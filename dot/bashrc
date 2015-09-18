@@ -385,7 +385,7 @@ case "${PVM_ARCH}" in
 	    gplogin* | mirage* | hpc* | pbs* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # endif EMT64 Rocks Cluster
 	esac # endcase ${HOST}
 	case "${HOST}" in 
-	    aerosol* ) PKG_ROOT='/opt/local' ; ;; # endif MAC OS X
+	    aerosol* | firn* ) PKG_ROOT='/opt/local' ; ;; # endif MAC OS X
 	    gplogin* ) PKG_ROOT='/sopt' ; ;; # endif EMT64 Rocks Cluster
 	    ipcc* ) PKG_ROOT='/opt' ; ;; # endif Rocks cluster
 	    pbs* ) PKG_ROOT='/usr/local' ; ;; # endif Ubuntu-stock
@@ -418,7 +418,7 @@ case "${PVM_ARCH}" in
 	case "${HOST}" in 
 		ashes* | ess1* | flyash* ) export OMP_NUM_THREADS='1' ; ;; # endif uniprocessor
 		clay* | neige* | silt* | virga* ) export OMP_NUM_THREADS='2' ; ;; # endif dual processor
-		aerosol* | givre* | hpc* | pbs* | tephra* ) export OMP_NUM_THREADS='4' ; ;; # endif quad processor
+		aerosol* | firn* | givre* | hpc* | pbs* | tephra* ) export OMP_NUM_THREADS='4' ; ;; # endif quad processor
 		glace* | gplogin* | grele* | roulee* | snow* ) export OMP_NUM_THREADS='8' ; ;; # endif dual-quad processor
 		mirage* | pileus* | rhea* | ys* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-octet processor
 	esac # endcase ${HOST}
@@ -582,7 +582,7 @@ case "${PVM_ARCH}" in
 #	export NETCDF_LIB=${HOME}/lib
 	export UDUNITS_INC=/opt/local/include/udunits2 # MacPorts location
 	case "${HOST}" in 
-	    aerosol* ) export OMP_NUM_THREADS=4 ; ;; # endif aerosol*
+	    aerosol* | firn* ) export OMP_NUM_THREADS=4 ; ;; # endif aerosol*
 	    cg1* ) export OMP_NUM_THREADS=2 ; ;; # endif cg1*
 	       * ) export OMP_NUM_THREADS=1 ; ;; # endif *
 	esac # endcase ${HOST}
@@ -802,8 +802,8 @@ FC_pgf95='pgf95'
 # MPI_CC and MPI_CXX depend upon MPICH version (MPICH or MPICH2)
 # and, sometimes, compiler (icc finds mpi.h automatically, gcc needs help)
 case "${HOST}" in 
-#    aerosol* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif clang/clang/macports
-    aerosol* ) export LINUX_CC=${CC_gcc_macports} ; export LINUX_CXX=${CXX_gxx_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif all MacPorts
+#    aerosol* | firn* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif clang/clang/macports
+    aerosol* | firn* ) export LINUX_CC=${CC_gcc_macports} ; export LINUX_CXX=${CXX_gxx_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif all MacPorts
     ashes* | clay* | flyash* | glace* | gplogin* | grele* | mirage* | pbs* | tephra* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC="${LINUX_CC} -I/usr/include/mpich2" ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK -I/usr/include/mpich2" ;; # endif gcc/g++/gfortran MPICH2
     ipcc* ) export LINUX_CC=${CC_pathcc} ; export LINUX_CXX=${CXX_pathCC} ; export LINUX_FC=${FC_pathf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # endif pathcc/pathCC/pathf95 MPICH2
     gplogin* ) export LINUX_CC=${CC_icc/icc/mpicc} ; export LINUX_CXX=${CXX_icpc/icpc/mpiCC} ; export LINUX_FC=${FC_ifort/ifort/mpif90} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort OpenMPI	
@@ -823,7 +823,7 @@ export LAMMPICXX=${LINUX_CXX}
 # NB: Pathscale documents extensive set of PSC_* flags on User's Guide p. 149--151
 case "${HOST}" in 
     ashes* ) export GCC_RCH_ARG='-march=pentium4' ; export ICC_RCH_ARG='-axW -mtune=pentium4' ; ;; # endif Pentium4-M
-    aerosol* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='' ; ;; # endif Intel Core i7
+    aerosol* | firn* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='' ; ;; # endif Intel Core i7
     flyash* ) export GCC_RCH_ARG='-march=pentium3' ; export ICC_RCH_ARG='-axK -mcpu=pentiumpro' ; ;; # endif Pentium3
     clay* | pbs* | silt* | tephra* ) export GCC_RCH_ARG='-march=opteron -mmmx -msse -msse2 -m3dnow -pipe -fexpensive-optimizations -mfpmath=sse,387' ; export ICC_RCH_ARG='-axW -mcpu=pentium4' ; export PGI_RCH_ARG='-tp=amd64 -fast -Minfo=all' ; export PSC_RCH_ARG='-march=opteron -mmmx -msse -msse2 -m3dnow -pipe -fexpensive-optimizations' ; ;; # endif Opteron
     esqf* ) export GCC_RCH_ARG='-mtune=power4' ; export ICC_RCH_ARG='' ; ;; # endif Power4
@@ -835,7 +835,7 @@ case "${HOST}" in
 esac # endcase ${HOST}
 # Set ICC_ROOT, IFC_ROOT
 case "${HOST}" in
-    aerosol* ) export ICC_ROOT='' ; export IFC_ROOT='' ; ;; # endif IA32
+    aerosol* | firn* ) export ICC_ROOT='' ; export IFC_ROOT='' ; ;; # endif IA32
     ashes* | flyash* | virga* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # endif IA32
     clay* | givre* | glace* | grele* | neige* | pbs* | roulee* | silt* | snow* | tephra* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # endif IA64
     gplogin* ) export ICC_ROOT='/sopt/intel/Compiler/11.0/081' ; export IFC_ROOT='/sopt/intel/Compiler/11.0/081' ; ;; # endif EMT64 Rocks Cluster
@@ -967,8 +967,8 @@ case ${PVM_ARCH} in
 	#export PRINTER='hp4050' # UCI croul
 	#export PRINTER='hp4250' # LGGE office
 	case ${HOST} in
-#	    aerosol* | ashes* | flyash* | neige* | roulee* | virga* ) export PRINTER='canon_mg8120' ; ;; # Irvine home office
-	    aerosol* | ashes* | flyash* | neige* | roulee* | virga* ) export PRINTER='dell5130' ; ;; # Irvine home office
+#	    aerosol* | ashes* | firn* | flyash* | neige* | roulee* | virga* ) export PRINTER='canon_mg8120' ; ;; # Irvine home office
+	    aerosol* | ashes* | firn* | flyash* | neige* | roulee* | virga* ) export PRINTER='dell5130' ; ;; # Irvine home office
 	    givre* | glace* | gplogin* | grele* ) export PRINTER='hp4700' ; ;; # UCI Croul 3323 (my office)
 #	    givre* | glace* | gplogin* | grele* ) export PRINTER='hpm600' ; ;; # UCI Croul mail room
 	esac # endcase ${HOST}
@@ -1084,7 +1084,6 @@ alias ess_gng='ssh -X 42080s12@eee.uci.edu'
 alias ess_cnt='ssh -X 42100s12@eee.uci.edu'
 alias ess_sco='ssh -X 42350w13@eee.uci.edu'
 alias gbsh="/bin/cp ${HOME}/sw/dot/bashrc.greenplanet ${HOME}/.bashrc;source ${HOME}/.bashrc"
-alias aerosol='ssh -X aerosol.ess.uci.edu'
 alias firn='ssh -X firn.ess.uci.edu'
 alias givre='ssh -X givre.ess.uci.edu'
 alias roulee='ssh -X roulee.ess.uci.edu'
@@ -1260,7 +1259,7 @@ case ${PVM_ARCH} in
 #    export FER_PALETTE=". ${FER_DIR}/ppl ${HOME}/ferret/ppl" # palettes
 
     case ${HOST} in
-    aerosol* | ashes* | flyash* | givre* | glace* | grele* | neige* | roulee* | virga* )
+    aerosol* | ashes* | firn* | flyash* | givre* | glace* | grele* | neige* | roulee* | virga* )
 	export INTEL_LICENSE_FILE='/opt/intel/cc/9.0/licenses:/opt/intel/fc/9.0/licenses'
 #	export LM_LICENSE_FILE='1700@sand.ess.uci.edu'
 	export LM_LICENSE_FILE='1700@ess1.ess.uci.edu'
