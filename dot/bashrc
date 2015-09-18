@@ -385,7 +385,7 @@ case "${PVM_ARCH}" in
 	    gplogin* | mirage* | hpc* | pbs* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # endif EMT64 Rocks Cluster
 	esac # endcase ${HOST}
 	case "${HOST}" in 
-	    aerosol* ) PKG_ROOT='/opt/local' ; ;; # endif MAC OS X
+	    aerosol* | firn* ) PKG_ROOT='/opt/local' ; ;; # endif MAC OS X
 	    gplogin* ) PKG_ROOT='/sopt' ; ;; # endif EMT64 Rocks Cluster
 	    ipcc* ) PKG_ROOT='/opt' ; ;; # endif Rocks cluster
 	    pbs* ) PKG_ROOT='/usr/local' ; ;; # endif Ubuntu-stock
@@ -418,7 +418,7 @@ case "${PVM_ARCH}" in
 	case "${HOST}" in 
 		ashes* | ess1* | flyash* ) export OMP_NUM_THREADS='1' ; ;; # endif uniprocessor
 		clay* | neige* | silt* | virga* ) export OMP_NUM_THREADS='2' ; ;; # endif dual processor
-		aerosol* | givre* | hpc* | pbs* | tephra* ) export OMP_NUM_THREADS='4' ; ;; # endif quad processor
+		aerosol* | firn* | givre* | hpc* | pbs* | tephra* ) export OMP_NUM_THREADS='4' ; ;; # endif quad processor
 		glace* | gplogin* | grele* | roulee* | snow* ) export OMP_NUM_THREADS='8' ; ;; # endif dual-quad processor
 		mirage* | pileus* | rhea* | ys* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-octet processor
 	esac # endcase ${HOST}
@@ -582,7 +582,7 @@ case "${PVM_ARCH}" in
 #	export NETCDF_LIB=${HOME}/lib
 	export UDUNITS_INC=/opt/local/include/udunits2 # MacPorts location
 	case "${HOST}" in 
-	    aerosol* ) export OMP_NUM_THREADS=4 ; ;; # endif aerosol*
+	    aerosol* | firn* ) export OMP_NUM_THREADS=4 ; ;; # endif aerosol*
 	    cg1* ) export OMP_NUM_THREADS=2 ; ;; # endif cg1*
 	       * ) export OMP_NUM_THREADS=1 ; ;; # endif *
 	esac # endcase ${HOST}
@@ -802,8 +802,8 @@ FC_pgf95='pgf95'
 # MPI_CC and MPI_CXX depend upon MPICH version (MPICH or MPICH2)
 # and, sometimes, compiler (icc finds mpi.h automatically, gcc needs help)
 case "${HOST}" in 
-#    aerosol* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif clang/clang/macports
-    aerosol* ) export LINUX_CC=${CC_gcc_macports} ; export LINUX_CXX=${CXX_gxx_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif all MacPorts
+#    aerosol* | firn* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif clang/clang/macports
+    aerosol* | firn* ) export LINUX_CC=${CC_gcc_macports} ; export LINUX_CXX=${CXX_gxx_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif all MacPorts
     ashes* | clay* | flyash* | glace* | gplogin* | grele* | mirage* | pbs* | tephra* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC="${LINUX_CC} -I/usr/include/mpich2" ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK -I/usr/include/mpich2" ;; # endif gcc/g++/gfortran MPICH2
     ipcc* ) export LINUX_CC=${CC_pathcc} ; export LINUX_CXX=${CXX_pathCC} ; export LINUX_FC=${FC_pathf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # endif pathcc/pathCC/pathf95 MPICH2
     gplogin* ) export LINUX_CC=${CC_icc/icc/mpicc} ; export LINUX_CXX=${CXX_icpc/icpc/mpiCC} ; export LINUX_FC=${FC_ifort/ifort/mpif90} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort OpenMPI	
@@ -823,7 +823,7 @@ export LAMMPICXX=${LINUX_CXX}
 # NB: Pathscale documents extensive set of PSC_* flags on User's Guide p. 149--151
 case "${HOST}" in 
     ashes* ) export GCC_RCH_ARG='-march=pentium4' ; export ICC_RCH_ARG='-axW -mtune=pentium4' ; ;; # endif Pentium4-M
-    aerosol* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='' ; ;; # endif Intel Core i7
+    aerosol* | firn* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='' ; ;; # endif Intel Core i7
     flyash* ) export GCC_RCH_ARG='-march=pentium3' ; export ICC_RCH_ARG='-axK -mcpu=pentiumpro' ; ;; # endif Pentium3
     clay* | pbs* | silt* | tephra* ) export GCC_RCH_ARG='-march=opteron -mmmx -msse -msse2 -m3dnow -pipe -fexpensive-optimizations -mfpmath=sse,387' ; export ICC_RCH_ARG='-axW -mcpu=pentium4' ; export PGI_RCH_ARG='-tp=amd64 -fast -Minfo=all' ; export PSC_RCH_ARG='-march=opteron -mmmx -msse -msse2 -m3dnow -pipe -fexpensive-optimizations' ; ;; # endif Opteron
     esqf* ) export GCC_RCH_ARG='-mtune=power4' ; export ICC_RCH_ARG='' ; ;; # endif Power4
@@ -835,7 +835,7 @@ case "${HOST}" in
 esac # endcase ${HOST}
 # Set ICC_ROOT, IFC_ROOT
 case "${HOST}" in
-    aerosol* ) export ICC_ROOT='' ; export IFC_ROOT='' ; ;; # endif IA32
+    aerosol* | firn* ) export ICC_ROOT='' ; export IFC_ROOT='' ; ;; # endif IA32
     ashes* | flyash* | virga* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # endif IA32
     clay* | givre* | glace* | grele* | neige* | pbs* | roulee* | silt* | snow* | tephra* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # endif IA64
     gplogin* ) export ICC_ROOT='/sopt/intel/Compiler/11.0/081' ; export IFC_ROOT='/sopt/intel/Compiler/11.0/081' ; ;; # endif EMT64 Rocks Cluster
@@ -967,8 +967,8 @@ case ${PVM_ARCH} in
 	#export PRINTER='hp4050' # UCI croul
 	#export PRINTER='hp4250' # LGGE office
 	case ${HOST} in
-#	    aerosol* | ashes* | flyash* | neige* | roulee* | virga* ) export PRINTER='canon_mg8120' ; ;; # Irvine home office
-	    aerosol* | ashes* | flyash* | neige* | roulee* | virga* ) export PRINTER='dell5130' ; ;; # Irvine home office
+#	    aerosol* | ashes* | firn* | flyash* | neige* | roulee* | virga* ) export PRINTER='canon_mg8120' ; ;; # Irvine home office
+	    aerosol* | ashes* | firn* | flyash* | neige* | roulee* | virga* ) export PRINTER='dell5130' ; ;; # Irvine home office
 	    givre* | glace* | gplogin* | grele* ) export PRINTER='hp4700' ; ;; # UCI Croul 3323 (my office)
 #	    givre* | glace* | gplogin* | grele* ) export PRINTER='hpm600' ; ;; # UCI Croul mail room
 	esac # endcase ${HOST}
@@ -1015,21 +1015,21 @@ alias dtm='cd ${DATA}/tmp' # ; function dtmcp { cp ${1} ${DATA}/tmp ; }
 alias dze='cd ${DATA}' # ; function dzecp { cp ${1} ${DATA} ; }
 
 alias hbi='cd ${HOME}/bin' ; function hbicp { cp ${1} ${HOME}/bin ; }
-alias hac='cd ${HOME}/aca' ; function haccp { cp ${1} ${HOME}/aca ; }
-alias hcp='cd ${HOME}/c++' ; function hcpcp { cp ${1} ${HOME}/c++ ; }
-alias hcr='cd ${HOME}/crr' ; function hcrcp { cp ${1} ${HOME}/crr ; }
-alias hdo='cd ${HOME}/dot' ; function hdocp { cp ${1} ${HOME}/dot ; }
-alias hds='cd ${HOME}/dst' ; function hdscp { cp ${1} ${HOME}/dst ; }
-alias hf='cd ${HOME}/f' ; function hfcp { cp ${1} ${HOME}/f ; }
-alias hic='cd ${HOME}/icr' ; function hiccp { cp ${1} ${HOME}/icr ; }
-alias hid='cd ${HOME}/idl' ; function hidcp { cp ${1} ${HOME}/idl ; }
-alias hjo='cd ${HOME}/job' ; function hjocp { cp ${1} ${HOME}/job ; }
-alias hjr='cd ${HOME}/jrn' ; function hjrcp { cp ${1} ${HOME}/jrn ; }
-alias hmi='cd ${HOME}/mie' ; function hmicp { cp ${1} ${HOME}/mie ; }
+alias hac='cd ${HOME}/sw/aca' ; function haccp { cp ${1} ${HOME}/sw/aca ; }
+alias hcp='cd ${HOME}/sw/c++' ; function hcpcp { cp ${1} ${HOME}/sw/c++ ; }
+alias hcr='cd ${HOME}/sw/crr' ; function hcrcp { cp ${1} ${HOME}/sw/crr ; }
+alias hdo='cd ${HOME}/sw/dot' ; function hdocp { cp ${1} ${HOME}/sw/dot ; }
+alias hds='cd ${HOME}/sw/dst' ; function hdscp { cp ${1} ${HOME}/rsr/dst ; }
+alias hf='cd ${HOME}/sw/f' ; function hfcp { cp ${1} ${HOME}/sw/f ; }
+alias hic='cd ${HOME}/rsr/icr' ; function hiccp { cp ${1} ${HOME}/rsr/icr ; }
+alias hid='cd ${HOME}/sw/idl' ; function hidcp { cp ${1} ${HOME}/sw/idl ; }
+alias hjo='cd ${HOME}/prv/job' ; function hjocp { cp ${1} ${HOME}/prv/job ; }
+alias hjr='cd ${HOME}/prv/jrn' ; function hjrcp { cp ${1} ${HOME}/prv/jrn ; }
+alias hmi='cd ${HOME}/sw/mie' ; function hmicp { cp ${1} ${HOME}/sw/mie ; }
 alias hnc='cd ${HOME}/nco' ; function hnccp { cp ${1} ${HOME}/nco ; }
-alias hpr='cd ${HOME}/prp' ; function hprcp { cp ${1} ${HOME}/prp ; }
-alias hrv='cd ${HOME}/rvw' ; function hrvcp { cp ${1} ${HOME}/rvw ; }
-alias hte='cd ${HOME}/tex' ; function htecp { cp ${1} ${HOME}/tex ; }
+alias hpr='cd ${HOME}/pnp/prp' ; function hprcp { cp ${1} ${HOME}/pnp/prp ; }
+alias hrv='cd ${HOME}/prv/rvw' ; function hrvcp { cp ${1} ${HOME}/prv/rvw ; }
+alias hte='cd ${HOME}/sw/tex' ; function htecp { cp ${1} ${HOME}/sw/tex ; }
 
 alias pze='cd /ptmp/${USER}' ; function pzecp { cp ${1} /ptmp/${USER} ; }
 
@@ -1066,6 +1066,10 @@ alias cp='cp -i -p' # -i = inquire, -p = preserve mode and time
 alias csrc="source ${HOME}/.cshrc"
 alias cvc='cvs commit -m ""'
 alias cvu='cvs update -kk'
+alias svc='svn commit -m ""'
+alias svu='svn update'
+alias gtc='for rps in acd diwg nco pnp prv PreAndPostProcessingScripts rsr sw; do cd ~/${rps};git commit -am "lazy commit";echo "Pushing ${rps}...";git push;done;cd -'
+alias gtp='for rps in acd diwg nco pnp prv PreAndPostProcessingScripts rsr sw; do cd ~/${rps};echo "Pulling ${rps}...";git pull;done;cd -'
 alias detex='detex -c' # -c = echo rather than delete cite{} commands
 alias df='df -k' # -k = units are kB rather than 512 B
 alias diff='diff -c -w' # -c = print 3 lines around diff, -w = ignore whitespace diffs
@@ -1079,8 +1083,7 @@ alias fr='export LANG=fr_FR.utf8;export LANGUAGE=fr_FR:fr:en_GB:en;export LC_ALL
 alias ess_gng='ssh -X 42080s12@eee.uci.edu'
 alias ess_cnt='ssh -X 42100s12@eee.uci.edu'
 alias ess_sco='ssh -X 42350w13@eee.uci.edu'
-alias gbsh="/bin/cp ${HOME}/dot/bashrc.greenplanet ${HOME}/.bashrc;source ${HOME}/.bashrc"
-alias aerosol='ssh -X aerosol.ess.uci.edu'
+alias gbsh="/bin/cp ${HOME}/sw/dot/bashrc.greenplanet ${HOME}/.bashrc;source ${HOME}/.bashrc"
 alias firn='ssh -X firn.ess.uci.edu'
 alias givre='ssh -X givre.ess.uci.edu'
 alias roulee='ssh -X roulee.ess.uci.edu'
@@ -1115,8 +1118,6 @@ alias scp='scp -p -C' # -p = preserve mode, time, -C = enable compression
 alias silt='ssh -X silt.ess.uci.edu'
 alias snow='ssh -X snow.engin.umich.edu'
 alias ssh='ssh -X' # -X = enable X11 forwarding
-alias svc='svn commit -m ""'
-alias svu='svn update'
 alias temperature='finger temperature@atd.ucar.edu'
 alias tephra='ssh -X tephra.ess.uci.edu'
 alias topz='top -U${USER}' # -Uusername
@@ -1134,7 +1135,7 @@ alias xwininfo='xwininfo -int'
 # Begin section not yet merged with cshrc 
 alias x16='startx -- -bpp 16 :1' # Start 16 bpp display acessible as Ctl-Alt-F8
 # End section not yet merged with cshrc
-function bin_obj_rm { rm "${HOME}/bin/*/${1} ${HOME}/obj/*/${1}.o ${HOME}/obj/*/${1}.d" ; }
+function bin_obj_rm { rm "${HOME}/bin/${1} ${HOME}/obj/${1}.o ${HOME}/obj/${1}.d" ; }
 function dotgrep { 'egrep ${1} .[a-zA-Z]*' ; }
 function difffunc { diff -c -w ${1} ${2} | more ; } # -c = print 3 lines around diff, -w = ignore whitespace diffs
 function dirtdiff { scp ${1} dirt.ess.uci.edu:${PWD}/foo; ssh dirt.ess.uci.edu diff -c ${PWD}/${1} ${PWD}/foo ; }
@@ -1198,8 +1199,8 @@ esac # endcase ${PVM_ARCH}
 case ${PVM_ARCH} in
 # Place PDFTeX before TeX so, e.g., pdftexinfo.tex is loaded first
     AIX* | LINUX* | MACOSX* | SUN* | WIN32* )
-    export TEXINPUTS=".:${HOME}/tex//:${HOME}/crr//:${DATA}/fgr//:${DATA}/ps//:${TEXMFDIR}/pdftex//:${TEXMFDIR}/tex//::" # // is recursive, :: activates default system search paths
-    export BIBINPUTS=".:${HOME}/tex//:${TEXMFDIR}/bibtex//::" # // is recursive, :: activates default system search paths
+    export TEXINPUTS=".:${HOME}/sw/tex//:${HOME}/sw/crr//:${DATA}/fgr//:${DATA}/ps//:${TEXMFDIR}/pdftex//:${TEXMFDIR}/tex//::" # // is recursive, :: activates default system search paths
+    export BIBINPUTS=".:${HOME}/sw/tex//:${TEXMFDIR}/bibtex//::" # // is recursive, :: activates default system search paths
 #    export TEXMFCNF=${TEXMFDIR}/web2c # One level above bibtex, tex,
 #    export THUMBPDF="--debug --verbose --device=mono" # Arguments to thumbpdf
     ;; # endif SUN* | LINUX* | AIX* | SGI* )
@@ -1243,7 +1244,7 @@ case ${PVM_ARCH} in
     LINUX* )
     export IDL_DEVICE='X'
 # Obsolete directory only necessary for cw_bselector in IBP
-    export IDL_PATH=${HOME}/idl:${IDL_DIR}/lib:${IDL_DIR}/lib/obsolete:/usr/local/hiphop
+    export IDL_PATH=${HOME}/sw/idl:${IDL_DIR}/lib:${IDL_DIR}/lib/obsolete:/usr/local/hiphop
     export IDL_STARTUP="${HOME}/.idl"
     export MATLABPATH=/usr/local/matlab7/netcdf/netcdf:/usr/local/matlab7/netcdf/mexcdf:/usr/local/matlab7/netcdf/netcdf/ncfiles:/usr/local/matlab7/netcdf/netcdf/nctype:/usr/local/matlab7/netcdf/netcdf/ncutility
 
@@ -1258,7 +1259,7 @@ case ${PVM_ARCH} in
 #    export FER_PALETTE=". ${FER_DIR}/ppl ${HOME}/ferret/ppl" # palettes
 
     case ${HOST} in
-    aerosol* | ashes* | flyash* | givre* | glace* | grele* | neige* | roulee* | virga* )
+    aerosol* | ashes* | firn* | flyash* | givre* | glace* | grele* | neige* | roulee* | virga* )
 	export INTEL_LICENSE_FILE='/opt/intel/cc/9.0/licenses:/opt/intel/fc/9.0/licenses'
 #	export LM_LICENSE_FILE='1700@sand.ess.uci.edu'
 	export LM_LICENSE_FILE='1700@ess1.ess.uci.edu'
