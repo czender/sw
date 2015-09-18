@@ -368,16 +368,15 @@ case "${PVM_ARCH}" in
 	export TEXMFDIR='/usr/share/texmf-texlive' # One level above bibtex, tex,
 	export X11='/usr/X11R6'
 	case "${HOST}" in 
-	    cooley* ) export DATA="/projects/HiRes_EarthSys/${USER}" ; ;; # endif ALCF
-	    edison* ) export DATA="${HOME}/data" ; ;; # endif NERSC
+	    cooley* | cc* ) export DATA="/projects/HiRes_EarthSys/${USER}" ; ;; # endif ALCF
+	    edison* | hopper* ) export DATA="${HOME}/data" ; ;; # endif NERSC
 	    gplogin* ) export DATA="/data/${USER}" ; ;; # endif EMT64 Rocks Cluster
 	    hpc* ) export DATA="/data/users/${USER}" ; ;; # endif hpc
-	    hopper* ) export DATA="${HOME}/data" ; ;; # endif NERSC
 	    mirage* ) export DATA="/glade/scratch/${USER}" ; ;; # endif mirage
 	    pileus* ) export DATA="/home/${USER}/data" ; ;; # endif CADES
 	    rhea* ) export DATA="/lustre/atlas/proj-shared/cli115/${USER}" ; ;; # endif OLCF
 	    ys* ) export DATA="/glade/p/work/${USER}" ; ;; # endif NCAR
-		* ) export DATA="/data/${USER}" ; ;; # endif default
+	    * ) export DATA="/data/${USER}" ; ;; # endif default
 	esac # endcase ${HOST}
 # PKG_ROOT is where non-default sysadmin-installed packages reside
 # PKG_ROOT is usually argument to configure --prefix=${PKG_ROOT}
@@ -857,7 +856,7 @@ fi # endif hostname
 
 # System-specific environments
 case "${HOST}" in
-    cooley* ) export PROJID='HiRes_EarthSys' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
+    cooley* | cc* ) export PROJID='HiRes_EarthSys' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
     edison* | hopper* ) export PROJID='HiRes_EarthSys' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
     rhea* ) export PROJID='cli115' ; export MY_MEMBERWORK="${MEMBERWORK}/${PROJID}" ; export MY_PROJWORK="${PROJWORK}/${PROJID}/${USER}" ; export MY_WORLDWORK="${WORLDWORK}/${PROJID}/${USER}" ; export DATA="${MY_PROJWORK}" ; ;;
 esac # endcase ${HOST}

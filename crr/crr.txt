@@ -1,3 +1,53 @@
+************************************************************************
+cd
+git clone http://github.com/czender/prv
+************************************************************************
+cd
+ln -s sw/sh sh
+************************************************************************
+for drc in cns grd hire job jrn ltr mny poetry rvw pr sdn trv www \
+aca anl anv bxm c c++ ck cld crm crr dead dot elisp f fsf hdf idl idx_rfr linux lsm map match matlab mie mk ncl perl sh slr_spc sltsbl tex time \
+ess ess_acc ess_atm ess_bnd ess_ccc ess_ccp ess_cnt ess_gng ess_gpc ess_hyd ess_lsp ess_phz ess_prc ess_rdn ess_sco uci \
+aeroce aeronet afgl arese avhrr dmr dst esmf icr idea igpp ncep toms \
+phd ppr_BiZ03 ppr_BiZ04 ppr_CaZ08 ppr_CaZ09 ppr_CaZ10 ppr_FlZ05 ppr_FlZ06 ppr_FZR07 ppr_GrZ04 ppr_HZM12 ppr_ZeK05 ppr_ZeM07 ppr_Zen08 ppr_Zen12 ppr_Zen14 ppr_ZeT06 ppr_ZeT06b ppr_ZFM07 ppr_ZGD09 ppr_ZKT12 ppr_ZMT04 prp prp_access prp_acme prp_ans prp_arl prp_axs prp_esdr prp_gpe prp_ids prp_IGPP06 prp_sdci prp_si2; do
+    /bin/rm -r -f ~/${drc}
+done
+
+mkdir ~/prv
+for drc in cns grd hire job jrn ltr mny poetry rvw pr sdn trv www; do
+    cp -r ~/${drc} ~/prv
+    cd  ~/prv/${drc}
+    /bin/rm -r -f .svn TAGS .gdb_history .cvsignore *.mod gmon.out *.brf *.idx *.ilg *.ind *.out *.nc
+done
+
+mkdir ~/sw
+for drc in aca anl anv bxm c c++ ck cld crm crr dead dot elisp f fsf hdf idl idx_rfr linux lsm map match matlab mie mk ncl perl sh slr_spc sltsbl tex time; do
+    cp -r ~/${drc} ~/sw
+    cd  ~/sw/${drc}
+    /bin/rm -r -f .svn TAGS .gdb_history .cvsignore *.mod gmon.out *.brf *.idx *.ilg *.ind *.out *.nc :${drc}
+done
+
+mkdir ~/acd
+for drc in ess ess_acc ess_atm ess_bnd ess_ccc ess_ccp ess_cnt ess_gng ess_gpc ess_hyd ess_lsp ess_phz ess_prc ess_rdn ess_sco uci; do
+    cp -r ~/${drc} ~/acd
+    cd  ~/acd/${drc}
+    /bin/rm -r -f .svn TAGS .gdb_history .cvsignore *.mod gmon.out *.brf *.idx *.ilg *.ind *.out *.nc :${drc}
+done
+
+mkdir ~/rsr
+for drc in aeroce aeronet afgl arese avhrr dmr dst esmf icr idea igpp ncep toms; do
+    cp -r ~/${drc} ~/rsr
+    cd  ~/rsr/${drc}
+    /bin/rm -r -f .svn TAGS .gdb_history .cvsignore *.mod gmon.out *.brf *.idx *.ilg *.ind *.out *.nc :${drc}
+done
+
+mkdir ~/pnp
+for drc in phd ppr_BiZ03 ppr_BiZ04 ppr_CaZ08 ppr_CaZ09 ppr_CaZ10 ppr_FlZ05 ppr_FlZ06 ppr_FZR07 ppr_GrZ04 ppr_HZM12 ppr_ZeK05 ppr_ZeM07 ppr_Zen08 ppr_Zen12 ppr_Zen14 ppr_ZeT06 ppr_ZeT06b ppr_ZFM07 ppr_ZGD09 ppr_ZKT12 ppr_ZMT04 prp prp_access prp_acme prp_ans prp_arl prp_axs prp_esdr prp_gpe prp_ids prp_IGPP06 prp_sdci prp_si2; do
+    cp -r ~/${drc} ~/pnp
+    cd  ~/pnp/${drc}
+    /bin/rm -r -f .svn TAGS .gdb_history .cvsignore *.mod gmon.out *.brf *.idx *.ilg *.ind *.out *.nc :${drc}
+done
+************************************************************************
 Hi Ping,
 
 Thank you for raising the high cirrus issue (pun intended).
