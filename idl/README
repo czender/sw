@@ -1,0 +1,12 @@
+$Id$ -*-Text-*-
+
+This directory, $HOME/idl, contains files and scripts for IDL graphics
+and analysis
+
+ibp.*		IBP Itty Bitty Processor GUI global dataset tool
+gcm.pro		Collection of routines for publication quality plots of global datasets
+mie.pro		Grabbag of graphics routines for papers and aerosol data
+
+Routine mie.pro:prn_tst() tests the printing and display of IDL graphics
+
+

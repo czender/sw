@@ -1,0 +1,61 @@
+/* NB: IBP resources are named in the source code where the widgets
+are created, mainly in ibp_widgets.pro. IDL does not seem to accept 
+color specification of non-button widgets yet, however. 
+ */ 
+
+Idl*ibp*done*background: red
+Idl*ibp*quit*background: red
+Idl*ibp*draw*background: LightGoldenrod
+Idl*ibp*draw*mnemonic: D
+Idl*ibp*draw*accelerator: Meta<Key>F4
+Idl*ibp*draw*acceleratorText: Meta-F4
+Idl*ibp*read*background: green
+Idl*ibp*read*mnemonic: R
+Idl*ibp*read*accelerator: <Key>F1
+Idl*ibp*read*acceleratorText: F1
+Idl*ibp*custom*background: LightGoldenrod
+Idl*ibp*custom*mnemonic: R
+Idl*ibp*custom*accelerator: <Key>F1
+Idl*ibp*custom*acceleratorText: F1
+
+/* Idl*ibp*auto_scl*background: #7300a100ff00
+Idl*ibp*avg_data*background: #7300a100ff00
+Idl*ibp*bin_size*background: #7300a100ff00
+Idl*ibp*ibp*background: #7300a100ff00
+Idl*ibp*chroma*background: #7300a100ff00
+Idl*ibp*cntr_ntv*background: #7300a100ff00
+Idl*ibp*cntr_ovl*background: #7300a100ff00
+Idl*ibp*dest*background: #7300a100ff00
+Idl*ibp*field*background: #7300a100ff00
+Idl*ibp*figure*background: #7300a100ff00
+Idl*ibp*first_lft_row*background: #7300a100ff00
+Idl*ibp*foo*background: #7300a100ff00
+Idl*ibp*format*background: #7300a100ff00
+Idl*ibp*fourth_lft_row*background: #7300a100ff00
+Idl*ibp*in_file*background: #7300a100ff00
+Idl*ibp*lat*background: #7300a100ff00
+Idl*ibp*lat_max*background: #7300a100ff00
+Idl*ibp*left_clm*background: #7300a100ff00
+Idl*ibp*lon*background: #7300a100ff00
+Idl*ibp*lon_max*background: #7300a100ff00
+Idl*ibp*lon_min*background: #7300a100ff00
+Idl*ibp*map_gph*background: #7300a100ff00
+Idl*ibp*bin_max*background: #7300a100ff00
+Idl*ibp*data_max*background: #7300a100ff00
+Idl*ibp*bin_min*background: #7300a100ff00
+Idl*ibp*cntr_lvl_min*background: #7300a100ff00
+Idl*ibp*data_min*background: #7300a100ff00
+Idl*ibp*cntr_lvl_nbr*background: #7300a100ff00
+Idl*ibp*fl_out*background: #7300a100ff00
+Idl*ibp*palette*background: #7300a100ff00
+Idl*ibp*region*background: #7300a100ff00
+Idl*ibp*right_clm*background: #7300a100ff00
+Idl*ibp*sv*background: #7300a100ff00
+Idl*ibp*second_lft_row*background: LightGoldenrod
+Idl*ibp*shape*background: #7300a100ff00
+Idl*ibp*third_lft_row*background: #7300a100ff00
+Idl*ibp*time*background: #7300a100ff00
+Idl*ibp*value*background: #7300a100ff00
+Idl*ibp*vrt_level*background: #7300a100ff00
+*/
+

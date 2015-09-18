@@ -1,0 +1,97 @@
+2003-07-23  Charlie Zender  <zender@uci.edu>
+
+	* gcm.pro (cntr_lvl_max): remove every other contour level when
+	there are huge numbers (> 15) of contours
+
+	* improved pnl_lbl automatic labeling
+
+	* ibp_fnc.pro (label_maker_srt): fixed zero truncation in contour
+	label problems
+
+2001-10-17  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c idl-1_9_0
+	Changes since idl-1_8_1: Revamped output formats and added
+	new rasters: JPEG, PPM, PNG, and MPEG formats
+	
+	* ibp_fnc.pro (lgn_dst): MPEGS are working pretty well, but 
+	date string needs parsing and title bar needs moving
+
+2001-06-01  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c idl-1_8_1
+
+	* Modified ncdf_varget_1() routine to accept two dimensional input
+	variables and a hyperslab index. This enables psd() to work with two
+	dimensional cll_fsh* variables from mie()
+
+	* Renamed szdst to psd a long time ago
+
+2000-03-14  Charlie Zender  <zender@uci.edu>
+
+	* Tagged as idl-1_8
+
+	* Validated that psd_bch reproduces mie() exactly by comparing
+	output of
+	psd_bch,mmr_rsl=[3.64e-08,1.63e-07,1.28e-07,3.93e-08],prn=1,fmt_nsm=1,anl_flg=1
+	psd_bch,mmr_rsl=[3.64e-08,1.63e-07,1.28e-07,3.93e-08],prn=1,fmt_nsm=1,anl_flg=0
+	Note that validation requires using same number of size bins in
+	psd() as in mie(), and same geometric standard deviations
+	(usually either 2.0 or 2.2)
+	
+	* Finished implementing psd_bch
+
+2000-03-10  Charlie Zender  <zender@uci.edu>
+
+	* Tagged as idl-1_7
+
+	* Making good progress on plotting size distributions
+
+2000-01-24  Charlie Zender  <zender@uci.edu>
+
+	* Tagged as idl-1_6
+
+	* Fixed some problems with countour labels and with plotting margins
+
+2000-01-21  Charlie Zender  <zender@uci.edu>
+
+	* Tagged as idl-1_5
+
+	* gcm_xy now has nice hyperslabbing and dly and yrl modes 
+
+1999-12-31  Charlie Zender  <zender@uci.edu>
+
+	* Modified gcm_tv to work with daily data
+
+	* Tagged as idl-1_4, ibp-4_1
+
+	* Finished replacing most old nomenclature with new standards, got
+	ibp and gcm working together again
+
+1999-12-30  Charlie Zender  <zender@uci.edu>
+
+	* Added Makefile which has 'make tags' rule that looks at all my
+	IDL files
+
+	* Tagged as idl-1_3
+
+	* Added lon_lev capability to IBP
+
+	* Fixed bug with longitude labels in regional plots
+
+	* Renamed lots of IBP variables
+
+	* Tagged as idl-1_2
+
+	* Working on adapting gcm_tv to daily data
+
+	* Added AEROCE graphing routines
+
+	* Removed lon,lev,lat ordering restriction for input data in IBP
+	lat_lev and lon_lat routines. Dataset may now follow COARDS
+	conventions and be lon,lat,lev
+
+1999-11-24  Charlie Zender  <zender@dust.ps.uci.edu>
+
+	* Tagged as idl-1_1
+

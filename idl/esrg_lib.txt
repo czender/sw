@@ -1,0 +1,108 @@
+            Table of Contents esrg_idl_3.0
+
+ PROCEDURE                            PURPOSE
+ ---------                            -------
+
+autorange.pro           histogram of array used to set image range
+average.pro             averages of arrays accounting for no-data points
+begps.pro               direct output to post-script
+boxonmap.pro            marquee cursor on geo maps
+boxpos.pro              set up a plot area
+cl.pro                  count the number of lines in a file
+classify.pro            associate scatter plot regions with image locations
+classplt.pro            associate scatter plot regions with image locations
+clstrshd.pro            image classification by cluster shade algorithm
+cmplxgen.pro            complex array with re(array)=x and im(array)=y
+coastline.pro           overlay coastline on a satellite image
+color_key.pro           draw a vertical color key and number scale
+color_pal.pro           show color palette
+connected.pro           filter out points not connected to n other points
+cov.pro                 compute coefficiency of two variables
+curbox.pro              marquee cursor routine
+cursim.pro              find values at points within TVIM displayed image
+day2jul.pro             convert from month,day,year to julian day
+dcolors.pro             sets up 10 discreet colors at bottom of color scale
+degrad.pro              converts from degrees to radians
+endps.pro               close postscript file, output back to 'X'
+expint.pro              compute exponential integral
+fill_arr.pro            fill in undefined regions of a 2-d array
+fill_image.pro          fill in undefined regions of a 2-d array
+finterp.pro             array interpolation
+fonts.pro               display vector drawn fonts in a new window
+ftok.pro                fahrenheit to kelvin conversion
+ftokm.pro               feet to km conversion
+gen_coastline.pro       generate coastline data from satellite image
+gengrid.pro             form outer product of a group of vectors
+globe_image.pro         Display an image on a rotating globe
+globe_image2.pro        Display an image on a rotating globe
+hilight.pro             histograms and subsetting
+hilite.pro              display image and blink on/off special regions
+hist.pro                create histogram plots
+histo.pro               create histogram plots
+image_it.pro            images deformed to arbitrary coordinates
+inside.pro              return subscripts of points inside a polygonal region
+integral.pro            compute integral by trapezoid rule
+interp.pro              array interpolation (see finterp)
+intersect.pro           intersection of two arrays
+jd2ymd.pro              covert from julian day to year,month,day
+jul2day.pro             covert from julian day to year,month,day
+kernel.pro              create a kernel to pick out oriented lines in images
+latlonrdpix.pro         tracks the lon/lat of the mouse location
+legend.pro              draws a plot legend 
+lenstr.pro              computes actual length of string in pixels
+ll_to_rng_az.pro        compute great-circle distance
+locate.pro              2-d search of x,y into xarray,yarray
+map_set2.pro            create geographic outlines
+mean.pro                compute mean
+min_curve_surf.pro      Interpolate a regular or irregularly gridded data
+min_day.pro             find minimum of a set of images
+modct.pro               modify color table
+mode.pro                Return the mode of an array.
+mprank.pro              find value at a given percentile rank in array regions 
+mstdev.pro              standard deviation and mean of any array.
+mtokm.pro               meters to km conversion
+mve.pro                 print standard deviation, mean, and other info
+ncdf_get_1field.pro     read net_cdf files
+ncdf_get_field.pro      read net_cdf files
+ncdf_info.pro           read net_cdf files
+newcov.pro              calculates the coefficiency of var1 and var2
+oband.pro               plots grey area between y1 and y2 as a function of x
+pause.pro               pause between plots
+pickc.pro               choose a single color
+planck.pro              compute planck function
+plotsym.pro             plot a user defined symbol
+pnts_near.pro           return subscript array of points within radius
+poly_xy.pro             Evaluate the bivariate polynomial function of x and y
+poly_xy_fit.pro         find bivariate polynomial fitting function
+poly_xyz.pro            Evaluate the trivariate polynomial function
+poly_xyz_fit.pro        find trivariate polynomial fitting function
+prank.pro               find value at a given percentile rank in array
+put_color_scale.pro     Draws a numbered color scale
+pwdstamp.pro            print present working directory to plot
+randata.pro             generate random data with a given power spectrum
+read_3d_arr.pro         read a 3d array
+read_3d_arr_bin.pro     read a 3d array
+readbuf.pro             read formatted numberical data from a file
+regrid.pro              Warp satellite image to a regular grid
+slope.pro               compute a two point fitting function, y=f(x)
+solar.pro               solar spectrum
+solve2.pro              solve two simultaneous non-linear equations
+step_ct.pro             Discreetizes color scale
+strip_fn.pro            Return a filename stripped of directory information.
+superpix.pro            compute super pixel average and standard deviation
+text_box.pro            Writes a text message to graphics window box
+timestamp.pro           print the current day and time on plot
+toggle.pro              toggles IDL output from X-win and a postscript
+toggle_1.pro            toggles IDL output from X-win and a postscript
+trace.pro               Define a path through a plot or image
+tri_surf.pro            Interpolates a irregularly gridded data
+tv_polar.pro            Display of images defined in polar coordinates
+tvim.pro                Display an image in a data window
+tvwin.pro               select image subsets from very large images
+write_in_box.pro        Writes a text message to a box in a graphics window.
+xct.pro                 a widget to change color tables
+xmakedraw.pro           make a draw widget
+xmap.pro                view an earth map
+xmessage.pro            make a set label widgets to display a message
+ymd2jd.pro              From Year, Month, and Day compute Julian Day number.
+zensun.pro              compute solar zenith and azimuth from day and time

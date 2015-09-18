@@ -1,0 +1,113 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; RCS Identification
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; $Author: zender $
+; $Date$
+; $Id$
+; $Revision$
+; $Locker:  $
+; $RCSfile: idl.template,v $
+; $Source: /home/zender/cvs/idl/idl.template,v $
+; $Id$
+; $State: Exp $
+;
+; NB: get RCS formatting in IDL files by using rcs -U -c"; " foo.pro
+;
+; Purpose: Serves as a template for full featured IDL programs.
+;
+; $Log: not supported by cvs2svn $
+; Revision 1.1.1.1  1999-05-11 22:20:50  zender
+; Imported sources
+;
+; Revision 1.1  1993/07/05  23:31:07  zender
+; Initial revision
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+function sample,input_1,input_2
+return,output_1
+end
+;
+pro idl_template, $
+	filename=filename
+	num_layers=num_layers, $
+	pause=pause, $
+	ps=ps, $
+;
+;Example usage:
+;
+;idl_template
+;
+if n_elements(filename) eq 0 then filename = 'clouds.cdf'
+if n_elements(num_layers) eq 0 then num_layers = 18
+if n_elements(pause) eq 0 then pause = 'y';ready to roll
+if n_elements(ps) eq 0 then ps = 'n'; print to .ps file or printer?
+if pause eq 'y' then !p.multi=0 else begin
+        !p.multi=[0,3,1,0,0]		;=[0,num_cols,num_rows,0,0]
+        pause = 'n'
+endelse
+;
+sys_time = systime(1) 
+close,/all
+erase
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Read in tabular from a file and graph it
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+openr,1,'filename'
+foo=""
+readf,1,foo
+readf,1,foo
+pressure=fltarr(num_layers)
+altitude=fltarr(num_layers)
+;
+for layer=0,num_layers-1 do begin
+        readf,1,a,b
+        pressure(layer)=a
+        altitude(layer)=b
+endfor
+close,1
+;
+plot_oi,pressure(*),altitude(*), $
+        tit='!6 Pressure vs. Altitude', $
+        xtit='Pressure (mb)', $
+        ytit='Altitude (km)', $
+;        xrange=[1.e-5,1.e-2], $
+        linestyle=0, TICKLEN=1.0, thick=2.
+;
+line_legend_x1=.22
+line_legend_dx=.07
+line_legend_x2=line_legend_x1+line_legend_dx
+text_legend_x=line_legend_x2+.01
+text_legend_size=1.2
+legend_y_top=.8
+legend_dy=.1
+legend_y=[legend_y_top,legend_y_top-legend_dy,legend_y_top-2.*legend_dy]
+;
+plots,[line_legend_x1,line_legend_x2],legend_y(0)+.013,linestyle=0,thick=2.,/NORMAL
+;
+xyouts,text_legend_x,legend_y(0),'!6Text Legend 0',size=text_legend_size,/NORMAL
+;
+data_legend_x=.6
+;
+foo_string=string(Format='(f6.2)',foo)
+;
+xyouts,data_legend_x,legend_y(0),'!6Foo = '+foo_string,size=text_legend_size,/NORMAL
+;
+if pause eq 'y' then begin
+	print,' Hit any key to continue, p to print this graph, or q to quit ...'
+	junk = get_kbrd(1)
+	if junk eq 'q' then goto, exit_gracefully
+	if junk eq 'p' then begin
+	        halfplot
+;******************** Printing routine, should be identical to above ***************
+;******************** End Printing routine ******************************
+	        if ps eq 'n' then lpr else lps
+	endif        
+endif ;endif pause
+;
+;***************enforced exit********************************
+goto,exit_gracefully
+;
+exit_gracefully: foo=1
+;
+end

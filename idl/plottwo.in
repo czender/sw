@@ -1,0 +1,16 @@
+# usage: plottwo.sh < plottwo.in
+# 
+#
+clm2 versus match   # big title
+clm_1998.nc         # file1
+DSTFLXT             # var1
+clm2 dust (avg=3e-9)# title1
+0.0                 # min1
+5e-8                # max1
+5e-9                # delta1
+dstmch78_1995.nc    # file2
+DSTSFMBL            # var2
+match dust (avg=1e-10)# title2
+0.0                 # min2
+5e-9                # max2
+5e-10               # delta2

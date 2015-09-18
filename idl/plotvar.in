@@ -1,0 +1,17 @@
+# usage: plotvar.sh < plotvar.in
+# 
+#
+4                   # number of plots
+Dust Optical Depth  # big title
+DSTODXC             # variable being plotted
+0.0                 # contour level min
+0.5                 # contour level max
+0.05                # contour level delta
+dstmch14_2000.nc    # input file 1
+dstmch14            # title of 1
+dstmch15_2000.nc    # input file 2
+dstmch15            # title of 2
+dstmch16_2000.nc    # input file 3
+dstmch16            # title of 3
+dstmch17_2000.nc    # input file 4
+dstmch17            # title of 4

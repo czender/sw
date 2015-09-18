@@ -1,0 +1,26 @@
+# usage: plotfile.sh < plotfile.in
+# 
+#
+4                   # number of plots
+dstmch14 (source=Ginoux)                     # big title
+dstmch14_2000.nc    # file being plotted
+DSTODXC             # var1
+Optical Depth       # title1
+0.0                 # min1
+0.5                 # max1
+0.05                # delta1
+DSTMPC              # var2
+Mass Path           # title2
+0.0                 # min2
+0.5                 # max2
+0.05                # delta2
+DSTSFGRV            # var3
+Grav                # title3
+0.0                 # min3
+0.5                 # max3
+0.05                # delta3
+DSTSFPCP            # var4
+Precip              # title4
+0.0                 # min4
+0.5                 # max4
+0.05                # delta4
