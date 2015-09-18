@@ -1,0 +1,93 @@
+% $Id$
+
+% Purpose: Commands specific to epidemiology
+
+% Copyright (c) 1998--2009, Charles S. Zender
+% This program may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License (LPPL), 
+% either version 1.2, or (at your option) any later version.
+% LPPL: http://www.latex-project.org/lppl.txt
+
+% The original author of this software, Charlie Zender, seeks to improve
+% it with your suggestions, contributions, bug-reports, and patches.
+% Charlie Zender <surname@uci.edu>, surname=zender
+% Department of Earth System Science
+% University of California, Irvine
+% Irvine, CA 92697-3100
+
+% Dependencies: aer.sty (for ncd,...)
+
+% Usage:
+% \usepackage{epd} % Epidemiology
+
+% Message printed when LaTeX called
+\@ifundefined{ProvidesPackage}{}{
+\ProvidesPackage{epd}[2002/09/22 v1.14 Epidemiology]
+} % end ProvidesPackage
+
+% 0. Provided commands
+
+% 1. Primary commands
+\newcommand{\Ccd}{Coccidioidomycosis} % [sng] Coccidioidomycosis
+\newcommand{\Cim}{\textit{C.~immitis}} % [sng] C. immitis
+\newcommand{\anmclmsbs}{\ensuremath{\prime}} % [sbs] Climatological Anomaly subscript
+\newcommand{\anmcsnsbs}{\ensuremath{\prime\prime}} % [sbs] Climatological Seasonal Anomaly subscript
+\newcommand{\crcsbs}{\ensuremath{*}} % [sbs] Corrected-for-Autoregression subscript
+\newcommand{\ccd}{coccidioidomycosis} % [sng] coccidioidomycosis
+% NB: Replace \blankidx with \mthidx in *mth variables in order to
+% display a left-superscripted m in front of  anomalies from the
+% climatological annual cycle (i.e., climatological monthly anomalies)
+% These superscripts were removed in review since the defining
+% appendices were also removed
+\newcommand{\blankidx}{\ensuremath{}} % [idx] Blank index
+\newcommand{\mthidx}{\ensuremath{m}} % [idx] Month index
+\newcommand{\mthnbr}{\ensuremath{M}} % [nbr] Number of months m in time-series data
+\newcommand{\ncd}{\ensuremath{N}} % [# s-1] Incidence rate, absolute
+\newcommand{\tmidx}{\ensuremath{n}} % [idx] Time index
+\newcommand{\tmnbr}{\ensuremath{N}} % [nbr] Number of time-series data
+\newcommand{\yridx}{\ensuremath{y}} % [idx] Year index
+
+% 2. Derived commands
+\newcommand{\anmcsncrcsbs}{\crcsbs} % [sbs] Climatological Seasonal Anomaly Corrected-for-Autoregression (i.e., Level Three data) subscript
+\newcommand{\flxpcpavg}{\ensuremath{\bar{\flxpcp}}} % [kg m2 s-1] Precipitation mass flux, climatological monthly mean
+\newcommand{\flxpcpsvn}{\ensuremath{\flxpcp_{\Sigma 7}}} % [kg m2 s-1] Precipitation mass flux, cumulative seven-month
+\newcommand{\ncdabs}{\ensuremath{\ncd_{0}}} % [# s-1] Incidence rate, absolute,
+\newcommand{\ncdavg}{\ensuremath{\bar{\ncd}}} % [# s-1] Incidence rate, climatological mean
+\newcommand{\ncdnrm}{\ensuremath{\bar{\ncd}}} % [# s-1 ppl-1] Incidence rate normalized per unit population
+\newcommand{\prssfcavg}{\ensuremath{\bar{\prssfc}}} % [Pa] Pressure at surface, climatological mean
+\newcommand{\tptsfcavg}{\ensuremath{\bar{\tptsfc}}} % [K] Temperature at surface, climatological mean
+\newcommand{\xxxanmclm}{\ensuremath{\xxx^{\anmclmsbs}}} % [frc] Climatological anomaly
+\newcommand{\xxxanmcsn}{\ensuremath{\xxx^{\anmcsnsbs}}} % [frc] Climatological seasonal anomaly
+\newcommand{\xxxavgmth}{\ensuremath{^{\blankidx}\xxxavg}} % [frc] Climatological monthly mean
+\newcommand{\xxxcrc}{\ensuremath{\xxx^{\crcsbs}}} % [frc] Climatological anomaly, auto-regression-corrected
+\newcommand{\xxxidx}{\ensuremath{\xxx_{\tmidx}}} % [frc] Climatological anomaly, explicit timeseries subscript
+
+% 3. Doubly-derived commands
+\newcommand{\flxpcpanmclm}{\ensuremath{\flxpcp^{\anmclmsbs}}} % [kg m2 s-1] Precipitation mass flux, climatological anomaly
+\newcommand{\flxpcpanmcsn}{\ensuremath{\flxpcp^{\anmcsnsbs}}} % [kg m2 s-1] Precipitation mass flux, climatological seasonal anomaly
+\newcommand{\flxpcpanmcsncrc}{\ensuremath{\flxpcp^{\anmcsncrcsbs}}} % [kg m2 s-1] Precipitation mass flux, climatological seasonal anomaly corrected for autoregression (i.e., Level Three data)
+\newcommand{\flxpcpavgmth}{\ensuremath{^{\blankidx}\flxpcpavg}} % [kg m2 s-1] Precipitation mass flux, climatological monthly mean
+\newcommand{\flxpcpsvnanmcsn}{\ensuremath{\flxpcpsvn^{\anmcsnsbs}}} % [kg m2 s-1] Precipitation mass flux, cumulative seven-month, climatological seasonal anomaly
+\newcommand{\ncdanmclm}{\ensuremath{\ncd^{\anmclmsbs}}} % [# s-1] Incidence rate, climatological anomaly
+\newcommand{\ncdanmcsn}{\ensuremath{\ncd^{\anmcsnsbs}}} % [# s-1] Incidence rate, climatological seasonal anomaly
+\newcommand{\ncdanmcsncrc}{\ensuremath{\ncd^{\anmcsncrcsbs}}} % [# s-1] Incidence rate, climatological seasonal anomaly corrected for autoregression (i.e., Level Three data)
+\newcommand{\ncdavgmth}{\ensuremath{^{\blankidx}\ncdavg}} % [# s-1] Incidence rate, climatological seasonal anomaly corrected for autoregression (i.e., Level Three data)
+\newcommand{\prssfcanmclm}{\ensuremath{\prssfc^{\anmclmsbs}}} % [Pa] Pressure at surface, climatological anomaly
+\newcommand{\prssfcanmcsn}{\ensuremath{\prssfc^{\anmcsnsbs}}} % [Pa] Pressure at surface, climatological seasonal anomaly
+\newcommand{\prssfcanmcsncrc}{\ensuremath{\prssfc^{\anmcsncrcsbs}}} % [Pa] Pressure at surface, climatological seasonal anomaly corrected for autoregression (i.e., Level Three data)
+\newcommand{\prssfcavgmth}{\ensuremath{^{\blankidx}\prssfcavg}} % [Pa] Pressure at surface, climatological seasonal anomaly corrected for autoregression (i.e., Level Three data)
+\newcommand{\tptsfcanmclm}{\ensuremath{\tptsfc^{\anmclmsbs}}} % [K] Temperature at surface, climatological anomaly
+\newcommand{\tptsfcanmcsn}{\ensuremath{\tptsfc^{\anmcsnsbs}}} % [K] Temperature at surface, climatological seasonal anomaly
+\newcommand{\tptsfcanmcsncrc}{\ensuremath{\tptsfc^{\anmcsncrcsbs}}} % [K] Temperature at surface, climatological seasonal anomaly corrected for autoregression (i.e., Level Three data)
+\newcommand{\tptsfcavgmth}{\ensuremath{^{\blankidx}\tptsfcavg}} % [K] Temperature at surface, climatological seasonal anomaly corrected for autoregression (i.e., Level Three data)
+\newcommand{\wndspdanmclm}{\ensuremath{\wndspd^{\anmclmsbs}}} % [m s-1] Wind speed, climatological anomaly
+\newcommand{\wndspdanmcsn}{\ensuremath{\wndspd^{\anmcsnsbs}}} % [m s-1] Wind speed, climatological seasonal anomaly
+\newcommand{\wndspdanmcsncrc}{\ensuremath{\wndspd^{\anmcsncrcsbs}}} % [m s-1] Wind speed, climatological seasonal anomaly corrected for autoregression (i.e., Level Three data)
+\newcommand{\wndspdavgmth}{\ensuremath{^{\blankidx}\wndspdavg}} % [m s-1] Wind speed, climatological seasonal anomaly corrected for autoregression (i.e., Level Three data)
+\newcommand{\xxxanmcsncrc}{\ensuremath{\xxx^{\anmcsncrcsbs}}} % [frc] climatological seasonal anomaly corrected for autoregression (i.e., Level Three data)
+\newcommand{\xxxcrcidx}{\ensuremath{\xxx^{\crcsbs}_{\tmidx}}} % [frc] Climatological anomaly, auto-regression-corrected, explicit timeseries subscript
+\newcommand{\xxxidxanmclm}{\ensuremath{\xxxidx^{\anmclmsbs}}} % [frc] Climatological anomaly, explicit timeseries subscript
+\newcommand{\xxxidxanmcsn}{\ensuremath{\xxxidx^{\anmcsnsbs}}} % [frc] Climatological seasonal anomaly, explicit timeseries subscript
+\newcommand{\xxxidxanmcsncrc}{\ensuremath{\xxxidx^{\anmcsncrcsbs}}} % [frc] Climatological seasonal anomaly corrected for autoregression (i.e., Level Three data), explicit timeseries subscript
+%\newcommand{\foo}{\ensuremath{f}} % [] 
+

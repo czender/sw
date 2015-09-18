@@ -1,0 +1,96 @@
+# csz++
+# Usage:
+# sudo cp /home/zender/linux/usr/local/pgi/license.dat.sand /usr/local/pgi/license.dat
+# sudo cp /home/zender/linux/usr/local/pgi/license.dat.sand sand.ess.uci.edu:/usr/local/pgi/license.dat
+# sudo cp sand.ess.uci.edu:/usr/local/pgi/license.dat /home/zender/linux/usr/local/pgi/license.dat.sand 
+# Restart PGI license server on sand with 
+# /etc/init.d/pgi-lmgrd restart
+
+## Keys for PGI 5.2 on sand.ess.uci.edu installed 2004
+## In the SERVER line below, replace 'server' with the 
+## hostname of the computer running the license daemons.
+##
+##SERVER server 00d0680399a4 7496
+#SERVER sand 00d0680399a4 7496
+##
+## In the DAEMON line, the location of the pgroupd daemon
+## may need to be modified.
+##
+#DAEMON pgroupd /usr/local/pgi/bin/pgroupd 
+##DAEMON pgroupd /usr/local/pgi-5.1-5/linux86-64/5.1/bin/pgroupd
+#
+#FEATURE pghpf-linux86 pgroupd 5.200 31-dec-0 1 4BB830312B4991866DC8 \
+#   VENDOR_STRING=508553:4 HOSTID=00d0680399a4 ck=236
+#FEATURE pgf90-linux86 pgroupd 5.200 31-dec-0 1 2BE88011A53CD2B38C77 \
+#   VENDOR_STRING=508553:4 HOSTID=00d0680399a4 ck=32
+#FEATURE pgf77-linux86 pgroupd 5.200 31-dec-0 1 6B7820E1338A9EDF5BE6 \
+#   VENDOR_STRING=508553:4 HOSTID=00d0680399a4 ck=105
+#FEATURE pgcc-linux86 pgroupd 5.200 31-dec-0 1 DBA880818B8C788D9626 \
+#   VENDOR_STRING=508553:4 HOSTID=00d0680399a4 ck=233
+#FEATURE pgcpp-linux86 pgroupd 5.200 31-dec-0 1 1B980051931B205BD293 \
+#   VENDOR_STRING=508553:4 HOSTID=00d0680399a4 ck=200
+#FEATURE pghpf-linux86-64 pgroupd 5.200 31-dec-0 1 \
+#   EB58807182C4E06B9DAC VENDOR_STRING=508553:4 \
+#   HOSTID=00d0680399a4 ck=5
+#FEATURE pgf90-linux86-64 pgroupd 5.200 31-dec-0 1 \
+#   3BD8B01185D28422E156 VENDOR_STRING=508553:4 \
+#   HOSTID=00d0680399a4 ck=222
+#FEATURE pgf77-linux86-64 pgroupd 5.200 31-dec-0 1 \
+#   BB68D05155F5CF70DD71 VENDOR_STRING=508553:4 \
+#   HOSTID=00d0680399a4 ck=6
+#FEATURE pgcc-linux86-64 pgroupd 5.200 31-dec-0 1 EBA800F1E12F66641760 \
+#   VENDOR_STRING=508553:4 HOSTID=00d0680399a4 ck=241
+#FEATURE pgcpp-linux86-64 pgroupd 5.200 31-dec-0 1 \
+#   2B589061633F1716C464 VENDOR_STRING=508553:4 \
+#   HOSTID=00d0680399a4 ck=163
+#FEATURE pgprof pgroupd 5.200 31-dec-0 1 CB5840D1E95C2DE081B5 \
+#   VENDOR_STRING=508553:4 HOSTID=00d0680399a4 ck=0
+#FEATURE pgdbg pgroupd 5.200 31-dec-0 1 4BF83061052F75746A32 \
+#   VENDOR_STRING=508553:4:ws HOSTID=00d0680399a4 ck=216
+#FEATURE pgdbg-linux86-64 pgroupd 5.200 31-dec-0 1 \
+#   AB5890F1A562E3E5365F VENDOR_STRING=508553:4:ws \
+#   HOSTID=00d0680399a4 ck=37
+
+
+## Keys for PGI 6.0 on sand.ess.uci.edu installed 20050408
+# In the SERVER line below, replace 'server' with the 
+# hostname of the computer running the license daemons.
+#
+SERVER sand 00d0680399a4 7496
+#
+# In the DAEMON line, the location of the pgroupd daemon
+# may need to be modified.
+#
+#DAEMON pgroupd /usr/pgi/bin/pgroupd 
+DAEMON pgroupd /usr/local/pgi/bin/pgroupd 
+FEATURE pghpf-linux86 pgroupd 6.000 31-dec-0 1 0B18F02129490E9E7142 \
+   VENDOR_STRING=508553:4 HOSTID=00d0680399a4 ck=185
+FEATURE pgf90-linux86 pgroupd 6.000 31-dec-0 1 3B88E041FBD6D5B75CA9 \
+   VENDOR_STRING=508553:4 HOSTID=00d0680399a4 ck=46
+FEATURE pgf77-linux86 pgroupd 6.000 31-dec-0 1 EBF800B14100C1D5498C \
+   VENDOR_STRING=508553:4 HOSTID=00d0680399a4 ck=214
+FEATURE pgcc-linux86 pgroupd 6.000 31-dec-0 1 BBD8C001D364AAB6349E \
+   VENDOR_STRING=508553:4 HOSTID=00d0680399a4 ck=47
+FEATURE pgcpp-linux86 pgroupd 6.000 31-dec-0 1 AB3820816BFD8B73F613 \
+   VENDOR_STRING=508553:4 HOSTID=00d0680399a4 ck=16
+FEATURE pghpf-linux86-64 pgroupd 6.000 31-dec-0 1 \
+   3B88606139C65C4ABA41 VENDOR_STRING=508553:4 \
+   HOSTID=00d0680399a4 ck=203
+FEATURE pgf90-linux86-64 pgroupd 6.000 31-dec-0 1 \
+   CBF810419B7DE15F3520 VENDOR_STRING=508553:4 \
+   HOSTID=00d0680399a4 ck=45
+FEATURE pgf77-linux86-64 pgroupd 6.000 31-dec-0 1 \
+   ABC81091AF0DDF89266D VENDOR_STRING=508553:4 \
+   HOSTID=00d0680399a4 ck=34
+FEATURE pgcc-linux86-64 pgroupd 6.000 31-dec-0 1 2B78307173187BEB1835 \
+   VENDOR_STRING=508553:4 HOSTID=00d0680399a4 ck=190
+FEATURE pgcpp-linux86-64 pgroupd 6.000 31-dec-0 1 \
+   CB886041057E6D49A506 VENDOR_STRING=508553:4 \
+   HOSTID=00d0680399a4 ck=253
+FEATURE pgprof pgroupd 6.000 31-dec-0 1 EBC89051A6BAD2392D69 \
+   VENDOR_STRING=508553:4 HOSTID=00d0680399a4 ck=29
+FEATURE pgdbg pgroupd 6.000 31-dec-0 1 5B1810C1EAA4EC4CF7FA \
+   VENDOR_STRING=508553:4:ws HOSTID=00d0680399a4 ck=68
+FEATURE pgdbg-linux86-64 pgroupd 6.000 31-dec-0 1 \
+   FB081021224B756AEBBF VENDOR_STRING=508553:4:ws \
+   HOSTID=00d0680399a4 ck=28

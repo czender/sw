@@ -1,0 +1,23 @@
+# Default crontab file
+#
+# This file is used by the cron program to determine when certain programs
+# should be run.
+#
+# Basically, cron gives you the ability to have a program run at a specific
+# time of day, regardless of whether you are logged in or not.
+#
+# The two examples provided inform you of daily reminders (if you use the
+# calendar program) and of the arrival of new messages (the msgs program).
+# 
+# To enable the .crontab file, you must execute the command 
+# crontab .crontab
+#
+# You can see what your current cron entries are with
+# crontab -l
+#
+# 'man 5 crontab' will give you more information about the format of lines
+# in your .crontab file.
+#
+#0 9 * * * /bin/calendar 
+#1 9 * * * /usr/local/bin/msgs -q 
+#0 9 * * * /cgd/home/zender/scripts/getweather.sh

@@ -1,0 +1,16 @@
+# Script to communicate between /usr/sbin/chat and modem
+# Syntax is "expect-send" pairs:
+# Chat waits for modem to receive first word (expect) 
+# After receiving first word, Chat sends command
+# '' in expect position means execute send command immediately 
+TIMEOUT 10
+ABORT ERROR
+ABORT BUSY
+ABORT 'NO CARRIER'
+ABORT 'NO DIALTONE'
+'' 'ATZ'
+SAY "Looking for dialtone...\n"
+OK 'atdt8249999'
+SAY "Dialling ISP...\n"
+TIMEOUT 75
+CONNECT 

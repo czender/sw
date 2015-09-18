@@ -1,0 +1,31 @@
+# $Id$ -*-shell-script-*-
+
+# Purpose: Commands executed at login to a bash shell
+
+# 20000307 It is incorrect to use ~ instead of ${HOME} in bash_profile
+# Using ~ instead of ${HOME} in bashrc appears to be fine
+# Is this because ${HOME} is not set until login completes?
+# 20140529 Mac OS X terminal is a login shell so executes .bash_profile not .bashrc
+
+# Source: Customized from Redhat 6.0 bash_profile
+
+# Bash login shells execute one of (in order) .bash_profile, .bash_login, .profile
+# .bashrc is executed at the start of any subshell
+# .bash_logout is executed every time a Bash login shell exits
+
+# Get aliases and functions
+if [ -f ${HOME}/.bashrc ]; then
+# fxm: It is unclear to me whether bashrc should be explicitly sourced here, 
+# or whether the login process does this itself
+    . ${HOME}/.bashrc
+fi # endif bashrc
+
+# User specific environment and startup programs
+PATH=${PATH}:${HOME}/bin
+BASH_ENV=${HOME}/.bashrc
+USERNAME=""
+
+export USERNAME BASH_ENV PATH
+
+# Programs to start automatically on login, e.g., X, would go here
+# startx

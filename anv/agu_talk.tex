@@ -1,0 +1,249 @@
+% Purpose: Slides for the AGU talk
+
+\documentclass[agupp]{aguplus}
+\usepackage{graphicx}
+\usepackage{csz}
+\begin{document}
+
+% Title Title Title Title Title Title Title Title
+\begin{center}
+\Large
+\textbf{Parameterization of Anvil Clouds in the NCAR GCM}
+
+\textbf{Charles S. Zender and J.T. Kiehl}
+
+\textbf{University of Colorado and NCAR}
+
+\end{center}
+
+%\title{Parameterization of Anvil Clouds in the NCAR GCM}
+%\author{Charles S. Zender\\University of Colorado and NCAR \and
+%J.T. Kiehl\\ NCAR}
+%\date
+%\maketitle
+
+\medskip
+
+\begin{itemize}
+\Large
+\item Parameterization Description
+\item Global Seasonal Cycle Sensitivity
+\item Regional Sensitivity
+\item Equatorial Pacific 
+\item Changes in Cloud Feedback in 1987 El Ni\~no
+\item Conclusions
+\end{itemize}
+
+\normalsize
+\pagebreak
+
+% Heurism Heurism Heurism Heurism Heurism Heurism Heurism Heurism
+
+\begin{figure*}
+\includegraphics[height=.5\textheight,clip=true]{anv_concept.eps}
+%\caption{Conceptual model of the ice budget in the ANV scheme.\label{fig:anv_concept}}
+\end{figure*}
+
+\Large
+ANV Scheme:
+\begin{eqnarray}
+{\partial \qi \over \partial t} & 
+= & 
+-\vec u \cdot \nabla \qi + 
+{\alpha M_{\mathrm{c}} \over \rho \Delta Z} - 
+\beta \qi - 
+\gamma \qi \\
+{\partial \qi \over \partial t} & 
+= & 
+-\vec u \cdot \nabla \qi + 
+A_s\Bigl(
+{\alpha_{\mathrm STB} w + \beta_{\mathrm STB} {\mathrm H}(T - 240)
+\over \rho \Delta z} \Bigr) -
+\beta \qi - 
+\gamma \qi \\
+{\partial \qv \over \partial t} &
+= & 
+-\vec u \cdot \nabla \qv - 
+{\alpha \Mc \over \rho \Delta Z} + 
+\beta \qi + 
+\delta \Bigl(1 - {\qi \over
+\qvi}\Bigr)P_{\mathrm{i}}^{1/2} \\
+{\partial T \over \partial t} &
+= &
+ -\vec u \cdot \nabla T +
+{\mbox{L}_{\mathrm{i}} \over {\mathrm c_p}}\Biggl[
+{\alpha \Mc \over \rho \Delta Z} - 
+\beta \qi - 
+\delta \Bigl(1 - {\qi \over \qvi}\Bigr)P_{\mathrm{i}}^{1/2}
+\Biggr]
+\end{eqnarray}
+
+CCM Scheme:
+\begin{eqnarray}
+\LWC & = & \LWC_0 \exp (-z/H) \\
+H & \propto & \ln Q \\
+Q & \propto & \int q dp
+\end{eqnarray}
+
+\normalsize
+\pagebreak
+
+% Conclusions Conclusions Conclusions Conclusions Conclusions Conclusions Conclusions Conclusions 
+\begin{center}
+\Large
+\textbf{Conclusions} 
+\end{center}
+
+\medskip
+
+\begin{itemize}
+\Large
+\item $w$, $T$, and $A_c$ suffice to grossly represent stable ice
+generation at the GCM scale. 
+\item A threshold convective mass flux \Mc\ (i.e., \Mc\ at lowest
+convective freezing level above 500~mb) can work as a proxy for \IWP\
+generation. 
+\item \Mc\ should be interpolated between adjacent vertical levels
+to help avoid spurious changes in \Mc\ due to coarse vertical
+resolution. 
+\item Cloud fraction may be implicitly parameterized, at least in
+cirrus anvils, where patchiness is low.  
+\item Negative cloud forcing feedbacks to \SST\ forcing in deep
+convective regimes is consistent with anomalous \SWCF\ increase to a
+saturated \LWCF\ basic state.
+\item The \LWCF\ response to large \SST\ forcing in CCM 
+(tightly coupled to \SST) was superior to ANV (tightly
+coupled to \Mc) because freezing level \Mc\ does not trend well 
+with \SST\ (in the ANV convection scheme).
+\item The \SWCF\ response to large \SST\ forcing in ANV was superior
+to CCM because the CCM condensate depends on the ALWC (logarithmically
+increasing with temperature change) whereas ANV depends linearly on \Mc.
+\end{itemize}
+
+\normalsize
+\pagebreak
+
+\begin{figure*}
+\includegraphics*[width=.5\hsize]{/data/zender/ps/erbe_b_anom_xavg_8589x87_0112_LWCF.eps}
+\includegraphics*[width=.5\hsize]{/data/zender/ps/erbe_b_anom_xavg_8589x87_0112_SWCF.eps}
+
+\includegraphics*[width=.5\hsize]{/data/zender/ps/amip5_anom_xavg_8589x87_0112_LWCF.eps}
+\includegraphics*[width=.5\hsize]{/data/zender/ps/amip5_anom_xavg_8589x87_0112_SWCF.eps}
+
+\includegraphics*[width=.5\hsize]{/data/zender/ps/spcp_81_anom_xavg_8589x87_0112_LWCF.eps}
+\includegraphics*[width=.5\hsize]{/data/zender/ps/spcp_81_anom_xavg_8589x87_0112_SWCF.eps}
+\caption{Seasonal amplitude in zonally averaged longwave and shortwave
+cloud forcing (\wxmS ) for (a) ERBE, (b) CCM, and
+(c) ANV. 
+Contour intervals are 5 and 10~\wxmS, respectively. 
+Month 1 is January. 
+Data are from 1985, 1986, 1988, and 1989.
+\label{fig:anom_xavg_8589x87_0112}}   
+\end{figure*}
+
+\begin{figure*}
+\centering
+\includegraphics*[height=.3\textheight]{/data/zender/ps/anom_xyavg_reg_Pacific_Equatorial_Eastern_8589x87_0112_LWCF.eps}%
+\includegraphics*[height=.3\textheight]{/data/zender/ps/anom_xyavg_reg_Pacific_Equatorial_Eastern_8589x87_0112_SWCF.eps}%
+
+\includegraphics*[height=.3\textheight]{/data/zender/ps/anom_xyavg_reg_Pacific_Western_Warm_Pool_8589x87_0112_LWCF.eps}%
+\includegraphics*[height=.3\textheight]{/data/zender/ps/anom_xyavg_reg_Pacific_Western_Warm_Pool_8589x87_0112_SWCF.eps}%
+
+\includegraphics*[height=.3\textheight]{/data/zender/ps/anom_xyavg_reg_Atlantic_North_8589x87_0112_LWCF.eps}%
+\includegraphics*[height=.3\textheight]{/data/zender/ps/anom_xyavg_reg_Atlantic_North_8589x87_0112_SWCF.eps}%
+\caption{Seasonal amplitude in regionally averaged longwave and
+shortwave cloud forcing (\wxmS ) over ocean only for ERBE, CCM, and
+ANV. 
+Month 1 is January.  
+Data are from 1985, 1986, 1988, and 1989.
+\label{fig:anom_xyavg_reg_8589x87_0112_ocean}}   
+\end{figure*}
+
+\begin{figure*}
+\centering
+\includegraphics*[height=.3\textheight]{/data/zender/ps/anom_xyavg_reg_Africa_South_8589x87_0112_LWCF.eps}%
+\includegraphics*[height=.3\textheight]{/data/zender/ps/anom_xyavg_reg_Africa_South_8589x87_0112_SWCF.eps}%
+
+\includegraphics*[height=.3\textheight]{/data/zender/ps/anom_xyavg_reg_Amazon_Basin_8589x87_0112_LWCF.eps}%
+\includegraphics*[height=.3\textheight]{/data/zender/ps/anom_xyavg_reg_Amazon_Basin_8589x87_0112_SWCF.eps}%
+
+\includegraphics*[height=.3\textheight]{/data/zender/ps/anom_xyavg_reg_Siberia_Western_8589x87_0112_LWCF.eps}%
+\includegraphics*[height=.3\textheight]{/data/zender/ps/anom_xyavg_reg_Siberia_Western_8589x87_0112_SWCF.eps}%
+\caption{Seasonal amplitude in regionally averaged longwave and
+shortwave cloud forcing (\wxmS ) over land only for ERBE, CCM, and
+ANV. 
+Month 1 is January.
+Data are from 1985, 1986, 1988, and 1989.
+\label{fig:anom_xyavg_reg_8589x87_0112_land}}   
+\end{figure*}
+
+\begin{figure*}
+\centering
+\includegraphics*[height=.95\textheight]{/data/zender/ps/amip5_anom_yavg_8589_0160_LWCF.eps}%
+\includegraphics*[height=.95\textheight]{/data/zender/ps/spcp_81_anom_yavg_8589_0160_LWCF.eps}%
+\caption{Hovm\"oller diagrams of meridionally averaged longwave cloud
+forcing (\wxmS ) in the tropics (10~\degreee S--10~\degreee N) for
+(a) CCM, and (b) ANV.
+Month 1 is January 1985.  
+\label{fig:anom_yavg_8589_0160_a}}
+\end{figure*}
+
+\begin{figure*}
+\includegraphics*[width=.45\hsize]{/data/zender/ps/erbe_b_reg_Pacific_Equatorial_Western_87m85_0305_LWCF_SWCF.eps}
+\includegraphics*[width=.45\hsize]{/data/zender/ps/erbe_b_reg_Pacific_Equatorial_Central_87m85_0305_LWCF_SWCF.eps}
+
+\includegraphics*[width=.45\hsize]{/data/zender/ps/amip5_reg_Pacific_Equatorial_Western_87m85_0305_LWCF_SWCF.eps}
+\includegraphics*[width=.45\hsize]{/data/zender/ps/amip5_reg_Pacific_Equatorial_Central_87m85_0305_LWCF_SWCF.eps}
+
+\includegraphics*[width=.45\hsize]{/data/zender/ps/spcp_81_reg_Pacific_Equatorial_Western_87m85_0305_LWCF_SWCF.eps}
+\includegraphics*[width=.45\hsize]{/data/zender/ps/spcp_81_reg_Pacific_Equatorial_Central_87m85_0305_LWCF_SWCF.eps}
+\caption{Differences in monthly mean \LWCF\ and \SWCF\ over ocean between 1987
+and 1985 for the three months March, April, and May in the Equatorial
+Western and Central Pacific for (a) ERBE, (b) CCM, and
+(c) ANV.
+\label{fig:reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF_a}}   
+\end{figure*}
+
+\begin{figure*}
+\includegraphics*[width=.45\hsize]{/data/zender/ps/erbe_b_reg_Pacific_Equatorial_Eastern_87m85_0305_LWCF_SWCF.eps}
+\includegraphics*[width=.45\hsize]{/data/zender/ps/erbe_b_reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF.eps}
+
+\includegraphics*[width=.45\hsize]{/data/zender/ps/amip5_reg_Pacific_Equatorial_Eastern_87m85_0305_LWCF_SWCF.eps}
+\includegraphics*[width=.45\hsize]{/data/zender/ps/amip5_reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF.eps}
+
+\includegraphics*[width=.45\hsize]{/data/zender/ps/spcp_81_reg_Pacific_Equatorial_Eastern_87m85_0305_LWCF_SWCF.eps}
+\includegraphics*[width=.45\hsize]{/data/zender/ps/spcp_81_reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF.eps}
+\caption{Differences in monthly mean \LWCF\ and \SWCF\ over ocean between 1987
+and 1985 for the three months March, April, and May in the Equatorial
+Eastern Pacific and Equatorial Pacific for (a) ERBE, (b) CCM, and (c)
+ANV. 
+\label{fig:reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF_b}}   
+\end{figure*}
+
+\begin{figure*}
+\includegraphics*[width=.45\hsize]{/data/zender/ps/amip5_reg_Pacific_Equatorial_Central_87m85_0305_LWCF_SWCF.eps}
+\includegraphics*[width=.45\hsize]{/data/zender/ps/spcp_81_reg_Pacific_Equatorial_Central_87m85_0305_LWCF_SWCF.eps}
+
+\includegraphics*[width=.45\hsize]{/data/zender/ps/amip5_reg_Pacific_Equatorial_Central_87m85_0305_TS1_LWCF.eps}
+\includegraphics*[width=.45\hsize]{/data/zender/ps/spcp_81_reg_Pacific_Equatorial_Central_87m85_0305_TS1_LWCF.eps}
+
+\includegraphics*[width=.45\hsize]{/data/zender/ps/amip5_reg_Pacific_Equatorial_Central_87m85_0305_TS1_TMQ.eps}
+\includegraphics*[width=.45\hsize]{/data/zender/ps/spcp_81_reg_Pacific_Equatorial_Central_87m85_0305_TS1_CMFMC.eps}
+\caption{Differences in monthly mean \SST\ and \LWCF\,
+\SST\ and precipitable water, and \SST\ and \Mc\ over ocean between
+1987 and 1985 for the three months March, April, and May in the
+Equatorial Central Pacific (a) CCM, (b) ANV.
+\label{fig:reg_Pacific_Equatorial_87m85_0305_TS1_CMFMC}}   
+\end{figure*}
+
+\begin{figure*}
+\centering
+\includegraphics*[height=.95\textheight]{/data/zender/ps/erbe_b_anom_yavg_8589_0160_LWCF.eps}%
+\caption{Hovm\"oller diagram of meridionally averaged longwave cloud
+forcing (\wxmS ) in the tropics (10~\degreee S--10~\degreee N) for
+ERBE.
+Month 1 is January 1985.  
+\label{fig:anom_yavg_8589_0160_b}}   
+\end{figure*}
+
+\end{document}

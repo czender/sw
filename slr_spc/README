@@ -1,0 +1,29 @@
+-*-text-*-
+
+Last Update: 19980904
+
+This directory, ${HOME}/slr_spc, contains data and programs
+related to the solar spectral irradiance.
+The slr_spc program turns raw source data files (stored in
+${DATA}/aca) into standard netCDF files (also stored in
+${DATA}/aca).
+
+Following two files are Bob Kurucz's spectra as retrieved about 970410
+from climate.gsfc.nasa.gov:/pub/wiscombe/Shortwave/Solar_Spectrum
+
+spc_Kur95_01wvn.txt
+spc_Kur95_20wvn.txt
+
+Following two files were sent to me by Bob Kurucz on 970527.
+First file are observations from NSO (Kitt Peak?)
+Second file comprises Kurucz's model results.
+
+spc_KFB84.txt
+spc_Kur97.txt
+
+Following file comprises Neckel and Labs data filled out with no fewer
+than three other, independent sources. 
+These data are used by the folks at SIO and C4. 
+Given to me by Bill Collins on 19961204. 
+
+spc_NeL84.txt	

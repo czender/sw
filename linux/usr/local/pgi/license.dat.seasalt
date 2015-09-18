@@ -1,0 +1,41 @@
+# 
+# Please do not change this file until you receive your permanent
+# license.  Modifying this file may cause your temporary license to
+# fail.
+#
+# csz++
+# Usage:
+# sudo cp ~/linux/usr/local/pgi/license.dat.seasalt /usr/local/pgi/license.dat
+# lmgrd server is started by /etc/rc.d/rc.local
+# Following licenses received 20010604 for PGI 3.4 for seasalt.ps.uci.edu
+# lmgrd fails when IDL and PGI licenses use different port numbers
+# IDL wants to use port 1700, while PGI wants to use port 7496
+#SERVER seasalt.ps.uci.edu 0001031c5c7f 7496
+SERVER seasalt.ps.uci.edu 0001031c5c7f 1700
+DAEMON pgroupd /usr/local/pgi/linux86/bin/pgroupd 
+FEATURE pghpf-linux86 pgroupd 3.200 31-dec-0 1 7B18E0417B6A1274FE04 \
+    VENDOR_STRING=502421:4 HOSTID=0001031c5c7f ck=199
+FEATURE pgf90-linux86 pgroupd 3.200 31-dec-0 1 BBE850411DAB5F396FA3 \
+    VENDOR_STRING=502421:4 HOSTID=0001031c5c7f ck=19
+FEATURE pgf77-linux86 pgroupd 3.200 31-dec-0 1 4B38E0F11F93EF973EB0 \
+    VENDOR_STRING=502421:4 HOSTID=0001031c5c7f ck=23
+FEATURE pgprof pgroupd 3.200 31-dec-0 1 BB7850F14BEEDA88C7D2 \
+    VENDOR_STRING=502421:4 HOSTID=0001031c5c7f ck=37
+FEATURE pgdbg pgroupd 3.200 31-dec-0 1 0BD8A0D1ED5D8E6CDF39 \
+    VENDOR_STRING=502421:4 HOSTID=0001031c5c7f ck=99
+
+# I am not licensed for the following products
+#FEATURE pgcc-linux86 pgroupd 0.0 31-dec-0 0 0 \
+#         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48
+#FEATURE pgCC-linux86 pgroupd 0.0 31-dec-0 0 0 \
+#         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48
+#FEATURE pghpf-sol86 pgroupd 0.0 31-dec-0 0 0 \
+#         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48
+#FEATURE pgf77-sol86 pgroupd 0.0 31-dec-0 0 0 \
+#         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48
+#FEATURE pgf90-sol86 pgroupd 0.0 31-dec-0 0 0 \
+#         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48
+#FEATURE pgcc-sol86 pgroupd 0.0 31-dec-0 0 0 \
+#         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48
+#FEATURE pgCC-sol86 pgroupd 0.0 31-dec-0 0 0 \
+#         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48

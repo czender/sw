@@ -1,0 +1,1848 @@
+% $Id$
+
+% Purpose: Seminar on mineral dust modeling
+
+% Usage: 
+% cd ${HOME}/crr;make -W smn_dst_mdl.tex smn_dst_mdl.ps;cd -
+
+\documentclass[final,dvips]{foils}
+
+% Standard packages
+\usepackage{amsmath} % \subequations, \eqref, \align
+\usepackage{array} % Table and array extensions, e.g., column formatting
+\usepackage[usenames]{color} % usenames allows, e.g., ``ForestGreen''
+\usepackage{graphicx} % Defines \includegraphics*
+\usepackage{longtable} % Multi-page tables, e.g., acronyms and symbols
+\usepackage{mdwlist} % Compact list formats \itemize*, \enumerate*
+\usepackage{natbib} % \cite commands from aguplus
+\usepackage[figuresright]{rotating} % Allows sideways figures and tables
+%\usepackage{times} % Times/Roman font, aguplus STRONGLY recommends this for the camera-ready version!!
+\usepackage{url} % Typeset URLs and e-mail addresses
+
+% Personal packages
+\usepackage{csz} % Library of personal definitions
+\usepackage{abc} % Alphabet as three letter macros
+\usepackage{dmn} % Dimensional units
+\usepackage{chm} % Chemistry
+\usepackage{dyn} % Fluid dynamics
+\usepackage{aer} % Aerosol physics
+\usepackage{rt} % Radiative transfer
+\usepackage{psd} % Particle size distributions
+\usepackage{smn} % Seminars
+\input{jgr_abb} % JGR-sanctioned journal abbreviations
+
+% Margins
+\topmargin 0in \headheight 0pt \headsep 0pt
+\textheight 9in \textwidth 6.5in
+\oddsidemargin 0in \evensidemargin 0in
+\marginparwidth 0pt \marginparsep 0pt
+\footskip 0pt
+\footnotesep=0pt
+
+% Commands specific to this file
+\newcommand{\bluestar}{\textcolor{blue}{$^{*}$}}
+\newcommand{\greenstar}{\textcolor{green}{$^{*}$}}
+\newcommand{\redstar}{\textcolor{red}{$^{*}$}}
+
+% FoilTeX macros
+\MyLogo{} % Appears bottom left corner every page
+\rightfooter{} % Pagenumber is the default
+\leftheader{} % Appears upper left
+\rightheader{} % Appears upper right
+
+\begin{document}
+\raggedright % Default is justified
+
+\rotatefoilhead{\huge \textcolor{blue}{The Atmospheric Physics of Climate Change}}\vspace{-0.5in}\LARGE
+\begin{center}
+Charles S. Zender\\
+Deptartment of Earth System Science\\
+University of California, Irvine\\
+\bigskip
+\bigskip
+\bigskip
+Summer Science Program\\
+Ojai, CA, July 17, 2004\\
+\bigskip
+\normalsize
+\end{center}
+
+\rotatefoilhead{\huge \textcolor{blue}{
+Global Patterns of Wind Erosion and Dust Emission in
+the Present Climate}}\vspace{-0.5in}\LARGE
+\begin{center}
+Charles S. Zender\\
+Dept.\ of Earth System Science, UC Irvine\\
+\bigskip
+\bigskip
+\bigskip
+Universitat Polytecnica de Catalunya, March 26, 2004\\
+\bigskip
+{\large Thanks: H.~Bian, A.~Grini, M.~Flanner, D.~Newman}
+\normalsize
+\end{center}
+
+\rotatefoilhead{\huge \textcolor{blue}{
+The Influence of Wind Erosion in Past, Present, and Future
+Climates}}\vspace{-0.5in}\LARGE 
+\begin{center}
+Charles S. Zender\\
+Dept.\ of Earth System Science, UC Irvine\\
+\bigskip
+\bigskip
+\bigskip
+Institut de Ci\`{e}ncia i~Tecnologia Ambientals\\
+Universitat Autonoma de Barcelona, \\
+March 30, 2004\\
+\bigskip
+{\large Thanks: H.~Bian, A.~Grini, M.~Flanner, D.~Newman}
+\normalsize
+\end{center}
+
+\foilhead{\bgp
+\Large\textcolor{blue}{\hfill Photolysis Forcing \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering
+\includegraphics*[width=1.0\hsize]{/data/zender/fgr/ppr_BiZ03/fgbw/phot}%
+\caption{Simulated dust-induced change in $\prc$-values.
+Point~A ($10\dgr${}N, $15\dgr${}E) in this study is solid line,
+and from simulation of \cite{MJL02} is dotted line.
+Point~B ($18\dgr${}N, $5\dgr${}W) is dashed line.
+Point~C ($14\dgr${}N, $32\dgr${}W) is dash-dot line.}
+\end{figure}
+
+\foilhead{\bgp
+\Large\textcolor{blue}{\hfill \Ot\ Distribution \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering
+\includegraphics*[width=1.0\hsize]{/data/zender/fgr/ppr_BiZ03/fgbw/o3}%
+\caption{Climatological \Ot~[ppb] in January and July at three
+  atmospheric layers simulated using gas phase chemistry alone.} 
+\end{figure}
+
+\foilhead{\bgp
+\Large\textcolor{blue}{\hfill Photochemical Forcing of \Ot\ by Dust \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering
+\includegraphics*[width=1.0\hsize]{/data/zender/fgr/ppr_BiZ03/fgbw/paperphoo3}%
+\caption{Photolysis rate forcing of \Ot~[ppb] by dust in January and
+July at three atmospheric layers.}
+\end{figure}
+
+\foilhead{\bgp
+\Large\textcolor{blue}{\hfill Heterogeneous Forcing of \Ot\ by Dust \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering
+\includegraphics*[width=1.0\hsize]{/data/zender/fgr/ppr_BiZ03/fgbw/heto3}%
+\caption{Decrease in \Ot~[ppb] due to heterogeneous reactions on
+dust in January and July at three atmospheric layers.}
+\end{figure}
+
+\rotatefoilhead{\huge \textcolor{blue}{
+LGM dust distribution and radiative forcing: Sensitivity to vegetation
+reconstruction}}\vspace{-0.5in}\LARGE
+\begin{center}
+Charles S. Zender, Mark Flanner, and Jonathan Adams\\
+Dept.\ of Earth System Science, UC Irvine\\
+\bigskip
+\bigskip
+\bigskip
+INQUA, Reno, Nevada, July 23--30, 2003\\
+\bigskip
+{\large Thanks: S.~Levis}
+\normalsize
+\end{center}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Background \& Objectives \hfill}}\vspace{-0.75in}\large
+\textit{Background}: 
+\vspace{-0.5in}\begin{itemize*}
+\item Previous research shows vegetation change required to reproduce    
+observed LGM:Present deposition ratios in high latitudes
+\cite[][]{MKH99,WTH02}
+\item Reconstructions of LGM vegetation differ significantly 
+in semi-arid regions \cite[][]{Cro95,AdF97} 
+\end{itemize*}
+\textit{Objectives}: 
+\vspace{-0.5in}\begin{itemize*}
+\item What are dust burden and climate forcing uncertainties due to  
+  vegetation reconstruction?
+\item How do they compare to LGM GHG, Solar climate forcing?
+\item May dust simulation/evaluation inform LGM vegetation reconstruction?
+\end{itemize*}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Strategy \hfill}}\vspace{-0.5in}\large
+\textit{Strategy}:
+Use present day and end-member $\vai$ reconstructions in mineral Dust
+Entrainment And Deposition (DEAD) model
+(\url{http://dust.ess.uci.edu/dead}) embedded in GCM.\\ 
+\begin{itemize*}
+\item Present Day: Satellite-derived $\vai$ \cite[]{KMC99,DZD03}
+\item Crowley: Reconstructed $\vai$ \cite[]{Cro95}
+\item Adams: Reconstructed $\vai$ \cite[]{AdF97}
+\end{itemize*}
+Evaluate present, LGM deposition results with DIRTMAP \cite[]{KoH01}.
+
+\foilhead{\bgp
+\Large\textcolor{blue}{\hfill Definitions \hfill}}\vspace{-0.5in}\large
+\begin{eqnarray}
+\flxmssvrtdstj & = & 
+\mblfrc \erdfct \hrzvrtprpfct \flxmsshrzslt 
+\sum_{\binidx=1}^{\srcnbr} \mssovrsrcsnk \nonumber \\
+\label{eqn:flx_mss_vrt_dst_ttl}
+\mblfrc & = & (1 - \lkfrc - \wtlfrc)(1 - \snwfrc)(1 - \vgtfrc) \nonumber \\
+\label{eqn:mbl_frc}
+\vgtfrc & = & \min[1.0,\min(\textcolor{ForestGreen}{\vai},\vaithr)/\vaithr] \nonumber
+\label{eqn:vgt_frc}
+\end{eqnarray}
+$\flxmssvrtdstj$\,[\kgxmSs]: Vertical dust flux\\
+$\mblfrc$: Fraction of ground that is erodible\\
+$\erdfct$: Erodibility factor\\
+$\hrzvrtprpfct$\,[\xm]: Sandblasting mass efficiency\\
+$\flxmsshrzslt$\,[\kgxms]: Saltation mass flux\\ 
+$\mssovrsrcsnk$: Source mode $\srcidx$ overlap with dust bin $\snkidx$\\
+$\lkfrc$, $\snwfrc$, $\vgtfrc$, $\wtlfrc$: Constraint by
+lakes, snow, vegetation, wetlands\\   
+\textcolor{ForestGreen}{$\vai$\,[\mSxmS]: Vegetation Area Index}\\
+$\vaithr = 0.3$\,\mSxmS: Threshold VAI\\
+
+\foilhead{\bgp
+\Large\textcolor{blue}{\hfill Vegetation Forcing \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering
+% gcm_xy_bch,pll=4,img=0,fld_top=1,lbl_typ='auto',prn=1
+\includegraphics*[width=0.7\hsize]{dstccm97_clm_VAI_DST}\vfill
+\includegraphics*[width=0.7\hsize]{dstccm96_clm_VAI_DST}\vfill
+\includegraphics*[width=0.7\hsize]{dstccm95_clm_VAI_DST}\vfill
+\caption{
+Vegetation Area Index $\vai$\,[\mSxmS] for
+(a)~Present Day, (b)~Crowley LGM, (c)~Adams LGM.
+\label{fgr:DSTSFMBL}}
+\end{figure}
+
+\foilhead{\bgp
+\Large\textcolor{blue}{\hfill Present Day Deposition\hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering
+\includegraphics*[width=\hsize]{dirtmap_dstccm97_DSTSFDPS}\vfill
+\caption{
+Present day DIRTMAP2 \cite[]{KoH01} ($x$-axis) vs.\ simulated
+($y$-axis) mass deposition flux $\flxmssvrtdst$\,[\gxmSyr].
+\label{fgr:DSTSFMBL}}
+\end{figure}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill LGM Dust \& Loess Deposition\hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering
+\includegraphics*[width=0.5\hsize]{dirtmap_dstccm96_DSTSFDPS}%
+\includegraphics*[width=0.5\hsize]{dirtmap_dstccm95_DSTSFDPS}
+\caption{
+LGM DIRTMAP2 \cite[]{KoH01} ($x$-axis) vs.\ simulated
+($y$-axis) mass deposition flux $\flxmssvrtdst$\,[\gxmSyr]
+for two vegetation reconstructions (a)~Crowley and (b)~Adams. 
+\label{fgr:DSTSFMBL}}
+\end{figure}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill LGM:Present Deposition Ratio\hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering
+\includegraphics*[width=0.5\hsize]{dirtmap_dstccm96_DSTSFDPS_rat}%
+\includegraphics*[width=0.5\hsize]{dirtmap_dstccm95_DSTSFDPS_rat}
+\caption{
+Ratio of LGM to present mass deposition flux from DIRTMAP2
+\cite[]{KoH01} ($x$-axis) and two vegetation reconstructions 
+($y$-axis) (a)~Crowley and (b)~Adams. 
+\label{fgr:DSTSFMBL}}
+\end{figure}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Present Day Seasonal Optical Depth \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering
+% ${HOME}/idl/gcm.pro:gcm_xy_bch,img=0,pll=4,csn=1,lbl_typ='auto',prn=0
+\includegraphics[width=0.5\hsize]{dstccm97_clm_1202_DSTODXC}%
+\includegraphics[width=0.5\hsize]{dstccm97_clm_0608_DSTODXC}%
+
+\includegraphics[width=0.5\hsize]{dstccm97_clm_0305_DSTODXC}%
+\includegraphics[width=0.5\hsize]{dstccm97_clm_0911_DSTODXC}%
+\caption{
+Predicted seasonal mean dust optical depth at 0.63\,\um\ for (a)~DJF, 
+(b)~MAM, (c)~JJA, and (d)~SON.
+\label{fgr:dstodxc_csn}}
+\end{figure}
+
+\foilhead{\bgp
+\Large\textcolor{blue}{\hfill LGM Annual Mean Optical Depth \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering
+% ${HOME}/idl/gcm.pro:gcm_xy_bch,img=0,pll=4,fld_top=1,lbl_typ='auto',prn=0
+\includegraphics[width=0.7\hsize]{dstccm97_clm_DSTODXC}\vfill
+\includegraphics[width=0.7\hsize]{dstccm96_clm_DSTODXC}\vfill
+\includegraphics[width=0.7\hsize]{dstccm95_clm_DSTODXC}
+\caption{
+Predicted annual mean dust optical depth at 0.63\,\um\ for
+(a)~Present Day, (b)~Crowley LGM, (c)~Adams LGM.
+\label{fgr:dstodxc}}
+\end{figure}
+
+\foilhead{\bgp
+\Large\textcolor{blue}{\hfill Solar Radiative Forcing \& Response \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering
+% ${HOME}/idl/gcm.pro:gcm_xy_bch,img=0,pll=4,fld_top=1,pnl_lbl='!5(a)',prn=0
+\includegraphics[width=0.7\hsize]{dstccm94_clm_FSNT}\vfill
+% ${HOME}/idl/gcm.pro:gcm_xy_bch,img=0,pll=4,fld_top=1,pnl_lbl='!5(b)',prn=0
+\includegraphics[width=0.7\hsize]{dstccm94_clm_FSNTFRC}\vfill
+% ${HOME}/idl/gcm.pro:gcm_xy_bch,img=0,pll=4,fld_top=1,pnl_lbl='!5(c)',prn=0,diff=1
+\includegraphics[width=0.7\hsize]{dstccm97_clm_dstccm94_clm_FSNT}\vfill
+\caption{
+Predicted annual mean present day 
+(a)~TOA net solar flux $\flxnetswtoa$, 
+(b)~Dust forcing of $\flxnetswtoa$, 
+(c)~Response of $\flxnetswtoa$ to dust.
+\label{fgr:dstodxc}}
+\end{figure}
+
+\foilhead{\bgp
+\Large\textcolor{blue}{\hfill Total Radiative Forcing \& Response \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering
+% ${HOME}/idl/gcm.pro:gcm_xy_bch,img=0,pll=4,fld_top=1,pnl_lbl='!5(a)',prn=0
+\includegraphics[width=0.7\hsize]{dstccm94_clm_FTNT}\vfill
+% ${HOME}/idl/gcm.pro:gcm_xy_bch,img=0,pll=4,fld_top=1,pnl_lbl='!5(b)',prn=0
+\includegraphics[width=0.7\hsize]{dstccm94_clm_FTNTFRC}\vfill
+% ${HOME}/idl/gcm.pro:gcm_xy_bch,img=0,pll=4,fld_top=1,pnl_lbl='!5(c)',prn=0,diff=1
+\includegraphics[width=0.7\hsize]{dstccm97_clm_dstccm94_clm_FTNT}\vfill
+\caption{
+Predicted annual mean present day 
+(a)~TOA net radiative flux $\flxnetrdntoa$, 
+(b)~Dust forcing of $\flxnetrdntoa$, 
+(c)~Response of $\flxnetrdntoa$ to dust.
+\label{fgr:dstodxc}}
+\end{figure}
+
+\foilhead{\bgp
+\Large\textcolor{blue}{\hfill Sensitivity of $\flxnetswtoa$ to Vegetation \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering
+% ${HOME}/idl/gcm.pro:gcm_xy_bch,img=0,pll=4,fld_top=1,lbl_typ='auto',prn=0
+\includegraphics[width=0.7\hsize]{dstccm94_clm_FSNTFRC}\vfill
+\includegraphics[width=0.7\hsize]{dstccm93_clm_FSNTFRC}\vfill
+\includegraphics[width=0.7\hsize]{dstccm92_clm_FSNTFRC}
+\caption{
+Predicted annual mean TOA net solar flux forcing by dust
+$\dltflxnetswtoa$ for three vegetation scenarios:
+(a)~Present Day, (b)~Crowley LGM, (c)~Adams LGM.
+\label{fgr:dstodxc}}
+\end{figure}
+
+\rotatefoilhead{}
+\begin{table*}
+\begin{minipage}{\hsize}
+\renewcommand{\footnoterule}{\rule{\hsize}{0.0cm}\vspace{-0.0cm}} % KoD95 p. 111
+\centering % \centering uses less vertical space than center-environment
+\caption[Evaluation of Simulations vs.\ DIRTMAP2]{\textbf{Evaluation of Simulations vs.\ DIRTMAP2}
+\label{tbl:stt}}
+\vspace{\cpthdrhlnskp}
+\begin{tabular}{l *{4}{>{$}r<{$}}}
+\hline \rule{0.0ex}{\hlntblhdrskp}%
+\mbox{Correlation} & \mbox{Present} & \mbox{Crowley} & \mbox{Adams} & \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+& & & & \\[-2.0ex]
+\multicolumn{5}{l}{Correlation of simulated deposition flux
+  $\flxmssvrtdst$ with DIRTMAP} \\[0.0ex]
+% data from dstccm95,96,97,94
+Linear $\crrcff$ % \footnote{Correlation coefficient}
+& 0.31 & 0.44 & \color{red}{0.47} & \\[0.0ex]
+Logarithmic $\crrcff$ % \footnote{Correlation coefficient}
+& 0.88 & 0.87 & \color{red}{0.89} & \\[0.0ex]
+\multicolumn{5}{l}{Slope of simulated deposition flux vs.\ DIRTMAP} \\[0.0ex]
+% data from dstccm95,96,97,94
+Linear $\crrcff$ % \footnote{Correlation coefficient}
+& 0.09 & \color{red}{0.05} & 0.04 & \\[0.0ex]
+Logarithmic $\crrcff$ % \footnote{Correlation coefficient}
+& 0.65 & \color{red}{0.67} & 0.60 & \\[0.0ex]
+\multicolumn{5}{l}{Correlation of simulated LGM:Present flux ratio with DIRTMAP} \\[0.0ex]
+% data from dstccm95,96,97,94
+Linear $\crrcff$ % \footnote{Correlation coefficient}
+& \mbox{NA} & 0.08 & \color{red}{0.21} & \\[0.0ex]
+Logarithmic $\crrcff$ % \footnote{Correlation coefficient}
+& \mbox{NA} & 0.14 & \color{red}{0.19} & \\[0.0ex]
+\hline
+\end{tabular}
+\end{minipage}
+\end{table*} % end tbl:stt
+
+\rotatefoilhead{}
+\begin{table*}
+\begin{minipage}{\hsize}
+\renewcommand{\footnoterule}{\rule{\hsize}{0.0cm}\vspace{-0.0cm}} % KoD95 p. 111
+\centering % \centering uses less vertical space than center-environment
+\caption[Sensitivity of Budget, Forcing, to Vegetation]{\textbf{Sensitivity of Budget, Forcing to Vegetation}
+%\caption[Sensitivity of Budget, Forcing, Response, to Vegetation]{\textbf{Sensitivity of Budget, Forcing, Response, to Vegetation}
+\label{tbl:sns}}
+\vspace{\cpthdrhlnskp}
+\begin{tabular}{l *{4}{>{$}r<{$}}}
+\hline \rule{0.0ex}{\hlntblhdrskp}%
+\mbox{Quantity} & \mbox{Present} & \mbox{Crowley} & \mbox{Adams} & \mbox{Range} \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+% data from dstccm95,96,97,94
+Emission\,[\Tgxyr] % \footnote{Emissions of $\dmt < 10$\,\um\ particles in \Tgxyr}
+& 1.8 & 3.6 & 6.4 & \pm 2.8 \\[0.0ex]
+Lifetime\,[day] % \footnote{Turnover time in days}
+& 3.6 & 3.9 & 3.3 & \pm 0.6 \\[0.0ex]
+Burden\,[\Tg] % \footnote{Atmospheric burden in Tg}
+& 17 & 38 & 57 & \pm 19 \\[0.0ex]
+\tauext % \footnote{Optical depth at 0.63\,\um}
+& 0.030 & 0.065 & 0.096 & \pm 0.03 \\[0.0ex]
+\dltflxnetrdnsfc\,[\wxmS] % \footnote{Net radiative flux forcing at surface}
+& -1.8 & -3.9 & -5.7 & \pm 1.8 \\[0.0ex]
+\dltflxnetrdnatm\,[\wxmS] % \footnote{Net radiative flux forcing of atmosphere}
+& 1.5 & 3.3 & 5.0 & \pm 1.7 \\[0.0ex]
+\dltflxnetrdntoa\,[\wxmS] % \footnote{Net radiative flux forcing at TOA}
+& -0.3 & -0.5 & -0.7 & \pm 0.2 \\[0.0ex]
+\csznote{
+\ensuremath{\delta\flxnetrdnsfc}\,[\wxmS] % \footnote{Net radiative flux response at surface}
+& -1.5 & -3.0 & -5.0 & \pm 2.0 \\[0.0ex]
+\ensuremath{\delta\flxnetrdnatm}\,[\wxmS] % \footnote{Net radiative flux response of atmosphere}
+& 1.0 & 2.3 & 3.8 & \pm 1.5 \\[0.0ex]
+\ensuremath{\delta\flxnetrdntoa}\,[\wxmS] % \footnote{Net radiative flux response at TOA}
+& -0.4 & -0.7 & -1.1 & \pm 0.4 \\[0.0ex]
+} % csznote
+\hline
+\end{tabular}
+\end{minipage}
+\end{table*} % end tbl:sns
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Conclusions \hfill}}\vspace{-0.5in}\large
+\begin{itemize*}
+\item Uncertainty due to LGM vegetation reconstruction:
+  Emissions $2.8$\,\Tgxyr\ ($\sim 60\%$), 
+  Dust burden $19$\,\Tg\ ($\sim 40\%$), 
+  Surface radiative forcing $1.8$\,\wxmS\ ($\sim 40\%$),
+  TOA radiative forcing $0.2$\,\wxmS\ ($\sim 30\%$)
+\item Surface radiative forcing uncertainty comparable to LGM GHG
+  forcing of $2.5$\,\wxmS\ \cite[]{SLO03} 
+\item Uncertainties in size distribution, transport, and scavenging 
+  preclude definitive conclusions about source regions.
+  Preliminary results suggest less Asian vegetation improves
+  simulation of Asian and N.~Pacific dust deposition.
+\end{itemize*}
+
+\rotatefoilhead{\huge \textcolor{blue}{
+Spatial Heterogeneity in Aeolian Erodibility: Uniform, Topographic, Geomorphic, and Hydrologic Hypotheses}}\vspace{-0.5in}\LARGE  
+\begin{center}
+Charles S. Zender and David J. Newman\\
+Dept.\ of Earth System Science, UC Irvine\\
+\bigskip
+\bigskip
+\bigskip
+University of Oslo, January 16, 2003\\
+\bigskip
+{\large Thanks: J.~Famiglietti, P.~Ginoux, S.~Levis, D.~Savoie, O.~Torres}
+\normalsize
+\end{center}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Objectives \hfill}}\vspace{-0.5in}\large
+\textit{Objectives}: 
+\begin{itemize*}
+\item Demonstrate/understand spatial heterogeneity of soil erodibility
+\item Constrain natural sources of dust, increase confidence 
+in identifying anthropogenic emissions 
+\end{itemize*}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Definitions \hfill}}\vspace{-0.5in}\large
+\textit{Definitions}:
+Soil aeolian erodibility $\erdfct$ is efficiency with which soil
+produces dust for given meteorological forcing.
+$\erdfct$ is dimensionless factor appearing in formulation of dust
+mobilization mass flux $\flxmssvrtdstj$\,[\kgxmSs] 
+%\cite[]{ZBN03}
+\begin{eqnarray}
+\flxmssvrtdstj & = & 
+\mblfrc \erdfct \hrzvrtprpfct \flxmsshrzslt 
+\sum_{\binidx=1}^{\srcnbr} \mssovrsrcsnk 
+\label{eqn:flx_mss_vrt_dst_ttl}
+\end{eqnarray}
+where $\mblfrc$ is fraction of ground that is erodible,
+$\hrzvrtprpfct$\,[\xm] is sandblasting mass efficiency,
+$\flxmsshrzslt$\,[\kgxms] is saltation mass flux, and
+$\mssovrsrcsnk$ is mass fraction of source mode $\srcidx$
+carried in transport bin $\snkidx$.
+Visit \url{http://dust.ess.uci.edu/dead} for more details.
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Strategy \hfill}}\vspace{-0.5in}\large
+\textit{Strategy}:
+Compare performance of four different $\erdfct$
+hypotheses in mineral Dust Entrainment And Deposition (DEAD) model
+\begin{itemize*}
+\item Uniform: globally uniform $\erdfct$. 
+  Emissions determined by instantaneous local meteorology, vegetation,
+  soil moisture.   
+\item Topographic: $\erdfct$ characterized by relative elevation in basin \cite[]{GCT01} 
+\item Geomorphic: $\erdfct$ characterized by upstream area.
+\item Hydrologic: $\erdfct$ characterized by present day surface runoff
+\end{itemize*}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Geomorphic Basins \hfill}}\vspace{-0.5in}\large
+\begin{figure}[!h]
+\centering % \centering uses less vertical space than center-environment
+\includegraphics*[width=\hsize,angle=0]{bds_bsn_T62}\vfill
+\caption{
+Distinct geomorphic basins are determined by backfilling DEM algorithm 
+\cite[]{JeD88}, modified to preserve true internal drainage basins
+\cite[]{Asa00}. 
+\label{fgr:bds_bsn_T62}}
+\end{figure}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Soil Erodibility \hfill}}\vspace{-0.5in}\large
+\begin{figure}[!h]
+\centering % \centering uses less vertical space than center-environment
+\includegraphics*[height=\hsize,angle=90]{bds_erd_fct_T62}\vfill
+\caption{
+Soil erodibility $\erdfct$ for four hypotheses:
+(a)~Uniform, (b)~Topographic, 
+(c)~Geomorphic, (d)~Hydrologic.
+\label{fgr:mbl_bsn_fct}}
+\end{figure}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Methods \hfill}}\vspace{-0.5in}\large
+Four three-year DEAD simulations driven by NCEP 1990--1992 meteorology  
+\csznote{\cite[]{Kal96}} in MATCH CTM \cite[]{RME97} 
+(T62/L28, $\Delta \tm = 40$~min.).
+Objectively evaluate hypotheses using three independent datasets: 
+\begin{itemize*}
+\item U.~Miami seasonal \& annual mean dust concentration
+\item Annual mean deposition at 11 stations \cite[]{GCT01}
+\item Spatial correlation with TOMS AAI/AOD \cite[]{TBH98}
+\end{itemize*}
+For DEAD description and evaluation of 1990s climatology:
+\texttt{\normalsize{ftp://dust.ess.uci.edu/pub/zender/ppr/ppr\_ZBN03.pdf}}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Mobilization \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering % \centering uses less vertical space than center-environment
+\includegraphics*[height=\hsize,angle=90]{lubbock_DSTSFMBL}\vfill
+\caption{
+Predicted annual mean mass emissions flux [\ugxmSs] for
+(a)~Uniform $\erdfct$, (b)~Topographic $\erdfct$,
+(c)~Geomorphic $\erdfct$, (d)~Hydrologic $\erdfct$.
+Scale is logarithmic.
+\label{fgr:DSTSFMBL}}
+\end{figure}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Column Mass Path \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering % \centering uses less vertical space than center-environment
+\includegraphics*[height=\hsize,angle=90]{lubbock_DSTMPC_dff}\vfill
+\caption{
+Predicted annual mean dust burden [\mgxmS] for
+(a)~Uniform $\erdfct$, and change relative to (a) due to
+(b)~Topographic $\erdfct$, (c)~Geomorphic $\erdfct$,
+(d)~Hydrologic $\erdfct$. 
+Scale is non-linear.
+\label{plt:DSTMPC}}
+\end{figure}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Deposition \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering % \centering uses less vertical space than center-environment
+\includegraphics*[height=\hsize,angle=90]{lubbock_DSTSFDPS}\vfill
+\caption{
+Predicted annual mean mass deposition flux [\ugxmSs] for
+(a)~Uniform $\erdfct$, (b)~Topographic $\erdfct$,
+(c)~Geomorphic $\erdfct$, (d)~Hydrologic $\erdfct$.
+Scale is logarithmic.
+\label{fgr:DSTSFDPS}}
+\end{figure}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Spatial Correlation \hfill}}\vspace{-0.5in}\large
+\begin{itemize}
+\item Compare model-simulated AOD to the TOMS-observed AAI and AOD
+in three important desert regions.
+\item Data are (re-)gridded to T62 
+\item Points with vegetation $\vai > 0.3$\,\mSxmS\ are removed to avoid
+  contamination by biomass burning aerosol. 
+\end{itemize}
+
+\foilhead{\bgp
+\Large\textcolor{blue}{\hfill Spatial Correlation \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering % \centering uses less vertical space than center-environment
+\includegraphics*[width=0.33\hsize]{toms_clm_Afr_aer_idx_331_360}%
+\includegraphics*[width=0.33\hsize]{toms_clm_EAs_aer_idx_331_360}%
+\includegraphics*[width=0.33\hsize]{toms_clm_Aus_aer_idx_331_360}%
+
+\includegraphics*[width=0.33\hsize]{dstmch1p_clm_Afr_DSTODXC}%
+\includegraphics*[width=0.33\hsize]{dstmch1p_clm_EAs_DSTODXC}%
+\includegraphics*[width=0.33\hsize]{dstmch1p_clm_Aus_DSTODXC}%
+
+\includegraphics*[width=0.33\hsize]{dstmch1q_clm_Afr_DSTODXC}%
+\includegraphics*[width=0.33\hsize]{dstmch1q_clm_EAs_DSTODXC}%
+\includegraphics*[width=0.33\hsize]{dstmch1q_clm_Aus_DSTODXC}%
+
+\includegraphics*[width=0.33\hsize]{dstmch1t_clm_Afr_DSTODXC}%
+\includegraphics*[width=0.33\hsize]{dstmch1t_clm_EAs_DSTODXC}%
+\includegraphics*[width=0.33\hsize]{dstmch1t_clm_Aus_DSTODXC}%
+
+\includegraphics*[width=0.33\hsize]{dstmch1r_clm_Afr_DSTODXC}%
+\includegraphics*[width=0.33\hsize]{dstmch1r_clm_EAs_DSTODXC}%
+\includegraphics*[width=0.33\hsize]{dstmch1r_clm_Aus_DSTODXC}%
+\caption{
+Mean 1980--2001 TOMS AAI and predicted dust AOD for 1990--1992 in the
+Saharan desert and Saudi Arabian peninsula, East Asia, and Australia.
+(a)~TOMS AAI, (b)~Uniform $\erdfct$, (c)~Topographic $\erdfct$, 
+(d)~Geomorphic $\erdfct$, (e)~Hydrologic $\erdfct$.
+$\crrcff$ is the spatial correlation coefficient between the
+experiment and TOMS. 
+\label{fgr:stt_odx}}
+\end{figure}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Spatial Correlations \hfill}}\vspace{-0.5in}\large
+\begin{table*}
+\begin{minipage}{\hsize}
+\renewcommand{\footnoterule}{\rule{\hsize}{0.0cm}\vspace{-0.0cm}} % KoD95 p. 111
+\centering % \centering uses less vertical space than center-environment
+\caption[Spatial Correlation of Model AOD with TOMS AAI and
+AOD]{\textbf{Spatial Correlation of Model AOD with TOMS AAI and AOD}%
+%\footnote{Number $\NNN$ of valid T62 gridpoints is 290, 77, and 59 for
+%  Saharan, East Asian, and Australian regions, respectively.
+%Highest $\crrcff$ for TOMS AAI in each region is boldfaced.}
+\label{tbl:stt_odx}}%
+\vspace{\cpthdrhlnskp}
+\begin{tabular}{l *{9}{>{$}r<{$}}}
+\hline \rule{0.0ex}{\hlntblhdrskp}%
+& \multicolumn{2}{c}{Sahara} & & \multicolumn{2}{c}{East Asia} & & \multicolumn{2}{c}{Australia} & \\[0.0ex] 
+\cline{2-3}\cline{5-6}\cline{8-9}
+Hypothesis & \mathrm{AAI} & \mathrm{AOD} & & \mathrm{AAI} & \mathrm{AOD}& & \mathrm{AAI} & \mathrm{AOD} & \\[0.5ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+% Data from dstmch1q-dstmch1t
+Uniform & 0.55 & 0.18 & & 0.81 & 0.78 & & 0.12 & 0.27 & \\[0.5ex]
+Topographic & \mathbf{0.69} & 0.34 & & 0.76 & 0.70 & & 0.64 & 0.55 & \\[0.5ex]
+Geomorphic & 0.65 & 0.37 & & \mathbf{0.91} & 0.77 & & 0.57 & 0.32 & \\[0.5ex]
+Hydrologic & 0.59 & 0.43 & & 0.71 & 0.67 & & \mathbf{0.70} & 0.51 & \\[0.5ex]
+\hline
+\end{tabular}
+\end{minipage}
+\end{table*} % end tbl:stt_odx
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Budgets \hfill}}\vspace{-0.5in}\large
+Compare annual mean dust budget of control to three experiments. 
+Mass path is prescribed, so lifecycle varies with proximity of
+sources to regions of wet deposition. 
+Note 15\% change in emissions and turnover time.
+\begin{table*}
+\begin{minipage}{\hsize}
+\renewcommand{\footnoterule}{\rule{\hsize}{0.0cm}\vspace{-0.0cm}} % KoD95 p. 111
+\caption[Climatological Budget Statistics]{\textbf{Climatological Budget Statistics}
+\label{tbl:bdg}}
+\vspace{\cpthdrhlnskp}
+\begin{tabular}{l *{4}{>{$}r<{$}}}
+\hline \rule{0.0ex}{\hlntblhdrskp}%
+Quantity & \mbox{Uniform} & \mbox{Topo} & \mbox{Geo} & \mbox{Hydro} \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+% data from dstmch1q--dstmch1t
+Burden%\footnote{Prescribed atmospheric burden in Tg}
+& 19.3   & 19.3   & 19.3   & 19.3   \\[0.5ex]
+Emission%\footnote{Emissions of $\dmt < 10$\,\um\ particles in \Tgxyr}
+& \color{Red}{1438}   & 1535   & \color{Red}{1638}   & 1632   \\[0.5ex]
+Lifetime%\footnote{Turnover time in days}
+& \color{Red}{5.0} & 4.7    & \color{Red}{4.4} & 4.4    \\[0.5ex]
+Global $\tau$%\footnote{Optical depth at 0.63\,\um}
+& 0.033  & 0.034  & 0.034  & 0.034  \\[0.5ex]
+\hline
+\end{tabular}
+\end{minipage}
+\end{table*} % end tbl:bdg
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Hypothesis Evaluation with Station
+  Observations: \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering % \centering uses less vertical space than center-environment
+\includegraphics[width=0.5\hsize]{cnc_lubbock}%
+\includegraphics[width=0.5\hsize]{dep_lubbock}
+\caption{
+(a) Predicted and observed climatological mean surface concentration of
+dust in \ugxmC\ at 19 U.~Miami stations.
+Dashed lines indicate factor of two disparity.
+(b). Predicted and observed climatological mean dust deposition flux 
+in \gxmSyr\ at 11 stations compiled by \cite{GCT01}.
+Axes are logarithmic.
+
+Large inter-model spread (\%) occurs for stations in and
+downwind of source regions, including Sal Island (57\%) and Cape
+Point (2500\%), Kaashidhoo (50\%), Jeju (310\%) and Okinawa (280\%).
+Surface observations of concentration and deposition show minimal
+inter-model spread at most non-dusty stations. 
+\label{fgr:cnc_sct}}
+\end{figure}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Linear and Logarithmic Statistics \hfill}}\vspace{-0.5in}\large
+Linear statistics preferentially weight dusty stations, so we compute
+logarithmic statistics too.
+Absolute and relative RMS biases $\rmsabs$ and $\rmsrlt$,
+respectively, computed using
+\begin{eqnarray}
+\rmsabs = \sqrt{ \frac{1}{\NNN} 
+\sum_{\iii = 1}^{\NNN} 
+( \xxx_{\iii} - \yyy_{\iii} )^{2} } \\
+\rmsrlt = \sqrt{ \frac{1}{\NNN} 
+\sum_{\iii = 1}^{\NNN} 
+\left( \frac{\xxx_{\iii} - \yyy_{\iii}}{\xxx_{\iii}} \right)^{2} }
+\label{eqn:rms_abs}
+%\label{eqn:rms_rlt}
+\end{eqnarray}
+
+\rotatefoilhead{
+\Large\textcolor{blue}{\hfill Statistics \hfill}}\vspace{-0.5in}\large
+Geomorphic Hypothesis best explains station observations:
+\begin{scriptsize}
+\begin{table*}
+\begin{minipage}{\hsize}
+\renewcommand{\footnoterule}{\rule{\hsize}{0.0cm}\vspace{-0.0cm}} % KoD95 p. 111
+\centering % \centering uses less vertical space than center-environment
+\caption[Annual Mean Concentration at 19 U.~Miami
+Stations]{\textbf{Biases in Annual Mean Concentration
+at 19 U.~Miami stations}%
+%\footnote{Value of best metric in each category is boldfaced.}
+\label{tbl:stt_cnc}}
+\vspace{\cpthdrhlnskp}
+\begin{tabular}{l *{12}{>{$}r<{$}}}
+\hline \rule{0.0ex}{\hlntblhdrskp}%
+& \multicolumn{5}{c}{Linear} & &
+\multicolumn{5}{c}{Logarithmic} \\[0.0ex] 
+\cline{2-6}\cline{8-12}
+Hypothesis & \crrcff & \mmm & \bbb & \rmsabs & \rmsrlt & & \crrcff & \mmm & \bbb & \rmsabs & \rmsrlt \\[0.5ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+% Data from dstmch1p-dstmch1t
+Uniform & 0.91   & 2.04   & -4.01  & 16.06  & 0.88   & & 0.84   & \mathbf{1.00}   & -0.11  & 0.52   & 2.12    \\[0.5ex]
+Topographic  & 0.96   & 1.58   & -2.30  & 8.60   & 0.85   & & 0.78   & 1.03   & -0.20  & 0.68   & 2.80    \\[0.5ex]
+Geomorphic   & 0.94   & 1.74   & -2.96  & 11.28  & 0.83   & & \mathbf{0.91}   & 0.93   & \mathbf{0.00}  & \mathbf{0.33}   & \mathbf{1.35}    \\[0.5ex]
+Hydrologic & \mathbf{0.98}   & \mathbf{1.47}   & \mathbf{-1.97}  & \mathbf{6.71}   & \mathbf{0.81}   & & 0.81   & 1.03   & -0.18  & 0.60   & 2.46    \\[0.5ex]
+\hline
+\end{tabular}
+\end{minipage}
+%} % end csznote
+
+%\csznote{
+%Table~\ref{tbl:stt_dps} summarizes the statistical correlations of
+%each experiment with the 11 stations in the observed climatology
+%shown in Figure~\ref{fgr:dps_sct}. 
+\begin{minipage}{\hsize}
+\renewcommand{\footnoterule}{\rule{\hsize}{0.0cm}\vspace{-0.0cm}} % KoD95 p. 111
+\centering % \centering uses less vertical space than center-environment
+\caption[Biases in Simulation of Annual Mean Deposition at 11 Stations]{\textbf{Biases in Simulation of Annual Mean Deposition at 11 stations}%
+%\footnote{Value of best metric in each category is boldfaced.}
+\label{tbl:stt_dps}}
+\vspace{\cpthdrhlnskp}
+\begin{tabular}{l *{12}{>{$}r<{$}}}
+\hline \rule{0.0ex}{\hlntblhdrskp}%
+& \multicolumn{5}{c}{Linear} & &
+\multicolumn{5}{c}{Logarithmic} \\[0.0ex] 
+\cline{2-6}\cline{8-12}
+Hypothesis & \crrcff & \mmm & \bbb & \rmsabs & \rmsrlt & & \crrcff & \mmm & \bbb & \rmsabs & \rmsrlt \\[0.5ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+% Data from dstmch1q-dstmch1t
+Uniform & 0.97   & 0.07   & 2.06   & 125.34 & 0.84   & & 0.93   & 0.77   & -0.15  & 0.45   & 0.78    \\[0.5ex]
+Topographic  & \mathbf{1.00}   & 0.21   & 1.35   & 107.52 & 0.74   & & 0.95   & 0.85   & \mathbf{-0.14}  & 0.37   & 0.73    \\[0.5ex]
+Geomorphic   & \mathbf{1.00}   & \mathbf{0.42}   & \mathbf{0.26}   & \mathbf{78.66}  & \mathbf{0.66}   & & \mathbf{0.96}   & \mathbf{0.90}   & \mathbf{-0.14}  & \mathbf{0.32}   & \mathbf{0.71}    \\[0.5ex]
+Hydrologic & \mathbf{1.00}   & 0.13   & 0.97   & 117.44 & 0.68   & & 0.94   & 0.78   & -0.21  & 0.45   & 0.78    \\[0.5ex]
+\hline
+\end{tabular}
+\end{minipage}
+\end{table*}
+\end{scriptsize}
+%} % end csznote
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Conclusions \hfill}}\vspace{-0.5in}\large
+\begin{itemize*}
+\item All three spatially varying erodibility hypotheses produce
+significantly better agreement with station and satellite data than 
+the null (Uniform) hypothesis.
+\item The Geomorphic erodibility hypothesis performs best overall,
+but results vary by region and by metric.
+\item These results support the hypothesis that dust emission ``hot spots''
+exist in regions where alluvial sediments have accumulated and may be
+disturbed \cite[]{PGT02}. 
+\item Our physically-based erodibility hypotheses help explain dust
+observations in some regions, particularly East Asia, and can 
+be used to help discriminate between natural and anthropogenic soil 
+emissions.  
+\end{itemize*}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Future Work \hfill}}\vspace{-0.5in}\large
+\textit{Linking erodibility $\erdfct$ to regional
+  geomorphology/hydrology helps constrain natural sources of dust, and
+  thus increases confidence in anthropogenic emissions identified using residual methods}.
+\begin{itemize*}
+\item Examine Hydrologic hypothesis with wet period (mid-Holocene) runoff
+\item Use TOMS/MODIS/AMSR-E to determine empirical $\erdfct$, subtract
+  natural $\erdfct$ to obtain anthropogenic $\erdfct$ 
+\item Apply to regional forecasts of Columbia Plateau, Aral Sea
+\end{itemize*}
+
+\foilhead{\vspace{0.25in}\Large\textcolor{blue}{\hfill
+Performance with Area $\erdfct$ \hfill}}\vspace{-0.5in}
+\begin{figure*}
+\centering % \centering uses less vertical space than center-environment
+% ${HOME}/idl/gcm.pro:gcm_tv_bch,rsmas=1,psym=[8,0],shd=1,stp=1,bw=1,info=1,prn=0
+\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_Brb_cnc_mss_dst}%
+\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_Mmi_cnc_mss_dst}%
+\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_Brm_cnc_mss_dst}%
+
+\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_Izn_cnc_mss_dst}%
+\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_SlI_cnc_mss_dst}%
+\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_McH_cnc_mss_dst}%
+
+\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_KGI_cnc_mss_dst}%
+\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_CGH_cnc_mss_dst}%
+\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_Kaa_cnc_mss_dst}%
+
+\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_Jej_cnc_mss_dst}%
+\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_Okn_cnc_mss_dst}%
+\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_Enw_cnc_mss_dst}%
+
+\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_Mdw_cnc_mss_dst}%
+%\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_Oah_cnc_mss_dst}%
+\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_Nau_cnc_mss_dst}%
+\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_AmS_cnc_mss_dst}%
+
+\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_NeC_cnc_mss_dst}%
+\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_Nrf_cnc_mss_dst}%
+\includegraphics*[width=0.33\hsize]{rsmas_dstmch90_clm_0112_CGr_cnc_mss_dst}%
+\caption{
+Predicted (line) and observed (circles) monthly mean surface
+dust concentration (\ugxmC) at U.~Miami stations.
+\label{fgr:rsmas}}
+\end{figure*}
+
+\rotatefoilhead{\huge \textcolor{blue}{
+Understanding the Global Distribution and Radiative Forcing of Mineral
+Dust Aerosol}}\vspace{-0.5in}\LARGE 
+\begin{center}
+Charles S. Zender\\
+Dept.\ of Earth System Science, UC Irvine\\
+\bigskip
+\bigskip
+\bigskip
+Dept. of Earth Sciences Seminar\\
+University of Southern California, December 3, 2001\\
+\bigskip
+{\large Thanks: P.~Ginoux, S.~Levis, P.~Rasch, D.~Savoie}
+\normalsize
+\end{center}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Problems in Assessing Dust Radiative Forcing \hfill}}\vspace{-0.5in}\large
+\begin{itemize*}
+\item Distribution (size, space, time)
+\begin{itemize*}
+\item Elements of variability: wind speed, vegetative, topographic,
+hydrologic, pedalogic constraints
+\end{itemize*}
+\item Optical Properties of Dry Component
+\begin{itemize*}
+\item Dust is inhomogeneous mixture of minerals, salts, OM
+\end{itemize*}
+\item Composition (multi-component aerosols)
+\begin{itemize*}
+\item Atmospheric processing (``aging'') may coat, deliquesce dust
+\end{itemize*}
+\item Indirect Effects
+\begin{itemize*}
+\item Dust particles can serve as CCN/IN
+\end{itemize*}
+\end{itemize*}
+Summarized in \jgr\ special issue August 2001 \cite[]{SWB01}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Distribution: Observations \hfill}}\vspace{-0.5in}\large
+\begin{itemize}
+\item Size: \bluestar Filters \cite[]{MSI00}, \bluestar AERONET \cite[]{Hol98}
+\item Composition: Filters, Mass Spec (ATOFMS)
+\item Space: \bluestar TOMS \cite[]{HBT97},
+\bluestar AVHRR \cite[]{SIS97}, Meteosat \cite[]{KPR99} 
+\item Vertical: LIDAR (LITE, ACE Asia)
+\item Plume Evolution: ACE Asia
+\end{itemize}
+\bluestar Presented in this talk
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Modeling Strategies \hfill}}\large\vspace{-0.5in}
+\fcolorbox{SkyBlue}{white}{\parbox{\textwidth}{
+\begin{table}
+\centering % \centering uses less vertical space than center-environment
+\begin{tabular}{l >{\raggedright}p{20.0em}<{} r}
+Model & Purpose & \\[4pt]
+\tableline
+\hline \rule{0.0ex}{\hlntblntrskp}%
+Box & \bluestar Test entrainment theory vs.\ wind-tunnel & \\[4pt]
+& Lagrangian trajectories, MCA optical properties & \\[4pt]
+1-D & \bluestar Radiative Forcing, Radiance Inversion & \\[4pt]
+RTM & Event Simulation, SS Processes & \\[4pt]
+& Air Pollution Modeling & \\[4pt]
+GTM & \bluestar Event Simulation, \bluestar Source/Sink Budgets & \\[4pt] 
+& \bluestar Assimilation, Offline radiative forcing, BGC & \\[4pt]
+AGCM & \bluestar Radiative Forcing, \bluestar Atm.\ Feedback & \\[4pt]
+CSM & Climate feedback, Coupled Biogeochemistry & \\[4pt]
+\end{tabular}
+\caption{\bluestar Shown today\label{tbl:mdl}}
+\end{table}
+}} % end \fcolorbox
+\clearpage
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Global Mean Dust Budget Statistics \hfill}}\large\vspace{-0.5in}
+\fcolorbox{SkyBlue}{white}{\parbox{\textwidth}{
+\begin{table}
+\centering % \centering uses less vertical space than center-environment
+\begin{tabular}{lr *{4}{>{$}r<{$}}} % KoD95 p. 94 describes '*' notation
+\hline \rule{0.0ex}{\hlntblhdrskp}% 
+Quantity & Units & \mbox{Andreae} & \mbox{Tegen} &
+\mbox{GOCART}\footnote{For size range $\dmt \in [0.2,12]$\,\um} & \mbox{DEAD} \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+% Numbers from 5 years of dstmch90 simulation
+% ncks -C -H -v DSTMPC,DSTODXC ${DATA}/${caseid}/${caseid}_clm_xy.nc
+Emission & MT yr$^{-1}$ & 1500 & 1222 & 1814 & 1403 \\[0.5ex]
+Lifetime & days & 4 & 4 & 7.1 & 4.3 \\[0.5ex]
+Burden & Tg & 8.4 & 18.8 & 35.9 & 16.1 \\[0.5ex]
+$\tau$ Ocean & & - & - & & 0.018 \\[0.5ex]
+$\tau$ Land & & - & - & & 0.047 \\[0.5ex]
+$\tau$ Global & & 0.023 & 0.033 & & 0.028 \\[0.5ex]
+\hline
+\end{tabular}
+\end{table}
+}} % end \fcolorbox
+\clearpage
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Size Dependence of
+Dust Removal Processes \hfill}}\large\vspace{-0.5in}
+\fcolorbox{SkyBlue}{white}{\parbox{\textwidth}{
+\begin{table}
+\centering % \centering uses less vertical space than center-environment
+\begin{tabular}{l *{4}{>{$}r<{$}}}
+Size & \mbox{Grv} & \mbox{Dry} & \mbox{Wet} & \mbox{Total} \\[4pt]
+\tableline
+\hline \rule{0.0ex}{\hlntblntrskp}%
+% Numbers from dstmch26 simulation of 1998
+$0.1$--$1.0$\,\um & 580 & 291 & 14 & 13 \\[4pt]
+$1.0$--$2.5$\,\um & 119 & 88 & 13 & 12 \\[4pt]
+$2.5$--$5.0$\,\um & 28 & 5.7 & 8.5 & 3.4 \\[4pt]
+$5.0$--$10.0$\,\um & 6.3 & 1.2 & 6.5 & 1.0 \\[4pt]
+\hline
+$0.1$--$10.0$\,\um & 66 & 18 & 12 & 7 \\[4pt]
+% % Numbers from dstmch57 simulation of 1998
+% $0.1$--$1.0$\,\um & 1054 & 262 & 17 & 16 \\[4pt]
+% $1.0$--$2.5$\,\um & 201 & 109 & 15 & 13 \\[4pt]
+% $2.5$--$5.0$\,\um & 33 & 25 & 8 & 6 \\[4pt]
+% $5.0$--$10.0$\,\um & 7 & 7 & 7 & 3 \\[4pt]
+% \hline
+% $0.1$--$10.0$\,\um & 58 & 43 & 12 & 9 \\[4pt]
+\end{tabular}
+\caption{Global mean turnover time (days) by removal process
+\label{tbl:tau}}
+\end{table}
+}} % end \fcolorbox
+Scavenging accounts for 61\% of deposition.\\
+Dry processes account for 39\%.
+\clearpage
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Size Dependence of
+Burden and Optical Depth \hfill}}\large\vspace{-0.5in}
+\fcolorbox{SkyBlue}{white}{\parbox{\textwidth}{
+Fractional contribution to global mean dust burden
+($29$\,\mgxmS), optical depth $\tau$ ($0.032$) by size bin: \\[4pt]  
+\begin{table}
+\centering % \centering uses less vertical space than center-environment
+\begin{tabular}{l *{3}{>{$}r<{$}}}
+Size & \mbox{Burden} & \tau & \\[4pt]
+\tableline
+\hline \rule{0.0ex}{\hlntblntrskp}%
+% Numbers from dstmch26 simulation of 1998
+$0.1$--$1.0$\,\um & 0.17 & 0.44 & \\[4pt]
+$1.0$--$2.5$\,\um & 0.65 & 0.50 & \\[4pt]
+$2.5$--$5.0$\,\um & 0.16 & 0.06 & \\[4pt]
+$5.0$--$10.0$\,\um & 0.02 & 0.01 & \\[4pt]
+\hline
+\end{tabular}
+%\caption{Fractional Contribution to Burden and Optical Depth by Size Bin
+%\label{tbl:tau}}
+\end{table}
+}} % end \fcolorbox
+\clearpage
+
+\rotatefoilhead{\vspace{0.25in}\Large\textcolor{blue}{\hfill AVHRR
+Seasonal AOD 0.63\,\um, 1998 \hfill}}\vspace{-0.5in}
+%\enlargethispage*{1in} 
+\begin{figure*}
+\centering % \centering uses less vertical space than center-environment
+\includegraphics*[width=0.5\hsize]{avhrr_1998_1202_DSTODXC}%
+\includegraphics*[width=0.5\hsize]{avhrr_1998_0608_DSTODXC}%
+
+\includegraphics*[width=0.5\hsize]{avhrr_1998_0305_DSTODXC}%
+\includegraphics*[width=0.5\hsize]{avhrr_1998_0911_DSTODXC}%
+\end{figure*}
+
+\rotatefoilhead{\vspace{0.25in}\Large\textcolor{blue}{\hfill TOMS
+Seasonal AAI 331--360~nm, 1998 \hfill}}\vspace{-0.5in} 
+%\enlargethispage*{1in} 
+\begin{figure*}
+\centering % \centering uses less vertical space than center-environment
+\includegraphics*[width=0.5\hsize]{toms_1998_1202_aer_idx_331_360}%
+\includegraphics*[width=0.5\hsize]{toms_1998_0608_aer_idx_331_360}%
+
+\includegraphics*[width=0.5\hsize]{toms_1998_0305_aer_idx_331_360}%
+\includegraphics*[width=0.5\hsize]{toms_1998_0911_aer_idx_331_360}%
+\end{figure*}
+
+\rotatefoilhead{\vspace{0.25in}\Large\textcolor{blue}{\hfill MATCH
+Seasonal Dust AOD 0.63\,\um, 1998 \hfill}}\vspace{-0.5in} 
+%\enlargethispage*{1in} 
+\begin{figure*}
+\centering % \centering uses less vertical space than center-environment
+\includegraphics*[width=0.5\hsize]{dstmch26_1998_1202_DSTODXC}%
+\includegraphics*[width=0.5\hsize]{dstmch26_1998_0608_DSTODXC}%
+
+\includegraphics*[width=0.5\hsize]{dstmch26_1998_0305_DSTODXC}%
+\includegraphics*[width=0.5\hsize]{dstmch26_1998_0911_DSTODXC}%
+\end{figure*}
+
+\foilhead{
+\vspace{0.0in}\large\textcolor{blue}{\hfill CCM Dust SW Forcing 1998 \hfill}}\vspace{-0.25in}
+\enlargethispage*{1in} 
+\begin{figure*}
+\centering % \centering uses less vertical space than center-environment
+\includegraphics[height=0.3\vsize]{dstccm45_1998_FSNTFRC}\vfill
+\includegraphics[height=0.3\vsize]{dstccm45_1998_FSATFRC}\vfill
+\includegraphics[height=0.3\vsize]{dstccm45_1998_FSDSFRC}\vfill
+\end{figure*}
+
+\foilhead{
+\vspace{0.25in}\Large\textcolor{blue}{\hfill Dust at Last Glacial Maximum\hfill}}\vspace{-0.5in}
+\enlargethispage*{1in} 
+\begin{figure*}
+\centering % \centering uses less vertical space than center-environment
+\includegraphics[height=0.5\vsize]{fdst10tc_1998_DSTODXC}\vfill
+\includegraphics[height=0.5\vsize]{fdst10ja_1998_DSTODXC}\vfill
+\end{figure*}
+
+\foilhead{
+\vspace{0.25in}\Large\textcolor{blue}{\hfill Transport Model vs.\ GCM\hfill}}\vspace{-0.5in}
+\enlargethispage*{1in} 
+\begin{figure*}
+\centering % \centering uses less vertical space than center-environment
+\includegraphics[height=0.5\vsize]{dstmch26_1998_DSTODXC}\vfill
+\includegraphics[height=0.5\vsize]{dstccm45_1998_DSTODXC}\vfill
+\end{figure*}
+
+\foilhead{
+\vspace{0.25in}\Large\textcolor{blue}{\hfill Solar Forcing \hfill}}\vspace{-0.5in}
+\enlargethispage*{1in} 
+\begin{figure*}
+\centering % \centering uses less vertical space than center-environment
+\includegraphics[height=0.5\vsize]{dstccm45_1998_x_QRSFRC_glb}\vfill
+\includegraphics[height=0.5\vsize]{dstccm45_1998_x_QRSFRC_SAM}\vfill % Saharan Air Mass 80W--20W
+\end{figure*}
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Dust model in NCAR
+MATCH, CCM, LSM\hfill}}\large\vspace{-0.5in}
+\begin{itemize}
+\item Source: $F \propto u_{*}^3$, basins, LAI, VWC sfc., snow
+\item Dry deposition: turbulent and gravitational deposition
+\item Wet deposition: nucleation, collision, convective, stratiform
+\item Transported size distribution: SGS bins, 4 std.\ in [0,10]\,\um
+\item Source size dist.: 3 background modes of Shettle (1984)
+\item Soil texture, mineralogy: IGBP DIS
+\item Radiative properties: Saharan dust, Mie theory
+\end{itemize}
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Size Dependence of
+Something \hfill}}\large\vspace{-0.5in}
+\fcolorbox{SkyBlue}{white}{\parbox{\textwidth}{
+\begin{table}
+\centering % \centering uses less vertical space than center-environment
+\begin{tabular}{l *{2}{>{$}r<{$}}}
+Size & \mbox{Field1} & \mbox{Field2} \\[4pt]
+& \mbox{\mgxmS} & \\[4pt]
+\tableline
+\hline \rule{0.0ex}{\hlntblntrskp}%
+% Numbers from dstmch26 simulation of 1998
+$0.1$--$1.0$\,\um & & \\[4pt]
+$1.0$--$2.5$\,\um & & \\[4pt]
+$2.5$--$5.0$\,\um & & \\[4pt]
+$5.0$--$10.0$\,\um & & \\[4pt]
+\hline
+$0.1$--$10.0$\,\um & & \\[4pt]
+\end{tabular}
+\caption{Global mean turnover time (days) by removal process
+\label{tbl:tau2}}
+\end{table}
+}} % end \fcolorbox
+\clearpage
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Mineral Dust \& Solar Absorption \hfill}}\vspace{-0.5in}\large
+\begin{itemize}
+\item Models may underpredict atmospheric solar absorption by 20\,\wxmS
+\item Does mineral dust absorption ameliorate GCM atmospheric absorption bias?
+\item Globally averaged, do clouds enhance or reduce solar absorption by dust?
+\item Why such large uncertainty in forcing estimates like IPCC?
+\end{itemize}
+
+\rotatefoilhead{
+\Large\textcolor{blue}{\hfill Refractive Indices by Station \hfill}}\vspace{-0.5in}\large
+\enlargethispage*{1in} 
+\begin{figure*}
+\centering % \centering uses less vertical space than center-environment
+\includegraphics[width=1.0\hsize]{idx_rfr_gph}%
+\end{figure*}
+
+\rotatefoilhead{
+\Large\textcolor{blue}{\hfill Mass-Independent Dust Optical Properties \hfill}}\vspace{-0.5in}\large
+\enlargethispage*{1in} 
+% Cool trick: Overlay figures in LaTeX by using picture environment
+% and placing % after everything to get rid of any whitespace
+\begin{picture}(0,0)(0,0)%
+\put(0.0,-5){\includegraphics[width=4.0in]{aer_saharan_dust_01_SWNB_ss_alb}}%
+\end{picture}%
+\begin{picture}(0,0)(0,0)%
+\put(0.0,-5){\includegraphics[width=4.0in]{aer_afghan_dust_01_SWNB_ss_alb}}%
+\end{picture}%
+\begin{picture}(0,0)(0,0)%
+\put(0.0,-5){\includegraphics[width=4.0in]{aer_aeronet_Bnz_01_1000_ss_alb}}%
+\end{picture}%
+
+\begin{picture}(0,0)(0,0)%
+\put(5.0,-5){\includegraphics[width=4.0in]{aer_saharan_dust_01_SWNB_asm_prm}}%
+\end{picture}%
+\begin{picture}(0,0)(0,0)%
+\put(5.0,-5){\includegraphics[width=4.0in]{aer_afghan_dust_01_SWNB_asm_prm}}%
+\end{picture}%
+\begin{picture}(0,0)(0,0)%
+\put(5.0,-5){\includegraphics[width=4.0in]{aer_aeronet_Bnz_01_1000_asm_prm}}%
+\end{picture}%
+
+\rotatefoilhead{
+\Large\textcolor{blue}{\hfill Mass-Specific Dust Optical Properties \hfill}}\vspace{-0.5in}\large
+\enlargethispage*{1in} 
+\begin{figure*}
+\centering % \centering uses less vertical space than center-environment
+\includegraphics[width=0.5\hsize]{aer_saharan_dust_01_SWNB_aer_ext_cff_mss}%
+\includegraphics[width=0.5\hsize]{aer_afghan_dust_01_SWNB_aer_ext_cff_mss}
+\end{figure*}
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Mineral Dust Solar Forcing \hfill}}\large\vspace{-0.5in}
+\fcolorbox{SkyBlue}{white}{\parbox{\textwidth}{
+\begin{table}
+\centering % \centering uses less vertical space than center-environment
+\begin{tabular}{lll}
+\tableline
+Metric & \multicolumn{2}{c}{SW Forcing} \\[0pt]
+& Clear Sky & All-Sky \\[0pt]
+\hline\hline
+& & \\[-10pt]
+% Results from four year mean of dstccm44
+% Optical Depth (0.63\,\um) & $0.032$ \\[0pt]
+Atmospheric Absorption & $1.9$ & $1.9$ \\[0pt]
+Surface Insolation & $$ & $-2.3$ \\[5pt]
+Surface Absorption & $-3.1$ & $-2.1$ \\[0pt]
+Sfc.\ $+$ Atm.\ Absorption & $-1.2$ & $-0.5$ \\[0pt]
+Net Flux at Tropopause & $-1.2$ & $-0.5$ \\[0pt] % TLF96 get 
+\tableline
+\end{tabular}
+\caption{Global annual mean solar forcing (\wxmS) by dust
+modeled with Saharan Dust optical properties \cite[]{Pat81}.
+Atmospheric dust may be \textit{up to 10 time less absorptive} than
+this! 
+\label{tbl:frc}}   
+\end{table}
+}} % end \fcolorbox
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill New Mobilization Parameterization \hfill}}\vspace{-0.5in}\large
+\begin{itemize}
+\item Couples land surface properties to source mechanisms
+\item Global, mechanistic model based on microphysical understanding
+\begin{itemize}
+\item Based on work by Balkanski, Bergametti, F\'ecan, Gillette,
+Iversen, Marticorena, Raupach, Schulz, Shao, White
+\item Sensitivities consistent with lab and field measurements
+\end{itemize}
+\item Hooks for surface chemistry
+\item Easier to incorporate future dust research products
+\end{itemize}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Size Distribution \hfill}}\vspace{-0.5in}\large
+\begin{itemize}
+\item Four transport bins: $[0.1$--$1.0],[1.0$--$2.5],[2.5$--$5.0],[5.0$--$10.0]$\,\um
+\begin{itemize}
+\item Transport bins have sub-grid distribution properties
+\item Deposition acts on mass-weighted mean size of bin
+\end{itemize}
+\item Spatially invariant tri-modal source distribution
+\begin{itemize}
+\item Lognormal ``background desert modes'' \cite[]{She84,SBG98}
+% Mass median diameters:
+\item $(\dmtvma$\,\um,$\gsd) = (0.01, 1.89), (2.5, 2.0), (42, 2.13)$
+\item Mass fractions 0.00026, 0.781, 0.219
+\end{itemize}
+\item Matrix maps source distributions to transport bins: 87\% of
+vertical mass flux is transported (i.e., $\dmt < 10$\,\um)
+\end{itemize}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Mobilization \hfill}}\vspace{-0.5in}\large
+Sub-gridscale surface type: bare ground erodible surface
+\begin{itemize}
+\item Bare ground with LAI $< 0.2$\,\mSxmS, no snow cover
+\item Globally uniform $\rghmmn = 0.01$~cm
+\item ``Smooth'' roughness length $\rghmmnsmt = 0.003$~cm
+\item Drag partition efficient fraction $f_e = 0.8$ \cite[]{MaB95}
+\item Iterative solution for $\wndfrc$, $\mnolng$ \cite[]{Bon96}
+\item $\wndfrc$ adjusted for ``Owen's effect'' \cite[]{GMB98}
+\end{itemize}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Saltation Mass Flux $\flxmsshrzslt$\hfill}}\vspace{-1.0in}\large
+\begin{eqnarray}
+\wndfrcrat & = & \wndfrcthr / \wndfrc \nonumber \\
+\flxmsshrzslt & = & { \cstslt \sfcfrcslt \dnsatm \wndfrc^3 \over \grv } 
+( 1 - \wndfrcrat ) ( 1 + \wndfrcrat )^2
+\label{eqn:flx_mss_hrz_slt_MaB95_1}
+\end{eqnarray}
+%\emph{Definitions:}
+\begin{table}
+\begin{tabular}{ >{$}r<{$} l}
+\cstslt & Empirically determined saltation constant (2.61) \\[0.0ex]
+\sfcfrcslt & Fractional area susceptible to erosion \\[0.0ex]
+\grv & Gravity \\[0.0ex]
+\dnsatm & Air density \\[0.0ex]
+\flxmsshrzslt & Vertically integrated horizontal mass flux \\[0.0ex]
+\wndfrcrat & Friction velocity ratio ($\wndfrcrat \le 1$) \\[0.0ex]
+\wndfrc & Wind friction velocity \\[0.0ex]
+\wndfrcthr & Threshold wind friction velocity \\[0.0ex]
+\end{tabular}
+\end{table}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Threshold Friction Velocity $\wndfrcthr$\hfill}}\vspace{-0.5in}\large
+\cite{IvW82} show $\wndfrcthr = $
+\begin{equation}
+\left[
+{ 0.1666681 \dnsaer \grv \dmt \over -1 + 1.928 \BBB^{0.0922} }
+\left( 1 + {6 \times 10^{-7} \over \dnsaer \grv \dmt^{2.5} } \right)
+\right]^{1/2}
+\dnsatm^{-1/2}
+\end{equation}
+for $0.03 \le \BBB \le 10$, and, for $\BBB > 10$, $\wndfrcthr = $ 
+\begin{equation}
+\left[
+0.0144 \dnsaer \grv \dmt ( 1 - 0.0858 e^{ -0.0617 ( \BBB - 10 ) } ) 
+\left( 1 + {6 \times 10^{-7} \over \dnsaer \grv \dmt^{2.5} } \right)
+\right]^{1/2}
+\dnsatm^{-1/2}
+\label{eqn:wnd_frc_thr_obs_2}
+\end{equation}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Threshold Friction Velocity, continued\hfill}}\vspace{-0.5in}\large
+\cite{MaB95} show $\rynnbrfrcthr$ or $\BBB$ is
+\begin{eqnarray}
+% IvW82 p. 111 variable ``B''
+\rynnbrfrcthr & = & \wndfrcthr \dmt / \vscknm \\
+% [frc] "B" MaB95 p. 16417 (5)
+& \approx & 0.38 + 1331.0 (100.0 \dmt )^{1.56}
+\end{eqnarray}
+\emph{Definitions:}
+\begin{table}
+\begin{tabular}{ >{$}r<{$} l}
+\dmt & Particle diameter \\[0.5ex]
+\dnsaer & Particle density \\[0.5ex]
+\BBB, \rynnbrfrcthr & Threshold friction Reynolds number \\[0.5ex]
+\grv & Gravitational acceleration \\[0.5ex]
+\vscknm & Kinematic viscocity \\[0.5ex]
+\wndfrcthr & Threshold wind friction velocity \\[0.5ex]
+\end{tabular}
+\end{table}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Threshold Friction Velocity, continued\hfill}}\vspace{-0.5in}\large
+Adjust threshold velocity for inhibition by moisture and for drag partition 
+\begin{eqnarray}
+\wndfrcthr(\vwc;\rghmmn,\rghmmnsmt) & = & \wndfrcthr(0;\rghmmnsmt)
+\frcthrwet (\vwc) \frcthrdrg (\rghmmn,\rghmmnsmt)
+%\frcthrwet (\vwc) & = & { \wndfrcthr(\vwc) \over \wndfrcthr(\vwc = 0) }
+%= { \wndfrcthrwet \over \wndfrcthrdry } \\
+%\frcthrdrg (\rghmmn,\rghmmnsmt) & = & { \wndfrcthr(\rghmmn,\rghmmnsmt)
+%\over \wndfrcthr(\rghmmnsmt) }
+\label{eqn:wnd_frc_thr_wet_dfn}
+\end{eqnarray}
+\emph{Definitions:}
+\begin{table}
+\begin{tabular}{ >{$}r<{$} l}
+\frcthrdrg & Threshold increase due to drag partition \\[0.5ex]
+\frcthrwet & Threshold increase due to moisture \\[0.5ex]
+\rghmmn & Roughness length of erodible surface \\[0.5ex]
+\rghmmnsmt & ``Smooth'' roughness length \\[0.5ex]
+\vwc & Volumetric water content \\[0.5ex]
+\end{tabular}
+\end{table}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Threshold Increase due to Drag Partition $\frcthrdrg$\hfill}}\vspace{-0.5in}\large
+\cite{MaB95} show
+\begin{eqnarray}
+\wndfrcfshfrc & = &
+ 1.0 - { \log(\rghmmn/\rghmmnsmt) \over
+\log [ 0.35 (0.1/\rghmmnsmt)^{0.8} ] } \\
+\frcthrdrg & = & \wndfrcfshfrc^{-1}
+\label{eqn:wnd_frc_fsh_frc_dfn}
+% MaB95 p. 16420, GMB98 p. 6207
+\end{eqnarray}
+\emph{Definitions:}
+\begin{table}
+\begin{tabular}{ >{$}r<{$} l}
+\wndfrcfshfrc & Efficient fraction of wind friction velocity \\[0.5ex]
+\frcthrdrg & Threshold increase due to drag partition \\[0.5ex]
+\rghmmn & Roughness length of erodible surface \\[0.5ex]
+\rghmmnsmt & ``Smooth'' roughness length \\[0.5ex]
+\end{tabular}
+\end{table}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Threshold Increase due to Moisture $\frcthrwet$\hfill}}\vspace{-0.5in}\large
+\cite{FMB99} show
+\begin{eqnarray}
+\label{eqn:vwc_thr_dfn}
+\vwcthr & = & 0.17 \mssfrccly + 0.14 \times \mssfrccly^2 \\
+\label{eqn:frc_thr_wet_dfn}
+% FMB99 p. 155 (15)
+\frcthrwet & = & \left\{
+\begin{array}{r@{\quad:\quad}l}
+1 & \vwc \le \vwcthr \\
+\sqrt{ 1 + 1.21 [ 100 ( \vwc - \vwcthr ) ]^{0.68} } & \vwc > \vwcthr
+\end{array} \right.
+\label{eqn:frc_thr_wet_FMB99}
+\end{eqnarray}
+\emph{Definitions:}
+\begin{table}
+\begin{tabular}{ >{$}r<{$} l}
+\frcthrwet & Threshold increase due to moisture \\[0.5ex]
+\mssfrccly & Soil clay content \\[0.5ex]
+\vwc & Volumetric water content \\[0.5ex]
+\vwcthr & Threshold volumetric water content \\[0.5ex]
+\end{tabular}
+\end{table}
+
+% \foilhead{\vspace{0.25in}\Large\textcolor{blue}{\hfill Surface VWC\hfill}}\vspace{-0.5in} 
+% %\enlargethispage*{1in} 
+% \begin{figure*}
+% \centering % \centering uses less vertical space than center-environment
+% \includegraphics*[width=0.5\hsize]{map_8589_05_vwc_sfc}%
+% \includegraphics*[width=0.5\hsize]{dstccm28_8589_05_VWC_SFC}%
+
+% \includegraphics*[width=0.5\hsize]{map_8589_06_vwc_sfc}%
+% \includegraphics*[width=0.5\hsize]{dstccm28_8589_06_VWC_SFC}%
+
+% \includegraphics*[width=0.5\hsize]{map_8589_07_vwc_sfc}%
+% \includegraphics*[width=0.5\hsize]{dstccm28_8589_07_VWC_SFC}%
+% \end{figure*}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Vertical Mass Flux \hfill}}\vspace{-0.5in}\large
+For $\mssfrccly < 0.20$, \cite{MaB95} show 
+\begin{eqnarray}
+% MaB95 p. 16423 (47)
+\hrzvrtprpfct & \equiv & \flxmssvrtdst / \flxmsshrzslt \nonumber \\ 
+& = & 100 \exp [ ( 13.4 \mssfrccly - 6.0 ) \ln 10 ]
+\label{eqn:hrz_vrt_prp_fct_MaB95_2}
+\end{eqnarray}
+\emph{Definitions:}
+\begin{table}
+\begin{tabular}{ >{$}r<{$} l}
+\hrzvrtprpfct & Ratio of vertical to horizontal mass fluxes \\[0.5ex]
+\flxmssvrtdst & Vertical mass flux of suspended dust \\[0.5ex]
+\mssfrccly & Soil clay content \\[0.5ex]
+\flxmsshrzslt & Vertically integrated horizontal saltation mass flux \\[0.5ex]
+\end{tabular}
+\end{table}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Dry Deposition Parameterization \hfill}}\vspace{-0.5in}\large
+\begin{eqnarray}
+\flxdps & = & - \vlcdps \cnc \\ % SeP97 p. 958 (19.1)
+\label{eqn:flx_dps_dfn}
+\vlcdps & = & \vlctrb + \vlcgrv \nonumber \\
+\label{eqn:vlc_dps_dfn}
+& = & \frac{1}{\rssaer + \rsslmn + \rssaer \rsslmn \vlcgrv } + \vlcgrv \\
+\label{eqn:rss_dps_dfn}
+\rsslmn & = & \left\{
+\begin{array}{ >{\displaystyle}l<{} @{\quad:\quad}l}
+\frac{ 1}{\wndfrc ( \shmnbr^{-2/3} + 10^{-3/\stknbr} ) } & \mbox{Solid surfaces} \\
+\frac{ 1}{\wndfrc ( \shmnbr^{-1/2} + 10^{-3/\stknbr} ) } & \mbox{Liquid surfaces}
+\end{array} \right.
+\label{eqn:rss_lmn_dfn}
+\end{eqnarray}
+
+\rotatefoilhead{
+\Large\textcolor{blue}{\hfill Size Sensitivity of Dry Deposition \hfill}}\vspace{-0.5in}\large
+\begin{figure*}
+\centering % \centering uses less vertical space than center-environment
+\includegraphics[width=1.0\hsize]{vlc_dps_aer}%
+\end{figure*}
+
+\rotatefoilhead{
+\Large\textcolor{blue}{\hfill Size Sensitivity of Collision Efficiency \hfill}}\vspace{-0.5in}\large
+\begin{figure*}
+\centering % \centering uses less vertical space than center-environment
+\includegraphics[width=1.0\hsize]{psd_cll_fsh}%
+\end{figure*}
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill IGBP DIS Soil Mineralogy \hfill}}\large\vspace{-0.5in}
+\enlargethispage*{1in} 
+\begin{itemize}
+\item Exchangeable Aluminum
+\item Organic Carbon
+\item \CaCOt
+\item Exchangeable potassium
+\item Nitrogen
+\item Exchangeable sodium 
+\item Extractable phosphorous
+\end{itemize}
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill BGC Directions \hfill}}\large\vspace{-0.5in} 
+\enlargethispage*{1in} 
+\begin{itemize}
+\item Publish dust work this millenium
+\item ``Effects of Land Use on Climate'': Integrate dust and LSM 
+\item Budgets of particulate \C, \N, \Pu\ (Mahowald) 
+\item Examine soil alkalinity (e.g., \CaCOt) effects on chemistry
+\end{itemize}
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Objectives \hfill}}\large\vspace{-0.5in} 
+\enlargethispage*{1in} 
+\begin{itemize}
+\item Evaluate model climatology over Tropical North Atlantic
+\item Demonstrate sensitivity of African Dust plume to 
+uncertain model parameters 
+\begin{itemize}
+\item Sensitivity of Size distribution to Collection Efficiency
+\item Sensitivity of Radiative Forcing to Size Distribution
+% Change in size distribution between Izana and Barbados
+% Radiative forcing efficiency per unit mass/optical depth at Izana vs. Barbados
+\end{itemize}
+\end{itemize}
+
+% AGU
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Conclusions \hfill}}\large\vspace{-0.5in} 
+\enlargethispage*{1in} 
+\begin{itemize}
+\item Microphysical approach: realistic mean/variability over TNA
+\item Modeled African dust plume:
+\begin{itemize}
+\item Sensitive to washout through collection efficiency
+\item Impacts longitudinal gradient of radiative forcing
+\end{itemize}
+\item Field measurements required to evaluate:
+\begin{itemize}
+\item Barbados dust size distribution cutoff at 2--3\,\um\ 
+\item Significant change in radiative forcing per unit mass/optical
+depth during transport (e.g., Iza\~na to Barbados)
+\end{itemize}
+\end{itemize}
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Conclusions \hfill}}\large\vspace{-0.5in} 
+\enlargethispage*{1in} 
+\begin{itemize*}
+\item Microphysical approach to mobilization is promising in both 
+CTMs and GCMs. 
+Both require improved vegetation, soil (or rock!) texture, hydrology, winds
+%GCMs require improved snow cover, Easterly waves.
+\item Distribution looks reasonable without only natural sources
+\item Dust absorbs $< 1.8$\,\wxmS\ solar radiation. 
+This improves agreement between observed and modeled atmospheric
+energy budgets (``enhanced absorption'').
+\item Regionally, low clouds enhance dust forcing while
+high clouds reduce it but these effects compensate in mean.
+\item Uncertainty in total forcing more due to optical properties
+(including composition) than to spatio-temporal distribution. 
+%\item May require global datasets of sub-gridscale properties
+%$E$, $\mssfrccly$, $\rghmmn$ 
+\item Present day feedbacks on atmosphere are small
+\end{itemize*}
+
+% BGC
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Conclusions \hfill}}\large\vspace{-0.5in} 
+\enlargethispage*{1in} 
+\begin{itemize}
+\item Microphysical approach yields realistic mean/variability
+\item Mean and variability on daily--annual timescales 
+\item Need better surface properties and wet deposition
+\begin{itemize}
+\item Surface type $n(D)$, LAI, $\mssfrccly$, $\rghmmn$ 
+\end{itemize}
+\item Preliminary:
+\item Terrigenous \CaCOt\ variation negligible at ODP658
+\item \CaCOt\ is regional, not linear with total dust
+\end{itemize}
+
+% UCI
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Conclusions \hfill}}\large\vspace{-0.5in} 
+\enlargethispage*{1in} 
+\begin{itemize}
+\item Microphysical approach to global mobilization works
+\item Solutions sensitive to size-dependent microphysics 
+\item Need better surface properties and wet deposition
+\begin{itemize}
+\item Surface type $n(D)$, LAI, $\mssfrccly$, $\rghmmn$, mineralogy,
+optical properties
+\end{itemize}
+\item Mineral and nutrient deposition is regional, not linear  
+with total dust 
+%\item Terrigenous \CaCOt\ variation negligible at ODP658
+\end{itemize}
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Mineral Dust
+Radiative Forcing at Barbados \hfill}}\large\vspace{-0.5in}
+\fcolorbox{SkyBlue}{white}{\parbox{\textwidth}{
+\begin{table}
+\centering % \centering uses less vertical space than center-environment
+\begin{tabular}{ l >{$}r<{$} >{$}r<{$} }
+\tableline
+Metric & \mbox{Forcing} & \mbox{$\Delta$ Forcing}\\[0pt]
+\hline\hline
+& & \\[-10pt]
+Atmospheric Absorption & & \\[0pt]
+(same, but for clear sky) & () & \\[0pt]
+Surface Insolation & & \\[5pt]
+Surface Absorption & & \\[0pt]
+Sfc.\ $+$ Atm.\ Absorption & & \\[0pt]
+Net Flux at Tropopause & & \\[0pt] % TLF96 get 
+\tableline
+\end{tabular}
+\caption{July mean solar forcing (\wxmS) by dust at Barbados
+\label{tbl:foo}}   
+\end{table}
+}} % end \fcolorbox
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Dust
+Radiative Forcing Gradient \hfill}}\large\vspace{-0.5in}
+\fcolorbox{SkyBlue}{white}{\parbox{\textwidth}{
+\begin{table}
+\centering % \centering uses less vertical space than center-environment
+\begin{tabular}{ lrr }
+\tableline
+Metric & Forcing & $\Delta$ Forcing \\[0pt]
+& Gradient & Gradient \\[0pt]
+\hline\hline
+& & \\[-10pt]
+Surface Insolation & 11 & -7 \\[5pt]
+Sfc.\ $+$ Atm.\ Absorption & 5.2 & -3.8 \\[0pt]
+\tableline
+\end{tabular}
+\caption{Change in July mean gradient of solar forcing (\wxmS) by
+mineral dust from Africa to Barbados at $15^\circ$N due to accounting
+for size dependent scavenging.
+\label{tbl:grd}}
+\end{table}
+}} % end \fcolorbox
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Dust
+Radiative Forcing Gradient \hfill}}\large\vspace{-0.5in}
+\fcolorbox{SkyBlue}{white}{\parbox{\textwidth}{
+\begin{table}
+\centering % \centering uses less vertical space than center-environment
+\begin{tabular}{ lrr }
+\tableline
+Metric & Forcing & $\Delta$ Forcing \\[0pt]
+& Gradient & Gradient \\[0pt]
+\hline\hline
+& & \\[-10pt]
+Surface Insolation & 45 & -7 \\[5pt]
+Sfc.\ $+$ Atm.\ Absorption & 19 & -3.8 \\[0pt]
+\tableline
+\end{tabular}
+\caption{Change in July mean gradient of solar forcing (\wxmS) by
+mineral dust from Africa to Barbados at $15^\circ$N due to accounting
+for size dependent scavenging.
+\label{tbl:grd2}}
+\end{table}
+}} % end \fcolorbox
+
+\rotatefoilhead{\huge \textcolor{blue}{Re-examining radiative forcing
+by clouds, aerosols, and gases}}\vspace{-0.5in}\LARGE
+\begin{center}
+Charles S. Zender\\
+Department of Earth System Science, UCI\\
+\bigskip
+\bigskip
+\bigskip
+Department of Atmospheric Science, UCLA \\
+April 25, 2001\\
+{\large Thanks to:\\ Bill Collins, Susan Solomon, Francisco Valero, Shaocai Yu}
+\normalsize
+\end{center}
+
+\rotatefoilhead{\huge \textcolor{blue}{Aeolian Mineral Dust in the
+Climate System: Observations, Models, and
+Implications}}\vspace{-0.5in}\LARGE 
+\begin{center}
+Charles S. Zender\\
+Department of Earth System Science, UCI\\
+\bigskip
+\bigskip
+\bigskip
+Department of Earth Sciences, UCSC \\
+February 21, 2001\\
+{\large Thanks to:\\ Paul Ginoux, Natalie Mahowald, Phil Rasch, Dennis Savoie}
+\normalsize
+\end{center}
+
+\rotatefoilhead{\huge \textcolor{blue}{Modeling the Global
+Distribution of Mineral Dust}}\vspace{-0.5in}\LARGE
+\begin{center}
+Charles S. Zender\\
+Department of Earth System Science, UCI\\
+\bigskip
+\bigskip
+\bigskip
+Bren School of Env.~Sci.~\&~Mgmt. \\
+UCSB, January 19, 2001\\
+{\large Thanks to:\\ Phil Rasch, Paul Ginoux, Dennis Savoie, Natalie Mahowald}
+\normalsize
+\end{center}
+
+\rotatefoilhead{\huge \textcolor{blue}{Implications of the Size-Resolved
+Distribution of African Mineral Dust Over the Tropical North Atlantic}}\vspace{-0.5in}\LARGE
+\begin{center}
+Charles S. Zender\par
+\medskip
+%Department of Earth System Science\\
+University of California, Irvine\\
+AGU, San Francisco, Dec 15, 2000\\
+{\large Thanks to:\\ Phil Rasch, Paul Ginoux, Dennis Savoie, Natalie Mahowald}
+\normalsize
+\end{center}
+
+\rotatefoilhead{\Huge \textcolor{blue}{Mineral Dust Aerosol
+over the N. Atlantic and Indian Oceans}}\vspace{-0.5in}\LARGE
+\begin{center}
+Charles S. Zender\par
+\medskip
+University of California, Irvine\\
+Biogeochemistry Working Group Meeting\\
+Boulder CO, June 28, 2000\\
+{\large Thanks to:\\ Brian Eaton, Paul Ginoux, Natalie Mahowald, Dennis Savoie}
+\normalsize
+\end{center}
+
+\rotatefoilhead{\huge \textcolor{blue}{
+Understanding the Global Distribution and Radiative Forcing of Mineral
+Dust Aerosol}}\vspace{-0.5in}\LARGE 
+\begin{center}
+Charles S. Zender\\
+Dept.\ of Earth System Science, UC Irvine\\
+\bigskip
+\bigskip
+\bigskip
+Env.\ Engr. Sci./Global Env. Science Seminar
+CalTech, November 14, 2001\\
+\bigskip
+{\large Thanks: P.~Ginoux, N.~Mahowald, P.~Rasch, D.~Savoie}
+\normalsize
+\end{center}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Outline \hfill}}\vspace{-0.5in}\large
+\begin{itemize}
+\item Observed Distribution
+\item Physical processes
+\item Radiative Forcing
+\item Biogeochemical Implications
+\end{itemize}
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Conclusions \hfill}}\large\vspace{-0.5in} 
+\enlargethispage*{1in} 
+\begin{itemize}
+\item Models underestimate atmospheric absorption $\sim 20$\,\wxmS
+\item Some missing absorption is correlated with clouds
+\item Absorbing aersols:
+\begin{itemize}
+\item Mineral Dust absorbs $\sim$1.8\,\wxmS 
+\item Carbon: SE US $\sim 5$\,\wxmS, Indian Ocean $\sim 50$\,\wxmS
+\end{itemize}
+\item Absorbing gases:
+\begin{itemize}
+\item \OdX\ absorbs $\sim 1$\,\wxmS
+\end{itemize}
+\item No smoking gun! $\sim 17$\,\wxmS\ remains unexplained!
+\begin{itemize}
+\item Future: dirty (multi-component) aerosols, \NOd, \HdO
+\end{itemize}
+\end{itemize}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Future Directions/Opportunities \hfill}}\vspace{-0.5in}\large
+Interaction of Aerosols and Climate
+\begin{enumerate}
+\item Natural Aerosol distributions
+\begin{itemize}
+\item Natural emissions controls: climate, veg., soil, $\mu$-physics
+\item Controls, time evolution of silt, dune, loess systems (WSU, UCSB)
+\item Aerosol hindcasting, forecasting (NCAR)
+\end{itemize}
+\item Radiative Forcing of dust, volcanic (current) sea-salt
+\begin{itemize}
+\item Multi-component aerosols: Optics, Mineralogy
+\item Natural aerosol forcing present/paleo climates (NCAR, UCSC?)
+\end{itemize}
+\item Atmospheric Chemistry
+\begin{itemize}
+\item Photochemical forcing of aerosol (UCI)
+\item Heterogeneous uptake of gases \HOx, \NOx
+\end{itemize}
+\item Biogeochemistry (UCSB, NCAR):
+\begin{itemize}
+\item Nutrient transport by Aeolian dust
+\item \Fe\ and \Pu\ limitation
+\end{itemize}
+\item ``Trace'' gases: \NOd, in-cloud \HdO, \HdOHdO
+\begin{itemize}
+\item Improve representation and reduce absorption bias
+\end{itemize}
+\end{enumerate}
+
+\csznote{
+% Transfer required figures to local machine
+for fl_stb in \
+aer_aeronet_Bnz_01_1000_asm_prm \
+aer_aeronet_Bnz_01_1000_ss_alb \
+aer_afghan_dust_01_SWNB_aer_ext_cff_mss \
+aer_afghan_dust_01_SWNB_asm_prm \
+aer_afghan_dust_01_SWNB_ss_alb \
+aer_afghan_dust_01_SWNB_ss_alb \
+aer_saharan_dust_01_SWNB_aer_ext_cff_mss \
+aer_saharan_dust_01_SWNB_asm_prm \
+aer_saharan_dust_01_SWNB_asm_prm \
+aer_saharan_dust_01_SWNB_ss_alb \
+avhrr_1998_0305_DSTODXC \
+avhrr_1998_0305_DSTODXC \
+avhrr_1998_0608_DSTODXC \
+avhrr_1998_0911_DSTODXC \
+avhrr_1998_1202_DSTODXC \
+avhrr_1998_1202_DSTODXC \
+bds_bsn_T62 \
+bds_erd_fct_T62 \
+cnc_lubbock \
+dstccm45_1998_DSTODXC \
+dstccm45_1998_FSATFRC \
+dstccm45_1998_FSDSFRC \
+dstccm45_1998_FSNTFRC \
+dstccm45_1998_FSNTFRC \
+dstccm45_1998_x_QRSFRC_SAM \
+dstccm45_1998_x_QRSFRC_glb \
+dstmch1p_clm_Afr_DSTODXC \
+dstmch1p_clm_Aus_DSTODXC \
+dstmch1q_clm_EAs_DSTODXC \
+dstmch1r_clm_EAs_DSTODXC \
+dstmch1t_clm_Afr_DSTODXC \
+dstmch1t_clm_Aus_DSTODXC \
+dstmch26_1998_0305_DSTODXC \
+dstmch26_1998_0305_DSTODXC \
+dstmch26_1998_0608_DSTODXC \
+dstmch26_1998_0911_DSTODXC \
+dstmch26_1998_1202_DSTODXC \
+dstmch26_1998_1202_DSTODXC \
+dstmch26_1998_DSTODXC \
+fdst10ja_1998_DSTODXC \
+fdst10tc_1998_DSTODXC \
+idx_rfr_gph \
+lubbock_DSTMPC_dff \
+lubbock_DSTSFDPS \
+lubbock_DSTSFMBL \
+psd_cll_fsh \
+rsmas_dstmch90_clm_0112_AmS_cnc_mss_dst \
+rsmas_dstmch90_clm_0112_Brb_cnc_mss_dst \
+rsmas_dstmch90_clm_0112_Brm_cnc_mss_dst \
+rsmas_dstmch90_clm_0112_CGH_cnc_mss_dst \
+rsmas_dstmch90_clm_0112_CGr_cnc_mss_dst \
+rsmas_dstmch90_clm_0112_Enw_cnc_mss_dst \
+rsmas_dstmch90_clm_0112_Izn_cnc_mss_dst \
+rsmas_dstmch90_clm_0112_Jej_cnc_mss_dst \
+rsmas_dstmch90_clm_0112_KGI_cnc_mss_dst \
+rsmas_dstmch90_clm_0112_Kaa_cnc_mss_dst \
+rsmas_dstmch90_clm_0112_McH_cnc_mss_dst \
+rsmas_dstmch90_clm_0112_Mdw_cnc_mss_dst \
+rsmas_dstmch90_clm_0112_Mmi_cnc_mss_dst \
+rsmas_dstmch90_clm_0112_Nau_cnc_mss_dst \
+rsmas_dstmch90_clm_0112_NeC_cnc_mss_dst \
+rsmas_dstmch90_clm_0112_Nrf_cnc_mss_dst \
+rsmas_dstmch90_clm_0112_Okn_cnc_mss_dst \
+rsmas_dstmch90_clm_0112_SlI_cnc_mss_dst \
+toms_1998_0305_aer_idx_331_360 \
+toms_1998_0305_aer_idx_331_360 \
+toms_1998_0608_aer_idx_331_360 \
+toms_1998_0911_aer_idx_331_360 \
+toms_1998_1202_aer_idx_331_360 \
+toms_1998_1202_aer_idx_331_360 \
+toms_clm_Afr_aer_idx_331_360 \
+toms_clm_EAs_aer_idx_331_360 \
+vlc_dps_aer \
+dstccm97_clm_VAI_DST \
+dstccm96_clm_VAI_DST \
+dstccm95_clm_VAI_DST \
+dirtmap_dstccm97_DSTSFDPS \
+dirtmap_dstccm96_DSTSFDPS \
+dirtmap_dstccm95_DSTSFDPS \
+dirtmap_dstccm96_DSTSFDPS_rat \
+dirtmap_dstccm95_DSTSFDPS_rat \
+dstccm97_clm_1202_DSTODXC \
+dstccm97_clm_0608_DSTODXC \
+dstccm97_clm_0305_DSTODXC \
+dstccm97_clm_0911_DSTODXC \
+dstccm97_clm_DSTODXC \
+dstccm96_clm_DSTODXC \
+dstccm95_clm_DSTODXC \
+dstccm94_clm_FSNT \
+dstccm94_clm_FSNTFRC \
+dstccm97_clm_dstccm94_clm_FSNT \
+dstccm94_clm_FTNT \
+dstccm94_clm_FTNTFRC \
+dstccm97_clm_dstccm94_clm_FTNT \
+dstccm94_clm_FSNTFRC \
+dstccm93_clm_FSNTFRC \
+dstccm92_clm_FSNTFRC \
+; do 
+scp 'dust.ess.uci.edu:${DATA}/ps/'${fl_stb}'.eps' ${DATA}/ps
+epstopdf ${DATA}/ps/${fl_stb}.eps
+done
+} % end csznote
+% $: rebalance syntax highlighting
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill References\hfill}}\vspace{-0.5in}\large
+% Bibliography
+%\renewcommand\refname{\normalsize Publications}
+\bibliographystyle{jas}
+\bibliography{bib}
+
+\end{document}

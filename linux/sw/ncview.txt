@@ -1,0 +1,185 @@
+ncview-1.92c lanina.ps.uci.edu 20010829:
+tar xvzf ncview-1.92c.tar.gz 
+cd ncview-1.92c
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export FC='pgf90'
+export CFLAGS='-O'
+export FFLAGS='-O -w'
+./configure --prefix=/usr/local
+make
+sudo make install
+make distclean
+
+ncview-1.92e elnino.ess.uci.edu 20040310:
+# Before building ncview install X library libXaw7.a (athena widgets)
+sudo apt-get install libxaw7-dev
+# Before building ncview install libppm.a so xview can create movies
+sudo apt-get install libnetpbm9-dev
+http://meteora.ucsd.edu/~pierce/ncview_home_page.html
+cd ${DATA}/tmp
+wget ftp://cirrus.ucsd.edu/pub/ncview/ncview-1.92e.tar.gz
+tar xvzf ncview-1.92e.tar.gz 
+cd ncview-1.92e
+make distclean
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export FC='g95'
+export CFLAGS='-O'
+export FFLAGS='-O -g -fno-second-underscore'
+./configure --prefix=/usr/local
+make
+sudo make install
+make distclean
+
+************************************************************************
+ncview-1.93 elnino.ess.uci.edu 20060130:
+http://meteora.ucsd.edu/~pierce/ncview_home_page.html
+************************************************************************
+# Before building ncview install X library libXaw7.a (athena widgets)
+sudo apt-get install libxaw7-dev
+# Before building ncview install libppm.a so xview can create movies
+sudo apt-get install libnetpbm9-dev
+cd ${DATA}/tmp
+wget ftp://cirrus.ucsd.edu/pub/ncview/ncview-1.93.tar.gz
+tar xvzf ncview-1.93.tar.gz 
+cd ncview-1.93
+make distclean
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export FC='g95'
+export CFLAGS='-O'
+export FFLAGS='-O -g -fno-second-underscore'
+./configure --prefix=/usr/local
+make
+sudo make install
+make distclean
+************************************************************************
+ncview-1.93 elnino.ess.uci.edu 20060130:
+http://meteora.ucsd.edu/~pierce/ncview_home_page.html
+************************************************************************
+
+************************************************************************
+20060620: ncview-1.93b virga.ess.uci.edu Ubuntu 6.06 Dapper
+http://meteora.ucsd.edu/~pierce/ncview_home_page.html
+************************************************************************
+# Before building ncview install X library libXaw7.a (athena widgets)
+sudo apt-get install libxaw7-dev
+# Before building ncview install libppm.a so xview can create movies
+sudo apt-get install libnetpbm9-dev
+cd ${DATA}/tmp
+wget ftp://cirrus.ucsd.edu/pub/ncview/ncview-1.93b.tar.gz
+tar xvzf ncview-1.93b.tar.gz 
+cd ncview-1.93b
+make distclean
+export GNU_TRP=`~/nco/autobld/config.guess`
+export CC='icc -std=c99'
+export CFLAGS='-O3 -g -mp -w1'
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export CXX='icpc'
+export CXXFLAGS='-O3 -g -mp -w1'
+export FC='ifort'
+export F90='ifort'
+export FFLAGS='-O3 -g -axW -mp -vec_report1'
+export F90FLAGS='-O3 -g -axW -mp -vec_report1'
+./configure --prefix=/usr/local
+make
+sudo make install
+make distclean
+************************************************************************
+200600620: ncview-1.93b virga.ess.uci.edu
+************************************************************************
+
+************************************************************************
+20060829: ncview-1.93b esmf.ess.uci.edu AIX 5.1
+http://meteora.ucsd.edu/~pierce/ncview_home_page.html
+************************************************************************
+# Before building ncview install X library libXaw7.a (athena widgets)
+sudo apt-get install libxaw7-dev
+# Before building ncview install libppm.a so xview can create movies
+sudo apt-get install libnetpbm9-dev
+cd ${DATA}/tmp
+wget ftp://cirrus.ucsd.edu/pub/ncview/ncview-1.93b.tar.gz
+tar xvzf ncview-1.93b.tar.gz 
+cd ncview-1.93b
+make distclean
+export GNU_TRP=`~/nco/autobld/config.guess`
+export OBJECT_MODE='64' # AIX-specific hack
+export CC='xlc_r'
+export CFLAGS='-O -qlanglvl=extc99 -qmaxmem=-1 -qarch=auto'
+export CPPFLAGS='-D_LARGE_FILES -DNDEBUG -I/usr/vacpp/include'
+export CXX='xlC_r'
+export FC='xlf_r'
+export F90='xlf90_r'
+export F90FLAGS='-O -qsuffix=f=f90 -qmaxmem=-1 -qarch=auto'
+export FFLAGS='-O -qarch=auto'
+./configure --prefix=/usr/local
+make
+sudo make install
+make distclean
+************************************************************************
+200600829: ncview-1.93b esmf.ess.uci.edu
+************************************************************************
+
+************************************************************************
+20091007: ncview-1.93g neige.ess.uci.edu Ubuntu 9.04 Jaunty
+http://meteora.ucsd.edu/~pierce/ncview_home_page.html
+************************************************************************
+# Before building ncview install X library libXaw7.a (athena widgets)
+sudo aptitude install libxaw7-dev
+# Before building ncview install libppm.a so xview can create movies
+sudo aptitude install libnetpbm10-dev
+cd ${DATA}/tmp
+wget ftp://cirrus.ucsd.edu/pub/ncview/ncview-1.93g.tar.gz
+tar xvzf ncview-1.93g.tar.gz 
+cd ncview-1.93g
+make distclean
+export GNU_TRP=`~/nco/autobld/config.guess`
+export CC='gcc'
+export CFLAGS=''
+export CPPFLAGS=''
+export CXX='g++'
+export CXXFLAGS=''
+export LDFLAGS='-lhdf5_hl -lhdf5 -lz -lcurl'
+export FC='gfortran'
+export F90='gfortran'
+export FFLAGS=''
+export F90FLAGS=''
+./configure --prefix=/usr/local
+make
+gcc -DINC_UDUNITS -DINC_PPM -o ncview ncview.o file.o util.o do_buttons.o file_netcdf.o view.o do_print.o epic_time.o interface/interface.o interface/x_interface.o interface/dataedit.o interface/display_info.o interface/plot_xy.o interface/utils.o interface/range.o interface/printer_options.o overlay.o interface/filesel.o interface/set_options.o interface/plot_range.o udu.o SciPlot.o interface/RadioWidget.o interface/cbar.o -L. -L/usr/local/lib -lnetcdf -lhdf5_hl -lhdf5 -lz -lcurl -ludunits -lXaw -lXmu -lnetpbm -lSM -lICE -lXt -lXext -lX11 -lm
+sudo make install
+make distclean
+************************************************************************
+20091007: ncview-1.93g neige.ess.uci.edu
+************************************************************************
+
+************************************************************************
+20091007: ncview-1.93g greenplanet.ess.uci.edu Ubuntu 9.04 Jaunty
+http://meteora.ucsd.edu/~pierce/ncview_home_page.html
+************************************************************************
+# Before building ncview install X library libXaw7.a (athena widgets)
+sudo aptitude install libxaw7-dev
+# Before building ncview install libppm.a so xview can create movies
+sudo aptitude install libnetpbm10-dev
+cd ${DATA}/tmp
+wget ftp://cirrus.ucsd.edu/pub/ncview/ncview-1.93g.tar.gz
+tar xvzf ncview-1.93g.tar.gz 
+cd ncview-1.93g
+make distclean
+export GNU_TRP=`~/nco/autobld/config.guess`
+export CC='gcc'
+export CFLAGS=''
+export CPPFLAGS=''
+export CXX='g++'
+export CXXFLAGS=''
+export LDFLAGS='-lhdf5_hl -lhdf5 -lz -lcurl'
+export FC='gfortran'
+export F90='gfortran'
+export FFLAGS=''
+export F90FLAGS=''
+./configure --prefix=/usr/local
+make
+gcc -DINC_UDUNITS -DINC_PPM -o ncview ncview.o file.o util.o do_buttons.o file_netcdf.o view.o do_print.o epic_time.o interface/interface.o interface/x_interface.o interface/dataedit.o interface/display_info.o interface/plot_xy.o interface/utils.o interface/range.o interface/printer_options.o overlay.o interface/filesel.o interface/set_options.o interface/plot_range.o udu.o SciPlot.o interface/RadioWidget.o interface/cbar.o -L. -L/usr/local/lib -lnetcdf -lhdf5_hl -lhdf5 -lz -lcurl -ludunits -lXaw -lXmu -lnetpbm -lSM -lICE -lXt -lXext -lX11 -lm
+sudo make install
+make distclean
+************************************************************************
+20091007: ncview-1.93g greenplanet.ess.uci.edu
+************************************************************************

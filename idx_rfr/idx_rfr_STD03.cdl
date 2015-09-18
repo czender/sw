@@ -1,0 +1,51 @@
+// ncgen -b -o ${DATA}/aca/idx_rfr_STD03.nc ${HOME}/idx_rfr/idx_rfr_STD03.cdl
+// ncks -C -H -s %9.5f -v bnd,idx_rfr_toms_dust_STD03_img,idx_rfr_toms_dust_STD03_rl $DATA/aca/idx_rfr_STD03.nc
+
+netcdf idx_rfr_STD03 {
+dimensions:
+	bnd = 6 ;
+variables:
+
+// global attributes:
+	:RCS_Header = "$Id$" ;
+	:history = "";
+	:source = "
+Created by Masaru Yoshioka 20030702
+Standardized by Charlie Zender 20030702
+Dust refractive indices from estimated from TOMS measurements
+Source: Sinyuk et al. (GRL, 2003) & Torres (Personal communication, 2003)
+Imaginary components are mainly from TOMS (STD03)
+Real components are from earlier TOMS (TBH02) and Patterson (PaG81)
+Nominal bandwidth is 1 nm for the first four wavelengths (UV)
+For visible wavelengths, CSZ uses 10 nm
+wl(um)   real  source	imaginary    source
+0.331    1.58  TBH02	0.00654  Tor03_eqn (calculated w/polynomial fit eqn)
+0.340    1.58  TBH02    0.00616  Tor03_est (direct estimate @exact wl)
+0.360    1.57  TBH02    0.00528  Tor03_eqn (calculated w/polynomial fit eqn)
+0.380    1.58  TBH02    0.00440  Tor03_eqn (calculated w/polynomial fit eqn)
+0.550    1.56  TBH02	0.00140  STD03_grf (read from graph)
+0.630    1.56  Pat81    0.00100  STD03_grf";
+
+	float bnd(bnd) ;
+	bnd:long_name = "Band center wavelength" ;
+	bnd:units = "micron" ;
+	bnd:C_format = "%.5g" ;
+
+	float idx_rfr_toms_dust_STD03_img(bnd);
+	idx_rfr_toms_dust_STD03_img:long_name = "TOMS/STD03 dust imaginary index of refraction";
+	idx_rfr_toms_dust_STD03_img:units = "";
+	idx_rfr_toms_dust_STD03_img:C_format = "%.3g";
+
+	float idx_rfr_toms_dust_STD03_rl(bnd);
+	idx_rfr_toms_dust_STD03_rl:long_name = "TOMS/STD03 dust real index of refraction";
+	idx_rfr_toms_dust_STD03_rl:units = "";
+	idx_rfr_toms_dust_STD03_rl:C_format = "%.4g";
+
+data:
+
+ bnd = 0.331, 0.340, 0.360, 0.380, 0.550, 0.630 ;
+
+ idx_rfr_toms_dust_STD03_img = 0.00654, 0.00616, 0.00528, 0.00440, 0.00140, 0.00100 ;
+
+ idx_rfr_toms_dust_STD03_rl = 1.58, 1.58, 1.57, 1.58, 1.56, 1.56 ;
+}

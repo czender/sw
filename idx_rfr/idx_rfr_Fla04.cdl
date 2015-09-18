@@ -1,0 +1,113 @@
+// ncgen -b -o ${DATA}/aca/idx_rfr_Fla04.nc ${HOME}/idx_rfr/idx_rfr_Fla04.cdl
+// ncks -C -H -s %9.5f -v bnd,idx_rfr_toms_dust_Fla04_img,idx_rfr_toms_dust_Fla04_rl $DATA/aca/idx_rfr_Fla04.nc
+
+netcdf idx_rfr_Fla04 {
+dimensions:
+	bnd = 90 ;
+variables:
+
+// global attributes:
+	:RCS_Header = "$Id$" ;
+	:history = "";
+	:source = "
+Indices of refraction for NaCl and Sea Salt
+Standardized by Charlie Zender 20040914
+Source: P. J. Flatau's REFLIB http://atol.ucsd.edu/~pflatau/refrtab/
+Source: Shettle and Fenn (1979), Volz (1972), Eldridge and Palik (1985)
+REFLIB notes:
+Shettle-Hitran
+Reformatted for REFLIB by PJFlatau
+
+A-7.  Volz, F. E. (1972) Infrared refractive index of atmospheric
+aerosol substance, Appl. Opt., 11:755-759.
+
+A-8.  Shettle, E. P. and Fenn, R. W. (1979)  Models for the Aerosols
+of the Lower Atmosphere and the Effects of Humidity Variations on
+Their Optical Properties, AFGL-TR-79-0214, 20 Sept 1979, ADA085951.
+
+A-9.  Volz, F. E. (1972) Infrared absorption by atmospheric aerosol
+substance, J. Geophys. Res., 77:1017-1031.
+
+A-5.  Eldridge, J. E. and Palik, E. D. (1985) Sodium Chloride, in
+Handbook of Optical Constants of Solids, Edited by E. D. Palik,
+Academic Press, Inc., Orlando, FL, 775-793.";
+
+	float bnd(bnd) ;
+	bnd:long_name = "Band center wavelength" ;
+	bnd:units = "micron" ;
+	bnd:C_format = "%.5g" ;
+
+	float idx_rfr_NaCl_Fla04_img(bnd);
+	idx_rfr_NaCl_Fla04_img:long_name = "NaCl imaginary index of refraction";
+	idx_rfr_NaCl_Fla04_img:units = "";
+	idx_rfr_NaCl_Fla04_img:C_format = "%.3g";
+	idx_rfr_NaCl_Fla04_img:state = "crystalline";
+
+	float idx_rfr_NaCl_Fla04_rl(bnd);
+	idx_rfr_NaCl_Fla04_rl:long_name = "NaCl real index of refraction";
+	idx_rfr_NaCl_Fla04_rl:units = "";
+	idx_rfr_NaCl_Fla04_rl:C_format = "%.4g";
+	idx_rfr_NaCl_Fla04_rl:state = "crystalline";
+
+	float idx_rfr_sea_salt_Fla04_img(bnd);
+	idx_rfr_sea_salt_Fla04_img:long_name = "Sea salt imaginary index of refraction";
+	idx_rfr_sea_salt_Fla04_img:units = "";
+	idx_rfr_sea_salt_Fla04_img:C_format = "%.3g";
+	idx_rfr_sea_salt_Fla04_img:state = "crystalline";
+
+	float idx_rfr_sea_salt_Fla04_rl(bnd);
+	idx_rfr_sea_salt_Fla04_rl:long_name = "Sea salt real index of refraction";
+	idx_rfr_sea_salt_Fla04_rl:units = "";
+	idx_rfr_sea_salt_Fla04_rl:C_format = "%.4g";
+	idx_rfr_sea_salt_Fla04_rl:state = "crystalline";
+
+data:
+
+ bnd = 0.2, 0.25, 0.3, 0.337, 0.4, 0.488, 0.515, 0.55, 0.633, 0.694, 0.86, 
+    1.06, 1.3, 1.536, 1.8, 2, 2.25, 2.5, 2.7, 3, 3.2, 3.392, 3.5, 3.75, 4, 
+    4.5, 5, 5.5, 6, 6.2, 6.5, 7.2, 7.9, 8.2, 8.5, 8.7, 9, 9.2, 9.5, 9.8, 10, 
+    10.591, 11, 11.5, 12.5, 13, 14, 14.8, 15, 16.4, 17.2, 18, 18.5, 20, 21.3, 
+    22.5, 25, 27.9, 30, 35, 40, 45, 50, 55, 60, 65, 70, 80, 90, 100, 110, 
+    120, 135, 150, 165, 180, 200, 250, 300, 400, 500, 750, 1000, 1500, 2000, 
+    3000, 5000, 10000, 20000, 30000 ;
+
+ idx_rfr_NaCl_Fla04_img = 3.1e-09, 2.3e-09, 1.5e-09, 8.7e-10, 3.8e-10, 
+    1.1e-10, 4.9e-11, 6.8e-11, 1.1e-10, 1.5e-10, 2.4e-10, 3.5e-10, 4.8e-10, 
+    6.1e-10, 7.5e-10, 8.6e-10, 1e-09, 1.1e-09, 1.2e-09, 1.4e-09, 1.5e-09, 
+    1.6e-09, 1.65e-09, 1.8e-09, 1.8e-09, 1.8e-09, 1.7e-09, 2.6e-09, 4.9e-09, 
+    5.8e-09, 7.2e-09, 1e-08, 1.4e-08, 1.5e-08, 1.6e-08, 1.7e-08, 1.9e-08, 
+    2e-08, 3e-08, 4.4e-08, 5.3e-08, 8e-08, 1.3e-07, 3.3e-07, 1.4e-06, 
+    2.8e-06, 8.8e-06, 2.3e-05, 2.7e-05, 7.6e-05, 0.00013, 0.0002, 0.00029, 
+    0.00062, 0.00099, 0.0014, 0.0035, 0.01, 0.026, 0.14, 0.66, 1.08, 1.99, 
+    3.46, 6.94, 0.761, 0.271, 0.123, 0.0968, 0.087, 0.079, 0.077, 0.072, 
+    0.064, 0.056, 0.052, 0.047, 0.041, 0.03, 0.027, 0.024, 0.012, 0.008, 
+    0.0061, 0.0047, 0.0029, 0.0024, 0.00056, 0.00041, 0.00026 ;
+
+ idx_rfr_NaCl_Fla04_rl = 1.79, 1.655, 1.607, 1.587, 1.567, 1.553, 1.55, 
+    1.547, 1.542, 1.539, 1.534, 1.531, 1.529, 1.528, 1.527, 1.527, 1.526, 
+    1.525, 1.525, 1.524, 1.524, 1.523, 1.523, 1.522, 1.522, 1.52, 1.519, 
+    1.517, 1.515, 1.515, 1.513, 1.51, 1.507, 1.505, 1.504, 1.503, 1.501, 1.5, 
+    1.498, 1.496, 1.495, 1.491, 1.488, 1.484, 1.476, 1.471, 1.462, 1.454, 
+    1.451, 1.435, 1.425, 1.414, 1.406, 1.382, 1.36, 1.33, 1.27, 1.17, 1.08, 
+    0.78, 0.58, 0.27, 0.14, 0.31, 4.52, 5.28, 3.92, 3.17, 2.87, 2.74, 2.64, 
+    2.59, 2.54, 2.5, 2.48, 2.47, 2.45, 2.44, 2.43, 2.43, 2.43, 2.43, 2.43, 
+    2.43, 2.43, 2.43, 2.43, 2.43, 2.43, 2.43 ;
+
+ idx_rfr_sea_salt_Fla04_img = 1e-04, 5e-06, 2e-06, 4e-07, 3e-08, 2e-08, 1e-08, 
+    1e-08, 2e-08, 1e-07, 3e-06, 0.0002, 0.0004, 0.0006, 0.0008, 0.001, 0.002, 
+    0.004, 0.007, 0.01, 0.003, 0.002, 0.0016, 0.0014, 0.0014, 0.0014, 0.0025, 
+    0.0036, 0.011, 0.022, 0.005, 0.007, 0.013, 0.02, 0.026, 0.03, 0.028, 
+    0.026, 0.018, 0.016, 0.015, 0.014, 0.014, 0.014, 0.016, 0.018, 0.023, 
+    0.03, 0.035, 0.09, 0.12, 0.13, 0.135, 0.152, 0.165, 0.18, 0.205, 0.275, 
+    0.3, 0.5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0 ;
+
+ idx_rfr_sea_salt_Fla04_rl = 1.51, 1.51, 1.51, 1.51, 1.5, 1.5, 1.5, 1.5, 1.49, 
+    1.49, 1.48, 1.47, 1.47, 1.46, 1.45, 1.45, 1.44, 1.43, 1.4, 1.61, 1.49, 
+    1.48, 1.48, 1.47, 1.48, 1.49, 1.47, 1.42, 1.41, 1.6, 1.46, 1.42, 1.4, 
+    1.42, 1.48, 1.6, 1.65, 1.61, 1.58, 1.56, 1.54, 1.5, 1.48, 1.48, 1.42, 
+    1.41, 1.41, 1.43, 1.45, 1.56, 1.74, 1.78, 1.77, 1.76, 1.76, 1.76, 1.76, 
+    1.77, 1.77, 1.76, 1.74, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ;
+
+}

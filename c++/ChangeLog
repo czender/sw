@@ -1,0 +1,2647 @@
+2015-01-22  Charlie Zender  <zender@uci.edu>
+
+	* ccc compiles, links, and executes well with clang on MacOSX
+
+	* Ensure correct precedence of + and () ? : in mie_sln.cc thanks to clang
+
+	* Deprecate "register" type as per clang recommendation
+
+	* Add -std=c++11 to MacOSX to quiet clang
+
+2014-07-04  Charlie Zender  <zender@uci.edu>
+
+	* Test C++-11 features
+
+2013-03-28  Charlie Zender  <zender@uci.edu>
+
+	* Add stat() diagnostics invoked by ccc --tst=stat
+
+2013-01-19  Charlie Zender  <zender@uci.edu>
+
+	* Hardwire data_path="/data/zender/aca" to avoid initialization
+	bug where fio::data_path was undefined when mnr/aer structures
+	initialized. This hack may be caused by GCC g++ changing order
+	of initialization of static namespace variables, which is
+	something the C++ specification leaves undefined.
+	It used to always work but broke over a year ago.
+
+2012-03-27  Charlie Zender  <zender@uci.edu>
+
+	* Add RRTM SW spectral grid
+
+2012-03-23  Charlie Zender  <zender@uci.edu>
+
+	* Add RRTM LW spectral grid
+
+2012-02-14  Charlie Zender  <zender@uci.edu>
+
+	* Update AIX options to netCDF 4.1.3 on bluefire
+
+2012-02-07  Charlie Zender  <zender@uci.edu>
+
+	* Fix assignment of density in aer_cls::dns_set()
+
+2011-12-31  Charlie Zender  <zender@uci.edu>
+
+	* Change copyright year to 2012
+
+2011-03-28  Charlie Zender  <zender@uci.edu>
+
+	* Four more CEWUs for GCC 4.4.5
+
+2010-10-27  Charlie Zender  <zender@uci.edu>
+
+	* Small syntax changes for clang-compliance
+
+2010-06-28  Charlie Zender  <zender@uci.edu>
+
+	* Successfully built c++ on AIX bluefire with netCDF4
+
+2009-04-24  Charlie Zender  <zender@uci.edu>
+
+	* Change GDZ08 to GDZ09
+
+2009-01-31  Charlie Zender  <zender@uci.edu>
+
+	* Deprecate icpc '-cxxlib-icc' argument
+
+2009-01-30  Charlie Zender  <zender@uci.edu>
+
+	* #include <string> for std::strcmp
+
+2008-10-26  Charlie Zender  <zender@uci.edu>
+
+	* Completed integration of a priori frc_msn_drc to obtain flx_frc_drc
+
+	* Allow command-line frc_msn_drc rather than frc_msn_dff
+	because FD and JCG now supply me with estimated frc_msn_drc
+
+	* Change default llm_typ from drc to dff
+
+2008-10-24  Charlie Zender  <zender@uci.edu>
+
+	* Temporarily change idx_rfr_H2O_ice_img(1310 nm)=1.302e-5 for GDZ08
+
+	* Temporarily change idx_rfr_H2O_ice_img(1550 nm)=4.586e-4 for GDZ08
+
+2008-09-30  Charlie Zender  <zender@uci.edu>
+
+	* Change photodiode detector to 0.1835 cm radius (from 0.2286) per JCG
+
+	* Change sphere reflectance at 1550nm to 0.965 per JCG
+
+2008-09-27  Charlie Zender  <zender@uci.edu>
+
+	* Verified that results with stray light reduce to old assumption
+	of 100% direct collimated incidence as stray light -> zero.
+
+	* Account for stray light in computing flx_frc_drc
+
+	* Change sphere reflectance at 1310nm from 0.9848 to 0.972
+	This changes direct/diffuse partitioning at 1310nm by ~10%!
+	
+2008-09-02  Charlie Zender  <zender@uci.edu>
+
+	* Added, compiled, and tested slr_zen_ngl_cos.cc
+
+2008-08-28  Charlie Zender  <zender@uci.edu>
+
+	* Temporarily change idx_rfr_H2O_ice_img(1550 nm)=5.55e-4 for GDZ08
+
+2008-07-02  Charlie Zender  <zender@uci.edu>
+
+	* Add wavelength-dependent beam-widths
+
+2008-05-29  Charlie Zender  <zender@uci.edu>
+
+	* Hint to set sng_foo when tst=sng
+
+2008-05-27  Charlie Zender  <zender@uci.edu>
+
+	* Noted Perfect agreement beween analytic and numerical integration
+
+	* fxm: azi_nbr > 2 gives sames psi_bar as azi_nbr=2, why?
+
+	* Setting --rds_usr=0.0 also zeros area averages because of "r" weight
+
+	* Make reflectance a normal loop
+
+	* ZKB = zero-known bugs
+
+	* Fix radial illumination/integration limits. Warn unitialized by default.
+
+	* Account for spherical cap in normalized sample surface area
+
+	* Treating depth akin to other coordinates
+	
+2008-04-23  Charlie Zender  <zender@uci.edu>
+
+	* Cleaned up snw.cc, implemented HRL06
+
+2008-04-07  Charlie Zender  <zender@uci.edu>
+
+	* Added snw.cc from Ghislain Picard. HRL06 integrating sphere simulation.
+
+2008-01-25  Charlie Zender  <zender@uci.edu>
+
+	* Update idx_rfr_ice values to Warren 1995 compilation which
+	uses Kou et al. from 0.6 - 2.5 um, and has Perovich and Govoni built-in
+
+2008-01-24  Charlie Zender  <zender@uci.edu>
+
+	* Turned off normalization by lgn_xpn_cff[0] in order to help
+	better diagnose problems
+
+	* On the whole, Lobatto weights now work better than linear weights
+	Remaining problems include: 
+	1. phz_fnc_lgn_ntg != 1.0
+	2. Expansion does not seem to converge as fast as Wis771 indicates
+
+	* Found and corrected factor of pi/2 error in Lobatto weights
+
+2008-01-23  Charlie Zender  <zender@uci.edu>
+
+	* Implemented Lobatto angular grid by default
+	Integrals seem to be off by factor of pi/2
+
+	* cvs tag -c mie-3_4_9 c++ mie nco/src/nco_c++ idx_rfr
+	Changes since mie-3_4_8: Phase function improvements
+	Last version before attempt to default to Lobatto quadrature 
+
+	* Lobatto abscissae and weights seem to agree with Wis771 (A2) for
+	L=100 on [0,pi]. Huzzah.
+
+	* Lobatto abscissae and weights agree exactly with Mathworld table
+
+	* Correct off-by-one error in Bessel root index
+
+	* Use ngl_wgt rather than ngl_dlt in lgn_xpn_cff computation
+
+2008-01-22  Charlie Zender  <zender@uci.edu>
+
+	* New inline routines seem to converge faster without causing
+	stack-recursion problems for large L
+
+	* Add fast inline Legendre routines in Legendre namespace
+
+	* Lobatto quadrature points seem OK on cosine grid for L=20
+	However, procedure hangs for large L, e.g., L=50
+
+	* Fix bogus breakage in spc_slr.cc whenever dbg_lvl > 3
+
+	* Add Legendre polynomial and derviative evaluators
+
+2008-01-20  Charlie Zender  <zender@uci.edu>
+
+	* Slightly adjust linear angle grid weights
+
+2008-01-19  Charlie Zender  <zender@uci.edu>
+
+	* Plug-in ngl_grd_get(). Seems to work for "regular" grids.
+
+	* Add test for Bessel function zeros
+
+2008-01-18  Charlie Zender  <zender@uci.edu>
+
+	*  sz_ctr=logarithmic mean for logarithmic grids
+
+2008-01-15  Charlie Zender  <zender@uci.edu>
+
+	* Change PMOM_second_dimension to header-defined variable
+
+2008-01-13  Charlie Zender  <zender@uci.edu>
+
+	* Turn on phase-function re-normalization
+
+	* Add diagnostic angular phase function information
+
+	* Dimension size is now, unfortunately, lgn_nbr+1 not lgn_nbr
+
+	* Output lgn_nbr+1 array elements of Legendre order 0:lgn_nbr
+
+2008-01-12  Charlie Zender  <zender@uci.edu>
+
+	* Increase MAXANG to 721 for quarter-degree resolution in MIEV0
+
+	* Output lgn_xpn_cff at computational (highest reasonable) precision
+
+2008-01-03  Charlie Zender  <zender@uci.edu>
+
+	* Use mkdir -p when creating new directories
+
+2007-11-02  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_4_8 c++ mie nco/src/nco_c++ idx_rfr
+	Changes since mie-3_4_7: snow reflectance works, GPL3, netCDF4, 
+	OpenMP with g++-4.2
+
+2007-11-01  Charlie Zender  <zender@uci.edu>
+
+	* Change rfl_flx_snw.? to rfl_spc_snw.?
+
+2007-10-01  Charlie Zender  <zender@uci.edu>
+
+	* Enable netCDF4 build capability at Makefile level
+
+2007-09-26  Charlie Zender  <zender@uci.edu>
+
+	* Use semi-infinite snowpack approximation when tau > 1000.0
+
+	* Put gsl_error_handler_csz() in new flp.cc file in libcsm_c++
+
+2007-09-25  Charlie Zender  <zender@uci.edu>
+
+	* Add gsl_error_handler routines to work around underflow
+
+	* Add wvl option to test wvl_grd_cls in ccc
+
+2007-09-21  Charlie Zender  <zender@uci.edu>
+
+	* Add friendly class member printing method to wvl_grd_cls
+
+2007-09-11  Charlie Zender  <zender@uci.edu>
+
+	* Change from GPL2 to GPL3
+
+2007-05-30  Charlie Zender  <zender@uci.edu>
+
+	* g++ requires #include <stdint.h> for LLONG_MAX, ULLONG_MAX
+
+	* icpc requires #include <stdint.h> for int64_t
+
+2007-05-22  Charlie Zender  <zender@uci.edu>
+
+	* Overload sng2nbr() to quiet compiler warnings
+
+	* Add sng2nbr() template to utl.hh to handle strtoll() and
+	strtoull() duties until those functions become ISO C++ standards 
+	(probably in 2008 or 2009)
+
+2007-05-18  Charlie Zender  <zender@uci.edu>
+
+	* Finesse handling of LLONG_MIN, LLONG_MAX, ULLONG_MAX
+	g++ 4.0.3 on sand seems to have LLONG_MIN but not LLONG_MAX nor ULLONG_MAX
+
+2007-05-14  Charlie Zender  <zender@uci.edu>
+
+	* All netCDF4 atomic data types are now tested
+
+	* Add NC_STRING string_var test
+
+2007-05-13  Charlie Zender  <zender@uci.edu>
+
+	* Support building with netCDF4 and creating netCDF4 output files
+
+2006-11-19  Charlie Zender  <zender@uci.edu>
+
+	* Allow day-of-year doy to include day 366 for leap-year compatibility
+
+2006-09-26  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_4_7 c++ mie nco/src/nco_c++ idx_rfr
+	Changes since mie-3_4_6: Output *_cff_vlm in [m2 air m-3 aer] not [m2 air m-3 air]
+
+2006-08-17  Charlie Zender  <zender@uci.edu>
+
+	* ccc builds and executes with pgCC, and OpenMP works fine
+
+	* Pass and test for PGI_CXX token to indicate pgCC compiler
+
+	* Makefile: Disambiguate test for "CC" containing "gcc" (satisfied
+	by both gcc and pgcc) by testing for "g++" in "CXX"
+
+2006-08-16  Charlie Zender  <zender@uci.edu>
+
+	* Perform CEWI initializations in idx_rfr.cc
+
+	* Add try/throw/catch test to tst.cc
+
+2006-08-16  Charlie Zender  <zender@ipcc.calit2.uci.edu>
+
+	* idx_rfr.cc: Remove extraneous <prc_cmp> from std::sqrt<prc_cmp>()
+	to support PGI pgCC
+
+2006-08-16  Charlie Zender  <zender@uci.edu>
+
+	* a2d.hh: Remove try/throw/catch to support PGI pgCC
+
+2006-07-01  Charlie Zender  <zender@uci.edu>
+
+	* Added Fe2O3_*_roush
+
+2006-06-30  Charlie Zender  <zender@uci.edu>
+
+	* ccc builds and executes with pathCC and OMP=N
+
+2006-06-22  Charlie Zender  <zender@uci.edu>
+
+	* Change CCM_SW, CCM_LW key-values to CAM_SW, CAM_LW
+
+2006-06-21  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_4_6 c++ mie nco/src/nco_c++ idx_rfr
+	Changes since mie-3_4_5: MCA improvements idx_rfr name changes, limestone_
+
+	* Successfully created dst_bln_20060621 Summer Solstice Dust
+
+2006-06-20  Charlie Zender  <zender@uci.edu>
+
+	* Change default Fe2O3 to Fe2O3_doccd
+
+	* Change Fe2O3 to Fe2O3_avg and SiO2 to SiO2_avg
+
+2006-06-19  Charlie Zender  <zender@uci.edu>
+
+	* Finish QOL78 implementation in offline data
+
+	* Fix definition error for QOL78 line strength and damping constant
+
+	* Fix sign error in dispersive reconstruction in idx_rfr_LQB93_get()
+
+2006-06-06  Charlie Zender  <zender@uci.edu>
+
+	* idx_rfr.cc: Add limestone IR bands from QOL78, still need visible data
+
+	* Add pathscale C++ compiler block
+
+2006-06-04  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_4_5 c++ mie nco/src/nco_c++
+	Changes since mie-3_4_4: MCA kludge idx_rfr for lac_ wsoc_ calcite_ gypsum_ 
+
+	* LQB93 calcite and gypsum appears to work
+
+	* Change "soot_" to "lac_" as per BoB05 recommended nomenclature
+
+	* Added wsoc (water soluble organic carbon) species
+
+	* Add infrastructure for LQB93 reflectance-based refractive index properties
+
+2006-05-12  Charlie Zender  <zender@uci.edu>
+
+	* Add illite, kaolinite, and montmorillonite species to mie.cc options
+	with default source file idx_rfr_Ill_Kao_Mnt.nc instead of
+	idx_rfr_roush_*.nc 
+	
+	* Check mineral-specific wavelength variable name first in
+	refractive index files (e.g., bnd_illite) and use that if present.
+	If not present, assume old-convention wherein wavelength variable 
+	in refractive index file is always named bnd.
+
+2006-05-02  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_4_4 c++ mie nco/src/nco_c++
+	Changes since mie-3_4_3: Bug-fixes to coated spheres
+
+	* Stabilizing multi-component optics development for dust in SNICAR
+
+	* Add psd.pl to mie repository
+
+2006-04-20  Charlie Zender  <zender@uci.edu>
+
+	* Change dns_mdp_max and dns_prt_min to work for air "particles"
+	suspended in liquid and move these constants to phys_cst.hh
+
+2006-03-02  Charlie Zender  <zender@uci.edu>
+
+	* Running under memory shielded RedHat Kernels fails (reported by Flanner)
+	Verified by valgrind on Ubuntu
+	wvl_grd constructor was deallocate()ing memory on constructor
+	Added prive flg_dyn_mmr to keep track of wvl_grd dynamic memory
+
+2006-01-29  Charlie Zender  <zender@uci.edu>
+
+	* Add remaining DHE02 (nee Dub01) aerosols: aeronet_[Bhr,CpV,Mng,Ogd,SdA] 
+
+	* Add "sensor" wavelength grid incorporating TOMS, MODIS, AERONET
+
+2006-01-28  Charlie Zender  <zender@uci.edu>
+
+	* Relax spc_slr_cls::ntp_slr_flx_mnt() so that it only checks for
+	solar spectral flux abutment on monotonic grids that are also
+	contiguous (i.e., not spectral grids with separation, like TOMS)
+
+	* Add Fe2O3_doccd refractive indices from the
+	Database of Optical Constants for Cosmic Dust (DOCCD)
+
+2006-01-21  Charlie Zender  <zender@uci.edu>
+
+	* Fix major problem with diagnostics: 
+	[abs,ext,sca]_cff_vlm [m2 m-3] refers to volumetric extinction
+	coefficients, i.e., per unit volume of aerosol particle.
+	However, some parts of code, specifically tau_[abs,ext,sca],
+	had been using them as distance extinction coefficients, i.e., 
+	per unit aerosol layer thickness. 
+	Introduce new diagnostic [abs,ext,sca]_cff_dst [m-1] to hold 
+	distance extinction coefficient which, confusingly, many
+	texts call volumetric extinction coefficient.
+
+2006-01-20  Charlie Zender  <zender@uci.edu>
+
+	* Change obsolete limit for Re < 2.0e5 to Re < 1.0e6 in aer.cc
+
+2005-11-27  Charlie Zender  <zender@uci.edu>
+
+	* Added mie_Sor01.cc routines from Sorensen review of soot aggregates
+
+	* cvs tag -c mie-3_4_3 c++ mie nco/src/nco_c++
+	Changes since mie-3_4_2: Revised/fixed MaS99 routines
+
+	* mie now takes dmn_frc argument for weakly absorbing spherical inclusions
+
+	* Merged Jorge's revised, fixed version of mie_MaS99.cc into codebase
+
+2005-09-13  Charlie Zender  <zender@uci.edu>
+
+	* Primitive MPI communications work with mpirun and mpiexec
+
+	* Disambiguate one-line prg_nm definition into two statements
+
+2005-09-11  Charlie Zender  <zender@uci.edu>
+
+	* Update Makefile to work with MPICH2 rather than MPICH
+
+	* Add initial MPI stubs
+
+2005-08-21  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_4_2 c++ mie nco/src/nco_c++
+	Changes since mie-3_4_1: Better support for Intel compilers
+
+2005-07-08  Charlie Zender  <zender@uci.edu>
+
+	* Trivial precision adjustments so libraries build when PRC_CMP=PRC_FLT
+
+2005-06-27  Charlie Zender  <zender@uci.edu>
+
+	* Looked for bug in dstmblutl.F90 and mnr_dst.cc found by Mark Harrison:
+	Was there an extra ryn_nbr_frc_thr_opt_fnc term when Re*t > 10?
+	No, but the JGR article ZBN03 Equation 1 and aer.tex 17.1 are incorrect.
+	The parenthetical expression (1-0.085exp(...)) should be squared
+	Typo only for Re*t > 10, i.e., for D > 450 um.
+	People who implemented this equation from the paper would only get
+	incorrect results for largest particles which most ignore in
+	climate studies.
+	
+2005-05-18  Charlie Zender  <zender@uci.edu>
+
+	* Added surface energy terms from deposition regions to output
+	This required passing six new variables through the blm_glb() 
+	interface to blm_lnd(), blm_ice(), and blm_ocn().
+	The six variables are flx_LW_up_sfc_dps, flx_ltn_dps,
+	flx_sns_atm_dps, flx_q_H2O_dps, wnd_str_mrd_dps, wnd_str_znl_dps
+
+2005-05-11  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_4_1 c++ mie nco/src/nco_c++
+	Changes since mie-3_4_0: LW grid updated, rgh_mmn_mbl range increased
+
+	* Allow MaB95 drag-partition routine frc_thr_ncr_drg_get() to
+	handle rgh_mmn_mbl > 0.005 m.
+
+2005-03-20  Charlie Zender  <zender@uci.edu>
+
+	* Changed CCM_LW grid to emulate CAM3_LW grid as much as possible
+	Now it has 7 bands with same boundaries as CAM3 except for band 2
+	Checked that running volcanic aerosol with best known input
+	parameters gives results close to those quoted in CRB04 p. 122
+	table 4.2. Results are indeed close enough given uncertainties.
+
+2005-03-19  Charlie Zender  <zender@uci.edu>
+
+	* Added idx_rfr_ffc_mxg_get() overload for Maxwell Garnett
+	approximation with multiple inclusions
+
+2005-03-05  Charlie Zender  <zender@uci.edu>
+
+	* mie_sln.cc: Fixed off-by-one-hundred typo in mie_sph_coat slf_tst
+
+2005-02-20  Charlie Zender  <zender@uci.edu>
+
+	* Hooked-in mie_sph_abs_fct_MaS99()
+
+	* cvs tag -c mie-3_4_0 c++ mie nco/src/nco_c++
+	Changes since mie-3_3_9: Fix wavelength grids
+
+	* Added mie_MaS99.cc and mie_MaS99.hh to implement Markel and
+	Shalaev's solutions for absorbing inclusions in weakly-absorbing spheres.
+	Routines compile and link but are not yet hooked into mie_prc()
+
+2005-02-08  Charlie Zender  <zender@uci.edu>
+
+	* Made default initialization values explicit longs and floats in
+	wvl_grd.hh. This works fine with g++ but AIX xlC complains about
+	initializing rvalues to references. Hence removed initialization
+	completely from constructor to keep capability of altering input
+	arguments through reference mechanism.
+
+	* Cleaned up idx_rfr_H2O_*(), verified that temperature
+	dependence of ice refractive index only occurs for wvl > 10 m
+	in idx_rfr_H2O_lqd(), which is outside normal range of use.
+	For idx_rfr_H2O_ice(), temperature dependence begins for wvl > 167 um
+
+	* Call opt2abb() in aer and idx_rfr constructors.
+	This allows constructors to be called with option string rather
+	than abbreviation string. It is redundant when constructor is
+	called with abbreviation string. However, it provides much better
+	diagnostics for when constructor is called with non-member string
+	names, so the redundancy is worth it.
+
+2005-01-31  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_3_9 c++ mie nco/src/nco_c++
+	Changes since mie-3_3_8: Generic non-monotonic grids work in slr_spc routines
+
+	* Fix mnt_nbr() to return number rather than start index of monotonic elements
+
+	* Handle monotonically decreasing grids in ntp_slr_flx_mnt()
+
+2005-01-30  Charlie Zender  <zender@uci.edu>
+
+	* Replaced CCM_SW specific non-monotonic solar spectrum grid
+	interpolator routine ntp_slr_flx_nmn_CCM_SW() with generic
+	non-monotonic grid interpolator routine ntp_slr_flx_nmn().
+ 	This should allow other non-monotonic grids, e.g., CCM_LW, to work
+	again. 
+
+	* Changed wvl_grd_cls constructor to alter calling arguments to
+	exit containing pre-defined grid information
+
+2005-01-28  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_3_8 c++ mie nco/src/nco_c++
+	Changes since mie-3_3_7: Tweaks to drag coefficient and ice density
+
+	* Changed cutoff for drag coefficient = 0.44 from Re=2.0e5 to
+	Re=1.0e5. Use new logarithmically interpolated drag coefficicient  
+	which changes from 0.44 to 0.1 as Re increases from 1.0e5 to 1.0e6. 
+
+2005-01-27  Charlie Zender  <zender@uci.edu>
+     
+	* Changed standard density of ice from 910 kg m-3 to 917 kg m-3 (NGW03 p. 6)
+
+	* cvs tag -c mie-3_3_7 c++ mie nco/src/nco_c++
+	Changes since mie-3_3_6: Hexagonal prisms treated as equal-V/S
+	spheres works to first order. Changed MAXTRM to 50000.
+
+	* Changed default MAXTRM in mie_sph_Wis79() from 1102 to 50000
+	to accomodate large size parameters required for snow simulation.
+	Is better solution to pass dynamic value of MAXTRM from mie_prc()?
+
+2005-01-26  Charlie Zender  <zender@uci.edu>
+
+	* Implemented logarithmically-spaced wavelength grids
+
+2005-01-25  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_3_6 c++ mie nco/src/nco_c++
+	Changes since mie-3_3_5: Use index-of-refraction-specific density
+	by default
+
+	* Implemented index-of-refraction-specific aerosol densities by
+	default in aer.cc. For example, HKS98 soot density = 1 g/cc is now
+	used by default with HKS98 soot optical properties. 
+	Density is a major wildcard for some aerosols.
+	Still possible to override from command line.
+
+	* Fixed bug in eqn_qdr_slvr(). eqn_cbc_slvr() has never worked.
+
+2005-01-23  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_3_5 c++ mie nco/src/nco_c++
+	Changes since mie-3_3_4: Bruggeman works! PMR still broken!
+
+	* Fixed bad branch for real valued solutions to quadratic
+	equations in mth.hh
+
+	* Found error in algebraic derivation of Bruggeman solution
+	After fixing error, the Bruggeman solution works fine!
+
+2005-01-22  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_3_4 c++ mie nco/src/nco_c++
+	Changes since mie-3_3_3: Maxwell Garnet works! Bruggeman broken!
+
+	* Added complex and short types to RTTI test in ccc
+
+	* Verified exact agreement between mie and ViC98 p. 5 Tbl. 3
+	for Maxwell Garnet. Apparently Bruggeman is currently broken.
+	Of course, how can I expect Bruggeman to work when complex 
+	quadratic solver is still iffy?
+	
+	* Added slf_tst_typ=ViC98 for EMAs. p. 5 Tbl. 3 of Videen and 
+	Chylek contains a perfect tabular comparison between Maxwell
+	Garnet, Bruggeman, and EEMA solutions for four volume fractions
+
+2005-01-21  Charlie Zender  <zender@uci.edu>
+
+	* Updated ncks flags in all source code comments
+
+	* q_bck is off by exactly factor of 100 in mie -dbg --slf_tst=BoH83 --coat
+	
+	* Verified BoH83 test cases work with homogeneous particle and
+	with coated sphere. Answers agree exactly with book using Wis79 
+	algorithm for homogeneous sphere and mie_sph_coat_BoH83 for coated
+	spheres. NB: mie_sph_BoH83() still broken. Coated spheres do not 
+	return scattering matrices so phase function unknown so program 
+	ultimately bombs but at least coated spheres work.
+
+	* Testing effective medium approximations with vlm_frc_ncl=0.0:
+	Answer should be idx_rfr_mtx
+	Bruggeman: Works
+	Maxwell Garnet: Works
+	Volume-weighted: Works
+
+	* Improved degenerate case handling for Bruggeman EMA solutions
+	when vlm_frc_ncl=0.0, 1.0. 
+	However, Bruggeman solution expected to jump significantly as 
+	vlm_frc_ncl->0.0.
+
+	* Pass idx_rfr_usr information from aer_cls to idx_rfr_cls constructor
+	This fixes self-test problem
+	
+2005-01-20  Charlie Zender  <zender@uci.edu>
+
+	* User-specified refractive indices appear to be broken, at least 
+	for test cases.
+
+	* Internal mixtures may work (not validated yet)
+
+	* Added idx_rfr_prn() to pretty-print refractive indices
+
+	* Fixed some printing bugs in idx_rfr and aer classes
+
+	* Made computation of wvn_grd and frq_grd optional in wvl_grd_cls
+	This helps conserve memory for high spectral resolution grids
+
+2005-01-17  Charlie Zender  <zender@uci.edu>
+
+	* Fully switch to object-oriented refractive indices
+	Programs compiles but appear to die in refractive index mechanisms
+
+2005-01-16  Charlie Zender  <zender@uci.edu>
+
+	* Change idx_rfr_cls() constructor to automatically read in
+	refractive indices for each idx_rfr object
+
+	* Add idx_rfr_raw_fl_get() patterned after spc_slr_raw_fl_get()
+
+	* Change NULL (a C token) to CEWI_NULL (a C++ token)
+
+	* cvs tag -c mie-3_3_3 c++ mie nco/src/nco_c++
+	Changes since mie-3_3_2: improved classes appear to work
+
+	* Improved aer, idx_rfr, spc_bbd, wvl_grd classes appear to work
+	Placing idx_rfr_cls within aer_cls compiles and dies at runtime
+	so is not used yet
+
+	* Added tpt_set() method to spc_bbd_cls
+
+2005-01-15  Charlie Zender  <zender@uci.edu>
+
+	* Restructure wvl_grd_cls recompute() to only re-allocate() when
+	number of wavelengths changes. 
+	allocate() is now only called in recompute(), not in constructor,
+	even for regular wavelength grids
+
+	* Overloaded flx_frc_get in spc_bbd_cls to handle whole arrays
+
+	* Added idx_rfr_cls object to aer_cls 
+	I'm pretty rusty at C++	and doing this was not intuitive
+	Wondering if it would be better to build up distinct classes 
+	from abstract base classes rather than include classes in other classes?
+
+	* Realized that effective refractive index changes do not yet work
+	because idx_rfr_cls only reads one file on first call.
+	Need to change to read one file per component
+	This requires improving object oriented capabilities of	idx_rfr_cls
+	There will be a lot of structural changes along the way, including
+	modifying many classes which were poorly written a long time ago.
+	Goal is to keep the basic single-component functionality working
+	while making these changes.
+	
+2005-01-14  Charlie Zender  <zender@uci.edu>
+
+	* Added mca_typ to transition idx_rfr_get() to caching multiple components
+
+2005-01-12  Charlie Zender  <zender@uci.edu>
+
+	* Added soot_HKS98 soot aerosol from OPAC
+
+2005-01-09  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_3_2 c++ mie nco/src/nco_c++
+	Changes since mie-3_3_1: default to gcc/g++ 3.4, netCDF 3.6
+
+	* Sundry tweaks to fix NCO, mie, c++ code to all work with gcc/g++
+	3.4 and netCDF 3.6 and netCDF 2.9.9+ and AMD64. Everything appears
+	to work again with these new defaults on i686, Opteron, and AIX.
+
+2005-01-07  Charlie Zender  <zender@uci.edu>
+
+	* Re-arranged lbl.hh so err_fnc_cpx_Hum82() prototype appears
+	before call in lnshp_vgt_fst_scl() to satisfy new GCC 3.4 rules
+
+2005-01-02  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_3_1 c++ mie nco/src/nco_c++
+	Changes since mie-3_3_0: idx_rfr now complex everywhere, support
+	six-component optics: core, medium, mantle, matrix, inclusion,
+	particle
+
+	* Verified recent changes to complex idx_rfr and idx_rfr_H2O yield
+	identical results with pre-change versions for h2o_lqd.
+
+2004-12-31  Charlie Zender  <zender@uci.edu>
+
+	* Templated vector interpolation routines
+
+	* Converted idx_rfr_H2O.cc to use SI I/O, replaced newmanisms with
+	code consistent with rest of mie
+
+2004-12-26  Charlie Zender  <zender@uci.edu>
+
+	* Verified that Wis79 gives virtually identical results to
+	B0H83-based optical properties used in CCM/MATCH/CAM dust models
+	since 1997. In other words, the bug in BoH83, was not responsible
+	for relatively low LW dust forcing.
+
+	* Added Fe2O3 and SiO2 to optical property suite
+
+2004-11-05  Charlie Zender  <zender@dust.ps.uci.edu>
+
+	* cvs tag -c mie-3_3_0 c++ mie nco/src/nco_c++
+	Changes since mie-3_2_9: Able to use and rebin swnb2 fluxes for weights
+
+2004-09-23  Charlie Zender  <zender@uci.edu>
+
+	* Add function routines for soot_ChC90, soot_DKS91, soot_WaW80 to idx_rfr_get()
+
+	* Change ChC89 to ChC90
+
+2004-09-17  Charlie Zender  <zender@uci.edu>
+
+	* Use nco_put_vara_crd() to write all coordinates
+
+	* Add dmn_rcd option to specify a record dimension
+
+2004-09-13  Charlie Zender  <zender@uci.edu>
+
+	* Added soot and sea salt aerosols soot_ChC90, sea_salt_Fla04,
+	NaCl_Fla04 
+
+2004-09-12  Charlie Zender  <zender@uci.edu>
+
+	* Added integer limits information from <climits>
+
+2004-08-31  Charlie Zender  <zender@uci.edu>
+
+	* Parse complex numbers in exponential format in sng2cpx()
+
+2004-08-17  Charlie Zender  <zender@uci.edu>
+
+	* Added MD5-hash instructions to crypt function
+
+2004-08-11  Charlie Zender  <zender@uci.edu>
+
+	* Re-implement Anonmalous Diffraction Theory (ADT)
+
+2004-07-12  Charlie Zender  <zender@uci.edu>
+
+	* mie_Wis79.cc: Changed MAXTRM to 50000 for large snow simulations
+
+2004-07-11  Charlie Zender  <zender@uci.edu>
+
+	* Snowpack optics routine appears to be working
+
+	* ccc.cc (main): Added tests for restrict keyword
+
+2004-07-09  Charlie Zender  <zender@uci.edu>
+
+	* Added infrastructure for snowpack optics routine
+
+2004-07-08  Charlie Zender  <zender@uci.edu>
+
+	* phz_fnc.cc: Handle dmn_nbr_max correctly in output
+
+	* cvs tag -c mie-3_2_9 c++ mie nco/src/nco_c++
+	Changes since mie-3_2_8: Fixed beaucoup memory leaks, invalid addresses
+
+	* Changed phz_fnc.cc back to valarrays, cleaned it up, verified answers
+
+2004-07-07  Charlie Zender  <zender@uci.edu>
+
+	* Phase function diagnostics appear to be fully working again,
+	after about a two year hiatus
+
+	* Compiled and executed mie, ccc, and nco_c++ codes with xlC
+	OPTS=X on AIX. All codes ran as expected. No significant issues
+	remain. 64-bit truncation warnings for conversion of long->int
+	cannot be squelched by using static_cast.
+
+	* Add a2d_cls(lmn_idx) and a2d_cls[lmn_idx] access methods
+
+	* Add bounds checking to a2d class
+
+	* Added more raindrop chemistry diagnostics
+
+	* Fixed cast problem in mth.hh cubic equation solver
+
+	* Removed duplicate test="cpx" section
+
+	* phz_fnc.cc: Fixed horrible awful bug in phz_fnc.cc
+
+	* Finish a2d assignment operator
+
+2004-07-02  Charlie Zender  <zender@uci.edu>
+
+	* omp.cc: Boosted thr_nbr_max_fsh from 4 to 32 
+
+	* cvs tag -c mie-3_2_8 c++ mie nco/src/nco_c++
+	Changes since mie-3_2_7: Add OpenMP --thr_nbr functionality
+
+	* Added omp.cc, omp.hh OpenMP modules
+
+2004-06-29  Charlie Zender  <zender@uci.edu>
+
+	* Decrease verbosity of boundary layer flux modeul debugging info
+
+2004-06-28  Charlie Zender  <zender@uci.edu>
+
+	* Reduce sz_mxm to 50.0 for psd_ntg_dgn test so that size
+	parameter never exceeds 1000. When sz_prm > 1000, must bump up
+	MAXTRM limit in mie_Wis79.cc.
+
+2004-06-27  Charlie Zender  <zender@uci.edu>
+
+	* Removed all static variables from mie_Wis79.cc and replaced them
+	with automatic variables passed through the calling tree.
+	mie_Wis79.cc should now be completely thread safe.
+
+	* Changed MAXTRM in MIEV0 (mie_sph_Wis79) from 10100 to 1102 to
+	conserve memory. This is expected to influence accuracy/doability
+	of a few test cases, but not normal runs
+
+	* Add Large File Support (LFS) to Makefile
+
+2004-06-22  Charlie Zender  <zender@uci.edu>
+
+	* Beefed up nbr2sng() exercises
+
+2004-06-21  Charalie Zender  <zender@uci.edu>
+
+	* ccc.cc: added option precision argument to nbr2sng()
+
+2004-06-20  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_2_3 c++ mie
+	Changes since mie-3_2_2: returned to threading over size loop that works
+
+	* Temporarily patch in the old threading model over sizes
+	OpenMP directives for both threading models are in and mutually exclusive
+	Activate old (and working) threading with #define PARALLELIZE_OVER_CL3
+	Activate new (but broken) threading with #define PARALLELIZE_OVER_CL2
+	The old CL3 threading is on by default
+
+	* cvs tag -c mie-3_2_2 c++ mie
+	Changes since mie-3_2_1: broke mie threading
+
+2004-06-06  Charlie Zender  <zender@uci.edu>
+
+	* Implement -m64 option for ABI=64 on LINUXAMD64
+
+	* a2d.hh: Remove circular dependency on libcsz_c++.hh
+
+2004-06-04  Charlie Zender  <zender@uci.edu>
+
+	* Proved that bands, wavelengths, and hybrid are equivalent: 
+
+        for bin_nbr in 1 10 100 1000 10000 100000 1000000 ; do 
+          bnd=`ncks -s "%15.12f" -C -F -u -H -v abs_cff_mss ${DATA_MIE}/mie/mie_bnd_${bin_nbr}.nc`
+          wvl=`ncks -s "%15.12f" -C -F -u -H -v abs_cff_mss ${DATA_MIE}/mie/mie_avg_${bin_nbr}.nc`
+          hyb=`ncks -s "%15.12f" -C -F -u -H -v abs_cff_mss ${DATA_MIE}/mie/mie_avg_hyb_10_100000_${bin_nbr}.nc`
+          printf "${bin_nbr} bands abs_cff_mss: wvl ${wvl}, bnd ${bnd}, hyb ${hyb}\n"
+        done # end loop over bin_nbr
+        
+	1 bands abs_cff_mss: wvl  0.000037371739, bnd  0.000037371739
+        10 bands abs_cff_mss: wvl  0.000036300325, bnd  0.000036300325
+        100 bands abs_cff_mss: wvl  0.000040294827, bnd  0.000040294827
+        1000 bands abs_cff_mss: wvl  0.000039221448, bnd  0.000039221448
+        10000 bands abs_cff_mss: wvl  0.000040019926, bnd  0.000040019926
+        100000 bands abs_cff_mss: wvl  0.000043796059, bnd  0.000043796059
+        1000000 bands abs_cff_mss: wvl  0.000044184975, bnd  0.000044184975, hyb  0.000044184975
+        10000000 bands abs_cff_mss: wvl , bnd  0.000044184975, hyb
+
+	
+	* Explicitly specify version 2 for GPL
+
+	* Wis79 captures Nus03 p. 1590 Fig 2 test resonance perfectly
+	to the naked eye
+
+	* Verified 32 threads gives same results as 4 threads on ESMF
+
+	* cvs tag -c mie-3_2_1 c++ mie
+	Changes since mie-3_2_0: MIMCUT = 1.0e-12
+
+	* Patch array allocation in mie_sln.cc to share more arrays
+	between BoH83 and Wis79 and to meet AIX xlC requirements that
+	static array bounds be known at compile time. 
+
+2004-06-03  Charlie Zender  <zender@uci.edu>
+
+	* mie_sln.cc: Changed MIMCUT from 1.0e-6 Wis79 default to 1.0e-12 
+	This is required to obtain non-zero mass absorption for visible
+	light in water, which has n_i ~ 1.0e-9
+
+	* Add -g to OPTS=O
+
+	* cvs tag -c mie-3_2_0 c++ mie
+	Changes since mie-3_1_1: Default to Wis79
+
+	* mie_slv defaults to Wis79
+
+	* Wis79 algorithm is validated and is superior to BoH83
+	(probably due to a self-induced bug in BoH83).  
+
+	* Leave Wis79 amplitude scattering matrices as complex conjugate
+	of BoH83 for consistency with Wis79 documentation. 
+	This should not affect any measurable quantities as all variables
+	derived from S-matrix use normalization somewhere.
+
+	* Dynamically dimensioning PMOM will be difficult since there is a
+	dependency between it and MAXANG. Left PMOM_dimension at 200 for now.	
+
+2004-06-02  Charlie Zender  <zender@uci.edu>
+
+	* Verified that MAXANG=2*ngl_nbr-1 and switched from MAXANG=7 to
+	consistent user-specified ngl_nbr
+
+	* Verified that Wis79 and BoH83 amplitude scattering matrices are
+	complex conjugates of eachother, i.e., s1 = conj(S1).
+
+2004-05-31  Charlie Zender  <zender@uci.edu>
+
+	* Used valgrind to isolate errors in phz_fnc.cc to a2d constructor 
+
+2004-05-28  Charlie Zender  <zender@uci.edu>
+
+	* Hacked mie_sln.cc to initialize q_bck to 0.0 so Wis79 solver
+	does not choke on output
+
+2004-05-27  Charlie Zender  <zender@uci.edu>
+
+	* Makefile: LDFLAGS follows C and C++ compiler OpenMP switches
+	instead of Fortran switches. This allows mixing of g++ and pgf90
+	executables on x86_64.
+
+2004-05-07  Charlie Zender  <zender@uci.edu>
+
+	* Turn on OpenMP by default OMP=Y 
+
+2004-03-15  Jorge Talamantes <jtalamantes@csub.edu>
+
+	* Changes to mie_Wis79.cc: fixed non-standard array
+	declarations which were acceptable to g++ but not to xlC_r
+
+2004-03-11  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie_last_pre_jorge c++ mie
+	* cvs tag -c mie-3_1_1 c++ mie
+	Changes since mie-3_1_0: fixed nco_c++, minor tweaks
+	This is the last version before Jorge started to modify
+
+	* Makefile: Added GCC option to AIX section
+
+2004-03-10  Charlie Zender  <zender@uci.edu>
+
+	* Occasional errors during writing, why?:
+	nco_err_exit(): ERROR netCDF library returned error code -60
+	nco_err_exit(): ERROR nco_put_var<double *>
+	Answer: These errors occur when variable is written before set
+	
+2004-01-31  Charlie Zender  <zender@uci.edu>
+
+	* Move my_new_handler to main.c so AIX xlC will optimize library
+
+2004-01-28  Charlie Zender  <zender@uci.edu>
+
+	* ccc.cc (main): Add cryptography test --ncr to generate passwords
+
+2004-01-27  Charlie Zender  <zender@uci.edu>
+
+	* mie_sln.cc: mie_Wis79 compiles, links, and dies with segfault
+
+2004-01-20  Charlie Zender  <zender@uci.edu>
+
+	* Rename routines in mie_Wis79.cc for compatibility with c++ module	
+
+2004-01-17  Charlie Zender  <zender@uci.edu>
+
+	* Add mie_Wis79.cc which contains all routines of Wiscombe
+	(1979) as translated to C++ by Jorge Talamantes.
+	Calling hooks have not been written yet and ccc currently crashes
+
+2003-11-13  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_1_0 c++ mie
+	Changes since mie-3_0_5: OpenMP works on mie routines on AIX
+
+2003-09-26  Charlie Zender  <zender@uci.edu>
+
+	* OpenMP with icc works in tst.cc but breaks in ccc.cc at first
+	executable line of main(), at least according to ddd
+
+	* Make plz, phz_fnc, and phz_fnc_mdl thread-safe
+
+2003-09-24  Charlie Zender  <zender@uci.edu>
+
+	* Move computation of ngl, ngl_dlt from mie_ngl_BoH83_csz() to mie.cc
+
+	* Rectify AIX warnings obtained with OPTS=X:
+	Stop demoting long's to int's on results of length calls
+
+	* ccc.cc: Change residual malloc() to new() where appropriate
+
+	* Changing to gsl_sf_lngamma() had unforeseen consequences in the
+	initialization of gamma function distributions fails because the
+	domain of valid arguments to gsl_sf_ln_gamma() does not include
+	negative integers or zero. Changed default var_ffc as workaround.
+	nr_gammln() never complained about this problem.
+	Checking the source code for nr_gammln(), it is unclear why.
+
+2003-09-23  Charlie Zender  <zender@uci.edu>
+
+	* pdf.hh: Replace nr_gammln() with gsl_sf_lngamma()
+
+	* spc_fnc.cc (nr_hook): Remove Numerical Recipes source code from
+	spc_fnc.cc. The code had been deprecated years ago (in favor of
+	GSL) but was not removed until now.
+
+2003-09-22  Charlie Zender  <zender@uci.edu>
+
+	* Makefile (#LINUX_CXX): Make Linux C++, C compilers environment variables
+
+2003-09-21  Charlie Zender  <zender@uci.edu>
+
+	* Add compiler token test
+	
+	* OpenMP works correctly with icc!
+
+2003-09-19  Charlie Zender  <zender@uci.edu>
+
+	* Turn OpenMP on by default
+
+2003-09-18  Charlie Zender  <zender@uci.edu>
+
+	* Intel icc compiler 7.0 works correctly with ISO specialization
+	syntax <> in a2d.hh
+
+2003-09-17  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_0_4 c++ mie
+	Changes since mie-3_0_3: Correct OpenMP implementation
+
+	* Order single/parallel sections correctly in omp_tst()
+	OpenMP works correctly on AIX!
+	
+2003-09-03  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_0_3 c++ mie
+	Changes since mie-3_0_2: Successful builds and execution on AIX,
+	TOMS and MODIS wavelength grids
+	
+	* Initialize all static members of LogNormalFunction at file scope
+	to satisfy AIX.
+
+	* Remove -Wno-non-template-friend since a2d.hh now is ISO compliant
+
+	* Remove pdf.o and a2d.o from libraries
+
+	* Change -spill to -qspill
+
+	* Successful compilation, linking, and execution on AIX!
+
+	* Makefile (ABI): Change default ABI to 64
+
+2003-09-02  Charlie Zender  <zender@uci.edu>
+
+	* Finally fixed a2d stream insertion operator<< !!!
+	Requires right combination of forward declaration,
+	using <> for non-specific template specialization, 
+	and not using <> in actual function definition.
+	Thanks to Jim Edwards of NCAR/IBM
+
+2003-08-04  Charlie Zender  <zender@uci.edu>
+
+	* Makefile: Always use re-entrant (_r) compilers on AIX
+
+2003-08-01  Charlie Zender  <zender@uci.edu>
+
+	* pdf.cc: Remove template instantiation in of lognormal and
+	gammafunctions. Apparently GCC 3.3+ no longer requires them
+	and AIX xlC complains about them.
+
+2003-07-20  Charlie Zender  <zender@uci.edu>
+
+	* wvl_grd.cc: Added MODIS wavelength grid
+
+2003-07-17  Charlie Zender  <zender@uci.edu>
+
+	* utl.cc (mnt_ncr): use wrn_prn() rather than err_prn() so
+	CCM_SW/CCM_LW grids may be processed
+
+2003-07-02  Charlie Zender  <zender@uci.edu>
+
+	* Add aerosol toms_STD03 based on TOMS retrievals in Tor02/STD03/Tor03
+
+2003-06-19  Charlie Zender  <zender@uci.edu>
+
+	* Add TOMS wavelength grid
+
+2003-06-08  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_0_2 c++ mie
+	Changes since mie-3_0_1: Usability, Newton-Raphson, portability
+	Should compile and link (but does not) on AIX
+
+	* Moved all template definitions from pdf.cc to pdf.hh to allow
+	compilation on AIX and other compilers that require templates in
+	.hh not .cc files
+
+	* Spruced up Newton-Raphson root-finding. 
+	Step back when error grows, allow passing pointers to function
+	and derivative evaluators.
+
+2003-04-21  Charlie Zender  <zender@uci.edu>
+
+	* rt.cc: Small tweaks for RedHat 9 compatibility
+
+2003-03-19  Charlie Zender  <zender@uci.edu>
+
+	* ccc.cc (main): Move drc_dat initialization to after command line
+	parsing to remove dependence on /data/zender/aca
+
+2003-03-06  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_0_1 c++ mie
+	* Changes since mie-3_0_0: Realized Wis79 option is, err, vaporware
+	Synchronization check-in for prg_anl_tst.txt
+
+2003-03-05  Charlie Zender  <zender@uci.edu>
+
+	* Added cff_drg_plt_hxg_Wan02_fst_scl() for drag coefficient for
+	hexagonal plates from Wan02
+
+2003-02-12  Charlie Zender  <zender@uci.edu>
+
+	* GSL shared libraries on dust cannot find required libgcc_s.so.1
+	library so must link statically for now, make STC=Y
+
+	* aer.hh: Fixed bug in drag coefficient interpolation introduced in 1.2.6.
+	Bug only affected particles with 2 < Re < 5, i.e., dust particles larger
+	than 80 microns diameter, so not to worry.
+	I had dyslexically reversed the weights. So shoot me!
+	Thanks to Alan Bol for pointing	this out.
+
+2002-11-10  Charlie Zender  <zender@uci.edu>
+
+	* Delete new'd variables in phz_fnc_dgn() (most of these used to be
+	valarrays and were autmatically deleted on function exit before
+
+2002-11-09  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_0_0 c++ mie
+	* Changes since mie-2_9_6: Includes Wis79 option
+
+	* Sync'd dev branch with main trunk
+
+2002-10-28  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_9_6 c++ mie
+	* Changes since mie-2_9_5: Support for prolate spheroids in dynamics,
+	improved (smoother) drag coefficients
+
+	* Add lps_sfc_fst_scl(), lps_vlm_fst_scl(),
+	dmt_eqv_vlm_lps_fst_scl(), dmt_eqv_vlm_lps_fst_scl() 
+
+	* Convert indices to unsigned int in mie_bck_hms_Chy73() to 
+	suit GSL and to avoid repetitive casting 
+
+	* Fix and use dmt_stk_get() and dmt_aer_get(). Functions are not
+	yet validated.
+
+2002-09-27  Charlie Zender  <zender@uci.edu>
+
+	* Simplify Boo71 inline function to reduce code redundance
+
+	* Blend asymptotic expansion-regime C_D with pure empirical
+	parameterization for 2 < Re < 5
+
+	* Implement Proudman and Pearson and Chester and Breach drag coefficients
+
+	* Add Euler's constant to mth::
+
+	* Build cff_drg_fst_scl() into cff_drg_get() to unify source
+
+	* aer.cc: Replace dns_prt by dns_prt-dns_mdp in exact fall
+	velocity solutions.
+
+2002-09-24  Charlie Zender  <zender@uci.edu>
+
+	* Problem: \lim_{asp_rat_lps \rightarrow 1} psi_lps = 2 but
+	psi_lps_fst_scl(1.0001) ~ 1.424179. Why?
+
+	* Restore missing sqrt() within sph_fct() and lps_fct() asin() calls
+
+2002-09-02  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_9_5 c++ mie
+	* cvs tag -c mie-2_9_3:
+	Changes for Comeau C/C++ compiler compatibility
+	Note mie-2_9_4 tag skipped on main trunk since it was used
+	on dev-branch
+
+	* Code now compiles and lib_cs[m,z]_c++.a builds with Comeau 
+	However, ccc does not link with Comeau
+
+2002-09-01  Charlie Zender  <zender@uci.edu>
+
+	* Cleanup idx_rfr_H2O.cc
+
+	* Fix errors flagged by Comeau como compiler:
+	1. Include cstdlib to get std::exit, std::abort, std::strtod, ...
+	2. Initialize size_t *, int * with actual pointers not NULL (which
+	is apparently really of type void *). C-cast NULL to accomplish
+	this, e.g., const int *dmn_scl((int *)NULL)
+	3. Remove const type qualifier from return types
+	4. Do not set array pointers == NULL after deleting them (since
+	NULL is of type void *)
+	5. como c++ does not have std::pow(prc_cmp,int), so avoid if
+	possible and use straight multiplication instead
+	6. Replace some prg_nm with prg_nm_get() since como appears not to
+	like global variables in strict ANSI mode. Maybe just need namespace?
+	
+2002-08-21  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_9_3 c++ mie
+	Changes since mie-2_9_2: Synchronization check-in for Stephen
+	Bamattre. NB: GCC linker does not find vlc_grv_get_Gin03().
+	Some problems compiling with GCC 3.1.1 meant I had to upgrade
+	binutils, but there are still weird problems on lanina.
+
+2002-08-11  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_9_2 c++ mie
+	Changes since mie-2_9_1: Hooks for fully handling settling of
+	aspherical particles
+
+	* ccc.cc (main): Added GSL test for complete elliptic integrals of
+	the second kind
+
+	* aer.cc/.hh: Added routines for treating aspherical particle drag:
+	asp_rat_get(), cff_drg_Boo71_fst_scl(),	dmt_eqv_lps_fst_scl(), 
+	lpt_fct_fst_scl(), psi_lps_fst_scl(), sph_fct_fst_scl()
+
+2002-06-23  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_9_1 c++ mie
+	Changes since mie-2_9_0: Generic data_path works in aer,spc_slr
+
+	* aer.cc: Call drc_pfx() in fl_nm_set() routines for
+	fl_idx_rfr (aer_cls) and fl_spc_slr (spc_slr_cls).
+
+	* fio.cc: Replace fdata_path_get() with drc_pfx() which is more
+	bulletproof. Perform error checking in data_path_set().
+
+2002-06-21  Charlie Zender  <zender@uci.edu>
+
+	* Verified ccc and mie build out of the box on gcc 3.2.
+
+	* blm.cc (oro_sng_get): put round() in mth_fnc namespace to
+	protect from system C99 library round() function found in gcc 3.2.
+
+2002-06-19  Charlie Zender  <zender@uci.edu>
+
+	* mmr.cc (newVar): namespace-qualify std:: members
+
+	* fio.cc (fdata_path_get): Add explicit return true
+
+	* cvs tag -c mie-2_9_0 c++ mie
+	Same as mie_dev-2_8_2, contains dev branch mods up to junefreeze
+
+	* cvs tag -c mie_dev-2_8_2 c++ mie
+	Merged main code up to mie-2_8_2 into junefreeze
+
+	* Merged changes from mie-2_8_0 through mie-2_8_2 into junefreeze
+
+	* cvs tag -c mie-2_8_2 c++ mie
+	Mainly build changes. Synchronization point for junefreeze.
+
+2002-06-15  Stephen Bamattre  <snb@quine>
+	* flag added to operator<< friend in a2d.hh: ICC flag allows for 
+	  correct compilation and linking of this class on icc
+
+2002-06-05  Charlie Zender  <zender@uci.edu>
+
+	* Makefile (LDFLAGS): Added flags for 64-bit mode on AIX
+
+2002-06-03  Stephen Bamattre  <snb@quine>
+	* Removed reference to mmr within main code base; class still remains
+	  as a member of the libcsz class for possible future use
+
+2002-05-30  Stephen Bamattre  <snb@quine>
+	* Namespaces cannot have as objects the new and delete operators
+	  in icc 6.0 (allowed on icc 5.5), changed new and delete operators
+	  to functions, disabled tracking of new and delete witin larger
+	  program pending resolution.
+
+2002-05-29  Stephen Bamattre  <snb@quine>
+	* Simplified mmr to not track specific statistics, now
+	  simply dumps free/delete info into ferr stream.  It is
+	  more efficent to track the final memory stats from the output
+	  file than to have the program monitor usage during execution
+
+2002-05-22  Charlie Zender  <zender@uci.edu>
+
+	* Ported to NPACI environment
+
+2002-05-20  Charlie Zender  <zender@uci.edu>
+
+	* #ifdef <> in friend ostream header in a2d.hh to satisfy icc
+
+2002-05-13  Stephen Bamattre  <snb@quine>
+
+	* Added capability to mmr to track individual functions within
+	  classes, instead of monitoring only specific classes themselves.
+
+2002-05-10  Stephen Bamattre  <snb@quine>
+
+	* Added calls to mmr and fio classes throughout ccc classes;
+	  now all free/delete calls pass through mmr to be handled.
+
+2002-05-06  Stephen Bamattre  <snb@quine>
+
+	* Modified mmr and fio classes to use namespace functionality
+
+2002-05-04  Stephen Bamattre  <snb@quine>
+
+	* Added mmr.cc and mmr.hh, which implement memory management hooks,
+	  and track memory usage by classes within the program.
+
+2002-05-01  Stephen Bamattre  <snb@quine>
+
+	* Added fio.hh and fio.cc, which implement a wrapper for the data
+	path directory, allowing the system to access a user identified dir
+	for data files.
+	* Added new command line option called data_path, which allows the user
+	to specify the directory formerly hard coded as /data/zender/aca
+
+2002-04-22  Charlie Zender  <zender@uci.edu>
+
+	* TODO: Removed items accomplished by Stephen Bamattre
+
+2002-04-12  Stephen Bamattre  <snb@quine>
+
+	*  Removed deep copy from a2d_cls operator= after build problems
+	on SPARC- conflicts with Sun ANSI C++ compiler implementation (cc),
+	see Stroustrup P.246 for more information on why deep copy within
+	constructors is a problem.  According to comp.lang.c++, this is also
+	a problem on other RISC archs.  Currently reset to shallow copy pending
+	a more detailed look at the problem.
+
+2002-04-21  Charlie Zender  <zender@uci.edu>
+
+	* Makefile ($(libcsz_c++).a): Fixed problem where a2d.o and cln.o
+	depended on copies in libcsm_c++ rather than libcsz_c++.
+	The consequences of mixing up dependencies like this are unpredictable
+
+2002-03-29  Stephen Bamattre  <snb@quine>
+
+	* Added deep (object) copy, replacing shallow copy  in a2d_cls operator=
+	* Added rudimental exceptions to the a2d destructor.
+
+2002-03-09  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_8_0 c++ mie
+	Changes since mie-2_7_5: uses <sstream> and requires GCC 2.96+	(linux) and GCC 3.0+ (others)
+	finesse wnd_frc_thr_get() convergence at kinks in drag coefficient
+
+2002-03-04  Charlie Zender  <zender@uci.edu>
+
+	* Fix compiler warning in nbr2sng() implementation
+
+2002-02-26  Charlie Zender  <zender@uci.edu>
+
+	* Problem with a2d still exists in that static members of template
+	class do not initialize correctly and cause compiler errors with
+	g++ 2.96. Work-around is to explicitly define float/double members
+	in a2d.cc
+
+	* a2d.hh: Fixed stream insertion operator template warning
+	messages in a2d.hh by using nifty <> to specialize friend template
+	as per newsgroup suggestion on comp.lang.c++/gnu.g++.help.
+
+2002-02-22  Charlie Zender  <zender@uci.edu>
+
+	* mnr_dst.cc: Added convergence exceptions for wnd_frc_thr_get()
+	so reasonable convergence does not cause exit
+	
+	* Added "sng" and "srm" tests to ccc.cc
+
+	* Added nbr2sng() to convert numbers to strings using
+	string-stream library (sstream) which apparently has finally been
+	introduced into GCC (probably requires GCC v. 3.0+)
+
+2002-02-11  Charlie Zender  <zender@uci.edu>
+
+	* Added GPL copyright statements to all files
+
+2002-01-27  Charlie Zender  <zender@uci.edu>
+
+	* Linking to GSL built from scratch with gcc and CVS code
+	cures _IO_std problem so icc fully links C++ OpenMP API.
+	Unfortunately, OpenMP-enabled ccc fails at entry to main()
+	Leave icc as default compiler since icc now does all gcc
+	does, but faster, and OpenMP may eventually work with icc.
+
+2002-01-26  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_7_5 c++ mie
+	Changes since mie-2_7_4: new user ID diagnostics in ccc, ported
+	to icc
+
+	* Unable to get OpenMP-enabled code to link with icc because of
+	unresolved tokens _IO_std[err,in] in GSL RPM. These should go
+	away if GSL is rebuilt from scratch.
+
+	* rt.cc: icc did not like shadowing static class member
+	wvl_nbr_dfl with temporary wvl_nbr_dfl in rt_cls constructor.
+	Unshadowing (by changing name of the temporary) this one variable 
+	fixed about a zillion link errors and now ccc links under icc.
+
+	* icc does not like std::stat(), std::get*uid, etc...
+
+	* Fixed improper use of std::abs() on real types
+
+2002-01-08  Charlie Zender  <zender@uci.edu>
+
+	* dbg.hh: Added hooks for prc_cmp=long double
+	Three tasks must be accomplished before this will work well:
+	1. Change printf's to streams for type-safety
+	2. Create netCDF I/O wrappers for long double type in libnco_c++
+	3. Change mie_sln routines to use max(prc_cmp,double) precision
+
+	* ccc.cc: Added tst=flt to dump floating point representation 
+
+2002-01-06  Charlie Zender  <zender@uci.edu>
+
+	* Makefile: Removed Fortran libraries from link lines
+
+2002-01-03  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_7_4 c++ mie nco_c++
+	Changes since mie-2_7_3: Long batch runs in double precision now
+	practical, performing production computations well on Linux
+
+	* mie_sln.cc (main): Limit size parameter warnings
+
+	* Noted IRIX g++ mie uses 4--5x more memory than Linux g++ mie
+	This makes mie unusable on IRIX for > 500000 wavelength	bins 
+	
+2002-01-02  Charlie Zender  <zender@uci.edu>
+
+	* lbl.cc: Enter define mode before defining HITRAN dimensions
+
+2002-01-01  Charlie Zender  <zender@uci.edu>
+
+	* ccc.cc (main): testing better loop counter status printer
+
+	* spc_bbd.cc: Tuning precision and range thresholds to take
+	advantage of double precision using #ifdef PRC_FLT constructs
+
+	* utl.hh: Fixed special case for arg_trg=0.0 in apx_eql_chk
+
+	* Makefile (${MY_DPN_DIR}/%.d): Fixed *.d generating rule to allow
+	C++ filenames to contain '+' character
+
+	* cvs tag -c mie-2_7_3 c++ mie nco_c++
+	Changes since mie-2_7_2: First successful builds, links, and
+	executions of double precision c++ and mie modules
+	
+	* Templateized vec_cpy
+
+	* utl.cc: Changed many functions from const <T> * to const <T> * const
+
+2001-12-31  Charlie Zender  <zender@uci.edu>
+
+	* idx_rfr_H2O.hh: Placed lookup tables in idx_rfr_H2O namespace
+
+	* Implemented PRC_CMP() macro for all naked constants to avoid
+	mixed type expressions. Results compile cleanly on Linux with
+	strict GSL flags.
+
+2001-12-30  Charlie Zender  <zender@uci.edu>
+
+	* idx_rfr_H2O.cc,ssl.cc: Liberal static_cast'ing to 
+	match argument precision in binary expressions involving complex
+	numbers so arithmetic compiles on AIX, Alpha platforms
+
+	* cvs tag -c mie-2_7_2 c++ mie nco_c++
+	Changes since mie-2_7_1: C++ water refractive indices
+	
+	* idx_rfr.cc: Merged idx_rfr_H2O additions of Dave Newman
+	This removes last bit of required Fortran from library
+
+	* idx_rfr_H2O.cc (reflqd): Added CEWIs, cleaned up
+
+2001-12-11  Charlie Zender  <zender@uci.edu>
+
+	* Moved cln.cc from libcsm_c++ to libcsz_c++ because 
+	date manipulation is needed by non-physics programs like zfm.
+
+2001-12-10  Charlie Zender  <zender@uci.edu>
+
+	* mnr_dst.cc: Sea-salt number fluxes are nearly ready, but
+	hygroscopic growth has not been accounted for yet
+
+2001-11-30  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_7_1 c++ mie nco_c++
+
+2001-11-04  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_7_0 c++ mie nco_c++
+	mie-2_7_0 is branchpoint for c++_dev module
+
+	* cvs tag -c mie-2_6_2 c++ mie nco_c++
+
+	* Version compiles, links, but mie dies at run-time due to
+	a2d_cls/nco_c++/valarray issues triggered in phz_fnc_dgn()
+
+	* a2d.hh: Added forward declaration of a2d_cls and operator<<
+	This did not solve AIX warnings:
+
+2001-11-03  Charlie Zender  <zender@uci.edu>
+
+	* Switched to gcc-3.0.2 if gcc-2.96 compiler was buggy
+	This did not solve the problem.
+	
+2001-11-02  Charlie Zender  <zender@uci.edu>
+
+	* Having major difficulty isolating memory bug in phz_fnc()
+	May have to do with sending valarrays to nco_put_var(),
+	or with a2d_cls(). Somehow invalid pointers are being freed.
+	Changed all valarray outputs in phz_fnc_dgn() to new[] pointers
+	and that improved things but still there are invalid pointers
+	being freed. a2d.hh line 87 causes last problem.
+	
+2001-10-29  Charlie Zender  <zender@uci.edu>
+
+	* Standardized templated type as prc_T, as opposed to
+	typedef'd computational type which is prc_cmp. 
+	This distinction should be maintained, and made more clear if
+	possible. Perhaps prc_tpl (precision template) and prc_cmp
+	(computational precision type = float double).
+
+	* cvs tag -c mie-2_6_1 c++ mie nco_c++
+	Changes since mie-2_6_0: Compiles natively with AIX,
+	phase function diagnostics output for all wavelength bins
+
+	* Compilation completes natively under AIX but linking fails
+	because pdf.cc templates are not expanded at compile time so
+	must be moved to .hh file. GCC allows template definitions in .cc
+	file if instantiated types are forward-declared at top of .cc
+	file. AIX does not allow this.
+
+	* Realized *.hh targets need to be completely rewritten to avoid
+	circular dependencies
+
+	* phz_fnc.cc: Process phase function information for each
+	wavelength bin. Remove ngl_flg. Verified Legendre decomposition
+	works. Convergence looks good. Still some minor issues with angle
+	grid and integration endpoints.
+
+	* a2d.hh: Realized that a2d.cc was a mistake which only worked
+	because I inadvertently used prc_cmp for the class template
+	and prc_cmp was simply a typedef for float/double. Moved all 
+	template code into a2d.hh. Hoping this will solve AIX compile
+	problems as well.
+
+	* Implemented a2d_cls operator= scalar
+
+2001-10-28  Charlie Zender  <zender@uci.edu>
+
+	* phz_fnc.cc: Rename phz_fnc to phz_fnc_dgn, pass phz_fnc_crr not
+	phz_fnc to Mie solver
+
+2001-10-27  Charlie Zender  <zender@uci.edu>
+
+	* nco_fl.cc: pass strings not pointers to nco_create(), nco_open()
+
+	* phz_fnc.cc: Added Legendre expansion output to netCDF file
+
+2001-10-22  Charlie Zender  <zender@uci.edu>
+
+	* Added backscatter coefficient for LIDAR assimilation
+
+	* Consolidated Mie routines in new mie_prc() driver
+	Verified self-tests still work
+
+2001-10-21  Charlie Zender  <zender@uci.edu>
+
+	* mie_sln.cc: Removed mie_ngl_BoH83
+
+2001-10-20  Charlie Zender  <zender@uci.edu>
+
+	* mie_sln.hh (spheres): Pass output arguments by reference
+
+2001-10-19  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_6_0 c++ mie
+	Changes since mie-2_5_9: Phase function phz_fnc is correctly
+	normalized so self test will show 4*pi difference with S11
+	diagnostic from BoH83 test
+	
+	* mie_sln.cc: Replace arbitrary BoH83 phase function normalization
+	with HaT74, ThS99 normalization used by all RT applications
+	phz_fnc_dgn() verifies that phase function normalization converges
+	to unity as number of angles increases. Precision is ~ 10^-3 when
+	ngl_nbr=181.
+
+	* mie_sln.cc: moved ngl_dgr calculation to phz_fnc_dgn()
+
+	* cvs tag -c mie-2_5_9 c++ mie
+	
+	* phz_fnc.cc: Moved phase function diagnostics into phz_fnc.cc
+
+2001-10-15  Charlie Zender  <zender@uci.edu>
+
+	* nco.cc: Call nco_inq_dimid(0 not nco_inq_dimlen()
+
+	* Removed blm_mbl() debugging algorithms (filtered adjustments,
+	positive-definite square roots, sign-change counting) from
+	blm_lnd() since none of them improved reliability. 
+	Kept convergence diagnostics since those are a good idea.
+
+	* ccc.cc (main): Attempting to run with prc_cmp = double, but
+	there are still 10 zillion 32-bit assumptions in the code to
+	remove
+
+2001-10-14  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_5_8 c++ mie
+	Changes since mie-2_5_7: new netCDF I/O library replacement
+	appears to be working, and complete for all current programs.
+	get_vara, put_vara, get_varm, put_varm are not yet implemented.
+
+	* Moved libcsm_c++ to before libnco_c++ in linking (placing leaves
+	at end)
+
+	* nco_var_dfn now calls nco_redef() safely
+
+	* nco_hgh.cc: created nco_hgh.cc for high level utilities
+	Put nco_var_dfn there so that programs like slr_spc can use
+	the var_mtd_sct infrastructure without linking to libcsm_c++
+
+	* nco_var.hh (attributes): Templatized another slew of put_var
+	functions.
+
+	* nco_dmn.cc: Fixed about 6 overloads that return rcd instead of
+	values like dmn_nbr, var_val, att_nbr.
+
+	* Makefile (CPP_TKN): Added -DNO_NETCDF_2
+
+	* Implement abort() on netCDF errors with -DABORT_ON_ERROR
+
+	* Output var,dmn,att name for failed, fatal inquires
+
+	* spc_slr.cc: Change flx_slr_frc to flx_frc for generality
+
+2001-10-13  Charlie Zender  <zender@uci.edu>
+
+	* nco_var.cc: Fixed bug where starting corner was 1,1,...1 not 0,0,..0
+
+	* Makefile (CPPFLAGS): Added VRS_SNG and VERSION features
+
+	* ccc.cc: Do not #include libintl.h on ALPHA
+
+	* cvs tag -c mie-2_5_7 c++ mie
+	Changes since mie-2_5_6: More attribute overloads
+	Fixed namespace usage in libnco_c++ so compilation is cleaner, but
+	still unsuccessful, on AIX and ALPHA.
+
+	* nco_att.cc: Having difficult problems with nco_put_att()
+	overloads for single element attributes. Not sure why.
+
+	* Makefile (CFLAGS): Added -Wno-unused to disable warnings for
+	unused variables
+
+2001-10-12  Charlie Zender  <zender@uci.edu>
+
+	* Added optional att_typ to put_att functions
+
+	* Added most overloaded inq_att() and inq_var() functions
+
+	* Moved all template functions into .hh files
+
+2001-10-11  Charlie Zender  <zender@uci.edu>
+
+	* Marathon session of adding almost every conceivable overload
+	needed for working libnco. Translated all old C++ interface to
+	new interface in all C++ code. Removed libnetcdf_c++ linking and
+	dependencies. Just need to write a few get_att() functions and
+	ready to compile.
+
+2001-10-10  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_5_6 c++ mie
+	Changes since mie-2_5_5: More diagnostic utility functions
+
+	* nco_utl.cc: Added NCO utilties nco_typ_lng(), nco_typ_sng(),
+	nco_c_typ_sng(), nco_ftn_typ_sng()
+
+	* cvs tag -c mie-2_5_5 c++ mie
+	Changes since mie-2_5_4: New C++ netCDF interface for input file
+
+	* Re-coded input of in.nc to use new interface, appears to work
+
+	* Finally, tied it all together by implementing one line routines
+	to return entire variables based on single line string name input.
+	This keeps the code required by my C++ interface to about the same
+	size as that required by the old, standard, Unidata C++ interface.
+	
+	* Wrote a number of super-convenience routines to return values
+	based on string inputs. This allows things like dimension lengths
+	to be returned as const based on dimension name in just one line.
+
+	* Wrote a number of convenience routines to return values rather
+	than error codes. This enables simple, one-line, definitions of
+	things like dimension IDs, file IDs, dimension lengths, as const
+	variables.
+
+2001-10-09  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_5_4 c++ mie
+	mie-2_5_4 is a synchronization checkin of the last working version
+	before adopting new overloaded C++ interface to netCDF 3.X API
+	Changes since mie-2_5_3: Fast J stuff
+	
+	* wvl_grd.cc: Added fastj_gas wavelength grid
+
+	* nco_var.hh (file): Added 4 get_var() overloads, and
+	nco_get_var_sz() to compute sizes of variables.
+	Rudimentary ability now exists to define, inquire, read and write
+	datasets.
+
+	* cvs tag -c mie-2_5_3 c++ mie
+	Changes since mie-2_5_2: No user-visible changes
+
+2001-10-08  Charlie Zender  <zender@uci.edu>
+
+	* Created libnco_c++.hh to contain the nco_???.hh files
+
+	* Broke nco_att.cc into nco_utl.cc, nco_fl.cc, nco_dmn.cc,
+	nco_var.cc, and nco_att.cc
+
+	* nco_att.cc: Added 2 overloaded def_var() functions
+
+	* wvl_grd.cc: Added FastJ aerosol wavelength grid "fastj_aer"
+
+	* cvs tag -c mie-2_5_2 c++ mie
+	Changes since mie-2_5_1: No user-visible changes
+
+	* Makefile: Modify for libnco_c++.a
+
+	* nco_att.cc: nco_att has 3 nearly working overloaded put_att functions
+
+	* nco_att.hh (file): Added nco_att.hh and nco_att.cc to handle 
+	 C++ wrappers for netCDF3.X C-interface. 
+
+2001-10-04  Charlie Zender  <zender@uci.edu>
+
+	* utl.cc: f90_prm_dat_prn() now can write free-format
+
+2001-10-03  Charlie Zender  <zender@uci.edu>
+
+	* utl.cc: fixed case where arg_trg == 0.0 in apx_eql_chk_flt()
+
+2001-09-19  Charlie Zender  <zender@uci.edu>
+
+	* ccc.cc (main): Added TerrainBase 5' grid-generating capability
+
+2001-09-13  Charlie Zender  <zender@uci.edu>
+
+	* blm.cc: Changed bulk density of snow from
+	250.0 to 100.0 kg m-3 in accord with old CCM value and WiW80.
+	New density represents top layer of dry snow, 
+	not packed snow (which is too deep to allow dust deflation),
+	or wet snow (which constrains mobilization through soil moisture).
+	This changes answers in snowy regions.
+
+2001-09-06  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_5_1 c++ mie ck/Makefile ck/htrn.c
+	Version 2.5.1 uses BSD getopt and has most cmp_prc==double hooks
+	working
+	
+	* ccc.cc (main): Using prc_cmp==double appears to work except for
+	netCDF I/O issues, may need to write own overloaded class, or use
+	alternate C++ implementation based on netCDF 3 with automatic type
+	conversion for both input and output (as does Fortran90 interface!)
+
+	* spc_slr.cc: Replaced (prc_cmp *) C-casts with C++ static_cast<>'s
+
+2001-09-05  Charlie Zender  <zender@uci.edu>
+
+	* dbg.hh: Replaced CEWI_flt with CEWI_cpv where appropriate
+
+	* utl.hh: Removed apx_eql_chk_flt(), use apx_eql_chk() instead
+
+	* ccc.cc (main): Use prc_cmp instead of float (almost) everywhere 
+	This is unvalidated so far, but should work for prc_cmp==float
+	
+2001-09-02  Charlie Zender  <zender@uci.edu>
+
+	* a2d.cc: Removed inline from all functions
+
+	* a2d.hh: Use prc_cmp instead of T template
+
+2001-08-26  Charlie Zender  <zender@uci.edu>
+
+	* Makefile (CPPFLAGS): Migrated to getopt_bsd, removed need for
+	-D__STDC__ on AIX and ALPHA
+
+	* getopt.h: Added getopt_bsd drop-in replacements for getopt() 
+
+2001-08-25  Charlie Zender  <zender@uci.edu>
+
+	* mnr_dst.cc: Finished initial implementattion of sea-salt
+	generation parameterization. Scheme is not yet validated and
+	probably contains dimensional errors which will require reading
+	original sources.
+
+2001-08-22  Charlie Zender  <zender@uci.edu>
+
+	* utl.cc (mnt_dcr): Fixed bug in mnt_ncr() and added mnt_dcr()
+
+2001-08-20  Charlie Zender  <zender@uci.edu>
+
+	* lsm.hh: Added new dimensions for CLM2 (LSM2) land surface model 
+
+2001-08-19  Charlie Zender  <zender@uci.edu>
+
+	* Converted 1-D automatic arrays to valarrays, 2-D arrays to
+	a2d's and removed last dependence on lon_nbr_tmp. All routines
+	should now be completely ISO-ANSI and work for lon_nbr != 1
+
+	* Added Airy and Bessel function to GSL test
+
+2001-08-17  Charlie Zender  <zender@uci.edu>
+
+	* a2d.cc: renamed Array class a2d for two dimensional array
+	and created separate compilation unit for it and merged into
+	libcsz_c++
+
+2001-08-15  Charlie Zender  <zender@uci.edu>
+
+	* rt.cc: Modified to allow runs with up to 1000000 wavelengths 
+
+2001-08-11  Charlie Zender  <zender@uci.edu>
+
+	* cls.cc: Improved Array class by inlining (redundant?)
+
+	* utl.cc (dbg_prn): Moved getting program name to warning
+	functions to reduce bloat
+
+	* cls.cc: Implemented Array class for local automatic two
+	dimensional arrays. Appears to work well, and has no problems with
+	netCDF. 
+
+	* ccc.cc (main): Implemented test section for Array class
+
+2001-08-09  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_5 c++ mie ck/Makefile ck/htrn.c
+	Verified that 2.5 still passes self-tests.
+
+	* Successfully compiled all c++ programs on AIX at least once
+	AIX appears to define getopt in stdio, rather than standalone
+	But i18n works fine! Viva espanol!
+
+2001-08-08  Charlie Zender  <zender@uci.edu>
+
+	* Change to std::time_t and std::ios::... to enable alpha
+	compiling with -std strict_ansi
+
+	* cvs tag -c mie-2_4_14 c++ mie ck/Makefile ck/htrn.c
+	Verified that 2.4.14 still passes self-tests.
+	
+	* Fixed as many Compaq Alpha warnings as possible without having
+	netCDF or GSL. Remaining issues are time_t, getarg option type,
+	long long types
+
+	* Removed unecessary semi-colons inadvertently at ends of function
+	decalarations
+
+	* pdf.cc: Made all _set() member functions qualify arguments as 
+	const to resolve qualifier discrepancy between header and code
+
+	* Qualifying <cmath> and <cstring> functions with std:: resolution
+	operator. Compaq/Alpha C++ declares an error if this is not done and
+	-std strict_ansi is specified. This includes std:: functions
+	strtod, pow, exp, log, abs, sprintf, atan, fabs, perror, strtol,
+	ctime, exit, time, abs, atan, floor, sprintf, getenv, malloc,
+	free, realloc
+	This also includes std:: structures time_t,
+
+2001-08-07  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_4_13 c++ mie ck/Makefile ck/htrn.c
+	2.4.13 is completely ISO conformant but core dumps in netCDF
+	I/O for large bnd_nbr,sz_nbr sizes. Presumably this is because
+	data is not guaranteed to be sequential in memory for double 
+	vector class.
+	
+	* ccc.cc (main): double vector works fine with tpt in ccc.
+	Verified netCDF gets contiguous array (at least for small
+	dimension sizes).
+
+	* Only remaining non-ISO constructs are automatic multidimensional
+	arrays which are output by netCDF and thus must be stored
+	contiguously, e.g., tpt[bnd_nbr][sz_nbr] in ccc.cc, cll_fsh in
+	mie.cc. These could be treated as double vectors if vectors were
+	defined to allocate space contiguously so that data portion could
+	be passed to netCDF with, e.g., float *tpt_ptr=&tpt[0][0];
+
+	* Added std:: to ostream and setw
+
+	* cvs tag -c mie-2_4_12 c++ mie ck/Makefile ck/htrn.c
+
+	* Abandoned using namespace abbreviations for explicit namespace
+	resolution of all std:: tokens.
+
+2001-08-05  Charlie Zender  <zender@uci.edu>
+
+	* mie_sln.cc: Switched from Numerical Recipes to GSL solver for
+	double factorial function. Results appear to be identical.
+
+	* ccc.cc: removed "extern C" protection from gsl headers
+	GSL appears to build this in to the headers themselves
+	
+2001-08-04  Charlie Zender  <zender@uci.edu>
+
+	* Note that gcc 3.0 requires explicit specification of std::
+	namespace, so most of these alterations for AIX will prove
+	useful soon anyway.
+
+	* Replaced automatic dimensioning local arrays like foo[lon_nbr]
+	with foo[lon_nbr_tmp] for AIX compiler, even though original
+	method is standard (I think) in blm.cc, mnr_dst.cc
+
+	* Added using std::endl,cout to bit.hh,
+	
+2001-08-03  Charlie Zender  <zender@uci.edu>
+
+	* Changed first and second arguments in pow() to match type
+	for smarter, faster templates in aer.cc, aer.hh, flx_sfc.cc,
+	spc_bbd.cc, sz_grd.cc 
+
+	* Replace less<foo> with std::less<foo> and map to std::map
+	 in aer.hh, bit.hh, chm.hh, idx_rfr.hh, psd.hh, sz_grd.hh, xtr.hh 
+
+	* Added using std::string to aer.hh, htrn_c++.hh, i18n.cc, xtr.hh, 
+
+	* Added <cassert> header to aer.hh, blm.hh, cln.hh, flx_sfc.hh,
+	sz_grd.hh, 
+
+	* Version 2.4.11 appears to work well on GNU but many
+	standards issues remain since xlC does not compile it.
+	A working xlC port should be worthy of version 2.5.
+
+	* cvs tag -c mie-2_4_11 c++ mie ck/Makefile ck/htrn.c
+
+	* ccc.cc: Switched to std::complex and complex<float> and 
+	complex<double> instead of float_complex and double_complex.
+	Apparently the latter are non-standard, although GNU compilers 
+	treat them as standard.
+
+2001-08-02  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_4_10 c++ mie ck/Makefile ck/htrn.c
+
+	* ccc.cc: Remaining compiler warnings with strict flags are either
+	due to incomplete physics (idx_rfr.cc and mnr_dst.cc) or to
+	problem with g++ <complex> header which redefines built-in abs() 
+
+	* mie_sln.cc: Reverted psi terms in Mie solution from long double
+	to double to eradicate following compiler warnings with strict flags
+	"no match for `complex<double> * long double &'"
+
+	* blm.cc (oro_sng_get): Replaced rint() by round() template
+
+	* mth.hh: created round() template for rounding since rint() is
+	not ANSI standard
+
+	* According to /usr/include/features.h, must add, e.g.,
+	_SVID_SOURCE || _POSIX_SOURCE || _GNU_SOURCE to CPPFLAGS 
+	in order to trigger g++ internal 
+	__USE_SVID || __USE_BSD || __USE_XOPEN_EXTENDED flags which 
+	#define strdup() prototype in /usr/include/string.h.
+	Not sure which to use, and do not want to use any.
+	Therefore rewrote ccc.cc to eliminate sole use of strdup()
+
+	* ccc.cc (main): added tm_ prefix to user-friendly time structure
+	elements in order to remove namespace conflict between month
+	element mth and math namespace mth.
+
+2001-08-01  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_4_9 c++ mie ck/Makefile ck/htrn.c
+
+	* nco.hh and var_mtd_sct is last questionable C++ construction is
+	in these libraries. It is unclear how to fix var_mtd_sct handling.
+	Remaining compiler warnings with strict flags are due to problems
+	with C++ compiler g++ (e.g., rint() and strdup() are not
+	prototyped), or incomplete subroutines where I have not yet
+	finished the physics, or questionable use of long double in 
+	mie_sln.cc.
+	
+	* Changed static STL map structures which were members of classes
+	to be const (e.g., static const scm chm_map) and altered the
+	temporary structures which populated the STL maps in static
+	initialization functions to not have any const members, since this
+	generated "non-static const member in class without a constructor"
+	warnings with strict compilation flags. Discussion thread is on
+	comp.lang.c++.help.
+
+2001-07-29  Charlie Zender  <zender@uci.edu>
+
+	* mth.hh: Complex math in polynomial solvers has been more
+	carefully typecast now so re-tested cbc_eqn_slvr and qdr_eqn_slvr
+	but neither is reliable yet. Unsure what problem is.
+
+	* ccc.cc (main): Merged GSL tests back into ccc, since ccc has
+	only ever worked on targets where ccc also worked
+	(main): removed phys_cst.hh dependency since everything is handled
+	through namespaces now
+
+	* Fixed all compiler warnings possible except non-static const
+	members without initializers in all classes
+
+2001-07-27  Charlie Zender  <zender@uci.edu>
+
+	* utl.cc: fixed compiler warning where apx_eql_chk variable
+	shadowed function name
+	(Exit_gracefully): fixed compiler warning where clock shadowed
+	global variable of same name
+
+	* bit.cc: Removed always true assert statement from bit_prn_uint
+
+	* cvs tag -c mie-2_4_8 c++ mie ck/Makefile ck/htrn.c
+
+	* nco.cc: Decomposed
+	gsl_complex_cos(gsl_complex_rect(cpx.real(),cpx.imag())) into 
+	gsl_complex_crr=gsl_complex_rect(cpx.real(),cpx.imag()) then
+	gsl_complex_cos(gsl_complex_crr)
+	This appears to fix problem with gsl_complex_cos returning garbage.
+	Note, however, that casting cpx.real() and cpx.imag() to doubles
+	in argument list to gsl_complex_rect() does not appear to help.
+	Odd.
+	
+2001-07-26  Charlie Zender  <zender@uci.edu>
+
+	* nco.cc: Added operator<< to print gsl_complex types in same
+	style as GCC float_complex types
+
+	* aer.cc: Changed ice crystal density from 800 to 910 kg m-3 in
+	accord with MYM02
+
+2001-07-24  Charlie Zender  <zender@uci.edu>
+
+	* nco.hh: Updated to conform to gsl-0.9 calling conventions 
+
+	* gsl.cc (main): Updated to conform to gsl-0.9 calling conventions 
+
+2001-07-15  Charlie Zender  <zender@uci.edu>
+
+	* flx_sfc.cc: Attempted to generate BFB input to blm_lnd using
+	only command line switches. Currently this is impossible for two
+	reasons. First, tpt_ptn_mdp in GCM depends on current local
+	surface pressure so must know that. Second, rgh_mmn_dps in GCM
+	depends on sfc_typ, so must know that. That said, if sfc_typ
+	and prs_ntf were also specified on command line, then input to
+	blm_lnd should be BFB with GCM inputs. Tested blm_lnd against
+	original CCM flxsice and got very encouraging results. blm_lnd()
+	and blm_ice() appear to be free of bugs.
+
+2001-07-13  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_4_7 c++ mie ck/Makefile ck/htrn.c
+
+2001-07-12  Charlie Zender  <zender@uci.edu>
+
+	* tdy.cc: Changed sfc_tns_wtr_lqd_PrK78() to print warning rather
+	than non-zero return code on out of range errors
+
+	* Fixed subtle problem caused by commenting out targets in middle
+	of rule and thus having comment line end with a backslash
+
+	* Relaxed restriction on maximum value of air density
+
+2001-07-06  Charlie Zender  <zender@uci.edu>
+
+	* aer.cc: Changed dust_like aerosol to have density of 1600 kg m-3
+
+2001-07-02  Charlie Zender  <zender@uci.edu>
+
+ 	* cvs tag -c mie-2_4_5 c++ mie ck/Makefile ck/htrn.c
+
+	* Added automatically-generated files htrn_c++.cc and htrn_c++.hh
+	to c++ module so that module is (more nearly) self-contained. 
+	Remaining external dependencies which could be (eventually)
+	replace are water and ice index of refraction codes.
+
+2001-06-26  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_4_4 c++ mie ck/Makefile ck/htrn.c
+
+	* lbl.cc: Added iso_map_idx_get() so now mmw and iso_sng refer to
+	correct isotopomer
+
+2001-06-25  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_4_3 c++ mie ck/Makefile ck/htrn.c
+
+	* lbl.cc: Slowly honing lbl package but unable to find bug in
+	fst_scl version of Hum82
+
+	* fast scalar implementation of lnshp_vgt from Hum82 appears broken
+
+	* Verified that lnshp_vgt from Hum82 has Doppler limit near line
+	core and Lorentzian wings as prs->0 and Lorentzian core as
+	prs->prs_sfc 
+
+	* Verified that fast scalar and vector versions of lnshp_dpp and
+	lnshp_lrn give identical answers, and that scalar Lio92 Voigt shape
+	agrees with vector Hum82 Voigt shape
+
+	* Doh! realized C++ exp(), pow(), sin() etc. are correctly
+	overloaded for complex arithmetic so Fortran cexp() = C++ exp() 
+
+2001-06-24  Charlie Zender  <zender@uci.edu>
+
+	* Added two implementations of Voigt function, and analytic
+	approximation from Lio92, and the (most of) the 1982 Humlicek
+	algorithm from Hum82. The Hum82 algorithm is crippled by the 
+	lack of an exponention routine for complex numbers. Lio92 routine
+	appears to converge to correct Doppler and Lorentz limits.
+
+	* Line shapes are nearly, but not completely, symmetric about line
+	center.	There must be a an error in my lineshape implementation.
+
+	* Implemented more flexible method of centering regular wavelength
+	grids using new --wvn_mdp_xcm and --wvn_dlt_xcm options
+
+2001-06-23  Charlie Zender  <zender@uci.edu>
+
+	* Correct spelling is isotopomer not isopotomer
+
+	* Transmittance results look too weak, CO2 optical depths of ~ 10^-9
+
+	* Fixed expression for inhomogeneous path absorptance
+
+	* Implemented temperature scaling of line strengths
+
+2001-06-22  Charlie Zender  <zender@uci.edu>
+
+	* Fixed HWHM_???_wvl to depend on ln_ctr_wvn. This highlights
+	problems with working with wavelength, since HWHMs are specified
+	relative to given wavenumber. Converting line strengths to
+	wavelength is ill-defined since supplied line strength is integral
+	of absorption cross-section in cm2 mlc-1 times wavenumber in cm-1.
+	No unambiguous way to deconvolve the integral into wavelength.
+
+	* cvs tag -c mie-2_4_2 c++ mie ck/Makefile ck/htrn.c
+
+	* Diagnostics look good so far, except HWHM_air_wvl which seems large
+
+	* Serious attempt to get lbl.cc to do something
+
+2001-06-20  Charlie Zender  <zender@uci.edu>
+
+	* Added rudimentary Chapman function capability
+
+2001-06-19  Charlie Zender  <zender@uci.edu>
+
+	* Added utl.cc:drc_pfx() to handle separately specified
+	directories and paths
+
+	* cvs tag -c mie-2_4_1 c++ mie ck/Makefile ck/htrn.c
+
+	* Added bogus zeroth element to C++ arrays written to htrn_c++.cc
+	so that C++ may use Fortran/HITRAN indexing convention
+
+	* lbl.cc now has skeleton working HITRAN I/O
+
+2001-06-18  Charlie Zender  <zender@uci.edu>
+
+	* Put dbg.hh in namespace dbg
+
+	* Put cln_cst.hh in namespace cln
+
+	* Put lsm.hh in namespace lsm
+
+	* 2.4.0 also marks shift to using namespaces to control access to
+	global variables
+
+	* 2.4.0 is first version that requires auto-generated files
+	htrn_c++.cc and htrn_c++.hh. Because these files are, by default,
+	stored in a separate directory, this may lead to some portability 
+	problems. 
+
+	* cvs tag -c mie-2_4_0 c++ mie ck/Makefile ck/htrn.c
+
+	* Put nco.cc back in libcsm_c++ instead of libcsz_c++
+
+	* Added lbl.cc, lbl.hh to libcsz_csm
+
+2001-06-17  Charlie Zender  <zender@uci.edu>
+
+	* Adopted phc namespace for all phys_cst.hh
+
+	* Added nmspc test
+
+	* Changed using namespace std to using std::cout...
+
+2001-06-15  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_3_7 c++ mie
+
+	* Removed delete[] from rt_cls::rt_lop since rt_cls::deallocate()
+	handles that. This appeared to fix the last memory bug in rt_cls.
+
+	* Used MALLOC_CHECK_=1 to find memory problem with rt_cls() memory
+	management reliably produced with ccc --tst=rt and with mie.
+
+2001-06-13  Charlie Zender  <zender@uci.edu>
+
+	* Added printing list of environment variables to ccc --tst_sng=nvr
+
+2001-05-29  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_3_5 c++ mie
+
+	* Verified solutions are correct on a simple polynomial and a simple
+	transcendental equation
+
+	* Added Newton-Raphson root finding to math packages
+
+2001-05-25  Charlie Zender  <zender@uci.edu>
+
+	* Changed solution form in two_srm_iso_sct() to work when tau_str
+	-> infty
+
+2001-04-12  Charlie Zender  <zender@uci.edu>
+
+	* Fixed Makefile bug where libcsm_c++ did not depend on rt.hh rt.o
+
+2001-03-19  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_3_2 c++ mie
+
+	* rt_cls works as intended
+
+	* Added ntp_vec_wrp() to automatically handle non-monotonic
+	interpolation for arrays
+
+	* Finished first stab at idx_rfr_cls. Memory allocation and
+	caching needs lots of work but basic infrastructure compiles.
+
+2001-03-15  Charlie Zender  <zender@uci.edu>
+
+	* Created mnt_nbr() to facilitate manipulation of non-monotonic
+	arrays 
+
+	* Added beginnings of a Radiative Transfer class (rt)
+
+2001-03-11  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_3_1 c++ mie
+
+	* Added TODO file for long-term wishes
+
+	* Added Fresnel reflectance and transmission computation and
+	verified that flux transmittance/reflectance conserves energy
+
+2001-03-09  Charlie Zender  <zender@uci.edu>
+
+	* Added dry air and seasalt to particle types
+
+2001-03-03  Charlie Zender  <zender@uci.edu>
+
+	* Added ALPHA to makefile to accomodate prospect alpha cluster
+
+2001-03-01  Charlie Zender  <zender@uci.edu>
+
+	* Many tweaks to support building on SGI with g++
+
+	* Translated cmd_ln_sng() from C to C++ and placed in utl.cc to
+	make C++ programs independent of NCO library
+
+2001-02-16  Charlie Zender  <zender@uci.edu>
+
+	* Changed SGI5 to SGI6 and combined SGI64 with SGIMP64
+
+2001-01-02  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c c++-2_1_1 c++ mie
+
+	* Added bit.cc bit manipulation utilities to examine internal
+	binary storage representation
+
+	* Added signed char to RTTI check
+
+	* Added ability to generate regular lat/lon grids to ccc
+	Implemented SeaWiFS grid as default
+
+2000-12-12  Charlie Zender  <zender@uci.edu>
+
+	* Computing irradiance time based on detector size
+
+	* Fixing problems related to geometry of detector
+
+2000-12-11  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c c++-2_1 c++ mie
+
+	* Fixed error where cnd_trm_air was confused with dff_trm_air
+
+	* Implemented many more microphysical routines in tdy.cc and
+	aer.cc to facilitate computation of ventilation coefficients and
+	latent heating quantities
+
+2000-12-10  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c c++-2_0_9 c++ mie
+
+	* Finished crude version of aerosol heating diagnostics
+
+2000-11-25  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c c++-2_0_8 c++ mie
+
+	* Added text output stream for logfile to aer_htg()
+
+	* aer_htg() results appear reasonable both for size-resolved and
+	for bulk aerosol methods, which yield same answers to precision of
+	10^-4. 
+
+2000-11-24  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c c++-2_0_7 c++ mie
+
+	* Placed aer_htg() call in mie()
+
+	* cvs tag -c c++-2_0_6 c++ mie
+
+	* Added specific heat capcities of more minerals and liquids
+
+	* Moved aerosol heating (aer_htg) routines to own subroutine,
+	aer_htg() which serves as template for outsourcing I/O from main
+
+2000-11-22  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c c++-2_0_5 c++ mie
+
+	* Rewrote and consolidated aer_cls constructors in aer.cc so that
+	mmw, spc_heat, etc. are all set correctly on instatntiation
+
+2000-11-21  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c c++-2_0_4 c++ mie
+
+	* Added nco.cc routines to begin abstracting some I/O duties from
+	the main program
+
+	* Added RTTI demonstration for constants with numerical suffixes
+
+	* cvs tag -c c++-2_0_3 c++ mie
+
+	* Finished ntp_slr_flx_nmn(). g++ gave me difficulty, which may be
+	a compiler error, in recognizing that ntp_slr_flx() was being
+	called correctly from ntp_slr_flx_nmn()
+
+2000-11-20  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c c++-2_0_2 c++ mie
+
+	* Added non-monotonic versions of rbn_vec() and ntp_slr_flx()
+	called rbn_vec_nmn() and ntp_slr_flx_nmn(), respectively.
+	These functions currently handle only CCM_SW grids
+	They should be improved to work on non-monotonic grids in general
+
+2000-11-17  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c c++-2_0_1
+
+	* Demonstrated there is an unknown memory leak, which is at least
+	triggered by slr_spc_cls.tst()
+
+	* Fixed only known memory leaks in spc_slr class
+
+	* ElectricFence interferes with gdb debugging of C++ programs so
+	disabled it for C++
+
+2000-11-15  Charlie Zender  <zender@uci.edu>
+
+	* Tagged c++-2_0
+
+	* Finished great class/function rearrangement.
+	Nearly all functions and classes formerly in mie_utl() and
+	mie_cls() have been disaggregated into individual files and placed
+	in libcsm_c++ or libcsz_c++.
+
+2000-11-13  Charlie Zender  <zender@uci.edu>
+
+	* Moved most mie_cls() classes into individual files
+
+2000-10-15  Charlie Zender  <zender@uci.edu>
+
+	* Tagged c++-1_5_2
+
+	* Improved parsing of complex numbers, imported from mie()
+
+	* Implemented virtual destructor for SzDstFnc class to fix
+	annoying warnings.
+
+2000-10-04  Charlie Zender  <zender@uci.edu>
+
+	* Moved template function definitions to mth.hh since source must
+	be visible within object files that instantiate template
+	functions. Weird and slightly different from template classes.
+	More like inline functions, though.
+
+2000-10-01  Charlie Zender  <zender@uci.edu>
+
+	* Split off cln_cst.hh from cln.hh to hold just constants
+	This split required to eliminate new warning messages in gcc 2.96
+
+2000-09-17  Charlie Zender  <zender@uci.edu>
+
+	* Noticed that clm is flaky, it segfaults unpredictably but then
+	works fine after recompiling. Possibly related to problem finding
+	TZ in environment in date_time.c. Not sure, though.
+
+	* Improved OpenMP handling by adding lists of shared() and
+	private() variables
+
+2000-09-08  Charlie Zender  <zender@uci.edu>
+
+	* Tagged this as c++-1_5_1
+
+2000-08-24  Charlie Zender  <zender@uci.edu>
+
+	* Reversed order of density arguments in particle velocity
+	routines: dns_aer is now dns_prt which follows dns_mdp. 
+	Note this makes previous versions of mie() incompatible with
+	current C++ library. Need to implement a means verifying version  
+	compatibility between object files and libraries.
+
+	* Added code to demonstrate archiving multidimensional static
+	arrays using netCDF C++ interface
+
+2000-08-19  Charlie Zender  <zender@uci.edu>
+
+	* Tagged this as c++-1_5
+
+	* Fixed subscript out of range error in vec.cc, vec_f77.F
+	Error was caught by efence and was only triggered by certain extrapolations
+	Verified fix works in identity interpolation and rebin
+	Still unsure whether this is final fix to this problem so left old
+	code commented out.
+	
+2000-06-16  Charlie Zender  <zender@uci.edu>
+
+	* Finally changed ntp_vec() to keep all input only arguments as
+	const. This involves copying three arrays (crd_in,dat_in,crd_out) 
+	even though they are only double reversed if they are not
+	monotonically increasing.
+
+2000-05-30  Charlie Zender  <zender@uci.edu>
+
+	* Segregated mineral dust aerosol physics routines into separate
+	file, mnr_dst.cc. Subroutine-ized and validated wnd_frc_thr_get()
+	from mie. 
+
+2000-05-29  Charlie Zender  <zender@uci.edu>
+
+	* Subroutine-ized and validated drg_cff_get() and vlc_grv_get() in
+	new aerosol physics routine aer.cc 
+
+2000-03-22  Charlie Zender  <zender@uci.edu>
+
+	* Added capability to handle negative increments to yyyymmdd_ncr()
+
+	* Fixed bug with yyyymmdd2doy() where September and October
+	incorrect number of days
+
+1999-07-30  Charlie Zender  <zender@dust.acd.ucar.edu>
+
+	* Tagged this as c++-1_4_2
+
+1999-06-19  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Fixed density bug in blm_ocn()
+
+1999-06-17  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Tagged this as c++-1_4_0
+
+1999-06-02  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Fixed error in flx_mss_vrt_dst_ttl_MaB95_get() where 20% cap on
+	mss_frc_cly was being ignored
+
+1999-05-21  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Fixed error in flx_mss_hrz_slt_ttl_Whi79_get() where wnd_frc was
+	compared to itself instead of wnd_frc_thr_slt
+
+Wed May 19 12:45:16 1999  ZENDER CHARLIE 1445 ML CGD  <zender@dataproc.ucar.edu>
+
+	* Fixed error in thermal conductivity calculation in
+	cnd_trm_soi_get() where conductivity of soil solids was 
+	inadvertently set to 0.0
+
+1999-05-18  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Tagged this as c++-1_3_3
+
+	* Fixed diagnostic flx_LW_sfc_up so that it now accounts for
+	reflection of flx_LW_sfc_dwn by non-unity msv_sfc
+
+Tue May 18 14:49:59 1999  ZENDER CHARLIE 1445 ML CGD  <zender@dataproc.ucar.edu>
+
+	* Fixed bogus definition of kappa_dry_air in phys_cst.hh
+
+ 	* Fixed error in thermal conductivity calculation in
+	cnd_trm_soi_get() where snow cover was handled incorrectly
+
+1999-05-17  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Tagged this as c++-1_3_2
+
+	* Added blm_dst_sfc() which is optimized to solve for surface
+	transfer over surfaces suitable for dust mobilization: dry, no
+	snow cover, smooth, no vegetation. Verified that blm_dst_sfc() and
+	full-blown flx_sfc() give identical answers for same input
+
+1999-04-12  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Tagged this as c++-1_3_1
+
+	* Learned that inline'd functions must be defined in header files
+	so their source is visible and available for inclusion into
+	calling files. Based on this, re-implemented min_flt() etc as
+	inlined functions.
+
+1999-04-06  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Tagged this as c++-1_3_0
+
+	* Implemented and validated all functions and variables in blm.cc,
+	blm.hh, and lsm.hh including rgh_zpd_get(), snw_frc_get(),
+	wnd_mbl_get(). Validation was against LSM, mie, and aer.
+
+1999-01-31  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Developed gsl.cc, gsl.hh for using GSL, the GNU Scientific Library
+
+1999-01-27  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Tagged this as c++-1_2
+
+	* Renamed cpp to ccc, libc++ to libcsz_c++ for safety. Having a
+	personal program named c++ around was tricking autoconf into
+	thinking that c++ was the g++ compiler.
+
+Tue Sep 29 16:45:06 1998  Charlie Zender  <zender@odin.cgd.ucar.edu>
+
+	* Added ntp_vec_one() convenience interface to ntp_vec()
+
+Wed Sep  2 14:37:59 1998  Charlie Zender  <zender@odin.cgd.ucar.edu>
+
+	* Tagged c++_1_1
+
+	* Fixed identity interpolation in ntp_vec(). Using new, simplified
+	header structure. Added utl.hh and turned libc++.hh into a
+	super-header file. Works very well. 
+
+1998-08-30  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Files complex.cc mnr.cc nc++.cc rbn_vec.cc mnr.hh are currently
+	not used in any executable or library. I'm not quite sure where to
+	put them, so I keep them here. They may be useful someday.
+
+	* Finished initial implementation of c++ module
+

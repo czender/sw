@@ -1,0 +1,8 @@
+$Header$ -*-text-*-
+
+1. Add eccen,obliq,mvelp input and output. The problem with this
+is that CRM does not use namelist input. With a CRM input file
+eccen,obliq,mvelp must always be input and some sort of key value
+used to determine when to use them and when to use iyear_AD.
+3. Remove empty directories?
+4. Change $Header$ to $Id$

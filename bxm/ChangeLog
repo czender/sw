@@ -1,0 +1,100 @@
+2005-02-20  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c bxm-1_4_0
+	Changes since bxm-1_4_0: Change name to dead
+
+	* Change model name from aer to dead
+
+2004-01-30  Charlie Zender  <zender@uci.edu>
+
+	* Change NCARG_ROOT to /usr/local/ncarg
+
+2004-01-29  Charlie Zender  <zender@uci.edu>
+
+	* bxm.ncl: Replace include.ncl with gsn_code.ncl
+
+	* Assume ncl is in /usr/local rather than /opt/local
+
+2003-12-16  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c bxm-1_2_3
+	Changes since bxm-1_2_2: Replace symbolic link to bxm.jpg with
+	the real file
+
+	* Box model was breaking with log errors that suggested that the
+	visualization of the bxm.jpg file was failing because bxm_vzn.html
+	was trying to visualize a symbolically linked file
+	(/var/www/html/dead/bxm.jpg was a link to /tmp/bxm/bxm.jpg).
+	Fixed problem by copying bxm.jpg directly to /var/www/html/dead
+	prior to visualization.
+
+2003-04-29  Charlie Zender  <zender@uci.edu>
+
+	* Added user-configurable --dbg_lvl input
+
+	* cvs tag -c bxm-1_2_2
+	Changes since bxm-1_2_1: Everything seems to work reliably
+
+	* Add super-dooper sophisticated ghostscript conversion switches
+
+	* Changed background color to gray
+
+	* Add VERSION file
+
+	* Transition to RedHat 9 server on dust
+
+2003-04-21  Charlie Zender  <zender@uci.edu>
+
+	* Make dst target for building distributions
+
+	* Add VERSION
+
+	* Convert bxm_run.py to standard nomenclature
+
+	* cvs tag -c bxm-1_2_1
+	Changes since bxm-1_2: More things work!
+
+	* bxm_run.sh (crt_sng): Hardcoded gs conversion command to avoid
+	security penalty for decreasing exec priveleges in invoked
+	scripts. This fixes last known user-interface bug in online box
+	model. 
+
+2003-04-20  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c bxm-1_2
+	Changes since bxm-1_1: More things work!
+
+	* Move ps2pdf to /usr/bin/ps2pdf, force copies
+
+	* Add run-time text output, mass budget in bxm_txt.html
+
+	* Change convert to /usr/bin/convert
+
+2003-04-16  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c bxm-1_1
+	Changes since bxm-1_0: higher security, documentation, appearance
+
+	* Isolate installation in script bxm_nst.sh
+
+	* bxm_run.sh Change text ouput from append to overwrite
+	
+	* Further documentation of dependencies
+
+	* aer/Makefile now takes DST_NBR from environment
+
+	* Use bash redirections in bxm_run.sh
+
+	* Changed tmp.bxm.ncl to bxm_usr.ncl
+
+2003-03-07  Charlie Zender  <zender@uci.edu>
+
+	* Changed ncgen in filenames to tvbds
+
+	* Added Makefile
+
+	* Documented all file locations and calling
+	relationships in source files and README
+
+	* Checked in Newman's version as bxm-1_0
+

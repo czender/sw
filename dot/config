@@ -1,0 +1,9 @@
+# $Id$
+
+# Purpose: ssh configuration file
+
+# 20041229: Debian Ubuntu Linux times out ssh connections after about five minutes
+# These options should keep the ssh connection alive longer
+
+TCPKeepAlive=yes
+ServerAliveInterval=300

@@ -1,0 +1,63 @@
+Dear members of the program committee,
+
+The following abstract is for submission to the Ninth Conference on
+Atmospheric Radiation. The work shows a large sensitivity of the
+organization of tropical convection to the radiative effects of anvil
+cloud, therefore it fits most closely with the theme of "relationships
+between radiative fluxes, moist atmospheric processes, and surface
+hydrology". The work is very interdisciplinary, and it was difficult
+to decide between submitting it to your conference and the session on
+"cloud/radiation/hydrological cycle interactions" in the Conference on
+Climate Variations. We decided the Atmospheric Radiation Conference is
+the more appropriate venue because the sensitivity study isolated the
+radiative effects of tropical anvils. My preference is for an oral
+presentation.
+
+Sincerely,
+Charlie Zender
+
+"Sensitivity of a climate simulation to the radiative effects of 
+tropical cirrus anvil cloud"
+ 
+Charles S. Zender  
+Jeffrey T. Kiehl  
+NCAR, P.O. Box 3000, Boulder, CO,
+80307-3000 USA
+ph. 303-497-1612  
+fax 303-497-1324
+zender@ncar.ucar.edu  
+
+Climate sensitivity to the radiative effects of tropical anvil is
+investigated using a simple prognostic ice cloud scheme in a version
+of the National Center for Atmospheric Research Community Climate
+Model.  Two numerical climate integrations are forced by 1985-1989
+sea surface temperature (SST): the control, with diagnostic ice cloud,
+and the experiment, with ice cloud forecast from modeled and observed
+characteristics of tropical anvil lifecycle (i.e., convective origin,
+vertical profile, phase, mesoscale precipitation, and lifetime).  The
+sensitivity experiment predicts enhanced ice and reduced liquid over
+most latitudes.  Increase in hydrometeor size associated with anvil
+weakens cloud radiative extinction per unit mass by factors of 1--3.
+The weaker mass extinction efficiency approximately balances enhanced
+ice amount so that anvil ice mass quadruples without biasing the mean
+radiative energy balance.
+
+Enhanced anvil perturbs the tropical upper troposphere temperature
+structure more strongly in winter, when the column is clearer and
+anvil radiatively heats the troposphere above 200 mb.  In the summer
+tropics, enhanced anvil reduces radiative cooling up to 200 mb, and
+enhances cooling above that.  The prognostic anvil is less strongly
+coupled to SST.  Based on the 1987 El Nino, the underprediction of
+shortwave cloud forcing sensitivity to SST indicates anvil ice crystal
+size or habit may be sensitive to SST.  The prognostic anvil
+formulation improves longwave cloud radiative response to SST cooling
+but worsens response to warming > 2 C.  In conjunction with
+weaker mass extinction efficiency of large ice, this weakens the
+feedback between longwave cloud forcing and convection over SST
+maxima.  The net response of convection is a shift toward the winter
+hemisphere in solstice months.  These changes lead to a significant
+response in the extratropical height field in January.
+
+
+
+

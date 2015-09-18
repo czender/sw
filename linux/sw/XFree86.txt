@@ -1,0 +1,28 @@
+
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-100dpi-fonts-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-3DLabs-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-75dpi-fonts-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-8514-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-AGX-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-FBDev-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-I128-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-Mach32-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-Mach64-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-Mach8-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-Mono-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-P9000-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-S3-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-S3V-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-SVGA-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-VGA16-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-W32-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-XF86Setup-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-Xnest-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-Xvfb-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-cyrillic-fonts-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-devel-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-doc-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-libs-3.3.5-1.6.0.i386.rpm
+rpm -UvhF ftp://updates.redhat.com/6.0/i386/XFree86-xfs-3.3.5-1.6.0.i386.rpm
+

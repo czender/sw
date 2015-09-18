@@ -1,0 +1,33 @@
+On sand.ess.uci.edu SuSE 9.0 20040508
+cd ${DATA}
+cvs -z3 -d:ext:anoncvs@savannah.gnu.org:/cvsroot/auctex login
+cvs -z3 -d:ext:anoncvs@savannah.gnu.org:/cvsroot/auctex co auctex
+cd auctex/
+./autogen.sh 
+./configure --with-lispdir=/usr/share/emacs/site-lisp
+sudo make install
+
+cd ${DATA}
+cvs -d :pserver:anonymous@cvs.sf.net:/cvsroot/preview-latex login
+cvs -d :pserver:anonymous@cvs.sf.net:/cvsroot/preview-latex co preview
+cd preview
+autogen.sh
+./configure
+./configure --disable-8bit-test
+make 
+sudo make install
+
+************************************************************************
+20100511 givre.ess.uci.edu cygwin 2.74 Vista
+************************************************************************
+http://www.gnu.org/software/auctex/manual/auctex/Installation-under-MS-Windows.html
+
+dtm
+wget http://ftp.gnu.org/pub/gnu/auctex/auctex-11.86.tar.gz .
+tar xvzf auctex-11.86.tar.gz 
+cd auctex-11.86
+
+./configure --with-emacs=/usr/bin/emacs --with-lispdir=/usr/share/emacs/site-lisp --with-texmf-dir=/usr/share/texmf
+************************************************************************
+20100511 givre.ess.uci.edu cygwin 2.74 Vista
+************************************************************************

@@ -1,0 +1,20 @@
+$Id$ -*-text-*-
+
+Original directory: /home/zender/ck
+
+This directory contains programs for correlated-k (ck.F) and
+line-by-line (lbl.F) radiative transfer codes. 
+
+Also, the htrn.c program decodes the HITRAN database and creates many
+useful header files and even programs: 
+
+../ck/hitran.F
+../ck/hitran.com
+../ck/hitran.h
+../ck/hitran.pl
+../ck/HITRAN.pm
+../c++/htrn_c++.cc
+../c++/htrn_c++.hh
+
+
+

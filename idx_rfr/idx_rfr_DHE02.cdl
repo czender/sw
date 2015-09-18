@@ -1,0 +1,155 @@
+// ncgen -b -o ${DATA}/aca/idx_rfr_DHE02.nc ${HOME}/idx_rfr/idx_rfr_DHE02.cdl
+// ncks -C -H -s %9.5f -v bnd,idx_rfr_aeronet_BrB_img,idx_rfr_aeronet_BrB_rl $DATA/aca/idx_rfr_DHE02.nc
+
+netcdf idx_rfr_DHE02 {
+dimensions:
+	bnd=4;
+
+variables:
+
+	:RCS_Header = "$Id$";
+	:history = "";
+	:source="
+Received Tue, 21 Aug 2001 from
+Oleg Dubovik <dubovik@aeronet.gsfc.nasa.gov>
+The indices of refraction are a first guess from AERONET stations.
+These are unpublished and will change.
+Oleg supplied data for five stations: Bahrain (Bhr), Saudi Arabia (SdA), Cape Verde (CpV), Banizoumbou (Bnz), Ouagadougou (Ogd), Barbados (Brb), Mongolia (Mng).
+The real part of the index of refraction was assumed constant in this
+wavelength range, only the imaginary part varies.
+
+These raw data provided by Oleg are a superset of the dust data reported in DHE02.
+Hence we renamed this file from Dub01 to DHE02 on 20060129.
+";
+
+	float bnd(bnd);
+	bnd:long_name = "Band center wavelength";
+	bnd:units = "micron";
+	bnd:C_format = "%.5g";
+
+	float idx_rfr_aeronet_Bhr_rl(bnd);
+	idx_rfr_aeronet_Bhr_rl:long_name = "AERONET Bahrain real index of refraction";
+	idx_rfr_aeronet_Bhr_rl:units = "";
+	idx_rfr_aeronet_Bhr_rl:C_format = "%.4g";
+	float idx_rfr_aeronet_Bhr_img(bnd);
+	idx_rfr_aeronet_Bhr_img:long_name = "AERONET Bahrain imaginary index of refraction";
+	idx_rfr_aeronet_Bhr_img:units = "";
+	idx_rfr_aeronet_Bhr_img:C_format = "%.3g";
+
+	float idx_rfr_aeronet_Bnz_rl(bnd);
+	idx_rfr_aeronet_Bnz_rl:long_name = "AERONET Banizoumbou real index of refraction";
+	idx_rfr_aeronet_Bnz_rl:units = "";
+	idx_rfr_aeronet_Bnz_rl:C_format = "%.4g";
+	float idx_rfr_aeronet_Bnz_img(bnd);
+	idx_rfr_aeronet_Bnz_img:long_name = "AERONET Banizoumbou imaginary index of refraction";
+	idx_rfr_aeronet_Bnz_img:units = "";
+	idx_rfr_aeronet_Bnz_img:C_format = "%.3g";
+
+	float idx_rfr_aeronet_Brb_rl(bnd);
+	idx_rfr_aeronet_Brb_rl:long_name = "AERONET Barbados real index of refraction";
+	idx_rfr_aeronet_Brb_rl:units = "";
+	idx_rfr_aeronet_Brb_rl:C_format = "%.4g";
+	float idx_rfr_aeronet_Brb_img(bnd);
+	idx_rfr_aeronet_Brb_img:long_name = "AERONET Barbados imaginary index of refraction";
+	idx_rfr_aeronet_Brb_img:units = "";
+	idx_rfr_aeronet_Brb_img:C_format = "%.3g";
+
+	float idx_rfr_aeronet_CpV_rl(bnd);
+	idx_rfr_aeronet_CpV_rl:long_name = "AERONET Cape Verde real index of refraction";
+	idx_rfr_aeronet_CpV_rl:units = "";
+	idx_rfr_aeronet_CpV_rl:C_format = "%.4g";
+	float idx_rfr_aeronet_CpV_img(bnd);
+	idx_rfr_aeronet_CpV_img:long_name = "AERONET Cape Verde imaginary index of refraction";
+	idx_rfr_aeronet_CpV_img:units = "";
+	idx_rfr_aeronet_CpV_img:C_format = "%.3g";
+
+	float idx_rfr_aeronet_DKS91_rl(bnd);
+	idx_rfr_aeronet_DKS91_rl:long_name = "Patterson and Gillette (1981) real index of refraction on AERONET grid";
+	idx_rfr_aeronet_DKS91_rl:units = "";
+	idx_rfr_aeronet_DKS91_rl:C_format = "%.4g";
+	float idx_rfr_aeronet_DKS91_img(bnd);
+	idx_rfr_aeronet_DKS91_img:long_name = "Patterson and Gillette (1981) imaginary index of refraction on AERONET grid";
+	idx_rfr_aeronet_DKS91_img:units = "";
+	idx_rfr_aeronet_DKS91_img:C_format = "%.3g";
+
+	float idx_rfr_aeronet_Mng_rl(bnd);
+	idx_rfr_aeronet_Mng_rl:long_name = "AERONET Mongolia real index of refraction";
+	idx_rfr_aeronet_Mng_rl:units = "";
+	idx_rfr_aeronet_Mng_rl:C_format = "%.4g";
+	float idx_rfr_aeronet_Mng_img(bnd);
+	idx_rfr_aeronet_Mng_img:long_name = "AERONET Mongolia imaginary index of refraction";
+	idx_rfr_aeronet_Mng_img:units = "";
+	idx_rfr_aeronet_Mng_img:C_format = "%.3g";
+
+	float idx_rfr_aeronet_Ogd_rl(bnd);
+	idx_rfr_aeronet_Ogd_rl:long_name = "AERONET Ougadougou real index of refraction";
+	idx_rfr_aeronet_Ogd_rl:units = "";
+	idx_rfr_aeronet_Ogd_rl:C_format = "%.4g";
+	float idx_rfr_aeronet_Ogd_img(bnd);
+	idx_rfr_aeronet_Ogd_img:long_name = "AERONET Ougadougou imaginary index of refraction";
+	idx_rfr_aeronet_Ogd_img:units = "";
+	idx_rfr_aeronet_Ogd_img:C_format = "%.3g";
+
+	float idx_rfr_aeronet_PaG81_rl(bnd);
+	idx_rfr_aeronet_PaG81_rl:long_name = "Patterson and Gillette (1981) real index of refraction on AERONET grid";
+	idx_rfr_aeronet_PaG81_rl:units = "";
+	idx_rfr_aeronet_PaG81_rl:C_format = "%.4g";
+	float idx_rfr_aeronet_PaG81_img(bnd);
+	idx_rfr_aeronet_PaG81_img:long_name = "Patterson and Gillette (1981) imaginary index of refraction on AERONET grid";
+	idx_rfr_aeronet_PaG81_img:units = "";
+	idx_rfr_aeronet_PaG81_img:C_format = "%.3g";
+
+	float idx_rfr_aeronet_SAJ93_rl(bnd);
+	idx_rfr_aeronet_SAJ93_rl:long_name = "Sokolik et al. (1993) real index of refraction on AERONET grid";
+	idx_rfr_aeronet_SAJ93_rl:units = "";
+	idx_rfr_aeronet_SAJ93_rl:C_format = "%.4g";
+	float idx_rfr_aeronet_SAJ93_img(bnd);
+	idx_rfr_aeronet_SAJ93_img:long_name = "Sokolik et al. (1993) imaginary index of refraction on AERONET grid";
+	idx_rfr_aeronet_SAJ93_img:units = "";
+	idx_rfr_aeronet_SAJ93_img:C_format = "%.3g";
+
+	float idx_rfr_aeronet_SdA_rl(bnd);
+	idx_rfr_aeronet_SdA_rl:long_name = "AERONET Saudi Arabia real index of refraction";
+	idx_rfr_aeronet_SdA_rl:units = "";
+	idx_rfr_aeronet_SdA_rl:C_format = "%.4g";
+	float idx_rfr_aeronet_SdA_img(bnd);
+	idx_rfr_aeronet_SdA_img:long_name = "AERONET Saudi Arabia imaginary index of refraction";
+	idx_rfr_aeronet_SdA_img:units = "";
+	idx_rfr_aeronet_SdA_img:C_format = "%.3g";
+
+data:	
+
+bnd =   0.44, 0.67, 0.87, 1.02;
+
+idx_rfr_aeronet_Bhr_rl = 1.55,1.55,1.55,1.55;
+idx_rfr_aeronet_Bhr_img = 0.0025, 0.0014, 0.001,  0.001;
+
+idx_rfr_aeronet_Bnz_rl = 1.505,1.505,1.505,1.505;
+idx_rfr_aeronet_Bnz_img = 0.0015, 0.001,  0.001,  0.001;
+
+idx_rfr_aeronet_Brb_rl = 1.43,1.43,1.43,1.43;
+idx_rfr_aeronet_Brb_img = 0.0016, 0.0024, 0.0033, 0.0038;
+
+idx_rfr_aeronet_CpV_rl = 1.48,1.48,1.48,1.48;
+idx_rfr_aeronet_CpV_img = 0.0025, 0.0007, 0.0006, 0.0006;
+
+idx_rfr_aeronet_DKS91_rl = 1.53,1.53,1.53,1.53;
+idx_rfr_aeronet_DKS91_img = 0.0085,0.0045,0.0012,0.001;
+
+idx_rfr_aeronet_Mng_rl = 1.555,1.555,1.555,1.555;
+idx_rfr_aeronet_Mng_img = 0.0037, 0.0027, 0.0027, 0.0027;
+
+idx_rfr_aeronet_Ogd_rl = 1.48,1.48,1.48,1.48;
+idx_rfr_aeronet_Ogd_img = 0.0018, 0.0016, 0.0012, 0.0012;
+
+idx_rfr_aeronet_PaG81_rl = 1.56,1.56,1.56,1.56;
+idx_rfr_aeronet_PaG81_img = 0.010859,0.003774,0.0036,0.0039;
+
+idx_rfr_aeronet_SAJ93_rl = 1.5596,1.5599,1.5599,1.5598;
+idx_rfr_aeronet_SAJ93_img = 0.0031,0.0032,0.0036,0.0039;
+
+idx_rfr_aeronet_SdA_rl = 1.56,1.56,1.56,1.56;
+idx_rfr_aeronet_SdA_img = 0.0029, 0.0013, 0.001,  0.001;
+
+}
+

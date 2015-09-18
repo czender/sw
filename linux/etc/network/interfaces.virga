@@ -1,0 +1,87 @@
+# $Id$
+# Purpose: Network configuration for Ubuntu Dapper Virga
+# /etc/network/interfaces -- configuration file for ifup(8), ifdown(8)
+# Usage:
+# diff ~/linux/etc/network/interfaces.virga /etc/network/interfaces
+# sudo cp ~/linux/etc/network/interfaces.virga /etc/network/interfaces
+# cp /etc/network/interfaces ~/linux/etc/network/interfaces.virga 
+# /etc/init.d/networking restart
+
+# Automatically configured interfaces 
+auto lo
+#auto eth0
+#auto eth0:1
+#auto eth1
+#auto eth2
+auto wlan0
+
+# Interface: lo
+# The loopback interface
+iface lo inet loopback
+address 127.0.0.1
+netmask 255.0.0.0
+
+# Interface: eth0 wired Fast Ethernet
+# Wired Access DHCP
+# iface eth0 inet dhcp
+
+# LGGE Wired Access
+# lgge-pc194.lgge.obs.ujf-grenoble.fr
+#iface eth0 inet static
+#	address 192.168.102.194
+#	broadcast 192.168.102.255
+#	gateway 192.168.102.254
+#	netmask 255.255.255.0
+
+# UCInet Wired Access Croul Hall
+iface eth0 inet static
+	address 128.200.14.189
+	broadcast 128.200.14.255
+	gateway 128.200.14.1
+	netmask 255.255.255.0
+
+# To access HP4515 and HP4350 printers in ESS common rooms (192.168.14.2, ...)
+iface eth0:1 inet static
+      address 192.168.14.189
+      broadcast 192.168.14.255
+      netmask 255.255.255.0
+
+# Interface: wlan0 802.11a/b/g Broadband Wireless
+#iface wlan0 inet dhcp
+#      wireless-essid "UCInet Mobile Access"
+#      wireless-essid mangonet
+#      wireless-essid zendernet
+
+# This is a list of hotpluggable network interfaces.
+# They will be activated automatically by the hotplug subsystem.
+mapping hotplug
+	script grep
+	map eth0
+
+# Less Frequently used interface configurations:
+
+# Static IP on Harry's wired network
+#iface eth0 inet static
+#	address 192.168.1.76
+#	broadcast 192.168.1.255
+#	gateway 192.168.1.1
+#	netmask 255.255.255.0
+#	network 192.168.1.0
+
+# Static IP on Harry's wireless network
+iface wlan0 inet static
+	address 192.168.1.76
+	broadcast 192.168.1.255
+	gateway 192.168.1.1
+	netmask 255.255.255.0
+	network 192.168.1.0
+        wireless-essid mangonet
+
+# Static IP PSCSG local wireless area of RH
+#iface wlan0 inet static
+#	wireless-essid pscsg
+#	address 128.200.166.177
+#	broadcast 128.200.166.255
+#	gateway 128.200.166.1
+#	netmask 255.255.255.0
+#	network 128.200.166.0

@@ -1,0 +1,52 @@
+Time notation:
+
+Y = Year digit 
+M = Month digit (01..12)
+D = Day digit (01..31) 
+H = Hour digit  (00..23)
+M = Minute digit (00..59)
+S = Second digit (00..59)
+
+FD = Decimal fraction of a day
+FH = Decimal fraction of an hour
+FM = Decimal fraction of a minute
+FS = Decimal fraction of a second
+
+unix = UNIX time (non-leap seconds since 1970/01/01:00:00:00.00 GMT) 
+doy = Day of year (floating point 1..365)
+ydy = Day of year (integer 1..365)
+gmt = Greenwich Mean Time
+gtst = Greenwich True Solar Time
+tst = True Solar Time
+lmt = Local Mean Time (equal gmt with longitude correction)
+ltst = Local True Solar Time
+
+_yr = year
+_mth = month
+_day = day of month
+_sec = second
+_mnt = minute
+_int = integral, integer
+_dcm = decimal
+
+E.g.:
+1964 March 12 12:09:37.3333 PM
+
+HHMMSS_FS = 120937.3333
+YYYYMMDD = 19640312
+YYMMDD = 640312
+DDHHMM = 121209
+DOY_FD = 71.
+UNIX = 
+
+In terms of UNIX time functions, the above correspond to
+
+  gmt_tm=gmtime(&time_unix_time_t);
+
+  mth=gmt_tm->tm_mon+1;
+  day=gmt_tm->tm_mday;
+  doy=gmt_tm->tm_yday+1;
+  yr=gmt_tm->tm_year+1900;
+  hr=gmt_tm->tm_hour;
+  mnt=gmt_tm->tm_min;
+  sec=gmt_tm->tm_sec;

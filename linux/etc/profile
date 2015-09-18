@@ -1,0 +1,39 @@
+# /etc/profile
+
+# System wide environment and startup programs
+# Functions and aliases go in /etc/bashrc
+
+PATH="$PATH:/usr/X11R6/bin"
+PS1="[\u@\h \W]\\$ "
+
+# /etc/profile
+# Purpose: System wide environment and startup programs
+# Usage: sudo cp ~/linux/etc/profile /etc/profile
+# csz++ 20000324 limit core dump size causes errors on telnet logins:
+# "bash: ulimit: cannot modify limit: Operation not permitted"
+#ulimit -c 1000000
+# csz-- 20000324
+if [ `id -gn` = `id -un` -a `id -u` -gt 14 ]; then
+	umask 002
+else
+	umask 022
+fi
+
+USER=`id -un`
+LOGNAME=$USER
+MAIL="/var/spool/mail/$USER"
+
+HOSTNAME=`/bin/hostname`
+HISTSIZE=1000
+HISTFILESIZE=1000
+
+INPUTRC=/etc/inputrc
+export PATH PS1 USER LOGNAME MAIL HOSTNAME HISTSIZE HISTFILESIZE INPUTRC
+
+for i in /etc/profile.d/*.sh ; do
+	if [ -x $i ]; then
+		. $i
+	fi
+done
+
+unset i

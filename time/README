@@ -1,0 +1,32 @@
+-*-text-*-
+
+Last Update: 980904
+
+This directory, ${HOME}/time/README, contains data and programs 
+related to the computation of time (UNIX time, GMT time, local time),
+Sun-Earth geometry (including solar zenith angle).
+
+time.txt	Terminology and conventions in my programs	  
+time_gmt2unix.c Converts GMT to UNIX time (hardcoded)
+time_unix2gmt.c Converts UNIX to GMT time (accepts command line input) 
+time_diff.c	Computes difference (in s) between two dates.
+		Demonstrates use of mktime() and difftime()
+time_tst.c	Test conversions between GMT time and UNIX time
+		Demonstrates use of tzset(), timegm(), gmtime()
+slr_crd_wac.pro IDL routines to compute solar geometry from Bill
+		Collins  
+
+Joseph J. Michalsky sent me fortran programs for computing Sun-Earth
+geometry. His original program and my translation of it are in
+
+slr_crd_jjm.orig       Original file from JJM
+slr_crd_jjm.F	Driver program for JJM's method
+slr_crd_utl.F	Subroutines for JJM's method
+~/f/slr_crd_mdl.F Fortran90 version of slr_crd_utl.F
+
+NB: date_time.c in module c (${HOME}/c) implements C-subroutines
+which facilitate Fortran access to C date and time functions. 
+These functions are derived from and _nearly_ identical to the
+functions developed in the time directory programs. 
+It would be nice to use the exact same functions both here and in
+date_time(). 

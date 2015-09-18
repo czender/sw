@@ -1,0 +1,1538 @@
+% $Id$
+
+% Purpose: Summarize frequently used CVS commands
+
+% Copyright (c) 1998--2014, Charles S. Zender
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License (GFDL), Version 1.3
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+% GFDL: http://www.gnu.org/copyleft/fdl.html
+
+% The original author of this software, Charlie Zender, seeks to improve
+% it with your suggestions, contributions, bug-reports, and patches.
+% Charlie Zender <zender at uci dot edu>
+% Department of Earth System Science
+% University of California, Irvine
+% Irvine, CA 92697-3100
+
+% Usage: 
+% cd ${HOME}/crr;make -W cvs.tex cvs.txt cvs.dvi cvs.ps cvs.pdf;cd -
+% scp ${HOME}/crr/cvs.tex ${HOME}/crr/cvs.txt ${DATA}/ps/cvs.ps ${DATA}/ps/cvs.pdf ${HOME}/crr/cvs.dvi dust.ess.uci.edu:/var/www/html/doc/cvs
+
+% # NB: latex2html chokes on cvs.tex
+% latex2html -dir /var/www/html/doc/cvs cvs.tex
+% # NB: tth works well on cvs.tex
+% cd ${HOME}/crr;tth -a -Lcvs -p${TEXINPUTS} < cvs.tex > cvs.html
+% scp cvs.html dust.ess.uci.edu:/var/www/html/doc/cvs
+% # NB: tex4ht works well on cvs.tex
+% cd ${HOME}/crr;htlatex cvs.tex
+% scp cvs*.css cvs*.html dust.ess.uci.edu:/var/www/html/doc/cvs
+% # NB: tex4moz works well on cvs.tex
+% cd ${HOME}/crr;/usr/share/tex4ht/mzlatex cvs.tex
+% scp cvs*.css cvs*.html cvs*.xml dust.ess.uci.edu:/var/www/html/doc/cvs
+
+\documentclass[12pt,twoside]{article}
+
+% Standard packages
+\usepackage{ifpdf} % Define \ifpdf
+\ifpdf % PDFLaTeX
+\usepackage[pdftex]{graphicx} % Defines \includegraphics*
+\pdfcompresslevel=9
+\usepackage{thumbpdf} % Generate thumbnails
+\usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
+\else % !PDFLaTeX
+\usepackage{graphicx} % Defines \includegraphics*
+\fi % !PDFLaTeX
+\usepackage{array} % Table and array extensions, e.g., column formatting
+\usepackage{lscape} % Landscape environment
+\usepackage{makeidx} % Index keyword processor: \printindex and \see
+\usepackage{natbib} % \cite commands from aguplus
+\usepackage{times} % Postscript Times-Roman font KoD99 p. 375
+\usepackage{url} % Typeset URLs and e-mail addresses
+
+% hyperref is last package since it redefines other packages' commands
+% hyperref options, assumed true unless =false is specified:
+% backref       List citing sections after bibliography entries
+% baseurl       Make all URLs in document relative to this
+% bookmarksopen Unknown
+% breaklinks    Wrap links onto newlines
+% colorlinks    Use colored text for links, not boxes
+% hyperindex    Link index to text
+% plainpages=false Suppress warnings caused by duplicate page numbers
+% pdftex        Conform to pdftex conventions
+% Colors used when colorlinks=true:
+% linkcolor     Color for normal internal links
+% anchorcolor   Color for anchor text
+% citecolor     Color for bibliographic citations in text
+% filecolor     Color for URLs which open local files
+% menucolor     Color for Acrobat menu items
+% pagecolor     Color for links to other pages
+% urlcolor      Color for linked URLs
+\ifpdf % PDFLaTeX
+\usepackage[backref,breaklinks,colorlinks,citecolor=blue,linkcolor=blue,urlcolor=blue,hyperindex,plainpages=false,pdftex]{hyperref} % Hyper-references
+\pdfcompresslevel=9
+\else % !PDFLaTeX
+\usepackage[backref=false,breaklinks,colorlinks=false,hyperindex,plainpages=false]{hyperref} % Hyper-references
+\fi % !PDFLaTeX
+
+% Personal packages
+\usepackage{csz} % Library of personal definitions
+\usepackage{jrn_agu} % AGU-sanctioned journal title abbreviations
+
+% Commands which must be executed in preamble
+\makeindex % Index described on KoD95 p. 220
+
+% Commands specific to this file
+\newcommand{\CVScolon}{:}
+
+% Margins
+\topmargin -24pt \headheight 12pt \headsep 12pt
+\textheight 9in \textwidth 6.5in
+\oddsidemargin 0in \evensidemargin 0in
+\marginparwidth 0pt \marginparsep 0pt
+\footskip 24pt
+\footnotesep=0pt
+
+\setcounter{secnumdepth}{6}
+
+\begin{document}
+
+\begin{center}
+Online version: \url{http://dust.ess.uci.edu/doc/cvs} \hfill \today\\
+\bigskip
+\bigskip
+{\Large \textbf{CVS Cheat Sheet}}\\
+\bigskip
+by Charlie Zender\\
+University of California, Irvine\\
+\end{center}
+Department of Earth System Science \hfill zender@uci.edu\\
+University of California \hfill Voice: (949)\thinspace 891-2429\\
+Irvine, CA~~92697-3100 \hfill Fax: (949)\thinspace 824-3256
+
+\pagenumbering{roman}
+\setcounter{page}{1}
+\pagestyle{headings}
+\thispagestyle{empty}
+%\onecolumn
+\tableofcontents
+\pagenumbering{arabic}
+\setcounter{page}{1}
+%\markleft{CVS Cheat Sheet}
+%\markright{}
+\thispagestyle{empty}
+
+\section{Software Configuration Management}
+The process of orderly tracking, versioning, and serving, and
+administration of project source code is called
+\trmdfn{Software Configuration Management} (\trmdfn{SCM}).
+This document describes two different software tools which aid in SCM:
+\href{http://www.cvshome.org}{\trmidx{Concurrent Versioning System}}
+(\trmidx{CVS}) and 
+\href{http://subversion.tigris.org}{\trmidx{Subversion}} (\trmidx{SVN}).
+These tools are intimately related since SVN is designed by some of
+the original authors of CVS to replace CVS.
+Currently, all of Section~\ref{sxn:cvs} (99\% of this document)
+is devoted to CVS, while the newer portions, Section~\ref{sxn:svn},
+is devoted to SVN.
+
+\section{CVS}\label{sxn:cvs}
+
+Section~\ref{sxn:cvs_gnr} presents the generic CVS commands.
+The commands proceed in order of increasing complexity. 
+After that, there are working examples from a number of specific
+modules.  
+
+\subsection{CVS Preliminaries}\label{sxn:cvs_prl}
+
+\subsubsection{Abbreviations}
+The following abbreviations are used:
+\trmidx{CWD} means the working copy of the CVS module in and beneath
+the \trmidx{Current Working Directory}; \cmdidx{mdl} = module name;
+\cmdidx{fl} = file name; \cmdidx{brnch} = branch tag; 
+\cmdidx{vrs} = version name (which can be a branch tag).
+
+\subsubsection{CVS Keywords}
+Only ``\texttt{cvs commit}'', ``\texttt{cvs tag}'', and ``\texttt{cvs
+rtag}'' change the repository. All other CVS commands change, if
+anything, the contents of the CWD only, and so are recoverable. 
+CVS commands should be executed from the top level of the CWD.
+In this case, the module name \cmdprn{mdl} may be optional at the
+end of the command (because CVS finds the module name by looking in
+the ``CVS'' subdirectory \verb'mdl/CVS'). 
+Executing CVS commands from one level above the module requires
+specification of the module name so that CVS knows where to find
+\verb'mdl/CVS'. 
+
+In addition to the usual RCS keywords (\texttt{Header}, \texttt{Date},
+\ldots), CVS defines the keyword \texttt{Name}.  
+The string ``\texttt{\$Name\$}'' expands to include the tag specified 
+when the module was checked out, e.g., ``\texttt{cvs co -r ccm3\_5\_22
+ccm}'' produces ``\texttt{\$Name\CVScolon ccm3\_5\_22 \$}'' but
+``\texttt{cvs co ccm}'' produces ``\texttt{\$Name\CVScolon \$}'' for
+two reasons. 
+First, no tag was specified with the checkout so the default
+\verb'ccm' module, i.e., the main trunk, is retrieved.
+The main trunk has no default tag name, so the keyword value is an
+empty string. 
+Second, checking out the main trunk never expands
+``\texttt{\$Name\$}'', but checking out a branch, any branch, does.
+Branch tags are sticky, so a branch always has an associated tag
+name. 
+The rest of the RCS keywords expand to their usual meanings regardless
+of whether the module is a tagged version or branch.
+To explicitly turn off CVS keyword expansion when checking out a
+module (recommended to avoid unnecessary conflicts due to CVS metadata
+changes), use  the ``\texttt{-kk}'' option instead of the default,
+``\texttt{-kkv}''.   
+The \verb'-k' options are \textit{sticky}, meaning they apply to any
+derived files as well.
+
+\subsubsection{CVS Errors}
+Occasionally CVS does not perform as expected.
+Two errors are particularly frequent, and easy to fix.
+The first is that, when asked to commit files to the repository, CVS
+complains that some subset of the files is out-of-date, and asks you
+to fix this before it proceeds. 
+This is, in fact, not an error, but very helpful behavior by CVS
+telling you that somehow your working directory is out of date with
+respect to the repository. 
+Some versions of CVS will commit those files that are modified but not
+commit those that are out of date.
+Other versions of CVS will not commit any file until all files in the
+CWD are current.
+In this case, simply perform a ``\texttt{cvs update}'' before
+attempting to ``\texttt{cvs commit}'' again.
+This should solve the problem.
+
+The second error occurs when CVS attempts to modify the repository,
+e.g., during a ``\texttt{cvs commit}'' operation, and it complains
+that it has never heard of any of the files, e.g., ``\texttt{cvsbin
+commit: nothing known about `to'}''. 
+If this occurs on the CGD Sun network, it might be because you have
+used simply \verb'cvs' rather than \verb'cvsbin' as the CVS command.
+Check this and try your command again.
+
+\subsubsection{CVS Debugging}
+When attempting to solve problems with CVS, try using the
+``\texttt{-t}'' switch so CVS will trace its execution.
+
+\subsubsection{CVS Environment Variables}
+CVS makes use of several \trmidx{environment variables}.
+\begin{verbatim}
+export CVS_RSH='ssh'    # Needed for ssh access to NCAR CGD CVS
+export CVSROOT=':ext:dust.ess.uci.edu:/data/home/${USER}/cvs'
+export CVSUMASK='002'   # Default file permissions for CVS
+\end{verbatim}
+
+\subsubsection{CVS Administration}
+In order to execute the \cmdidx{cvs admin} command, the user must be a
+member of the \flprn{cvsadmin} group, if it exists.
+\begin{verbatim}
+cvs admin -oREV::
+cvs admin -mREV:MSG Replace the log message of revision REV with MSG.
+\end{verbatim}
+
+It took five years since I began using CVS in 1998 before I needed to
+learn how to use CVS administrative commands to repair repositories.
+On July~30, 2003 the laptop I was using ran out of power and somehow
+wrote binary garbage into every file that \cmdidx{emacs} was
+visiting. 
+I only lost a few hours of work, and it seemed like time to backup 
+everything I was working on.
+That made things a little worse because I incidentally committed the
+binary garbage to CVS. 
+How did I remove the binary garbage from the repository?
+\begin{verbatim}
+# Replace corrupt file with latest working backup
+cvs update -r 1.65 -p pnp.tex > pnp.tex
+# Delete garbage file from repository
+cvs admin -o 1.65:1.67 pnp.tex # Method 1: Collapse everything between 
+cvs admin -o 1.66 pnp.tex # Method 2: Delete a specific version
+# Delete garbage file from repository
+cvs update -r 1.53 -p prp_mri.tex > prp_mri.tex
+cvs admin -o 1.54 prp_mri.tex
+\end{verbatim}
+
+\subsubsection{Repository Relocation}\label{sxn:rlc}
+Occassionally a CVS repository moves and one must adjust the
+ repository location in all modules that were checked out from that
+ repository. 
+One method of doing this is simply deleting the old modules and then
+ checking them out from the new location.
+This works fine unless the module is not synchronized with the
+ repository, i.e., if there is new work that has not been checked in. 
+In this case it may be wiser to edit the repository location in the 
+checked out modules, rather than re-checking out the modules.
+\begin{verbatim}
+# Modules in repository on esmf.ess.uci.edu 
+mdl_lst='aca aeroce aeronet afgl anl anv arese avhrr c caco3 ccm ck cld clm crr
+dmr dot dst elisp erbe ess ess_acc ess_atm ess_bnd ess_ccc ess_lsp
+ess_phz ess_prc ess_rdn facts frc fsf grd hdf hire idea idl idx_rfr
+igbp igpp improve ipcc job jrn linux lsm ltr map match mk
+mny ncep ncl perl phd poetry pr prp rt rvw sdn slr_spc specfun tex
+time toms uci www' 
+mdl_lst='bxm c++ esmf f mie mie_ww ppr_BiZ03 ppr_BiZ04 ppr_FlZ05
+ppr_GrZ04 ppr_ZMT04 ppr_ZeK05 ppr_ZeT06b ppr_ZeT06 prp_gtcp
+prp_itr sltsbl'
+mdl_lst='nco'
+for mdl in ${mdl_lst} ; do
+  cd ${HOME}/${mdl}
+  printf "Updating module ${mdl}...\n"
+  for fl in `find . -name Root -print` ; do
+    printf "Updating Root name in ${fl}...\n"
+#   echo 'zender@goldhill.cgd.ucar.edu:/home/zender/cvs' > ${fl}
+#   echo 'zender@nco.cvs.sf.net:/cvsroot/nco' > ${fl}
+#   echo 'zender@esmf.ess.uci.edu:/u/zender/cvs' > ${fl}
+    echo ':ext:zender@nco.cvs.sf.net:/cvsroot/nco' > ${fl}
+  done # end loop over fl
+done # end loop over mdl
+for mdl in ${mdl_lst} ; do
+  cd ${HOME}/${mdl}
+  printf "Updating module ${mdl}...\n"
+  for fl in `find . -name Repository -print` ; do
+    printf "Updating Repository name in ${fl}...\n"
+    echo ${mdl} > ${fl}
+  done # end loop over fl
+done # end loop over mdl
+
+# Modules in repository on goldhill.cgd.ucar.edu
+aer -> /home/zender/match_dst/dst
+cam2_0_2_dev41_brnchT_dust2
+cam_dev
+ccm_dst
+ccsm2
+ccsm2_2_beta08
+clm2_deva_52
+clm_dev
+crm
+match_dst
+
+# Modules in repository on dust.ess.uci.edu
+bxm
+c++
+esmf
+f
+mie
+mie_ww
+ppr_BiZ03
+ppr_BiZ04
+ppr_FlZ05
+ppr_GrZ04
+ppr_ZMT04
+ppr_ZeK05
+ppr_ZeT06b
+ppr_ZeT06
+prp_gtcp
+prp_itr
+sltsbl
+
+# Modules in repository on sf.net
+nco
+\end{verbatim}
+
+\subsection{Modules}\label{sxn:cvs_mdl}
+To create a CVS repository, use
+\begin{verbatim}
+cvs -d ${HOME}/cvs init
+\end{verbatim}
+The following subsections present specific examples for both generic
+and CGD-related modules. 
+Many of the same examples are used for different modules, so that the
+examples might differ only in the name of the target module, and
+sometimes not at all (e.g., ``\texttt{cvs co}'').
+The goal has been to keep the examples self-contained for each
+module, at the expense of document length and redundancy. 
+The examples are drawn from modules in active use in CGD.
+Table~\ref{tbl:rps}\ summarizes the three repositories used in the
+examples. 
+\begin{landscape}
+\begin{table}
+\begin{center}
+\begin{tabular}{l l >{\ttfamily}l<{} >{\ttfamily}l<{}}
+\hline \rule{0.0ex}{\hlntblhdrskp}% 
+Software & Machine & Repository Location & Module(s) \\[0.0ex]
+\hline
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\cxx, mie\footnote{\texttt{cvs -d :ext:dust.ess.uci.edu:/home/zender/cvs co -kk mie}} & \mchidx{dust.ess.uci.edu} & /home/zender/cvs & c++ mie \\[0.5ex]
+NCO & \mchidx{cvs.nco.sourceforge.net} & /cvsroot/nco & nco \\[0.5ex]
+CCM, CCM-Dust, CRM & \mchidx{goldhill.cgd.ucar.edu} & /fs/cgd/csm/models/CVS.REPOS & ccm ccm\_dst crm \\[0.5ex]
+MATCH, MATCH-Dust & \mchidx{goldhill.cgd.ucar.edu} & /fs/cgd/csm/people/eaton/CVS & match match\_dst dst \\[0.5ex]
+CAM & \mchidx{goldhill.cgd.ucar.edu} & /fs/cgd/csm/models/CVS.REPOS & cam2\_0\_2\_dev41\_brnchT\_dust2 \\[0.5ex]
+\hline
+\end{tabular}
+\caption{CVS Repositories Used in Examples\label{tbl:rps}}   
+\end{center}
+\end{table}
+\end{landscape}
+Most of the examples do not explicitly specify the repository (with
+the \verb'-d' argument).
+This is because most commands are executed within, rather than above,
+the CWD.
+Table~\ref{tbl:rps}\  should be consulted when the repository to use
+is in doubt. 
+
+\subsection{CVS Server Issues}\label{sxn:cvs_srv}
+A precise discussion of setting up a CVS server is given at
+\url{http://www.korayguclu.de/index.php?&file=linux.cvs.pserver.xml}.
+The CVS documentation describes the necessary modifications to the
+internet \trmidx{daemon} configuration file \flidx{/etc/inetd.conf}.
+\trmidx{RedHat Linux} uses a more powerful and complex
+(some call this sophisticated) daemon, \cmdidx{xinetd} (pronounced 
+``zy-net-d''), configured in \flidx{/etc/xinetd.conf}.
+On RedHat systems, CVS password server services are controlled by a
+file called \flidx{cvspserver} located in \flidx{/etc/xinetd.Dachau's}.
+\begin{verbatim}
+# Others
+sudo scp ~/linux/etc/inetd.conf.dust /etc/inetd.conf
+# RedHat
+sudo scp ~/linux/etc/xinetd.d/cvspserver /etc/xinetd.d
+sudo /etc/rc.d/init.d/xinetd restart
+\end{verbatim}
+The CVS documentation specifies how to configure the \cmdidx{port
+  number} (2401), \cmdidx{socket\_type}, and \cmdidx{server\_args}
+  flags.
+Internet daemon services (i.e., \cmdprn{inetd} or \cmdprn{xinetd})
+should be started automatically, in, say, system \trmidx{runlevel}~3. 
+
+\subsubsection[Read-only Access]{Read-only Access}\label{sxn:cvs_read}
+Place the \flidx{readers}, \flidx{writers}, and \flidx{passwd} file
+in the directory \flprn{${CVSROOT}/CVSROOT}.
+\begin{verbatim}
+cd ${HOME}/cvs/CVSROOT
+chmod 644 readers writers
+chmod 444 readers writers
+% cat > readers
+sci_prg
+jtalaman
+mflanner
+% cat > writers
+zender
+mflanner
+% cat > passwd
+sci_prg::cvspub
+esmf::cvspub
+\end{verbatim}
+Add user \flidx{cvspub} to the system.
+Do not give the user a home directory or interactive access.
+
+Once read-only services work, outside users may check out 
+modules by logging in as the \trmidx{anonymous user}.
+\begin{verbatim}
+cvs -d :pserver:sci_prg@dust.ess.uci.edu:/home/zender/cvs login
+cvs -d :pserver:sci_prg@dust.ess.uci.edu:/home/zender/cvs co -kk c++
+\end{verbatim}
+
+\subsection{Generic Modules}\label{sxn:cvs_gnr}
+
+\subsubsection[Import]{Import an existing directory}\label{sxn:cvs_mpr}
+Import files in directory \verb'mdl' to create new CVS module
+\verb'mdl'.    
+The keywords ``zender'' (vendor tag) and ``mdl-0\_1'' (release tag)
+are used for initial module tags. 
+\begin{verbatim}
+cd mdl
+cvs import -m "Imported sources" mdl zender mdl-0_1
+cvs -d :ext:dust.ess.uci.edu:/home/zender/cvs import -m "Imported sources" mdl zender mdl-0_1
+cd ..
+mv mdl mdl.bck
+cvs co -kk mdl
+ls -R mdl
+/bin/rm -r mdl.bck
+\end{verbatim}
+
+\subsubsection[Import RCS]{Import RCS files}
+Edit the CVS repository to create the appropriate source directories. 
+Make sure all RCS files are unlocked, then copy them into the CVS
+repository. 
+\begin{verbatim}
+cd mdl/RCS
+rcs -u *
+mkdir ${CVSROOT}/mdl
+cp .*,v *,v ${CVSROOT}/mdl
+cd ../..
+mv mdl mdl.bck
+cvs co mdl
+ls -R mdl
+/bin/rm -r mdl.bck
+\end{verbatim}
+
+\subsubsection[Checkout]{Checkout}
+Checkout module \verb'mdl'. A \verb'-d' argument before the
+verb specifies the CVS repository to use (instead of
+\texttt{\$CVSROOT}). %$ NB: Placed here to satisfy Emacs Highlighting regex. 
+By default, a module \verb'mdl' is placed in the \verb'mdl' directory
+of the CWD. 
+A \verb'-d' argument after the verb specifies an arbitrary directory
+for the module.
+The \verb'-kk' option suppresses RCS keyword expansion (e.g., of
+``\texttt{\$Header\CVScolon: \$}''), thereby minimizing the number of
+conflicts during a future \texttt{cvs update}. 
+Note that \verb'co' is a synonym for \verb'checkout'---the two are
+interchangeable. 
+\begin{verbatim}
+cvs co mdl     # Expands keywords
+cvs co -kk mdl # Does not expand keywords. Use prior to cvs update.
+cvs checkout -d drc mdl
+cvs -d /fs/cgd/csm/models/CVS.REPOS co mdl
+cvs -d /fs/cgd/csm/models/CVS.REPOS co -d drc mdl
+\end{verbatim}
+
+\subsubsection[Add]{Add}
+Schedule file \verb'fl' for addition to the repository.  
+Actual addition takes effect with the next ``\texttt{cvs commit}''
+command.\\  
+\verb'cvs add fl'
+
+\subsubsection[Remove]{Remove}
+Schedule file \verb'fl' for removal from the repository.  
+Actual removal takes effect with the next ``\texttt{cvs commit}''
+command.\\ 
+\verb'cvs remove fl'
+
+\subsubsection[Query]{Query}
+Show changes of CWD relative to repository. 
+Option \verb'-n' specifies that no changes to the repository will
+occur.\\  
+\verb'cvs -n update'
+
+\subsubsection[Diff]{Diff}
+Show changes relative to particular versions, tags, or times.
+\begin{verbatim}
+cvs diff -kk main.c
+cvs diff -r ccm3_6 -kk main.c
+cvs diff -r 1.1 -kk main.c
+cvs diff -D "last week" -kk main.c
+cvs diff -D "4 days ago" -kk main.c
+cvs diff -D "3/12/98" -kk main.c
+\end{verbatim}
+Revert repository to state it was in 24~hours before.
+Use \verb'-p' switch to overwrite version in current directory.
+This prevents CVS from applying sticky flag to new versions.
+\begin{verbatim}
+cvs update -D "24 hours ago" -p ncap.h > ncap.h
+cvs update -D "24 hours ago" -p ncap_lex.l > ncap_lex.l
+cvs update -D "24 hours ago" -p ncap_yacc.y > ncap_yacc.y
+cvs update -D "24 hours ago" -p ncap_utl.c > ncap_utl.c
+\end{verbatim}
+Checkout a date-stamped version of a module:
+\begin{verbatim}
+cvs -z3 -d zender@nco.cvs.sf.net:/cvsroot/nco co -D 20050524 -d nco-20050524 nco
+\end{verbatim}
+Compare module files from two different dates:
+\begin{verbatim}
+cvs diff -c --ignore-all-space -kk -D 20050519 -D 20050520 
+\end{verbatim}
+
+\subsubsection[Commit]{Commit}
+Commit changes beneath CWD. 
+The \verb'commit' verb accepts optional filename arguments for
+file-by-file (rather than entire module) commits.
+\begin{verbatim}
+cvs commit                # Invokes editor for log message
+cvs commit -m "fixed bug" # Uses "fixed bug" for log message
+cvs commit README         # Only commits README file
+\end{verbatim}
+
+\subsubsection[Tag]{Tag}
+Tag CWD with \verb'mdl-1_0'. 
+Option \verb'-c' causes \verb'tag' to verify that files beneath CWD
+are not modified relative to the repository. 
+This ensures the repository has all the information needed to exactly
+reproduce the CWD from the tag name in the future (with, e.g.,
+``\texttt{cvs co -r mdl1\_0 mdl}''.
+\begin{verbatim}
+cvs tag -c mdl-1_0     # From top-level of CWD
+cvs tag -c mdl-1_0 mdl # Above top-level of CWD
+\end{verbatim}
+
+\subsubsection[Rtag]{Rtag}
+``Repository'' tag (\verb'rtag') the module with \verb'tag_nm'.
+Verb \verb'rtag', as opposed to \verb'tag', operates on the
+repository, not the CWD.  
+Does this only tag those portions of the repository in and beneath the
+CWD? (fxm).
+By default, \verb'rtag' tags the most recent version of the
+module. 
+This can be overridden with \verb'-D date' option.
+Use (\verb'rtag') with caution on branches, because it will update the
+main repository as well (fxm).\\
+\verb'cvs rtag tag_nm'
+
+\subsubsection[Release]{Release}
+Release module \verb'mdl' and delete its working
+directories. 
+CVS prompts the user whether to actually delete the directory:\\   
+\verb'cvs release -d mdl # From level above CWD' 
+
+\subsubsection[Update]{Update}
+Update the CWD for \verb'mdl' so that it reflects the latest 
+version of the repository. 
+One, and only one, \verb'-j' option, ``\texttt{-j vrs}'', updates
+the CWD of \verb'mdl' to the latest revision of the \textit{ancestor}
+of \verb'vrs'.  
+The ancestor is the model from which the \verb'vrs' branch split.
+Given two \verb'-j' options, ``\texttt{-j vrs1 -j vrs2}'', 
+the \verb'update' command takes the differences (uses \verb'diff')
+between version \verb'vrs1' and version \verb'vrs2' and
+applies them (uses \verb'patch') to the CWD.
+The \verb'-kk' option suppresses RCS keyword expansion, thereby
+minimizing the number of conflicts during an update.
+For this reason, it is wise to use \texttt{cvs co -kk mdl}
+before using \texttt{cvs update}.
+\begin{verbatim}
+cvs update      # Update all files in module
+cvs update *    # Update currently checked-out files only
+cvs update mdl  # Above top-level of CWD
+cvs update -kk
+cvs update -kk -d # Add directories not in working copy
+cvs update -j vrs -kk
+cvs update -j vrs1 -j vrs2 -kk
+cvs update -kk -p params.h > foo        # Redirect file to stdout
+# Replace modified file with repository file
+cvs update -kk -p params.h > params.h   
+\end{verbatim}
+
+\subsection{C++ Module}\label{sxn:cvs_c++}
+The C++ module \verb'c++' was imported using ``\texttt{cvs import -m
+"Imported sources" c++ zender c++-1\_0}''. 
+
+\subsubsection[Checkout]{Checkout}
+Checkout the latest version of the C++ module. 
+\begin{verbatim}
+# From NCAR, from ~
+cvsbin co c++
+# From home, from ~
+cvs -d :pserver:zender@bearmtn.cgd.ucar.edu:/home/zender/cvs login
+cvs -d :pserver:zender@bearmtn.cgd.ucar.edu:/home/zender/cvs co -kk c++
+# From UCI, from ~
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/home/zender/cvs co -kk c++
+\end{verbatim}
+
+\subsubsection[Commit]{Commit}
+Commit C++ CWD to remote repository.
+One of the nicest feature about CVS is that it knows about remote
+repositories, so commands like \verb'commit' and \verb'update' need no
+extra arguments.
+\begin{verbatim}
+# Update CWD at home and continue working
+cvs update c++ # From home ~/
+# Commit CWD at home to repository at NCAR
+cvs commit c++ # From home ~/
+\end{verbatim}
+
+\subsection{NCO Module}\label{sxn:cvs_nco}
+
+The NCO module \verb'nco' was imported using ``\texttt{cvs import -m
+"Imported sources" nco zender nco-1\_0}''. 
+
+\subsubsection[Checkout]{Checkout}
+Checkout the latest version of the NCO module. 
+\begin{verbatim}
+# From home, from ~/nc
+cvs -d :pserver:zender@bearmtn.cgd.ucar.edu:/home/zender/cvs login
+cvs -d :pserver:zender@bearmtn.cgd.ucar.edu:/home/zender/cvs co nco
+\end{verbatim}
+
+\subsubsection[Update]{Update}
+Update a remote module (i.e., at home) to the current NCAR NCO
+repository. 
+\begin{verbatim}
+cvs status
+cvs -n update
+cvs update      # Update all files in module
+cvs update *    # Update currently checked-out files only
+\end{verbatim}
+
+\subsection{CRM Module}\label{sxn:cvs_ccm_crm}
+
+The CRM module \verb'crm' was created as a branch of CCM version
+3.5.22.
+First, we defined module \verb'crm' by editing the
+\verb'/fs/cgd/csm/models/CVS.REPOS/CVSROOT/modules' file to contain
+the following lines: 
+\begin{verbatim}
+...
+# CCM Column models
+crm atm/ccm_crm &ccm_crm_src
+ccm_crm_src -d src atm/ccm_crm_src &eul &physics &ccmlsm_share &dom &csm_share &
+srchutil &control
+...
+\end{verbatim}
+Finally, we executed the following commands to create the CRM branch
+of the CCM:
+\begin{verbatim}
+cvs co -r ccm3_5_22 crm
+cd src/crm
+cvs tag -b ccm_brnch_crm 
+cd src/control
+cvs tag -b ccm_brnch_crm [list of files in control needed by CRM]
+cd src/physics
+cvs tag -b ccm_brnch_crm [list of files in physics needed by CRM]
+...
+\end{verbatim}
+Note that we used \verb'tag' rather than \verb'rtag' in the above
+because only \verb'tag' allows one to tag a specified subset of the
+files in a given module.
+In this case, the desired subset was the CCM files which are also
+required by the CRM, but no others (this excluded superfluous files,
+e.g., \verb'vdiff.F').
+All work on the CRM module is actually performed on this
+\verb'ccm_brnch_crm' branch of the CRM, rather than the CRM main trunk
+This methodology, i.e., working on the branch rather than the main
+trunk, is also used for the Dust module component of CCM, MATCH, and
+MOZART described in Sections~\ref{sxn:cvs_ccm_dst}, \ref{sxn:cvs_match_dst},
+and \ref{sxn:cvs_mozart_dst} respectively.  
+
+\subsubsection[Create Distribution]{Create Distribution}
+Release a new CRM.
+This process uses many CVS commands.
+First, make sure the \verb'crm' module in the repository is
+up-to-date, so that the CWD can be exactly reproduced.
+Second, release the module. 
+Third, check out the CRM with the \verb'-kk' option. 
+Fourth, difference the CWD with the most recent branch tag.
+This difference file shows the differences between the releases.
+Do these differences make sense?
+Fifth, tag the module.
+Sixth, execute the distribution script.
+\begin{verbatim}
+cd ..                   # Move above top-level of CWD
+cvs commit crm          # Above top-level of CWD
+cvs release -d crm      # Above top-level of CWD
+cvs -d /fs/cgd/csm/models/CVS.REPOS co -r ccm_brnch_crm -kk crm
+cvs diff -kk -r ccm3_6 crm > pre.diff
+cvs tag -c ccm3_6_brnchT_crm2_0 crm
+crm_dst.pl --dbg=1 ccm3_6_brnchT_crm2_0
+\end{verbatim}
+
+\subsubsection[Update]{Update to newer CCM version}
+Update the CWD to a newer CCM version.
+This process uses many CVS commands.
+First, checkout a clean copy of the CRM branch into the CWD.
+Second, difference the pre-merged CRM from its current CCM base.
+This difference file shows all the CRM-specific modifications to the
+current CCM base code.
+Third, update the CWD to the desired CCM version.
+Given two \verb'-j' options, (``\texttt{-j ccm3\_5\_22 -j
+ccm3\_6\_0}''), the \verb'update' command takes the differences (uses
+\verb'diff') from CCM version \verb'ccm3_5_22' to CCM version
+\verb'ccm3_6_0' and applies them (uses \verb'patch') to the CWD.
+Fourth, examine and fix the conflicts caused by this merge.
+Use, e.g., ``\texttt{cvs status}'' to locate conflicts.
+Make sure to compile, test, and generate new *.out files for the
+updated model.
+This ensures that any new source files will be included in
+\verb'Srcfiles' and \verb'Depends'.
+Also, it is important to compile with
+``\texttt{-DSINGLE\_SOURCE\_FILE}'' option.
+This verifies that any new files merged into, and needed by, the CRM
+are accounted for.
+Unfortunately, there is no simple way to ensure that superfluous
+source files have not crept into the CRM.
+Fifth, difference the post-merged CRM from the new CCM base.
+This difference file shows all the CRM-specific modifications to the
+new CCM base code.
+Sixth, difference the two difference files.
+This file highlights conflicts caused by the merge process and,
+hopefully, any mistakes CVS made in performing the update.
+Seventh, commit the updated code to the head of the branch.
+Eighth, if desired, tag the branch as a new release of CRM.
+\begin{verbatim}
+# Above top-level of CWD
+cvs -d /fs/cgd/csm/models/CVS.REPOS co -r ccm_brnch_crm -kk crm
+cvs diff -kk -r ccm3_5_22 crm > pre.diff
+cvs update -j ccm3_5_22 -j ccm3_6 crm
+cvs status crm | grep -i conflict
+cvs diff -kk -r ccm3_6 crm > post.diff
+diff pre.diff post.diff > diff.diff
+cvs commit crm
+cvs tag -c ccm3_6_brnchT_crm2_0 crm
+\end{verbatim}
+
+\subsubsection[Checkout]{Checkout}
+Checkout the latest version of the CRM. 
+By default, the \verb'crm' module is placed in the \verb'crm'
+directory of the CWD. 
+A \verb'-d' argument after the verb specifies an arbitrary
+directory.
+\begin{verbatim}
+cvs co -r ccm_brnch_crm -kk crm
+cvs -d /fs/cgd/csm/models/CVS.REPOS co -r ccm_brnch_crm -kk crm
+cvs -d /fs/cgd/csm/models/CVS.REPOS co -r ccm_brnch_crm -d drc crm
+cvs -d :pserver:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/models/CVS.REPOS \
+co -r ccm_brnch_crm -kk crm
+\end{verbatim}
+% cvs -d :pserver:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/models/CVS.REPOS co -r ccm_brnch_crm -kk crm
+% From UCI
+% cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/models/CVS.REPOS co -r ccm_brnch_crm -kk crm
+
+\subsubsection[Export]{Export}
+Export the latest version of the module \verb'crm' from CCM
+branch \verb'ccm_brnch_crm' into directory
+\verb'/data/zender/crm-1.1' and prepare a compressed tarfile
+distribution.  
+The \verb'export' command strips all the CVS directories from the
+output.  
+This is most useful for creating distributions for public release. 
+Using \verb'-kkv' instead of \verb'-kv' would expand CVS keywords into
+keywords plus values. 
+\begin{verbatim}
+/bin/rm -r -f /data/zender/crm-1.1
+cvs export -kv -r ccm_brnch_crm -d /data/zender/crm-1.1 crm
+cd /data/zender; gtar -cvzf crm-1.1.tar.gz ./crm-1.1
+\end{verbatim}
+
+\subsubsection[Tag]{Tag}
+Tag CWD with \verb'ccm3_6_brnchT_crm2_0'. 
+Option \verb'-c' causes \verb'tag' to verify that files beneath CWD
+are not modified relative to the repository. 
+This ensures the repository has all the information needed to exactly 
+reproduce the CWD from the tag name in the future. 
+Note it is wise to tag only modules which have been checked out  
+with the \verb'-kk' option.
+This prevents large numbers of trivial differences between tagged
+versions.\\  
+\verb'cvs tag -c ccm3_6_brnchT_crm2_0'
+
+\subsubsection[Remote Checkout]{Remote Checkout}
+Checkout the latest version of the CRM from home. 
+The first \verb'-d' option specifies the remote repository.
+The second \verb'-d' option specifies the name of the directory to place the
+module in.
+The final argument, \verb'crm', is the name of the module to checkout.
+For unknown reasons this command erroneously places the src directories one
+level too high in most cases.
+This is apparently a CVS bug fixed in later versions of CVS.
+\begin{verbatim}
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/models/CVS.REPOS \
+co -r ccm_brnch_crm -N -d crm crm
+\end{verbatim}
+Here is a workaround for the above problem:
+\begin{verbatim}
+mv ccmlsm_share dom physics srchutil control csm_share eul src
+mv src crm
+\end{verbatim}
+
+\subsection{CCM-Dust Module}\label{sxn:cvs_ccm_dst}
+The module \verb'ccm_dst' comprises the sub-modules \verb'ccm' and
+\verb'dst'. 
+Thus \verb'ccm_dst' is the complete CCM with the dust modifications. 
+Code modifications related to dust appear in the usual files in
+\verb'src' (e.g., file \verb'physics/aphys.F'). 
+Most of the dust physics are isolated in the new directory
+\verb'src/dust'.  
+The branch \verb'ccm_brnch_dst' was created as a branch of CCM version
+3.5.22.
+First, we defined module \verb'ccm_dst' by editing the
+\verb'/fs/cgd/csm/models/CVS.REPOS/CVSROOT/modules' file to contain
+the following lines: 
+\begin{verbatim}
+...
+# Atmospheric models
+ccm             atm/ccm &ccm_src &ccm_tools
+ccm_dst         atm/ccm &ccm_dust_src &ccm_tools
+...
+#  Sub-modules to ccm
+ccm_src -d src atm/ccm_src &dynamics &physics &control &spmd &dom &som \
+                &lsm &ccmlsm_share &csm_share &mathutil &srchutil
+ccm_dust_src -d src atm/ccm_src &dst &dynamics &physics &control &spmd &dom &som \
+                &lsm &ccmlsm_share &csm_share &mathutil &srchutil
+...
+physics         atm/ccm_src_dirs/physics
+dst             atm/ccm_src_dirs/dust
+...
+\end{verbatim}
+Finally, we executed the following commands to create the Dust branch
+of the CCM:
+\begin{verbatim}
+cvs co ccm_dst
+cd ccm_dst
+cvs tag -b ccm_brnch_dst
+\end{verbatim}
+
+\subsubsection[Checkout]{Checkout}
+Checkout the latest version of the CCM-Dust module. 
+A \verb'-d' argument after the verb specifies an arbitrary directory
+for the module.
+\begin{verbatim}
+cd /fs/cgd/data0/zender
+cvsbin -d /fs/cgd/csm/models/CVS.REPOS co -r ccm_brnch_dst -kk ccm_dst
+# From home, from ~/fsh/dst 
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/models/CVS.REPOS \
+co -r ccm_brnch_dst -kk ccm_dst
+cvs -d :pserver:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/models/CVS.REPOS \ 
+co -r ccm_brnch_dst -kk ccm_dst 
+# From UCI
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/models/CVS.REPOS co -r ccm_brnch_dst -kk ccm_dst 
+# CCM Box model only
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/models/CVS.REPOS co -r ccm_brnch_dst -kk -d aer dst
+# Standard CCM, from UCI
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/models/CVS.REPOS co -kk -d ccm_o2x ccm
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/models/CVS.REPOS co -r ccm3_10 -d ccm_o2x ccm
+# Source directory only 
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/models/CVS.REPOS co -r ccm3_10 -d src ccm_src
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/models/CVS.REPOS co -kk -d src ccm_src
+# Then when updating parent, use cvs update -l -kk for local update only
+# Marianna's dust CLM
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/models/CVS.REPOS co -r clm2_deva_52 -d clm2_deva_52 clm2
+# Natalie's dust CAM/CLM
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/models/CVS.REPOS co -r cam2_0_2_dev41_brnchT_dust2 -d cam2_0_2_dev41_brnchT_dust2 cam1
+# Head of CAM 
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/models/CVS.REPOS co -r cam_dev -d cam_dev cam1
+# SNICAR
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/models/CVS.REPOS rtag -b -r cam3_0_25 cam3_0_25_brnch_snicar cam1
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/models/CVS.REPOS co -kk -r cam3_0_25_brnch_snicar -d cam_snicar cam1
+\end{verbatim}
+% cvs -d :pserver:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/models/CVS.REPOS co -r ccm_brnch_dst -kk ccm_dst
+
+\subsubsection[Query]{Query}
+Show which files in CWD have changed relative to the most recent
+committed version in the Dust repository.
+Then show precisely what has changed for file \verb'dstmbl.F'.
+\begin{verbatim}
+cvs -nq update -kk
+\end{verbatim}
+The result of \verb'cvs -n update' is a list of files which differ
+from the repository. 
+Each file is prefixed by a code.
+The most common codes are \verb'C' (for conflicts), \verb'M'
+(local modifications newer than repository), and \verb'U' (local file
+needs updating).
+Conflicts 
+\begin{verbatim}
+/home/zender/f: cvs -n update
+cvsbin update: Updating .
+C Makefile
+M csz_f77.F
+U sng.F
+\end{verbatim}
+The precise differences relative to the repository are shown with
+\begin{verbatim}
+cvs diff -kk
+\end{verbatim}
+Show which files in CWD have changed relative to version
+\verb'mdl-1_0' in the CCM repository.
+Then show precisely what has changed for file \verb'Makefile'.
+\begin{verbatim}
+cvs -nq update -r mdl-1_0 -kk
+cvs diff -r mdl-1_0 -kk Makefile
+\end{verbatim}
+
+\subsubsection[Release]{Release}
+Release the current Dust module and check out a new working copy. 
+\begin{verbatim}
+# Above top-level of CWD
+cvs -d /fs/cgd/csm/models/CVS.REPOS release -d ccm_dst
+cvs -d /fs/cgd/csm/models/CVS.REPOS co -r ccm_brnch_dst -kk ccm_dst
+\end{verbatim}
+
+\subsubsection[Tag]{Tag}
+Note that tagging in the CCM repository invokes error checking modules
+and, by default, launches windows which request one line summaries
+on the local machine.
+Attempting to tag from behind a firewall or proxy can thus result in 
+failure because the windows are unable to open on the requested
+console.
+In this case, the tagging must be done from
+\flprn{goldhill.cgd.ucar.edu}, and the user's \cmdidx{DISPLAY} must be
+set to \verb'NONE'
+\begin{verbatim}
+export DISPLAY=NONE
+\end{verbatim}
+This problem does not arise when tagging from an unfiltered IP address.
+
+Tag CWD with \verb'ccm3_6_brnchT_dst1_2'. 
+Option \verb'-c' causes \verb'tag' to verify that files beneath CWD
+are not modified relative to the repository. 
+This ensures the repository has all the information needed to exactly
+reproduce the CWD from the tag name in the future.
+\begin{verbatim}
+cd ccm_dst              # Move to top-level of CWD
+cvs tag -c ccm3_6_brnchT_dst1_2
+\end{verbatim}
+
+\subsubsection[Update]{Update}
+Update the CWD to a newer CCM version.
+\begin{verbatim}
+# Above top-level of CWD
+cvs -d /fs/cgd/csm/models/CVS.REPOS co -r ccm_brnch_dst -kk ccm_dst
+cvs -d /fs/cgd/csm/models/CVS.REPOS diff -kk -r ccm3_5_22 ccm_dst > pre.diff
+cvs -d /fs/cgd/csm/models/CVS.REPOS update -j ccm3_5_22 -j ccm3_6 ccm_dst
+cvs -d /fs/cgd/csm/models/CVS.REPOS status ccm_dst | grep -i conflict
+cvs -d /fs/cgd/csm/models/CVS.REPOS diff -kk -r ccm3_6 ccm_dst > post.diff
+diff pre.diff post.diff > diff.diff
+cvs commit ccm_dst
+cvs tag -c ccm3_6_brnchT_dst1_0 ccm_dst
+\end{verbatim}
+
+\subsection{MATCH-Dust Module}\label{sxn:cvs_match_dst}
+The module \verb'match_dst' comprises the sub-modules \verb'match' and
+\verb'dst'. 
+Thus \verb'match_dst' is the complete MATCH with the dust modifications. 
+Code modifications related to dust appear in the usual files in
+\verb'src' (e.g., file \verb'physlic.F'). 
+Most of the dust physics are isolated in new files in the \verb'dst'
+directory, e.g., \verb'dstmbl.F'.
+The branch \verb'match_dst-0' was created as a branch of MATCH
+Spitfire version 3.2.9.
+First, we defined module \verb'match_dst' by editing the
+\verb'/fs/cgd/csm/people/eaton/CVS/CVSROOT/modules' file to contain
+the following lines: 
+\begin{verbatim}
+match           match
+matchSrc        -d src match/src
+matchReaders    -d readers match/readers
+...
+dst             dust
+match_dst       match &dst
+\end{verbatim}
+The \verb'dust' source directory in the MATCH repository is actually a
+symbolic link to the dust source in the CSM repository: 
+\begin{verbatim}
+cd /fs/cgd/csm/people/eaton/CVS
+ln -s /fs/cgd/csm/models/CVS.REPOS/atm/ccm_src_dirs/dust .
+\end{verbatim}
+Next, we added a MATCH tag to the CCM branch of the Dust module.
+\begin{verbatim}
+cvs -d /fs/cgd/csm/models/CVS.REPOS co -kk -r ccm_brnch_dst dst
+cd dst
+cvs tag -c MATCH_SPITFIRE-3_2_9
+\end{verbatim}
+This enabled us to check out both MATCH and Dust at the same time in
+preparation for the next step, creating the MATCH-Dust branch.
+Note that in order to apply MATCH tags to files in the CCM repository,
+we had to disconnect the CCM-Dust module from the default CCM tag
+syntax checking routines.
+Finally, we created and tagged the MATCH-Dust branch.
+\begin{verbatim}
+cvs -d /fs/cgd/csm/people/eaton/CVS rtag -b -r MATCH_SPITFIRE-3_2_9 \
+match_brnch_dst match_dst
+\end{verbatim}
+In the preceding command, \verb'MATCH_SPITFIRE-3_2_9' is the
+pre-existing tag associated with all files that were placed in the 
+new \verb'match_brnch_dst' branch of the \verb'match_dst' module.
+Originally, we left the \verb'MATCH_SPITFIRE-3_2_9' tag on the files
+in the \verb'dst' directory, but this caused problems when merging
+changes to the main trunk of the MATCH into MATCH-Dust.
+The tag caused CVS to think that the Dust-specific files were parts of
+\verb'MATCH_SPITFIRE-3_2_9', and thus CVS tried to remove them when
+updating to a later version on the main trunk.
+Thus, we later removed the \verb'MATCH_SPITFIRE-3_2_9' tag from all
+the files in the \verb'dst' directory.
+
+\subsubsection[Repository changes]{Changes to standard MATCH repository}
+Once these commands were completed, we slightly altered the
+architecture of the MATCH-Dust repository to facilitate CCM-style
+compiling methods (i.e., compile from list of directories rather than
+list of individual files plus directories).
+\verb'match_brnch_dst' was created from the MATCH 3.2 repository,
+and these commands were used to modify the standard MATCH repository:
+\begin{verbatim}
+# Routine to read CCM dynamics data conflicts with NCEP reader routine.
+# Store it in parallel, non-conflicting, directory:
+cd /fs/cgd/data0/zender/match_dst/readers
+mkdir ccm
+cvs add ccm
+cd ccm
+mv /fs/cgd/data0/zender/match_dst/src/dyninp.F .
+cvs remove /fs/cgd/data0/zender/match_dst/src/dyninp.F
+cvs add dyninp.F
+
+/bin/rm extoro.F setzen.F # Remove relics from Mark Lawrence
+cvs remove extoro.F setzen.F
+/bin/rm cloud_dum.F # Routines superceded by prognostic cloud water
+cvs remove cloud_dum.F
+
+cd ..
+cvs commit -m "Rearranged files to work with MATCH-Dust Makefile"
+\end{verbatim}
+To create a dust branch from the standard MATCH 4.X repository, the
+following changes to the standard directory structure would be
+required: 
+\begin{verbatim}
+# Routine to read CCM dynamics data conflicts with NCEP reader routine.
+# Store it in parallel, non-conflicting, directory:
+cd /fs/cgd/data0/zender/match_dst/readers
+mkdir ccm
+cvs add ccm
+cd ccm
+mv /fs/cgd/data0/zender/match_dst/src/dyninp.F .
+cvs remove /fs/cgd/data0/zender/match_dst/src/dyninp.F
+cvs add dyninp.F
+
+# Remove routines in libncaru.a and libmss.a on NCAR computers
+/bin/rm setzen.F # Remove relics from Mark Lawrence
+cvs remove setzen.F
+
+cd ..
+cvs commit -m "Rearranged files to work with MATCH-Dust Makefile"
+\end{verbatim}
+
+\subsubsection[Checkout]{Checkout}
+Checkout the latest version of the MATCH-Dust module. 
+A \verb'-d' argument after the verb specifies an arbitrary directory
+for the module.
+\begin{verbatim}
+# Get MATCH-Dust on Dataproc
+cd /fs/cgd/data0/zender
+cvs -d /fs/cgd/csm/people/eaton/CVS co -r match_brnch_dst -kk match_dst
+# Get MATCH-Dust in CGD
+cvs -d :pserver:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/people/eaton/CVS \
+co -r match_brnch_dst -kk match_dst 
+# Get MATCH-Dust at UCI
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/people/eaton/CVS co -r match_brnch_dst -kk match_dst 
+# Get Dust box model at UCI (i.e., checkout the dst directory, name it aer)
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/people/eaton/CVS co -r match_brnch_dst -kk -d aer dst
+# Get Assimilation model at UCI
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/people/eaton/CVS co -r match3_3_24_ind1_19 -kk -d ${HOME}/match_asm match
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/people/eaton/CVS co -r match3_3_24_ind1_19 -kk -d ${HOME}/match_asm/dst dst
+# Create Pat's branch
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/people/eaton/CVS rtag -b -r match-3_3_23-dst-0_9_8 match_brnch_dst_pjones match_dst
+# Checkout Pat's branch (``old'' model)
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/people/eaton/CVS co -r match_brnch_dst_pjones -kk -d match_dst_old match_dst 
+# Create Alf's sandblasting branch
+cvs tag -b -r match-4_0_beta2-dst-1_1_1 match_brnch_dst_sbl match_dst
+# Checkout Alf's sandblasting branch
+cvs -d :ext:zender@goldhill.cgd.ucar.edu:/fs/cgd/csm/people/eaton/CVS co -r match_brnch_dst_sbl -kk -d match_dst_sbl match_dst 
+# Get Dust box model from ESMF (i.e., model directory is named dead)
+cvs -d :ext:zender@esmf.ess.uci.edu:/u/zender/cvs co -kk -r match_brnch_dst dead
+\end{verbatim}
+
+\subsubsection[Tag]{Tag}
+Tag CWD with \verb'match-3_2_10-dst-1_3'.
+Option \verb'-c' causes \verb'tag' to verify that files beneath CWD
+are not modified relative to the repository. 
+This ensures the repository has all the information needed to exactly
+reproduce the CWD from the tag name in the future.
+Be sure this version compiles before tagging it.
+\begin{verbatim}
+cd match_dst            # Move to top-level of CWD
+cvs tag -c match-3_2_10-dst-1_3
+\end{verbatim}
+
+\subsubsection[Merge CCM into CCM-Dust]{Merge CCM changes into CCM-Dust}
+Merge changes to main CCM trunk into the CCM-Dust branch. 
+Merging main trunk changes into CCM-Dust should never change the
+\verb'dst' directory itself, but should alter the contents of
+\verb'src/physics', \verb'src/control', etc. 
+This example merges the changes from CCM version
+\verb'ccm3_6' to CCM version
+\verb'ccm3_6_6' into CCM-Dust version
+\verb'ccm3_6_brnchT_dst-0_9_6', which is then tagged as
+\verb'ccm3_6_6_brnchT_dst-0_9_6'. 
+\begin{verbatim}
+cd /fs/cgd/data0/zender/ccm_dst
+cvs diff -kk -r ccm3_6 > pre.diff
+cvs update -kk -j ccm3_6 -j ccm3_6_6
+cvs status | grep -i conflict
+cvs diff -kk -r ccm3_6_6 > post.diff
+diff pre.diff post.diff > diff.diff
+make ccm
+cvs commit 
+cvs tag -c ccm3_6_6_brnchT_dst-0_9_6
+\end{verbatim}
+
+\subsubsection[Merge MATCH into MATCH-Dust]{Merge MATCH changes into MATCH-Dust}
+Merge changes to main MATCH trunk into the MATCH-Dust branch. 
+Merging main trunk changes into MATCH-Dust should never change the
+\verb'dst' directory itself, but should alter the contents of
+\verb'src', \verb'readers', etc. 
+This example merges the changes from MATCH version
+\verb'match3_2_10_scyc1_0' to MATCH version
+\verb'match3_3_20' into MATCH-Dust version
+\verb'match-3_2_10-dst-1_4a', which is then tagged as
+\verb'match-3_3_20-dst-1_4a'. 
+\begin{verbatim}
+cd /fs/cgd/data0/zender/match_dst
+cvs diff -kk -r match3_2_10_scyc1_0 > pre.diff
+cvs update -kk -j match3_2_10_scyc1_0 -j match3_3_20
+cvs status | grep -i conflict
+cvs diff -kk -r match3_3_20 > post.diff
+diff pre.diff post.diff > diff.diff
+make match
+cvs commit 
+cvs tag -c match-3_3_20-dst-1_4a
+\end{verbatim}
+
+\subsubsection[Merge MATCH-Dust into CCM-Dust]{Merge MATCH-Dust changes into CCM-Dust}
+Merge changes to the MATCH-Dust branch into the CCM-Dust branch. 
+A simple ``\texttt{cvs update}'' does not work because the changes are
+on different branches.
+This example merges the changes from MATCH-Dust version
+\verb'match-3_2_9-dst-1_2' to MATCH-Dust version
+\verb'match-3_2_10-dst-1_4' into CCM-Dust version
+\verb'ccm3_6_brnchT_dst1_2', which is then tagged as
+\verb'ccm3_6_brnchT_dst1_4'.  
+\begin{verbatim}
+cd /fs/cgd/data0/zender/ccm_dst/src/dst
+cvs diff -kk -r ccm3_6_brnchT_dst1_2 > pre.diff
+cvs update -kk -j match-3_2_9-dst-1_2 -j match-3_2_10-dst-1_4
+cvs status | grep -i conflict
+cvs diff -kk -r match-3_2_10-dst-1_4 > post.diff
+diff pre.diff post.diff > diff.diff
+make ccm
+cvs commit 
+cvs tag -c ccm3_6_brnchT_dst1_4
+\end{verbatim}
+
+\subsubsection[Merge CCM-Dust into MATCH-Dust]{Merge CCM-Dust changes into MATCH-Dust}
+Merge changes to the CCM-Dust branch into the MATCH-Dust branch.  
+A simple ``\texttt{cvs update}'' does not work because the changes are
+on different branches.
+This example merges the changes from CCM-Dust version
+\verb'match-3_2_9-dst-1_0' to CCM-Dust version
+\verb'ccm3_6_brnchT_dst1_2' into MATCH-Dust version
+\verb'match-3_2_9-dst-1_0', which should then be tagged as
+\verb'match-3_2_9-dst-1_2'. 
+\begin{verbatim}
+cd /fs/cgd/data0/zender/match_dst/dst
+cvs diff -kk -r match-3_2_9-dst-1_0 > pre.diff
+cvs update -kk -j match-3_2_9-dst-1_0 -j ccm3_6_brnchT_dst1_2
+cvs update -p -j match-3_2_9-dst-1_0 params.h > params.h
+cvs status | grep -i conflict
+cvs diff -kk -r ccm3_6_brnchT_dst1_2 > post.diff
+diff pre.diff post.diff > diff.diff
+cvs commit
+make match
+cvs tag -c match-3_2_9-dst-1_2
+\end{verbatim}
+
+\subsection{MOZART-Dust Module}\label{sxn:cvs_mozart_dst}
+The module \verb'mozart_dst' comprises the sub-modules \verb'mozart' and
+\verb'dst'. 
+Thus \verb'mozart_dst' is the complete MOZART with the dust modifications. 
+The MOZART Dust implementation was created well after MATCH-Dust, and
+uses most of the same directory structure.
+Thus, the CVS commands for manipulating the MOZART-Dust model are
+directly analogous to those described in Section~\ref{sxn:cvs_match_dst},
+with the following exceptions.
+
+\subsubsection[Field names]{Field names}
+By default, MOZART archives both instantaneous values of constituents
+mixing ratios. 
+These are given the names assigned in the code, e.g., \verb'DSTQ01'.
+MOZART can also be told to archive time-averaged values of these
+constituent fields.
+Time-averaged constituent fields are assigned names based on there
+constituent index in the model, e.g., \verb'TRA01'.
+
+\section{Subversion Overview}\label{sxn:svn}
+
+\subsection{Modules}\label{sxn:svn_mdl}
+To create a \trmidx{Subversion} repository, use
+\begin{verbatim}
+svnadmin create /home/zender/svn
+export SVNROOT="svn+ssh://dust.ess.uci.edu/data/home/${USER}/svn/trunk"
+\end{verbatim}
+
+\subsection{Generic Modules}\label{sxn:svn_gnr}
+
+\subsubsection[Import]{Import an existing directory}\label{sxn:cvs_mpr}
+The \cmdidx{cvs2svn} command converts CVS repositories to
+\trmidx{Subversion} repositories.
+\begin{verbatim}
+# Dry run do not actually commit anything.
+cvs2svn -v --dry-run -s /home/zender/nco esmf.ess.uci.edu:/u/zender/cvs
+cvs2svn -v --dry-run -s /home/zender/svn /home/zender/cvs
+cvs2svn -v --dry-run -s /var/www/html/svn esmf.ess.uci.edu:/u/zender/cvs
+# Commands actually used
+cvs2svn -v --existing-svnrepos --force-tag=map-2_1_2 \
+        -s /home/zender/svn /home/zender/cvs
+# Valid Subversion keywords are:
+Date Revision Author HeadURL Id
+By default cvs2svn expands CVS keywords Name, Revision, Header 
+prior to importing to Subversion.
+cvs2svn correctly transitions CVS keywords Date, Id to Subversion.
+# Keyword expansion appears to be automatic: How to turn off?
+cvs2svn --keywords-off
+# Change mode (chmod) of local file to executable
+cd ~/aca;svn propset svn:executable ON htrn2nc.pl aca.pl
+cd ~/aca;svn propset svn:executable ON htrn2nb.sh htrn2nc.sh aca.sh etags.sh 
+# Find all files changed since 20081118
+cvs diff -N -c -D 20081118 | grep "Index:" > ~/foo.new
+# Backup ESMF CVS
+cd /home/zender
+tar cvzf ./cvs.tar.gz ./cvs
+scp cvs.tar.gz dust.ess.uci.edu:
+# Production conversion on PBS
+/bin/rm -r -f ~/svn
+cvs2svn -v -s /home/zender/svn /home/zender/cvs > ~/cvs2svn.txt
+# keywords-off does not help me email from DLW 20081125
+# cvs2svn --keywords-off -v -s /home/zender/svn /home/zender/cvs > ~/cvs2svn.txt
+# http://www.cvsnt.org/manual/html/Substitution-modes.html
+# To switch off keyword substitution for all files in a subtree: 
+cvs update -k +o
+cvs commit -m "Change substitution mode"
+\end{verbatim}
+Import new source directories:
+\begin{verbatim}
+svn help import
+cd mdl
+svn import -m "Imported sources" ~/mdl ${SVNROOT}/mdl
+cd ..
+mv mdl mdl.bck
+svn co ${SVNROOT}/mdl
+ls -R mdl
+/bin/rm -r mdl.bck
+\end{verbatim}
+
+Convert my CVS repositories from ESMF to PBS 20090205:
+\begin{verbatim}
+rps_usr='zender/cvs'
+#rps_srv_old='dust'
+#rps_srv_new='esmf'
+rps_srv_old='esmf'
+rps_srv_new='dust'
+export CVS_RSH='ssh'    # Needed for ssh access to NCAR CGD CVS
+export CVSROOT=":ext:${USER}@${rps_srv_new}.ess.uci.edu:${HOME}/cvs"
+echo ":ext:${rps_srv_new}.ess.uci.edu:/home/zender/cvs" > ~/cvs_zender.txt
+locate CVS/Root | grep zender > ~/cvs_Root.txt
+for fl in `cat cvs_Root.txt`; do
+rps_crr=`cat ${fl}`
+case "${rps_crr}" in 
+    *${rps_srv}*${rps_usr}* ) 
+    printf "${fl} points to a ${rps_usr} repository on ${rps_srv_old}, will redirect to ${rps_srv_new}\n"
+    /bin/cp -f ~/cvs_zender.txt ${fl}
+    ;; # endif match*
+    * )
+    printf "${fl} does not point to a ${rps_usr} repository on ${rps_srv_old}, will not change\n"
+    ;; # endif default
+esac # endcase ${rps_crr}
+done
+# Server instructions here were not helpful:
+# http://sanatio.blogspot.com/2005/12/cvs-server-on-ubuntu.html
+# Instead, had to manually create lock directories on server with
+sudo mkdir /var/locks
+sudo mkdir /var/locks/cvs
+sudo chmod 777 /var/locks
+sudo chmod 777 /var/locks/cvs
+# 20150216: Sourceforge reported lock errors
+# https://sourceforge.net/p/forge/site-support/9688
+# Took a week to fix, no thanks to SF, finally figured this out:
+rsync -av nco.cvs.sourceforge.net::cvsroot/nco/* . # Backup CVS repo
+ssh -t zender,nco@shell.sourceforge.net create # Create login shell
+sf-help --web # Print location of hidden directories
+cd /home/project-web/nco # Apparently this is my repo
+adminrepo --unlock cvs # This gets rid of the dreaded locks
+adminrepo --save # This did not actually seem to help
+\end{verbatim}
+
+Check out modules:
+\begin{verbatim}
+svn checkout file:///home/zender/svn/trunk/f ~/foo
+svn checkout file:///home/zender/svn/trunk/mdl ~/mdl
+\end{verbatim}
+Check out date-stamped or version-stamped module into new directory foo
+\begin{verbatim}
+svn checkout --revision {2009-11-11} $SVNROOT/crr ~/foo
+svn checkout --revision {2013-12-02} file:///home/zender/svn/trunk/nco ~/foo
+\end{verbatim}
+Export date-stamped or version-stamped file into new file foo
+\begin{verbatim}
+svn export --revision {2009-11-11} $SVNROOT/crr/crr.txt ~/foo
+\end{verbatim}
+Examine status or working directory
+\begin{verbatim}
+svn status
+\end{verbatim}
+Commit changes in working directory
+\begin{verbatim}
+svn 
+\end{verbatim}
+List modules contained in repository
+\begin{verbatim}
+svn ls svn+ssh://zender@dust.ess.uci.edu/home/zender/svn/trunk
+svn checkout file:///home/zender/svn/trunk/dot ~/dot
+\end{verbatim}
+Tagging
+\begin{verbatim}
+svn copy svn+ssh://zender@dust.ess.uci.edu/home/zender/svn/trunk/f \
+svn+ssh://zender@dust.ess.uci.edu/home/zender/svn/tags/f/2.0.3 \
+-m "Tagging the 2.0.3 release of the project" 
+\end{verbatim}
+Equivalence between \texttt{svn} and \texttt{svn+ssh} methods:
+\begin{verbatim}
+# Using Subversion only full path not necessary, but svnserve must run on server:
+svn checkout svn://dust.ess.uci.edu/svn/trunk/f
+# Using Subversion + SSH, full path is necessary, but svnserve not used:
+svn checkout svn+ssh://dust.ess.uci.edu/home/zender/svn/trunk/f
+\end{verbatim}
+
+Converting CVS keywords to Subversion properties:
+First, find the files with keywords, e.g., 
+\begin{verbatim}
+egrep -rl '\$(Author|Date|Header|Name|Revision|Source|State|Id)' *
+\end{verbatim}
+Determine the appropriate properties to set by searching
+Subversion's hidden \flidx{.svn} directory, e.g.,
+\begin{verbatim}
+# Convert $Id$ to $Id$ keyword
+perl -pi -e 's/\$Header\$/\$Id\$/g;' *
+perl -pi -e 's/\$Id$/\$Id\$/g;' *
+egrep -rl '\$Id: ' * | grep -v /.svn/ | xargs svn propset svn:keywords Id
+svn commit
+\end{verbatim}
+
+Resolving conflicts:
+After editing to resolve a conflict, one may still receive errors
+on commits attempts like
+\begin{verbatim}
+zender@greenplanet:~/ess_gcm$ svn commit -m ""
+svn: Commit failed (details follow):
+svn: Aborting commit: '/state/partition1/home/zender/ess_gcm/cam_gcm.sh' remains in conflict
+\end{verbatim}
+The solution is to explicitly tell Subversion that the conflict has
+been resolved
+\begin{verbatim}
+zender@greenplanet:~/ess_gcm$ svn resolved cam_gcm.sh
+Resolved conflicted state of 'cam_gcm.sh'
+zender@greenplanet:~/ess_gcm$ svn commit -m "Resolved funky conflict"
+Sending        cam_gcm.sh
+Transmitting file data .
+Committed revision 14055.
+\end{verbatim}
+
+Renaming files:
+\begin{verbatim}
+svn mv foo bar
+\end{verbatim}
+
+Create modules:
+\begin{verbatim}
+cd
+svn import mdl ${SVNROOT}/mdl -m "Imported Sources"
+mv mdl mdl.bck
+svn co ${SVNROOT}/mdl
+ls -R mdl
+/bin/rm -r mdl.bck
+\end{verbatim}
+
+\section{Git Overview}\label{sxn:git}
+
+ACME favors Git, and ACME-flavored development procedures for Git are
+described
+\href{https://acme-climate.atlassian.net/wiki/display/Docs/Development+Quick+Guide}{here}. 
+
+\subsection{Cloning}\label{sxn:git_cln}
+
+To clone a remote repository using HTTPS protocol, use
+\begin{verbatim}
+git clone https://github.com/ACME-Climate/DiagnosticsWorkflow
+\end{verbatim}
+Note that OLCF does not support HTTPS protocol.
+On OLCF machines, one must use clone Git repositories with the 
+SSH protocol instead.
+
+To clone a remote repository using SSH protocol, first install
+an SSH key from the development machine to the remote server (e.g.,
+GitHub), by following these instructions
+\href{https://help.github.com/articles/generating-ssh-keys}.
+
+\begin{verbatim}
+git clone git@github.com:ACME-Climate/DiagnosticsWorkflow
+\end{verbatim}
+
+\subsection{Modules}\label{sxn:git_mdl}
+
+\subsection{Creating}\label{sxn:git_crt}
+
+\begin{verbatim}
+cd ~/diwg
+# Transform current directory into Git repository. Create .git subdirectory.
+git init
+# Push new local Git repository to GitHub
+git remote add origin https://github.com/czender/diwg.git
+git push origin --all
+git push origin --tags
+git push --set-upstream origin master
+\end{verbatim}
+
+\subsection{Merging}\label{sxn:git_mrg}
+
+A Git \cmdprn{pull} is basically a merge.
+If one pulls the remote master onto a local repository which contains
+changes, Git complains that the pull will overwrite the changes, then
+quits. 
+To force the overwrite of any local changes, one uses \cmdprn{fetch}
+to update the local metadata, then \cmdprn{reset} to point the local
+repository to the remote head.
+\begin{verbatim}
+# Fetch from default remote, origin
+git fetch
+# Reset current branch (master) to origin's master
+git reset --hard origin/master
+\end{verbatim}
+This procedure is often necessary with NCO, because older machines
+automatically generate different .cpp and .hpp files than newer
+machines. 
+
+Merging changes in branches to the master
+\begin{verbatim}
+# Merging NCO branches
+# This method pushes everthing from devel to master
+# Works as intended when devel and master have same files
+cd ~/nco
+git checkout master
+git pull origin master
+git merge devel
+git push origin master
+
+# Merging ACME branches
+# Above method does not work as intended because devel and master have (some) different files
+# Assume we are working on devel and make changes we want to incorporate into master
+# First, commit the changes to devel (so they are not lost when checking out master)
+git fetch
+git checkout master
+git pull
+git checkout devel file1 file2
+git status
+git diff --cached
+git commit -am ``message''
+git push origin master
+git checkout devel
+\end{verbatim}
+
+Merging changes in master out to the branches
+\begin{verbatim}
+# Merging occurs locally (no pull request necessary)
+# Push to remote when satisfied with results
+# Graphical explanation at:
+# http://stackoverflow.com/questions/3876977/update-git-branches-from-master
+git checkout rgr
+git merge master # Retains true history, best solution
+# Any CONFLICTS are identified by <<<< HEAD ==== master >>>> syntax and must be hand-edited
+# Branch will be called HEAD
+# Unclear what to do with ChangeLog (see graphic) above:
+# Edit to keep monotonic in time or let-alone preserve true sequence of merge?
+git commit -a -m ``Merged changes in master into rgr branch''
+# ...or...
+git checkout rgr
+git rebase master # Retains false history, inferior solution
+git commit -a -m ``Rebased rgr branch to master''
+\end{verbatim}
+
+\subsection{Renaming}\label{sxn:git_rnm}
+
+Rename local and remote branches
+\begin{verbatim}
+git branch -m old_branch new_branch       # Rename branch locally    
+git push origin :old_branch               # Delete old branch
+git push --set-upstream origin new_branch # Push new branch, set local branch to track new remote
+\end{verbatim}
+
+\subsection{Forensics}\label{sxn:git_rnm}
+
+Obtain dated or tagged versions of code
+\begin{verbatim}
+git 
+\end{verbatim}
+
+% Bibliography
+%\renewcommand\refname{\normalsize Publications}
+%\nocite{ZeK971}
+%\bibliographystyle{agu}
+%\bibliography{/home/zender/tex/bib}
+
+\end{document}

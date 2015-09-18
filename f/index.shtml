@@ -1,0 +1,253 @@
+<!-- $Id$
+
+Purpose: Homepage for SNG, the Fortran command line parser
+
+Usage:
+http://dust.ess.uci.edu/f
+file:/home/zender/f/index.shtml
+
+cp -f ~/f/index.shtml /var/www/html/f/index.shtml
+scp -p ~/f/index.shtml dust.ess.uci.edu:/var/www/html/f/index.shtml
+-->
+
+<table width="100%"><tr><td align="left" valign="top">/
+<a href="http://www.ess.uci.edu">UCI ESS</a> /
+<a href="http://www.ess.uci.edu/~zender">Zender Group</a> /
+<a href="http://dust.ess.uci.edu/f">SNG</a> /
+</td>
+
+<td align="right" valign="top">
+[<a href="http://g95.sf.net">G95</a>]
+[<a href="http://gcc.gnu.org/fortran">Gfortran</a>] 
+</td></tr></table>
+
+<!doctype html public "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+   <title>SNG Homepage</title>
+   <meta name="Generator" content="Old fashioned typing">
+   <meta name="Author" content="Charles S. Zender">
+   <meta name="Keywords" content="SNG Homepage, fortran, GNU-POSIX, getopt, command line parser">
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#008080" alink="#FF0000">
+
+<p><hr width="100%"></p>
+<p><h1 align=center>Welcome to the SNG Homepage</h1>
+<p><h2 align=center>A getopt_long()-like module for Fortran9X/2K</h2>
+<p><h2>Current version is <!--#include virtual="VERSION"--> last updated on <!--#flastmod file="sng.tar.gz"--> </h2>
+
+<p><ul>
+<li><a href="#Definition">What is SNG?</a></li>
+<li><a href="#News">SNG News & Announcements</a></li>
+<li><a href="#RTFM">Documentation</a></li>
+<li><a href="#Version">Version Summary</a></li>
+<li><a href="#Download">Download/CVS SNG Software Source</a></li>
+<li><a href="#Problems">Known Problems with SNG</a></li>
+</ul>
+<hr>
+
+<dt><a name="Definition"></a></dt>
+<h2>What is SNG?</h2>
+<p>SNG is a portable fortran9X/2K command line parser and
+string manipulation library.
+SNG comprises subroutines for parsing GNU/POSIX-style long
+command-line options a la the GNU <tt>getopt_long()</tt> package.
+SNG is written in pure Fortran9X/200X so that your modern fortran
+codes can kick the <tt>namelist</tt> habit.
+
+<br>
+License:<br>
+The core library, <tt>sng_mdl.F90</tt>, has a free, non-restrictive,
+non-copyleft, GPL-compatible, X11-style license.
+The demo front end program, <tt>sng.F90</tt>, and a supporting
+utility, <tt>dbg_mdl.F90</tt>, which are both cleanly segregable
+from the core library, are in the public domain.
+<hr></p>
+
+<dt><a name="News"></a></dt>
+<h2>SNG News</h2>
+<ul>
+<li>20090320: Released SNG version 2.0.3</li>
+<li>20090318: Released SNG version 2.0.2</li>
+<li>20060928: Released SNG version 2.0.1</li>
+<li>20060928: Released SNG version 2.0.0</li>
+<li>20050823: Homepage debuts with SNG version ???</li>
+<li>20020418: SNG version 1.8.0 released</li>
+<li>20020418: First public release of SNG</li>
+</ul>
+<hr></p>
+
+<dt><a name="RTFM"></a></dt>
+<h2>Documentation</h2> 
+<p>The nascent SNG documentation is a simple text format file:
+<ul>
+<li><a href="./sng-README.txt">sng-README.txt</a>, Text documentation</li>
+</ul>
+Currently, the file describes the command line processing philosophy.
+The real documentation is the front-end program <tt>sng.F90</tt> which 
+demonstrates how to use most SNG features.
+Contributions of additional sections are most welcome.
+
+Instructions for compiling and testing sng are contained at the top
+of the sng.F90 driver program. They are short and simple so I repeat
+them here, with the example output from the demo program
+<tt>sng.F90</tt>: 
+<pre>
+zender@lanina:~/f$ pgf90 -o dbg_mdl.o -c dbg_mdl.F90
+zender@lanina:~/f$ pgf90 -o sng_mdl.o -c sng_mdl.F90
+zender@lanina:~/f$ pgf90 -o sng sng_mdl.o dbg_mdl.o sng.F90
+zender@lanina:~/f$ sng --dbg=0 --dbl=1.234e234 --flt=-5.67e-37 --int=12345678 --lgc=T --sng="GNU's Not UNIX" --drc_out=${HOME}/output/directory
+ Before command line parsing and string manipulation: 
+ main() reports cmd_ln = 
+ main() reports dbl_foo =    0.0000000000000000E+000
+ main() reports flt_foo =    0.0000000E+00
+ main() reports int_foo =             1
+ main() reports lgc_foo =   F
+ main() reports sng_foo = Default value
+ main() reports fl_in = in.nc
+ main() reports fl_out = foo.nc
+ main() reports drc_in = /home/user/input/dir
+ main() reports drc_out = 
+ After command line parsing and string manipulation: 
+ main() reports cmd_ln = 
+ sng --dbg=0 --dbl=1.234e234 --flt=-5.67e-37 --int=12345678 --lgc=T --sng=GNU's Not UNIX --drc_out=/home/zender/output/directory
+ main() reports dbl_foo =    1.2339999999999977E+234
+ main() reports flt_foo =   -5.6700002E-37
+ main() reports int_foo =      12345678
+ main() reports lgc_foo =   T
+ main() reports sng_foo = GNU's Not UNIX
+ main() reports fl_in = /home/user/input/dir/in.nc
+ main() reports fl_out = /home/zender/output/directory/foo.nc
+ main() reports drc_in = /home/user/input/dir
+ main() reports drc_out = /home/zender/output/directory
+</pre>
+The Fortran variables have their type-specific default values until
+SNG and parses the command line options.</p> 
+
+<p>How much code overhead does it take to implement this
+<tt>getopt_long()</tt>-like capability in the front end program?
+Certainly not more than a <tt>namelist</tt> parsing routine!
+The above command line parser was implemented with
+<pre>
+  arg_nbr=command_argument_count() ! [nbr] Number of command line arguments
+  arg_idx=1 ! [idx] Counting index
+  do while (arg_idx <= arg_nbr)
+     call ftn_getarg_wrp(arg_idx,arg_val) ! [sbr] Call getarg, increment arg_idx
+     dsh_key=arg_val(1:2) ! [sng] First two characters of option
+     if (dsh_key == "--") then
+        opt_lng=ftn_opt_lng_get(arg_val) ! [nbr] Length of option
+        if (opt_lng <= 0) stop "Long option has no name"
+        opt_sng=arg_val(3:2+opt_lng) ! [sng] Option string
+        if (dbg_lvl >= dbg_io) write (6,"(5a,i3)") prg_nm(1:ftn_strlen(prg_nm)), &
+             ": DEBUG Double hyphen indicates multi-character option: ", &
+             "opt_sng = ",opt_sng(1:ftn_strlen(opt_sng)),", opt_lng = ",opt_lng
+        if (opt_sng == "dbg" .or. opt_sng == "dbg_lvl" ) then
+           call ftn_arg_get(arg_idx,arg_val,dbg_lvl) ! [enm] Debugging level
+        else if (opt_sng == "dbl" .or. opt_sng == "dbl_foo" ) then
+           call ftn_arg_get(arg_idx,arg_val,dbl_foo) ! [frc] Double
+        else if (opt_sng == "drc_in") then
+           call ftn_arg_get(arg_idx,arg_val,drc_in) ! [sng] Input directory
+        else if (opt_sng == "drc_out") then
+           call ftn_arg_get(arg_idx,arg_val,drc_out) ! [sng] Output directory
+        else if (opt_sng == "fl_in") then
+           call ftn_arg_get(arg_idx,arg_val,fl_in) ! [sng] Input file
+        else if (opt_sng == "fl_out") then
+           call ftn_arg_get(arg_idx,arg_val,fl_out) ! [sng] Output file
+        else if (opt_sng == "flt" .or. opt_sng == "flt_foo" ) then
+           call ftn_arg_get(arg_idx,arg_val,flt_foo) ! [frc] Float
+        else if (opt_sng == "int" .or. opt_sng == "int_foo" ) then
+           call ftn_arg_get(arg_idx,arg_val,int_foo) ! [nbr] Integer
+        else if (opt_sng == "lgc" .or. opt_sng == "lgc_foo" ) then
+           call ftn_arg_get(arg_idx,arg_val,lgc_foo) ! [lgc] Logical
+        else if (opt_sng == "sng" .or. opt_sng == "sng_foo") then
+           call ftn_arg_get(arg_idx,arg_val,sng_foo) ! [sng] String
+        else ! Option not recognized
+           arg_idx=arg_idx-1 ! [idx] Counting index
+           call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
+        endif ! endif option is recognized
+        ! Jump to top of while loop
+        cycle ! C, F77, and F90 use "continue", "goto", and "cycle"
+     endif ! endif long option
+     ! Handle short options
+     if (dsh_key == "-D") then
+        call ftn_arg_get(arg_idx,arg_val,dbg_lvl) ! [enm] Debugging level
+     else if (dsh_key == "-f") then
+        call ftn_arg_get(arg_idx,arg_val,flt_foo) ! [frc] Float
+     else if (dsh_key == "-i") then
+        call ftn_arg_get(arg_idx,arg_val,fl_in) ! [sng] Input file
+     else if (dsh_key == "-l") then
+        call ftn_arg_get(arg_idx,arg_val,int_foo)
+     else if (dsh_key == "-p") then
+        lgc_foo=.not.lgc_foo
+     else if (dsh_key == "-o") then
+        call ftn_arg_get(arg_idx,arg_val,fl_out) ! [sng] Output file
+     else if (dsh_key == "-s") then
+        call ftn_arg_get(arg_idx,arg_val,sng_foo) ! [sng] String
+     else if (dsh_key == "-v") then
+        goto 1000 ! Goto exit with error status
+     else ! Option not recognized
+        arg_idx=arg_idx-1 ! [idx] Counting index
+        call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
+     endif ! endif arg_val
+  end do                    ! end while (arg_idx <= arg_nbr)
+  ! Compute any quantities that might depend on command line input
+  ! Prepend user-specified path, if any, to input data file names
+  if (ftn_strlen(drc_in) > 0) call ftn_drcpfx(drc_in,fl_in) ! [sng] Input file
+  ! Prepend user-specified path, if any, to output data file names
+  if (ftn_strlen(drc_out) > 0) call ftn_drcpfx(drc_out,fl_out) ! [sng] Output file
+</pre>
+which is admittedly overkill in that it includes comments, debugging
+code, and short option equivalents to certain long options.
+<tt>ftn_arg_get()</tt>, which is overloaded for all data types,
+implements the bulk of the work so SNG has the same interface
+for all data types.
+<hr></p>
+
+<dt><a name="Version"></a></dt>
+<h2>Version Summary</h2>
+<ul>
+<li><b>SNG 2.0.3</b>, Add <tt>ftn_strspc()</tt> function, improve documentation
+<li><b>SNG 2.0.2</b>, General maintenance and new compilers
+<li><b>SNG 2.0.1</b>, <tt>gfortran</tt> compatibility, clean up compiler warnings
+<li><b>SNG 2.0.0</b>, SNG acquires homepage
+</ul>
+<hr></p>
+
+<dt><a name="Download"></a></dt>
+<h2>Download SNG model source distribution.</h2> 
+<p>The distribution includes the complete SNG source code necessary to
+build and run SNG on your own machine.</p>
+<ul>
+<li>Source code and documentation in tarball format: <a href="http://dust.ess.uci.edu/f/sng.tar.gz">sng.tar.gz</a> (<!--#fsize file="sng.tar.gz"--> compressed tar file)</li>
+</ul>
+
+<p>Subversion access to SNG will be set-up on request</p>
+<!--
+<hr></p>
+
+<dt><a name="Problems"></a></dt>
+<h2>Known Problems with SNG:</h2>
+<ul>
+<li>No problemo</li>
+</ul>
+<p><hr></p>
+
+<table width="100%"><tr><td align="left" valign="top">/
+<a href="http://www.ess.uci.edu">UCI ESS</a> /
+<a href="http://www.ess.uci.edu/~zender">Zender Group</a> /
+<a href="http://dust.ess.uci.edu/f">SNG</a> /
+</td>
+
+<td align="right" valign="top">
+[<a href="http://g95.sf.net">G95</a>]
+[<a href="http://gcc.gnu.org/fortran">Gfortran</a>] 
+</td></tr></table>
+
+<p>
+<hr></p>
+Address questions and comments about SNG to 
+<address>
+<a href="mailto:surname@uci.edu">Charlie &ldquo;my surname is zender&rdquo; Zender</a></address>
+
+</body>
+</html>

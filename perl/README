@@ -1,0 +1,16 @@
+-*-text-*-
+
+This directory, /home/zender/perl, contains various scripts written in
+Perl.
+
+README.stat2nc  Description of stat2nc
+DBG.pl		Module for debugging
+ccm_prc.pl	Call CCM processor from Perl
+csz.pl		Personal Perl library
+data2nc.pl	Incomplete generic tabular format to netCDF converter
+dss3532nc.pl	Converts NCAR DSS 353 soundings to netCDF
+egcs_nst.pl	Installs software
+fl_rnm.pl	Renames files in a directory
+sng_rpl_glb.pl	Replaces strings in files
+stat2nc.pl	Converts CCM text output to netCDF
+stat2nc_dst.sh	Distribution script for stat2nc

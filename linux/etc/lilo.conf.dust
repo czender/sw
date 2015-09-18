@@ -1,0 +1,21 @@
+prompt
+timeout=50
+default=2.4.20-28.9smp
+boot=/dev/sda
+map=/boot/map
+install=/boot/boot.b
+linear
+message=/boot/message
+
+image=/boot/vmlinuz-2.4.20-28.9
+	label=2.4.20-28.9
+	initrd=/boot/initrd-2.4.20-28.9.img
+	read-only
+	append="root=LABEL=/"
+
+image=/boot/vmlinuz-2.4.20-28.9smp
+	label=2.4.20-28.9smp
+	initrd=/boot/initrd-2.4.20-28.9smp.img
+	read-only
+	append="root=LABEL=/"
+

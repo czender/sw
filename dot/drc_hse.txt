@@ -1,0 +1,76 @@
+# scp ~/dot/drc_hse.txt ess1.ess.uci.edu:public_html
+# http://www.ess.uci.edu/~zender/drc_hse.txt
+
+Our address is 
+
+3 Whistler Ct.
+Irvine, CA
+92617-4069
+(949) 856-9787
+
+Latitude :   33.635129 N
+Longitude: -117.839761 E
+
+Driving from the North (LA):
+We are about 45 minutes from LAX airport.
+Take 405 South to 73 South and exit 73 South at Bison Ave.
+(Bison is the last toll-free exit from 73).
+Turn left onto Bison and drive straight into UCI.
+At the second stoplight, turn right onto Peltason Ave.
+Follow Peltason as it curves around campus and turn
+right at the first stopsign, Los Trancos. 
+Follow Los Trancos up the hill through two stopsigns.
+Los Trancos turns into California at the top of the hill.
+Follow California along the ridge and turn left at the 
+stopsign for Whistler. We are the second house on the right.
+
+Driving from the South (San Diego):
+We are about 80 minutes from San Diego.
+Take 405 North and get off on the Culver Ave. exit.
+Turn left onto Culver and follow Culver for about 2.0 miles.
+You will pass straight across Campus Ave and bend around the UCI 
+campus until you hit the stoplight at Anteater/Shady Canyon.
+Turn right onto Anteater (if you turned left here you would be on
+Shady Canyon). Follow Anteater into the main UCI campus. 
+Turn left at the first intersection, which is California Ave. 
+Climb California up the hill through three stopsigns. 
+Turn right at the stopsign intersection with Whistler
+(you have gone too far if you crest the hill and start descending). 
+We are the second house on the right hand side of Whistler.
+
+Driving from the West (Laguna Beach/Newport Beach):
+We are 25 minutes from Laguna, 10 minutes from Newport Beach.
+Take Pacific Coast Highway towards Crystal Cove State Beach.
+Turn East onto Newport Coast Drive (look for the Arch).
+Follow Newport Coast Drive up to the top, and down the
+other side, passing under Highway 73 as you go.
+Turn right onto Bonita Canyon Road at the bottom of the hill.
+(Though it takes ten more minutes, you are now 100 yards from us.)
+Follow Bonita Canyon Road as it curves around the back of campus until 
+you reach the major stoplight intersection with Campus & Culver.
+Bonita Canyone becomes Culver Drive if you miss the turn here.
+Turn left onto Campus Drive and go through two lights.
+Then turn left onto Peltason (at Campus & Peltason/Berkeley).
+Follow Peltason into the main campus. Peltason curves around
+the campus. Turn left at the stopsign intersection with Gabrielino.
+Follow Gabrielino up the hill and turn right onto California
+at the top. Follow California and then turn right at the
+stopsign intersection with Whistler.
+We are the second house on the right.
+
+Driving from the East (Anaheim):
+We are about 25 minutes from Disneyland.
+Get on 55W from I5 or Highway 91.
+Take 55W to 73S and exit 73S at Bison Ave.
+(Bison Ave. is the last toll-free exit on 73).
+Turn left onto Bison and drive straight into UCI.
+At the second stoplight, turn right onto Peltason Ave.
+Follow Peltason as it curves around campus and turn
+right at the first stopsign, Los Trancos. 
+Follow Los Trancos up the hill through two stopsigns.
+Los Trancos turns into California at the top of the hill.
+Follow California along the ridge and turn left at the 
+stopsign for Whistler. We are the second house on the right.
+
+Public transportation:
+There is an Amtrak/Metrorail station in Irvine.

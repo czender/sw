@@ -1,0 +1,24 @@
+1. Make access to old external datasets like dst25, lsm_8589, toms,... optional
+2. Create common block to allow various data directories to be set independently
+3. Modify map_rbn or create new routine to reset slightly unphysical values (e.g., wtl_frc_out=1.0+1.0e-8) caused by rounding errors during rebinning
+4. Streamline, subroutinize, and generalize conversion of latixy, longixy to lat_in_grd, lon_in_grd
+5. Notify CLM folks that have better weight for pft_frc_out in heterogeneous cells
+6. clm/src/main/areaMod:celledge_regional() assumes (incorrectly) regular longitudinal spacing on each latitude band
+7. Compiling with OPTS=X causes compiler failure on SGI, but OPTS=D works
+8. Running AIX,SGI causes core dump in hgt_sfc_get() presumably due to memory limits
+11. SUNMP does not read '*' format float data in IGBP .srf files
+12. Add option to specify change in sea-level and create land masks for, e.g., LGM
+14. Replace csh goto statement in tst.sh with sh equivalent
+17. Read soil texture from Sam's 5'x5' CLM2 netCDF file rather than my IBIS 1x1 degree file
+18. verify new lnd_msk check in soi_text_get() works with CCM hgt routine and with MATCH/CCM
+19. Use nearest neighbor algorithm in sfc_typ_get(), lai_get(), pft_get() for new land points which appear when MSL changes
+20. Mojave, Dead Sea are ocean when flg_NGDC enabled since hgt_sfc_in < 0.0
+21. Setting too many points to loam in soil_txt_get()?
+23. Test and activate hyd_get() to replace mdl_lsm_get() and lsm_get_sfc_flw()
+24. Code high resolution flow accumulation (which still may not work due to memory)
+27. Implement map type structure containing lat_typ, lon_typ, lon_srt, map_dsc_sng, map_enm
+28. High resolution basins appear to cause infinite loop in area accumulation:
+bds --bkf_itr_nbr=5 -x 720 -y 360 -m 13 -o ${DATA}/data/dst_0.5x0.5.nc
+bds: Computing flow accumulation factors at model resolution
+ERROR: infinite loop in notLoop
+29. Output basin ID to netCDF

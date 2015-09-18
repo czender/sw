@@ -1,0 +1,1600 @@
+% $Id$
+
+% Purpose: Paper on global abundance and forcing of Oxygen collision complexes 
+% URL: http://dust.ess.uci.edu/ppr/o2x.ps.gz
+% URL: http://dust.ess.uci.edu/ppr/o2x.pdf
+
+% NB: Solomon highly recommends reading Burkholder and McKellar
+
+% Usage:
+% dvips -Ppdf -G0 -o ${DATA}/ps/o2x.ps ~/crr/o2x.dvi;ps2pdf ${DATA}/ps/o2x.ps ${DATA}/ps/o2x.pdf
+% cd ~/crr;make -W o2x.tex o2x.dvi o2x.ps;cd -
+% cd ~/crr;texcln o2x;make o2x.pdf;bibtex o2x;makeindex o2x;make o2x.pdf;bibtex o2x;makeindex o2x;make o2x.pdf;cd -
+% scp -p ${DATA}/ps/o2x.pdf dust.ess.uci.edu:/var/www/html/ppr/ppr_Zen99.pdf
+
+% Create *.pdf versions of every graphics file for use with pdftex: 
+% cd ${DATA}/ps; foreach fl ( `ls *.eps` ); epstopdf $fl; end
+% PDF and Postscript versions have different margins, fonts, and font sizes:
+% PDF seems to always enforce horizontal truncation of graphics
+% PDF version occupies significantly less (~0.8 cm) vertical space
+% PDF version occupies significantly less (~0.8 cm) horizontal space
+% PDF version fonts 
+% Despite these differences, line breaks, page breaks, and thus page numbers are identical
+% Overall, I prefer the Postscript version
+
+\documentclass[agupp,twoside]{aguplus} % Concise preprint style
+%\documentclass[agupp,twoside,draft]{aguplus} % No figures
+%\documentclass[12pt,agums]{aguplus} % Double-spaced manuscript for submittal
+%\documentclass[jgrga]{aguplus} % Galleys to save money
+
+% AGU++ Options
+%\printfigures % Adds figures at end
+\doublecaption{35pc} % Captions printed twice
+\sectionnumbers % Turns on section numbers
+\extraabstract % Adds supplemental abstract
+%\afour % European A4 paper size
+%\figmarkoff % Supress marginal markings
+
+% AGUTeX options and entries
+%\tighten % Turns off double spacing, has no effect with agupp
+%\singlespace % Restores single spacing
+%\doublespace % Restores double spacing
+
+% Standard packages
+\usepackage{ifpdf} % Define \ifpdf
+\ifpdf % PDFLaTeX
+\usepackage[pdftex]{graphicx} % Defines \includegraphics*
+\pdfcompresslevel=9
+\usepackage{thumbpdf} % Generate thumbnails
+\usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
+\else % !PDFLaTeX
+\usepackage{graphicx} % Defines \includegraphics*
+\fi % !PDFLaTeX
+
+\usepackage{times} % Times/Roman font, aguplus STRONGLY recommends this for the camera-ready version!!
+
+% hyperref is last package since it redefines other packages' commands
+% hyperref options, assumed true unless =false is specified:
+% backref       List citing sections after bibliography entries
+% breaklinks    Wrap links onto newlines
+% colorlinks    Use colored text for links, not boxes
+% hyperindex    Link index to text
+% plainpages=false Suppress warnings caused by duplicate page numbers
+% pdftex        Conform to pdftex conventions
+\ifpdf % PDFLaTeX
+\usepackage[backref,breaklinks,colorlinks,hyperindex,plainpages=false,pdftex]{hyperref} % Hyper-references
+\pdfcompresslevel=9
+\else % !PDFLaTeX
+\usepackage[backref,breaklinks,colorlinks,hyperindex,plainpages=false]{hyperref} % Hyper-references
+\fi % !PDFLaTeX
+
+% Personal packages
+\usepackage{csz} % Library of personal definitions
+\usepackage{dmn} % Dimensional units
+\usepackage{chm} % Commands generic to chemistry
+\usepackage{hyp} % Hyphenation exception list
+\input{jgr_abb} % AGU-sanctioned journal title abbreviations
+
+% Commands specific to this file
+\usepackage{o2x} % Commands specific to O2*X work
+\newlength{\tblwdt} % Horizontal size of current table
+\newlength{\fltwdtsngclm}\setlength{\fltwdtsngclm}{20.0pc} % Float width to fill single column
+\newlength{\fltwdtdblclm}\setlength{\fltwdtdblclm}{41.0pc} % Float width to fill whole page
+
+% \lefthead and \righthead are automatically uppercased by jgrga documentstyle 
+% Short title: ZENDER: CLIMATOLOGY OF \OdX\ ABUNDANCE AND SOLAR ABSORPTION
+% \OdX does not look good when italicized, so expand instead
+\lefthead{ZENDER}
+\righthead{CLIMATOLOGY OF O$_2 {\cdot} $X ABUNDANCE AND SOLAR ABSORPTION}
+\received{January~28, 1999}
+\revised{July~14, 1999}
+\accepted{July~22, 1999}
+\journalid{JGRD}{October~27, 1999}
+\articleid{24471}{24484}
+\paperid{1999JD900797}
+% The $ in the following line screws up the hilit19 highlighting
+%\ccc{0148-0227/99/1999JD900797\ 09.00}
+\ccc{0148-0227/99/1999JD900797\$09.00}
+\cpright{AGU}{1999}
+% \cpright{Crown}{1994}
+% (No \ccc{} for Crown copyrights.)
+
+\authoraddr{C. S. Zender,
+Department of Earth System Science, University of California, Irvine,
+CA~~92697-3100. (zender@uci.edu)}
+%National Center for Atmospheric Research, P.O. Box 3000, Boulder,
+%CO~~80307. (zender@ncar.ucar.edu)}    
+
+\slugcomment{JOURNAL OF GEOPHYSICAL RESEARCH, VOL.~104, NO.~D20, PAGES
+24,471--24,484, OCTOBER~27,~1999}
+%\slugcomment{Submitted to \textit{J. Geophys. Res. Atm.},
+%January~28, 1999. Revised July~14, 1999. Accepted July~22, 1999.}
+%\slugcomment{\today}
+
+% NB: Placement of figures is very sensitive to \textfraction
+\renewcommand\textfraction{0.3} % Minimum fraction of page that is text
+\setcounter{totalnumber}{10} % Maximum number of floats per page
+\setcounter{topnumber}{10} % Maximum number of floats at top of page
+\setcounter{dbltopnumber}{10} % Maximum number of floats at top of two-column page
+\setcounter{bottomnumber}{10} % Maximum number of floats at bottom of page
+\renewcommand\topfraction{1.0} % Maximum fraction of top of page occupied by floats
+\renewcommand\dbltopfraction{1.0} % Maximum fraction of top of two-column page occupied by floats
+\renewcommand\bottomfraction{1.0} % Maximum fraction of bottom of page occupied by floats
+\renewcommand\floatpagefraction{1.0} % Fraction of float page filled with floats
+\renewcommand\dblfloatpagefraction{1.0} % Fraction of double column float page filled with floats
+
+\begin{document}
+
+% NB: title must be lowercased by hand. The documentstyle does not enforce it.
+\def\paperchaptertitle{Global climatology of abundance and solar
+absorption of oxygen collision complexes} 
+\title{\paperchaptertitle}
+
+\author{Charles S. Zender\altaffilmark{1}}
+\affil{National Center for Atmospheric Research, Boulder, Colorado} 
+\altaffiltext{1}{Now at Department of Earth System Science, University
+of California, Irvine.\\
+\smallskip
+\noindent Copyright 1999 by the American Geophysical Union.\\
+Paper number 1999JD900797.\\
+0148-0227/99/1999JD900797\$09.00}
+
+\begin{abstract}
+To improve our understanding of the absorption of solar radiation in 
+the atmosphere we have characterized the spectral absorption, the
+spatial and temporal abundance, and the radiative forcing of the
+oxygen collision pairs \OdOd\ and \OdNd\ ($\OdX \equiv \OdOd +
+\OdNd$). 
+The regional, vertical, seasonal, and annual patterns of \OdX\
+abundance and radiative forcing are obtained from a general
+circulation model. 
+We estimate the mean absorption by \OdX, heretofore neglected in large
+scale atmospheric models, is 0.75--1.2\,\wxmS, or 1--2\% of total
+atmospheric solar absorption.   
+%For comparison, solar absorption by \Od\ and \COd\ is roughly 2.0 and
+%0.5\,\wxmS, respectively.   
+\OdX\ absorption reduces surface insolation by 0.48--0.78\,\wxmS\ and  
+increases the net radiative flux at the tropopause by
+0.32--0.52\,\wxmS.   
+These ranges bracket the uncertainties due to spectral absorption
+cross sections, \OdNd\ efficiency, \OdX\ abundance, and cloud
+distribution. 
+Globally averaged, \OdX\ enhances absorption equally in clear and
+in cloudy skies.
+
+We create a global climatology of well-mixed collision complex
+abundances by scaling \OdX\ abundance to other complexes such as
+\NdNd\ and \OdAr.  
+Collision complex abundance depends quadratically on the
+concentrations of the constituents.  
+This dependence causes a 20\% increase in \OdX\ abundance in the 
+Arctic relative to the Tropics for the same sea level pressure.  
+The variations in zonal mean \OdX\ abundance due to surface elevation,
+the annual mean meridional temperature gradient, and to seasonal
+temperature variations are 40, 15, and 10\%, respectively.    
+\OdX\ heating obeys the weakly absorbing, linear limit so it peaks at
+the surface in clear skies, but clouds shift this peak up by
+200--300\,\mb\ on seasonal timescales. 
+Surface albedo and clouds strongly modulate the solar forcing
+efficiency of \OdX\ (forcing per unit abundance) by altering the mean
+photon path length. 
+These factors produce annual mean forcing maxima in the subtropics
+over bright deserts and regions of marine stratus.    
+Inclusion of \OdX\ in models is likely to reduce cold biases in the
+summertime polar atmosphere, where \OdX\ contributes 2--4\% of total
+solar heating. 
+%The seasonal forcing peaks in summertime polar regions.
+%Clouds, surface reflectance, and reduced water vapor cause the forcing
+%efficiency in the Antarctic to exceed the Arctic by 30--75\%.
+
+% ncks -H -u -F -C -v NPCO2O2 ${DATA}/dmr04/dmr04_8589_1202_x.nc
+% ncks -H -u -F -C -v NPCO2O2 ${DATA}/dmr04/dmr04_8589_0608_x.nc
+
+\end{abstract}
+
+\section{Introduction}\label{sxn:ntr}
+
+% Original studies: Get McKellar, Ketellar (this has the O2-N2 shape),
+% and Cho
+
+\nocite{EPP95,GOB90,MCB98,PEP97,SPS98}
+
+% Get rid of horizontal rule separating this footnote from text
+%\renewcommand{\footnoterule}{} 
+\setlength{\footnotesep}{12pt} 
+%\footnote{\noindent Copyright 1999 by the American Geophysical Union.\\
+%Paper number 1999JD900797.\\
+%0148-0227/99/1999JD900797\$09.00}%
+
+Our ability to balance the solar radiation budget of the atmosphere is
+uncertain \cite[e.g.,][and references
+therein]{StT902,KAC97,RaV97,Col98}.  
+Until we can perform this fundamental task, our skill at
+predicting the all sky radiation budget, and hence at predicting
+climate and climate change, will continue to be highly uncertain
+\cite[e.g.,][]{CPB89}. 
+The atmospheric collision complexes of oxygen \OdOd\ and \OdNd\
+(henceforth $\OdX \equiv \OdOd + \OdNd$) have recently been
+identified as contributors to discrepancies between modeled and
+observed surface insolation \cite[]{PEP97,SPS98}.  
+\OdX\ presents a timely and interesting case for a radiative budget
+study because its solar absorption cross section is relatively well
+known, but its abundance and absorption have not been characterized at
+the global scale necessary to fully describe its impact on climate. 
+
+The absorption features of oxygen collision complexes have been
+studied in the laboratory and in the atmosphere for many decades
+\cite[][and references therein]{PeP80,SPS98}.   
+Collisions relax the selection rules for dipole-forbidden transitions
+in one or both \Od\ molecules, allowing for absorption during the
+collision. 
+The detection of discrepancies between modeled and observed solar
+radiation in cloudy skies \cite[]{CZM95,RaV97} provoked interest in
+whether \OdX\ contributes to this discrepancy \cite[]{EPP95,MGL97}
+and in what its global radiative forcing characteristics are.
+
+\cite{PEP97} first estimated the global annual mean solar
+absorption by \OdOd\ in clear sky and in all sky (i.e., including
+clouds) conditions as 0.53 and 0.57\,\wxmS, respectively.   
+Two newer estimates include the effects of the powerful 1.27\,\um\ band 
+and of nitrogen induced absorption (\OdNd) in this band.
+Estimates from these studies suggest that globally and annually
+averaged, \OdX\ absorbs 0.9--1.3\,\wxmS\ \cite[]{SPS98} or 0.84\,\wxmS\
+\cite[]{MCB98}.
+Thus \OdX\ is thought to contribute 1--2\% of the total solar
+atmospheric absorption of 67\,\wxmS\ (out of 342\,\wxmS\ incoming)
+\cite[]{KiT97}.  
+These estimates of \OdX\ absorption are based on single column
+line-by-line, multiple-scattering radiative transfer models which have
+been extensively validated against atmospheric observations by high
+spectral resolution instruments.   
+The disparity in the latter two estimates is mostly due to
+uncertainties in absorption cross sections for \OdX\ bands in the near
+infrared and, to a lesser extent, from extrapolating single-column
+results to global annual means.
+
+We use the term ``radiative forcing'' to denote various measures of
+the influence of atmospheric heating by \OdX\ on the climate system.
+Line-by-line estimates of \OdX\ absorption are too computationally 
+expensive to convey the rich regional and seasonal behavior of
+\OdX\ radiative forcing caused by variations in temperature, pressure,  
+elevation, clouds, surface albedo, and mixing ratios of other
+radiatively active atmospheric constituents. 
+A general circulation model (GCM) is best suited to provide
+self-consistent, time-varying realistic distributions of \OdX\
+forcing. 
+%The motivations for modeling the global distribution and forcing of
+%\OdX\ are at least twofold:  
+%First, to refine estimates of \OdX\ forcing.
+%Prior estimates were extrapolated from single-column studies.
+%We diagnose forcing from within a GCM where the most important 
+%boundary conditions vary realistically in space and time.
+Employing a GCM allows us to extend prior studies and to provide
+additional forcing metrics, including clear versus cloudy sky forcing,
+surface forcing, and net forcing at the tropopause.
+These metrics allow us to compare the radiative forcing by \OdX\ to
+other absorbers, including greenhouse gases. 
+These comparisons, in turn, help to prioritize implementation of \OdX\
+physics in large-scale atmospheric models. 
+It is worthwhile noting that in contrast to anthropogenically
+influenced greenhouse gas concentrations, \OdX\ abundance is not
+changing.   
+
+%The other goal of this study is to establish the spatial and temporal
+%patterns of abundance and forcing due to \OdX.
+To our knowledge no prior study has constructed a systematic global
+climatology for any collision complex (or dimer). 
+Moreover, the regional, seasonal, and vertical patterns of \OdX\
+abundance generalize to all complexes formed from well-mixed gases. 
+Thus these patterns, which depend mainly on the meridional
+temperature gradient and orographic features, apply to all
+well-mixed collision complexes, for example, \NdNd, \OdAr, and \OdCOd.   
+The patterns of \OdX\ radiative forcing, which depend additionally on 
+insolation, surface albedo, and cloud cover, only apply to other
+complexes with absorption features similar to those of \OdX.    
+Thus, by characterizing \OdX\ abundance and forcing, we automatically 
+obtain insight into all well-mixed collision complexes.
+
+Establishing the spatial and temporal patterns of \OdX\ abundance and
+forcing will also help future studies ascertain whether unexplained
+atmospheric solar absorption is consistent with absorption by
+collision complexes (or dimers) of well-mixed molecules. 
+The existence of complexes besides \OdX\ which cause significant
+solar radiative forcing is highly speculative.
+All significant structured atmospheric absorption measured in the
+atmosphere for large portions of the solar spectrum has been
+convincingly attributed to known absorbers
+\cite[]{PEP97,SPS98,MCB98,VRC981}.   
+Moreover, a number of recent field studies explains all observed
+broadband clear sky solar absorption to within the uncertainties in
+the observations and models \cite[]{CRV97,ZBP97,RaV97,JiC98}.  
+However, \cite{KAC97} and \cite{HNS98} find inexplicable discrepancies
+between models and observations of the clear sky diffuse field, and  
+many independent studies show enhanced cloudy sky solar absorption
+relative to model predictions on both local and global scales
+\cite[]{CZM95,ZBP97,Col98}.  
+Since \OdX\ has been proposed as a candidate for explaining some of
+these discrepancies \cite[]{EPP95,MGL97}, this study attempts to bound
+the role of \OdX\ in explaining enhanced absorption in clear and
+cloudy skies. 
+
+The remainder of this study is organized as follows:
+Section~\ref{sxn:mth} presents the nomenclature of collision complexes
+and summarizes the laboratory measurements of \OdX\ cross sections.
+Section~\ref{sxn:spc} illustrates the modeled spectral characteristics 
+of \OdX\ absorption during a field campaign and shows its net vertical
+heating signature in an idealized atmosphere.
+Section~\ref{sxn:res} presents the regional, seasonal, and vertical
+climatologies of \OdX\ abundance and forcing and generalizes \OdX\
+abundance to other well-mixed collision complexes.
+Section~\ref{sxn:dsc} summarizes the results and discusses their
+implication for future studies of the atmosphere. 
+
+\section{Characterization of Abundance and Absorption Cross
+Section}\label{sxn:mth} 
+
+Quantifying the global radiative forcing of a gaseous molecular
+species $i$ requires characterization of both its concentration 
+$\cnc_i(x,y,z,t)$\,\mlcxcmC\ and its absorption cross section
+$\xsx_i(\wvl)$\,\cmSxmlc.  
+The convolution of these two quantities with the instantaneous
+radiation field yields the instantaneous forcing due to the gas.
+However, careful laboratory measurements provide convincing evidence
+that for atmospheric temperatures and solar wavelengths, \OdX\
+absorption is due to transient collision complexes rather than bound
+dimers (or van~der~Waals complexes) \cite[]{GOB90,OTN91}.
+Since \OdX\ is not a bound molecule, we begin by defining properties
+analogous to $\cnc_i$ and $\xsx_i$, but that apply to collision
+complexes.    
+
+\subsection{Abundance}\label{sxn:bun} 
+The ``abundance'' $\cncXY$ of a collision complex of molecules $\X$
+and $\Y$ is analogous to a traditional number concentration of a
+molecular species.
+We define $\cncOdX \equiv \cncOd \cncX$ where $\cncOd$ and $\cncX$
+are the number concentrations of \Od\ and of its collision
+partner (\Nd\ or \Od, unless otherwise specified) in \mlcxcmC,
+respectively.  
+Thus the dimensions of $\cncOdX$ are \mlcSxcmS. 
+By definition, $\cncOdX$ is linearly proportional to the frequency of  
+collisions of \Od\ with \X.
+To graphically depict the total column abundance of \OdX, we will
+present the vertical column paths $\npcOdX$ defined by 
+\newline\parbox{18.0pc}{ % KoD95 p. 138
+\begin{eqnarray}
+\npcOdOd & \equiv & \int_{0}^{\mathrm{TOA}} \cncOdOd \, d\pth = 
+\int_{0}^{\mathrm{TOA}} \cncOd^2 \, d\pth \nonumber \\ 
+\npcOdNd & \equiv & \int_{0}^{\mathrm{TOA}} \cncOd \cncNd \, d\pth = 
+\gamma \npcOdOd \nonumber
+%\label{eqn:N}
+\end{eqnarray}
+}\hfill % end parbox KoD95 p. 138
+\parbox{2.0pc}{\begin{eqnarray}\label{eqn:N}\end{eqnarray}}\newline
+where the integration over $\pth$ (height) is from the surface ($\pth =
+0$) to the top of atmosphere (TOA $\approx 1.5$\,\mb\ due to GCM
+vertical discretization).   
+Likewise, the column path of a molecule \X, in \mlcxcmS, will be
+denoted by $\npcX$.  
+We assume in (\ref{eqn:N}) that the volume mixing ratios of \Nd\ and
+\Od\ are constant in the Earth's atmosphere and that their ratio is
+the constant $\gamma \equiv \cncNd/\cncOd = 3.72787$
+\cite[][p. 9]{GoY89}.  
+Since the vertical profile of $\cncOdX$ varies with the square of
+atmospheric density, variations in $\gamma$ above the stratosphere
+have negligible impact on the column abundance, and thus forcing, of 
+\OdX.  
+
+\subsection{Absorption Cross Sections}\label{sxn:xsx} 
+The absorption bands of the \OdOd\ and \OdNd\ collision complexes have
+been studied for decades.
+\cite{SPS98} give an excellent review of laboratory research on
+oxygen collision complex absorption.
+Here we summarize only the research necessary to understand the  
+physical parameterizations and uncertainties present in this
+study. 
+
+Laboratory measurements of \OdX\ absorption infer a binary absorption
+coefficient $\xsxb(\wvl)$ from the quadratic dependence of measured
+absorption on \Od\ concentration, $\cncOd$. 
+\cite{NeB98} provide a detailed description of this type of
+measurement and its uncertainties.
+The dimensions of $\xsxb(\wvl)$ are \cmFxmlcS.
+%Thus $\xsxbOdX(\wvl)$ is the absorption optical depth due to \OdX\
+%($\odxcOdX$) at wavelength $\wvl$ per unit number concentration 
+%(\mlcxcmC) of \Od\ per unit number path (\mlcxcmS) of \X.   
+Thus, for a given concentration $\cncOd$\,\mlcxcmC\ and path length
+$\pthdlt$ centimeters of collision partner (\Od\ or \Nd), the optical
+depths $\odxcOdX$ due to \OdX\ at wavelength $\wvl$ are
+\begin{eqnarray}
+\odxcOdOd(\wvl) & = & \xsxbOdOd(\wvl) \, \cncOd^2 \pthdlt \\
+\odxcOdNd(\wvl) & = & \xsxbOdNd(\wvl) \, \cncOd \cncNd \pthdlt \nonumber \\
+& = & \gamma \, \epsNd \xsxbOdOd(\wvl) \, \cncOd^2 \pthdlt \nonumber \\
+\odxcOdNd(\wvl) & = & \gamma \, \epsNd \odxcOdOd(\wvl)
+\label{eqn:tau}
+\end{eqnarray}
+where (\ref{eqn:tau}) applies to the 1.27\,\um\ band only
+(see Plate~\ref{plt:abs_xsx}) and $\epsNd$, discussed below, 
+is the efficiency of \Nd\ (relative to \Od) at inducing \Od\
+absorption through collisional processes (i.e., $\xsxbOdNd = \epsNd
+\xsxbOdOd$). 
+
+Plate~\ref{plt:abs_xsx} shows the solar absorption continua for
+\OdX\ measured by \cite{GOB90} at $\sim 0.15$~nm resolution for $0.335
+< \wvl < 1.137$\,\um. 
+\begin{plate*}
+\begin{center}
+% NB: figure produced with ~/arese/arese.pro:abs_xsx_gph()
+\includegraphics[width=\fltwdtdblclm]{/data/zender/fgr/o2x/abs_xsx}\vfill
+\end{center}
+\caption{
+Solar absorption continua of \OdX, \Ot, \Od, and \NOd.
+Continua of \OdOd\ (red) and \OdNd\ (blue) are plotted as
+binary absorption coefficients $\xsxbOdX$ (\cmFxmlcS) on the right-hand
+axis. 
+Continua of \Ot\ (black), \NOd\ (green), and \Od\ (yellow) are
+plotted as traditional cross sections $\xsx$ (\cmSxmlc) on the
+left-hand axis.  
+\label{plt:abs_xsx}}   
+\end{plate*}
+The 1.27\,\um\ band has not been adequately examined with modern
+laboratory techniques, so we adopt the cross sections for this band
+recommended by \cite{SPS98}. 
+On the basis of a number of earlier measurements, Solomon et~al.\
+constructed the 1.27\,\um\ band by stretching the measured 1.06\,\um\
+band to a full width at half maximum (FWHM) of 180\,\xcm\ and scaling
+its integrated band intensity by 1.6.
+The cross sections of \Ot\ and \Od\ \cite[]{WMO85}, and of \NOd\
+\cite[]{DCM88}, are shown for comparison.  
+The red curves show that significant \OdOd\ solar absorption occurs in
+two spectral regions: $0.3 < \wvl < 0.7$\,\um\ and $1.0 < \wvl <
+1.4$\,\um. 
+\OdOd\ visible absorption is due to simultaneous collision induced
+transitions in both \Od\ molecules, while near-infrared absorption 
+involves only one \Od\ transition.
+
+\cite{NeB98} recently measured $\xsxbOdOd$ for $0.455 < \wvl <
+0.830$\,\um\ and compared their measurements to those of \cite{GOB90}
+(Plate~\ref{plt:abs_xsx}).  
+The maximum $\xsxbOdOd$ and the integrated band intensities of
+most bands differed by $< 20$\% between the two sets of
+measurements. 
+Greenblatt et~al.\ found the integrated band intensity of the bands
+centered at 360, 380, and 477~nm varied by $< 15$\% from 
+$T = 296$\,\K\ to 196\,\K.
+Newnham and Ballard found the integrated band intensity of four bands
+from 532--630~nm varied by $< 10$\% from $T = 283$\,\K\ to 223\,\K\
+but that the intensity of the 477~nm band decreased by 30\% over this 
+temperature range. 
+Thus the two studies disagree on the temperature dependence of the
+the only band examined in both studies, the 477~nm band. 
+Why the disagreement at 477~nm exceeds the stated error bars of the
+two studies is unexplained. 
+Balloon-borne observations of the 447, 532, and 577~nm bands by
+\cite{OFH98} recorded a 20\% decrease in $\xsxbOdOd$ as the
+temperature increased from $T = 200$\,\K\ to 300\,\K. 
+Note that this decrease is in contrast to the increase of $\xsxbOdOd$
+with $T$ measured by Newnham and Ballard in the 477~nm band. 
+Osterkamp et~al.\ conclude that \OdOd\ may be a metastable complex
+with some dimer-like properties.
+For simplicity, our study assumes $\xsxbOdX$ is constant with
+temperature.
+However, we should remain open to the possibility that $\xsxbOdX$
+varies significantly with temperature for some bands.
+
+The parameter $\epsNd$ defines the efficiency of \Nd\ relative to
+\Od\ as a partner for inducing absorption in the \Od\ $1.27$\,\um\
+band. 
+The upper and lower blue curves centered at $\wvl = 1.27$\,\um\ in
+Plate~\ref{plt:abs_xsx} correspond to $\xsxbOdNd$ assuming $\epsNd =
+0.1$ and~0.3, respectively.
+All prior studies show $0.1 \le \epsNd \le 0.3$, and the preponderance 
+suggest $\epsNd = 0.3$ (see discussion by \cite{SPS98}).  
+
+% \cite{GOB90} found no evidence for temperature dependence in the
+% \OdOd\ absorption at temperatures above $-90$~C,
+% This shows that \OdOd\ van der Walls complexes are not present at
+% temperatures characteristic of Earth's atmosphere and may be ignored 
+% in this study.
+
+\cite{SPS98} used differential optical absorption spectroscopy at
+large zenith angles to show their high spectral resolution ($\approx
+0.6$~nm) in situ measurements agree with the laboratory
+cross sections of \cite{GOB90} (Plate~\ref{plt:abs_xsx}) to within
+0.3\% for the \OdOd\ band at 0.63\,\um.  
+\cite{MCB98} recently inferred $\xsxbOdX$ for $1.0 < \wvl < 1.57$\,\um\ 
+from field measurements with a high-resolution ($0.6~$\xcm)
+interferometer. 
+They inferred comparable peak intensities in the 1.06 and 1.27\,\um\
+\OdX\ bands, but narrower FWHMs, than previous investigators
+\cite[]{SPS98}.
+These narrower FWHMs would reduce absorption in the near-infrared
+\OdX\ bands by about 30\% relative to Greenblatt et~al.\ and Solomon
+et~al. 
+%This discrepancy, and possible explanations, are discussed in both
+%\cite{MCB98} and \cite{SPS98}.
+
+The uncertainties in $\xsxbOdX(\wvl)$ contribute roughly half of the 
+uncertainty in our estimate of global \OdX\ forcing.
+The uncertainty in $\xsxbOdX(\wvl)$ is $< 10\%$ for $0.335 <
+\wvl < 1.137$ \um\ \cite[]{GOB90}. 
+Uncertainty in $1.27$\,\um\ band absorption is $\sim 30\%$. 
+This was estimated by extrapolating to global scale the difference
+between single-column simulations employing the continua proposed by
+\cite{SPS98} and by \cite{MCB98}.
+For consistency, our study adopts the same cross sections as
+Solomon et~al., but we note two choices that keep our results for
+total \OdX\ absorption closer to those of Mlawer et~al.
+First, we use $\epsNd = 0.2$, a somewhat conservative value.
+Second, we neglect the \OdOd\ absorption band near 1.58\,\um.
+This band absorbs $\sim 9\%$ as much as the 1.27\,\um\ band
+\cite[]{MCB98}. 
+Appending the 1.58\,\um\ continuum to the Solomon et~al.\
+cross sections would increase our computed total \OdX\ solar forcing
+by $\sim 4\%$. 
+Other absorption features of \OdX\ are negligible in terms of the total
+absorbed solar irradiance.
+These features, and those of many other well-mixed collision
+complexes, are summarized in Table~\ref{tbl:cnc}. 
+
+\section{High Resolution Single Column Simulations}\label{sxn:spc}
+
+%\section{Overlap of \OdX\ with \HdO, \Ot, \Od, \NOd, and
+%\COd}\label{sxn:spc}  
+\OdX\ complexes are a relatively recent addition to the longstanding
+group of solar absorbers considered in large-scale atmospheric models:
+\HdO, \Ot, \Od, \NOd, and \COd. 
+As such, the spectrally and vertically dependent features of \OdX\
+absorption have not yet been thoroughly characterized in the
+literature. 
+We now analyze these features in high-resolution, single-column
+simulations in order to better understand their implications on
+global-annual scales.
+
+\subsection{Spectral Characteristics and Overlap}\label{sxn:ovr}
+Two previous studies characterized aspects of the spectral overlaps
+between \OdX\ and more familiar absorbers. 
+\citeauthor{PEP97} [\citeyear{PEP97}, Figure~2] show \OdX\ spectral
+features at surface and TOA for $335 < \wvl < 1137$~nm.
+\citeauthor{SPS98} [\citeyear{SPS98}, Figure~2] show residual surface
+absorption spectra of \OdOd, \Od, and \HdO\ in the region $610 < \wvl
+< 680$~nm.    
+To complement these studies, our Plate~\ref{plt:odac} shows the
+modeled absorption optical depth $\tauabs(\wvl)$ of all significant
+gaseous solar absorbers for $200 < \wvl < 1400$~nm.
+\begin{plate*}
+\begin{center}
+\includegraphics[width=\fltwdtdblclm]{/data/zender/fgr/o2x/odxc}\vfill
+\end{center}
+\caption{
+Decomposition of simulated absorption optical depth $\tauabs(\wvl)$ at
+the CART site at local solar noontime on October 15, 1995.
+Gaseous absorbers included are \OdOd\ (red), \OdNd\ (green), \HdO\
+(yellow), \Ot\ (blue), \Od\ (light blue), \NOd\ (light green), and
+\COd\ (black).   
+The line spectra of \HdO, \COd, and \Od\ are averaged over 10\,\xcm.  
+\label{plt:odac}}   
+\end{plate*}
+The spectra represent local solar noontime (solar zenith angle $\theta
+= 45.128\dgr$) for October~15, 1995, at the Clouds and Radiation
+Testbed (CART) site in Oklahoma.   
+This was a pristine day with minimal aerosol burden ($0.04 <
+\tauvisaer < 0.05$, not shown), low precipitable water (11.6\,\kgxmS),
+low column \Ot\ (233~DU), and estimated column \NOd\ of $5 \times 
+10^{19}$\,\xmS.    
+\cite{ZBP97} describe the multistream narrow band (10\,\xcm) Malkmus
+model, the experimental uncertainties, and all the input data in more
+detail.  
+
+Plate~\ref{plt:odac} isolates the solar absorption continuum 
+(using $\xsxbOdX$ from Plate~\ref{plt:abs_xsx}) of each gaseous
+absorber considered in the model.
+\OdX\ shares with \HdO\ the distinction of overlapping with all the
+significant solar absorbers.   
+The strongest visible bands of \OdOd\ overlap with the center of the
+\Ot\ Chappuis bands near 0.6\,\um.
+The \OdOd\ band at $0.630$\,\um\ overlaps the discrete \Od\ $\gamma$
+band at 0.629\,\um.
+The strong 1.06\,\um\ band partially overlaps a saturated water vapor
+band, but its center is the strongest nonoverlapped feature of \OdOd\
+in the spectrum.
+Absorption at 1.27\,\um\ shows strong overlap among the oxygen infrared 
+band, \OdOd, and \OdNd.
+Although 1.27\,\um\ is in a water vapor window, both wings of the \OdX\
+bands centered there overlap with weak \COd\ bands and with the
+wings of \HdO\ bands. 
+This overlap with \HdO\ lessens somewhat in dry air masses where
+column moisture is $< 5$\,\kgxmS\ (e.g., Antarctica), but \OdX\ 
+absorption is only weakly sensitive to variations in \HdO\ (see
+section~\ref{sxn:csn}). 
+As Plate~\ref{plt:odac} shows, contributions of \OdNd\ and \OdOd\ to
+the total 1.27\,\um\ continuum are nearly equal if $\epsNd = 0.2$.
+Using $\epsNd = 0.3$ (and weaker $\xsxbOdX(1.27$\,\um)), \cite{MCB98}  
+found \OdNd\ absorption may exceed \OdOd\ absorption in this band by
+15\%.  
+
+The \OdOd\ band at 0.477\,\um\ occupies a relatively transparent
+spectral region where it is often stronger than any other gaseous
+absorber, i.e., \Ot\ or \NOd.
+This band is discernible in routine optical depth spectra taken at the 
+CART site and other locations \cite[]{MBB99}.
+Note that neglecting \OdOd\ absorption in its stronger bands
+could bias operational retrievals of other absorber amounts (e.g.,
+\Ot, \NOd, or aerosol), leading to overestimates of order 0.01 optical 
+depths.  
+Fortunately, we are aware of no operational retrievals that are 
+compromised by neglect of \OdOd\ absorption.
+For this particular profile, we estimate \OdX\ causes 2.3\,\wxmS, or
+1.4\%, of the total modeled atmospheric solar absorption of 164\,\wxmS.
+Accounting for this absorption reduces the discrepancy between
+noontime modeled and observed surface insolation (773 and 760\,\wxmS,
+respectively) from 13.0 to 11.2\,\wxmS\ \cite[]{ZBP97}.   
+% swnb -K -U -p ${DATA}/arese/clm/951015_1200_arese_clm.nc -d ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_O2O2_O2N2.nc &
+% swnb -p ${DATA}/arese/clm/951015_1200_arese_clm.nc -d ${DATA}/tmp/951015_1200_arese_mdl_clr_aer.nc &
+% ncks -u -H -C -F -d levp,111 -v flx_bb_dwn_sfc,flx_bb_abs_atm,flx_bb_dwn_drc,flx_bb_dwn_dff ${DATA}/tmp/951015_1200_arese_mdl_clr_aer.nc
+% ncks -u -H -C -F -d levp,111 -v flx_bb_dwn_sfc,flx_bb_abs_atm,flx_bb_dwn_drc,flx_bb_dwn_dff ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_O2O2_O2N2.nc
+
+% swnb -r 0.2 -A -B -K -U -p ${DATA}/aca/mls_icrccm_92lvl.nc -d ${DATA}/tmp/mls_icrccm_clr_cln_O2O2_O2N2.nc &
+% swnb -r 0.2 -A -B -C -K -U -p ${DATA}/aca/mls_icrccm_92lvl.nc -d ${DATA}/tmp/mls_icrccm_clr_cln_O2O2_O2N2_xCO2.nc &
+% swnb -r 0.2 -A -B -O -K -U -p ${DATA}/aca/mls_icrccm_92lvl.nc -d ${DATA}/tmp/mls_icrccm_clr_cln_O2O2_O2N2_xO2.nc &
+% swnb -r 0.2 -A -B -p ${DATA}/aca/mls_icrccm_92lvl.nc -d ${DATA}/tmp/mls_icrccm_clr_cln.nc &
+% swnb -r 0.2 -m 0.1 -A -B -K -U -p ${DATA}/aca/mls_icrccm_92lvl.nc -d ${DATA}/tmp/mls_icrccm_cld_cln_O2O2_O2N2.nc &
+% swnb -r 0.2 -m 0.1 -A -B -C -K -U -p ${DATA}/aca/mls_icrccm_92lvl.nc -d ${DATA}/tmp/mls_icrccm_cld_cln_O2O2_O2N2_xCO2.nc &
+% swnb -r 0.2 -m 0.1 -A -B -p ${DATA}/aca/mls_icrccm_92lvl.nc -d ${DATA}/tmp/mls_icrccm_cld_cln.nc &
+% ncdiff -O -v htg_rate_bb,flx_bb_dwn_sfc,flx_bb_abs_atm,flx_bb_abs_sfc ${DATA}/tmp/mls_icrccm_clr_cln_O2O2_O2N2.nc ${DATA}/tmp/mls_icrccm_clr_cln.nc ${DATA}/tmp/mls_icrccm_clr_cln_O2O2_O2N2_frc.nc
+% ncdiff -O -v htg_rate_bb,flx_bb_dwn_sfc,flx_bb_abs_atm,flx_bb_abs_sfc ${DATA}/tmp/mls_icrccm_clr_cln_O2O2_O2N2.nc ${DATA}/tmp/mls_icrccm_clr_cln_O2O2_O2N2_xCO2.nc ${DATA}/tmp/mls_icrccm_clr_cln_CO2_frc.nc
+% ncdiff -O -v htg_rate_bb,flx_bb_dwn_sfc,flx_bb_abs_atm,flx_bb_abs_sfc ${DATA}/tmp/mls_icrccm_clr_cln_O2O2_O2N2.nc ${DATA}/tmp/mls_icrccm_clr_cln_O2O2_O2N2_xO2.nc ${DATA}/tmp/mls_icrccm_clr_cln_O2_frc.nc
+% ncdiff -O -v htg_rate_bb,flx_bb_dwn_sfc,flx_bb_abs_atm,flx_bb_abs_sfc ${DATA}/tmp/mls_icrccm_cld_cln_O2O2_O2N2.nc ${DATA}/tmp/mls_icrccm_cld_cln.nc ${DATA}/tmp/mls_icrccm_cld_cln_O2O2_O2N2_frc.nc
+% ncdiff -O -v htg_rate_bb,flx_bb_dwn_sfc,flx_bb_abs_atm,flx_bb_abs_sfc ${DATA}/tmp/mls_icrccm_cld_cln_O2O2_O2N2.nc ${DATA}/tmp/mls_icrccm_cld_cln_O2O2_O2N2_xCO2.nc ${DATA}/tmp/mls_icrccm_cld_cln_CO2_frc.nc
+% ncks -u -H -C -F -v htg_rate_bb,flx_bb_dwn_sfc,flx_bb_abs_atm,flx_bb_abs_sfc ${DATA}/tmp/mls_icrccm_clr_cln_O2O2_O2N2_frc.nc | m
+
+\subsection{Vertical Heating Profile}\label{sxn:htg}
+To illustrate the vertical profile of \OdX\ heating, we simulated
+``climatological'' clear and cloudy sky, aerosol-free heating profiles
+for a 92 level midlatitude summer atmosphere \cite[]{Bri921}.
+Figure~\ref{fgr:odx_htg} shows the resulting vertical profile of total 
+solar heating for the clear sky profile, the \OdX\ contribution to
+this clear sky heating, and the \OdX\ cloudy sky heating.   
+\begin{figure}
+\begin{center}
+% NB: This figure produced by ~/idl/mie.pro:odx_htg_gph()
+\includegraphics*[width=\fltwdtsngclm]{/data/zender/fgr/o2x/o2x_htg}\vfill
+\end{center}
+\caption{
+Vertical profile of solar gaseous heating (\kxd) for a standard,
+climatological midlatitude summer atmosphere.
+Shown are the total solar heating rate in clear sky (solid) and,
+exaggerated by a factor of 100, the \OdX\ contributions to the heating
+in clear sky (dashed) and in the presence of a 100\,\gxmS, 100\,\mb\ thick
+stratus cloud (dotted).
+\label{fgr:odx_htg}}   
+\end{figure}
+The solar zenith angle ($\theta = 60\dgr$), surface albedo ($A
+= 0.2$), and cloud properties (100\,\mb thick liquid stratus cloud
+centered at 850\,\mb, condensate path 100\,\gxmS) represent
+climatological atmospheric properties.  
+The \OdX\ heating profiles are multiplied by a factor of 100 for
+clarity.  
+
+The clear sky \OdX\ heating increases rapidly with pressure, peaking
+at the surface. 
+Thus \OdX\ clear sky heating weakly destabilizes the atmospheric
+column. 
+At moderate zenith angles, \OdX\ absorption is relatively weak (i.e.,
+$\odxcOdX < 0.1$) and is not dominated by overlap with other gases
+(Plate~\ref{plt:odac}). 
+Heating by a well-mixed molecule in this nonoverlapped, optically
+thin limit is constant with air density.  
+In constrast, it is easy to show that in this limit, heating by a
+well-mixed collision complex (or dimer) increases linearly with
+air density.  
+The high correlations of the \OdX\ heating in Figure~\ref{fgr:odx_htg}
+with air density (not shown) confirm that \OdX\ heating obeys the
+weakly absorbing linear limit in both clear and cloudy skies.
+The absorbed energy actually increases quadratically with dry air
+density, i.e., linearly with \OdX\ abundance (\ref{eqn:N}), but one
+factor of density (the heat capacity of air in \jxmCK) is removed in
+converting from a volumetric heating (\wxmC) to an absolute heating
+rate (\kxd).  
+We note that \OdX\ is the only significant solar absorber with this 
+vertical signature. 
+The \OdX\ heating rates in Figure~\ref{fgr:odx_htg} do not appear 
+linear because they are expressed as functions of pressure rather
+than density. 
+
+Figure~\ref{fgr:odx_htg} shows that clouds significantly enhance
+\OdX\ heating above cloud top and reduce heating beneath cloud top
+(dotted line).  
+Thus clouds shift the \OdX\ heating profile maximum upward to the
+level of the cloud top.
+This feature appears prominently in climatological averages of \OdX\
+heating shown in section~\ref{sxn:vrt}.
+
+In summary, \OdX\ bands are present in much of the visible spectrum 
+and in important near-infrared windows.
+These bands are well characterized by the linear limit of small
+absorber paths. 
+The vertical profile of clear sky \OdX\ heating weakly decreases
+the atmospheric stability. 
+
+\subsection{Implementation of Absorption in GCM}
+To estimate the global abundance and forcing of \OdX, we employed 
+the National Center for Atmospheric Research (NCAR) Community Climate
+Model, Version~3 (CCM3) general circulation model \cite[]{KHB98}.
+The {CCM3} employs an 18 bin $\delta$-Eddington approximation for the 
+solar spectral region \cite[]{Bri921}.   
+The eight bins for $\lambda < 0.7$\,\um\ represent monochromatic
+intervals, but water vapor absorption in the near-infrared is
+represented by a seven bin $k$-distribution technique.
+We created binary cross sections $\xsxbar$ for each CCM spectral
+bin by spectrally averaging $\xsxbOdX(\wvl)$ from the laboratory
+resolution ($\sim 0.15$~nm) to the CCM resolution.  
+The near-infrared 1.06 and 1.27\,\um\ continuum absorption bands were
+mapped into the CCM $k$-distribution bins corresponding to the mean
+intensity of the nearest water vapor bands.
+This procedure included weighting the high-resolution cross sections
+by the incident solar flux at the top of the atmosphere in the more
+detailed narrow band multistream (NBM) model \cite[]{ZBP97}.  
+In offline single-column comparisons, the CCM3 radiation model
+and the NBM model \OdX\ absorption agreed to within 10\% for
+% DBG: XXX 
+standard atmospheric conditions ranging from Arctic to Tropical, so no
+tuning of the $\xsxbar$ was required.  
+
+\section{Global Abundance and Absorption}\label{sxn:res} 
+
+The NCAR CCM3 general circulation model \cite[]{KHB98} has 18 levels
+in the vertical and a horizontal resolution of $\sim 2.8\dgr
+\times 2.8\dgr$ near the equator.   
+The dynamical timestep is 20~min, but radiative fluxes are computed 
+hourly. 
+Cloud diagnosis is based on convective activity, stability, and
+relative and absolute humidity.
+Hydrometeor optical properties are partitioned into liquid and ice
+components based on temperature and pressure.  
+\cite{KHH98} show that compared to observations, the CCM3 produces 
+little or no bias in clear sky radiative fluxes and only small biases
+in cloudy sky fluxes. 
+Thus the CCM3 is suitable for assessing the radiative forcing of other
+(noncloud) atmospheric constituents.
+
+We performed three CCM integrations in order to separately estimate
+the forcings caused by \OdOd, \OdNd, and $\OdOd + \OdNd$,
+respectively. 
+Each integration is 1~year long and is initialized from the same
+fully spun up data set for January~1. 
+The integrations employed climatological sea surface temperatures, and
+all forcings are seasonally averaged (i.e., 3~month means) in 
+order to minimize the influence of variability on the results.
+The solar radiation physics were called twice each solar radiation
+time step (60~min): once with and once without \OdX\ heating. 
+\OdX\ forcing is the difference between these values.
+We archived \OdX\ abundance and forcing every times tep (20~min), but
+these forcings were not allowed to affect the predicted climate. 
+
+\subsection{Annual Mean Abundance and Absorption}\label{sxn:ann_avg}
+Collision complex abundance is a statistic of the second moment of
+dry air density (\ref{eqn:N}).
+Plate~\ref{plt:O2O2_ann_avg} shows the annual mean column abundance
+of \OdOd, $\npcOdOd$.  
+\begin{plate*}
+\begin{center}
+\includegraphics[width=\fltwdtdblclm]{/data/zender/fgr/o2x/dmr04_8589_NPCO2O2}\vfill
+%\includegraphics[width=\fltwdtdblclm]{/data/zender/fgr/o2x/dmr04_8589_NPCO2N2}\vfill
+\end{center}
+\caption{
+Annual mean column abundance $\npcOdOd$ ($\times 10^{42}$ \mlcSxcmF)
+of \OdOd.  
+\label{plt:O2O2_ann_avg}}   
+\end{plate*}
+The major meridional gradient is caused by the poleward decrease in
+zonal mean temperature.
+Cold polar air of a given mass is denser than warm tropical air.
+Since $\cncOdOd$ is the square of $\cncOd$ (\ref{eqn:N}), $\npcOdX$ is 
+$\sim 20\%$ greater in the Arctic than the tropics at the same sea
+level pressure. 
+The same would be true of the Antarctic, except the Antarctic plateau
+displaces the densest portion of the troposphere, significantly
+reducing \OdX\ column abundance.
+The Tibetan Plateau, Greenland, East Africa, the Andes, and the
+Rockies also show significant orographic reduction in $\npcOdX$.
+Note that orographic reduction of $\npcOdX$ is time-invariant, in
+contrast to effects of seasonally varying temperature and pressure in
+the extratropics, discussed below.  
+Whereas the zonal mean column abundance of a well-mixed molecule
+(e.g., $\npcOd$) decreases by $30\%$ from sea level in the Arctic to
+the Antarctic plateau at 700\,\mb, the corresponding decrease in
+$\npcOdX$ exceeds 50\%. 
+% ncks -H -u -F -C -v PS ${DATA}/sld012d/sld012d_xavg_8589_01.nc
+% ncks -H -u -F -C -v NPCO2O2 ${DATA}/dmr04/dmr04_8589_01_x.nc
+In summary, \OdX\ is more sensitive to the thermodynamic and
+orographic environment than \Od\ or \Nd\ alone, owing to its quadratic
+dependence on these constituents.   
+
+Uncertainties in simulated $\npcOdX$ stem from biases in model
+pressure $p$, temperature $T$, and surface elevation.
+The maximum seasonal mean CCM temperature bias in the lower
+troposphere is $< 6$\,\K\ \cite[]{HKH98}.
+The maximum seasonal mean CCM grid point surface pressure bias is 
+$< 1\%$ \cite[]{HHB98}. 
+Biases in column \Od\ arising from the discretization of surface
+elevation do not exceed 1\%.  
+Assuming the worst case scenario (errors are additive) yields a
+conservative uncertainty in seasonal grid point mean $\npcOd$ and
+$\npcNd$ of $\pm 4\%$, implying uncertainty bounds for $\npcOdOd$ and
+$\npcOdNd$ of $\pm 8\%$. 
+The maximum uncertainty is over the Antarctic shelf and the
+Tibetan Plateau, regions where variability and differences with
+climatological analyses are relatively large \cite[]{HHB98}.
+The simulated annual mean surface pressure is 984.5\,\mb, in excellent
+agreement with 984.9\,\mb\ from National Centers for Environmental
+Prediction (NCEP) reanalyses.  
+% ncks -H ${DATA}/ncep/ncep_8589_xy.nc
+This confirms that grid point biases in $\npcOdX$ are generally random,
+not systematic, and we place the global mean bias conservatively at
+$\pm 2\%$.   
+As will be described below, grid point biases in simulated \OdX\
+forcing are generally dominated by uncertainties in absorber
+cross section and cloud vertical distribution, not \OdX\ abundance.   
+
+The regional abundance of any well-mixed collision complex \XY\ is
+determined by scaling Plate~\ref{plt:O2O2_ann_avg} by the product of 
+the ratios $\cncX / \cncOd$ and $\cncY / \cncOd$.
+Table~\ref{tbl:cnc} summarizes the scale factors (relative to \OdOd)
+and global annual mean abundances of many well-mixed collision
+complexes. 
+\begin{table*}\setlength{\tblwdt}{30.0pc}
+\begin{center}
+\begin{minipage}{\tblwdt}
+\caption{\parbox{\tblwdt}{Global Annual Mean Abundances of Well-Mixed Collision Complexes}}
+\vspace{\cpthdrhlnskp}
+\begin{tabular*}{\tblwdt}{l 
+@{\extracolsep{\fill}} l 
+r@{\extracolsep{0.0em}.}l 
+@{\extracolsep{\fill}} l}
+\tableline \rule{0.0ex}{\hlntblhdrskp}% 
+Complex & Scale & \multicolumn{2}{c}{Abundance,} & Collision Induced Absorption Bands \\[0.0ex]
+\XY & $\npcXY / \npcOdOd$ & \multicolumn{2}{c}{\mlcSxcmF} & \\[0.5ex]
+\tableline \rule{0.0ex}{\hlntblntrskp}%
+% ncks -H -C -F -u -v NPCO2O2 ${DATA}/dmr04/dmr04_8589_xy.nc
+% NPCO2O2 = 1.23809e+17 MLC2/M5
+% Locations of collision induced bands of well-mixed complexes:
+% O2-O2: Fundamental (forbidden) vibration band 6.42 um (GoY89 p. 116)
+% O2-O2: Collision induced rotation spectrum at 100 cm-1 = 100 um  (GoY89 p. 197)
+% O2-O2: 1.58 um (MCB98 p. 3862)
+% N2-N2: Fundamental (forbidden) vibration band 4.29 um (GoY89 p. 193)
+% N2-N2: Collision induced rotation spectrum at 90 cm-1 = 110 um (GoY89 p. 192)
+% O2-N2: N2 is O2 Partner at 1.27 um but not 1.06 um (SPS98 p. 3850)
+% O2-N2: N2 is O2 partner in Herzberg (Sha77 p. 525)
+% O2-A : A is O2 Partner at 1.27 um (SPS98 p. 3850) and Herzberg (ShP77 p. 433)
+% O2-CH4 : CH4 is O2 Partner in Herzberg (OOK95 p. 11830)
+% O2-CO2: CO2 is O2 Partner in Herzberg (OOK95 p. 11830)
+% CO2-CO2: Rotational band at 200 um (GoY89 p. 206)
+\OdOd & $1$ & $1$ & $24 \times 10^{43}$ & HC, 1.58\,\um\, 6.42\,\um\ \\[0.0ex]
+\OdNd & $3.728$ & $4$ & $62 \times 10^{43}$ & HC, 4.29\,\um, 6.42\,\um, 100\,\xcm\ \\[0.0ex]
+\NdNd & $13.90$ & $1$ & $72 \times 10^{44}$ & 4.29\,\um, 90\,\xcm\ \\[0.0ex]
+\OdAr & $0.0446$ & $5$ & $52 \times 10^{41}$ & HC, 1.27\,\um, 6.42\,\um\ \\[0.0ex]
+\OdCOd & $1.69 \times 10^{-3}$ & $2$ & $09 \times 10^{40}$ & 1.27\,\um\ \\[0.0ex]
+\OdCHq & $8.1 \times 10^{-6}$ & $1$ & $00 \times 10^{38}$ & HC \\[0.0ex]
+\COdCOd & $2.87 \times 10^{-6}$ & $3$ & $55 \times 10^{37}$ & 60\,\xcm\ \\[\tblendhlnskp]
+\tableline
+\end{tabular*}
+\vspace*{\hlncptftrskp}\par\parbox{\tblwdt}{\hspace{1em}% NB: Use vspace*
+Scale factors relate $\npcXY$ to $\npcOdOd$ (\ref{eqn:N}).
+Band locations are approximate centers of absorption bands.
+HC denotes Herzberg Continuum ($\sim$~200--250~nm).
+\OdOd\ and \OdNd\ bands considered in this study
+(Plate~\ref{plt:abs_xsx}) are omitted for brevity.  
+Spectral data compiled from
+\cite{Sha77}, \cite{ShP77}, \cite{GoY89}, \cite{OTN91}, \cite{OOK95},
+\cite{SPS98}, and \cite{MCB98}. 
+\label{tbl:cnc}}   
+\end{minipage}
+\end{center}
+\end{table*}
+The scale factors were computed using atmospheric abundances of
+\citeauthor{GoY89} [\citeyear{GoY89}, p.~9], corrected to present-day
+values in the case of \COd\ (355~ppm) and \CHq\ (1.7~ppm). 
+
+The final column of Table~\ref{tbl:cnc} lists the approximate centers 
+of the collision induced absorption bands due to each complex, apart
+from the \OdX\ bands shown in Plate~\ref{plt:abs_xsx}.
+Taken together, such bands appear in the spectrum from the Herzberg
+continuum to the far infrared.
+In addition to the bands shown in Plate~\ref{plt:abs_xsx}, collisions
+involving \OdOd\ and \OdNd\ induce oxygen absorption in the Herzberg
+continuum from 195 to 250~nm and in the oxygen (forbidden) 
+fundamental vibration band at 6.42\,\um\ \cite[]{ShP77,OTN91}.   
+Both \OdNd\ and \NdNd\ induce absorption in the nitrogen (forbidden)
+fundamental band at 4.29\,\um. 
+Insolation in these spectral regions is too weak to allow significant
+solar absorption in absolute terms. 
+However, it may be important to account for this absorption when
+retrieving atmospheric parameters such as temperature from remotely
+sensed spectra, for example, in the \COd\ 4.3\,\um\ band
+\cite[][p. 192]{GoY89}.
+
+Plate~\ref{plt:O2O2_O2N2_ann_avg_frc} shows the annual mean increase
+in atmospheric absorption due to \OdX.
+\begin{plate*}
+\begin{center}
+\includegraphics[width=\fltwdtdblclm]{/data/zender/fgr/o2x/dmr04_8589_FSATFRC}\vfill
+%\includegraphics[width=\fltwdtdblclm]{/data/zender/fgr/o2x/dmr06_8589_FSATFRC}\vfill
+%\includegraphics[width=\fltwdtdblclm]{/data/zender/fgr/o2x/dmr05_8589_FSATFRC}\vfill
+\end{center}
+\caption{
+Annual mean increase in column atmospheric absorption (\wxmS) due to
+\OdX.
+%Note difference in scales.
+%White regions exceed maximum scale value by $< 10\%$.
+\label{plt:O2O2_O2N2_ann_avg_frc}}   
+\end{plate*}
+The annual mean forcing approximately resembles the abundance
+(Plate~\ref{plt:O2O2_ann_avg}), though some new features are evident.
+First note the enhanced atmospheric absorption above bright, low
+surfaces (desert, stratus clouds, ice). 
+Since the spectral optical depth of most \OdX\ bands is $< 0.05$
+(Plate~\ref{plt:odac}), absorption in these bands is in the 
+linear limit where a change in absorber path causes a proportionate
+change in atmospheric absorption.  
+Reflection from low, bright surfaces increases photon path lengths in
+the \OdX-rich lower atmosphere.
+This increases the mean \OdX\ path and thus the \OdX\ absorption. 
+However, reflection from high clouds (e.g., tropical cirrus)
+prevents photons from reaching the lower atmosphere and reduces
+the mean \OdX\ path traversed by these photons.
+This reduces \OdX\ absorption and causes the local minima in \OdX\
+forcing in the Intertropical Convergence Zone (ITCZ) region. 
+The zonal annual mean atmospheric absorption due to \OdX\ is 
+$\sim 0.9$\,\wxmS\ and does not vary strongly with latitude (not
+shown). 
+
+It is interesting to note that geographic structure of \OdNd\
+absorption closely resembles that of \OdOd\ absorption, so that their
+sum, Plate~\ref{plt:O2O2_O2N2_ann_avg_frc}, adequately represents the
+structure of each.
+Since \OdNd\ absorption occurs entirely in the 1.27\,\um\ band,
+it is enhanced relative to \OdOd\ over vegetated surfaces but
+diminished over sea-ice and ocean due differences between the
+near-infrared and visible albedos of these surfaces.
+The magnitude of global mean \OdNd\ absorption is proportional to the 
+assumed \Nd\ efficiency. 
+This study assumes $\epsNd = 0.2$, which leads to \OdNd\ forcing being
+20\% of \OdOd\ absorption.
+As discussed in section~\ref{sxn:xsx}, $\epsNd$ may be $0.3$, in which
+case \OdNd\ forcing would be 30\% of \OdOd\ forcing.   
+
+It is useful to distinguish atmospheric absorption from other common
+metrics of radiative forcing. 
+Table~\ref{tbl:frc} summarizes the global mean statistics of \OdX\ 
+atmospheric forcing, surface forcing, column radiative forcing, and
+net radiative forcing at the tropopause. 
+\begin{table}\setlength{\tblwdt}{\fltwdtsngclm}
+\caption{Global Annual Mean Forcings of \OdX} 
+\vspace{\cpthdrhlnskp}
+\begin{tabular*}{\tblwdt}{l 
+@{\extracolsep{\fill}} r@{\extracolsep{0.0em}.}l 
+@{\extracolsep{\fill}} r@{\extracolsep{0.0em}.}l 
+@{\extracolsep{\fill}} r@{\extracolsep{0.0em}.}l}
+\tableline \rule{0.0ex}{\hlntblhdrskp}% 
+Forcing, \wxmS\ & \multicolumn{2}{c}{\OdOd} & \multicolumn{2}{c}{\OdNd} & \multicolumn{2}{c}{Total} \\[0.5ex]
+\tableline \rule{0.0ex}{\hlntblntrskp}%
+Atmospheric Absorption & $0$ & $78$ & $0$ & $15$ & $0$ & $93$ \\[0.0ex]
+% Atmospheric Absorption & $0.780251$ & $0.152012$ & $0.930421$ \\[0.0ex]
+(same, but for clear sky) & ($0$ & $78$) & ($0$ & $17$) & ($0$ & $94$) \\[0.0ex]
+% (same, but for clear sky) & ($0.775744$) & ($0.169158$) & ($0.942698$) \\[0.0ex]
+Surface Insolation & $-0$ & $50$ & $-0$ & $10$ & $-0$ & $60$ \\[0.0ex]
+% Surface Insolation & $-0.496327$ & $-0.100377$ & $-0.595738$ \\[0.0ex]
+Surface Absorption & $-0$ & $42$ & $-0$ & $08$ & $-0$ & $51$ \\[0.0ex]
+% Surface Absorption & $-0.42418$ & $-0.0849603$ & $-0.508373$ \\[0.0ex]
+Sfc.\ $+$ Atm.\ Absorption & $0$ & $36$ & $0$ & $07$ & $0$ & $42$\\[0.0ex]
+% Sfc.\ $+$ Atm.\ Absorption & $0.356073$ & $0.0670514$ & $0.422048$\\[0.0ex]
+Net Flux at Tropopause & $0$ & $34$ & $0$ & $06$ & $0$ & $40$\\[\tblendhlnskp]
+% Net Flux at Tropopause & $0.$ & $$ & $$\\[\tblendhlnskp]
+\tableline
+\end{tabular*}
+\vspace*{\hlncptftrskp}\vfill\parbox{\tblwdt}{\hspace{1em}% NB: Use vspace*
+Total forcings may be up to 20\% lower or 30\% higher than indicated.  
+See text for uncertainty analysis.
+Sfc, surface; Atm, atmosphere.}
+\label{tbl:frc}   
+\end{table}
+The first row, atmospheric forcing, is the mean increase in
+atmospheric absorption due to \OdX\
+(Plate~\ref{plt:O2O2_O2N2_ann_avg_frc}), 0.93\,\wxmS.  
+For comparison, the all sky solar absorption due to \HdO, \Ot,
+\Od, and \COd\ is $\sim 43$, 14, 2, and 0.5\,\wxmS, respectively
+\cite[]{KiT97} (\NOd\ abundance is highly heterogeneous and a reliable
+estimate of its mean absorption has yet to be made).   
+The second row shows that on average, the clear sky atmospheric
+absorption by \OdX\ slightly exceeds the all sky absorption.
+
+Atmospheric absorption at solar wavelengths reduces surface
+insolation (third row of Table~\ref{tbl:frc}) and thus surface
+absorption (fourth row). 
+The fifth row shows the column radiative forcing, the sum of
+atmospheric forcing and surface forcing.
+This quantity  (column radiative forcing) equals the change in net
+radiative flux at the top of the atmosphere.
+The impact of atmospheric constituents on tropospheric climate is, by 
+convention, quantified by the change in net radiative flux at the
+tropopause, shown in row six.
+More than 97\% of \OdX, and thus 97\% of \OdX\ absorption, is in the 
+troposphere (see Plate~\ref{plt:O2O2_O2N2_csn_avg_x}).
+Therefore the column radiative forcing of \OdX\ nearly equals the net
+radiative forcing at the tropopause.
+
+\subsection{Uncertainty in Mean \OdX\ Forcing}\label{sxn:err}  
+The largest uncertainties in the estimates in Table~\ref{tbl:frc} stem
+from uncertainties in cross section $\xsxbOdOd$, \Nd\ efficiency
+$\epsNd$, \OdX\ abundance $\npcOdX$, and cloud vertical distribution.
+The uncertainty ranges for these quantities are $\xsxbOdOd(\lambda)$,
+$-30$ to $+10\%$, depending on $\lambda$ (see section~\ref{sxn:xsx});
+$\epsNd$, $\pm 50\%$; and $\npcOdX$, $\pm 2\%$. 
+Also, appending the \OdOd\ 1.58\,\um\ continuum of \cite{MCB98} to the 
+\cite{SPS98} cross sections would increase our computed total
+\OdX\ solar forcing by $\sim 4\%$.
+As discussed in section~2.1, the possible temperature dependence of 
+$\xsxbOdX(\lambda)$ is not yet fully understood
+\cite[]{GOB90,NeB98,OFH98}.     
+Therefore we have not included uncertainty due to possible temperature
+dependence of $\xsxbOdX$ in our error analysis.
+
+The simulated mean clear sky and all sky planetary albedos agree with
+satellite observations to within 0.005 \cite[]{HKH98}, eliminating the
+possibility of gross surface or cloud reflectance biases in estimated
+\OdX\ forcing.
+Modeled total cloud fraction, 0.588, is bracketed by the Nimbus~7 and 
+International Satellite Cloud Climatology Project (ISCCP) estimates of
+0.522 and 0.625, respectively \cite[]{HKH98}. 
+The vertical distribution of cloudiness generally agrees with
+observations for clouds below 400\,\mb\ but disagrees for cloud top
+heights above 400\,\mb, a region where clouds efficiently reduce \OdX\
+forcing.  
+The CCM high cloud fraction, 0.34, exceeds ISCCP analyses by 0.20
+\cite[]{HKH98}.  
+There is considerable uncertainty in the observations, but if the
+ISCCP total and high cloud estimates are correct, then we estimate the
+modeled all sky \OdX\ forcing is up to 10\% too low because of
+exaggerated amounts of high-level cloud relative to low-level cloud. 
+
+Except for \OdX\ abundance, the aforementioned uncertainties are
+systematic, not random. 
+Summing the uncertainties for a conservative error estimate yields a
+total uncertainty range for the all sky forcings in
+Table~\ref{tbl:frc} of $-20$ to $+30\%$.     
+Thus the uncertainty range for \OdX\ all sky absorption is
+0.75--1.21\,\wxmS. 
+The lower bound forcing corresponds to the 1.06 and 1.27\,\um\
+$\xsxbOdX$ of \cite{MCB98} and \Nd\ efficiency $\epsNd = 20\%$
+(\ref{eqn:tau}).   
+The upper bound forcing uses $\xsxbOdX$ from \cite{GOB90} and
+\cite{SPS98}, $\epsNd = 30\%$, and assumes that 4\% of \OdX\
+absorption occurs at 1.58\,\um\ and that the CCM3 overpredicts high
+level clouds relative to low-level clouds.  
+
+The results in Table~\ref{tbl:frc} appear to contrast with two prior
+studies. 
+\cite{PEP97} estimate \OdOd\ enhances all sky heating relative to
+clear sky heating by $\sim 7\%$ (neglecting the 1.27\,\um\ band).
+Using identical \OdX\ cross sections to our study, \cite{SPS98}
+estimated the mean atmospheric absorption due to \OdX\ is
+0.9--1.3\,\wxmS. 
+Both these prior studies used the same method to convert single-column
+results to global mean results.
+The method assumes 50\% of the globe is covered with cloud top heights
+at 700\,\mb\ and that these clouds increase the photon path by 30~km
+\cite[]{PEP97}.
+Thus their conversion method assumes fewer and lower clouds than
+predicted by the CCM3.
+These assumptions both lead to larger forcings than shown in
+Table~\ref{tbl:frc} and, taken together, suffice to explain the
+differences between the studies.  
+It is unclear whether assumptions regarding surface albedo and
+elevation also contribute to these model differences.
+
+% NB: Column 1 (O2O2) is from dmr06
+% NB: Column 2 (O2N2) is from dmr05
+% NB: Column 3 (O2O2+O2N2) is from dmr04
+% ncks -H -u -F -C -v FSATFRC,FSDSFRC,FSNTFRC,FSNSFRC,FSATCFRC,FSNTCFRC,FSNSCFRC ${DATA}/dmr04/dmr04_8589_xy.nc
+% Find relation between absorption increase and net radiative forcing
+% at TOA and at tropopause for the 951015_1200 ARESE profile:
+% ncdiff -O -v flx_bb_net,flx_bb_dwn_sfc,flx_bb_abs_atm,flx_bb_abs_sfc ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_O2O2_O2N2.nc ${DATA}/tmp/951015_1200_arese_mdl_clr_aer.nc ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_O2O2_O2N2_frc.nc
+% ncks -u -H -C -F -v flx_bb_net,flx_bb_dwn_sfc,flx_bb_abs_atm,flx_bb_abs_sfc ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_O2O2_O2N2_frc.nc | m
+% Tropopause (change in temperature gradient) occurs at about 100 mb 
+% Delta flx_bb_abs_atm=2.31 W m-2
+% Delta flx_bb_dwn_sfc=-1.86 W m-2
+% Delta flx_bb_abs_sfc=-1.51 W m-2
+% Delta flx_bb_net(TOA)=0.801 W m-2
+% Delta flx_bb_net(100 mb)=0.779 W m-2 
+% Delta flx_bb_net(120 mb)=0.764 W m-2 
+% Delta flx_bb_net(150 mb)=0.738 W m-2 
+% Delta flx_bb_net(200 mb)=0.682 W m-2 
+% Fraction of column O2O2 absorption above 100 mb is
+% (0.801-0.779)/(2.31) ~= 0.010, or 1%. 
+% Relative importance of stratospheric O2O2 increases over high clouds.
+% Therefore estimate net flux at tropopause as (98% * FSAT_dlt)-(FSNS_dlt) 
+% Show fraction of O2-O2 column above a given level:
+% ncks -C -H -v cnc_O2_npl_O2_clm_frc,tpt ${DATA}/aca/trp_afgl_73lvl.nc | m
+
+\subsection{Seasonal Structure of Abundance and Absorption}\label{sxn:csn}  
+Owing to the seasonal cycles of insolation and temperature, 
+annual mean forcings do not suffice to characterize the
+geographic and vertical distribution of \OdX\ forcing as it impacts
+the climate system. 
+To illustrate this point, Figure~\ref{fgr:NPCO2O2_x} shows the zonal
+mean of the column abundance of \OdOd\ for December--February (DJF)
+and June--August (JJA). 
+\begin{figure}
+\begin{center}
+\includegraphics[width=\fltwdtsngclm]{/data/zender/fgr/o2x/dmr04_8589_1202_0608_x_NPCO2O2}\vfill
+\end{center}
+\caption{
+Zonal mean column abundance of \OdOd, $\npcOdOd$ ($\times
+10^{42}$\,\mlcSxcmF), for DJF (solid line) and JJA (dashed line).   
+\label{fgr:NPCO2O2_x}}
+\end{figure}
+The increases in $\npcOdX$ from summer to winter in the North and
+South polar regions are 8--10\% and 1--3\%, respectively. 
+% ncks -H -u -F -C -v NPCO2O2 ${DATA}/dmr04/dmr04_8589_01_x.nc
+% ncks -H -u -F -C -v NPCO2O2 ${DATA}/dmr04/dmr04_8589_07_x.nc
+These increases are entirely due to seasonal changes of pressure and
+temperature.  
+Although the solar radiative forcing of \OdX\ during polar winter is
+zero, this seasonal cycle in $\npcOdX$ does affect \OdX\ absorption
+bands in the far infrared (see Table~\ref{tbl:cnc}) throughout the
+year. 
+The meridional gradient and seasonal changes in $\npcOdX$ depicted in
+Figure~\ref{fgr:NPCO2O2_x} apply to all other collision complexes in
+Table~\ref{tbl:cnc} as well. 
+
+The strongest modulator of solar radiative forcing is, of course, the
+seasonal change of insolation.
+Plate~\ref{plt:O2O2_O2N2_csn_avg} shows the geographic distribution
+of the seasonal mean atmospheric absorption by \OdX.
+\begin{plate*}
+\begin{center}
+\includegraphics[width=0.5\fltwdtdblclm]{/data/zender/fgr/o2x/dmr04_8589_1202_FSATFRC}%
+\includegraphics[width=0.5\fltwdtdblclm]{/data/zender/fgr/o2x/dmr04_8589_0608_FSATFRC}%
+
+\includegraphics[width=0.5\fltwdtdblclm]{/data/zender/fgr/o2x/dmr04_8589_0305_FSATFRC}%
+\includegraphics[width=0.5\fltwdtdblclm]{/data/zender/fgr/o2x/dmr04_8589_0911_FSATFRC}%
+\end{center}
+\caption{
+Seasonal mean increase in atmospheric solar absorption (\wxmS) due to \OdX. 
+(a) December--February (DJF).
+(b) March--May (MAM).
+(c) June--August (JJA).
+(d) September--November (SON).
+White regions exceed maximum scale value by $< 0.7$\,\wxmS.
+\label{plt:O2O2_O2N2_csn_avg}}
+\end{plate*}
+\OdX\ absorption is greatest in polar regions in summer, where peak
+insolation coincides with the greatest \OdX\ abundances
+(Figure~\ref{fgr:NPCO2O2_x}). 
+Plates~\ref{plt:O2O2_O2N2_csn_avg}a and~\ref{plt:O2O2_O2N2_csn_avg}c
+show southern and northern summer forcings are nearly symmetric
+about the equator.
+Arctic forcing is 10--30\% stronger than Antarctic forcing, mainly
+the Antarctic plateau reduces $\npcOdX$.
+% ncks -H -u -F -C -v FSATFRC ${DATA}/dmr04/dmr04_8589_01_x.nc
+Most remarkable are the large polar regions where atmospheric \OdX\
+absorption approaches or exceeds 2.0\,\wxmS\ on seasonal timescales.  
+Seasonal sea ice boundaries appear in
+Plates~\ref{plt:O2O2_O2N2_csn_avg}a--\ref{plt:O2O2_O2N2_csn_avg}d
+where they demarcate the open ocean from regions of higher absorption.  
+Equinoctial forcings (Plates~\ref{plt:O2O2_O2N2_csn_avg}b
+and~\ref{plt:O2O2_O2N2_csn_avg}d) extend farther into the winter
+hemisphere than solstitial forcings, and are weaker.  
+%Plate~\ref{plt:O2O2_O2N2_csn_avg} can be used to estimate the
+%corrections needed to account for \OdX\ in models which do not yet
+%incorporate its affects.
+
+Surface albedo, elevation, and clouds all play roles in determining
+the seasonal forcing maxima near the poles. 
+To help disentangle these roles, we show in Figure~\ref{fgr:FSATFRC_x}
+the zonal mean of the winter and summer seasonal forcings
+(Plates~\ref{plt:O2O2_O2N2_csn_avg}a
+and~\ref{plt:O2O2_O2N2_csn_avg}c) due to \OdX.   
+\begin{figure}
+\begin{center}
+% NB: This figure made with ~/idl/mie.pro:gcm_vy_gph()
+\includegraphics[width=\fltwdtsngclm]{/data/zender/fgr/o2x/dmr04_8589_1202_0608_x_FSATFRC}\vfill
+\end{center}
+\caption{
+Zonal seasonal mean increase in atmospheric solar absorption (\wxmS)
+due to \OdX: DJF (solid line) and JJA (dashed line).  
+\label{fgr:FSATFRC_x}}
+\end{figure}
+The influence of clouds and surface albedo on \OdX\ forcing is
+clarified by comparing the seasonal forcings in
+Figure~\ref{fgr:FSATFRC_x} to the seasonal abundances in
+Figure~\ref{fgr:NPCO2O2_x}.  
+% ncwa -O -a lon,lat -d lat,-90.0,-70.0 -w gw -v FSATFRC,NPCO2O2 ${DATA}/dmr04/dmr04_8589_1202.nc foo.nc
+% ncwa -O -a lon,lat -d lat,70.0,90.0 -w gw -v FSATFRC,NPCO2O2 ${DATA}/dmr04/dmr04_8589_0608.nc foo.nc
+% ncks -H -u foo.nc
+The zonal mean summertime \OdX\ forcing in the Antarctic
+(70--90$\dgr$S), 1.69\,\wxmS, is 96\% of the forcing in the Arctic
+(70--90$\dgr$N), 1.76\,\wxmS, although the Antarctic has only 74\%
+of the \OdX. 
+Thus surface and low-level cloud reflectance makes \OdX\ forcing 30\%
+more efficient (per unit abundance) in the Antarctic than in the
+Arctic.  
+Within 5\dgr\ of the poles, the forcing efficiency of \OdX\ is 
+75\% greater in the Antarctic than in the Arctic.
+The change in forcing efficiency reduces, and nearly eliminates, the
+surface elevation-induced disparity in forcing between the poles.
+
+The large difference between the forcing efficiencies of \OdX\ in the 
+Arctic and the Antarctic is caused by differences in the surface
+albedo, cloud distribution, and water vapor column between the two
+polar climate systems. 
+First, the simulated visible surface albedo of Arctic sea ice is $\sim 
+0.6$, much lower than the simulated visible surface albedo of the
+Antarctic continent, $\sim 0.95$ \cite[]{BrB981}.   
+Offline sensitivity studies show that in the absence of clouds, the
+higher surface reflectance underlying Antarctic \OdX\ increases
+forcing (per unit abundance) by $\sim 25\%$ relative to the Arctic.  
+Observations suggest the modeled surface albedo and low-level cloud
+fraction in the summertime Arctic are $\sim 0.15$ and 0.10 too high,
+respectively \cite[]{BrB981}.   
+%Corresponding biases in the Antarctic are much smaller, only $\sim
+%0.5$ and $\sim 0.10$, respectively. 
+This suggests the simulated summertime Arctic forcing is too high,
+which would amplify the disparity between Arctic and Antarctic forcing
+efficiencies. 
+
+A second, but much weaker, effect is due to the change in simulated
+precipitable water content from the summertime Arctic (11.5\,\kgxmS) to 
+the Antarctic (2.7\,\kgxmS).
+Both are in fair agreement with European Centre for Medium-Range
+Weather Forecasts (ECMWF) analyses \cite[]{BrB981}. 
+The drier Antarctic column makes the wings of the near-infrared
+water vapor bands (compare Plate \ref{plt:odac}) more transmissive
+(less saturated).
+This increases absorption per unit \OdX\ by $\sim 2\%$. 
+% ncwa -O -a lon,lat -d lat,-90.0,-70.0 -w gw -v TMQ ${DATA}/sld012d/sld012d_8589_1202.nc foo.nc
+% ncwa -O -a lon,lat -d lat,70.0,90.0 -w gw -v TMQ ${DATA}/sld012d/sld012d_8589_0608.nc foo.nc
+% ncwa -O -a lon,lat -d lat,-90.0,-70.0 -w gw -v TMQ ${DATA}/sld012d/sld012d_8589.nc foo.nc
+% ncwa -O -a lon,lat -d lat,70.0,90.0 -w gw -v TMQ ${DATA}/sld012d/sld012d_8589.nc foo.nc
+% ncks -H -u foo.nc
+% clm -n -h 0.2 -i ${DATA}/arese/clm/951015_1200_arese_clm.nc -o ${DATA}/arese/clm/951015_1200_arese_clm_mpcH2O_0.2.nc
+% clm -n -h 0.6 -i ${DATA}/arese/clm/951015_1200_arese_clm.nc -o ${DATA}/arese/clm/951015_1200_arese_clm_mpcH2O_0.6.nc
+% ncks -u -H -C -v mpc_H2O,cnc_O2_npl_O2_clm ${DATA}/arese/clm/951015_1200_arese_clm_mpcH2O_0.2.nc
+% ncks -u -H -C -v mpc_H2O,cnc_O2_npl_O2_clm ${DATA}/arese/clm/951015_1200_arese_clm_mpcH2O_0.6.nc
+% swnb -r 0.60 -p ${DATA}/arese/clm/951015_1200_arese_clm_mpcH2O_0.2.nc -d ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_mpcH2O_0.2_alb_0.60.nc &
+% swnb -r 0.60 -K -U -p ${DATA}/arese/clm/951015_1200_arese_clm_mpcH2O_0.2.nc -d ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_O2O2_O2N2_mpcH2O_0.2_alb_0.60.nc &
+% swnb -r 0.95 -p ${DATA}/arese/clm/951015_1200_arese_clm_mpcH2O_0.2.nc -d ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_mpcH2O_0.2_alb_0.95.nc &
+% swnb -r 0.95 -K -U -p ${DATA}/arese/clm/951015_1200_arese_clm_mpcH2O_0.2.nc -d ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_O2O2_O2N2_mpcH2O_0.2_alb_0.95.nc &
+% swnb -r 0.95 -p ${DATA}/arese/clm/951015_1200_arese_clm_mpcH2O_0.6.nc -d ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_mpcH2O_0.6_alb_0.95.nc &
+% swnb -r 0.95 -K -U -p ${DATA}/arese/clm/951015_1200_arese_clm_mpcH2O_0.6.nc -d ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_O2O2_O2N2_mpcH2O_0.6_alb_0.95.nc &
+% swnb -r 0.95 -p ${DATA}/arese/clm/951015_1200_arese_clm.nc -d ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_mpcH2O_1.0_alb_0.95.nc &
+% swnb -r 0.95 -K -U -p ${DATA}/arese/clm/951015_1200_arese_clm.nc -d ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_O2O2_O2N2_mpcH2O_1.0_alb_0.95.nc &
+% ncks -u -H -C -v flx_bb_abs_atm ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_mpcH2O_0.2_alb_0.60.nc
+% ncks -u -H -C -v flx_bb_abs_atm ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_O2O2_O2N2_mpcH2O_0.2_alb_0.60.nc
+% ncks -u -H -C -v flx_bb_abs_atm ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_mpcH2O_0.2_alb_0.95.nc
+% ncks -u -H -C -v flx_bb_abs_atm ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_O2O2_O2N2_mpcH2O_0.2_alb_0.95.nc
+% ncks -u -H -C -v flx_bb_abs_atm ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_mpcH2O_0.6_alb_0.95.nc
+% ncks -u -H -C -v flx_bb_abs_atm ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_O2O2_O2N2_mpcH2O_0.6_alb_0.95.nc
+% ncks -u -H -C -v flx_bb_abs_atm ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_mpcH2O_1.0_alb_0.95.nc
+% ncks -u -H -C -v flx_bb_abs_atm ${DATA}/tmp/951015_1200_arese_mdl_clr_aer_O2O2_O2N2_mpcH2O_1.0_alb_0.95.nc
+% h = is H2O scale factor, A is surface albedo
+% OdX forcing (h=0.2, A = 0.60) is 3.29 W m-2 (out of 142)
+% OdX forcing (h=0.2, A = 0.95) is 4.12 W m-2 (out of 162)
+% Thus, Arctic -> Antarctic surface albedo change increases OdX forcing by 25%
+% OdX forcing (h=0.2, A=0.95) is 4.12 W m-2 (out of 162)
+% OdX forcing (h=0.6, A=0.95) is 4.072 W m-2 (out of 197)
+% OdX forcing (h=1.0, A=0.95) is 4.035 W m-2 (out of 215)
+% Thus, Arctic -> Antarctic H2O path change increases OdX forcing by 1.2% 
+% Hence OdX forcing is not sensitive to H2O path
+
+\subsection{Vertical Structure}\label{sxn:vrt} 
+The vertical profile of \OdX\ heating is important in determining
+possible dynamical feedbacks as well as the change in net flux at the
+tropopause.  
+Plate~\ref{plt:O2O2_O2N2_csn_avg_x} shows the vertical profile of the
+seasonally and zonally averaged solar heating due to \OdX.  
+\begin{plate*}
+\begin{center}
+\includegraphics[width=0.5\fltwdtdblclm]{/data/zender/fgr/o2x/dmr04_8589_1202_x_QRSFRC}%
+\includegraphics[width=0.5\fltwdtdblclm]{/data/zender/fgr/o2x/dmr04_8589_0608_x_QRSFRC}%
+
+\includegraphics[width=0.5\fltwdtdblclm]{/data/zender/fgr/o2x/dmr04_8589_0305_x_QRSFRC}%
+\includegraphics[width=0.5\fltwdtdblclm]{/data/zender/fgr/o2x/dmr04_8589_0911_x_QRSFRC}%
+\end{center}
+\caption{
+As in Plate~\ref{plt:O2O2_O2N2_csn_avg}, but for the vertical profile
+of the heating ($\times 10^{-2}$\,\kxd) due to \OdX. 
+\label{plt:O2O2_O2N2_csn_avg_x}}
+\end{plate*}
+The vertical axis is the CCM hybrid vertical coordinate times 1000
+\cite[]{KHB98}.  
+Thus the panels transition from a pure sigma coordinate
+representation at the surface to a pure pressure representation near
+200\,\mb. 
+As mentioned previously, virtually all of the heating is confined 
+to the troposphere.
+\OdX\ heating decreases toward the winter hemisphere due to decreasing
+daylight hours. 
+Above 700\,\mb\ (300\,\mb\ above the surface) the heating decreases
+with pressure due to decreasing \OdX\ abundance (compare
+Figure~\ref{fgr:odx_htg}).  
+Seasonal \OdX\ heating in excess of 0.02\,\kxd\ extends throughout
+the polar summer troposphere.
+This is 2--4\% of local solar heating owing to all other solar
+absorbers (compare Figure~\ref{fgr:odx_htg}). 
+The heating rate in the Antarctic summer troposphere 
+(Plate~\ref{plt:O2O2_O2N2_csn_avg_x}a) is nearly 20\% stronger than
+the Arctic summer troposphere (Plate~\ref{plt:O2O2_O2N2_csn_avg_x}c) 
+due to its thinner atmosphere.
+
+The heating peaks between 200--300\,\mb\ above the surface in all regions
+every season. 
+This peak does not coincide with the maximum \OdX\ abundance (which is
+always at the surface) even though \OdX\ absorption is in the
+optically thin limit (Plate~\ref{plt:odac}). 
+As shown in Figure~\ref{fgr:odx_htg}, the location of maximum \OdX\
+heating does coincide with maximum \OdX\ abundance except when
+efficient scatterers such as clouds screen the \OdX\ in the lower
+atmosphere from incoming solar radiation.  
+Thus cloud reflection is responsible for shifting the mean vertical
+location of maximum \OdX\ absorption, and thus heating, upward from
+the surface by 200--300\,\mb.   
+Plate~\ref{plt:O2O2_O2N2_csn_avg_x} supports this by showing that the
+heating maxima as a function of latitude dips somewhat closer to the
+surface in the subtropical regions characterized by large-scale
+subsidence and relatively clear skies.
+
+Radiative forcing in other nonoverlapped, optically thin bands of
+well-mixed collision complexes (e.g., the \NdNd\ fundamental band at
+4.29\,\um, see Table~\ref{tbl:cnc}), will show qualitatively similar
+patterns to
+Plates~\ref{plt:O2O2_O2N2_ann_avg_frc}--\ref{plt:O2O2_O2N2_csn_avg_x}.   
+The magnitude of forcing by other bands is, of course, highly
+sensitive to the spectral location of the particular band. 
+
+\section{Discussion and Summary}\label{sxn:dsc} 
+
+We have characterized the spectral, vertical, regional, and seasonal
+atmospheric heating by \OdX.
+The motivations for modeling the global distribution and forcing of 
+\OdX\ were to refine and extend estimates of \OdX\ forcing inferred
+from one-dimensional studies to the global climate scale. 
+Our global simulations indicate that global annual mean atmospheric
+absorption by \OdX\ is 0.75--1.2\,\wxmS\ (Table~\ref{tbl:frc}).  
+This falls between the recent estimates of 0.9--1.3\,\wxmS\
+\cite[]{SPS98} and 0.84\,\wxmS\ \cite[]{MCB98}. 
+This absorption reduces surface insolation by 0.48--0.78\,\wxmS. 
+
+\OdX\ absorption is highly localized in the troposphere and it
+increases the net radiative flux at the tropopause by
+0.32--0.52\,\wxmS. 
+It is useful to compare this absolute radiative forcing by \OdX\
+(whose abundance is not changing) to greenhouse gas forcing (due to
+changes in the gases' abundance from preindustrial to present-day
+levels). 
+This comparison enables us to assess the magnitude of the perturbation
+to the mean state climate caused by \OdX. 
+The 0.32--0.52\,\wxmS\ forcing by \OdX\ is less than the anthropogenic 
+forcing of \COd\ (1.75\,\wxmS) but comparable to forcing by \CHq\
+(0.44\,\wxmS), stratospheric \HdO\ (0.15\,\wxmS), and \NdO\ (0.11\,\wxmS)
+\cite[][p. 57]{SDW90}.   
+
+By extending the simulations to the global scale, we were able to
+characterize the spatial and temporal distributions of \OdX\ abundance
+and forcing. 
+\OdX\ abundance mimics the concentration of \Od\ and \Nd, except its
+quadratic dependence on these constituents accentuates both its
+spatial and temporal gradients.
+This dependence causes a 20\% increase in \OdX\ abundance in the 
+Arctic relative to the Tropics for the same sea level pressure.  
+\OdX\ abundance depends most on zonal mean temperature, pressure,
+and surface elevation.
+The variations in zonal mean \OdX\ abundance due to surface elevation,
+the annual mean meridional temperature gradient, and to seasonal
+temperature variations are 40, 15, and 10\%, respectively.    
+These results scale to all collision complexes of well-mixed gases,
+for example, \NdNd\ and \OdAr.
+
+Many features of \OdX\ radiative forcing are common to all solar
+absorbers, but the relatively sharp gradients in \OdX\ abundance
+enhance these features.
+Surface and cloud reflectance modulate the solar forcing efficiency of
+\OdX\ (forcing per unit abundance) by altering the mean \OdX\ path
+traversed by the average photon.
+These factors explain why annual mean collision complex forcing peaks
+in the subtropics over bright deserts and regions of marine stratus.
+The seasonal cycle of insolation causes the seasonal mean solar
+forcing to peak in summertime polar regions.  
+However, these summertime polar peaks are enhanced by bright surfaces
+and extensive low-level clouds, especially in the Arctic.
+The forcing efficiency of complexes in the Antarctic is 30--75\%
+greater than in the Arctic.
+
+In clear skies the magnitude of \OdX\ heating grows linearly with air
+density, peaking at the surface.
+This heating profile tends to weakly destabilize the atmospheric
+column. 
+On seasonal timescales, clouds shift the height of peak \OdX\
+heating upward by 200--300\,\mb\ and smooth out the vertical decrease of
+heating that would otherwise follow the rapid decrease of \OdX\
+abundance with height. 
+\OdX\ heating peaks at 0.02--0.03\,\kxd\ in the polar troposphere
+in summer.
+This is 2--4\% of local heating due to all other solar absorbers.
+
+Many GCMs have strong cold biases at the summertime polar tropopause,
+where the CCM3 (not shown) is up to 10--14\,\K\ too cold \cite[]{HKH98}. 
+The CCM3 also suffers from a cold bias in the summertime polar
+troposphere of 2--6\,\K\ \cite[]{BrB982}.    
+Some, but probably not all, of these biases are due to the numerical 
+treatment of dynamics \cite[]{WiO98}.
+It is likely that allowing \OdX\ heating to affect the thermal
+structure of the atmosphere will ameliorate, though not eliminate,
+the remainder of these biases.
+For example, single-column simulations show the radiative relaxation
+timescale at the polar tropopause is $\sim 50$\,days. 
+Thus the \OdX\ heating of $\sim 0.01$\,\kxd\
+(Plate~\ref{plt:O2O2_O2N2_csn_avg_x}) increases the radiative
+equilibrium temperature by $\sim 1$\,\K\ in this region.  
+
+We quantified some fingerprints that distinguish absorption due to
+well-mixed collision complexes (and well-mixed dimers) from absorption
+due to well-mixed monomers.  
+The most significant distinguishing feature is the stronger spatial and
+temporal gradients of collision complex abundance relative to monomer
+abundance. 
+Whereas the zonal mean column abundance of a well-mixed molecule
+such as \Od\ decreases by $30\%$ from sea level in the Arctic to the
+Antarctic plateau at 700\,\mb, the corresponding decrease in $\npcOdX$ 
+exceeds 50\%. 
+In the weakly absorbing, nonoverlapped limit, well-mixed molecules
+cause an increase in the solar heating rate that is constant with air
+density, whereas well-mixed collision complexes such as \OdX\ cause
+the solar heating rate to increase linearly with air density.  
+
+\cite{ZBP97} demonstrated that \OdOd\ absorption improved agreement
+between modeled and observed solar absorption in both clear and cloudy
+skies during the Atmospheric Radiation Measurement (ARM) Enhanced
+Shortwave Experiment (ARESE). 
+Their total (direct $+$ diffuse) clear sky surface insolation
+discrepancies ($\sim 15$\,\wxmS) were no larger than instrumental and
+model uncertainties (e.g., aerosol properties). 
+Working with an independent set of radiometric observations from
+ARESE, \cite{KAC97} found excellent model agreement with direct beam
+observations but reported a 30\,\wxmS\ model overestimate of the
+instantaneous diffuse surface insolation during clear sky conditions
+over multiple days during ARESE. 
+They did not account for \OdX\ absorption.
+As shown in section~\ref{sxn:ovr}, \OdX\ absorption reduced clear sky
+noontime surface insolation by $\sim 2$\,\wxmS\ during ARESE. 
+However, nearly $90\%$ of this \OdX\ absorption came from the direct
+solar beam, and only $10\%$ occurred in the diffuse field.  
+This illustrates the point that unknown or neglected gaseous
+absorption processes cannot, by themselves (i.e., without invoking
+aerosol processes), remedy a clear sky diffuse radiation bias because
+gaseous absorption of the direct beam far exceeds gaseous absorption
+of the diffuse field. 
+
+Our global simulations show that in the annual mean, \OdX\ enhances
+absorption equally in clear and cloudy skies. 
+Thus \OdX\ neither exacerbates nor remediates solar absorption
+discrepancies that are associated with clouds
+\cite[]{StT902,CZM95,RaV97}.  
+The agreement between clear and cloudy sky \OdX\ absorption is due to
+the global mean cancellation of photon and absorber path length
+changes due to clouds: 
+Low-level clouds increase \OdX\ absorption relative to clear skies by
+increasing path lengths, while middle- and high-level clouds decrease
+\OdX\ absorption by screening photons from the lower atmosphere. 
+We hypothesize that this agreement is predominantly due to the global
+vertical distributions of cloud reflectivity and well-mixed molecules
+and has little to due with spectral features particular to \OdX.   
+There are two reasons to expect that this hypothesis is true.
+First, \OdX\ absorption occurs at many locations in the visible and
+near-infrared and is not correlated with water vapor or condensate
+absorption bands.
+Second, cloud transmission is nearly spectrally uniform for $0.3 <
+\lambda < 1.5$\,\um, so clouds do not preferentially transmit any
+energetically significant solar wavelength bands to the lower
+atmosphere. 
+This hypothesis should be tested because, if it is true, it implies
+that globally averaged, well-mixed collision complexes or dimers
+do not enhance absorption more in cloudy sky than in clear sky.  
+A similar hypothesis may hold for well-mixed molecules in general. 
+
+%Therefore our study suggests that, on a global scale, discrepancies
+%between models and observations of cloudy sky absorption cannot be 
+%caused by well-mixed collision complexes or dimers. 
+
+%Our global results support an inference which may inform the current
+%debate about the existence and causes of enhanced solar absorption in
+%cloudy skies \cite[]{StT902,RaV97}.  
+%...
+%Considering that \OdX\ absorption occurs at many locations in the
+%visible and near-infrared, and is not correlated with water vapor
+%bands, it is possible that \OdX\ absorption is representative of
+%featureles solar continuum absorption by any well-mixed collision
+%complex or dimer. 
+%Thus it is difficult to imagine that any unknown, well-mixed absorber
+%with an unstructured absorption continuum at solar wavelengths can
+%cause significantly more absorption in cloudy skies than in clear
+%skies.     
+%However, differential optical absorption spectroscopy of high
+%precision atmospheric spectra has been used to constrain the magnitude
+%of unaccounted-for, structured solar absorption.
+%This technique has been applied to significant portions of the solar 
+%spectrum in both clear sky, 
+%$400 < \lambda < 680$~nm and $1.0 < \lambda < 3.3$~nm \cite[][]{PEP97,SPS98,MCB98}, 
+%and cloudy sky, $450 < \lambda < 675$~nm \cite[][]{PEP97},
+%conditions to show that any significant unaccounted-for absorption in
+%these spectral regions must be unstructured.
+%Therefore our study suggests that, on a global scale, discrepancies
+%between models and observations of cloudy sky absorption cannot be 
+%caused by well-mixed collision complexes or dimers. 
+
+The radiative importance of other abundant, but not necessarily
+well-mixed, collision complexes and dimers in the atmosphere should be  
+explored.    
+\cite{SPS98} point out that \Ar\ and \COd\ are also relatively
+efficient partners for inducing \Od\ absorption at 1.27\,\um\ but note
+that \OdAr\ and \OdCOd\ are too scarce (Table~\ref{tbl:cnc}) to cause
+significant absorption.
+%For example, the efficiency of \COd\ relative to \Od\ as a collision
+%partner for \Od\ absorption at 1.27\,\um\ is $\sim 3.0$.
+%Adjusting the \OdNd\ forcing in Table~\ref{tbl:cnc} by the appropriate
+%factors yields an estimate for mean \OdCOd\ absorption of 0.001\,\wxmS.
+\cite{ChG97} and \cite{SPS98} suggest \OdHdO\ and \HdOHdO\ as
+promising candidates to examine in the search for neglected solar
+absorbers.   
+
+In summary, the recent discovery that the oxygen collision pairs
+\OdOd\ and \OdNd\ absorb a small but significant fraction of the
+globally incident solar radiation alters the long-standing view that
+\HdO, \Ot, \Od, \COd, and \NOd\ are the only significant gaseous solar
+absorbers in Earth's atmosphere. 
+%The solar irradiance absorbed by the known remaining photolytic gases 
+%(e.g., \NdO, \CHq) was, and still is, deemed negligible relative to
+%these five absorbers. 
+This study quantified the spectral, regional, vertical, and seasonal
+patterns of \OdX\ abundance and radiative forcing.
+We now know that globally and annually averaged, \OdX\ absorbs about
+1\,\wxmS\ of solar radiation, more than \COd, and that \OdX\ does not
+increase cloudy sky solar absorption relative to clear sky absorption.
+Improved measurements of \OdX\ absorption cross sections in the near 
+infrared will remove about half of the 25\% uncertainty in total
+\OdX\ absorption.
+Accounting for \OdX\ reduces discrepancies between models and
+measurements of solar absorption.
+\OdX\ absorption should therefore be included in high-resolution
+radiative transfer models, remote-sensing retrieval algorithms, and in
+large-scale atmospheric models used to simulate climate and climate
+change. 
+\OdX\ has the most potential to improve the simulated climate
+in summertime polar regions. 
+Future versions of the CCM will include this absorption.
+
+% Balance preprint columns
+\balance
+
+% Appendices
+\appendix
+
+% Acknowledgements
+\acknowledgments
+S.~Solomon and R.~Portmann provided \OdX\ cross section data and
+helpful suggestions at an early stage of this study.   
+J.~Burkholder, E.~Mlawer, D.~Newnham, and K.~Pfeilsticker provided
+useful comments on \OdOd\ cross section measurements and
+uncertainties.  
+B.~Briegleb, W.~Collins, and S.~Solomon made numerous suggestions
+which improved the quality of the manuscript.
+R.~Portmann and one anonymous reviewer provided constructive reviews.  
+The NCAR ASP program provided support and encouragement. 
+This research was supported in part by DOE ARM Program Grant
+DEFG0593ER61376. 
+
+% Bibliography
+\bibliographystyle{agu}
+\bibliography{bib}
+
+\end{document}

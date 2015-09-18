@@ -1,0 +1,14 @@
+#!/bin/bash
+# Purpose: /etc/sysconfig/apm-scripts/apmcontinue 
+# Usage: cp /home/zender/linux/etc/sysconfig/apm-scripts/apmcontinue /etc/sysconfig/apm-scripts/apmcontinue 
+# Script is executed when i7500 resumes
+# This script is called by /etc/sysconfig/apm-scripts/apmscript when laptop resumes
+# This script works with RedHat GNU/Linux 7 and supercedes earlier versions
+# Source: Suggested by dmg@csg.uwaterloo.ca
+# Fix clock which will be wrong after suspends
+# Fix slow keyboard rate after suspends
+(
+/sbin/hwclock --hctosys
+/sbin/kbdrate -r 30 -d 250
+\echo -n >/dev/tty0
+)

@@ -1,0 +1,111 @@
+# $Header: /home/zender/cvs/linux/etc/network/interfaces.ashes,v 1.23 2008-12-01 16:52:02 zender Exp $
+# Purpose: Network configuration for Ubuntu on ashes
+# /etc/network/interfaces -- configuration file for ifup(8), ifdown(8)
+# Usage:
+# sudo cp ~/linux/etc/network/interfaces.ashes /etc/network/interfaces
+# cp /etc/network/interfaces ~/linux/etc/network/interfaces.ashes 
+# diff ~/linux/etc/network/interfaces.ashes /etc/network/interfaces
+
+# Automatically configured interfaces 
+auto lo
+#auto eth0
+# Ubuntu assignation of eth1/eth2/eth3/eth4 is unpredictable with extra pcmcia cards
+# Without extra pcmcia cards, the internal broadcom wireless chip is normally eth2
+auto eth3
+#auto eth4
+#auto eth2
+#auto wlan0
+
+# Interface: lo
+# The loopback interface
+iface lo inet loopback
+
+# Interface: eth0 wired Fast Ethernet
+# Wired Access DHCP
+iface eth0 inet dhcp
+
+# LGGE Wired Access
+# lgge-pc194.lgge.obs.ujf-grenoble.fr
+#iface eth0 inet static
+#	address 192.168.102.194
+#	broadcast 192.168.102.255
+#	gateway 192.168.102.254
+#	netmask 255.255.255.0
+
+# UCInet Wired Access Croul Hall
+#iface eth0 inet static
+#	address 128.200.14.90
+#	broadcast 128.200.14.255
+#	gateway 128.200.14.1
+#	netmask 255.255.255.0
+
+# Interface: eth1 802.11a/b/g Broadband Wireless (typically netgear WG511 Broadcom 4306 card on ashes)
+# UCI NACS wireless network requires DHCP
+#iface eth1 inet dhcp
+#        wireless-essid zendernet
+
+# Interface: eth2 802.11b Broadband Wireless (typically internal chip TrueMobile1400 on ashes)
+#iface eth2 inet dhcp
+#        wireless-essid zendernet
+#	wireless-rate 5.5M
+
+# Interface: eth3 802.11b Broadband Wireless (typically netgear WG511 Broadcom 4306 card on ashes)
+#iface eth3 inet dhcp
+#        wireless-essid zendernet
+
+# Interface: eth 802.11b Broadband Wireless (typically netgear WG511 Broadcom 4306 card on ashes)
+#iface eth4 inet dhcp
+#        wireless-essid zendernet
+
+# Interface: eth 802.11g Broadband Wireless (typically netgear WG111v2 USB stick)
+#iface wlan0 inet dhcp
+#        wireless-essid zendernet
+
+# This is a list of hotpluggable network interfaces.
+# They will be activated automatically by the hotplug subsystem.
+
+# Less Frequently used interface configurations:
+
+# Static IP on Harry's wired network
+#iface eth0 inet static
+#	address 192.168.1.75
+#	broadcast 192.168.1.255
+#	gateway 192.168.1.1
+#	netmask 255.255.255.0
+#	network 192.168.1.0
+
+# Static IP on Harry's wireless network
+#iface eth1 inet static
+#	address 192.168.1.75
+#	broadcast 192.168.1.255
+#	gateway 192.168.1.1
+#	netmask 255.255.255.0
+#	network 192.168.1.0
+
+# Static IP on Harry's wireless network
+iface eth2 inet static
+	address 192.168.1.75
+	broadcast 192.168.1.255
+	gateway 192.168.1.1
+	netmask 255.255.255.0
+	network 192.168.1.0
+        wireless-essid mangonet
+
+# Static IP on Harry's wireless network
+iface eth3 inet static
+	address 192.168.1.75
+	broadcast 192.168.1.255
+	gateway 192.168.1.1
+	netmask 255.255.255.0
+	network 192.168.1.0
+        wireless-essid mangonet
+
+# Static IP PSCSG local wireless area of RH
+#iface eth1 inet static
+#	wireless_essid "pscsg"
+#	address 128.200.166.177
+#	broadcast 128.200.166.255
+#	gateway 128.200.166.1
+#	netmask 255.255.255.0
+#	network 128.200.166.0
+

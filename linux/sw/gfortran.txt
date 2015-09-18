@@ -1,0 +1,48 @@
+First, ensure GMP and its headers are installed:
+
+apt-get install libgmp3 libgmp3-dev
+
+cvs -d :pserver:anoncvs@subversions.gnu.org:/cvsroot/gcc login
+cvs -z9 -d :pserver:anoncvs@subversions.gnu.org:/cvsroot/gcc co -r tree-ssa-20020619-branch gcc
+
+cd ${DATA}/gcc
+./configure --prefix=/usr/local --enable-languages=c,f95
+make
+sudo make install
+
+# All you need to get daily builds of tree for i686:
+cd ${DATA}/gfortran
+wget -O - http://f77.linksysnet.com/current/gfortran-bin.tar.gz | tar xfz -
+ln -s ${DATA}/gfortran/irun /tmp/gfortran
+sudo ln -s -f /tmp/gfortran/bin/gfortran /usr/local/bin/gfortran
+gfortran --version
+
+************************************************************************
+20051028
+************************************************************************
+# All you need to get daily builds of tree for i686:
+/bin/rm -r ${DATA}/gfortran;mkdir -p ${DATA}/gfortran;cd ${DATA}/gfortran
+wget http://quatramaran.ens.fr/~coudert/gfortran/gfortran-linux.tar.gz
+tar xvfz gfortran-linux.tar.gz
+ln -s ${DATA}/gfortran/irun /tmp/gfortran
+sudo ln -s -f /tmp/gfortran/bin/gfortran /usr/local/bin/gfortran
+gfortran --version
+
+> For a 32-bit linux, you can try
+> http://quatramaran.ens.fr/~coudert/gfortran/gfortran-linux.tar.gz
+>
+> For a 64-bit linux, you can try
+> http://quatramaran.ens.fr/~coudert/gfortran/gfortran-x86_64-linux.tar.gz
+>
+> The French address is due to the fact that Francios-Xavier Coudert
+> has been packaging gfortran.
+
+
+Indeed. I use my local webserver to host the binaries.
+
+> If you're looking for the Cray pointer
+> support, these packages may have the code.  I believe FX has an
+> automatic script to do nightly builds, but I could be wrong.
+
+
+The binaries available on quatramaran.ens.fr are updated daily (you can download binaries for the last few days, too, with names such as gfortran-linux-20051024.tar.gz). So, yes indeed, the binaries have Cray pointer support.

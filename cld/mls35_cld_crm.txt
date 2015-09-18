@@ -1,0 +1,90 @@
+-----------------------------------------------------------------
+ mls 35 level  ccm2                                              
+-----------------------------------------------------------------
+  180.69465       day of year
+  45.00           latitude
+  level   p(mb)    t(k)        h2ommr(g/g) o3mmr(g/g)  cldcvr    cldlwp(g/m2)
+   35  1.8437E-02  2.1534E+02  4.0000E-06  1.4530E-06  0.0000E+00  0.0000E+00 
+   34  4.1128E-02  2.1665E+02  4.0000E-06  1.4530E-06  0.0000E+00  0.0000E+00 
+   33  8.2762E-02  2.2265E+02  4.0000E-06  1.4530E-06  0.0000E+00  0.0000E+00 
+   32  1.5084E-01  2.3495E+02  4.0000E-06  2.1702E-06  0.0000E+00  0.0000E+00 
+   31  2.4869E-01  2.4574E+02  4.0000E-06  2.6999E-06  0.0000E+00  0.0000E+00 
+   30  3.7096E-01  2.5471E+02  4.0000E-06  3.0287E-06  0.0000E+00  0.0000E+00 
+   29  5.2646E-01  2.6281E+02  4.0000E-06  3.2638E-06  0.0000E+00  0.0000E+00 
+   28  7.4709E-01  2.7107E+02  4.0000E-06  3.4687E-06  0.0000E+00  0.0000E+00 
+   27  1.0602E+00  2.7630E+02  4.0000E-06  4.0933E-06  0.0000E+00  0.0000E+00 
+   26  1.5045E+00  2.7244E+02  4.0000E-06  5.3144E-06  0.0000E+00  0.0000E+00 
+   25  2.1350E+00  2.6606E+02  4.0000E-06  6.9827E-06  0.0000E+00  0.0000E+00 
+   24  3.0297E+00  2.5931E+02  4.0000E-06  8.7134E-06  0.0000E+00  0.0000E+00 
+   23  4.2994E+00  2.5266E+02  4.0000E-06  9.5165E-06  0.0000E+00  0.0000E+00 
+   22  6.1011E+00  2.4637E+02  4.0000E-06  9.8734E-06  0.0000E+00  0.0000E+00 
+   21  8.6579E+00  2.4076E+02  4.0000E-06  1.0087E-05  0.0000E+00  0.0000E+00 
+   20  1.2286E+01  2.3533E+02  4.0000E-06  1.0160E-05  0.0000E+00  0.0000E+00 
+   19  1.7435E+01  2.3003E+02  4.0000E-06  8.6936E-06  0.0000E+00  0.0000E+00 
+   18  2.4741E+01  2.2531E+02  4.0000E-06  7.3247E-06  0.0000E+00  0.0000E+00 
+   17  3.5110E+01  2.2229E+02  4.0000E-06  6.0317E-06  0.0000E+00  0.0000E+00 
+   16  4.9823E+01  2.1955E+02  4.0000E-06  4.5477E-06  0.0000E+00  0.0000E+00 
+   15  7.0702E+01  2.1685E+02  4.0000E-06  2.7905E-06  0.0000E+00  0.0000E+00 
+   14  1.0033E+02  2.1575E+02  4.0000E-06  1.4604E-06  0.0000E+00  0.0000E+00 
+   13  1.4052E+02  2.1575E+02  4.0000E-06  8.2655E-07  0.0000E+00  0.0000E+00 
+   12  1.9165E+02  2.1889E+02  1.0566E-05  4.5279E-07  0.0000E+00  0.0000E+00 
+   11  2.5451E+02  2.3083E+02  8.5175E-05  2.7141E-07  0.0000E+00  0.0000E+00 
+   10  3.2907E+02  2.4246E+02  2.7824E-04  1.8046E-07  0.0000E+00  0.0000E+00 
+    9  4.1427E+02  2.5333E+02  6.0203E-04  1.3331E-07  0.0000E+00  0.0000E+00 
+    8  5.0779E+02  2.6296E+02  1.0966E-03  1.0124E-07  0.0000E+00  0.0000E+00 
+    7  6.0603E+02  2.7134E+02  2.0812E-03  8.3058E-08  0.0000E+00  0.0000E+00 
+    6  7.0421E+02  2.7862E+02  3.8283E-03  7.0606E-08  0.0000E+00  0.0000E+00 
+    5  7.9673E+02  2.8469E+02  5.9229E-03  6.1741E-08  0.0000E+00  0.0000E+00 
+    4  8.7767E+02  2.8895E+02  7.9957E-03  5.6710E-08  0.0000E+00  0.0000E+00 
+    3  9.4136E+02  2.9146E+02  9.7147E-03  5.3332E-08  0.0000E+00  0.0000E+00 
+    2  9.8306E+02  2.9296E+02  1.0855E-02  5.1333E-08  0.0000E+00  0.0000E+00 
+    1  1.0054E+03  2.9374E+02  1.1462E-02  5.0318E-08  0.0000E+00  0.0000E+00 
+       1013.000  
+                   294.00   surface air temperature
+                   294.00   ground (skin) temperature
+                    1.000   surface type flag
+                    0.000   surface roughness
+                    0.000   SNOW COVER
+                    0.100   ASVIS
+                    0.100   ASNIR
+                    0.100   AWVIS
+                    0.100   AWNIR
+                    0.000   fraction strng zen ang srf
+                    3.3e-4  co2 volume mixing ratio
+
+
+Notes on the input:
+
+1) Day of year includes the fraction that determines the solar elevation
+angle; for example, if day 15.0 was used, the local time of calculation
+would be midnight; if day 15.5, conditions would be local noon.  Day of 
+year also includes the change in earth/sun distance, as is done in ccm2.
+The solar constant is set be data statement in routine 'radcsw'.
+
+2) Latitude runs from +90 to -90 degrees.
+
+3) Total number of levels must be the same as the 'plev = ' parameter.
+ 
+4) Pressure data is at the same levels as temperature and other fields;
+for the radiation, the interface pressures between layers are required;
+these are computed as simple averages of adjacent level pressures.
+Pressure data is in milli-bars.
+
+5) Temperatures are in K, h2o and o3 are mass mixing ratios, cloud cover
+as fraction, and cloud liquid water path in g/m2. Note that cloud cover
+of 1 is reset internally to .99999, since exactly 1.0  will cause the 
+longwave code to fail.
+
+6) The last pressure is the surface pressure.
+
+7) The surface temperatures are given as the air temperature in contact
+with the surface, and the actual skin temperature of the surface.
+
+8) Surface type determines how the surface albedos are computed; if ocean
+or sea-ice, albedos are set internally; otherwise, the spectral/zenith
+angle type albedos read in are used.
+
+9) Surface aerodynamic roughness and snow cover are used over land and
+sea-ice to help set surface albedos.
+
+10) CO2 volume mixing ratio is in fraction.

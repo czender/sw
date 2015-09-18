@@ -1,0 +1,1088 @@
+%***********************************************************************
+% RCS Identification
+%***********************************************************************
+% $Author: zender $
+% $Date$
+% $Id$
+% $Revision$
+% $Locker:  $
+% $RCSfile: aca.tex,v $
+% $Source: /home/zender/cvs/aca/aca.tex,v $
+% $Id$
+% $State: Exp $
+%
+% Purpose: Template for quickie papers.
+%
+% $Log: not supported by cvs2svn $
+% Revision 1.1.1.1  1998-09-01 01:31:22  zender
+% Imported sources
+%
+% Revision 1.2  1996/09/10 14:36:12  zender
+% synchronization of locking mode checkin.
+%
+% Revision 1.1  1994/12/31  06:37:30  zender
+% Initial revision
+%***********************************************************************
+
+%***********************************************************************
+% Begin TeX notes
+%***********************************************************************
+% This is written for preprocessing by tib, the citation handler.
+% To use all the features of tib the following commands are necessary:
+% 
+% alias tib       'tib -d /u4/boettner/tib ' 		;in the .cshrc file 
+% alias tiblist   'tiblist -d /u4/boettner/tib '	;in the .cshrc file 
+%
+% tibdex clouds.ref		;creates INDEX
+% tib -s jgr clouds.tex		;creates clouds-t.tex
+%				;(-s = style, jgr = J. Geophys. Res. format)
+% tib clouds.tex		;uses default style
+% tex clouds-t.tex		;creates clouds-t.log and clouds-t.dvi
+% xdvi clouds-t.dvi		;X window previewer
+% dvips clouds-t.dvi		;creates clouds-t.ps
+% tiblist -s jgr clouds.ref	;creates tex file directly from references
+% tiblook <keyword>		;locates entry from reference file
+%
+% In order to include citations in the text do the following:
+% <, ramaswamy detwiler ,> includes the unique citation which has both
+% ramaswamy and detwiler as keywords in running text with
+% the year in parenthesis, while [, reference ,] (where the ``,'' is a ``.'')
+% puts the whole citation in parenthesis.
+%
+% This also uses the AMS TeX eplain.tex macro package for equation
+% numbering.  To define an equation number, place \eqdef{eqname} right
+% AFTER the equation.  To reference it in the text, use \eqref{eqname}
+% The same goes for figures, only use \figdef and \figref. CAUTION:
+% The figdef and eqdef macros use the same registers so naming a
+% figure the same as an equation will confuse it.
+%
+% Note the following style points: the word ``figure'' should always
+% be capitalized in text, i.e., and spelled in full at the beginning
+% of a sentence but abbreviated in the middle of a sentence. ``Table''
+% and ``Plate'' are the same but should never be abbreviated. And
+% letters identifying subgraphs, i.e., Fig.~7{\it a\/} are italicized 
+% in JGR but not JAS.
+% 
+% {\it Italicized\/} words should be followed by ``\/'' to adjust the
+% next space correctly (except when the following character is a
+% period or a comma). 
+% 
+% Forced spaces in math mode can be made by using the \ character,
+% although that allows line breaks (unlike ~ which doesn't work in
+% math mode), e.g., $\lambda = 8\ \mu$ instead of $\lambda = 8$~$\mu$.
+%
+%$$
+%e^{i\pi}=-1
+%\eqdef{eqn_name}
+%$$
+%
+%Figure~\figref{fig_name}{\it a\/} is on the next page.
+%
+%$$
+%e^{i\pi}=-1 \qquad\hbox{equation with text for $0 < w < 20$, 
+%{\it IWP} in g/m$^2$, $w$ in cm/s} 
+%\eqdef{eqn_name2}
+%$$
+%
+% Here's an example of a bulleted outline:
+%\vskip 1em
+%\item{a.} First
+%
+%\item{b.} Second
+%\itemitem{} sub-item
+%\itemitem{} sub-item
+%
+%\vskip 1em
+%
+%***********************************************************************
+% End TeX notes
+%***********************************************************************
+
+%***********************************************************************
+% Begin Preamble
+%***********************************************************************
+% Define general page, paragraph, and line formatting here.
+% macros for equation numbering
+\input /cgd/home/zender/tex/eplain
+% personal TeX definitions of item and month name
+\input /cgd/home/zender/tex/utilities
+% for inclusion of postscript figures /usr/local/lib/tex_family/tex/inputs/epsf.tex
+\input epsf
+% have tex report size of picture in output
+\epsfverbosetrue
+%
+\magnification=\magstep1
+\font\ninerm=cmr9
+\font\tenrm=cmr10
+\font\titlefont=cmr10 scaled\magstep1
+\font\slanttitlefont=cmsl10 scaled\magstep1
+\baselineskip=12pt
+\null
+%
+%Definitions, hyphenations, and macros.
+\def\reff{ {$r_{\rm e}$} }
+\def\IWP{ {\it IWP\/} }
+\hyphenation{va-por}
+\hyphenation{depo-sition}
+\hyphenation{short-wave}
+\hyphenation{long-wave}
+\hyphenation{anal-yzed}
+\hyphenation{envi-ron-mental}
+\hyphenation{cond-itions}
+\hyphenation{trop-ical}
+\hyphenation{meso-scale}
+\hyphenation{near-ly}
+\hyphenation{gas-e-ous}
+\hyphenation{}
+\hyphenation{}
+\hyphenation{}
+\hyphenation{}
+%
+%***********************************************************************
+% End Preamble
+%***********************************************************************
+
+%***********************************************************************
+% Begin Title Page
+%***********************************************************************
+%Skip the page number on the title page
+\pageno=-1
+%\headline={\tenrm {\it Draft of \today~~\timestring} \hfil \folio}
+\footline={\hfil}
+\nopagenumbers
+\baselineskip=20pt
+\ {\rm }
+\vskip 2.truein
+\centerline{Notes on Spectral Cloud Modelling}
+\centerline{of Future TDDR flights over the ARM SGP Site}
+\centerline{Charles S. Zender}
+\centerline{zender@ncar.ucar.edu}
+\vskip .5truein
+{\obeylines\smallskip
+\centerline{National Center for Atmospheric Research%
+\footnote*{The National Center for Atmospheric Research is sponsored by the National Science Foundation.}}
+\centerline{Boulder, Colorado 80307-3000}
+\vskip 1.truein
+\centerline{\today}}
+%\centerline{{\it }}
+\vfill\eject
+%
+%***********************************************************************
+% End Title Page
+%***********************************************************************
+
+%***********************************************************************
+% Begin Abstract 
+%***********************************************************************
+%Create the abstract:
+\bigskip
+\centerline{\it Abstract}
+\smallskip
+\baselineskip=14pt
+{\parindent=0truein \narrower \smallskip \ninerm
+\noindent
+Recent measurements from a combination of {\it in situ}, satellite,
+and station data lead to the conclusion that cloud models are
+underestimating globally averaged cloud absorption by 20--30 W/m$^2$.
+Quantifying this modelling deficiency, often called ``Anomalous
+Cloud Absorption'' (ACA), and understanding its physical origin 
+will be the subject of future studies including airborne TDDR
+radiometers.  
+The TDDR instrument currently has seven narrowband (10~nm)
+channels located between .3 and 1.6~$\mu$m. 
+This report attempts to address the problem of
+identifying optimal spectral locations for new TDDR channels
+with the goal of detecting any spectral signature to the ACA.
+Toward this end a high resolution multiple scattering
+radiation code is assembled and used to predict the response of
+the seven existing and four new candidate channels to the cloudy
+environment. 
+The four new channels are picked between the existing channels
+in the NIR. 
+One is discarded because of poor SNR but
+the remaining three are viable candidates for new TDDR channel
+locations.
+\smallskip}
+\baselineskip=14pt
+\vfill\eject
+%
+%***********************************************************************
+% End Abstract 
+%***********************************************************************
+
+%***********************************************************************
+% Begin Body of Paper
+%***********************************************************************
+
+\beginsection{1. Introduction} %the next line must be blank!
+
+The unexplained cloud absorption known as ACA must have some spectral
+signature, however broad. 
+By carefully (or fortuitously) placing the narrowband TDDR channels it
+is hoped to locate regions of heretofore unnoticed solar absorption in
+the clouds over the Southern Great Plains (SGP) test site. 
+The spectral distribution of the solar constant and
+the size of the ACA already constrain the location of future TDDR
+channels. 
+The globally annually averaged ACA is estimated to be between 20 and
+30 W/m$^2$ [.CZM94.]; this is about 5\% of the TOA solar flux.  
+The solar irradiance studies of both 
+<.LaN68.> and <.ThD71.> agree that less than 5\% of incoming solar
+flux is redder (longer wavelength) than 2.3~$\mu$m, this constrains 
+candidates to be bluer than 2.3~$\mu$m.  
+Any ACA mechanism with continuum features might be observable farther
+in the NIR than 2.3~$\mu$m, but should also be observable at shorter
+wavelengths than 2.3~$\mu$m. 
+Redder channels will have much better signal to noise ratios
+(SNRs) for photon counters. 
+Constraining the locations of the new channels further than this
+requires detailed knowledge of the spectral structure of
+atmospheric absorption in cloudy atmospheres, i.e., a radiative
+transfer model.
+
+%This will restore page numbering for rest of the manuscript. It
+%should go somewhere before page two text begins.
+\pageno=1
+%\headline={\tenrm {\it Draft of \today~~\timestring} \hfil [\oldstyle\folio\tenrm]} 
+\headline={\tenrm \hfil [\oldstyle\folio\tenrm]}
+\footline={\hfil}
+%
+The rest of this report proceeds as follows.
+Section 2 describes the workings of the radiation model and the
+sources of the input data.
+Section 3 presents a general overview of the atmospheric absorption
+features of the troposphere followed by sensitivity
+studies of spectral radiance to various configurations of clouds.
+Section 4 summarizes the results and recommendations.
+
+\beginsection{2. Radiation Model} %the next line must be blank!
+
+The high spectral resolution radiative transfer model constructed
+for these studies
+accounts for multiple scattering, liquid and/or solid phase
+hydrometeors, and absorption by O$_2$, O$_3$, CO$_2$, and H$_2$O
+gases.  
+Solar insolation has a resolution of .01~$\mu$m in the UV/visible to 
+.2~$\mu$m in the NIR ([.LaN68.] or [.ThD71.]). Solar insolation has
+the coarsest resolution of any of the input datasets.
+
+Liquid cloud droplets are assumed to be present in a log normal size
+distribution with a standard deviation of 1.5 and an effective radius
+of 10~$\mu$m.  The optical properties of the droplet distribution
+were computed from Mie theory using indices of refraction tabulated at
+a resolution from .02~$\mu$m in the UV/visible to .1~$\mu$m in the
+NIR.  Ice cloud crystals are also assumed to be present in a log
+normal size distribution, except with a standard deviation of 1.5 and
+an effective radius of 20~$\mu$m.  The optical properties of the
+crystal distribution were computed from Mie theory using indices of
+refraction tabulated at a resolution between .005 and .05~$\mu$m
+through the solar spectrum. The ice fraction of a cloud was determined
+by a simple function: warmer than -10$^\circ$C is pure liquid phase,
+colder than -40$^\circ$C is pure ice phase, with a linear transition
+through the mixed phase region (colder than -10$^\circ$C but warmer
+than -40$^\circ$C). 
+
+O$_3$ absorption cross-sections in the Hartley, Huggins, and Chappuis
+bands, as well as O$_2$ absorption in the Herzberg continuum, is taken
+from WMO (1985) data at a resolution between .02 and .05~$\mu$m. 
+The WMO O$_3$ data is only input dataset that is not identical
+to what Bruce P. Briegleb (NCAR) employed in his companion
+study. 
+
+Briegleb provided Malkmus random band parameters for H$_2$O (HITRAN
+1992) and O$_2$ (HITRAN 1986)
+at 10 cm$^{-1}$ intervals from .56~$\mu$m to 5
+$\mu$m (17900 to 2000 cm$^{-1}$).  
+CO$_2$ parameters (HITRAN 1986) were provided at 5 cm$^{-1}$ intervals
+and averaged up to 10 cm$^{-1}$ in transmission space.
+This narrow band data was used to
+evaluate pseudo-monochromatic absoption coefficients for input to the
+multiple scattering radiation code. 
+Briegleb notes that significant
+errors in these pseudo-monochromatic absorption coefficients can occur
+when the cloud is optically thick enough to completely attenuate the
+direct beam so that a diffusivity correction to the path length
+should be utilized. 
+This diffusivity effect will artificially decrease computed cloud
+absorption when the solar zenith angle is less than  
+the mean polar angle at which diffuse radiation propogates, usually
+taken to be 50$^\circ$. 
+In other words, the control solar geometry (see below) and 
+computations within 3 hours of local noon 
+should underpredict the cloud absorption. 
+On the other hand, the
+diffusivity effect should artificially increase computed cloud
+absorption for solar zenith angles greater than 50$^\circ$ due the
+foreshortened paths the diffuse radiation actually follows.
+The diffusivity effect should be negligible near 9~AM and 3~PM.
+
+The radiative transfer model used is DISORT, the well-known DIScrete
+ORdinate Radiative Transfer program. DISORT is run in 16 stream mode
+(eight per hemisphere) unless otherwise noted. 
+What this report will refer to as the 
+zenith and nadir intensities are actually the
+azimuthally-averaged intensities at the closest computational Gaussian
+angle to the zenith and nadir, about 11.5$^\circ$ for the 16 stream
+mode (see below).
+
+The atmospheric profile selected for the ARM SGP site was an 18 layer
+version of the ICRCCM standard Mid-Latitude Summer (MLS) profile. 
+The 300$^\circ$~K surface
+temperature is perhaps a degree or two high for mid-September, and the
+actual surface pressure is about 960~mb, not the 1000~mb employed by
+the model. 
+The availability of numerous validations to the standard MLS profile
+seemed to outweigh slight benefits of these small corrections at this
+early stage of modelling.
+The surface is assumed to be a Lambertian reflector 
+with a .2 albedo.
+
+There are some differences in methodology and coding to consider when 
+directly comparing results from this model to Briegleb's.
+This model does not employ a layer extending from the MLS profile
+top interface (1.5~mb) to space so computed broadband absorbed
+fluxes are too small by less than .5 W/m$^2$.  
+Our two models agree identically on H$_2$O absorption, but not on O$_2$
+and CO$_2$ absorption, where this model absorbs about 25\% more (or
+about 3~W/m$^2$) more than Briegleb's. 
+The reason for this discrepency is still unexplained. 
+Our Rayleigh scattering routines differ by a part in
+500 in TOA clear sky albedo---probably because we use different
+Rayleigh scattering parameterizations. 
+Our treatments of cloud
+extinction yield differences of a full percent in TOA albedo for a
+standard 100~g/m$^2$ cloud configuration; mine has the higher albedo. 
+This cloud discrepency could arise because Briegleb interpolates
+the coarse Mie scattering properties onto the fine wavelength grid of
+the spectral calculation whereas this model uses simple binning.
+Briegleb differentiates clear sky from cloudy sky column
+profiles by forcing the relative humidity to 100\% in all cloudy
+layers. 
+Despite this model giving a larger cloud albedo, it 
+computes rather large SWCF ratios---as high as 1.39---for important 
+cloud cases. 
+There should be future intercomparisons with Briegleb's model 
+to validate these large SWCF ratio results.
+\medskip
+\noindent{\sl Initial Conditions}\nobreak
+
+The standard cloud case is called the control cloud.  
+The control cloud is a 100 g/m$^2$ liquid water cloud with base at
+1.6~km (900~mb). 
+The control geometry was chosen to be local noon over the ARM SGP
+Central Facility, which gives a solar zenith angle of 34$^\circ$. 
+This is not a particularly useful solar angle as far as projecting
+results to global averages, but it is one extrema 
+of the absorption spectra: the shortest absorber paths and the highest
+insolations which the flight craft could see. 
+Because of the high solar elevation the downwelling radiances measured
+by the up-looking TDDR beneath cloud will be much larger than
+identical conditions for a lower sun. 
+This improves the signal to noise ratio (SNR) for sub-cloud
+TDDR but the shorter path lengths can also conceal some of the
+absorption effects being sought by the TDDR.  
+There is some direct evidence
+from <.PiV94.> fig.~4 that the SWCF ratio
+may peak near solar zenith angles of 30$^\circ$, which is very near 
+the noontime sun at the ARM site. 
+In any case, Briegleb extensively explores the geometry 
+of a solar zenith angle near to .5 in his companion study.
+
+\beginsection{3. Results} %the next line must be blank!
+
+%
+\medskip
+\noindent{\sl Clear sky absorption}\nobreak
+
+The transmission characteristics of the clear sky control
+atmosphere are separated into the five gaseous extinction processes
+considered in the model in figs.~\figref{trans_const}{\it a--e}.
+Each figure was computed by turning of all processes except the one
+displayed. 
+O$_2$ (fig.~\figref{trans_const}{\it a}\/) has four absorption features in the shortwave: 
+.63, .69, 7.6, and 1.27~$\mu$m. Since O$_2$ has such large absorber
+paths, its absorption features are ubiquitous in the troposphere.
+O$_3$ (fig.~\figref{trans_const}{\it b}\/) has three significant absorption features in the shortwave: 
+.2--.3~$\mu$m (Hartley band), .30--33~$\mu$m (Huggins bands), and
+.45--.80~$\mu$m (Chappuis bands). 
+There is a slight temperature dependence to the Huggins bands---this
+model employs cross-sections appropriate to -70$^\circ$C which would
+tend to underestimate absorption.
+Together with the O$_2$ Herzberg continuum (not shown), O$_3$ is
+responsible for the extinction of all the incident UV above the
+surface. 
+
+The strongest CO$_2$ bands (fig.~\figref{trans_const}{\it c}\/) are
+centered at 1.4, 1.6, and 2~$\mu$m. 
+The 1.4~$\mu$m band overlaps with an H$_2$O band
+(fig.~\figref{trans_const}{\it d}\/), and the 1.6~$\mu$m band 
+is also strongly absorbed by ice (fig.~\figref{trans_const}{\it f}\/).
+None of the TDDR channels is located in a region of significant CO$_2$
+absorption. 
+H$_2$O vibration-rotation bands extend from .6~$\mu$m throughout the
+NIR.  
+H$_2$O absorption accounts for $\sim$~90\% of all clear sky atmospheric
+absorption. 
+H$_2$O absorption in cloudy atmospheres certainly deserves scrutiny
+with the TDDR instrument because incorrect representation of it
+could lead to the large flux discrepencies necessary to explain ACA.
+Since all of the existing TDDR channels are located in H$_2$O windows,
+two of the proposed channels, at .91 and 1.18~$\mu$m, are placed in
+the wings of H$_2$O bands. 
+These two channels should help us gauge our understanding of some of
+the near wing H$_2$O absorption. 
+Two more channels, at 1.235 and 2.2~$\mu$m, are proposed at the center
+of windows not currently seen by the TDDR.
+Rayleigh scattering (fig.~\figref{trans_const}{\it e}\/), is responsible
+for the clear sky optical visible depth of .15 which has been
+subtracted from the optical depth reported on the figures (see
+Appendix~A for the legend to the diagnostic information printed to the
+left of each figure).
+
+Figure~\figref{trans_const}{\it f}\ compares the mass absorption
+coefficient of the ice crystal distribution to that of the liquid
+droplet distribution.
+For a given {\it CWP\/} the absorption optical depth scales inversely
+with the effective radius, so we can divide the bottom figure by two
+to compensate for the difference in effective radii. 
+The spectral features that stand out are the very enhanced ice
+absorption peaks at 1.6 and 2.0 $\mu$m; these peaks are much smaller
+in the liquid water absorption profile.
+\medskip
+\noindent{\sl Control atmosphere and control cloud}\nobreak
+
+The general transmission characteristics of the control
+atmosphere including all gaseous and cloud constituents
+are shown in figs.~\figref{hires_clr}--\figref{lores_cld}.
+The high resolution figs.~\figref{hires_clr}\ and \figref{hires_cld}\
+are plotted at the
+computational resolution, while the low resolution
+figs.~\figref{lores_clr}\ and \figref{lores_cld}\ were averaged to
+10~nm (the nominal TDDR bandwidth) with a square filter.  
+The 10~nm plots remove much of the fine structure of the H$_2$O bands
+as well as portraying the TDDR instrument more faithfully.
+It would be interesting to see what the fine structure would be if the
+correct filter response functions were applied instead of boxcar
+averaging. 
+All figures following fig.~\figref{lores_cld}\ are plotted at the
+10~nm resolution.
+Note that Transmission ($T$), Absorptance ($A$), and Reflectance
+($R$), are normalized so that $T + R + A = 1$ in all figures. 
+
+The fluxes (figs.~\figref{hires_clr}{\it d}, \figref{hires_cld}{\it
+d}, \figref{lores_clr}{\it d}, and \figref{lores_cld}{\it d}\/) and
+radiances (figs.~\figref{hires_clr}{\it e}, \figref{hires_cld}{\it
+e}, \figref{lores_clr}{\it e}, and \figref{lores_cld}{\it e}\/) are
+plotted as they would be observed by tandem aircraft flying at nominal
+levels of 1~km (900~mb) and 12.5~km (197~mb). 
+Examination of the downwelling clear sky fluxes
+(figs.~\figref{hires_clr}{\it d} or \figref{lores_clr}{\it d}\/) shows
+that the H$_2$O absorption above 13~km is almost neglible because the
+stratospheric H$_2$O mass path is very small.
+The attentuation at 13~km also shows the fingerprints of the 1.42 and
+2.0~$\mu$m CO$_2$ bands.
+The flux attenuation from TOA to 13~km at .5~$\mu$m is mostly due to
+Rayleigh backscattering, while in the UV and NIR the stratospheric
+O$_3$ bands have extinguished $\sim$~20~W/m$^2$.
+
+The increased flux attenuation from 13~km to 1~km is a consequence of
+the exponential increase in path lengths with pressure. 
+The powerful H$_2$O absorption in the NIR reflects the moisture in the
+lower troposphere. 
+Enhanced Rayleigh scattering in the UV--visible and more pronounced
+O$_2$ absorption in the NIR stem from the dry atmosphere.
+One notices the small flux in the proposed channel at 2.2~$\mu$m, 
+remains unattenuated by the clear sky.
+The main features of H$_2$O absorption---the windows at 1, 1.23, and
+1.6~$\mu$m---are not strongly dependent on the thermodynamic phase of
+the H$_2$O. 
+At solar zenith angles besides twilight, the flux absorption due to 
+clouds of any phase (see below) will look qualitatively like
+absorption due to increased H$_2$O vapor.
+
+The downwelling radiance below cloud base is viewed by a TDDR
+looking towards its zenith and so will be referred to as the zenith
+radiance.
+The upwelling radiance above cloud top is viewed by a TDDR
+looking towards its nadir and so will be referred to as the nadir
+radiance.
+These definitions agree with Briegleb's usage.
+Zenith and nadir radiances 
+are components of the diffuse radiation field since the sun is not
+directly overhead. 
+The clear sky zenith radiance
+(figs.~\figref{hires_clr}{\it e}\ or \figref{lores_clr}{\it e}\/)
+is proportional to the clear sky downwelling flux 
+(figs.~\figref{hires_clr}{\it d}\ or \figref{lores_clr}{\it d}\/)
+by a factor of $\pi/A_{\rm sfc} \sim 15$.
+Rayleigh scattering dominates the nadir radiance to the
+extent that the near UV is brighter than the visible.
+
+The cloudy sky zenith radiance has the same morphology as the
+the nadir radiance for the control cloud.
+Examination of the slopes of the radiances in
+figs.~\figref{hires_cld}{\it e}\ or \figref{lores_cld}{\it e}\ 
+shows the nadir radiance is preferentially strengthened relative to
+the zenith radiance in the visible, but weakened in the NIR.
+The strengthening in the visible may be related to the forward
+scattering peak of the hydrometeors, 
+while the weakening in the NIR is caused by the H$_2$O vapor and
+condensate absorption from 13~km to 1~km.
+
+Three dimensional surface plots of the
+absorbed spectral flux (figs.~\figref{spec_abs}{\it a,b}\/) give a  
+qualitative overview of the structure of absorption in the
+atmosphere.
+Cloudy sky absorption (fig.~\figref{spec_abs}{\it b}\/) 
+ is stronger than 
+clear sky absorption (fig.~\figref{spec_abs}{\it a}\/) 
+above the cloud because of the absorption of backscattered radiation.
+The tall spike in the lower left corner is stratospheric O$_3$
+absorption, while the CO$_2$ bands at 4.3~$\mu$m are seen in the lower
+right.
+The control cloud absorption at 800~mb is responsible for the
+strongest peaks and for the long low ridge of greybody absorption in
+the right rear of fig.~\figref{spec_abs}{\it b}.
+
+Two more 3D-surface figures
+verify that the azimuthally-averaged radiances being presented are 
+adequate representations of the azimuthally resolved 
+radiance field. 
+Fig.~\figref{full_rad}{\it a}\ 
+shows the full radiance field for the .5~$\mu$m channel at 1~km.
+The lower TDDR will be looking at polar angle $\pi$ or 180$^\circ$,
+which appears azimuthally symmetric to well within 10\%.
+The high degree of azimuthal symmetry is a sign
+that  the diffuse radiation beneath the cloud has been multiply
+scattered. 
+Variation of the radiance with the polar angle near the zenith is
+negligible, justifying the use of the closest computational polar
+angle to the zenith in this 16 stream computation.
+
+Fig.~\figref{full_rad}{\it b}\ 
+depicts the angularly resolved radiance field for the
+visible channel above the cloud at 13~km. 
+There are polar angles for which the
+scattered intensity is clearly not azimuthally symmetric, with the
+peak asymmetry edge-on to the cloud near a 90$^\circ$ polar angle.
+However, the nadir radiance field (polar angle 0$^\circ$) is still
+azimuthally symmetric.
+The radiation field looking edge-on to the cloud shows peaks at the
+same azimuthal angle as the sun (0$^\circ$ = 360$^\circ$) and specular
+reflection-like peak at 180$^\circ$. 
+These peaks are due to
+singly scattered photons reflected off the top of the cloud. 
+The nadir radiance
+comes from multiply scattered photons which penetrated
+deeper in the cloud.
+These diffuse photons are azimuthally homogeneous by the time they
+scatter up and out of the cloud.
+Simulations of TDDR viewing angles within about
+15$^\circ$ from nadir/zenith should be able to employ 
+azimuthally averaged intensities from a 16~stream computation.
+\medskip
+\noindent{\sl Sensitivity to increasing {\it LWP\/}}\nobreak
+
+The first sensitivity study examines the dependence of the
+nadir/zenith radiances on the {\it LWP\/} in the control cloud.
+The liquid control cloud at 800~mb was thickened from 0 to 300 g/m$^2$
+in increments of 25 g/m$^2$. 
+The column SWCF ratio decreased monotonically from 1.25 (at
+25~g/m$^2$) to 1.14 (at 300~g/m$^2$).
+The TDDR viewing radiances are shown for selected {\it LWP\/} in
+figs.~\figref{cwp_rad}{\it a--h}.
+Only the {\it LWP\/} is varied in these figures
+(note that the radiance scale varies).
+
+The nadir radiance monotonically increased with {\it LWP\/}; this
+increase should be attributed to   
+the higher TOA albedos of the thicker clouds. 
+The nadir radiance becomes stronger than the zenith radiance when
+$A_{\rm {TOA}} \sim .5$, or {\it LWP\/} $\sim 100$~g/m$^2$.
+The zenith radiance increases with {\it LWP\/} until the multiple
+scattering regime is reached at about $\sim 15$~g/m$^2$.
+For thicker clouds
+the zenith radiance monotonically decreases because less downwelling
+radiation is able to penetrate the cloud.
+
+Three of the four candidate channels should receive stronger signals
+than the existing 1.64~$\mu$m channel.
+Presumably these three channels would have an adequate SNR.
+Fig.~\figref{cwp_rad}{\it b}\ shows
+that the SNR problem in the proposed 2.2~$\mu$m channel seems to
+be compounded by the insensitivity of the channel to {\it LWP\/}.  
+The insensitivity is not as severe viewed from the lower TDDR
+(fig.~\figref{cwp_rad}{\it d}\/), 
+but the SNR problem is even more severe at 1~km because
+the 2.2 $\mu$m window has completely closed for clouds heavier than 
+about 200~g/m$^2$.
+Therefore this 2.2~$\mu$m channel may have to be discarded
+as a candidate.
+
+Finally, all the channel radiances for this study were plotted against
+the radiance in the visible channel ($\lambda = .5~\mu$m) to reproduce
+the radiance relationships that Bob Cess (SUNY) has been looking at 
+(figs.~\figref{cwp_rad_rat}{\it a--d}\/).
+The visible channels in figs.~\figref{cwp_rad_rat}{\it a,b}\ 
+(.41 and .67~$\mu$m) show no evidence of 
+increasing more slowly than the .5~$\mu$m channel over the range of
+{\it LWP\/} tested.
+The radiance growth in the NIR channels, however, does tend to 
+lag behind the visible channel as the {\it LWP\/} increases. 
+This ``turning over'' in the NIR was seen by Cess. 
+\medskip
+\noindent{\sl Sensitivity to ice phase}\nobreak
+
+The next sensitivity study examined what effect ice phase clouds had
+on the absorption. 
+For this purpose the 100 g/m$^2$ control cloud was treated as
+ice ($r_{\rm e} = 20\ \mu$m), 
+instead of liquid ($r_{\rm e} = 10\ \mu$m), 
+even though the cloud is at 800~mb. 
+The column SWCF ratio of the liquid cloud was 1.16
+while the SWCF ratio for the ice cloud was surprisingly high: 1.39.
+Unfortunately this sensitivity study was not performed for the
+same size distribution in each phase in order to disentangle the
+hydrometeor size effects from the phase effects.
+Fig.~\figref{trans_const}{\it f}\ provides
+insight to where the spectral
+signature of the ice cloud should show up and 
+figs.~\figref{ice}{\it a,b}\ compare the liquid to ice radiances at
+each flight level.
+The 2.0~$\mu$m region was nearly opaque due to H$_2$O vapor,
+so the difference between ice and liquid condensate is difficult
+to detect here.
+However, by comparing the peak heights of the 1.25 and 1.6~$\mu$m
+windows for both liquid and ice, one can clearly see the enhanced
+absorption of ice relative to liquid throughout the 1.6~$\mu$m window. 
+\medskip
+\noindent{\sl Sensitivity to increasing solar zenith angle}\nobreak
+
+The final sensitivity test in this report analyzed the dependence of
+the nadir/zenith radiances on the solar zenith angle.
+For this study a moderately thick (200~g/m$^2$) mixed phase cloud
+($\sim 50$\% ice), was simulated in the upper troposphere
+between 6.3 and 10~km (470 to 280~mb).
+Starting at local noon a computation was performed each hour until
+twilight. 
+The column SWCF ratio decreased monotonically from 1.04 (at
+local noon) to .56 (at twilight).
+Figs.~\figref{sza_rad}{\it a--g}\ show that
+both nadir and zenith radiances monotonically decreased with
+increasing solar zenith angle.
+This decrease should be attributed to the decreasing TOA flux.
+Absorptance between 1~km and 13~km monotonically decreased from
+15\% of TOA flux (at local noon) to $\sim 10\%$ (at twilight).
+One also notices the relative enhancement of the nadir radiance to the 
+zenith radiance as the shadows lengthen.
+The zenith radiance is depleted because of the large number of
+scatterings needed to penetrate the cloud while while the nadir
+radiance is enhanced by the same effect (resulting in larger TOA
+albedos for larger zenith angles).
+The nadir enhancement is more pronounced at shorter wavelengths due to
+more efficient Rayleigh scattering.
+
+As the sun moved toward the horizon, the mass paths enlongated
+but figs.~\figref{sza_rad_rat}{\it a--d}\/ do not show any 
+of the ``turning over'' that characterized the NIR in the {\it LWP\/}
+sensitivity study (figs.~\figref{cwp_rad_rat}{\it a--d}\/).
+Instead the radiances in all spectral channels diminish evenly
+as the solar zenith angle increases.
+The absorber paths seem to be within the linear limit in this
+sensitivity study.
+
+\beginsection{4. Conclusions} %the next line must be blank!
+
+%
+The angularly resolved radiance field was examined to determine
+whether nadir/zenith radiances could be approximated by the
+azimuthally averaged radiance at the nearest computational angle
+in a 16~stream calculation.
+Figs.~\figref{full_rad}{\it a,b}\ 
+support the approximation that the
+azimuthally resolved nadir/zenith radiances do not differ
+significantly from the azimuthally averaged nadir/zenith radiances, at
+least for multiply-scattering clouds.
+Sixteen streams appears to be adequate in resolving the nadir/zenith
+polar angle as well.
+
+All computations were performed assuming spherical ice crystals with
+$r_{\rm e} = 20\ \mu$m. 
+Recent observations by <.KKW93.> reported high numbers of small ice
+crystals (total concentration $\sim 10000\ \ell^{-1}$) in tropical
+cirrus.  
+If the log-normal size distribution employed here undercounts small
+ice crystals then the computed absorption would be underestimated near
+cloud top and overestimated near cloud base [.ZeK94.].
+Treating ice crystals as aspherical tends to lessen absorption
+[.TaL89a.].
+Computations with the CCM2 column radiation code [.Bri92a.] 
+as modified to account for crystal size and shape effects were unable
+to produce SWCF ratios in excess of 1.1. 
+Accounting for these ice effects did improve (raise) the TOA albedo,
+however. 
+Those preliminary and spectrally-coarse (18 band) calculations indicate
+that including detailed size 
+distribution and crystal shape effects into the current model would
+change $A_{\rm TOA}$ more than the cloud forcing ratio.
+
+The SWCF ratio, the diagnostic most often used to assess ACA, was
+computed for each cloud scenario.
+The SWCF ratio tended to increase with decreasing {\it LWP\/} (down to
+25~g/m$^2$) and decreasing zenith angle (up to 30$^\circ$).
+The largest SWCF ratio simulated in these studies, 1.39, occurred 
+at $\Theta \sim 34^\circ$ when the control cloud at 800~mb was
+treated as 100\% ice. 
+This particular case, although unphysical, should be validated by
+Briegleb because of its high SWCF ratio.
+<.PiV94.> observed a maxima in SWCF ratio near 30$^\circ$.
+
+The results suggest at least two avenues for further computations:
+mixed phase clouds at liquid temperatures, and varying ice and liquid
+size distributions.
+Could large numbers of ice phase hydrometeors
+(e.g., hail or mixed-phase hydrometeors) beneath the melting level
+significantly affect cloud absorption properties? 
+
+There are two main criteria which candidate channels for the
+TDDR must meet: 
+First, the channel should not saturate under normal cloudy
+conditions. 
+Second, the channel should represent a spectral window which
+could contribute substantially towards the observed 20-30~W/m$^2$ ACA.
+Three of the four candidate channels (.91, 1.23, and 1.18~$\mu$m) meet
+these criteria. 
+The candidate at 2.2~$\mu$m fails the first criteria for the bottom
+TDDR, and arguably fails the second criteria as well.
+\medskip
+\baselineskip=14pt
+\noindent{\it Acknowledgements.}
+I thank Bruce Briegleb for his generously providing the optical data,
+and for his comments at every stage of this work.
+This work was supported in part by Earth Observing System project
+W-17,661. 
+\baselineskip=14pt
+%
+\vfill\eject
+%***********************************************************************
+% End Body of Paper
+%***********************************************************************
+
+%***********************************************************************
+% Begin Appendices
+%***********************************************************************
+\centerline{APPENDIX A}
+\bigskip
+Diagnostic quantities printed on the right hand side of the figures:
+
+{\bf First line:} Geometric boundary conditions and surface albedo
+\item{a.} Profile type
+\item{b.} Latitude
+\item{c.} Day of year
+\item{d.} Hour of day (standard time)
+\item{e.} Solar zenith angle
+\item{f.} Cosine of the solar zenith angle
+\item{g.} Surface albedo
+
+{\bf Second line, first half:} Cloud properties 
+\item{a.} Condensed Water Path ({\it CWP\/})
+\item{b.} Base altitude of lowest level containing clouds
+\item{c.} Thickness from highest cloud in column to lowest
+\item{d.} Fraction of total {\it CWP\/} that is ice, i.e., {\it IWP}/{\it CWP}
+
+{\bf Second line, second half:} Cloud forcings
+\item{a.} Cloud forcing evaluated at TOA
+\item{b.} Cloud forcing evaluated at surface
+\item{c.} Cloud forcing ratio for entire column = surface cloud forcing/TOA cloud forcing
+\item{d.} Cloud forcing ratio for column between 1 and 13~km = cloud
+forcing at 1~km divided by cloud forcing at 13~km
+
+{\bf Third line:} Column optical properties and broadband fluxes
+(in W/m$^2$)  
+\item{a.} TOA albedo
+\item{b.} Cloud extinction optical depth at $\lambda = .5$~$\mu$m
+\item{c.} Flux down at TOA
+\item{d.} Flux down at surface
+\item{e.} Flux absorbed in atmosphere
+\item{f.} Flux absorbed by surface
+\item{g.} Flux absorbed between 13~km and 1~km
+
+{\bf Fourth line:} Broadband fluxes (in W/m$^2$) measureable by
+aircraft at 13~km and 1~km
+\item{a.} Total downwelling flux (direct + diffuse) at $z = 13$~km
+\item{b.} Direct beam flux at $z = 13$~km
+\item{c.} Upwelling flux at $z = 13$~km
+\item{d.} Net flux at $z = 13$~km
+\item{e.} Total downwelling flux (direct + diffuse) at $z = 1$~km
+\item{f.} Direct beam flux at $z = 1$~km
+\item{g.} Upwelling flux at $z = 1$~km
+\item{h.} Net flux at $z = 1$~km
+%
+\vfill\eject
+%***********************************************************************
+% End Appendices
+%***********************************************************************
+
+%***********************************************************************
+% Begin References
+%***********************************************************************
+% A percent followed immediately by tib citations means the citations
+% will be added to the reference list but won't be cited by tib
+% anywhere in the paper.  this is useful for citations which had to
+% be formatted by hand.
+% the following .[] is used by tib to generate the reference list
+%[,extra references,],[,more references,] 
+\centerline{REFERENCES}
+\bigskip
+.[]
+\vfill\eject
+%***********************************************************************
+% End References
+%***********************************************************************
+
+%***********************************************************************
+% Begin Tables
+%***********************************************************************
+\nopagenumbers
+\baselineskip=16pt
+% The '#' means ``stick the text of each column entry in this place''.
+% The '&' is like the the tab key on the typewriter, TeX backs up to
+% the beginning of the current column then advances one column exactly.
+% \cr signifies the end of the row, all unfilled columns are assumed
+% blank (TeXbook, p. 231). 
+% Here's an example of a formatted table placed in the middle of the text:
+%\midinsert
+%$$
+%\vbox{
+%\halign{
+% Here is the template for the table:
+%# \hfil \qquad & # \hfil \qquad \cr
+%
+%\noalign{\hrule}
+%\noalign{\vskip-2pt}
+%\noalign{\hrule}
+%\noalign{\vskip6pt}
+%\multispan2{\hfil Initial Properties of Standard Cloud \hfil} \cr
+%\noalign{\vskip4pt}
+%\noalign{\hrule}
+%\noalign{\vskip4pt}
+%Cloud base (km) & 11\cr
+%Maximum vertical updraft (cm-s$^{-1}$) & 5\cr
+%\noalign{\vskip4pt}
+%\noalign{\hrule}
+%
+%} % end halign
+%} % end vbox
+%$$
+\baselineskip=12pt
+%{\bf Table~1.} The initial cloud properties are shown above. 
+%The {\it mean\/} properties are vertical averages within the cloud. 
+\baselineskip=16pt
+%\endinsert
+%
+%
+\baselineskip=16pt
+\vfill\eject
+%***********************************************************************
+% End Tables
+%***********************************************************************
+
+%***********************************************************************
+% Begin Figure Captions
+%***********************************************************************
+%Print out the figure captions on their own pages in their own font.
+%Skip the page number on the figure caption pages.
+\nopagenumbers
+\baselineskip=14pt
+%
+\bigskip
+\vbox{
+\noindent{\bf  Figure~\figdef{trans_const}}.
+Atmospheric transmittance $T$ for each gaseous
+constituent from $\lambda = .2$--$2.5~\mu$m.
+({\it a\/}) O$_2$ absorption.
+({\it b\/}) O$_3$ absorption.
+({\it c\/}) CO$_2$ absorption.
+({\it d\/}) H$_2$O absorption.
+({\it e\/}) Rayleigh scattering.
+({\it f\/}) Mass absorption coefficients for ice and liquid water
+log-normal hydrometeor distributions for $\lambda = .2$--$5~\mu$m:
+$\sigma = 1.5$, $r_{\rm e} = 10 \mu$m (liquid) and  $r_{\rm e} =
+20~\mu$m (ice). 
+}
+%
+\bigskip
+\vbox{
+\noindent{\bf  Figure~\figdef{hires_clr}}.
+Clear sky optical properties, fluxes, and radiances at the full
+spectral resolution of the computations.
+({\it a\/}) Transmittance $T$ from $\lambda = .2$--$5~\mu$m.
+({\it b\/}) Absorptance $A$ from $\lambda = .2$--$5~\mu$m.
+({\it c\/}) Reflectance $R$ from $\lambda = .2$--$5~\mu$m.
+({\it d\/}) Spectral downwelling flux $F^\downarrow_\lambda$ at TOA,
+13~km, and 1~km from $\lambda = .2$--$2.5~\mu$m.
+({\it e\/}) Spectral upwelling radiance $I^\uparrow_\lambda$ at 13~km,
+and spectral downwelling radiance $I^\downarrow_\lambda$ at 1~km from $\lambda = .2$--$2.5~\mu$m.
+}
+%
+\bigskip
+\vbox{
+\noindent{\bf  Figure~\figdef{lores_clr}}.
+Same as figure~\figref{hires_clr}\ but averaged to 10~nm resolution.
+}
+%
+\bigskip
+\vbox{
+\noindent{\bf  Figure~\figdef{hires_cld}}.
+Same as figure~\figref{hires_clr}\ but for the control cloud:
+100~g~m$^{-2}$ liquid droplets, base at 1.6~km (836~mb), and thickness
+of .9~km (80~mb).
+}
+%
+\bigskip
+\vbox{
+\noindent{\bf  Figure~\figdef{lores_cld}}.
+Same as figure~\figref{hires_cld}\ but averaged to 10~nm resolution.
+}
+%
+\bigskip
+\vbox{
+\noindent{\bf  Figure~\figdef{spec_abs}}.
+Absorbed spectral flux at all wavelengths and levels.
+Horizontal axes are level in the atmosphere (Pa) and wavelength (m). 
+({\it a\/}) Clear sky.
+({\it b\/}) Control cloud (100~g/m$^2$ at 800~mb).
+}
+%
+\bigskip
+\vbox{
+\noindent{\bf  Figure~\figdef{full_rad}}.
+Radiance field for all azimuthal and polar angles for $\lambda =
+.5~\mu$m. 
+Horizontal axes are polar angle (radians) and azimuthal angle
+(radians). The polar angle is measured from the vertical so that
+upwelling radiance has $\Theta = 0$.
+The azimuthal coordinate (which wraps around on itself) is fixed by
+the azimuthal angle of the sun, set to $\phi_0 = 0$.
+({\it a\/}) Radiance beneath control cloud (1~km).
+({\it b\/}) Radiance above control cloud (13~km).
+}
+%
+\bigskip
+\vbox{
+\noindent{\bf  Figure~\figdef{cwp_rad}}.
+Radiances at the flight levels for selected {\it LWP}\/s in the
+control atmosphere.
+({\it a\/}) {\it LWP\/}~=~0~g~m$^{-2}$.
+({\it b\/}) {\it LWP\/}~=~25~g~m$^{-2}$.
+({\it c\/}) {\it LWP\/}~=~50~g~m$^{-2}$.
+({\it d\/}) {\it LWP\/}~=~100~g~m$^{-2}$.
+({\it e\/}) {\it LWP\/}~=~150~g~m$^{-2}$.
+({\it f\/}) {\it LWP\/}~=~200~g~m$^{-2}$.
+({\it g\/}) {\it LWP\/}~=~250~g~m$^{-2}$.
+({\it h\/}) {\it LWP\/}~=~300~g~m$^{-2}$.
+}
+%
+\bigskip
+\vbox{
+\noindent{\bf  Figure~\figdef{cwp_rad_rat}}.
+Radiance in the visible ($\lambda = .5~\mu$m) channel (horizontal
+axis) is plotted versus radiance in the rest of the TDDR channels
+(vertical axis). 
+The atmospheric profile is as for the control cloud
+except the total {\it LWP\/} in the cloud layer is varied from 0 to
+300~g~m$^{-2}$ in steps of 25~g~m$^{-2}$.
+{\it LWP\/} and channel center are labelled by hand.
+({\it a\/}) 13~km upwelling radiances for existing channels.
+({\it b\/}) 13~km upwelling radiances for all (existing + candidate) channels.
+({\it c\/}) 1~km downwelling radiances for existing channels.
+({\it d\/}) 1~km downwelling radiances for all (existing + candidate) channels.
+}
+%
+\bigskip
+\vbox{
+\noindent{\bf  Figure~\figdef{ice}}.
+Radiance at flight levels for the 100~g~m$^{-2}$ control cloud
+treated as liquid spheres ($r_{\rm e} = 10 \mu$m) versus ice spheres
+($r_{\rm e} = 20 \mu$m). 
+The diagnostic figures printed on the sidebar are for the ice cloud.
+({\it a\/}) Upwelling radiances at 13~km.
+({\it b\/}) Downwelling radiances at 1~km.
+}
+%
+\bigskip
+\vbox{
+\noindent{\bf  Figure~\figdef{sza_rad}}.
+Radiances at the flight levels for hourly solar zenith angles
+starting at local noon. 
+The mixed phase cloud is 200~g/m$^2$, $\sim 50$\% ice, between 
+6.3 and 10~km (470 to 280~mb).
+({\it a\/}) Local noon, $\theta = 34^\circ$, $\cos\theta = .83$.
+({\it b\/}) 1 PM or 11 AM, $\theta = 37^\circ$, $\cos\theta = .80$.
+({\it c\/}) 2 PM or 10 AM, $\theta = 44^\circ$, $\cos\theta = .72$.
+({\it d\/}) 3 PM or 9 AM, $\theta = 53^\circ$, $\cos\theta = .60$.
+({\it e\/}) 4 PM or 8 AM, $\theta = 66^\circ$, $\cos\theta = .43$.
+({\it f\/}) 5 PM or 7 AM, $\theta = 76^\circ$, $\cos\theta = .24$.
+({\it g\/}) 6 PM or 6 AM, $\theta = 88^\circ$, $\cos\theta = .03$.
+}
+%
+\bigskip
+\vbox{
+\noindent{\bf  Figure~\figdef{sza_rad_rat}}.
+Same in fig.~\figref{cwp_rad_rat}\ but for the cloud scenarios in 
+fig.~\figref{sza_rad}.
+Local time and channel center are labelled by hand.
+}
+%
+%\bigskip
+%\vbox{
+%\noindent{\bf  Figure~\figdef{thick}}.
+%Radiances and fluxes at flight levels for the 700~g~m$^{-2}$ 
+%mixed phase cloud from 1.5 to 11.5~km (830 to 200~mb).
+%({\it a\/}) Spectral Flux.
+%({\it b\/}) Nadir and zenith radiances.
+%}
+%%
+%\bigskip
+%\vbox{
+%\noindent{\bf  Figure~\figdef{thin}}.
+%Radiances and fluxes at flight levels for the 25~g~m$^{-2}$ 
+%mixed phase cloud from 8 to 10~km (370 to 280~mb).
+%({\it a\/}) Spectral Flux.
+%({\it b\/}) Nadir and zenith radiances.
+%}
+%
+%Reset the font from the figure caption settings to the text body:
+\baselineskip=14pt
+\tenrm
+\vfill\eject
+%***********************************************************************
+% End Figure Captions
+%***********************************************************************
+
+%***********************************************************************
+% Begin Figure Graphics w/o captions
+%***********************************************************************
+%
+%\epsfxsize=6.5in
+%\null\bigskip\centerline{\epsffile{/home/zender/web/papers/cir_rad_sens/figure_1.ps}}
+%\bigskip\vbox{\centerline{\noindent{\bf Figure~1}.}}
+%
+%***********************************************************************
+% End Figure Graphics w/o captions
+%***********************************************************************
+
+%***********************************************************************
+% End Document
+%***********************************************************************
+%
+\bye
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,30 @@
+[user]
+	name = Charlie Zender
+	email = zender@uci.edu
+[core]
+	editor = emacs
+	excludesfile = ~/.gitignore
+[web]
+	browser = google-chrome
+[push]
+	default = matching
+[color]
+	ui = auto
+[color "branch"]
+	current = yellow bold
+	local = green bold
+	remote = cyan bold
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[color "status"]
+	added = green bold
+	changed = cyan bold
+	untracked = red bold
+[github]
+	user = czender
+[url "https://github.com/"]
+     insteadOf = gh:

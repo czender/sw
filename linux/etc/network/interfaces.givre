@@ -1,0 +1,77 @@
+# $Id$
+# Purpose: Network configuration for Ubuntu machine Givre
+# /etc/network/interfaces -- configuration file for ifup(8), ifdown(8)
+# Usage:
+# diff ~/linux/etc/network/interfaces.givre /etc/network/interfaces
+# sudo cp ~/linux/etc/network/interfaces.givre /etc/network/interfaces
+# cp /etc/network/interfaces ~/linux/etc/network/interfaces.givre 
+# /etc/init.d/networking restart
+
+# Automatically configured interfaces 
+auto lo
+auto eth0
+auto eth0:1
+
+# Interface: lo
+# The loopback interface
+iface lo inet loopback
+address 127.0.0.1
+netmask 255.0.0.0
+
+# Interface: eth0 wired Fast Ethernet
+# Wired Access DHCP
+# iface eth0 inet dhcp
+
+# UCInet Wired Access Croul Hall
+iface eth0 inet static
+	address 128.200.14.205
+	broadcast 128.200.14.255
+	gateway 128.200.14.1
+	netmask 255.255.255.0
+
+# To access HP4515 and HP4350 printers in ESS common rooms (192.168.14.2, ...)
+iface eth0:1 inet static
+      address 192.168.14.205
+      broadcast 192.168.14.255
+      gateway 192.168.14.1
+      netmask 255.255.255.0
+
+# Interface: wlan0 802.11a/b/g Broadband Wireless
+iface wlan0 inet dhcp
+#      wireless-essid "UCInet Mobile Access"
+#      wireless-essid mangonet
+#      wireless-essid zendernet
+
+# This is a list of hotpluggable network interfaces.
+# They will be activated automatically by the hotplug subsystem.
+mapping hotplug
+	script grep
+	map eth0
+
+# Less Frequently used interface configurations:
+
+# Static IP on Harry's wired network
+#iface eth0 inet static
+#	address 192.168.1.75
+#	broadcast 192.168.1.255
+#	gateway 192.168.1.1
+#	netmask 255.255.255.0
+#	network 192.168.1.0
+
+# Static IP on Harry's wireless network
+#iface wlan0 inet static
+#	address 192.168.1.75
+#	broadcast 192.168.1.255
+#	gateway 192.168.1.1
+#	netmask 255.255.255.0
+#	network 192.168.1.0
+
+# Static IP PSCSG local wireless area of RH
+#iface wlan0 inet static
+#	wireless-essid pscsg
+#	address 128.200.166.177
+#	broadcast 128.200.166.255
+#	gateway 128.200.166.1
+#	netmask 255.255.255.0
+#	network 128.200.166.0
+

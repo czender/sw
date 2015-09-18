@@ -1,0 +1,208 @@
+%Define general page, paragraph, and line formatting here.
+\input /cgd/home/zender/tex/eplain
+\input /cgd/home/zender/tex/utilities
+\magnification=\magstep3
+\nopagenumbers
+\parskip=12pt
+\parindent=1em
+\tolerance=10000
+\overfullrule=0pt
+\raggedright
+%%%%%%%%%%%%%% Insert scratch TeX commands below here %%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\centerline{\bf Parameterization of Anvil Clouds in the NCAR GCM}
+\centerline{\bf Charles S. Zender and J.T. Kiehl}
+\centerline{\bf University of Colorado and NCAR}
+\medskip
+
+\item{1.} Motivation
+\item{2.} Parameterization development
+\item{3.} Climate sensitivity
+\item{4.} Cloud sensitivity to El Nino
+\item{5.} Conclusions
+
+\vfill\eject
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% End page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\centerline{\bf Parameterization Properties}
+\medskip
+
+\item{1.} Shows correct radiative feedbacks
+\item{2.} Non-prescribed IWP (allow deviations from Adiabatic Liquid Water Content)
+\item{3.} Captures IWC profile of anvils (-> ice -> SWCF > LWCF)
+\item{4.} Sensitive to local convective properties
+\item{5.} Prognostic
+
+\vfill\eject
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% End page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\centerline{\bf Current CCM Cloud Properties}
+\medskip
+
+\item{1.} Prescribed IWP as a function of $\int Q$ (Adiabatic Liquid Water Content)
+\item{2.} Does not quite saturate the LWCF
+\item{3.} Does not know about anvils
+\item{4.} Sensitive to total column moisture (e.g., SST)
+\item{5.} Prescribed
+
+\vfill\eject
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% End page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\centerline{\bf Motivation }
+\medskip
+
+Tropical cirrus are especially important because among all cloud types
+they exist in the coldest part of the troposphere directly over the
+warmest oceans and thus produce the strongest longwave forcing.
+
+CCM2 captures mean climatological radiative fields quite well, but a
+more stringent test is the model's ability to respond to an external
+forcing. 
+
+The 1987 El Nino and contemporaneous ERBE data are such a test.
+Observed radiative sensitivity to SST forcing can test whether a 
+GCM cloud parameterization predicts the correct anomalies in both the
+LW (cloud top temperature, emissivity) and the SW (optical depth,
+particle size and phase).
+
+Analyses show that $\Delta SWCF / \Delta LWCF > 1.1$ in the tropics
+during El Nino. However the CCM predicts the ratio is $\approx$ 1. 
+
+A prescribed {\it IWP\/} is unable to fully adjust cloud mass to
+convective events. A prognosed {\it IWP\/} should take into account
+the most important bulk predictors of anvil ice.
+
+\vfill\eject
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% End page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\centerline{\bf SPCP = Semi-Prognostic Cirrus Parameterization = }
+\medskip
+For a grid cell of density $\rho$,
+thickness $\Delta z$, ice mixing ratio $q_{\rm i}$, vapor mixing
+ratio $q_{\rm v}$, temperature $T$, ice saturation specific humidity
+$q_{\rm s}$, precipitation (snow) flux $P_{\rm i}$, and large scale wind field
+$\vec u$, the thermodynamic couplings that define the SPCP are:
+
+Convective:
+$$
+{\partial q_{\rm i} \over \partial t} = -\vec u \cdot \nabla q_{\rm i} + 
+{\alpha M_{\rm c} \over \rho \Delta Z} - 
+\beta q_{\rm i} - 
+\gamma q_{\rm i}
+\eqdef{q_i_eqn}
+$$
+
+Stable:
+$$
+{\partial q_{\rm i} \over \partial t} = -\vec u \cdot \nabla q_{\rm i} + 
+{\alpha_{\rm STB} w + \beta_{\rm STB} {\rm H}(T - 240) \over \rho
+\Delta Z} -
+\beta q_{\rm i} - 
+\gamma q_{\rm i}
+\eqdef{q_i_stb_eqn}
+$$
+
+$$
+{\partial q_{\rm v} \over \partial t} = -\vec u \cdot \nabla q_{\rm v} - 
+{\alpha M_{\rm c} \over \rho \Delta Z} + 
+\beta q_{\rm i} + 
+{\delta \over \rho} \Bigl(1 - {q_{\rm i} \over q_{\rm s}}\Bigr)P_{\rm i}^{1/2}
+\eqdef{q_v_eqn}
+$$
+$$
+{\partial T \over \partial t} = -\vec u \cdot \nabla T +
+{\hbox{L}_{\rm i} \over {\rm c_p}}\Biggl[
+{\alpha M_{\rm c} \over \rho \Delta Z} - 
+\beta q_{\rm i} - 
+{\delta \over \rho} \Bigl(1 - {q_{\rm i} \over q_{\rm s}}\Bigr)P_{\rm i}^{1/2}
+\Biggr]
+\eqdef{T_eqn}
+$$
+where $\Delta Z$ is the thickness of the convecting portion of the
+column for which $T < 0~^\circ$C, L$_{\rm i}$ is the latent heat of
+fusion, and c$_{\rm p}$ is the specific heat of air at constant pressure. 
+
+\vfill\eject
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% End page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\centerline{\bf $\Omega_{.5}$ (Control Model) = CCM2 + }
+\medskip
+\item{1.} Ice radiative properties
+\item{2.} Continental/Maritime cloud drop size distinction
+\item{3.} Locally diagnosed cloud water content
+\item{4.} Background aerosol
+\item{5.} Trace gases
+\item{6.} LSM Land Surface Model
+\item{7.} modifications to PBL and moist convection
+
+\vfill\eject
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% End page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vsize=11.0truein
+\centerline{\bf Conclusions} 
+\medskip
+\item{$\bullet$} Negative cloud forcing feedbacks in deep convective
+regimes may be caused by the anomalous SWCF increase to a saturated 
+LWCF basic state.
+
+\item{$\bullet$} Convective mass flux $M_c$ can work as a proxy for
+IWP generation...but using a cloud base $M_c$ ignores the integrated
+strength of penetrative convection.
+
+\item{$\bullet$} Cloud fraction may be implicitly parameterized, at
+least in cirrus anvils, where patchiness is low. 
+
+\item{$\bullet$} Dividing ice condensate generation into convective
+and stable components works well. Further division into multiple
+synoptic cloud regimes looks promising.
+
+\item{$\bullet$} $w$, $T$, and $A_c$ suffice to grossly represent 
+stable ice generation at the GCM scale.
+
+\item{$\bullet$} Spatial distributions of {\it IWP\/}, and the
+location and strength of {\it IWP\/} extrema, are needed to see whether
+higher {\it IWP\/} in storm tracks than ITCZ is real.
+
+\item{$\bullet$} Vertical distribution of $f_{\rm ice}(T)$ is 
+needed to cleanly mesh ice with liquid.
+
+\vfill\eject
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% End page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%% Insert scratch TeX commands above here %%%%%%%%%%%%%
+\bye

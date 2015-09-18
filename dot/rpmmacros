@@ -1,0 +1,47 @@
+# Purpose: Default switches for building RPMs
+
+# NB: A simpler version of this file is created by rpmdev-setuptree
+
+# My surname is zender
+%packager      Charlie Zender <surname@uci.edu>
+%vendor        netCDF Operators Project
+
+# Information required for signing RPMs with GPG key
+%_signature gpg
+%_gpg_name  Charlie Zender
+
+# HOWTO build RPMs as a user
+# http://fedoraproject.org/wiki/How_to_create_an_RPM_package
+%_topdir %(echo "$DATA")/rpm
+
+# 20130608: Deprecate these
+# %_rpmtopdir %{_topdir}/%{name}
+# %_builddir %{_rpmtopdir}/BUILD
+# %_rpmdir %{_rpmtopdir}
+# %_sourcedir %{_rpmtopdir}
+# %_specdir %{_rpmtopdir}
+# %_srcrpmdir %{_rpmtopdir}
+# %_tmppath %{_rpmtopdir}/TMP
+# %_buildroot %{_tmppath}/%{name}-root
+
+%_smp_mflags %( \
+    [ -z "$RPM_BUILD_NCPUS" ] \\\
+        && RPM_BUILD_NCPUS="`/usr/bin/nproc 2>/dev/null || \\\
+                             /usr/bin/getconf _NPROCESSORS_ONLN`"; \\\
+    if [ "$RPM_BUILD_NCPUS" -gt 16 ]; then \\\
+        echo "-j16"; \\\
+    elif [ "$RPM_BUILD_NCPUS" -gt 3 ]; then \\\
+        echo "-j$RPM_BUILD_NCPUS"; \\\
+    else \\\
+        echo "-j3"; \\\
+    fi )
+
+%__arch_install_post \
+    [ "%{buildarch}" = "noarch" ] || QA_CHECK_RPATHS=1 ; \
+    case "${QA_CHECK_RPATHS:-}" in [1yY]*) /usr/lib/rpm/check-rpaths ;; esac \
+    /usr/lib/rpm/check-buildroot
+
+# mkdir -p ${DATA}/rpm/nco/TMP ${DATA}/rpm/nco/BUILD
+# /bin/cp ~/nco/bld/nco.spec ${DATA}/nco-3.1.9.tar.gz ${DATA}/rpm/nco
+# cd ${DATA}/rpm/nco;rm -rf TMP/* BUILD/*;rpmbuild -ba --sign nco.spec 2>&1 | tee > ~/nco.foo
+

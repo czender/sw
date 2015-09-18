@@ -1,0 +1,3 @@
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/ncdx.tar.Z .
+tar xvzf ncdx.tar.Z

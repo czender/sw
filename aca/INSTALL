@@ -1,0 +1,131 @@
+$Id$
+
+Purpose: Installation instructions for swnb2 and clm
+
+NB: README contains more generic description of these and related programs
+
+0. Download source:
+http://dust.ess.uci.edu/swnb2/swnb2.tar.gz
+gunzip, and untar the source
+tar -xvzf swnb2.tar.gz
+Source and data will be placed in ./swnb2
+Read the README file for an overview of the most of the files
+Read top of clm.F90 and swnb2.F90 to see usage of command line switches
+The data files all end in *.nc
+
+1. Set environment variable PVM_ARCH
+export PVM_ARCH=`pvmgetarch`
+
+2. Compile library source: Using definitions of libcsz_f90
+and libcsm_f90 from README, compile and link these libraries.
+libcsm_f90 depends on libcsz_f90, so compile libcsz_f90 first.
+This step is actually optional in that the executables may
+be built directly from the modules without generating these
+intermediate libraries. 
+Just make sure the link commands that follow include all required
+*.mod (module) and *.o (object) files.
+Linux example:
+libcsz_f90_fl='dbg_mdl precision erf_mdl gmm_mdl sng_mdl mmr_mdl nf90_utl prn_mdl utl_mdl xtr_mdl vec_mdl'
+libcsm_f90_fl='phys_cst_mdl clm_mdl dmr_mdl fnd_cst_mdl htrn_mdl drv_cst_mdl flx_slr_mdl slr_crd_mdl wvl_mdl rt_mdl tdy_mdl'
+for fl in ${libcsz_f90_fl}; do \
+lf95 -c --mod .:/usr/local/include -DHIDE_SHR_MSG --trace --ntrap \
+-DLinux --dbl -O3 --trace --wide -DPRC_DBL  -DLINUX \
+-I. -I/home/zender/f -I/usr/local/include -U_OPENMP  \
+-o /home/zender/obj/LINUX/${fl}.o ${fl}.F90; \
+ar rv /home/zender/lib/LINUX/libcsz_f90.a /home/zender/obj/LINUX/${fl}.o
+done
+for fl in ${libcsm_f90_fl}; do \
+lf95 -c --mod .:/usr/local/include -DHIDE_SHR_MSG --trace --ntrap \
+-DLinux --dbl -O3 --trace --wide -DPRC_DBL  -DLINUX \
+-I. -I/home/zender/f -I/usr/local/include -U_OPENMP  \
+-o /home/zender/obj/LINUX/${fl}.o ${fl}.F90; \
+ar rv /home/zender/lib/LINUX/libcsm_f90.a /home/zender/obj/LINUX/${fl}.o
+done
+
+3. Compile main clm and swnb2 source files. Notes:
+Path to netCDF module must be specified (e.g., -I/usr/local/include)
+C-preprocessor must be called for .F90 files, and -D${PVM_ARCH} must be specified
+Do not attempt to use OpenMP constructs because DISORT is not thread-safe
+The Makefile options I use on various architectures are stored in Makefile
+Makefile is an insanely complex set of make rules intended for developers
+Linux example:
+for fl in swnb2.F90 clm.F90 ; do \
+lf95 -c --mod .:/usr/local/include -DHIDE_SHR_MSG --trace --ntrap \
+-DLinux --dbl -O3 --trace --wide -DPRC_DBL  -DLINUX \
+-I. -I/home/zender/f -I/usr/local/include -U_OPENMP  \
+-o /home/zender/obj/LINUX/${fl/\.F90/.o} ${fl}; \
+done
+for fl in disort2.f d1mach.f r1mach.f linpak.f bdref.f ; do \
+lf95 -c --mod .:/usr/local/include -DHIDE_SHR_MSG --trace --ntrap \
+-DLinux --dbl -O3 --trace --wide -DPRC_DBL  -DLINUX \
+-I. -I/home/zender/f -I/usr/local/include -U_OPENMP  \
+-o /home/zender/obj/LINUX/${fl/\.f/.o} ${fl}; \
+done
+gcc -Wall -c -g -D${PVM_ARCH} date_time.c -o /home/zender/obj/LINUX/date_time.o
+
+4. Make swnb2 and clm executables by linking object files to libraries. 
+Notes: Path to netCDF library must be specified
+Linux example:
+lf95 -o /home/zender/bin/LINUX/swnb2 /home/zender/obj/LINUX/swnb2.o \
+/home/zender/obj/LINUX/disort2.o /home/zender/obj/LINUX/d1mach.o \
+/home/zender/obj/LINUX/r1mach.o /home/zender/obj/LINUX/linpak.o \
+/home/zender/obj/LINUX/bdref.o -L/home/zender/lib/LINUX -lcsm_f90 \
+-lcsz_f90 -L/usr/local/lib -lnetcdf 
+lf95 -o /home/zender/bin/LINUX/clm /home/zender/obj/LINUX/clm.o \
+/home/zender/obj/LINUX/date_time.o \
+-L/home/zender/lib/LINUX -lcsm_f90 -lcsz_f90 -L/usr/local/lib -lnetcdf 
+
+5. Generate the atmospheric column profile required by swnb
+Ignore warning messages concerning saturation vapor pressure and total pressure 
+
+ender@dust:~/aca$ clm -i mls_cld.txt -o mls_cld.nc
+Source file unknown Version unknown Date unknown
+Input presumed to be CLM file in text format
+CRM 2.x fields read from input file
+Text input presumed to omit layer aerosol burden
+Not imposing background aerosol
+Not forcing saturated levels to be cloudy
+Not forcing cloudy levels to be saturated
+Ingested text file /data/zender/aca/mls_cld.txt
+clm: Ingested /data/zender/aca/aer_mineral_dust.nc
+clm: Ingested /data/zender/aca/aer_h2so4_215K.nc
+clm: WARNING prs_ttl(   1) =     2.074 mb > prs(   1) =     2.026 mb
+clm: WARNING prs_ttl(   2) =     6.460 mb > prs(   2) =     5.470 mb
+clm: WARNING prs_ttl(   3) =    16.351 mb > prs(   3) =    15.296 mb
+clm: WARNING prs_ttl(   4) =    34.455 mb > prs(   4) =    33.936 mb
+clm: WARNING prs_ttl(   5) =    62.551 mb > prs(   5) =    60.780 mb
+clm: WARNING prs_ttl(   6) =   104.201 mb > prs(   6) =   103.225 mb
+clm: WARNING prs_ttl(   7) =   161.414 mb > prs(   7) =   161.270 mb
+clm: Wrote results to /data/zender/aca/mls_cld.nc
+
+Columns with more or few than 18 levels must have # levels specified:
+clm -l 92 -i mls_icrccm_92lvl.txt -o mls_icrccm_92lvl.nc
+clm -l 92 -i trp_icrccm_92lvl.txt -o trp_icrccm_92lvl.nc
+
+6. Run the radiative transfer code:
+
+zender@dust:/data/zender/swnb2$ swnb2 -p mls_icrccm_92lvl.nc -d swnb2_mls_icrccm_92lvl.nc
+zender@dust:~/aca$ swnb2 -p mls_icrccm_92lvl.nc -d swnb2_mls_icrccm_92lvl.nc
+Source file unknown Version unknown Date unknown
+swnb2: Ingested /data/zender/aca/mls_icrccm_92lvl.nc
+swnb2: Ingested /data/zender/aca/swnb_H2O.nc
+swnb2: Ingested /data/zender/aca/swnb_CO2.nc
+swnb2: Ingested /data/zender/aca/swnb_OH.nc
+swnb2: Ingested /data/zender/aca/swnb_O2.nc
+swnb2: Ingested /data/zender/aca/abs_xsx_O3.nc
+swnb2: Ingested /data/zender/aca/abs_xsx_O2O2.nc
+swnb2: Ingested /data/zender/aca/abs_xsx_NO2.nc
+swnb2: Ingested /data/zender/aca/abs_xsx_H2OH2O.nc
+swnb2: Ingested /data/zender/aca/ice_20.nc
+swnb2: Ingested /data/zender/aca/lqd_10.nc
+swnb2: Ingested /data/zender/aca/aer_sulfate.nc
+swnb2: Ingested /data/zender/aca/aer_sulfate.nc
+swnb2: Ingested /data/zender/aca/nst_FSBR.nc
+swnb2: Ingested /data/zender/aca/spc_Kur95_01wvn.nc
+swnb2 : INFO Not attempting OpenMP multi-threading
+Wrote results to swnb2_mls_icrccm_92lvl.nc
+
+7. Errors:
+If program results in immediate core dump check to be sure
+you have set unlimited soft stacksize on your machine, e.g.,
+ulimit -s unlimited

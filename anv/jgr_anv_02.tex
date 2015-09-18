@@ -1,0 +1,420 @@
+% $Id$
+
+% Purpose: Revision of ZeK97 for JGR
+
+\documentclass[12pt,twoside]{article}
+\usepackage{graphicx} % defines \includegraphics*
+\usepackage{natbib} % \cite commands from aguplus
+\usepackage{graphicx} % defines \includegraphics*
+\usepackage{ifthen} % Boolean and programming commands
+
+\usepackage{/home/zender/tex/csz} % all my local definitions
+\input{/home/zender/tex/jgr_abb}
+
+\begin{document}
+ 
+\begin{center}\normalsize
+Revisions to Manuscript JGRd-96152, formerly \\
+``Tropical Climate Sensitivity to Representation of Cirrus
+Anvil Lifecycle'', \\
+now titled \\
+``Sensitivity of
+climate simulations to radiative effects of tropical anvil structure''
+\end{center}
+\bigskip
+\begin{center}\normalsize
+Authors: C.~S.~Zender and J.~T.~Kiehl
+\end{center}\normalsize
+\bigskip
+Date: \today
+\bigskip\normalsize
+
+\section{Response to Reviewer A}
+
+\begin{enumerate}
+
+% 1.
+\item Most of the terms in (1) do not vary in the vertical.
+The revised manuscript states this more explicitly in the text beneath
+(1). 
+The reviewer may overestimate the complexity of the parameterization. 
+Parameters $c_1$--$c_3$ do not vary in time or space---they are the
+free parameters of the parameterization.
+Their values are quoted just before the beginning of Section~2.1.
+\Mc\ is the convective mass flux in the lowest convecting layer above
+500~mb, so it is fixed for a given column.  
+\qi, $\rho$, and the wind vector $\vec u$ (which is hidden in the
+material derivative) are the only variables which are functions of
+height in (1). 
+The vertical variation of \qi\ is defined by (1) and discussed in 
+the paragraph following (1), and in Sections~2.3 (new) and~3.1.
+
+The $c_4$ label in Figure~1 was inadvertently included and has been
+removed from the revised manuscript.  
+In the experiment, latent heating (including evaporation of
+precipitation) operates on the condensation and precipitation
+diagnosed by the original CCM routines, not on the prognostic \qi,
+which is felt through its radiative effects only. 
+A completely prognostic liquid water scheme would be needed in
+addition to the ice water scheme in order to fully couple the latent
+heat of \qi\ to the system.
+The manuscript describes a prognostic ice water scheme only, and
+thus focuses on the radiative effects of the anvil condensate.
+This is now explicitly stated in the first paragraph of Section~3 and
+emphasized in the new title.
+
+%In the manuscript, the latent heating of anvil formation is determined
+%by the deep convection scheme in both the control and the experiment
+%\cite[]{Hac94}. 
+
+% 2.
+\item The disputed claim on p.~5 has been removed.
+However, we are concerned the reviewer feels the justification for the
+ice parameterization is \textit{weak} whereas we feel it is
+conceptually \textit{simple} (but powerful).  
+So allow us to recapitulate the justification:
+The fundamental idea of the prognostic parameterization is that the
+production of ice in anvil is, to first order, proportional to the
+convective mass flux at anvil base.  
+The application of this idea in a GCM is, to our knowledge, new
+although the idea itself is not.
+For example, the observational study of \cite{MaR93} concludes
+``\ldots [our findings and others] suggest that the magnitude of the
+convective updraft and mass (and water) flux at the base of the Cb may
+determine the average vertical and horizontal extent and mean cloud
+properties of all CS [tropical high cloud systems].''
+The first paragraph of Section~2.1 cites this and the similar findings
+of the modeling study of \cite{XuK91} (who state the \textit{local}
+convective mass flux is the best predictor of \textit{local} anvil
+mass, a point we return to in the next item). 
+Finally, Figure~2 shows the results of a CEM simulation intended to
+qualitatively demonstrate the modeled relationship between \Mc\ and
+\IWPdot.
+
+% 3.
+\item Reviewer~A raises many points in revision~3, we address them in
+order.
+
+\begin{enumerate}
+\item To incorporate a better sense of the wide spectrum of anvil 
+behavior, we now use ranges instead of single values to describe the 
+lifetime and relative core area estimates of a typical anvil.
+The revised manuscript says:
+``Anvil lifetime, typically 6--12~hr \cite[]{ALV88,LeH80} \ldots'' and
+``The relative area of convecting cores to the associated anvil is
+10--20\% \cite[]{FDR90,LeH80}.''
+
+\item Reviewer~A states ``\ldots the vertical structure of the
+condensate is discussed with the statement that model and observations
+show little variation or increase from the freezing level to
+300~mb. Vertical variation of this type is not indicated by
+observations but only by models \ldots''.
+Further, Reviewer~A implies time-mean \qi\ in MCSs significantly
+decreases above anvil base both in reality and in model studies.
+We have reviewed many studies and think Reviewer~A will agree the
+balance of evidence supports the new phrasing ``\ldots \qc\ does not 
+decrease significantly (but can increase) from the freezing level
+\ldots''.     
+The studies which definitively bear on this subject are cited in the
+revised manuscript, and we summarize their results in greater detail
+here so that Reviewer~A may weigh the evidence:
+
+First, the EMEX anvils simulated by runs 7 and~8 in Figure~3 of
+\cite{TLS96} do not appear to us to contradict our statement.
+However, the figure is not time or domain averaged so it is difficult
+to tell.
+We note that $\IWC = \rho \qi$ so that \qi\ increases with height as
+long as IWC decreases with height slower than $\rho$.
+A GCM requires the prediction of \qi\ on large time and space scales.
+Anvil \qi\ contributes to the time average from a wide region until
+the anvil dissipates whereas convective region \qi\ contributes to the
+time average over a smaller area and for a shorter period.   
+This is evident in Figure~13 of \cite{GMK96}, where \qi\ increases by
+roughly 100\% between freezing level and 275~mb.
+Figure~13 of \cite{SLT94} shows \qi\ decreasing by only $\sim 20\%$
+from freezing level to 300~mb. 
+
+Direct observations of the vertical profile of \qi\ (or IWC) in
+tropical anvils are scarce.
+\cite{WSS931} Figure~6 shows radar reflectivity of an anvil and
+Figure~7b shows LWC (not IWC) as a function of height. 
+However, in modeling the same system, \cite{WSS932} claim their
+Figures~2 and~3 agree with radar measurements and are consistent with
+typical MCS structure proposed by \cite{Hou89}.  
+Observational data from CEPEX also supports the paradigm of slowly
+varying \qi\ up to 300~mb.
+When converted from IWC to \qi, \cite{McH96} Figure~6 shows \qi\
+increases slowly from 8--10~km (400--300~mb)\footnote{The 8-10~km
+flight occurred later in the lifecycle of the anvil.}, decreases
+slowly from 10--12~km (300-220~mb), and decreases quickly above
+12~km. 
+\cite{McH971} Figure~1 shows the vertical structure of IWC averaged
+over all anvils sampled in CEPEX as a function of temperature. 
+There is a very wide spread in the measurements, but the median \qi\
+appears relatively constant from $-10 < T < -40$~C (450--250~mb). 
+The relatively small sample size encompassed by these observations
+cannot be used to construct a climatological value. 
+
+\item The reviewer correctly notes the importance of the difference 
+between the parameterization, in which apportions new IWP
+($c_1\Mc\Delta t$) evenly among all convecting layers where $T <
+0~^\circ$C, and reality, in which local anvil condensate is 
+produced or detrained by the local convective mass flux.
+In developing ANV, we performed many experiments where the vertical
+distribution of the predicted condensate was weighted by local mass
+flux $M$ (which is close to what the reviewer suggests). 
+The upper level convective mass fluxes were very weak compared to the
+anvil base mass fluxes and so the anvils were ``bottom heavy'' and
+lacked enough high-level condensate to produce realistic LWCF. 
+The deep convection scheme employed in CCM2 produces weaker upper
+level convection than most competing schemes \cite[]{Hac94,MRP95}, and
+GCMs which employ different deep convection schemes might well produce
+realistic climates using the method suggested by the reviewer. 
+Finally, we emphasize the observational study of \cite{MaR93} (quoted
+in item~2 above) and Figure~2 provide qualitative motivation for our
+procedure. 
+
+%Other methods of distributing IWP nonuniformly in the vertical are
+%expected to become more practical as data from field observations,
+%especially in the tropics, accumulates.
+%For example, new IWP could be vertically partitioned based on observed
+%IWC profiles.
+
+\item As indicated in (1) the vertical distribution of condensate by
+using \Mc\ instead of local mass flux $M$.
+The total anvil condensate generated in one timestep is $\Delta \IWP =
+c_1 \Mc \Delta t$.
+The fraction of $\Delta \IWP$ which is apportioned into a model layer
+of thickness $\Delta z$ is $\Delta z/\Delta Z$ where $\Delta Z$ is the
+thickness of the portion of the total column that is both freezing and
+convectively active.
+
+\end{enumerate}
+
+% 4.
+\item Done.
+% The stats in Hou89, FDR90, and Mar93 show that anvil cloud fraction
+% approaches 1 when GCM horizontal resolution approaches $100^2$~\kmS.
+
+% 5.
+\item At the reviewer's request we have added a panel to Figure~2
+which shows the variation of \Mc\ and \IWPdot\ for the first day of
+the CEM simulation.
+We elected to show the timeseries rather than a scatterplot because
+we feel the former is more illustrative of the mesoscale physics
+occuring in the domain.
+As stated in the manuscript the excellent correlation between
+\Mc\ and \IWPdot\ in the CEM simulation only lasts for the first
+2.5~hr of the simulation, shown in Figure~2b.
+As is clear from Figure~2a and the text, the correlation vanishes for
+longer time periods (the linear correlation coefficient is 0.24 for
+the first day of the simulation). 
+
+%During this time there is only one convective core in the domain, and 
+%condensate removal processes (precipitation and evaporation) are
+%negligible compared to production processes (convective detrainment
+%and stratiform condensation). 
+%Thus the slope of the correlation presented in Figure~2 represents
+%the partial derivative of IWP with respect to \Mc, i.e., $c_1$.
+%Once significant precipitation, evaporation, or convection elsewhere
+%in the CEM domain commences, a plot like Figure~2 would show the total
+%derivative of IWP with respect to \Mc and thus be unsuitable for
+%estimating $c_1$. 
+%Often \Mc\ is positive when \IWPdot\ is negative! 
+%This always occurs net anvil dissipation exceeds production.
+%It also occurs when the decay of a mature anvil in one region of the
+%domain exceeds the formation of anvil in another.
+%(1) is capable of parameterizing these circumstances as long as $c_1$
+%represents the partial derivative of IWP with respect to \Mc, which is
+%always positive and qualitatively shown in Figure~2.
+
+% 6.
+\item In terms of the approximation suggested by the reviewer,
+$$
+{\IWPdot \over \Delta Z} = {\qi \Mc \over \Delta Z} +
+\mathrm{Mesoscale~generation}
+$$
+we intend $c_1$ to represent the entire RHS of the equation.
+As suggested, we computed the mesoscale condensate source as the
+residual between the actual anvil mass change \IWPdot\ and the
+convective source predicted by the product $\qi\Mc$.
+We employed this method on the hour of anvil formation ending at
+$t = 150$~min.
+The contribution of the inferred mesoscale production to the 
+total anvil generation averaged 48\%, with a range from 0--95\%.  
+The wide range is presumably due to the approximation.  
+\cite{LeH80} and \cite{GaH83} estimated mesoscale processes
+contribute 25--40\% of anvil condensate. 
+Unfortunately, the data archived from the CEM simulation lacks
+the necessary information\footnote{The data required are separate
+physics tendencies, or rates, for all condensate source and sink
+mechanisms, i.e., condensation, evaporation, removal.
+Only absolute mixing ratios, not their tendencies, were archived.} 
+to accurately determine the relative strengths of convective vs.\
+mesoscale source and sink processes, i.e., to perform the same
+rigorous budget analysis as \cite{LeH80} or \cite{SLT94}.
+Since we are unable to perform the more rigorous budget analysis 
+on the CEM simulation we have opted to not include the above estimates
+in the revised manuscript. 
+We changed the paragraph to read 
+``Note \IWPdot\ includes convectively detrained condensate as well as
+condensate produced in the young anvil.
+The parameter $c_1$ is intended to implicitly account for the anvil
+mass formed by both convective and mesoscale circulations.''  
+
+% 7.
+\item The 3-dimensional transport of ice mixing ratio is accomplished 
+by the semi-Lagrangian technique of \cite{WiR93}. 
+This is now mentioned under~(1).
+
+% 8.
+\item Reviewer~A points out that the sensitivity study presented
+consists of two fundamentally different changes to the treatment of
+ice cloud in the model.
+The first change is the prognostic formulation itself (1), and the
+second is changing the ice fraction from (2) to~(3).
+Reviewer~A then asks the what the relative role of these two
+modifications is.   
+This question is essentially identical to the question asked by
+Reviewer~B and our response applies to both:
+ 
+Isolating the climate responses due to (1) and (3) separately in 
+independent GCM sensitivity studies would not yield conclusive
+results on the their role in forcing the response in the present,
+combined experiment. 
+This is because increasing ice fraction alone, for example, would
+result in a large net climate response not present in our experiment.
+Therefore we approached this question by performing offline
+sensitivity studies to estimate the relative strengths of the
+forcings due to the two modifications. 
+The magnitude of the tropical radiative forcing by the increased upper
+tropospheric condensate is 2--3~times the magnitude of the forcing due
+to the increased ice fraction. 
+Section~3.3 of the revised manuscript contains two paragraphs which 
+summarize summarize these findings.
+
+% 9.
+\item We claimed the increased abundance of zonal average condensate
+in the upper troposphere agrees with recent observations and models. 
+There is no 3-dimensional observational climatology of condensate
+against which to validate Figure~5.
+Therefore we have diluted our claim about the modeled zonal average
+condensate from ``\ldots agree with recent observations \ldots'' to
+``\ldots agree with inferences from recent observations \ldots''.  
+The additional observations by \cite{McH96} and \cite{McH971} we now
+cite are described in our response to item~3, but do not a climatology
+make.  
+The use of a CEMs with large domains (ours was 900~km in longitude) is
+intended bridge the gap between MCS models and GCMs. 
+The improving success of many CEMs at reproducing observed features of
+MCSs (GATE, EMEX, TOGA-COARE) is the (admittedly hopeful)
+justification for extending the \qi\ predictions of CEMs from local to
+zonal averages.  
+
+% 10.
+\item We used ``lifecycle'' to distinguish between the treatment of
+anvil as a time-evolving entity with characteristic, prognostic source
+and sink mechanisms as in (1), and the diagnostic treatment where
+anvil is determined as present or absent based on the instantaneous
+state of other large scale variables without regard to previous
+timesteps as in CCM (4)--(6).  
+Others prefer using ``lifecycle'' to characterize the stages of anvil
+development in a mesoscale environment (e.g., the four stages of MCS
+lifecycle idealized in Figure~1 of \cite{Hou89}).    
+At Reviewer~A's suggestion, we have eliminated most instances of
+``anvil lifecycle'' throughout the manuscript. 
+In its place, we usually use ``anvil production'' and/or ``anvil
+structure'', terms that more concisely reflect the major differences
+between CCM and ANV.
+The manuscript is now titled ``Sensitivity of tropical climate
+simulations to radiative effects of anvil structure'', which continues
+to emphasize the manuscript as a sensitivity study, but also
+identifies the major difference in the treatment of anvil between the
+two parameterizations.  
+
+It is true that an improved diagnostic approach might well cause the
+same changes as our prognostic approach.
+Yes, the paper is a comparison between two different
+parameterizations.   
+
+\end{enumerate}
+
+% Bibliography
+\nocite{ZeK972}
+\bibliographystyle{agu}
+\bibliography{/home/zender/tex/bib}
+
+\clearpage
+
+\setcounter{section}{1}
+\setcounter{page}{1}
+
+\begin{center}\normalsize
+Revisions to Manuscript JGRd-96152, formerly \\
+``Tropical Climate Sensitivity to Representation of Cirrus
+Anvil Lifecycle'', \\
+now titled \\
+``Sensitivity of
+climate simulations to radiative effects of tropical anvil structure''
+\end{center}
+\bigskip
+\begin{center}\normalsize
+Authors: C.~S.~Zender and J.~T.~Kiehl
+\end{center}\normalsize
+\bigskip
+Date: \today
+\bigskip\normalsize
+
+\section{Response to Reviewer B}
+
+\begin{enumerate}
+
+% 1.
+\item Both reviewers have asked essentially the same question, that
+is, to identify the relative roles of the two modifications, (1) and
+(3), in causing the model response.
+We did not mean to convey the impression that the prognostic
+generation of anvil (1), by itself, caused the model response.
+In fact, the last sentence of Section~2.2 reads ``This [increased ice
+fraction] proves to be an important factor in diagnosing the cause of
+change in climatological cloud radiative properties in this
+sensitivity study''.
+
+Isolating the climate responses due to (1) and (3) separately in 
+independent GCM sensitivity studies would not yield conclusive
+results on the their role in forcing the response in the present,
+combined experiment. 
+This is because increasing ice fraction alone, for example, would
+result in a large net climate response not present in our experiment.
+Therefore we approached this question by performing offline
+sensitivity studies to estimate the relative strengths of the
+forcings due to the two modifications. 
+The magnitude of the tropical radiative forcing by the increased upper
+tropospheric condensate is 2--3~times the magnitude of the forcing due
+to the increased ice fraction. 
+Section~3.3 of the revised manuscript contains two paragraphs which 
+summarize these findings.
+
+% 2.
+\item At Reviewer~B's request we have isolated the radiative
+response to the anvil parameterization and included it as Figure~6a,
+and relabeled the total diabatic heating response as Figure~6b. 
+The discussion of Figure~6 is expanded and clarified.
+
+% 3. 
+\item Yes, the adjective ``improved'' was too ambiguous.
+By ``improved representation of tropical anvil'' we meant the
+our prognostic representation of anvil generation and structure.
+The manuscript has been changed accordingly.
+
+% 4.
+\item The determination of hydrometeor size and its radiative
+treatment is now summarized at the end of Section~2.2.
+Section~2.3 was added to describe the diagnostic cirrus
+parameterization. 
+
+\end{enumerate}
+
+\end{document}
+
+

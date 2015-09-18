@@ -1,0 +1,1 @@
+/home/zender/PreAndPostProcessingScripts/generate_climatologies/climo_nco.sh

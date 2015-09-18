@@ -1,0 +1,533 @@
+% $Id$ -*-LaTeX-*-
+
+% Purpose: Seminar on weather
+% Presented to: Vista Verde Elementary School, 20070222
+
+% URL: 
+% http://dust.ess.uci.edu/smn/smn_wth.pdf
+% http://dust.ess.uci.edu/smn/smn_wth_vv_200702.pdf
+
+% Create (see also end of file):
+% cd ~/crr;make -W smn_wth.tex smn_wth.pdf;cd -
+
+% Synchronize:
+% rsync dust.ess.uci.edu:/data/zender/fgr/smn_wth ${DATA}/fgr
+% rsync /data/zender/fgr/smn_wth dust.ess.uci.edu:/data/zender/fgr
+
+% Distribute:
+% scp ${DATA}/ps/smn_wth.pdf dust.ess.uci.edu:/var/www/html/smn/smn_wth.pdf
+% scp ${DATA}/ps/smn_wth.pdf dust.ess.uci.edu:/var/www/html/smn/smn_wth_vv_200702.pdf
+
+\documentclass[12pt]{article}
+
+% Standard packages
+\usepackage{ifpdf} % Define \ifpdf
+\ifpdf % PDFLaTeX
+\usepackage[pdftex]{graphicx} % Defines \includegraphics*
+\pdfcompresslevel=9
+%\usepackage{thumbpdf} % Generate thumbnails
+\usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
+\graphicspath{/data/zender/fgr/smn_wth} % Help epstopdf find .eps figures to convert
+\else % !PDFLaTeX
+\usepackage{graphicx} % Defines \includegraphics*
+\fi % !PDFLaTeX
+\usepackage{array} % Table and array extensions, e.g., column formatting
+%\usepackage[usenames]{color} % usenames allows, e.g., ``ForestGreen''
+\usepackage{colortbl} % Colored columns in tables, required by pdfscreen
+\usepackage[dayofweek]{datetime} % \xxivtime, \ordinal
+\usepackage{makeidx} % Index keyword processor: \printindex and \see
+\usepackage{mdwlist} % Compact list formats \itemize*, \enumerate*
+%\usepackage[numbers,sort]{natbib} % \cite commands from aguplus
+\usepackage[sort]{natbib} % \cite commands from aguplus
+\usepackage{times} % Postscript Times-Roman font KoD99 p. 375
+%\usepackage{tocbibind} % Add Bibliography and Index to Table of Contents
+\usepackage{xspace} % Unknown
+
+% pdfscreen uses hyperref to set margins for screen mode
+% pdfscreen calls hyperref internally if hyperref is not already invoked
+% pdfscreen also loads packages graphicx, color, calc, and comment
+% print         Print version
+% screen        Screen version
+% panelright    Navigation panel on RHS
+% paneltoc      Table of Contents in panel
+% sectionbreak  Introduces pagebreak before section
+% code          Commands producing fancy verbatim-like effects
+%\usepackage[screen,code,panelright,sectionbreak]{pdfscreen}
+\usepackage[screen,code]{pdfscreen}
+%\usepackage[print]{pdfscreen}
+
+% Personal packages
+\usepackage{csz} % Library of personal definitions (\ifpdf...)
+\usepackage{abc} % Alphabet as three letter macros
+\usepackage{dmn} % Dimensional units
+\usepackage{chm} % Chemistry
+\usepackage{dyn} % Fluid dynamics
+\usepackage{aer} % Aerosol physics
+\usepackage{rt} % Commands specific to radiative transfer
+\usepackage{psd} % Particle size distributions
+\usepackage{smn} % Seminar configuration for pdfscreen
+
+% Commands which must be executed in preamble
+
+% Commands specific to this file
+% 1. Primary commands
+\hypersetup{ % A command provided by \hyperref
+pdftitle={Weather}, % Title given to acroread window displaying this file
+pdfsubject={Weather},
+pdfauthor={Charlie Zender},
+pdfkeywords={outreach physics weather},
+%pdfpagemode={FullScreen}, % Starts in full screen mode, hit 'Esc' to escape
+pdfmenubar=true % Allow access to reader's menubar
+} % end \hypersetup
+
+\begin{document} % End preamble
+
+\def\smnttl{Pretty, Nasty, Weather}
+
+\begin{screen}
+\title{\color{section0}\Huge \smnttl} % Title for screen mode
+\end{screen}
+\begin{print} 
+\title{\Huge\texttt{\smnttl}} % Title for print mode
+\end{print}
+
+\author{\LARGE
+Olivia's Dad (Charlie)
+{\href{mailto:zender@uci.edu}{\color{section1}\texttt{<zender@uci.edu>}}}\\ 
+\href{http://www.ess.uci.edu}{Department of Earth System Science}\\
+University of California, Irvine\\
+\\
+Presented to:\\
+Vista Verde Elementary School First Grade Assembly\\
+Built: \shortdate\today, \xxivtime\\
+\\
+(Web:~\url{http://dust.ess.uci.edu/smn/smn_wth_vv_200702.pdf})
+} % end author
+
+\pagedissolve{Split /D 2 /Dm /H /M /O} % pagedissolve options in pdfscreen manual p. 9
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_rth_blue_marble_july_8km';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://earthobservatory.nasa.gov/Newsroom/BlueMarble/images_bmng/8km/world.topo.bathy.200407.3x5400x2700.jpg
+\includegraphics[width=\hsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_rth_blue_marble_july_8km}%
+\caption{
+``Blue Marble''---Earth without clouds in July
+(\href{http://earthobservatory.nasa.gov/Newsroom/BlueMarble/images_bmng/8km/world.topo.bathy.200407.3x5400x2700.jpg}{earthobservatory.nasa.gov}).
+\label{fgr:pix_rth_blue_marble_july_8km}}
+\end{figure*}
+\clearpage
+
+\date{} % Empty braces turns off date
+\maketitle
+\begin{screen}
+\vfill
+\end{screen}
+\clearpage
+
+\csznote{
+\begin{abstract}
+\Large
+\setlength{\baselineskip}{12.0pt} % 1.234 X 11pt
+\noindent \smnttl
+\end{abstract}
+\clearpage
+} % end csznote
+
+% Do not use \tableofcontents command in document when paneltoc is option
+\begin{print}
+\tableofcontents
+\end{print}
+\begin{screen}
+\vfill
+\end{screen}
+
+\csznote{ % Example text slide
+\Large
+\section[Foo]{Foo}
+Hi
+\clearpage
+} % end csznote
+
+\Large
+\section[Outline]{Outline}
+\begin{itemize*}
+\item Environmental as Art: Turbulence, Landforms, Rainbows
+\item Clouds
+\item Precipitation: Rain, Snow, Hail
+\item Severe Weather: Tornados, Hurricanes
+\item Peaceful weather
+\item Extreme dryness
+\item Extreme heat
+\item Extreme cold
+\item Climate change
+\end{itemize*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_cld_krm_vrt_AlI';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://earthasart.gsfc.nasa.gov/images/von_kar_hires.jpg
+\includegraphics[height=1.0\vsize,angle=0,clip=true,trim=0.0in 0.5in 0.0in 1.0in]{/data/zender/fgr/smn_wth/pix_cld_krm_vrt_AlI}%
+\caption{
+Von Karman street clouds over the Aleutian Islands
+(\href{http://earthasart.gsfc.nasa.gov/images/von_kar_hires.jpg}{earthasart.gsfc.nasa.gov}).
+\label{fgr:pix_cld_krm_vrt_AlI}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_dsr_namib';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://earthasart.gsfc.nasa.gov/images/namib_hires.jpg
+\includegraphics[height=1.0\vsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_dsr_namib}%
+\caption{
+Namibian desert
+(\href{http://earthasart.gsfc.nasa.gov/images/namib_hires.jpg}{earthasart.gsfc.nasa.gov}).
+\label{fgr:pix_dsr_namib}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_rnb_dsr';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://www.weatherwise.org/pgallery04/2004c.jpg
+\includegraphics[height=1.0\vsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_rnb_dsr}%
+\caption{
+Rainbow in White Sands desert
+(\href{http://www.weatherwise.org/pgallery04/2004c.gif}{www.weatherwise.org}).
+\label{fgr:pix_rnb_dsr}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_rnb_qdr';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.gif http://www.weatherwise.org/pgallery06/2006b.gif;giftopnm ${fgr}.gif > ${fgr}.pnm;pnmtojpeg ${fgr}.pnm > ${fgr}.jpg;/bin/rm -f ${fgr}.gif ${fgr}.pnm
+\includegraphics[height=1.0\vsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_rnb_qdr}%
+\caption{
+Double double-rainbows
+(\href{http://www.weatherwise.org/pgallery06/2006b.gif}{www.weatherwise.org}).
+\label{fgr:pix_rnb_qdr}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_cld_mmt_brd';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.gif http://www.weatherwise.org/pgallery06/2006l.gif;giftopnm ${fgr}.gif > ${fgr}.pnm;pnmtojpeg ${fgr}.pnm > ${fgr}.jpg;/bin/rm -f ${fgr}.gif ${fgr}.pnm
+\includegraphics[width=\hsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_cld_mmt_brd}%
+\caption{
+Mammatus clouds
+(\href{http://www.weatherwise.org/pgallery06/2006l.gif}{www.weatherwise.org}).
+\label{fgr:pix_cld_mmt_brd}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_cld_mmt_sns';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://www.weatherwise.org/pgallery04/2004b.jpg
+\includegraphics[height=1.0\vsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_cld_mmt_sns}%
+\caption{
+Mammatus clouds at sunset
+(\href{http://www.weatherwise.org/pgallery04/2004b.gif}{www.weatherwise.org}).
+\label{fgr:pix_cld_mmt_sns}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_cld_lgt';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.gif http://www.weatherwise.org/pgallery06/2006a.gif;giftopnm ${fgr}.gif > ${fgr}.pnm;pnmtojpeg ${fgr}.pnm > ${fgr}.jpg;/bin/rm -f ${fgr}.gif ${fgr}.pnm
+\includegraphics[width=\hsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_cld_lgt}%
+\caption{
+Mammatus clouds with lightning
+(\href{http://www.weatherwise.org/pgallery06/2006a.gif}{www.weatherwise.org}).
+\label{fgr:pix_cld_lgt}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_cherrapunji_sgn';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://upload.wikimedia.org/wikipedia/commons/f/ff/Cherrapunji.jpg
+\includegraphics[height=0.97\vsize,angle=0,clip=true,trim=0.0in 0.5in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_cherrapunji_sgn}%
+\caption{
+Cherrapunji, India receives on average 450\,in.\ (38\,\ft) of rain per year.
+In 1861, it received 904\,in.\ (80\,\ft); 366\,in. (31\,\ft) fell in July alone.
+(\href{http://upload.wikimedia.org/wikipedia/commons/f/ff/Cherrapunji.jpg}{wikimedia.org}).
+\label{fgr:pix_cherrapunji_sgn}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_snw_flk_car';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.gif http://www.weatherwise.org/pgallery06/2006p.gif;giftopnm ${fgr}.gif > ${fgr}.pnm;pnmtojpeg ${fgr}.pnm > ${fgr}.jpg;/bin/rm -f ${fgr}.gif ${fgr}.pnm
+\includegraphics[height=1.0\vsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_snw_flk_car}%
+\caption{
+Snowflakes on a car windshield
+(\href{http://www.weatherwise.org/pgallery06/2006p.gif}{www.weatherwise.org}).
+\label{fgr:pix_snw_flk_car}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_hail_hand';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://www.chaseday.com/PHOTOSHP/hail/hailhand3.JPG
+\includegraphics[width=\hsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_hail_hand}%
+\caption{
+Large hailstone from a tornadic supercell northeast of Breckenridge, Texas.
+The record hailstone, 7\,in. diameter, 18.75\,in. circumference, fell
+in Aurora, Nebraska on June~22, 2002.
+(\href{http://www.chaseday.com/PHOTOSHP/hail/hailhand3.JPG}{www.chaseday.com}).
+\label{fgr:pix_hail_hand}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_cld_acu_sns';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.gif http://www.weatherwise.org/pgallery06/2006c.gif;giftopnm ${fgr}.gif > ${fgr}.pnm;pnmtojpeg ${fgr}.pnm > ${fgr}.jpg;/bin/rm -f ${fgr}.gif ${fgr}.pnm
+\includegraphics[width=\hsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_cld_acu_sns}%
+\caption{
+Altocumulus at sunset
+(\href{http://www.weatherwise.org/pgallery06/2006c.gif}{www.weatherwise.org}).
+\label{fgr:pix_cld_acu_sns}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_cld_spr_cll';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://www.weatherwise.org/pgallery05/2005f.jpg
+\includegraphics[height=1.0\vsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_cld_spr_cll}%
+\caption{
+Supercell thunderstorm
+(\href{http://www.weatherwise.org/pgallery05/2005f.gif}{www.weatherwise.org}).
+\label{fgr:pix_cld_spr_cll}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_trn_OK_19990503';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://upload.wikimedia.org/wikipedia/en/1/1a/Dszpics1.jpg
+\includegraphics[width=\hsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_trn_OK_19990503}%
+\caption{
+Tornado in Oklahoma May~3, 1999
+(\href{http://upload.wikimedia.org/wikipedia/en/1/1a/Dszpics1.jpg}{wikimedia.org}).
+\label{fgr:pix_trn_OK_19990503}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_trn_dmg_f5';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://upload.wikimedia.org/wikipedia/commons/d/df/F5_tornado_damage_example.jpg
+\includegraphics[width=\hsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_trn_dmg_f5}%
+\caption{
+Winds in a tornado near Oklahoma City May~3, 1999 reached
+318\,mph (509\,\kmxhr).
+Winds reached 231\,mph (370\,\kmxhr) at Mount Washington, New
+Hampshire on April~12, 1934.
+(\href{http://upload.wikimedia.org/wikipedia/commons/d/df/F5_tornado_damage_example.jpg}{wikimedia.org}).
+\label{fgr:pix_trn_dmg_f5}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_hrr_katrina_20050828';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://www.osei.noaa.gov/Events/Tropical/Gulf_Mexico/2005/TRCkatrina240_N5.jpg
+\includegraphics[height=1.0\vsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_hrr_katrina_20050828}%
+\caption{
+Hurricane Katrina at Category~5 status with winds 160\,mph
+(258\,\kmxhr), August~28, 2005.
+(\href{http://www.osei.noaa.gov/Events/Tropical/Gulf_Mexico/2005/TRCkatrina240_N5.jpg}{www.osei.noaa.gov}).
+\label{fgr:pix_hrr_katrina_20050828}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_cld_lnt_pr';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://www.weatherwise.org/pgallery04/2004a.jpg
+\includegraphics[width=\hsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_cld_lnt_pr}%
+\caption{
+Lenticular clouds in Puerto Rico
+(\href{http://www.weatherwise.org/pgallery04/2004a.gif}{www.weatherwise.org}).
+\label{fgr:pix_cld_lnt_pr}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_fog_rdn_lni';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://www.weatherwise.org/pgallery03/ww2000a.jpg
+\includegraphics[width=\hsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_fog_rdn_lni}%
+\caption{
+Radiation fog off Loon Island
+(\href{http://www.weatherwise.org/pgallery03/ww2000a.jpg}{www.weatherwise.org}).
+\label{fgr:pix_fog_rdn_lni}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_dsr_atacama_boulders';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://www.atacamaphoto.com/atacama/atacama18.jpg
+\includegraphics[width=\hsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_dsr_atacama_boulders}%
+\caption{
+Boulders in the Atacama Desert, Peru
+(\href{http://www.atacamaphoto.com/atacama/atacama18.jpg}{www.atacamaphoto.com}).
+\label{fgr:pix_dsr_atacama_boulders}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_dsr_atacama_llareta';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://www.atacamaphoto.com/atacama/atacama03.jpg
+\includegraphics[width=\hsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_dsr_atacama_llareta}%
+\caption{
+Llareta (Azorella compacta), an extremophile flower, at Salar de Huasco, Peru
+(\href{http://www.atacamaphoto.com/atacama/atacama03.jpg}{www.atacamaphoto.com}).
+\label{fgr:pix_dsr_atacama_llareta}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_dst_cld_az';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://www.weatherwise.org/pgallery04/2004e.jpg
+\includegraphics[width=\hsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_dst_cld_az}%
+\caption{
+Dust storm in Arizona
+(\href{http://www.weatherwise.org/pgallery04/2004e.gif}{www.weatherwise.org}).
+\label{fgr:pix_dst_cld_az}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_dst_snt_ana_20020220';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://www.jpl.nasa.gov/images/earth/usa/misr_022002_browse.jpg
+\includegraphics[height=\vsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_dst_snt_ana_20020220}%
+\caption{
+Santa Ana winds carry desert dust over Vista Verde Elementary School,
+February~20, 2002.
+(\href{http://www.jpl.nasa.gov/images/earth/usa/misr_022002_browse.jpg}{www.jpl.nasa.gov}).
+\label{fgr:pix_dst_snt_ana_20020220}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_dsr_death_valley_racetrack';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://k47.pbase.com/u44/zeroscan/upload/28652293.CRW_4695copy.jpg
+\includegraphics[width=\hsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_dsr_death_valley_racetrack}%
+\caption{
+Death Valley, California reached 134\,\dgrf\ (56.6\,\dgrc) July~10, 1913. 
+El~Azizia (Al~'Aziziyah), Libya reached 135.9\,\dgrf\ (57.7\,\dgrc) September~13, 1922.
+(\href{http://k47.pbase.com/u44/zeroscan/upload/28652293.CRW_4695copy.jpg}{k47.pbase.com}).
+\label{fgr:pix_dsr_death_valley_racetrack}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_antarctica_halo';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://www.coolantarctica.com/gallery2/weather/images/weather_1000_solar_halo1.jpg
+\includegraphics[width=\hsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_antarctica_halo}%
+\caption{
+The Russian Base Vostok in Antarctica reached $-129$\,\dgrf\ ($-89$\,\dgrc) in 1983
+(\href{http://www.coolantarctica.com/gallery2/weather/images/weather_1000_solar_halo1.jpg}{www.coolantarctica.com}).
+\label{fgr:pix_antarctica_halo}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='glc_mlt_20020606';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://fxm
+\includegraphics[height=1.0\vsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/home/zender/ppr_ZFM07/fgr/glc_mlt_20020606_Grn.jpg}%
+\caption{
+Meltwater stream flowing into a large moulin in the ablation zone (area below the equilibrium line) of the Greenland ice sheet. Photo Courtesy: Roger J. Braithwaite, University of Manchester, UK.
+\label{fgr:glc_mlt_20020606}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_plr_br_mlt';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://img.dailymail.co.uk/i/pix/2007/02_1/polarbrsDM010207_468x762.jpg
+\includegraphics[height=1.0\vsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_plr_br_mlt}%
+\caption{
+Polar bears stranded on melting ice
+(\href{http://www.ec.gc.ca/EnviroZine}{www.ec.gc.ca/EnviroZine}). 
+Photo \copyright{2006} Envirozine.
+\label{fgr:pix_plr_br_mlt}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='pix_earthrise';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg http://dayton.hq.nasa.gov/IMAGES/LARGE/GPN-2001-000009.jpg
+\includegraphics[height=0.95\hsize,angle=270,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/pix_earthrise}%
+\caption{
+Earthrise from Apollo~8, December~29, 1968
+(\href{http://dayton.hq.nasa.gov/IMAGES/LARGE/GPN-2001-000009.jpg}{NASA}).
+\label{fgr:pix_earthrise}}
+\end{figure*}
+\clearpage
+
+\csznote{
+\Large
+\begin{figure*}
+\centering\vspace{-0.25in}
+% fgr='foo';cd ${DATA}/fgr/smn_wth;/bin/rm -f ${fgr}.*;wget --output-document=${fgr}.jpg url
+\includegraphics[width=\hsize,angle=0,clip=true,trim=0.0in 0.0in 0.0in 0.0in]{/data/zender/fgr/smn_wth/foo}%
+\caption{
+Hi
+(\href{url}{url}).
+\label{fgr:foo}}
+\end{figure*}
+\clearpage
+} % end csznote
+
+\section[Learning More]{Where to Learn More}
+\begin{itemize*}
+\item \href{http://visibleearth.nasa.gov}{NASA Visible Earth}: Cool pictures
+\item \href{http://www.eo.ucar.edu}{NCAR Education}: K--12  Weather/Climate education
+\item \href{http://www.weather.com}{The Weather Channel}: Breaking weather
+\item \href{http://www.ess.uci.edu/~zender}{Zender Group Website}: Our climate research
+\end{itemize*}
+
+\csznote{
+\section[References]{References}
+% Bibliography
+%\renewcommand\refname{\normalsize Publications}
+\bibliographystyle{jas}
+\bibliography{bib}
+\vfill
+} % end csznote
+
+\csznote{
+% Usage: Place usage here at end of file so comment character % not needed
+cd ~/crr;pdflatex smn_wth.tex;cd -
+cd ~/crr;make -W smn_wth.tex smn_wth.dvi smn_wth.ps smn_wth.pdf;cd -
+cd ~/crr;pdflatex smn_wth.tex;thumbpdf smn_wth;pdflatex smn_wth.tex;cd -
+cd ~/crr;texcln smn_wth;make smn_wth.pdf;bibtex smn_wth;makeindex smn_wth;make smn_wth.pdf;bibtex smn_wth;makeindex smn_wth;make smn_wth.pdf;cd -
+cd ~/crr;make -W smn_wth.tex smn_wth.pdf;cd -
+
+scp ${DATA}/ps/smn_wth.pdf dust.ess.uci.edu:/var/www/html/smn/smn_wth.pdf
+cp ${DATA}/ps/smn_wth.pdf /media/USB20FD
+} % end csznote
+
+% $: rebalance syntax highlighting
+
+\end{document}

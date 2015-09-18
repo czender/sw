@@ -1,0 +1,17 @@
+fan-2.0.2 95/11/03:
+
+cd /usr/local/src
+ftp ftp.unidata.ucar.edu
+...
+tar -xzvf fan-2.0.2.tar.Z
+cd /usr/local/src/fan-2.0.2/src
+setenv CFLAGS '-O -DNDEBUG'
+setenv CPP_UDUNITS -I/usr/local/include
+setenv LD_UDUNITS -L/usr/local/lib -ludunits
+
+./configure -prefix=/usr/local
+make
+make test
+make install
+make clean
+

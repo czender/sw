@@ -1,0 +1,52 @@
+#!/bin/sh
+########################################################################
+### FILE:       /etc/ppp/chain
+### PURPOSE:    Start/Stop IP chains (masquerade) service
+### Thanks to Jason Kissinger <jlk@windchill.com> for some tweaks
+########################################################################
+
+NAME=$0
+
+case "$1" in
+  start)
+    echo -n "Starting IP chains (masq) support... "
+    /sbin/ipchains -P forward DENY
+    /sbin/ipchains -A forward -j MASQ -s 192.168.1.0/24 -d 0.0.0.0/0
+# Block Windows "whohas" traffic to prevent spurious dialling...
+    /sbin/ipchains -A forward -j DENY -p tcp -s 0.0.0.0/0 137:139
+    /sbin/ipchains -A forward -j DENY -p udp -s 0.0.0.0/0 137:139
+
+    /sbin/insmod ip_masq_cuseeme
+    /sbin/insmod ip_masq_ftp
+    /sbin/insmod ip_masq_irc
+    /sbin/insmod ip_masq_quake
+    /sbin/insmod ip_masq_raudio
+    /sbin/insmod ip_masq_vdolive
+    echo 1 > /proc/sys/net/ipv4/ip_dynaddr
+    echo "Done."
+    ;;
+
+  stop)
+    echo -n "Stopping IP chains (masq) support... "
+    /sbin/rmmod ip_masq_cuseeme
+    /sbin/rmmod ip_masq_ftp
+    /sbin/rmmod ip_masq_irc
+    /sbin/rmmod ip_masq_quake
+    /sbin/rmmod ip_masq_raudio
+    /sbin/rmmod ip_masq_vdolive
+
+    /sbin/ipchains -D forward -j MASQ -s 10.0.0.0/8
+
+    echo 0 > /proc/sys/net/ipv4/ip_dynaddr
+    echo "Done."
+    ;;
+
+  *)
+    echo "Usage: /etc/ppp/$NAME {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0
+
+#  END OF SCRIPT

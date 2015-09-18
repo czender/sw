@@ -1,0 +1,35 @@
+# Overall Pagoda install documentation
+# https://svn.pnl.gov/gcrm/wiki/PagodaDocumentation
+
+# MPI
+sudo yum install openmpi
+
+# Global Arrays 5.x
+# http://hpc.pnl.gov/globalarrays
+cd ${DATA}/tmp
+wget http://hpc.pnl.gov/globalarrays/download/ga-5-3b.tgz .
+tar xvzf ga-5-3b.tgz
+cd ga-5-3b
+mkdir bld
+cd bld
+../configure --prefix=/usr/local
+make
+make install 
+
+# PnetCDF
+# http://trac.mcs.anl.gov/projects/parallel-netcdf
+tar zxvf parallel-netcdf-1.4.1.tar.gz
+cd parallel-netcdf-1.4.1
+./configure MPICC=cc MPIF77=ftn MPIF90=ftn MPICXX=CC --prefix="your install path"
+make
+make install
+
+# Pagoda 1.0
+cd ${DATA}/tmp
+wget https://svn.pnl.gov/gcrm/attachment/wiki/PagodaDownload/pagoda-1.0.tgz .
+tar xvzf pagoda-1.0.tgz
+cd pagoda-1.0
+mkdir bld
+cd bld
+../configure --with-pnetcdf=/path/to/pnetcdf/install --with-ga=/path/to/ga5.x/install
+make

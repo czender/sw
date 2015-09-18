@@ -1,0 +1,211 @@
+-*-Fundamental-*-
+
+gss1.acd.ucar.edu on 19990623:
+rcp sanitas.cgd.ucar.edu:/data/zender/specfun.tar.gz .
+tar xvzf specfun.tar.gz
+cd specfun
+cd src.sp
+make -f Makefile.unix
+cd ..
+sudo mv libspecfun.a /usr/local/lib
+
+lanina.ps.uci.edu LINUX 20010727:
+cd ~/specfun/src.sp
+/bin/rm *.o ${MY_LIB_DIR}/libspecfun.a ~/specfun/libspecfun.a
+export FC="pgf90"
+export FFLAGS="-Mr8 -Mi4 -Mextend -Mnosecond_underscore -byteswapio -Mrecursive -Mdalign -Ktrap=fp"
+export LDFLAGS=""
+gmake -e -f Makefile.unix
+/bin/cp ~/specfun/libspecfun.a ${MY_LIB_DIR}
+cd ~/f;gmake cln lib_cln fff
+fff --drc_in=$HOME/nco/data --tst=gsl
+cd -
+/bin/rm *.o ~/specfun/libspecfun.a
+
+shiva.cgd.ucar.edu SUNMP:
+cd ~/specfun/src.sp
+/bin/rm *.o ${MY_LIB_DIR}/libspecfun.a ~/specfun/libspecfun.a
+export FC="f90"
+export FFLAGS="-xs -stackvar -e -fast -inline=%auto -xtypemap=real:64,double:64,integer:32"
+export LDFLAGS="-fast"
+gmake -e -f Makefile.unix
+/bin/cp ~/specfun/libspecfun.a ${MY_LIB_DIR}
+cd ~/f;gmake cln lib_cln fff
+fff --drc_in=$HOME/nco/data --tst=gsl
+cd -
+/bin/rm *.o ~/specfun/libspecfun.a
+
+dataproc.ucar.edu SGIMP64:
+cd ~/specfun/src.sp
+/bin/rm *.o ${MY_LIB_DIR}/libspecfun.a ~/specfun/libspecfun.a
+export FC="f90"
+export FFLAGS="-O2 -64 -mips4 -extend_source -r8 -i4"
+export LDFLAGS="-64 -mips4"
+gmake -e -f Makefile.unix
+/bin/cp ~/specfun/libspecfun.a ${MY_LIB_DIR}
+cd ~/f;gmake cln lib_cln fff
+fff --drc_in=$HOME/nco/data --tst=gsl
+cd -
+/bin/rm *.o ~/specfun/libspecfun.a
+
+babyblue.ucar.edu AIX:
+cd ~/specfun/src.sp
+/bin/rm *.o ${MY_LIB_DIR}/libspecfun.a ~/specfun/libspecfun.a
+setenv FC "xlf90"
+setenv FFLAGS "-O3 -qstrict -Q -qrealsize=8 -qdpc=e -qmaxmem=-1 -qarch=auto -qspillsize=2500 -qsuffix=f=f:cpp=F -qfixed=132"
+setenv LDFLAGS ""
+gmake -e -f Makefile.unix
+/bin/cp ~/specfun/libspecfun.a ${MY_LIB_DIR}
+cd ~/f;gmake cln lib_cln fff
+fff --drc_in=$HOME/nco/data --tst=gsl
+cd -
+/bin/rm *.o ~/specfun/libspecfun.a
+
+prospect.ucar.edu ALPHA:
+cd ~/specfun/src.sp
+/bin/rm *.o ${MY_LIB_DIR}/libspecfun.a ~/specfun/libspecfun.a
+setenv FC "f90"
+setenv FFLAGS " -O3 -inline speed -r8 -i4 -automatic -fpe3 -extend_source"
+setenv LDFLAGS ""
+gmake -e -f Makefile.unix
+/bin/cp ~/specfun/libspecfun.a ${MY_LIB_DIR}
+cd ~/f;gmake cln lib_cln fff
+fff --drc_in=$HOME/nco/data --tst=gsl
+cd -
+/bin/rm *.o ~/specfun/libspecfun.a
+
+20020913:
+biogenic.ps.uci.edu LINUX:
+cd ~/specfun/src.sp
+/bin/rm *.o ${MY_LIB_DIR}/libspecfun.a ~/specfun/libspecfun.a
+export FC="lf95"
+export FFLAGS="--mod .:/usr/local/include -DHIDE_SHR_MSG --trace --trap -DLinux  -O3 --trace --wide -openmp -DPRC_FLT  -DLINUX -I. -I/dhome/zender/include -I/usr/local/include"
+export LDFLAGS=""
+gmake -e -f Makefile.unix
+/bin/cp ~/specfun/libspecfun.a ${MY_LIB_DIR}
+cd ~/f;gmake cln lib_cln fff
+fff --drc_in=$HOME/nco/data --tst=gsl
+cd -
+/bin/rm *.o ~/specfun/libspecfun.a
+
+20021122:
+lanina.ess.uci.edu LINUX Intel ifc:
+cd ~/specfun/src.sp
+/bin/rm *.o ${MY_LIB_DIR}/libspecfun.a ~/specfun/libspecfun.a
+export FC="ifc"
+export FFLAGS=""
+export LDFLAGS=""
+make -e -f Makefile.unix
+/bin/cp ~/specfun/libspecfun.a ${MY_LIB_DIR}/libspecfun.a.ifc
+/bin/cp ${MY_LIB_DIR}/libspecfun.a.ifc ${MY_LIB_DIR}/libspecfun.a
+cd ~/f;make cln lib_cln fff
+fff --drc_in=$HOME/nco/data --tst=gsl
+cd -
+/bin/rm *.o ~/specfun/libspecfun.a
+
+20030201:
+elnino.ess.uci.edu LINUX:
+scp -r dust.ess.uci.edu:specfun ~
+cd ~/specfun/src.sp
+/bin/rm *.o ${MY_LIB_DIR}/libspecfun.a ~/specfun/libspecfun.a
+export FC="lf95"
+export FFLAGS="--mod .:/usr/local/include -DHIDE_SHR_MSG --trace --trap -DLinux -O3 --trace --wide -openmp -DPRC_FLT -DLINUX -I. -I/dhome/zender/include -I/usr/local/include"
+export LDFLAGS=""
+make -e -f Makefile.unix
+/bin/cp -f ~/specfun/libspecfun.a ${MY_LIB_DIR}/libspecfun.a.lf95
+ln -s ${MY_LIB_DIR}/libspecfun.a.lf95 ${MY_LIB_DIR}/libspecfun.a
+cd ~/f;make cln lib_cln fff
+fff --drc_in=$HOME/nco/data --tst=gsl
+cd -
+/bin/rm *.o ~/specfun/libspecfun.a
+
+20030508:
+ashes.ess.uci.edu LINUX:
+scp -r dust.ess.uci.edu:/data/zender/specfun ${DATA}
+cd ${DATA}/specfun/src.sp
+/bin/rm *.o ${MY_LIB_DIR}/libspecfun.a ${DATA}/specfun/libspecfun.a
+bash # Use new shell to sandbox environment changes
+export FC="lf95"
+export FFLAGS="--mod .:/usr/local/include -DHIDE_SHR_MSG --trace --trap -DLinux -O3 --trace --wide -openmp -DPRC_FLT -DLINUX -I. -I/home/zender/include -I/usr/local/include"
+export LDFLAGS=""
+make -e -f Makefile.unix
+exit # Exit new shell
+/bin/cp -f ${DATA}/specfun/libspecfun.a ${MY_LIB_DIR}/libspecfun.a.lf95
+ln -s -f ${MY_LIB_DIR}/libspecfun.a.lf95 ${MY_LIB_DIR}/libspecfun.a
+cd ~/f;make cln lib_cln fff
+fff --drc_in=$HOME/nco/data --tst=gsl
+cd -
+/bin/rm *.o ${DATA}/specfun/libspecfun.a
+
+20040505:
+sand.ess.uci.edu LINUXAMD64 pgf90:
+scp -r dust.ess.uci.edu:/data/zender/specfun ${DATA}
+cd ${DATA}/specfun/src.sp
+/bin/rm *.o ${MY_LIB_DIR}/libspecfun.a ${DATA}/specfun/libspecfun.a
+bash # Use new shell to sandbox environment changes
+export FC="pgf90"
+export FFLAGS="-Mr8 -Mi4 -Mextend -Mnosecond_underscore -byteswapio -Mrecursive -Mdalign -Ktrap=fp"
+export LDFLAGS=""
+make -e -f Makefile.unix
+exit # Exit new shell
+/bin/cp -f ${DATA}/specfun/libspecfun.a ${MY_LIB_DIR}/libspecfun.a.pgf90
+ln -s ${MY_LIB_DIR}/libspecfun.a.pgf90 ${MY_LIB_DIR}/libspecfun.a
+cd ~/f;make cln lib_cln fff
+fff --drc_in=${HOME}/nco/data --tst=gsl
+cd -
+/bin/rm *.o ${DATA}/specfun/libspecfun.a
+
+20040613:
+esmf.ess.uci.edu AIX:
+bash # Use new shell to sandbox environment changes
+export DATA='/data/zender/zender'
+scp -r dust.ess.uci.edu:/data/zender/specfun ${DATA}
+cd ${DATA}/specfun/src.sp
+/bin/rm *.o ${MY_LIB_DIR}/libspecfun.a ${DATA}/specfun/libspecfun.a
+export FC='xlf95'
+export FFLAGS='-O3 -qstrict -Q -qrealsize=8 -qdpc=e -qmaxmem=-1 -qarch=auto -qspillsize=2500 -qsuffix=f=f:cpp=F -qfixed=132'
+export LDFLAGS=''
+make -e -f Makefile.unix
+exit # Exit new shell
+/bin/cp ${DATA}/specfun/libspecfun.a ${MY_LIB_DIR}
+cd ~/f;gmake cln lib_cln fff
+fff --drc_in=$HOME/nco/data --tst=gsl
+cd -
+/bin/rm *.o ${DATA}/specfun/libspecfun.a
+
+20040824:
+elnino.ess.uci.edu LINUX:
+scp -r dust.ess.uci.edu:/data/zender/specfun ${DATA}
+cd ${DATA}/specfun/src.sp
+/bin/rm *.o ${MY_LIB_DIR}/libspecfun.a ${DATA}/specfun/libspecfun.a
+bash # Use new shell to sandbox environment changes
+export FC='g95'
+export FFLAGS='-ffixed-line-length-132 -fno-second-underscore -Wimplicit -Wunused-label -Wall'
+export LDFLAGS=''
+make -e -f Makefile.unix
+exit # Exit new shell
+/bin/cp -f ${DATA}/specfun/libspecfun.a ${MY_LIB_DIR}/libspecfun.a.g95
+ln -s -f ${MY_LIB_DIR}/libspecfun.a.g95 ${MY_LIB_DIR}/libspecfun.a
+cd ~/f;make cln lib_cln fff
+fff --drc_in=$HOME/nco/data --tst=gsl
+cd -
+/bin/rm *.o ${DATA}/specfun/libspecfun.a
+
+20041222:
+# sand.ess.uci.edu LINUXAMD64 Debian/Ubuntu Warty Warthog g95
+scp -r dust.ess.uci.edu:/data/zender/specfun ${DATA}
+cd ${DATA}/specfun/src.sp
+/bin/rm *.o ${MY_LIB_DIR}/libspecfun.a ${DATA}/specfun/libspecfun.a
+bash # Use new shell to sandbox environment changes
+export FC='g95'
+export FFLAGS='-O -g -fno-second-underscore'
+export LDFLAGS=''
+make -e -f Makefile.unix
+exit # Exit new shell
+/bin/cp -f ${DATA}/specfun/libspecfun.a ${MY_LIB_DIR}/libspecfun.a.g95
+ln -s ${MY_LIB_DIR}/libspecfun.a.g95 ${MY_LIB_DIR}/libspecfun.a
+cd ~/f;make cln lib_cln fff
+fff --drc_in=${HOME}/nco/data --tst=gsl
+cd -
+/bin/rm *.o ${DATA}/specfun/libspecfun.a
+

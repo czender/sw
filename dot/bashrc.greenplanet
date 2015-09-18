@@ -1,0 +1,130 @@
+# $Id$ -*-shell-script-*-
+
+# Purpose: Greenplanet .bashrc file, executed at start of any sub-shell
+
+# Usage:
+# scp ~/dot/bashrc.greenplanet greenplanet.ps.uci.edu:.bashrc
+# /bin/cp ~/dot/bashrc.greenplanet ~/.bashrc
+# gbsh # Shell alias shortcut to source ~/dot/bashrc.greenplanet
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+        . /etc/bashrc
+fi
+
+# Compiler-specific
+if [ '0' = '1' ]; then
+# Intel compiler license: L95L-C7BGM7GC
+# http://www.intel.com/cd/software/products/asmo-na/eng/278607.htm
+    export LINUX_CC='icc -std=c99 -D_BSD_SOURCE -D_POSIX_SOURCE'
+    export LINUX_CXX='icpc'
+    export LINUX_FC='ifort'
+    export NETCDF4_ROOT='/sopt/ifort_icpc'
+    export NETCDF_ROOT='/sopt/ifort_icpc'
+    export NETCDF_INC='/sopt/ifort_icpc/include'
+    export NETCDF_LIB='/sopt/ifort_icpc/lib'
+    export ICC_RCH_ARG='-axP -mcpu=pentium4 -msse3'
+    export ICC_ROOT='/sopt/intel/Compiler/11.0/081'
+    export IFC_ROOT='/sopt/intel/Compiler/11.0/081'
+    export PATH=${ICC_ROOT}/bin/intel64\:${PATH}
+    export MPI_ROOT='/sopt/mpi/openmpi-1.3.3/intel' # Cause NCO to assume parallel netCDF4
+fi # endif Intel
+
+if [ '0' = '1' ]; then
+# GNU compilers
+    export LINUX_CC='gcc -std=c99 -pedantic -D_BSD_SOURCE -D_POSIX_SOURCE'
+    export LINUX_CXX='g++'
+    export LINUX_FC='gfortran'
+    export NETCDF4_ROOT='/sopt/netcdf/netcdf3-gcc-serial'
+    export NETCDF_ROOT='/sopt/netcdf/netcdf3-gcc-serial'
+    export NETCDF_INC='/sopt/netcdf/netcdf3-gcc-serial/include'
+    export NETCDF_LIB='/sopt/netcdf/netcdf3-gcc-serial/lib'
+fi # endif GNU
+
+if [ '0' = '1' ]; then
+# Alternate GNU compilers
+    export LINUX_CC='gcc -std=c99 -pedantic -D_BSD_SOURCE -D_POSIX_SOURCE'
+    export LINUX_CXX='g++'
+    export LINUX_FC='gfortran'
+    export MPI_ROOT='/sopt/mpi/openmpi-1.3.3/gcc_gfortran' # Cause NCO to assume parallel netCDF4
+    export NETCDF4_ROOT='/sopt/gfortran_g++'
+    export NETCDF_ROOT='/sopt/gfortran_g++'
+    export NETCDF_INC='/sopt/gfortran_g++/include'
+    export NETCDF_LIB='/sopt/gfortran_g++/lib'
+fi # endif GNU
+
+if [ '1' = '0' ]; then
+# PGI compilers
+    export LINUX_CC='pgcc -c9x -D_BSD_SOURCE -D_POSIX_SOURCE'
+    export LINUX_CXX='pgCC'
+    export LINUX_FC='pgf95'
+#    export NETCDF4_ROOT='/sopt/pgf90_pgcc'
+#    export NETCDF_ROOT='/sopt/pgf90_pgcc'
+#    export NETCDF_INC='/sopt/pgf90_pgcc/include'
+#    export NETCDF_LIB='/sopt/pgf90_pgcc/lib'
+    export NETCDF4_ROOT='/sopt/netcdf/netcdf3-pgi-serial'
+    export NETCDF_ROOT='/sopt/netcdf/netcdf3-pgi-serial'
+    export NETCDF_INC='/sopt/netcdf/netcdf3-pgi-serial/include'
+    export NETCDF_LIB='/sopt/netcdf/netcdf3-pgi-serial/lib'
+    export PGI_ROOT='/sopt/pgi-10.6'
+    export PGI_BIN_ROOT="${PGI_ROOT}/linux86-64/10.6"
+
+    export PATH=${PGI_BIN_ROOT}/bin\:${PATH}
+fi # endif PGI
+
+# User-specific: Probably useful only to Zender-group members
+alias gbsh="/bin/cp ${HOME}/dot/bashrc.greenplanet ${HOME}/.bashrc;source ${HOME}/.bashrc"
+alias hdo='cd ${HOME}/dot' ; function hdocp { cp ${1} ${HOME}/dot ; }
+alias killzender='for x in `seq -f compute-1-%g 21 32`; do ssh $x "kill -9 -1"; done'
+alias pze='cd /ptmp/${USER}'
+alias xmd='xmodmap ~/.xmodmaprc' # Swap caplock<->ctrl keys
+export CVSROOT=":ext:${USER}@dust.ess.uci.edu:/home/${USER}/cvs"
+export DATA="/data/${USER}"
+export DATA_RT="${DATA}/aca" # Input data for mie, ccc, swnb2, clm
+export MY_BIN_DIR="${HOME}/bin/LINUXAMD64"
+export MY_LIB_DIR="${HOME}/lib/LINUXAMD64"
+export MY_OBJ_DIR="${HOME}/obj/LINUXAMD64"
+export PATH=${HOME}/bin/LINUXAMD64\:${PATH}
+export PATH=${HOME}/sh\:${PATH}
+export SVNROOT="svn+ssh://dust.ess.uci.edu/home/${USER}/svn/trunk"
+export SYSTYPE='BSD' # Useful for killing processes
+export TZ='PST8PDT'	# Colorado=MST7MDT, California=PST8PDT, Paris=CET-1CEST
+
+# Generic: Probably useful to everyone
+alias bsrc="source ${HOME}/.bashrc"
+alias cln='rm *~ .[a-zA-Z]~ \#\*\# core core.* *.tmp *foo foo* *.o *.bak *.trace gmeta aaaa* thumb???.png thumbdta.tex *-t.tex* *.bbl *.blg *.log *.glo *.aux *.dlog *.cp *.cps *.fn *.fns *.ky *.pg *.toc *.tp *.vr *.lof *.lot *.dvi *.ttt *.fff'
+alias cp='cp -i' # -i = inquire
+alias csrc="source ${HOME}/.cshrc"
+alias cvc='cvs commit -m ""'
+alias cvu='cvs update -kk'
+alias dir='ls --color=auto -laF | more'
+alias dze='cd /data/${USER}'
+alias h='history'
+alias ld_library_path="echo -e \${LD_LIBRARY_PATH//:/'\n'}" # NeR98 p. 102
+alias ls='ls -F --color=auto' # -F = mark directories with /, links with @, etc., --color uses color if standard output is terminal
+alias m='less'
+alias make='gmake'
+alias manpath="echo -e \${MANPATH//:/'\n'}" # NeR98 p. 102
+alias mv='mv -i' # -i = inquire
+alias nodez='/sopt/sh/nodejobs 1 21 32' # -d processes too
+alias nvr='env | sort | more'
+alias path="echo -e \${PATH//:/'\n'}" # NeR98 p. 102
+alias qz="qstat -u ${USER} -rn" # -u username -rn nodelist
+alias rm='rm -i' # -i = inquire
+alias scp='scp -p -C' # -p = preserve mode, time, -C = enable compression
+alias ssh='ssh -X' # -X = enable X11 forwarding
+alias svc='svn commit -m ""'
+alias svu='svn update'
+alias tar='gtar'
+export CVSUMASK='002' # Default file permissions for CVS
+export CVS_RSH='ssh'
+export HDF5_ROOT='/sopt/HDF5'
+export HOST=`/bin/hostname`
+# export LM_LICENSE_FILE='7496@mpc.uci.edu' # Required (or equivalent) for PGI
+export NCARG_ROOT='/sopt/ncl' # NCL and NCARGraphics
+#export OMP_NUM_THREADS='8' # GreenPlanet cpus-per-node (set in /etc/bashrc)
+export PS1='\u@\h:\w\$ ' # Prompt user@host:cwd$ NeR98 p. 71 NB: single quotes
+export PVM_ARCH='LINUXAMD64'
+
+# Paths dependent on environment
+export PATH=${PATH}\:${NCARG_ROOT}/bin

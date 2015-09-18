@@ -1,0 +1,8 @@
+elnino Debian Libranet 2.6.7 Kernel 20050626
+cd ${DATA}/tmp
+wget ftp://ftp.uci.edu/distribution/vpnclient/vpnclient-linux.tar.gz
+tar xvzf vpnclient-linux.tar.gz
+cd vpnclient
+sudo ./vpn_install
+# Ubuntu kernel headers are in, e.g.,
+/usr/src/linux-headers-2.6.10-5

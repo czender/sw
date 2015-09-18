@@ -1,0 +1,309 @@
+************************************************************************
+                    THIS IS UNSUPPORTED SOFTWARE
+    but documented bug reports and enhancements are very welcome.
+************************************************************************
+
+cld 5.4 -- Microphysical ice cloud model by Charlie Zender and Jeff Kiehl.
+
+Purpose:
+
+o cld is a column ice cloud model. Given an initial atmospheric
+profile (in ASCII CCM column model format), cld will time integrate
+the evolution of an ice cloud as described in "Radiative sensitivities
+of tropical anvils to small ice crystals" by Charles S. Zender and
+J.T. Kiehl, Journal of Geophysical Research, Vol. 99, No. D12, pp
+25869--25880, 1994, hereafter ZeK94.
+
+Availability:
+
+Anonymous FTP from ftp.cgd.ucar.edu:pub/zender/cld* or from NCAR CGD
+network at /data2/zender/pub/src/cld* and
+/data2/zender/pub/bin/$PVM_ARCH/cld
+
+Files:
+cld-5.4.tar.gz			the entire source tree:
+./cld-5.4/Makefile		GNU makefile for compilation
+./cld-5.4/README.cld		this file
+./cld-5.4/ccm2rad_c.f		hacked CCM2 column model
+./cld-5.4/defs.h		physical constants and structures
+./cld-5.4/etbfct.f		flux corrected transport
+./cld-5.4/globals.h		global variables
+./cld-5.4/ice.c			ice radiative properties
+./cld-5.4/interp.c		interpolation routines
+./cld-5.4/main.c		main routine
+./cld-5.4/mie_bohren_c.f	Mie scattering parameters
+./cld-5.4/mls35_cld_crm.txt	mid-latitude summer profile
+./cld-5.4/spline.f		spline fitting routines
+./cld-5.4/trp35_cld_crm.txt	tropical atmosphere profile
+./cld-5.4/utilities.c		physics utilities routines
+./cld-5.4/idx_rfr_h2o_ice_sgw.f		ice index of refraction
+
+Installation:
+
+o uncompress and untar the cld archive, e.g., type
+"gunzip cld-5.4.tar.gz" and then "tar -xvf cld-5.4.tar"
+
+o cld has been compiled under SunOS 4.1.3, Solaris 2.4, IRIX, AIX, and
+UNICOS. cld has been causing system reboots on some machines under
+Solaris 2.4, the cause for this is unknown.  The supplied Makefile has
+the compilation arguments tailored for the NCAR CGD and SCD networks.
+
+o The supplied Makefile works with GNU make. If you are using a
+different make program, you will need to create your own makefile.
+The supplied Makefile may invoke a compiler that is not on your
+system, such as gcc, or acc---simply edit your favorite compiler into
+the Makefile.
+
+o The supplied Makefile depends upon up to five non-standard
+environment variables. You must set these in order for the Makefile to
+work. Following is a list of the environment variables and their
+acceptable values: MACHINE (cray,ibm,sun,sgi); OS (SunOS,AIX,UNICOS);
+PVM_ARCH (SUNMP,SUN4SOL2,CRAY,RS6K,SGI5); MY_BIN_DIR (installation
+directory for the cld executable); MY_OBJ_DIR (directory to store the
+relocatable object (.o) files). It is recommended that MY_BIN_DIR and
+MY_OBJ_DIR be different for each different machine architecture.
+
+o cld links to the netCDF library -lnetcdf. Make sure you have the
+latest version of netCDF installed and that it's location is known to
+the linker (e.g., setenv LD_LIBRARY_PATH
+.../usr/local/lib/netcdf/lib... on Suns).  The C-preprocessor for cld
+also needs to know where to find the include file netcdf.h (e.g.,
+-I/usr/local/include/netcdf/include on Suns)
+
+o From your installation directory, type "make cld". The supplied
+Makefile compiles to one of three optimization levels, which may be
+specified at compile time with the with the OPTS switch: "make OPTS=O
+cld" (optimized), "make OPTS=R cld" (regular), or "make OPTS=D cld"
+(debugging, sets -g switch). If the compilation is unsuccessful
+continue reading this section for compilation help.
+
+o Because both C and Fortran routines in cld can output to the
+terminal, there are some obscure Fortran libraries that need to be
+specified as well (e.g., -lF77 and -lM77 on Suns, -lf on Crays). If
+you are getting unsatisfied external reference errors you will need to
+hunt down the corresponding libraries for your particular platform.
+
+o The only statically allocated memory in the program is in the
+radiation routine ccm2rad_c.f in which the number of levels (plev) in
+the high resolution grid must be specified as a parameter statement,
+and then that routine must be recompiled. If you try to run cld with
+the incorrect number of levels in the radiation grid, the program will
+abort with a helpful diagnostic about the number of levels you need to
+set the plev parameter in ccm2rad_c.f
+
+Execution:
+
+o cld is written in C and Fortran. Most of the important options to
+cld can be performed by simply changing a command line argument. Use
+"cld -2" to print the list of command line arguments (these are
+appended below).  Use "cld -q" to print the list of debugging (-D)
+options (these are appended below).
+
+o cld has a spherical particle mode (toggle -X) which requires Mie
+scattering parameters for both LW and SW spectral regimes. These are
+stored in offline lookup files named mie_XX_LW.dat and mie_XX_SW.dat
+where XX is the number of sizes in the crystal distribution (specified
+with -x). cld will create these files if they are not already on disk,
+but they take awhile to generate, so it is recommended that they not
+be deleted after a run. NB: if you use the same number of sizes but
+change the actual sizes (with -m) then you must delete any existing
+Mie data files and regenerate them from scratch or else the program
+will use the mismatched Mie data.
+
+o cld works on a nested grid. The column atmospheric profile (e.g.,
+trp35_cld_crm.txt) specifies the thermodynamic structure and cloud
+field of the entire atmospheric column from the surface to space.
+This outer grid, which is specified on pressure levels, only affects
+the radiative calculations.  The inner, high-resolution cloud grid is
+embedded in the outer grid based on the height of the upper and lower
+boundaries (specified by the user with -G, -g). The number of layers
+(set with -l) refers to the number of layers within this cloud grid.
+The plev parameter in the radiation routine needs to be set to the
+total number of layers, which equals the number in the coarse column
+profile (35 for trp35_cld_crm.txt) plus the number in the high
+resolution grid (set with -l, default 100), minus the number of coarse
+levels which coincide with the high resolution grid (typically 1 to 10
+for a high resolution grid between 5 and 15 km deep). For example,
+plev = 157 for the 35 layer trp35_cld_crm.txt with grid base (-G) at 5
+km and grid thickness (-g) of 13 km and 130 layers in the high-res
+grid because 157 = 35 + 130 - 8 (i.e., the 13 km high resolution grid
+replaced 8 of the 35 layers in the coarser resolution grid).
+
+o NB: the surface albedo, day of year, local time of day, and latitude
+(and thus the solar zenith angle) are specified in the column profile
+(e.g., trp35_cld_crm.txt). See the documentation in the supplied
+column profiles.
+
+o Example command line invocations of cld are stored at the top of the
+main.c file. plev probably has to be reset to get these to work.
+Duplicate answers to the figures in ZeK94 should be obtainable if the
+initial conditions are set the same. Since ZeK94 appeared, however,
+the function of the -S and -s initial in cloud saturation switches has
+been changed, see main.c for their current meanings.
+
+Output:
+
+o Summary ASCII textual information goes to stdout where it may be
+redirected to a file with standard UNIX shell syntax, e.g., cld >
+cld.txt
+
+o Numeric output goes to a binary netCDF file each timestep (specified
+with -o).
+
+o As mentioned above, cld creates Mie scattering lookup tables if they
+don't already exist.
+
+o One of the last things cld does is output an atmospheric profile
+suitable for input into the offline CCM2 column radiation model. This
+profile contains all plev levels of structure used in the radiation
+code on the last time step. This file is named cld_crm.txt.  NB:
+cld_crm.txt is the correct format for use as an initial
+coarse-resolution profile for cld itself.
+
+o The contents of the netCDF file may be examined with the standard
+netCDF utility ncdump. However, we recommend using the more flexible
+ncks. ncrename can be used to alter the names of the contents of the
+output file. Available via anonymous ftp from
+ftp.cgd.ucar.edu:pub/zender/ncks*
+ftp.cgd.ucar.edu:pub/zender/ncrename*
+
+Command line options:
+
+Most of these options directly change the physics algorithms.
+
+usage: cld [-options] where options are one or more of:
+
+Aa:Bb:Cc:D:d:e:Ff:G:g:H:h:i:J:j:Kk:L:l:M:m:N:n:o:P:p:QqRr:S:s:t:UuVvWw:Xx:Z:z
+
+-A LAGRANGE Toggle Lagrangian growth. Default is ON
+-B EULER Toggle Eulerian growth phase. Default is ON
+-C ICE_ADVECT Toggle velocity advection. Default is ON
+-D debug Set the debugging level.  Default is 0
+-F HETEROGENEOUS_NUCLEATION Toggle. Default is True
+-G grid_base Default is 8000. m
+-H cloud_base Default is 1.e4 m
+-J ice_crystal_habit. Default is HEXAGONAL_COLUMNS
+-K AGGREGATION Toggle aggregation. Default is ON
+-L HOMOGENEOUS_NUCLEATION Toggle. Default is True
+-M atmospheric_profile_type Default is TROPICS
+-N INC_init Default is 1.e6 m^-3
+-P PAUSE Wait in between graphs? Default is True
+-Q RAD_FEEDBACK toggle flux feedback. Default is True
+-R RADIATION toggle radiation routines. Default is True
+-S S_ice_cloud Default is 1.2 ice sat ratio in cloud
+-U VAPOR_ADVECT toggle. Default is True
+-V VERBOSE toggle printing of WARNINGS. Default is True
+-X LIOU toggle hex crystals. Default is False
+-W WEED_NEGATIVE_VALUES toggle. Default is True
+-Z initial_distribution_type option. Default is KNOLLENBERG
+-a alpha_growth Courant condition safety factor. Default is .4
+-b bins_per_doubling Default is 2
+-c num_ccm2_level Default is 35
+-d debug_value Default is 0
+-e err_file Get the error file name. Default is stderr
+-f float_foo_input Generic tuning param. Default is 0.
+-g grid_thick Default is 4000. m
+-h cloud_thick Default is 1000. m
+-i in_file get the input file name. Default is stdin
+-j alpha_transport Courant condition safety factor. Default is .2
+-k dt timestep (Courant overrides).  Default is 100. s
+-l num_layer Default is 100
+-m smallest_length Default is 10.e-6
+-n num_step Default is 1
+-o out_file Output file name. Default is cloud.nc
+-p plot_step Default is 20 time steps per snapshot
+-q print out the debugging actions
+-r rad_step radiation update interval. Default is 1
+-s S_ice_ambient Default is .9 ice sat ratio beneath cloud
+-t tau_CCN_timescale Default is 1. s
+-u UPDRAFT_PROFILE_IS_FLAT toggle. Default is False
+-v print the RCS program version
+-w wind_speed_max Default is .05 m/s
+-x num_size Default is 40
+-z MOVIE_NETCDF_OUTPUT Default is False
+
+Debugging options:
+
+There are about 70 debugging options. Only one may be specified (with the
+-D command line argument) per run. Some of the options affect physics
+algorithms, but most just print out additional diagnostic information.
+
+Option  Action
+0: Do nothing. The default debugging mode.
+10: Environmental Profiles: prints k,z (km),T (K), T (C), S, P (mb), r_vap (g/kg), r_ice (g/kg)
+11: Initial concentration of entire distribtuion in #/liter
+12: Time evolution of concentration of one particular layer & size
+13: Thermal conductivity of each layer
+14: 
+15: daltitude_dtime (cm/s) of each layer & size
+16: equiv_radius (microns) of each size
+17: prism_radius (microns) of each size
+18: dmass_dtime (ng/s) of each layer & size at end
+19: Concentration (#/m^3) of each layer & size & timestep
+20: d_env_temp_dt of each layer & timestep
+21: vapor_diffusivity of each layer at end
+22: Crystal dimensions: j, Mass (ng),dMass (ng), L (u), dL (u), r_s (u), S (u^2), Hex L (u), Hex D (u), Aspect, Hex r_s (u), Hex S (u^2)
+23: Euler_stable_size of each layer & timestep
+24: Length (microns) of Euler_stable_size of each layer & timestep
+25: Concentration (#/liter) of one particular layer & size at end
+26: No opt
+27: No opt
+28: IWC (kg/m^3) at each layer & timestep post-Lagrangian but pre-Eulerian growth
+29: Concentration (#/liter) of each layer & size at end
+30: Tells how much sublimate (ng) (if any) from each layer & size & timestep
+31: Maximum Euler_stable_size in cloud, cloud_base, and cloud_top at each timestep, 
+32: Effective radius of each layer at end
+33: No opt
+34: Nucleation (#/m^3) (if any) into each layer at end
+35: wind_speed (cm/s) of each layer at end
+36: fall_speed (cm/s) of each layer & size
+37: Vapor path conservation check before and after wind transport
+38: SW band, lambda (microns), ice real index, ice imag index
+39: Mie_Bohren_c internal debugging info
+40: Mie optical properties table: band, lambda (u), size, r_s (u), n_real, n_imag, X, Q_ext, Q_sca, Q_abs, g, omega
+41: Runs Bohren's test case Mie parameters
+42: CCM2 environmental input, e.g., from ccm2rad.trp35.dat
+43: Bulk layer optical properties of each layer & band & timestep: cbi, z (km), cti, z (km), band, lambda (u), eff_tau_sca, eff_tau_ext, eff_omega, eff_g
+44: Cloud grid info: cbi, cti, num_cloud_layers, z (km), bccmil, tccmil, nccmlev
+45: Outputs full colmod style info each timestep
+46: No opt
+47: Ebert & Curry treatment of SW & LW optical properties by bulk IWC and r_e
+48: Crystal surface temperature and environmental temperature at each layer & size at end
+49: No opt
+50: Crystal Power absorption at each layer & size at end: hex_r_e (u), planck_q_abs_avg, q_SW (uW), q_LW (uW), latent heat (uW)
+51: No opt
+52: IR wavelength and band diagnostics at each layer and band: lambda (u), dlambda (u), T (K), band weight, IR radiance, total intens., sigma T^4
+53: Slingo treatment of all bulk IWC as LWC and use r_e (option crashes)
+54: Diffusivities of each layer & size: z (km), L (u), D_M, f_M, K_T, f_T
+55: Bulk distribution properties of each layer at end: IWC (mg), N (#/l), r_e (u), mean IWC, mean INC, mean r_e
+56: No opt
+57: Initial cloud lookup environmental table at grid points and interpolated state variables at each layer: z (km), T (K), p (mb)
+58: Latent/Radiative heating of one particular size & layer at end
+59: Environmental fluxes and heating rates: z (km), FupSW (W/m^2), FdownSW, FupLW, FdownLW, SWFdiv (mW/m^3), LWFdiv, HSW (K/hr), HLW, Hnet
+60: Heat balance of each layer at end: z(km), latent (K/hr), advective, net radiative, their sum
+61: Stability Check: z (km), T (K), dT/dz, Theta (K), dTheta/dz, advective (K/hr), radiative net, latent
+62: Reset LWmac kappa to its original CCM2 value of 60 m^2/kg
+63: Latent/Radiative heating of each layer & size & timestep: z (km), L (u), N (#/l), alpha, beta, latent (uW/m^3), q_SW, q_LW, q_net, latent + net
+64: Latent/Radiative heating of each layer & size at end: z (km), L (u), N (#/l), alpha, beta, latent (uW/m^3), q_SW, q_LW, q_net, latent + net
+65: Comparison of q apportioned equally by crystal conc. vs. weighted by size & band at each layer & size & timestep: z (km), L (u), simple q_SW, q_LW, q_net, actual q_SW, q_LW, q_net
+66: Comparison of flux divergences computed by differencing returned total fluxes vs. summing their spectral totals at end: z (km), lambda (u), ngSWdiv, ngLWdiv, SWdiv, LSdiv, total SWdiv
+67: Check sum comparison of total radiative heating vs. computed flux divergences of each layer & timestep: z (km), total q_SW, SWdiv, total q_LW, LWdiv
+68: No opt
+69: LW validation of bulk (interface) method vs. CCM2 of each layer at end: z (km), p (mb), p_int (mb), epsilon, tranmissivity, sigma T^4, FupLW_int, FupLW, FdnLW_int, FdnLW, FdivLW, FdivLW_int
+70: Display visible extinction and LW absorption optical depths of each layer at end
+71: Concentration = 0 initially in each layer & size
+72: LW mass absorption validation at each layer & band at end: z (km), lambda (u), LW spec band weight, LW spec vol abs coeff (km^-1), LWsvac/IWC (m^2/g), LWmac (m^2/g). Then layer totals: weights, kappa, LWsvac, beta*kappa*IWP, epsilon. Then cloud-integrated totals: IWP, mean IWC, LWvac, LWmac, total epsilon
+73: Albedo-Emissivity diagnostics at end: thickness, max(IWC) and its height, albedo, absorptance, transmittance, emissivity by zender, stephens, stackhouse methods
+74: Apply Mie_Liou correction fudge factors in the SW
+75: Output from Liou_fudge hex column crystal dimensions of each size L (u), D (u), Aspect, r_s (u), r_s^2 (u^2), A  (u^2), x-Sec A (u^2), Mass (ng) and bilinear_interp matrices (when applicable)
+76: X-sections and individual optical properties of crystals (whether hexagonal or not
+77: Hex column dimension diagnostics from newton-raphson routine: initial mass (kg), volume (m^3), L (u), iteration, L (u), epsilon, final D (u), aspect
+78: Band-averaged Mie calcs. at each quad. point: lambda (u), n_real, n_imag, avg_n_real, avg_n_imag
+79: SWCF and surface SWCF diagnostics
+80: 
+
+
+
+
+
+

@@ -1,0 +1,400 @@
+-*-Fundamental-*-
+
+#***********************************************************************
+# 20130617: givre.ess.uci.edu x86_64/EMT64 Debian Ubuntu Raring Ringtail gcc/gfortran 4.7.3 netcdf-4.3.0
+#***********************************************************************
+# SCRIP
+cd ${DATA}
+svn checkout http://oceans11.lanl.gov/svn/SCRIP/trunk/SCRIP
+mv ${DATA}/SCRIP ${DATA}/scrip
+cd ${DATA}/scrip
+setupTargetDir ${DATA}/scrip
+
+# NB: ESMF requires legacy netCDF C++ library:
+cd ${DATA}/tmp
+wget ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-cxx-4.2.tar.gz
+tar xvzf netcdf-cxx-4.2.tar.gz 
+cd ${DATA}/tmp/netcdf-cxx-4.2
+LDFLAGS='-L/usr/local/lib' ./configure --prefix=/usr/local > netcdf_cxx.configure.${GNU_TRP}.foo 2>&1
+make > netcdf_cxx.make.${GNU_TRP}.foo 2>&1
+mv -f config.log netcdf_cxx.config.log.${GNU_TRP}.foo
+make check > netcdf_cxx.check.${GNU_TRP}.foo 2>&1
+scp netcdf_cxx.*.foo dust.ess.uci.edu:/var/www/html/tmp
+sudo make install
+
+# ESMF http://www.earthsystemmodeling.org
+# http://www.earthsystemcog.org/projects/regridweightgen/
+cd ${DATA}/tmp
+/bin/rm -r ${DATA}/esmf
+tar xvzf esmf_6_3_0r_src.tar.gz
+/bin/mv ${DATA}/tmp/esmf ${DATA}
+cd ${DATA}/esmf
+export ESMF_DIR='/data/zender/esmf'
+export ESMF_INSTALL_PREFIX='/usr/local'
+export ESMF_INSTALL_BINDIR='bin'
+export ESMF_INSTALL_DOCDIR='doc'
+export ESMF_INSTALL_HEADERDIR='include'
+export ESMF_INSTALL_LIBDIR='lib'
+export ESMF_INSTALL_MODDIR='include'
+export ESMF_LAPACK='internal'
+export ESMF_NETCDF='split'
+export ESMF_NETCDF_INCLUDE='/usr/local/include'
+export ESMF_NETCDF_LIBPATH='/usr/local/lib'
+export ESMF_NETCDF_LIBS='-lnetcdff -lnetcdf_c++ -lnetcdf'
+make clean
+make -j8
+make check
+# Run following command as root. Do not sudo. sudo requires all environment variables. PITA.
+make install # Run as root (after defining above environment variables as root)
+make installcheck
+# Edit this if trying to install using sudo:
+# sudo ESMF_DIR='/data/zender/esmf' ESMF_INSTALL_PREFIX='/usr/local' ESMF_INSTALL_BINDIR='bin' ESMF_INSTALL_DOCDIR='doc' ESMF_INSTALL_HEADERDIR='include' ESMF_INSTALL_LIBDIR='lib' ESMF_INSTALL_MODDIR='include' make install
+# Test
+ESMF_RegridWeightGen -s ${DATA}/scrip/grids/remap_grid_T42.nc -d ${DATA}/scrip/grids/remap_grid_T42.nc -w ~/esmf_rgr_foo.nc # identify mapping works on T42 grid
+ESMF_RegridWeightGen -s ${DATA}/scrip/grids/remap_grid_POP43.nc -d ${DATA}/scrip/grids/remap_grid_T42.nc -w ~/esmf_rgr_foo.nc # fails on POP grid without -i
+ESMF_RegridWeightGen -s ${DATA}/scrip/grids/remap_grid_POP43.nc -d ${DATA}/scrip/grids/remap_grid_T42.nc -w ~/esmf_rgr_foo.nc --ignore_unmapped # works with POP grid with -i
+ESMF_RegridWeightGen -s ${DATA}/scrip/grids/remap_grid_POP43.nc -d ${DATA}/scrip/grids/remap_grid_T42.nc -w ~/esmf_rgr_foo.nc --ignore_unmapped --method=conserve # 
+#***********************************************************************
+# 20130617: givre.ess.uci.edu x86_64/EMT64 Debian Ubuntu Raring Ringtail gcc/gfortran 4.7.3 netcdf-4.3.0
+#***********************************************************************
+
+#***********************************************************************
+# 20150320: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 21 gcc/gfortran 4.9.2 netcdf-4.3.3.1
+#***********************************************************************
+# Tempest
+sudo yum install lapack lapack-devel blas
+cd ${DATA}/tmp
+git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+# Compile with g++ -std-c++11
+# Link to -llapack -lblas
+make
+
+# ESMF http://www.earthsystemmodeling.org
+# http://www.earthsystemcog.org/projects/regridweightgen/
+# Works fine with LINUX_FC=gfortran-mp-4.9 on aerosol (MACOSX)
+cd ${DATA}/tmp
+/bin/rm -r -f ${DATA}/esmf
+tar xvzf esmf_6_3_0rp1_src.tar.gz
+/bin/mv ${DATA}/tmp/esmf ${DATA}
+cd ${DATA}/esmf
+export ESMF_BOPT='g' # Default is 'O' for optimized. 'g' builds debuggable library
+export ESMF_DIR='/data/zender/esmf'
+export ESMF_INSTALL_PREFIX='/usr/local'
+export ESMF_INSTALL_BINDIR='bin'
+export ESMF_INSTALL_DOCDIR='doc'
+export ESMF_INSTALL_HEADERDIR='include'
+export ESMF_INSTALL_LIBDIR='lib'
+export ESMF_INSTALL_MODDIR='include'
+export ESMF_LAPACK='internal'
+export ESMF_NETCDF='split'
+export ESMF_NETCDF_INCLUDE='/usr/local/include'
+export ESMF_NETCDF_LIBPATH='/usr/local/lib'
+export ESMF_NETCDF_LIBS='-lnetcdff -lnetcdf_c++ -lnetcdf'
+make clean
+make -j8
+make check
+# Run following command as root, meaning get a root terminal with 'sudo -s' then run 'make install'
+# 'sudo make install' would fail because it requires all environment variables be set. PITA.
+make install # Run as root (after defining above environment variables as root)
+make installcheck
+# Edit this if trying to install using sudo:
+# sudo ESMF_DIR='/data/zender/esmf' ESMF_INSTALL_PREFIX='/usr/local' ESMF_INSTALL_BINDIR='bin' ESMF_INSTALL_DOCDIR='doc' ESMF_INSTALL_HEADERDIR='include' ESMF_INSTALL_LIBDIR='lib' ESMF_INSTALL_MODDIR='include' make install
+
+# Necessary modifications to successfully link as library. From nco.h:
+#ifdef ENABLE_ESMF
+  /* csz 20150320
+     Define these only in main() files not in original location in ESMC_CoordSys.h  
+     Otherwise any file #including ESMC.h inadvertently includes these constants multiple times 
+     Should be defined as externals that resolve to single definition in main()
+     sudo cp ~/nco/src/nco/ESMC_CoordSys.h /usr/local/include */
+  const double ESMC_CoordSys_Deg2Rad= 0.01745329251994329547437;
+  const double ESMC_CoordSys_Rad2Deg=57.29577951308232286464772;
+#endif /* !ENABLE_ESMF */
+
+# Test
+ESMF_RegridWeightGen -s ${DATA}/scrip/grids/remap_grid_T42.nc -d ${DATA}/scrip/grids/remap_grid_T42.nc -w ~/esmf_rgr_foo.nc # identify mapping works on T42 grid
+ESMF_RegridWeightGen -s ${DATA}/scrip/grids/remap_grid_POP43.nc -d ${DATA}/scrip/grids/remap_grid_T42.nc -w ~/esmf_rgr_foo.nc # fails on POP grid without -i
+ESMF_RegridWeightGen -s ${DATA}/scrip/grids/remap_grid_POP43.nc -d ${DATA}/scrip/grids/remap_grid_T42.nc -w ~/esmf_rgr_foo.nc --ignore_unmapped # works with POP grid with -i
+ESMF_RegridWeightGen -s ${DATA}/scrip/grids/remap_grid_POP43.nc -d ${DATA}/scrip/grids/remap_grid_T42.nc -w ~/esmf_rgr_foo.nc --ignore_unmapped --method=conserve # 
+#***********************************************************************
+# 20150320: roulee.ess.uci.edu x86_64/EMT64 Debian Ubuntu Raring Ringtail gcc/gfortran 4.7.3 netcdf-4.3.0
+#***********************************************************************
+
+#***********************************************************************
+# 20150401: aerosol.ess.uci.edu x86_64-apple-darwin14.1.0 MacOSX 10.10 Yosemite clang 6.0 netcdf-4.3.3.1
+#***********************************************************************
+# Tempest
+# No additional ports needed for tempestremap on MACOSX. Everything (blas, lapack) already installed by XTools.
+cd ${DATA}/tmp
+git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+# No Makefile modifications needed
+make
+
+# NB: Tempest executables do not always (ever?) accept "--option=val" format, use "--option val" instead
+# NB: Tempest RLL mesh generation works with interface (not centered) longitude specifications
+# The default is lon_begin=0=xv[0]=West_edge of first gridcell, and lon_end=360=East_edge of last gridcell
+# This is equivalent to NCO's lon_typ=Grn_wst
+# To get xc[0]=0, equivalent to NCO's lon_typ=Grn_ctr, offset lon_begin and lon_end by half a gridcell
+# Generate Regular Lat/Lon (RLL) grid:
+GenerateRLLMesh --lat 180 --lon 360 --lon_begin -0.5 --lon_end 359.5 --file ${DATA}/rgr/msh_180x360.g
+GenerateRLLMesh --lat 90 --lon 180 --lon_begin -1.0 --lon_end 359.0 --file ${DATA}/rgr/msh_90x180.g
+GenerateOverlapMesh --a ${DATA}/rgr/msh_180x360.g --b ${DATA}/rgr/msh_90x180.g --out ${DATA}/rgr/msh_ovr_180x360_to_90x180.g
+GenerateOverlapMesh --a ${DATA}/rgr/msh_90x180.g --b ${DATA}/rgr/msh_180x360.g --out ${DATA}/rgr/msh_ovr_90x180_to_180x360.g
+GenerateOfflineMap --in_mesh ${DATA}/rgr/msh_180x360.g --out_mesh ${DATA}/rgr/msh_90x180.g --ov_mesh ${DATA}/rgr/msh_ovr_180x360_to_90x180.g --out_map ${DATA}/maps/map_180x360_to_90x180.20150818.nc
+GenerateOfflineMap --in_mesh ${DATA}/rgr/msh_90x180.g --out_mesh ${DATA}/rgr/msh_180x360.g --ov_mesh ${DATA}/rgr/msh_ovr_90x180_to_180x360.g --out_map ${DATA}/maps/map_90x180_to_180x360.20150818.nc
+
+# Hybrid: NCO grids with Tempest overlap/map
+GenerateOverlapMesh --a ${DATA}/grids/180x360_SCRIP.20150820.nc --b ${DATA}/grids/90x180_SCRIP.20150820.nc --out ${DATA}/rgr/msh_ovr_180x360_to_90x180.g
+GenerateOverlapMesh --a ${DATA}/grids/90x180_SCRIP.20150820.nc --b ${DATA}/grids/180x360_SCRIP.20150820.nc --out ${DATA}/rgr/msh_ovr_90x180_to_180x360.g
+GenerateOfflineMap --in_mesh ${DATA}/grids/180x360_SCRIP.20150820.nc --out_mesh ${DATA}/grids/90x180_SCRIP.20150820.nc --ov_mesh ${DATA}/rgr/msh_ovr_180x360_to_90x180.g --out_map ${DATA}/maps/map_180x360_to_90x180.20150820.nc
+GenerateOfflineMap --in_mesh ${DATA}/grids/90x180_SCRIP.20150820.nc --out_mesh ${DATA}/grids/180x360_SCRIP.20150820.nc --ov_mesh ${DATA}/rgr/msh_ovr_90x180_to_180x360.g --out_map ${DATA}/maps/map_90x180_to_180x360.20150820.nc
+
+ncks -O -D 5 -t 1 --map=${DATA}/maps/map_180x360_to_90x180.20150818.nc ${DATA}/data/dst_1x1.nc ${DATA}/rgr/dst_2x2.nc
+ncks -O -D 5 -t 1 --map=${DATA}/maps/map_90x180_to_180x360.20150818.nc ${DATA}/data/dst_2x2.nc ${DATA}/rgr/dst_1x1.nc
+
+GenerateCSMesh --alt --res 30 --file ${DATA}/rgr/msh_ne30.g
+GenerateCSMesh --alt --res 120 --file ${DATA}/rgr/msh_ne120.g
+GenerateOverlapMesh --a ${DATA}/rgr/msh_ne120.g --b ${DATA}/rgr/msh_ne30.g --out ${DATA}/rgr/msh_ovr_ne120_to_ne30.g
+GenerateOfflineMap --in_mesh ${DATA}/rgr/msh_ne120.g --out_mesh ${DATA}/rgr/msh_ne30.g --ov_mesh ${DATA}/rgr/msh_ovr_ne120_to_ne30.g --in_type cgll --out_type cgll --in_np 4 --out_np 4 --out_map ${DATA}/maps/map_ne120np4_to_ne30np4_tps.20150613.nc
+ncks -O -D 5 -t 1 -v FSNT --map=${DATA}/maps/map_ne120np4_to_ne30np4_tps.20150613.nc ${DATA}/ne120/rgr/famipc5_ne120_v0.3_00003.cam.h0.1979-01.nc ${DATA}/ne30/rgr/tempest_ne30.nc # borken
+ApplyOfflineMap --map ${DATA}/maps/map_ne120np4_to_ne30np4_tps.20150613.nc --var FSNT --in_data ${DATA}/ne120/rgr/famipc5_ne120_v0.3_00003.cam.h0.1979-01.nc --out_data ${DATA}/ne30/rgr/tempest_ne30.nc
+ApplyOfflineMap --map ${DATA}/maps/map_ne120np4_to_ne30np4_aave.20150614.nc --var FSNT --in_data ${DATA}/ne120/rgr/famipc5_ne120_v0.3_00003.cam.h0.1979-01.nc --out_data ${DATA}/ne30/rgr/tempest_ne30.nc
+
+GenerateOverlapMesh --a ${DATA}/rgr/msh_ne30.g --b ${DATA}/rgr/msh_ne120.g --out ${DATA}/rgr/msh_ovr_ne30_to_ne120.g
+GenerateOfflineMap --in_mesh ${DATA}/rgr/msh_ne30.g --out_mesh ${DATA}/rgr/msh_ne120.g --ov_mesh ${DATA}/rgr/msh_ovr_ne30_to_ne120.g --in_type cgll --out_type cgll --in_np 4 --out_np 4 --out_map ${DATA}/maps/map_ne30np4_to_ne120np4_tps.20150618.nc
+ncks -O -D 5 -t 1 -v FSNT --map=${DATA}/maps/map_ne30np4_to_ne120np4_tps.20150618.nc ${DATA}/ne30/rgr/famipc5_ne30_v0.3_00003.cam.h0.1979-01.nco.nc ${DATA}/ne30/rgr/tempest_ne120.nc
+
+# Self-contained testing
+bds -x 180 -y 090 -m 13 -o ${DATA}/rgr/dst_2x2.nc
+ncks -O -x -v bsn_enm,lnd_msk,msk_rgn,mth_max,pft_clm,sfc_typ,src_flg ${DATA}/rgr/dst_2x2.nc ${DATA}/rgr/dst_2x2.nc # Remove NC_INT variables
+GenerateRLLMesh --lat 180 --lon 360 --file ${DATA}/rgr/msh_1x1.g
+GenerateRLLMesh --lat 90 --lat_begin -90 --lon 180 --lon_begin 0 --file ${DATA}/rgr/msh_2x2.g
+GenerateOverlapMesh --a ${DATA}/rgr/msh_2x2.g --b ${DATA}/rgr/msh_1x1.g --out ${DATA}/rgr/msh_ovr_2x2_1x1.g
+GenerateOfflineMap --in_mesh ${DATA}/rgr/msh_2x2.g --out_mesh ${DATA}/rgr/msh_1x1.g --ov_mesh ${DATA}/rgr/msh_ovr_2x2_1x1.g --in_data ${DATA}/rgr/dst_2x2.nc --out_data ${DATA}/rgr/dst_rgr_1x1.nc # Completes but wrong answers (possibly because only ncols variables get regridded?)
+ncks --cdl -v lon,lat -m -H ${DATA}/rgr/dst_rgr_1x1.nc | m
+
+# Tempestremap programs to ingest
+ApplyOfflineMap
+CalculateDiffNorms
+GenerateCSMesh
+GenerateGLLMetaData
+GenerateICOMesh 
+GenerateLambertConfConicMesh
+GenerateOfflineMap
+GenerateOverlapMesh
+GenerateRLLMesh
+GenerateTestData
+MeshToTxt
+SQuadGen
+
+# Put links in /usr/local/bin
+sudo ln -s ${DATA}/tmp/tempestremap/bin/ApplyOfflineMap /usr/local/bin/ApplyOfflineMap
+sudo ln -s ${DATA}/tmp/tempestremap/bin/CalculateDiffNorms /usr/local/bin/CalculateDiffNorms
+sudo ln -s ${DATA}/tmp/tempestremap/bin/GenerateCSMesh /usr/local/bin/GenerateCSMesh 
+sudo ln -s ${DATA}/tmp/tempestremap/bin/GenerateGLLMetaData /usr/local/bin/GenerateGLLMetaData
+sudo ln -s ${DATA}/tmp/tempestremap/bin/GenerateICOMesh /usr/local/bin/GenerateICOMesh 
+sudo ln -s ${DATA}/tmp/tempestremap/bin/GenerateLambertConfConicMesh /usr/local/bin/GenerateLambertConfConicMesh
+sudo ln -s ${DATA}/tmp/tempestremap/bin/GenerateOfflineMap /usr/local/bin/GenerateOfflineMap
+sudo ln -s ${DATA}/tmp/tempestremap/bin/GenerateOverlapMesh /usr/local/bin/GenerateOverlapMesh
+sudo ln -s ${DATA}/tmp/tempestremap/bin/GenerateRLLMesh /usr/local/bin/GenerateRLLMesh
+sudo ln -s ${DATA}/tmp/tempestremap/bin/GenerateTestData /usr/local/bin/GenerateTestData
+sudo ln -s ${DATA}/tmp/tempestremap/bin/MeshToTxt /usr/local/bin/MeshToTxt
+sudo ln -s ${DATA}/tmp/SQuadGen/SQuadGen /usr/local/bin/SQuadGen
+
+# ESMF vocabulary
+# Grids explained here: http://www.earthsystemmodeling.org/esmf_releases/public/ESMF_6_3_0rp1/ESMF_refdoc/node3.html#SECTION03020000000000000000
+SCRIP Original grid file format: http://www.earthsystemmodeling.org/esmf_releases/public/ESMF_6_3_0rp1/ESMF_refdoc/node3.html#sec:fileformat:scrip
+GRIDSPEC Tile grid propsed CF extension by V. Balaji (GFDL), half-integrated into libCF http://www.gfdl.noaa.gov/~vb/gridstd/gridstd.html
+ESMF-Unstructured
+UGRID Proposed (by ESMF) CF-unstructured grid data model
+"Logically rectangular grids have grid_rank set to 2, whereas unstructured grids have this variable set to 1"
+DE Decomposition Element (Data classes are distributed over DEs)
+PE 
+PET Persistent Execution Thread (abstraction of a core, MPI process, or OpenMP thread)
+
+# ACME/CESM vocabulary
+np Degree of polynomial (of numerical basis function for gridcell?)
+ne Number of Edges for Cubed Sphere. Total cells = 6*ne*ne?
+
+# Tempest vocabulary
+CS  Cubed Sphere
+CUBIT Geometry and Mesh Generation Toolkit from Sandia (superceded by Tempest?)
+Exodus Mesh format used by Tempest (.g files) 
+ICO Icosahedral
+GLL Gauss-Lobatto-Legendre
+RLL Rectangular Latitude Longitude
+RRM Regionally Refined Model
+
+# OLCF environment
+PE Programming Environment
+
+# OLCF environment. Project ID = CLI115
+# $HOME = /ccs/home/zender # User Home
+# $DATA = ${HOME}/data # CSZ $DATA
+# $fxm = /home/zender # User Archive HPSS
+# $MEMBERWORK = /lustre/atlas/scratch/zender # mode 700 14 days
+# $PROJWORK = /lustre/atlas/proj-shared # mode 770 90 days
+# $WORLDWORK = /lustre/atlas/world-shared # mode 775 14 days
+# $MY_MEMBERWORK = /lustre/atlas/scratch/zender/cli115 # mode 700 14 days
+# $MY_PROJWORK = /lustre/atlas/proj-shared/cli115/zender # mode 770 90 days
+# $MY_WORLDWORK = /lustre/atlas/world-shared/cli115/zender # mode 775 14 days
+export DATA="${HOME}/data" # CSZ $DATA
+export PROJID='cli115'
+export MY_MEMBERWORK="${MEMBERWORK}/${PROJID}" # mode 700 14 days
+export MY_PROJWORK="${PROJWORK}/${PROJID}/${USER}" # mode 770 90 days
+export MY_WORLDWORK="${WORLDWORK}/${PROJID}/${USER}" # mode 775 14 days
+mkdir ${MY_MEMBERWORK}
+mkdir ${MY_PROJWORK}
+mkdir ${MY_WORLDWORK}
+export DATA="${MY_PROJWORK}" # mode 770 90 days
+
+# Source datasets:
+# /lustre/atlas2/csc121/world-shared/mbranst/ne120/raw/b1850c5.cam.h0.*.nc
+# /lustre/atlas2/csc121/world-shared/mbranst/ne120/interpolated/b1850c5.cam.h0.*.nc
+# ne120 (~1/4 degree)
+mkdir -p ${DATA}/ne120/raw
+mkdir -p ${DATA}/ne30/raw
+mkdir -p ${DATA}/ne120/rgr
+mkdir -p ${DATA}/ne30/rgr
+cp /lustre/atlas2/csc121/world-shared/mbranst/ne120/raw/b1850c5.cam.h0.0001-??.nc ${DATA}/ne120/raw
+cp /lustre/atlas2/csc121/world-shared/mbranst/ne30/raw/ne30_gx1.B1850c5d.cam.h0.0005-??.nc ${DATA}/ne30/raw
+
+# Regridding notes:
+https://acme-climate.atlassian.net/wiki/display/WORKFLOW/UVCDAT+remap+for+diagnostics # MAT's Q&A on regridding
+https://acme-climate.atlassian.net/wiki/pages/viewpage.action?pageId=3245918 # 20140814 Marcia Branstetter notes
+https://acme-climate.atlassian.net/wiki/display/WORKFLOW/ACME+regridder+instructions # Doutriaux instructions (superceded by belo), MAT, Rasch comments
+https://acme-climate.atlassian.net/wiki/display/WORKFLOW/Using+NCL+to+remap+CAM+model+output+files # MAT/Marcia explains MAT NCL script
+# Rhea update Instructions from Brian Smith, 20150406:
+module unload python ompi paraview PE-intel PE-gnu
+module load cmake gcc
+#source /lustre/atlas/world-shared/csc121/uvcdat/2.1.0-mesa/bin/setup_runtime.sh
+source /lustre/atlas/world-shared/csc121/uvcdat/2015-05-06/bin/setup_runtime.sh
+ulimit -s unlimited # Need this to avoid issues with memory limits
+acme_regrid -h
+# acme_regrid [-h] [--weight-file WEIGHTS] [--output OUT] --input FILE [--var VAR]
+# optional arguments:
+# -h, --help            show this help message and exit
+# --weight-file WEIGHTS, -w WEIGHTS path to weight file
+# --output OUT, -o OUT  output file
+# --input FILE, -i FILE, -f FILE, --file FILE input file to process
+# --var VAR, -v VAR variable to process (default is all variable with 'ncol' dimension
+
+# ne120 to 181x360 takes ~26m14s to ~31m18s on rhea front-end with acme_regrid:
+time acme_regrid --weight-file ${DATA}/rgr/map_ne120np4_to_181x360_aave.nc --input ${DATA}/ne120/raw/b1850c5.cam.h0.0001-01.nc --output ${DATA}/ne120/rgr/b1850c5.cam.h0.0001-01.acme.nc
+# ne120 to 181x360 takes ~03m32s on rhea front-end with ncl:
+time ncl 'wgtfile="/lustre/atlas/proj-shared/cli115/zender/rgr/map_ne120np4_to_181x360_aave.nc"' 'srcfile="/lustre/atlas/proj-shared/cli115/zender/ne120/raw/b1850c5.cam.h0.0001-01.nc"' /lustre/atlas/proj-shared/cli115/zender/rgr/regridfile.ncl
+/bin/mv ${DATA}/ne120/raw/b1850c5.cam.h0.0001-01-remap.nc ${DATA}/ne120/rgr/b1850c5.cam.h0.0001-01.ncl.nc
+# ne120 to 181x360 takes ~03m54s to ~24m03s on rhea front-end with nco:
+time ncks -D 5 -O --map=${DATA}/rgr/map_ne120np4_to_181x360_aave.nc ${DATA}/ne120/raw/b1850c5.cam.h0.0001-01.nc ${DATA}/ne120/rgr/b1850c5.cam.h0.0001-01.nco.nc
+
+# ne30 to fv129x256
+# acme 5m54s
+time acme_regrid --weight-file ${DATA}/rgr/map_ne30np4_to_fv129x256_aave.150418.nc --input ${DATA}/ne30/raw/ne30_gx1.B1850c5d.cam.h0.0005-01.nc --output ${DATA}/ne30/rgr/ne30_gx1.B1850c5d.cam.h0.0005-01.acme.nc
+# ncl 0m57s
+time ncl 'wgtfile="/lustre/atlas/proj-shared/cli115/zender/rgr/map_ne30np4_to_fv129x256_aave.150418.nc"' 'srcfile="/lustre/atlas/proj-shared/cli115/zender/ne30/raw/ne30_gx1.B1850c5d.cam.h0.0005-01.nc"' /lustre/atlas/proj-shared/cli115/zender/rgr/regridfile.ncl
+/bin/mv ${DATA}/ne30/raw/ne30_gx1.B1850c5d.cam.h0.0005-01-remap.nc ${DATA}/ne30/rgr/ne30_gx1.B1850c5d.cam.h0.0005-01.ncl.nc
+# nco 0m27s
+time ncks -D 5 -O --map=${DATA}/rgr/map_ne30np4_to_fv129x256_aave.150418.nc ${DATA}/ne30/raw/ne30_gx1.B1850c5d.cam.h0.0005-01.nc ${DATA}/ne30/rgr/ne30_gx1.B1850c5d.cam.h0.0005-01.nco.nc
+w
+time ncks -D 5 -O --map=${DATA}/rgr/map_ne30np4_to_to_fv129x256_aave.150418.nc ${DATA}/rgr/ne30_gx1.B1850c5d.cam.h0.0005-01.nc ~/foo.nc
+
+# ncra takes at least 20 minutes to average a single ne120 file because (size ~10 GB) because RAM usage climbs to ~30 GB
+time ncra -D 3 -O ${DATA}/ne120/raw/b1850c5.cam.h0.*.nc ${DATA}/ne120/rgr/b1850c5_clm.nc > ~/foo 2>&1 & # 20+m00s 4.4.8
+time ncra --flt -D 3 -O ${DATA}/ne120/raw/b1850c5.cam.h0.*.nc ${DATA}/ne120/rgr/b1850c5_clm.nc > ~/foo 2>&1 & # 103m08s 4.4.9 (averaging 12 files) peak sst mmr 29GB
+time ncra -D 3 -O ${DATA}/ne30/raw/ne30_gx1.B1850c5d.cam.h0.0005-??.nc ${DATA}/ne30/rgr/b1850c5_clm.nc # 00m37s 4.3.9
+time ncra -D 3 -O ${DATA}/ne30/raw/ne30_gx1.B1850c5d.cam.h0.0005-??.nc ${DATA}/ne30/rgr/b1850c5_clm.nc # 01m07s 4.4.8
+time ncwa -D 3 -O ${DATA}/ne120/raw/b1850c5.cam.h0.0001-01.nc ${DATA}/ne120/rgr/b1850c5.cam.h0.0001-01_xy.nc # 05m29s 4.3.9
+
+# Mark Taylor (and John Truesdale) wrote and use NCL script regridfile.ncl:
+# titan:~taylorm/cam/ncl/regridfile.ncl # MAT personal copy
+# Usage:
+# ncl 'wgtfile="map_file_name"' 'srcfile="*cam.h0.*.nc"' regridfile.ncl
+wget https://raw.github.com/mt5555/remap-ncl/master/regridfile.ncl # GitHub
+ncl 'wgtfile=""' 'srcfile="${DATA}/b1850c5_clm.nc"' regridfile.ncl
+
+# 20150424: After regridding kerfuffle, Peter Caldwell and Mark Taylor drafted
+# requirements and standard datasets for ACME regridders. 
+# https://acme-climate.atlassian.net/wiki/display/ATM/Regridding+-+v0.3+AMIP+runs
+
+# Grid files in SCRIP format:
+# https://acme-svn2.ornl.gov/acme-repo/acme/mapping/grids
+ne30np4_091226_pentagons.nc  # 1.0 degree CAM-SE grid
+ne120np4_pentagons_100310.nc # 1/4 degree CAM-SE grid
+129x256_SCRIP.nc  # Like T85, but equally spaced (1.4 degrees) in latitude/longitude, including points at both poles
+256x512_SCRIP.nc  # Equi-angle lat/lon grid (.70 degrees)
+801x1600_SCRIP.nc # Equi-angle lat/lon grid (0.225 degrees)
+
+# Mapping files: Available from the ACME inputdata server
+# https://acme-svn2.ornl.gov/acme-repo/acme/mapping/maps
+map_ne30np4_fv129x256_aave.150418.nc    # Area-averaged (ESMF algorithm) for downscaling 
+map_ne30np4_fv257x512_bilin.150418.nc   # Bilinear to a finer grid, to preserve all scales
+map_ne120np4_fv257x512_aave.150418.nc   # Area-averaged (ESMF algorithm) for downscaling 
+map_ne120np4_fv801x1600_bilin.150418.nc # Bilinear to a finer grid, to preserve all scales
+
+# Copy these grids and maps to rhea
+wget --no-check-certificate https://zender:abracad1@acme-svn2.ornl.gov/acme-repo/acme/mapping/grids/129x256_SCRIP.130510.nc
+
+# Create remap files from grid files:
+ESMF_RegridWeightGen -s ne30np4_091226_pentagons.nc -d 129x256_SCRIP.nc -w map_ne30np4_fv129x256_aave.DATE.nc --method conserve
+ESMF_RegridWeightGen -s ne30np4_091226_pentagons.nc -d 257x512_SCRIP.nc -w map_ne30np4_fv257x512_bilin.DATE.nc --method bilinear
+ 
+Climatologies: NCO vs. UVCDAT
+https://acme-climate.atlassian.net/wiki/display/ATM/Climo+Files+-+v0.3+AMIP+runs
+https://acme-climate.atlassian.net/wiki/display/ATM/climo_nco.py
+
+PIO/PIO2:
+# Lead developer: John Edwards. ACME: Rob Jacob
+# http://www.cesm.ucar.edu/models/pio_new
+# https://github.com/parallelio/parallelio
+cd ${DATA}/tmp
+git clone https://github.com/PARALLELIO/ParallelIO.git
+cd ${DATA}/tmp/ParallelIO
+# MacOSX
+export CXX=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++
+export CC=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc
+export FC=/opt/local/bin/gfortran-mp-4.9
+20150506: GitHub distro needs additional CMake configuration files
+# Linux
+mkdir ${DATA}/tmp/ParallelIO/bin
+cd ${DATA}/tmp/ParallelIO/bin
+# This fails because of CGD permissions. Jayesh Krishna <jayesh@mcs.anl.gov>
+# svn co https://svn-ccsm-models.cgd.ucar.edu/tools/genf90/trunk .
+scp givre.ess.uci.edu:/data/zender/tmp/ParallelIO/bin/genf90.pl .
+git clone https://github.com/CESM-Development/CMake_Fortran_utils cmake
+cmake CMakeLists.txt
+cd ${DATA}/tmp/ParallelIO
+# Follow Jayesh instructions to specify PnetCDF (-D argument) and source directory (last argument). Requires PnetCDF 1.6.
+cmake -DPNETCDF_DIR=/usr/local/parallel ${DATA}/tmp/ParallelIO
+
+dogfood:
+ESMF_RegridWeightGen -s ${DATA}/grids/ne120np4_pentagons.100310.nc -d ${DATA}/grids/ne30np4_pentagons.091226.nc -w ${DATA}/maps/map_ne120np4_to_ne30np4_aave.20150614.nc --method conserve
+ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_ne120np4_to_ne30np4_aave.20150603.nc ${DATA}/ne120/rgr/famipc5_ne120_v0.3_00003.cam.h0.1979-01.nc ${DATA}/ne30/rgr/dogfood.nc
+
+ESMF_RegridWeightGen -s ${DATA}/grids/ne30np4_pentagons.091226.nc -d ${DATA}/grids/ne30np4_pentagons.091226.nc -w ${DATA}/maps/map_ne30np4_to_ne30np4_aave.20150603.nc --method conserve
+ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_ne30np4_to_ne30np4_aave.20150603.nc ${DATA}/ne30/rgr/famipc5_ne30_v0.3_00003.cam.h0.1979-01.nc ${DATA}/ne30/rgr/dogfood.nc
+
+ESMF_RegridWeightGen -s ${DATA}/grids/ne30np4_pentagons.091226.nc -d ${DATA}/grids/ne120np4_pentagons.100310.nc -w ${DATA}/maps/map_ne30np4_to_ne120np4_aave.20150603.nc --method conserve
+ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_ne30np4_to_ne120np4_aave.20150603.nc ${DATA}/ne30/rgr/famipc5_ne30_v0.3_00003.cam.h0.1979-01.nc ${DATA}/ne30/rgr/dogfood.nc
+
+ESMF_RegridWeightGen -s ${DATA}/grids/129x256_SCRIP.130510.nc -d ${DATA}/grids/ne30np4_pentagons.091226.nc -w ${DATA}/maps/map_fv129x256_to_ne30np4_aave.20150602.nc --method conserve
+ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_fv129x256_to_ne30np4_aave.20150602.nc ${DATA}/ne30/rgr/fv_FSNT.nc ${DATA}/ne30/rgr/dogfood.nc
+
+ESMF_RegridWeightGen -s ${DATA}/grids/ne30np4_pentagons.091226.nc -d ${DATA}/grids/remap_grid_T42.nc -w ${DATA}/maps/map_ne30np4_to_T42_aave.20150601.nc --method conserve
+ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_ne30np4_to_T42_aave.20150601.nc ${DATA}/ne30/rgr/famipc5_ne30_v0.3_00003.cam.h0.1979-01.nco.nc ${DATA}/ne30/rgr/dogfood.nc
+
+ESMF_RegridWeightGen -s ${DATA}/grids/remap_grid_T42.nc -d ${DATA}/grids/129x256_SCRIP.130510.nc -w ${DATA}/maps/map_t42_to_fv129x256_aave.20150621.nc --method conserve
+ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_t42_to_fv129x256_aave.20150621.nc ${DATA}/dstmch90/dstmch90_clm.nc ${DATA}/ne30/rgr/dogfood.nc
+
+ESMF_RegridWeightGen -s ${DATA}/grids/129x256_SCRIP.130510.nc -d ${DATA}/grids/257x512_SCRIP.130510.nc -w map_fv129x256_to_fv257x512_aave.20150529.nc --method conserve
+ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_fv129x256_to_fv257x512_aave.20150529.nc ${DATA}/ne30/rgr/famipc5_ne30_v0.3_00003.cam.h0.1979-01.nco.nc ${DATA}/ne30/rgr/dogfood.nc
+
+RRM:
+GenerateOverlapMesh --a ${DATA}/rgr/msh_180x360.g --b ${DATA}/grids/california_25km.nc --out ${DATA}/rgr/msh_ovr_180x360_to_ca25km.g
+GenerateOfflineMap --in_mesh ${DATA}/rgr/msh_180x360.g --out_mesh ${DATA}/grids/california_25km.nc --ov_mesh ${DATA}/rgr/msh_ovr_180x360_to_ca25km.g --out_map ${DATA}/maps/map_180x360_to_ca25km.20150715.nc
+ncks -O --map=${DATA}/maps/map_180x360_to_ca25km.20150715.nc ${DATA}/rgr/dst_1x1.nc ${DATA}/rgr/dst_ca25km.nc
+
+#***********************************************************************
+# 20150401: aerosol.ess.uci.edu x86_64-apple-darwin14.1.0 MacOSX 10.10 Yosemite clang 6.0 netcdf-4.3.3.1
+#***********************************************************************

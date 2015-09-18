@@ -1,0 +1,8 @@
+2004-01-13  Charlie Zender  <zender@uci.edu>
+
+	* sltsbl.F90 (sltsbl): Zero alphanumbervalue when flux is zero.
+
+2003-01-20  Charlie Zender  <zender@uci.edu>
+
+	* Created sltsbl module sltsbl-1_0
+

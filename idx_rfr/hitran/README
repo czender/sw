@@ -1,0 +1,20 @@
+-*-text-*-
+
+This directory, /home/zender/idx_rfr/hitran, contains index of
+refraction data for various aerosols. Currently, all the files here
+are copies directly and unmodified from the HITRAN96 CDROM directory 
+/cdrom/aerosols.
+
+netCDF versions of some of these data are centralized in
+/home/zender/idx_rfr (CDL files) and /data/zender/aca (.nc files). 
+
+aerosol.doc	HITRAN summary of all *.dat data files
+downing_.dat
+kou_etal.dat
+palmer_w.dat
+remsberg.dat
+shettle.dat
+steele_h.dat
+timmerma.dat
+toon_eta.dat
+warren.dat

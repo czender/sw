@@ -1,0 +1,201 @@
+% $Id$
+
+% Purpose: Paper on Mie resonance biases
+
+% Usage:
+% cd ~/crr;make -W mie_grl.tex mie_grl.dvi mie_grl.ps;cd -
+% scp -p ${DATA}/ps/mie_grl.ps ${DATA}/ps/mie_grl.pdf dust.ess.uci.edu:/var/ftp/pub/zender/mie_grl
+
+\documentclass[agupp,twoside]{aguplus} % Concise preprint style
+%\documentclass[agupp,twoside,draft]{aguplus} % No figures
+%\documentclass[12pt,agums]{aguplus} % Double-spaced manuscript for submittal
+%\documentclass[jgrga]{aguplus} % Galleys to save money
+
+% AGU++ Options
+%\printfigures % Adds figures at end
+\doublecaption{35pc} % Captions printed twice
+\sectionnumbers % Turns on section numbers
+\extraabstract % Adds supplemental abstract
+%\afour % European A4 paper size
+%\figmarkoff % Supress marginal markings
+
+% AGUTeX options and entries
+%\tighten % Turns off double spacing, has no effect with agupp
+\singlespace % Restores single spacing
+%\doublespace % Restores double spacing
+
+% Standard packages
+\usepackage{ifpdf} % Define \ifpdf
+\ifpdf % PDFLaTeX
+\usepackage[pdftex]{graphicx} % Defines \includegraphics*
+\pdfcompresslevel=9
+\usepackage{thumbpdf} % Generate thumbnails
+\usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
+\else % !PDFLaTeX
+\usepackage{graphicx} % Defines \includegraphics*
+\fi % !PDFLaTeX
+\usepackage{array} % Table and array extensions, e.g., column formatting
+\usepackage{times} % Times/Roman font, aguplus STRONGLY recommends this for the camera-ready version!!
+
+% hyperref is last package since it redefines other packages' commands
+% hyperref options, assumed true unless =false is specified:
+% backref	List citing sections after bibliography entries
+% breaklinks	Wrap links onto newlines
+% colorlinks	Use colored text for links, not boxes
+% hyperindex	Link index to text
+% plainpages=false Suppress warnings caused by duplicate page numbers
+% pdftex	Conform to pdftex conventions
+\ifpdf % PDFLaTeX
+\usepackage[backref,breaklinks,colorlinks,hyperindex,plainpages=false,pdftex]{hyperref} % Hyper-references
+\pdfcompresslevel=9
+\else % !PDFLaTeX
+\usepackage[backref,breaklinks,colorlinks,hyperindex,plainpages=false]{hyperref} % Hyper-references
+\fi % !PDFLaTeX
+
+% Personal packages
+\usepackage{csz} % Library of personal definitions
+\usepackage{dmn} % Dimensional units
+\usepackage{chm} % Commands generic to chemistry
+\usepackage{dyn} % Commands generic to fluid dynamics
+\usepackage{hyp} % Hyphenation exception list
+\usepackage{aer} % Commands specific to aerosol physics
+\usepackage{rt} % Commands specific to radiative transfer
+\usepackage{psd} % Particle size distributions
+\input{jgr_abb} % AGU-sanctioned journal title abbreviations
+
+% Commands specific to this file
+\newlength{\tblwdt} % Horizontal size of current table
+\newlength{\fltwdtsngclm}\setlength{\fltwdtsngclm}{20.0pc} % Float width to fill single column
+\newlength{\fltwdtdblclm}\setlength{\fltwdtdblclm}{41.0pc} % Float width to fill whole page
+
+% NB: The \lefthead and \righthead will be automatically uppercased by
+% the jgrga documentstyle 
+% Short title: Zender et al.: Atmospheric absorption during ARESE
+\lefthead{ZENDER: RADIATIVE BIASES DUE TO MIE RESONANCES}
+\righthead{ZENDER: RADIATIVE BIASES DUE TO MIE RESONANCES}
+\received{Month Day, 2001}
+\revised{Month Day, 2001}
+\accepted{Month Day, 2001}
+\journalid{JGRD}{Journal Date}
+\articleid{page1}{page2}
+\paperid{02JDXXXXX}
+% The $ in the following line screws up the hilit19 highlighting
+%\ccc{0148-0227/02/02JD-01781\ 09.00}
+\ccc{0148-0227/02/02JD-01781\$09.00}
+\cpright{AGU}{2001}
+% \cpright{Crown}{1994}
+% (No \ccc{} for Crown copyrights.)
+
+\authoraddr{C. S. Zender,
+Department of Earth System Science, University of California, Irvine,
+CA~~92697-3100. (zender@uci.edu)}
+%National Center for Atmospheric Research, P.O. Box 3000, Boulder,
+%CO~~80307. (zender@ncar.ucar.edu)}    
+
+%\slugcomment{JOURNAL OF GEOPHYSICAL RESEARCH, VOL.~102, NO.~D25, PAGES
+%29,901--29,915, DECEMBER~27,~2001}
+%\slugcomment{Submitted to \textit{J. Geophys. Res. Atm.},
+%January~28, 2001. Revised July~14, 2001. Accepted July~22, 2001.}
+\slugcomment{\today}
+
+% NB: Placement of figures is very sensitive to \textfraction
+\renewcommand\textfraction{0.3} % Minimum fraction of page that is text
+\setcounter{totalnumber}{10} % Maximum number of floats per page
+\setcounter{topnumber}{10} % Maximum number of floats at top of page
+\setcounter{dbltopnumber}{10} % Maximum number of floats at top of two-column page
+\setcounter{bottomnumber}{10} % Maximum number of floats at bottom of page
+\renewcommand\topfraction{1.0} % Maximum fraction of top of page occupied by floats
+\renewcommand\dbltopfraction{1.0} % Maximum fraction of top of two-column page occupied by floats
+\renewcommand\bottomfraction{1.0} % Maximum fraction of bottom of page occupied by floats
+\renewcommand\floatpagefraction{1.0} % Fraction of float page filled with floats
+\renewcommand\dblfloatpagefraction{1.0} % Fraction of double column float page filled with floats
+
+\begin{document}
+
+% NB: title must be lowercased by hand. The documentstyle does not enforce it.
+\def\paperchaptertitle{Radiative Biases due to Mie Resonances} 
+\title{\paperchaptertitle}
+
+\author{Charles S. Zender}
+\affil{Department of Earth System Science, University of California at
+Irvine} 
+
+\begin{abstract}
+The effect of Mie resonances on cloud shortwave radiative forcing
+is examined.
+\end{abstract}
+
+\section{Introduction}\label{sxn:ntr}
+
+% Get rid of the horizontal rule separating this footnote from text
+%\renewcommand{\footnoterule}{} 
+%\setlength{\footnotesep}{12pt} 
+%\footnote{\noindent Copyright 2001 by the American Geophysical Union.\\
+%Paper number 02JD01871\\
+%0148-0227/02/02JD-01781\09.00}%
+
+Our ability to close the clear sky solar radiation budget is still
+disputed \cite[e.g.,][and references therein]{RaV97}. 
+Until we can unambiguously perform this fundamental task, our skill at
+closing the cloudy sky radiation budget, and hence at predicting
+climate and climate response, is questionable \cite[e.g.,][]{CPB89}. 
+
+\section{Methods}\label{sxn:mth}
+
+\section{Model Simulations}\label{sxn:mdl} 
+
+Figure~\ref{fgr:rsn_hrz} shows a Mie resonance near $\wvl = fxm$\,\um.
+\begin{figure}
+\begin{center}
+% ${HOME}/idl/mie.pro:aer_gph,fl_nm='/data/zender/mie/mie_hrz_1000.nc',prn=1
+\includegraphics[width=\hsize]{mie_rsn_hrz}\vfill
+\end{center}
+\caption{
+Mie resonance near $\wvl = fxm$\,\um.
+\label{fgr:rsn_hrz}}
+\end{figure}
+
+Table~\ref{tbl:bdg} shows the total bias for each 100\,nm band
+from 500--2000\,nm.
+\begin{table}
+\begin{minipage}{\hsize} % Minipage necessary for footnotes KoD95 p. 110 (4.10.4)
+\renewcommand{\footnoterule}{\rule{\hsize}{0.0cm}\vspace{-0.0cm}} % KoD95 p. 111
+\begin{center}
+\caption[Narrow Band Bias]{\textbf{Narrow Band Bias}%
+\label{tbl:bdg}}%
+\vspace{\cpthdrhlnskp}
+\begin{tabular}{l *{3}{>{$}r<{$}}} % KoD95 p. 94 describes '*' notation
+\hline \rule{0.0ex}{\hlntblhdrskp}% 
+Band & \mbox{Bias} & \mbox{Liquid} & \mbox{Ice} \\[0.0ex]
+nm & & & \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+% Numbers from 
+500--600 & & \\[0.5ex]
+600--700 & & \\[0.5ex]
+\hline
+\end{tabular}
+\end{center}
+\end{minipage}
+\end{table} % end tbl:bdg
+
+\section{Global Forcing}\label{sxn:stn} 
+
+\section{Discussion and Summary}\label{sxn:dsc} 
+
+% Balance preprint columns
+\balance
+
+% Appendices
+\appendix
+
+% Acknowledgements
+\acknowledgments
+The author thanks M.~Nussenzweig for helpful discussions.
+This research was supported in part by DOE ARM Program Grant
+DEFG0593ER61376, and by NASA EOS Grant XXX.
+
+% Bibliography
+\bibliographystyle{agu}
+\bibliography{bib}
+
+\end{document}

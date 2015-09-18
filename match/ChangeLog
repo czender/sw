@@ -1,0 +1,70 @@
+2002-04-05  Alf Grini  <alfgr@dust.ps.uci.edu>
+
+	* Tagged match_sbl_dstmch77 synchronization for creation of match_sbl branch
+	cvs tag -b -r match_sbl_dstmch77 match_sbl match
+	cvs tag -c match_sbl_dstmch77
+	
+2002-03-20  Charlie Zender  <zender@uci.edu>
+
+	* Added match_vnl.sh to run vanilla MATCH (no dust)
+
+2001-11-10  Charlie Zender  <zender@uci.edu>
+
+	* match.sh: Add 'CLOUD' to outfld() list for radiative forcing
+
+2001-11-08  Charlie Zender  <zender@uci.edu>
+
+	* match.sh: Use absolute paths for rm,cp,ln to avoid aliases
+	in interactive shell runs
+
+2001-10-29  Charlie Zender  <zender@uci.edu>
+
+	* match.sh: Add rdsp link, change icdate to yyyymmdd
+
+2001-09-13  Charlie Zender  <zender@uci.edu>
+
+	* Makefile: make cln clears files in box model directory which
+	are confusing global makefile when using relative paths
+	(./obj/LINUX).
+
+2001-09-10  Charlie Zender  <zender@uci.edu>
+
+	* Makefile: Updated with new ALPHA, AIX builds and recognition of
+	.F90 and .mod files 
+
+2001-07-12  Charlie Zender  <zender@uci.edu>
+
+	* Added DBG option to Makefile to enable -DDST_DBG without
+	changing dst.h
+
+2001-06-25  Charlie Zender  <zender@uci.edu>
+
+	* match.sh: I just learned the hard way that a match (or ccm, for
+	that matter) executable learns all its identity from the namelist
+	file. Thus an old executable given a new namelist file will run
+	and stamp tapes with the new CASEID, etc., but the executable can
+	be old. This is what happened with dstmch62. It was really
+	dstmch61 masquerading as dstmch62. This is one more argument for
+	switching from namelist input to command-line switches.
+
+	* Removed broken targets RS6K, SGI5, SUN4, SUN4SOL2 from Makefile
+
+Wed Nov 25 14:16:53 1998  Charlie Zender  <zender@sanitas-e0.cgd.ucar.edu>
+
+	* Added rmout,rmrst = .true. to namelist in order to allow long
+	runs in /tmp/zender.
+
+Tue Sep 15 08:39:17 1998  Charlie Zender  <zender@odin.cgd.ucar.edu>
+
+	* The reason the last version core dumped on Winterpark is that I
+	was trying to do verticall interpolation from 28 to 18
+	levels. Vertical interpolation is not implemented in MATCH.
+
+Fri Sep 11 16:02:49 1998  Charlie Zender  <zender@odin.cgd.ucar.edu>
+
+	* Implemented initial version of MATCH Dust module from MATCH
+	3.2.8. This version builds and runs MATCH 3.2.8 correctly on Cray
+	machines, but core dumps on Winterpark for unknown reasons.
+	There are no specific modifications to use Dust routines, although
+	the params.h file has been modified to accept Dust tokens.
+

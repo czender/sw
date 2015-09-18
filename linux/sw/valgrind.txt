@@ -1,0 +1,30 @@
+svn on ashes.ess.uci.edu Ubuntu Hoary 20050524:
+cd ${DATA}/tmp
+svn co svn://svn.valgrind.org/vex/trunk vex
+svn co svn://svn.valgrind.org/valgrind/trunk valgrind
+cd ${DATA}/tmp/vex && make clean version all
+cd ${DATA}/tmp/valgrind
+./autogen.sh
+./configure --prefix=/usr/local --with-vex=${DATA}/tmp/vex
+make
+sudo make install
+hash -r
+valgrind --version
+
+ipcc.ess.uci.edu CentOS 20060630:
+cd $DATA/tmp
+wget http://valgrind.org/downloads/valgrind-3.2.0.tar.bz2
+bunzip2 valgrind-3.2.0.tar.bz2
+tar xvf valgrind-3.2.0.tar
+bash # New shell level keeps environment variables sandboxed
+make distclean
+export GNU_TRP=`~/nco/autobld/config.guess`
+export CC='gcc'
+export CXX='g++'
+export CPPFLAGS=''
+export CFLAGS=''
+./configure --prefix=/usr/local > valgrind.configure.${GNU_TRP}.foo 2>&1
+make
+make test
+sudo make install
+exit # Return to previous shell level

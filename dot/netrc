@@ -1,0 +1,3 @@
+machine climate.llnl.gov login zender password secretword
+machine ftp.joss.ucar.edu login wg1_review password PX73H9VT
+

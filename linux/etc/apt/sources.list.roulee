@@ -1,0 +1,99 @@
+# See sources.list(5) for more information
+# Usage:
+# sudo diff ~/linux/etc/apt/sources.list.roulee /etc/apt/sources.list
+# sudo cp ~/linux/etc/apt/sources.list.roulee /etc/apt/sources.list
+# sudo scp ~/linux/etc/apt/sources.list.roulee roulee.ess.uci.edu:/etc/apt/sources.list
+
+# 20030201: Change from woody to sarge
+# 20030519: Deprecate marillat, move Libranet to bottom
+# 20040106: Change to Libranet 2.8
+# 20040820: Delete marillat, switch to MEPIS
+# 20050411: Delete MEPIS, switch to Ubuntu hoary
+# 20050915: Remove Ubuntu backports, add Kubuntu
+# 20051015: Change from hoary to breezy, remove Kubuntu, 
+# 20051018: Re-add multiverse and backports, as per http://www.ubuntuguide.org/#extrarepositories
+# 20051021: Comment out breezy-backports until dapper opens and backports available
+# 20051112: Add breezy-backports since dapper-drake has opened
+# 20060204: Change from breezy to dapper development branch
+# 20061026: Change from dapper to edgy final
+# 20070202: Switch to repositories recommended by http://ubuntuguide.org/wiki/Ubuntu_Edgy#How_to_add_extra_repositories
+# 20070423: Change to feisty
+# 20070723: Uncomment deb-src for pbuilder chroot
+# 20071021: Comment medibuntu repositories for upgrade to gutsy
+# 20080103: Change from us.archive to archive (for smart European access)
+# 20080501: Change to hardy
+# 20080730: Add launchpad repository to get KDE 4.1
+# 20081024: Change to intrepid
+# 20090302: Overwrite with new intrepid defaults
+# 20090304: Add medibuntu repositories for easier skype
+# 20090316: Add Anders Kaseorg's PPA for latest NVidia drivers
+# 20090316: Remove Anders Kaseorg's PPA for latest NVidia drivers (which bail on givre)
+# 20090417: Change to jaunty
+# 20090823: Add Google Chromium PPA
+# 20101031: Change to karmic
+# 20100404: Change to lucid
+# 20101011: Change to maverick
+# 20110505: Change to natty
+
+deb http://us.archive.ubuntu.com/ubuntu/ natty main restricted
+deb-src http://us.archive.ubuntu.com/ubuntu/ natty main restricted
+
+## Major bug fix updates produced after the final release of the
+## distribution.
+deb http://us.archive.ubuntu.com/ubuntu/ natty-updates main restricted
+deb-src http://us.archive.ubuntu.com/ubuntu/ natty-updates main restricted
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team. Also, please note that software in universe WILL NOT receive any
+## review or updates from the Ubuntu security team.
+deb http://us.archive.ubuntu.com/ubuntu/ natty universe
+deb-src http://us.archive.ubuntu.com/ubuntu/ natty universe
+deb http://us.archive.ubuntu.com/ubuntu/ natty-updates universe
+deb-src http://us.archive.ubuntu.com/ubuntu/ natty-updates universe
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu 
+## team, and may not be under a free licence. Please satisfy yourself as to 
+## your rights to use the software. Also, please note that software in 
+## multiverse WILL NOT receive any review or updates from the Ubuntu
+## security team.
+deb http://us.archive.ubuntu.com/ubuntu/ natty multiverse
+deb-src http://us.archive.ubuntu.com/ubuntu/ natty multiverse
+deb http://us.archive.ubuntu.com/ubuntu/ natty-updates multiverse
+deb-src http://us.archive.ubuntu.com/ubuntu/ natty-updates multiverse
+
+## Uncomment the following two lines to add software from the 'backports'
+## repository.
+## N.B. software from this repository may not have been tested as
+## extensively as that contained in the main release, although it includes
+## newer versions of some applications which may provide useful features.
+## Also, please note that software in backports WILL NOT receive any review
+## or updates from the Ubuntu security team.
+deb http://us.archive.ubuntu.com/ubuntu/ natty-backports main restricted universe multiverse
+deb-src http://us.archive.ubuntu.com/ubuntu/ natty-backports main restricted universe multiverse
+
+deb http://security.ubuntu.com/ubuntu natty-security main restricted
+deb-src http://security.ubuntu.com/ubuntu natty-security main restricted
+deb http://security.ubuntu.com/ubuntu natty-security universe
+deb-src http://security.ubuntu.com/ubuntu natty-security universe
+deb http://security.ubuntu.com/ubuntu natty-security multiverse
+deb-src http://security.ubuntu.com/ubuntu natty-security multiverse
+
+## Uncomment the following two lines to add software from Canonical's
+## 'partner' repository. This software is not part of Ubuntu, but is
+## offered by Canonical and the respective vendors as a service to Ubuntu
+## users.
+deb http://archive.canonical.com/ubuntu natty partner
+deb-src http://archive.canonical.com/ubuntu natty partner
+
+# Third party developers repository
+deb http://extras.ubuntu.com/ubuntu natty main
+
+# Medibuntu
+# Please report any bug on https://bugs.launchpad.net/medibuntu/
+deb http://packages.medibuntu.org/ natty free non-free
+deb-src http://packages.medibuntu.org/ natty free non-free
+
+# Google Chromium browser
+deb http://ppa.launchpad.net/chromium-daily/ppa/ubuntu natty main
+deb-src http://ppa.launchpad.net/chromium-daily/ppa/ubuntu natty main
+

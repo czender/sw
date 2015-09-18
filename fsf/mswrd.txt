@@ -1,0 +1,37 @@
+# Purpose: Canned response to people sending documents in proprietary formats
+# Source: Modified from RMS's example
+
+# URL:
+# http://www.ess.uci.edu/~zender/mswrd.txt
+
+# Usage: 
+# scp ~/fsf/mswrd.txt swamis.ps.uci.edu:public_html/mswrd.txt
+
+cat > ${HOME}/fsf/foo.txt << EOF
+I ignore documents sent in secret proprietary formats such as
+Microsoft Word or Excel.
+Propagating documents in proprietary formats has bad effects---
+it pressures the recipients to use Microsoft software.
+Whether intentionally or not, it buttresses Microsoft's monopoly. 
+This stymies broader adoption of free software.
+Free software promotes curiosity, creativity, and sharing.
+Would you please reconsider the use of proprietary formats for
+communication with other people? 
+
+Please send me documents as plain text, PDFs, or in a free office
+standard produced and distributed by groups such as these:  
+http://hdf.ncsa.uiuc.edu
+http://www.gnome.org
+http://www.kde.org
+http://www.oasis-open.org
+http://www.openoffice.org
+http://www.unidata.ucar.edu/packages/netcdf
+http://www.ximian.com
+
+"A non-free program is a predatory social system that keeps people
+in a state of domination and division, and uses the spoils to dominate
+more. It may seem like a profitable option to become one of the
+emperor's lieutenants, but ultimately the ethical thing to do is to
+resist the system and put an end to it."---Richard M. Stallman 
+EOF
+scp ${HOME}/fsf/foo.txt swamis.ps.uci.edu:public_html/mswrd.txt

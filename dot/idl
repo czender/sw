@@ -1,0 +1,11 @@
+!edit_input=50
+.rnew ~/.idle
+; 19991005: From Liam Gumley <Liam.Gumley@ssec.wisc.edu> on comp.lang.idl-pvwave
+; These keywords must be set before any windows are drawn
+device,true=24
+window,/free
+device,decomposed=0
+; 19981029: Backing store: 0 = None, 1 = Server-implemented, 2 = IDL-implemented
+device,retain=2
+;device,retain=1
+

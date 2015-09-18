@@ -1,0 +1,90 @@
+  Below is a summary of the indices of refraction which are placed upon
+  the HITRAN CD in this AEROSOL sub-directory.  If you have any questions,
+  please call Steve Massie at NCAR (303-497-1404, massie@ncar.ucar.edu).
+
+c *****  File: DOWNING-.DAT
+  Data: Real and imaginary indices of refraction for water at 27 C
+  between 10 and 5000 cm-1.
+
+  Reference: H.D. Downing and D. Williams, "Optical constants of water
+  in the infrared," J.Geophys.Res. 80, 1656-1661 (1975).
+
+c *****  File: KOU-ETAL.DAT
+  Data: Imaginary indices of refraction for water and ice in the 0.67 to
+  2.5 micron range.
+
+  Reference: L. Kou, D. Labrie, and P. Chylek, "Refractive indices of water
+  and ice in the 0.65 to 2.5 micron range," Appl.Opt. 32, 3531-3540 (1993).
+
+c *****  File: WARREN.DAT
+  Data: Real and imaginary indices of refraction of ice at -7 C for the
+  4.43e-2 to 167 micron range, and indices of ice at -1, -5, -20, and -60 C
+  for the 167 to 8.6e6 micron range.
+
+  Reference: S.G. Warren, "Optical constants of ice from the ultraviolet
+  to the microwave," Appl.Opt. 23, 1206-1225 (1984).
+  The values here were generated from a program of S. Warren.
+
+c *****  File: SHETTLE.DAT
+  Data: Real and imaginary indices of refraction for water, ice, sodium
+  chloride, sea salt, water soluble aerosol, ammonium sulfate, carbonaceous
+  aerosol, volcanic dust, sulfuric acid, meteoric dust, quartz, hematite,
+  sand, and dust-like aerosol.  The tabulations start and 0.2 microns and
+  extend out to 40 microns (or to longer wavelengths).  These indices were
+  used to generate the aerosol models which are incorporated into the
+  LOWTRAN, MODTRAN, and FASCODE computer codes.
+
+  References: The data were tabulated by E.P. Shettle of the Naval Research
+  Laboratory.
+
+  Data: Real and imaginary indices of refraction of nitric acid trihydrate,
+  nitric acid dihydrate, nitric acid monohydrate, and solid amorphous nitric
+  acid solutions.
+
+  Reference: O.B. Toon, M.A. Tolbert, B.G. Koehler, A.M. Middlebrook, and
+  J. Jordan, "The infrared optical constants of H2O-icd, amorphous nitric
+  acid solutions, and nitric acid hydrates," J.Geophys.Res. (in press, 1994).
+
+c *****  File: PALMER-W.DAT
+  Data: Real and imaginary indices of refraction of sulfuric acid solutions
+  at 25, 38, 50, 75, 84.5, and 95.6% H2SO4, by weight.
+
+  Reference: K.F. Palmer and Dudley Williams, "Optical constants of sulfuric
+  acid; Application to the clouds of Venus?," Appl.Opt. 14, 208-219 (1975).
+
+c *****  File: REMSBERG.DAT
+  Data: Real and imaginary indices of refraction of sulfuric acid solutions
+  at 75 and 90% H2SO4, by weight, plus the standard deviations of the
+  measurements.
+        Real and imaginary indices of refraction of nitric acid solutions
+  at 68% HNO3, by weight, plus the standard deviations of the measurements.
+
+  Reference: E.E. Remsberg, D. Lavery, and B. Crawford, "Optical constants
+  for sulfuric and nitric acids," J.Chem. and Engin.Data 19, 263-255 (1974).
+
+c *****  File: STEELE-H.DAT
+  Data: Theoretical equilibrium composition (weight percentage of H2SO4)
+  of sulfuric acid solutions, given as a function of temperature and
+  H2O vapour pressure.
+
+  Reference: H.M. Steele and P. Hamill, "Effects of temperature and humidity
+  on the growth and optical properties of sulphuric acid-water droplets
+  in the stratosphere," J.Aerosol Sci. 12, 517-528 (1981).
+
+c ***** File: TIMMERMA.DAT
+  Data: Sulfuric acid density (gm/cm^3) values for solutions between
+  0 and 100% H2SO4 (by weight) for temperatures between 0 and 60 C.
+
+  Reference: J. Timmermans, The physico-chemical constants of binary
+  systems in concentrated solutions, Interscience, New York, (1960).
+  The data cited here (from pages 561-562 of Timmermans) are from Domke
+  and Bein (1905).
+
+c ***** File: TOON-ETA.DAT
+  Data: Real and imaginary indices of refraction of H2O-ice, amorphous
+  nitric acid solutions, and nitric acid hydrates.
+  
+  Reference: O.B. Toon, M.A. Tolbert, B.G. Koehler, A.M. Middlebrook,
+  and J. Jordan, "The infrared optical constants of H2O-ice, amorphous 
+  acid solutions, and nitric acid hydrates," J.Geophys.Res. (in press 1994).
+

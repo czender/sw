@@ -1,0 +1,1199 @@
+% $Id$
+
+% Purpose: ANV parameterization development paper.
+
+\ifphdcsz{}{
+
+%\documentclass[twoside,agupp]{aguplus}
+%\documentclass[agupp]{aguplus}
+\documentclass[twoside,agums]{aguplus}
+%\documentclass[jgrga]{aguplus}
+
+%  AGU++ OPTIONS
+%\printfigures        % ADDS FIGURES AT END
+%\doublecaption{35pc} % CAPTIONS PRINTED TWICE
+\sectionnumbers      % TURNS ON SECTION NUMBERS
+%\extraabstract       % ADDS SUPPLEMENTAL ABSTRACT
+%\afour               % EUROPEAN A4 PAPER SIZE
+%\figmarkoff          % SUPPRESS MARGINAL MARKINGS
+
+%  AGUTeX OPTIONS AND ENTRIES
+%\tighten             % TURNS OFF DOUBLE SPACING, has no effect with agupp
+%\singlespace         % RESTORES SINGLE SPACING
+%\doublespace         % RESTORES DOUBLE SPACING
+
+\usepackage{graphicx} % defines \includegraphics*
+\usepackage{ifthen} % Boolean and programming commands
+\usepackage{longtable} % for long tables, like acronyms and symbols
+\usepackage{tabularx} % for long tables, like acronyms and symbols
+
+\usepackage{/home/zender/tex/csz} % all my local definitions
+%\usepackage{jrn_abb} % Define abbreviations used in bib.bib
+\input{/home/zender/tex/jgr_abb}
+
+% NB: The \lefthead and \righthead will be automatically uppercased by
+% the jgrga documentstyle 
+\lefthead{Zender and Kiehl}
+%\righthead{Development of the ANV Prognostic Ice Scheme for GCMs}
+\righthead{Prognostic Ice Scheme for GCMs based on Tropical Anvils}
+\received{date1}
+\revised{date2}
+\accepted{date3}
+\journalid{JGRD}{Journal date}
+\articleid{page1}{page2}
+\paperid{94JZ12345}
+% The $ in the following line screws up the hilit19 highlighting
+%\ccc{0000-0000/00/94JZ-12345\$05.00}
+\ccc{0000-0000/00/94JZ-12345\05.00}
+% \cpright{PD}{1994}
+% \cpright{Crown}{1994}
+% (No \ccc{} for Crown copyrights.)
+\cpright{AMS}{1996}
+
+\authoraddr{J. T. Kiehl and Charles S. Zender, National Center for Atmospheric
+Research, P.O. Box 3000, Boulder, CO 80307-3000}
+
+%\slugcomment{Submitted to \jas, April~22, 1996. Copyright \copyright 1996 AMS.}
+\slugcomment{\today}
+
+\begin{document}
+} % not phdcsz
+
+% NB: title must be lowercased by hand. The documentstyle does not enforce it.
+\def\paperchaptertitle{A prognostic ice cloud parameterization for
+GCMs based on modeled and observed behavior of tropical anvils}
+\ifphdcsz{\chapter{\paperchaptertitle}\label{chap:cem}}{\title{\paperchaptertitle}}
+\ifphdcsz{}{\author{Charles S. Zender and J. T. Kiehl}}
+\ifphdcsz{}{\affil{National Center for Atmospheric Research, Boulder, Colorado}}
+
+\ifphdcsz{\section{Abstract}}{\begin{abstract}}
+We document the development of a parameterization of cirrus cloud
+suitable for implementation in general circulation models (GCMs).
+The parameterization, called ANV (for anvil), comprises convective 
+(sub-gridscale) and stratiform (resolved) condensation.
+Both components represent the bulk processes of deposition,
+sublimation, and precipitation of ice mass without assuming or
+predicting the ice particle size. 
+We employed a cumulus ensemble model (CEM) to determine parameters
+governing ice generation in the convective case, and a size resolving
+column model in the stratiform case.
+As a result ANV predicts the ice budget of a GCM atmospheric column 
+from the convective mass flux, updraft, temperature, humidity, and
+inferred budgets of observed convective systems. 
+Statistics from control runs of a GCM and the CEM revealed fundamental
+distinctions in the convective behavior of each model in a tropical
+convecting regime.
+Sampling the CEM dataset using convective criteria which minimize
+systematic differences in the mass flux profile between models permits
+ANV to be mapped from the high to the low resolution model in a
+physically consistent manner.
+\ifphdcsz{}{\end{abstract}}
+
+\section{Introduction}\label{sec:cem_intro}
+
+Ice cloud has a significant impact on the radiative budget of the
+earth and presents a great challenge to modeling its climate.
+Ice cloud contributes more than any other cloud type to total
+continental cloud cover and rank second to marine stratocumulus in
+tropical oceanic coverage \cite[]{WHL86,WHL88}.
+Deep convection in the tropics generates anvils in the coldest part of
+the troposphere, over the warmest SST---ideal conditions for trapping
+longwave emission from the surface.
+In the tropics, net cloud forcing is a small residual between
+shortwave and longwave cloud forcing (SWCF and LWCF) whose magnitude
+largely depends on two properties: cloud mass and height
+\cite[]{Kie941}. 
+A small bias in either property can change the sign of feedbacks
+between cloud forcing, SST, and convection which control the
+hydrologic cycle. 
+Satellite datasets exist that document the direct influence of cloud
+on the global energy budget \cite[e.g.,][]{RCH89}, but their role in
+the hydrologic cycle remains largely speculative.
+\cite{SuL931} argue that the observed vertical distribution of tropical
+water vapor can be maintained by sublimating hydrometeors detrained
+from cirrus. 
+For these reasons, the prediction of ice cloud in a general
+circulation model (GCM) should include the essential physics that
+determine tropical anvil vertical and geographic distribution,
+longevity, and mass.
+
+The treatment of ice cloud by GCMs falls into two classes: diagnostic
+and prognostic. 
+Diagnostic schemes employ empirical relationships among large scale
+variables (e.g., temperature and humidity) to obtain the mixing ratio
+of condensed water \qc\ \cite[e.g.,][]{KBB96}, or a proxy, such as cloud
+optical depth \cite[]{HRR83}. 
+Their prescribed, steady state nature makes diagnostic schemes 
+computationally efficient.
+Typically some form of entraining plume is implicitly assumed,
+so that the \qc\ profile increases with height above cloud base more 
+slowly than, but similar to, an adiabatic condensed water profile.
+
+While variations on it can perform well for entraining plumes, an
+adiabatic profile is ill-suited as a basis for predicting the vertical
+distribution of condensate resulting from deep convection.
+Deep convection is characterized by an active core region much smaller
+then the associated mesoscale outflow (anvil).
+The relative area of a core to its anvil is $< 10\%$ \cite[]{FDR90}.
+Typical anvil depth is 5--10~km (resolvable by current GCMs)
+\cite[]{WSS931}. 
+In contrast to the monotonic adiabatic profile, observations and cloud
+resolving simulations \cite[]{WSS932,SLT94,GMK95} show the
+area-averaged vertical \qc\ profile of a mature (or time-averaged)
+anvil system varies little (and can increase) from freezing level to
+$\sim 300$~mb, above which \qc\ decreases rapidly.
+Furthermore, detached anvils can project a radiative influence long
+after deep convection ceases \cite[]{ALV88}.
+Representing this convective-radiative hysteresis is an important
+advantage of prognostic over diagnostic schemes.
+The fidelity of diagnostic schemes could be improved by
+transmitting information about the synoptic environment to them, but
+this is a complicated, non-local procedure.
+
+Representing a wide spectrum of cloud types is more naturally
+accomplished by prognostic schemes, which forecast \qc\ each timestep 
+with an equation incorporating physically based sources, sinks, and
+transport. 
+Our interest is the sensitivity of the climate system to tropical
+anvils.
+A forecast \qc\ allows hysteresis, and so can maintain long-lived
+anvils after the cessation of convection.
+Prognostic cloud schemes occupy a spectrum from relatively simple,
+single category bulk condensate treatments \cite[e.g.,][]{Sun88}, to
+complex multiple category (droplet, rain, graupel, crystal, snow etc.) 
+treatments that also predict size spectra \cite[e.g.,][]{FTV89}.
+Complex schemes include more physical processes whose details are
+poorly understood (e.g., homogeneous nucleation) and will remain
+difficult to test against observations for many years.
+%The role of a specific physical process in the climate system can be
+%better understood by selectively enabling or disabling the process in
+%a GCM \cite[e.g., ice crystal terminal velocities,][]{SeM93}.
+Prior studies of the effects of cirrus employed either diagnostic
+cloud schemes \cite[e.g.,][]{SlS88,RHD89}, or prognostic schemes
+\cite[e.g.,][]{SeM93,SRB94,FoR962,DYK96} that detrain (with a
+specified, sometimes 100\%, efficiency) condensate predicted by a
+moist convection parameterization into the stratiform anvil.
+In the latter models, detrained condensate is consistent with the
+moist convective parameterization, but may not include condensate
+formation from secondary circulations. 
+To our knowledge, only \cite{Don93} explicitly accounts for condensate
+formed by mesoscale circulations outside the deep convective core
+(perhaps 25--40\% of total anvil condensate \cite[]{LeH80,GaH83}).  
+The main purpose of this study is to develop a prognostic cloud scheme
+in which deep convection results in the generation and maintenance of
+mesoscale anvils with realistic \qc\ profiles and lifetimes.
+
+Previous studies \cite[]{Sli87,Sun88,XuK91} agree that the total 
+cloud field is best parameterized as the net result of convective and
+stratiform cloud processes.
+Long term, multi-regional datasets on cloud microphysics, radiation,
+and mesoscale dynamical features needed to develop and fully test 
+prognostic ice cloud parameterizations do not exist.
+In the interim many in the GCM community feel the best tool available
+for studying deep convection and associated mesoscale outflow is the
+cloud-resolving cumulus ensemble model (CEM) \cite[]{Bro94}.
+Current computational resources allow one to define CEM domains 
+that extend beyond the scale of a typical GCM grid box. 
+Thus, these models serve as a bridge from the cloud scale up to the
+scale of the GCM. 
+For prognosing stratiform ice associated with large scale ascent and
+cooling, a size resolving column model (SRCM) may suffice.
+This study combines results from SRCM, CEM, and GCM simulations
+with empirical estimates of convective system hydrologic budgets
+into a parameterization scheme for ice cloud dubbed ANV (for anvil).  
+A second paper \cite[]{ZeK962} describes the sensitivity of the
+simulated climate of a new version of the National Center for
+Atmospheric Research Community Climate Model (NCAR CCM) to the
+radiative effects of the enhanced upper tropospheric ice amount and
+fraction predicted by ANV.  
+
+The paper is organized as follows: Section~\ref{sec:cem} summarizes
+the 24~day numerical experiment performed with the CEM.
+We analyze the CEM dataset and develop the convective component of ANV
+in Section~\ref{sec:anv}.
+The technique used to mesh the convective portion of ANV with a GCM in
+a physically consistent manner is shown in Section~\ref{sec:gcm}. 
+Section~\ref{sec:srcm} describes the SRCM and documents the stratiform
+component of ANV.
+Section~\ref{sec:cem_disc} contains concluding remarks.
+
+\section{Cumulus Ensemble Model}\label{sec:cem}
+
+We employed the CEM developed by \cite{Tri92} for our studies.
+A more comprehensive review of our CEM simulation is presented by
+\cite{GMK95}.
+The model is nonhydrostatic, fully non-Boussinesq and can be run in
+either a 2-dimensional or 3-dimensional configuration.
+The model employs a six water category (cloud droplets, rain droplets, 
+pristine ice crystals, snow crystals, aggregates and graupel) bulk
+formulation for microphysics \cite[]{FTV89}.
+The model also includes a parameterization for longwave and shortwave
+radiation; a turbulent kinetic energy closure; and a Businger-type
+parameterization for surface exchange.
+The configuration of the simulations is analogous to the work of
+\cite{SLT94}.
+The model run is 2-dimensional with an outer domain of 900~km and a
+horizontal resolution of 1~km. 
+The vertical domain extends to 25~km with a variable vertical
+resolution, with a nominal resolution in the mid-troposphere of 200~m.
+The horizontal boundary condition is periodic.
+The model time step is 10~s.
+A constant surface temperature of 301~\dgr K is assumed to represent 
+Western Pacific conditions.
+
+The model is forced with steady conditions from the Marshall Islands
+\cite[]{YEC73}.
+The imposed zonal wind and vertical updraft profiles are shown in
+Figure~\ref{fig:cem_forcing}. 
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/cem_forcing.eps}
+\end{center}
+\caption[Imposed vertical profiles of large scale forcing in the
+CEM]{
+Imposed vertical profiles of large scale forcing in the
+CEM: Horizontal wind shear (solid) and large scale ascent
+(dotted).\label{fig:cem_forcing}} 
+\end{figure}
+The imposed zonal wind profile indicates a strong low level jet
+which implies strong shear in the lowest 2--3~km near the surface. 
+The imposed vertical velocity profile peaks in the mid to upper
+troposphere at 3~\cmxs\ upward motion.
+
+The CEM simulation was run for 24~days. 
+The length of integration was chosen to insure that the model reached an
+equilibrium with the large scale forcing. 
+The time evolution of domain-average temperature and precipitable
+water showed the model takes roughly 15 days to reach equilibrium
+with the large scale forcing \cite[Figure~4,][]{GMK95}. 
+Figure~\ref{fig:cem_snapshot} shows the snapshot of total condensate
+mixing ratio \qc\ at the end of day one.
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=\hsize]{/data/zender/fgr/phd/cem_snapshot.eps}
+\end{center}
+\caption[Snapshot of condensed water mixing ratio \qc\ at the 
+end of day~1 of the CEM simulation]{Snapshot of condensed water mixing
+ratio \qc\ (\gxkg) at the end of day~1 of the CEM
+simulation.\label{fig:cem_snapshot}} 
+\end{figure*}
+The figure indicates two convective cores located near 50~km and 350~km
+with extensive upper tropospheric cloud cover.  
+The time-averaged (days 4--24) and domain-averaged concentrations for
+liquid water, ice water, and total condensed water are shown in
+Figure~\ref{fig:cem_fice}. 
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/cem_fice.eps}
+\end{center}
+\caption[Time- and domain-average ice, liquid, and
+total condensate from the 24 day CEM simulation]{
+Time- and domain-average ice (dotted), liquid (dashed), and total
+(solid) condensate (\gxmS) from the 24 day CEM simulation. 
+Horizontal arrows indicate the 500~mb level.\label{fig:cem_fice}}    
+\end{figure}
+Above 500~mb, the cloud water is dominated by ice,  with ice
+concentrations between 0.1 and 0.14~\gxmC.
+Note that the model predicts a very sharp transition between liquid and
+ice phase.
+In terms of temperature this transition occurs over only 5~\dgr K. 
+
+As discussed in the next section, we have employed the results from 
+this CEM simulation to develop a prognostic scheme for anvil cloud. 
+The advantage of using this model is it provides a self-consistent and
+comprehensive data base for testing and developing  parameterizations
+for the GCM.  
+However, we recognize the CEM model should itself be validated with
+observational data. 
+We hope these data will become available in the not too distant future.
+
+\section{Parameterization of Ice Condensate Resulting from Convection}\label{sec:anv}
+
+\subsection{Source Processes Deduced from the CEM Dataset}
+
+A number of dynamic and thermodynamic fields were considered as
+proxies for the generation of anvil ice water. 
+Time series of the mean convective (cumulus) mass flux, relative
+humidity, cloud amount (fraction), and ice water content were
+compared to the time tendency of total column ice water path, \IWPdot.
+\cite{XuK91} concluded convective mass flux $M$ best predicts
+tropical convective cloud amount and the IWC of individual anvil
+layers.  
+Our analyses indicate $M$ also best predicts \IWPdot.
+This conclusion is widely applicable to GCMs because many, if not
+most, cumulus convection parameterizations predict $M$
+\cite[e.g.,][]{ArS74,Tie93,ZhM952}. 
+We restrict the present study to the actual parameterization of
+\IWPdot\ in terms of $M$.
+In the context of the CEM, $M$ is defined to be the horizontally
+averaged vertical density flux from all grid cells which exceed a
+critical updraft ($w > \wc = 1$~\mxs) and a critical condensate amount
+($\qc > \qcc = .05$~\gxkg).
+The optimal choice of \wc\ and \qcc\ depends on the GCM convective
+parameterization, see Section~\ref{sec:gcm} below.
+
+Figure~\ref{fig:cem_mc_diwpdt}\ shows the simultaneous variation of
+$M$ at 500~mb and \IWPdot\ through the first day of the simulation.  
+\begin{figure}
+\begin{center}
+\includegraphics*[height=.25\textheight]{/data/zender/fgr/phd/cem_mc_diwpdt_a.eps}\vfill
+\includegraphics*[height=.25\textheight]{/data/zender/fgr/phd/cem_mc_diwpdt_b.eps}\vfill
+\includegraphics*[height=.25\textheight]{/data/zender/fgr/phd/cem_mc_diwpdt_c.eps}\vfill
+\end{center}
+\caption[Evolution and correlation of 500~mb $M$ and \IWPdot\ during 
+the first 24 hours of the CEM simulation]{
+(a) Evolution of 500~mb $M$ (\gxmS) (solid) and \IWPdot\ (dashed)
+during the first 24 hours of the CEM simulation. 
+\IWPdot\ is expressed in \gxmSgcmt, i.e., mass change per GCM
+timestep. 
+(b) The first 2.5 hours of (a).
+(c) Linear correlation and least squares fit of 500~mb $M$ to \IWPdot\
+from (b).\label{fig:cem_mc_diwpdt}}
+\end{figure}
+The initial anvil formation, lasting about six hours, occured as a
+prescribed thermal instability triggered concentrated convective
+updrafts (cores) which detrained frozen condensate into a cirrus anvil
+above 500~mb.
+The variation of \IWPdot\ is strongest during convectively
+active periods, and subdued during the convectively quiescent period
+($400 < t < 900$~min). 
+Non-convective formation of anvil ice is also evident during the
+quiescent period. 
+Secondary circulations and weaker convection ($w < 1$~\mxs) apparently 
+result in significant deposition.
+These mesoscale processes are poorly understood, but consistent with
+budget studies \cite[]{LeH80}.
+At $t \approx 900$~min two widely separated, westward travelling
+convective systems developed and maintained distinct anvils.
+Deep convective activity similar to $900 < t < 1300$~min occurred
+approximately daily and maintained extensive anvil coverage for the
+remaining three weeks.
+
+In order to isolate the processes controlling ice generation
+from destruction we focused on the initial hours of anvil formation,
+when a single convective tower dominated the mass budget of the entire
+domain. 
+Figures~\ref{fig:cem_mc_diwpdt}b and \ref{fig:cem_mc_diwpdt}c show
+initial anvil formation is attributable to the strength of $M$ near
+the freezing level. 
+We define \pc\ as the pressure $p$ at which $M$ most strongly
+correlates with \IWPdot. 
+Similar analyses (not shown) which varied $p$ from 750 to 250~mb,
+confirmed $\pc \approx 500$~mb (roughly 50~mb above the tropical
+freezing level).
+Deep convection was perennial in the three week simulation but 
+$\Mc \equiv M(\pc)$ never exceeded 80~\gxmSs.
+This adds confidence the correlation between \Mc\ and \IWPdot\ in
+Figure~\ref{fig:cem_mc_diwpdt}c is robust over the realizable range of
+convective intensities.
+On this basis we adopted \Mc\ as the fundamental predictor of anvil
+ice generation by convective processes.   
+This is implemented in ANV as the term $c_1\Mc$ in forecast
+equation (\ref{eqn:qi_cnv}) for \qi (shown below).
+Ice generated by convection may be augmented by stratiform condensate
+(detailed in Section~\ref{sec:srcm}) in non-convecting layers.
+
+The current ANV implementation apportions new IWP ($c_1\Mc\Delta t$)
+evenly among all convecting layers where $T < 0~^\circ$C.
+Experimental versions of ANV, employing the convection scheme of
+\cite{Hac94}, apportioned new IWP weighted by local $M$, so that
+IWP was distributed nonuniformly.
+This method tended to overpredict \qi\ at near freezing level at the
+expense of too little \qi\ in the upper levels of anvils.
+%Figures~\ref{cem_snapshot} and \ref{cem_fice} show that anvil ice
+%appears to peak well above the freezing level.
+Other methods of distributing IWP nonuniformly in the vertical are
+expected to become more practical as data from field observations,
+especially in the tropics, accumulates.
+For example, new IWP could be vertically partitioned based on observed
+IWC profiles.
+
+\subsection{Sink Processes Deduced from the CEM Dataset and
+Observations} 
+
+A forecast equation for \qi\ requires adequate representation of ice 
+removal processes to balance the convective detrainment.
+We divide sink processes into three terms: precipitation, sublimation,
+and sublimation of precipitation. 
+Isolating the specific processes causing anvil decay in the CEM
+simulation was difficult due to persistent convection and secondary
+circulations in the domain (Figure~\ref{fig:cem_mc_diwpdt}a). 
+Nevertheless, regressions of relative humidity, saturation deficit,
+cloud amount, and IWC against \IWPdot\ and \IWCdot\ were performed
+to identify the most promising proxies for anvil decay. 
+
+Precipitation (including virga and mesoscale downdrafts) is the 
+strongest sink process in anvils \cite[]{LeH80,GaJ91}. 
+Cloud amount at 500~mb (determined using the method of \cite{SLT94})
+was clearly related to \IWPdot\ throughout the convectively quiescent
+period.
+Despite this, cloud amount was discarded as a proxy for precipitation 
+because it is difficult to define consistently from CEM to GCM. 
+There are three advantages meriting \IWC\ as the chief predictor for
+the rate of precipitation: 
+First, \cite{Hey77} found the precipitation rate in deep continental
+ice cloud was proportional to $\IWC^{1.16}$.
+Second, \IWC\ often nicely (anti-)correlated with \IWCdot\ in the CEM
+(correlation was often enhanced by letting \IWCdot\ lag \IWC\ by
+40--60~min).
+However, no useful rate coefficient could be isolated because the
+archived data lacked necessary fields.
+Third, \IWC\ and precipitation rate are independent of the horizontal 
+extent of a homogeneous anvil; thus a rate coefficient derived from a
+SRCM applies to a GCM. 
+On this basis ANV converts ice to precipitation (snow) at a rate
+proportional to anvil mass, $c_3$\qi.  
+The value of the free parameter $c_3^{-1}$, the $e$-folding time for
+ice removal due to precipitation, is discussed in
+Section~\ref{sec:srcm} below.   
+Currently, precipitation in ANV instantly falls through the column.
+\cite{Smi90} describes a simple method for implementing realistic 
+fall-speeds, which can significantly change the amount of ice in a GCM
+\cite[]{SeM93}. 
+A Kessler-style formulation sublimes precipitation (virga)
+\cite[e.g.,][]{Sun88}.
+
+Anvil decay through local sublimation includes the effects of
+entrainment of dry air into cloudy, and sub-gridscale distributions
+of cloudiness and subsaturated air.
+Neither the ice saturation deficit ($\qvi - \qv$) nor the relative
+humidity (\RH) correlated with \IWCdot\ after the upper troposphere
+equilibrated to $\RH \sim 100\%$ \cite[]{GMK95}.
+Rather than resorting to a sub-gridscale model of \qvi\ distribution
+(i.e., cloud fraction), we take a semi-empirical approach like
+\cite{Don93}. 
+Following \cite{LeH80}, many studies have inverted observations
+of tropical and continental convective systems to infer the spatially
+and temporally averaged moisture balance between the convective and
+stratiform regions.
+\cite{GaJ91}, in their Table~2, summarize the ratio between mesoscale
+(anvil) evaporation ($E_{me}$) and precipitation ($R_m$) from five
+such studies. 
+The average $E_{me}/R_m$ in tropical and continental systems is .22
+and .28, respectively.
+On this basis ANV assumes that the ratio of anvil sublimation to
+precipitation is  $c_2/c_3 = .25$ in every layer and timestep.
+
+\subsection{Prognostic Thermodynamic Equations of ANV}
+
+Figure~\ref{fig:anv_concept} shows a conceptual model of the ice
+budget in ANV.  
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/home/zender/anv/anv_concept.eps}
+\end{center}
+\caption[Conceptual model of the ice budget in ANV]{
+Conceptual model of the ice budget in ANV. 
+Free parameters $c_1$--$c_5$ and \pc\ are defined and discussed in
+Sections~\ref{sec:anv}--\ref{sec:srcm} and used in 
+equations
+(\ref{eqn:qi_cnv}--\ref{eqn:qi_stb}).\label{fig:anv_concept}}   
+\end{figure}
+For a grid cell of density $\rho$,
+thickness $\Delta z$, ice mixing ratio \qi, vapor mixing
+ratio \qv, temperature $T$, ice saturation mixing ratio \qvi,
+precipitation (snow) flux \Psnow, and large scale wind field 
+$\vec u$, the thermodynamic couplings that define ANV are:
+\begin{eqnarray}
+\label{eqn:qi_cnv}
+{D\qi \over Dt} & 
+= & 
+{c_1 \Mc \over \rho \Delta Z} - 
+c_2 \qi - 
+c_3 \qi \\
+\label{eqn:qv}
+{D\qv \over Dt} &
+= & 
+-{c_1 \Mc \over \rho \Delta Z} + 
+c_2 \qi + 
+c_4 \Bigl(1 - {\qi \over
+\qvi}\Bigr)\Psnow^{1/2} \\
+\label{eqn:t}
+{DT \over Dt} &
+= &
+{\Lvi \over \cp}\Biggl[
+{c_1 \Mc \over \rho \Delta Z} - 
+c_2 \qi - 
+c_4 \Bigl(1 - {\qi \over \qvi}\Bigr)\Psnow^{1/2}
+\Biggr]
+\end{eqnarray}
+where $\Delta Z$ is the thickness of the convecting portion of the
+column in which $T < 0~^\circ$C, \Lvi\ is the latent heat of
+sublimation, and \cp\ is the specific heat of air at constant pressure.
+The material derivatives on the LHS of
+(\ref{eqn:qi_cnv}--\ref{eqn:t}) account for advection by $\vec u$. 
+The first term on the RHS of (\ref{eqn:qi_cnv}) relates the generation
+of total column ice to \Mc.
+The second term represents local sublimation of the anvil due to
+sub-gridscale entrainment and subsaturation.
+The $c_3$ term in (\ref{eqn:qi_cnv}) converts ice to precipitation.
+The $c_4$ term in (\ref{eqn:qv}) and (\ref{eqn:t}) acts to sublime
+precipitation.
+Terms not involving ice have been omitted from the RHS of
+(\ref{eqn:qv}) and (\ref{eqn:t}).
+Note that the detraining anvil completely covers a gridcell, i.e.,
+cloud fraction is 1.
+Table~\ref{tbl:anv_free_parm} summarizes all the parameters used by ANV.
+%\begin{planotable}{cllr}
+%% See CZPIII p. 89,90,136
+%%\tablewidth{\hsize} % works for normal tables
+%\tablewidth{41pc} % works for full width tables
+%\tablecaption{Free parameters in ANV\label{tbl:anv_free_parm}}
+%\tablehead{\colhead{} & \colhead{Meaning} & \colhead{Suggested Value} & \colhead{Source}}
+%\tablenotetext{\textit{a}}{Average of values from Table~2, \cite{GaJ91}.}
+%\tablenotetext{\textit{b}}{\cite{Sun88}. Value from NCAR CCM3.}
+%\startdata
+%$c_1$ & Relates \Mc\ to mesoscale detrainment & $2.4 \times 10^{-3}$ & CEM, Figure~\ref{fig:cem_mc_diwpdt}c \nl
+%$c_2$ & Anvil sublimation rate & $.25c_3$ s$^{-1}$ & Empirical\tablenotemark{\textit{a}} \nl
+%$c_3$ & Precipitation rate & $2.8 \times 10^{-4}$ s$^{-1}$ & SRCM, Figure~\ref{fig:srcm_decay_ss}\nl
+%$c_4$ & Precipitation sublimation rate & $1 \times 10^{-5}$ m$^{-2}$~kg$^{1/2}$~s$^{-1/2}$ & Empirical\tablenotemark{\textit{b}} \nl
+%$c_5$ & Relates stratiform \qidot\ to $w$, $T$ & -1.15 & SRCM, Figures~\ref{fig:srcm_w_ss},\ref{fig:srcm_t_ss} \nl
+%\wc\ & Threshold $w$ for convection in CEM & 1 \mxs & CEM, GCM, Figure~\ref{fig:mc_hist} \nl
+%\qcc\ & Threshold \qc\ for convection in CEM & .05~\gxkg & CEM, Empirical \nl
+%\pc\ & Level to evaluate $M$ for (\ref{eqn:qi_cnv}--\ref{eqn:t}) & 500 mb & CEM, Figure~\ref{fig:cem_mc_diwpdt}b \nl
+%\end{planotable}
+%\begin{minipage}[t]{\hsize}
+%\begin{sidewaystable}
+%\begin{table*}
+\ifphdcsz{\begin{sidewaystable}}{\begin{table*}}
+\begin{center}
+%\caption{Free parameters in ANV\label{tbl:anv_free_parm}}
+\vspace{5pt}
+\begin{tabularx}{7in}{cllr}
+\hline
+& & & \\[-5pt]
+& Meaning & Suggested Value & Source \\[4pt]
+\hline
+& & & \\[-6pt]
+$c_1$ & Relates \Mc\ to mesoscale detrainment & $2.4 \times 10^{-3}$ & CEM, Figure~\ref{fig:cem_mc_diwpdt}c \\
+%$c_2$ & Anvil sublimation rate & $.25c_3$ s$^{-1}$ & Empirical \\
+% XXX: reinsert footnotes for preprints
+$c_2$ & Anvil sublimation rate & $.25c_3$ s$^{-1}$ &
+Empirical\ifphdcsz{\footnote{Average of values from Table~2,
+\cite{GaJ91}.}}{\tablenotemark{\textit{a}}} \\
+%$c_2$ & Anvil sublimation rate & $.25c_3$ s$^{-1}$ &
+%Empirical\footnote{Average of values from Table~2, \cite{GaJ91}.} \\ 
+$c_3$ & Precipitation rate & $2.8 \times 10^{-4}$ s$^{-1}$ & SRCM, Figure~\ref{fig:srcm_decay_ss} \\
+%$c_4$ & Precipitation sublimation rate & $1 \times 10^{-5}$
+%m~kg$^{-1/2}$~s$^{-1/2}$ & Empirical \\
+$c_4$ & Precipitation sublimation rate & $1 \times 10^{-5}$
+m~kg$^{-1/2}$~s$^{-1/2}$ &
+Empirical\ifphdcsz{\footnote{\cite{Sun88}. Value from NCAR CCM3
+\cite[]{KBB96}.}}{\tablenotemark{\textit{b}}} \\  
+$c_5$ & Relates stratiform \qidot\ to $w$, $T$ & $-1.15$ & SRCM, Figures~\ref{fig:srcm_w_ss},\ref{fig:srcm_t_ss} \\
+\wc\ & Threshold $w$ for convection in CEM & 1 \mxs & CEM, GCM, Figure~\ref{fig:mc_hist} \\
+\qcc\ & Threshold \qc\ for convection in CEM & .05~\gxkg & CEM, Empirical \\
+\pc\ & Level to evaluate $M$ for (\ref{eqn:qi_cnv}--\ref{eqn:t}) & 500 mb & CEM, Figure~\ref{fig:cem_mc_diwpdt}b \\[4pt]
+\hline
+& & & \\[-8pt]
+\end{tabularx}
+\ifphdcsz{}{\tablenotetext{\textit{a}}{Average of values from Table~2, \cite{GaJ91}.}}
+\ifphdcsz{}{\tablenotetext{\textit{b}}{\cite{Sun88}. Value from NCAR CCM3
+\cite[]{KBB96}.}}
+\end{center}
+\caption{Free parameters in ANV\label{tbl:anv_free_parm}}
+\ifphdcsz{\end{sidewaystable}}{\end{table*}}
+%\end{minipage}
+%\end{table*}
+%\end{sidewaystable}
+
+\section{Meshing ANV with a GCM}\label{sec:gcm}
+
+Meshing an anvil parameterization from a CEM into a GCM only makes
+sense if an equivalence can be demonstrated between the predictive
+parameters in the respective models.
+Since \Mc\ is the sole source of convectively generated ice in ANV
+(\ref{eqn:qi_cnv}), the CEM $M$ profile should match the GCM $M$
+profile to ensure ANV complements, not co-opts, the GCM convection
+scheme.
+The $M$ predicted by a GCM moist convection scheme sums the mass flux
+from all sub-gridscale (non-resolved) convective elements (clouds).
+Convection in the GCM context includes all unresolved mass flux
+generated by moist adiabatic instabilities.
+However, the continuous physical processes in a CEM do not distinguish 
+between convection, mesoscale eddies, and large scale ascent.
+As mentioned above, ANV employs a threshold updraft \wc\
+and threshold condensate mixing ratio \qcc\ to select GCM-type
+convection in the CEM; only gridcells exceeding these thresholds
+contribute to CEM $M$.
+The main criterion for setting these thresholds is to obtain
+consistent $M$ between models (and, hopefully, observations) so that
+implementations of (\ref{eqn:qi_cnv}--\ref{eqn:t}) in the GCM will
+behave predictably.
+
+Intercomparing the convective behavior of a CEM to a GCM raises a 
+number of questions.
+How can the influence of differing boundary conditions between the CEM 
+(periodic, fixed SST) and a GCM region (open, prescribed SST) be
+minimized? 
+How might the internal variance of the models (their sensitivity to
+initial conditions) skew the analyses?
+The models run at physically incommensurate temporal and spatial
+scales; is it feasible to use the instantaneous GCM \Mc\ in
+(\ref{eqn:qi_cnv}--\ref{eqn:t})?
+We attempt to address these issues in three ways.
+First, we isolate a common synoptic regime to intercompare.
+Second, we look for systematic convection differences in averages over
+many convective system lifetimes.
+Third, we intercompare frequency distributions of the instantaneous
+\Mc\ used in (\ref{eqn:qi_cnv}--\ref{eqn:t}).
+
+\subsection{GCM Control Simulation}
+
+We employ a new version of the NCAR CCM2 (hereafter the GCM) to 
+demonstrate the technique of mapping (\ref{eqn:qi_cnv}--\ref{eqn:t})
+to a GCM in a physically consistent manner. 
+The GCM contains four improvements over the standard CCM2
+\cite[]{HBB93} in the area of cloud physics:
+Ice phase condensate is treated with the radiative scheme of
+\cite[]{EbC92}.
+A continental/maritime distinction is made in the effective radius of
+cloud droplets \cite[]{Kie942}.
+LWP is based on column precipitable water rather than prescribed by
+latitude. 
+Large scale precipitation is able to evaporate between the cloud and
+surface.
+
+Steady conditions from the Marshall Islands region studied by
+\cite{YEC73} were used to force the CEM simulation
+(Figure~\ref{fig:cem_forcing}). 
+July GCM simulations best matched the strong low-level convergence and
+intense precipitation of the CEM simulation in a $10\dgr \times
+15\dgr$ region centered at 125~\dgr E, 15~\dgr N
+(in the Philippine Sea, 40~\dgr W of the Marshalls). 
+This control region consists of 19 maritime and one land gridpoint
+at T42 resolution ($\sim$~2.8\dgr).
+The GCM simulation was run for 14~days and instantaneous data were
+archived every timestep ($\Delta t = 20$~min). 
+%Two filters were applied to the GCM dataset:
+%Second, gridpoints not experiencing intense convective precipitation
+%($P > 15$~\mmxday) were excluded (XXX replot figure~\ref{fig:precip}
+%or disqualify it from this statement).
+%This excluded points atypical of the CEM forcing conditions.
+Land-locked precipitation ($10\%$ of the regional total) was removed 
+by excising the land gridpoint (the CEM simulation was also entirely
+maritime). 
+Figure~\ref{fig:precip} compares the resulting instantaneous,
+domain-averaged precipitation timeseries between CEM and GCM.
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/precip.eps}
+\end{center}
+\caption[Domain-averaged precipitation timeseries from tropical
+simulations]{
+Domain-averaged precipitation timeseries (\mmxday) from tropical
+simulations.   
+CEM instantaneous hourly values from days 4--24 (solid) and GCM
+instantaneous values every 20~m for 14 days (dashed). 
+Offset along the abscissa is arbitrary.\label{fig:precip}}
+\end{figure}
+The mean precipitation rates (and associated latent heating) are
+similar: 14.4 and 17.0~\mmxday, respectively.
+However, the strong diurnal component in the CEM contrasts markedly
+with the low-frequency synoptic events in the GCM.
+The significant difference in the spectral characteristics of the
+latent heating raised doubts that the $M$ profiles would be
+comparable. 
+
+\subsection{Threshold Convective Velocity}
+
+Intercomparing temporally and spatially averaged $M$ profiles
+reduces, to the extent possible, model differences due to internal
+variability.  
+Figure~\ref{fig:mc_profile} compares the vertical structure of $M$ in
+the GCM control region, the CEM simulation, and the Marshall Islands
+as inferred by \cite{YEC73}.  
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/mc_profile.eps}
+\end{center}
+\caption[Time- and domain-average convective mass flux $M$ over the
+Marshall Islands region from observations, GCM, and CEM]{
+Time- and domain-average convective mass flux $M$ (\mbxh) over the
+Marshall Islands region from observations (solid), GCM (dotted), and  
+CEM (dashed).
+Updrafts are defined to be positive.
+Observations are taken from \cite{YEC73},
+Figure~13.\label{fig:mc_profile}}
+\end{figure}
+Observed $M$ peaked at the surface with a secondary maxima near
+250~mb, indicative of anvil circulations.
+Strong low level convergence and shear cause $M$ to peak near the
+surface in the Yanai and GCM $M$ profiles. 
+In contrast, the closed domain forces CEM $M$ to zero at the surface 
+(cf.\ Figure~18 of \cite{SLT94}). 
+The GCM and CEM reproduce observed $M$ from the boundary layer to
+500 and 600~mb, respectively. 
+The weak GCM $M$ in the upper troposphere is a known bias of the
+convection scheme, see \cite{MRP95}.
+CEM $M$ is sensitive to \wc\ and \qcc\ (all figures in this study use
+$\wc = 1$~\mxs\ and $\qcc = .05$~\gxkg). 
+Decreasing \qcc\ from .1 to 0~\gxkg\ nearly doubled $M$ beneath
+500~mb. 
+Above 500~mb however, $M$ is relatively insensitive to $\qcc <
+.1$~\gxkg\ because the CEM simulation produced persistent anvil
+coverage in this region (Figure~\ref{fig:cem_fice}). 
+The modeled 800--200~mb $M$ gradient is too strong.
+Halving \wc\ from 1 to .5~\mxs\ reduced the CEM gradient from 2.5:1 to 
+1.25:1, in agreement with Yanai.
+The relaxed gradient was caused by including a strong, perhaps
+radiatively driven, circulation ($.5 < w < 1$~\mxs) near anvil top.
+
+The radiative and dynamical feedbacks from prognosed cloud are
+nonlinear. 
+Therefore it is important that the temporal distribution of GCM $M$  
+match the distribution of CEM $M$ used to derive
+(\ref{eqn:qi_cnv}--\ref{eqn:t}) and to pick $c_1$.  
+Figure~\ref{fig:mc_hist} shows histograms of the instantaneous,
+domain-average $M$ from the CEM and GCM.
+\begin{figure}
+\begin{center}
+\includegraphics*[height=.2\textheight]{/data/zender/fgr/phd/cem_mc_hist_500mb.eps}\vfill
+\includegraphics*[height=.2\textheight]{/data/zender/fgr/phd/ccm_mc_hist_500mb.eps}\vfill
+\includegraphics*[height=.2\textheight]{/data/zender/fgr/phd/cem_mc_hist_200mb.eps}\vfill
+\includegraphics*[height=.2\textheight]{/data/zender/fgr/phd/ccm_mc_hist_200mb.eps}\vfill
+\end{center}
+\caption[Comparison of frequency distribution of instantaneous $M$ 
+between CEM and GCM]{
+Comparison of frequency distribution of instantaneous $M$ (\gxmSs)
+between CEM and GCM. 
+The left hand axes indicate the percentage of the data contained in
+each bin.
+The dashed lines and right hand axes indicate the percentage of the
+data with $M$ less than the abscissa.
+(a) CEM $\sim$~500~mb. (b) GCM 500~mb. (c) CEM $\sim$~200~mb. (d) GCM
+200~mb. 
+\label{fig:mc_hist}}
+\end{figure}
+The frequency distributions of $M$ in the two models were most
+similar from 500--200~mb using $w_{\mathrm{c}} = 1$~\mxs.
+Relaxing \wc\ increases the mean and mode of \Mc.
+Typically only 1--2~\% of the (2-dimensional) CEM domain satisfied $w 
+> 1$~\mxs.
+This fraction is at the low end of satellite-derived estimates
+of the areal extent of deep convective cloudiness \cite[]{FDR90}. 
+
+The overall agreement in the simulated $M$ profiles is somewhat
+unexpected, considering the differences between the models and their
+precipitation timeseries (Figure~\ref{fig:precip}).
+The agreement in mean $M$ (Figure~\ref{fig:mc_profile}) partially
+results from tuning \qcc\ and \wc, but the underlying distributions of
+$M$ (Figure~\ref{fig:mc_hist}) were already similar.
+Both \qcc\ and \wc\ depend on the GCM convection scheme
+with which ANV is to be used, and possibly on the synoptic regime. 
+
+\section{Stratiform Ice Cloud Generation}\label{sec:srcm}
+
+Orographically forced uplift, warm frontal overrunning, and large
+scale ascent and cooling can form ice cloud in the absence of any
+parameterized convection; we denote such ice as stratiform.
+The GCM-resolved thermodynamic fields that control the development
+of stratiform (stable) ice cloud are temperature $T$, humidity \qv,
+and updraft $w$ \cite[]{HeD90}.
+As with convective condensation, the temporal and spatial scales of
+stratiform condensation differ vastly from the scales on which GCMs
+predict the thermodynamic fields. 
+GCM schemes for diagnosis and prognosis of stratiform ice span a
+corresponding range of complexity:
+\cite{HeP84} empirically relate \qi\ to $w$ and $T$.
+\cite{Sun88} predicts \qi\ from highly parameterized physical
+processes which assume exact saturation in the cloudy fraction of a
+gridbox.
+\cite{HeD90} diagnose \qi\ by trajectory integrations of the
+thermodynamics governing single parcel behavior.
+\cite{Smi90} predicts \qc\ by assuming a functional form for the
+sub-gridscale distribution conserved quantities.
+\cite{FeH92} diagnose \qi\ from fits to a detailed microphysical
+scheme to determine number concentration, effective radius, and \qc\
+for liquid (or spherical ice crystal) cloud.
+Experience with the above methods suggests detailed sub-gridscale
+modelling may not be necessary to predict free-atmosphere stratiform
+condensation at GCM resolution. 
+Our strategy for modelling stratiform condensation is to replace the
+mass flux-based creation process from (\ref{eqn:qi_cnv}) with a
+quiescent deposition process, but to keep the same destruction and
+removal processes.
+
+\subsection{Closure and Microphysical Assumptions}
+
+Parameterization of stratiform condensation in large scale models
+involves closure assumptions and microphysical assumptions.
+Allowing cloud formation in subsaturated gridcells requires a closure 
+assumption to relate the resolved thermodynamic fields to the
+sub-gridscale distribution of condensate.
+Stratiform cloud fraction $A_s$ is naturally suited to map column (and
+parcel) models of stratiform condensation, which is horizontally homogeneous,
+to specified horizontal fractions of a gridcell.
+Numerical studies by \cite{XuK91} suggest relative humidity is best
+suited to diagnose $A_s$.
+At the same time, diagnoses of $A_s$ based on local or synoptic
+atmospheric state continually improve as field, model, and satellite 
+data accumulate.
+To accommodate future advances in $A_s$ diagnosis, and to maintain
+internal simplicity, ANV requires the GCM to make the closure
+assumptions for, and to specify, $A_s$. 
+The rest of this section describes the microphysical assumptions 
+we make to model condensate formation and removal processes. 
+
+A supersaturated vapor field quickly equilibrates by deposition,
+assuming adequate ice freezing nuclei (IFN) are present.
+The IFN assumption is justified in most cases for $T < -15$~\dgr C  
+\cite[]{HeD90}.
+Since supercooled droplets should be represented by the liquid
+component in a full GCM cloud scheme, ANV assumes all vapor condensed
+at $T < 0$~\dgr C to form ice.
+Complications arise from droplet curvature (Kelvin) effects, water
+inhomogeneity (solute) effects and radiation (especially at cloud base
+and top).
+These processes slightly change the equilibrium vapor pressure over
+crystals and lead to size-based competition for vapor among ice
+crystals \cite[]{RaD86}.
+Bulk (non size-resolving) condensate models such as ANV may ignore
+vapor competition so long as the timescale for the vapor field to
+equilibrate with ice crystals through diffusional processes is much
+faster than a typical GCM timestep ($\Delta t \sim 20$~min). 
+
+The balance between \qi\ and \qv\ in a fixed, horizontally
+homogeneous, exactly saturated layer in an updraft $w$ is: 
+\begin{equation}
+{\partial \qi \over \partial t} = 
+-{\partial \qvi \over \partial t} 
+-w{\partial \qvi \over \partial z} 
+-w{\partial \qi \over \partial z}
+- c_2\qi 
+- c_3\qi 
+\label{eqn:qidot_1}
+\end{equation}
+The first two terms on the RHS of (\ref{eqn:qidot_1}) describe the
+changes in vapor available for deposition in large-scale ascent due
+to local temperature change (e.g., adiabatic or radiative cooling of
+the layer), and convergence of supersaturated vapor, respectively.
+The difficulty of separating the contributions of $w$ and $T$ to
+deposition in an Eulerian framework is apparent in these two terms: 
+vapor flux and adiabatic cooling are linear in $w$, but \qvi\ is 
+exponential in $T$ due to the Clausius-Clapeyron relationship.
+The next term is the large scale convergence of \qi.
+The remaining terms are local sublimation and precipitation,
+parameterized in terms of \qi\ from (\ref{eqn:qi_cnv}).
+The behavior of \qidot\ in the limit of resolved and
+saturated large-scale ascent (\ref{eqn:qidot_1}) guides
+our parameterization of sub-gridscale effects. 
+
+\subsection{Size Resolving Column Model (SRCM) Simulations}
+
+Sensitivity studies were performed with the SRCM of \cite{ZeK94} in
+order to isolate the effects of updraft speed $w$ from temperature
+$T$ in (\ref{eqn:qidot_1}).
+The SRCM explicitly represents nucleation, deposition, sublimation,
+sedimentation, and radiation, but does not attempt represent
+diffusion, convection, collision, liquid processes, or entrainment.   
+The SRCM used 50 geometrically spaced mass bins for ice particles
+corresponding to hexagonal column lengths 3--2000~\um.  
+The time step is 3~s for microphysics and transport, 1~min for
+radiation.
+The thermodynamic profile was a standard 35-level tropical
+atmospheric profile from ICRCCM \cite[]{EEF91} with an embedded
+130-level ($\Delta z = 100$~m) computational grid from 5--18~km.
+The ice crystal distribution from a decaying tropical anvil
+\cite[]{KKW93} was replicated to form a 2~km thick ($\sim$ one
+GCM layer) homogeneous anvil with initial $\IWP \approx 73$~\gxmS. 
+Most uncertain in the Knollenberg distribution is the abundance of
+small ice crystals (which contribute little to cloud mass). 
+The following sensitivity studies are presented in terms of IWP
+rather than \qi\ ($= \IWP/(\rho \Delta z)$) for direct
+comparison to Figure~\ref{fig:cem_mc_diwpdt}, and to simplify
+deductions about the radiative import of the sensitivities.
+
+\subsection{Timescale for Precipitation}
+
+As mentioned in Section~\ref{sec:anv}, the precipitation rate of
+cirrus is taken to be proportional to cloud mass itself.
+The proportionality constant, $c_3$ in (\ref{eqn:qi_cnv}), is the
+inverse of the $e$-folding timescale $\tau$ for sedimentation of ice
+crystals in the cloud.
+Modelling the sedimentation of a tropical anvil in the SRCM provides an
+understanding of the range of $\tau$ in the atmosphere.
+Here we use the term \textit{sedimentation} rather than
+\textit{precipitation} to emphasize the SRCM does not account for
+collection processes.
+This study monitored the IWP change in the initial cloud through
+a six hour integration in still, saturated air.
+Figure~\ref{fig:srcm_decay_ss} shows the sedimentation of the same
+anvil from three different cloud base heights.
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/srcm_decay_ss.eps}
+\end{center}
+\caption[Time variation of IWP (\gxmS) for the same initial 2~km
+thick anvil at three different cloud base heights]{
+Time variation of IWP (\gxmS) for the same initial 2~km
+thick anvil at three different cloud base heights: 5~km (dotted),
+10~km (dashed), and 15~km (dot-dashed).
+Solid curves represent pure exponential decay with timescale $\tau =
+.5$~hr (lower) and 2~hr (upper),
+respectively.\label{fig:srcm_decay_ss}}    
+\end{figure}
+The two solid curves represent purely exponential decay of the initial
+anvil, $\IWP(t) = \IWP_0 e^{-t/\tau}$, with timescales $\tau = .5$
+and 2~hr. 
+The SRCM employs terminal velocities from \cite{Hey72}, which increase 
+with height and crystal length.
+Sedimentation is very efficient for the first hour, as the large
+crystals ($L > 200$~\um) quickly fall from the anvil.
+Differential sedimentation causes the separation of the dashed
+curves before $t = 2$~hr, and leaves more vapor available for
+deposition to small crystals afterwards.
+The remaining mass descends slowly ($< 30$~\cmxs) in smaller crystals. 
+Figure~\ref{fig:srcm_decay_ss} shows that 
+Near GCM resolution in the free troposphere ($\Delta z < 2$~km), 
+figure~\ref{fig:srcm_decay_ss} shows $\tau < .5$~hr overestimates 
+sedimentation for the entire life of the anvil while $\tau >
+2$~hr underestimates sedimentation of large crystals, and hence
+cloud mass.
+A compromise value of $\tau = c_3^{-1} = 1$~hr is recommended.
+This should be contrasted with observed ``typical'' anvil lifetimes of
+$\sim 6$~hr over Panama \cite[]{ALV88}. 
+Of course observations implicitly include condensate resupply
+through convective detrainment, mesoscale generation, and cloud top 
+cooling. 
+
+\subsection{Dependence of Deposition Rate on Updraft}
+
+This sensitivity study isolates the effect of updraft on stratiform
+condensation by examining the growth of the initial cloud in an
+atmosphere exactly saturated with respect to ice. 
+Ice crystals were not allowed to sediment.
+Figure~\ref{fig:srcm_w_ss}a shows the dependence of \IWPdot\ on the
+ascent speed $w$ of vapor for the same initial anvil at three
+different cloud base heights.  
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/srcm_w_ss.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/srcm_w_ss_c5.eps}\vfill
+\end{center}
+\caption[Sensitivity of deposition rate \IWPdot\ and $c_5$ to updraft
+$w$ in a 2~km thick anvil in a saturated column]{ 
+Sensitivity of (a) deposition rate \IWPdot\ and (b) $c_5$ to updraft 
+$w$ (\cmxs) in a 2~km thick anvil in a saturated column.
+\IWPdot\ is expressed in \gxmSgcmt, i.e., mass change per GCM
+timestep. 
+Results are shown for three different cloud base heights: 5~km
+(solid), 10~km (dotted), and 15~km (dashed).\label{fig:srcm_w_ss}} 
+\end{figure}
+\IWPdot\ is computed from the difference between the final and
+initial (73~\gxmS) IWP from one hour integrations of the SRCM. 
+\IWPdot\ is linear with $w$ for all cloud heights, and a nonlinear
+dependence on cloud height is evident.
+Most of the difference ($> 90\%$) in ice deposition rates stems
+from the exponential decrease in $-\partial \qvi/\partial z$ in
+(\ref{eqn:qidot_1}) from 1.4 to .02~\gxkgkm\ between 5~and
+15~km. 
+The ambient density decrease from .63 to .24~\kgxmC\ between 5 and
+15~km accounts for the remaining factor of $\sim 3$ difference in the
+deposition rates. 
+The \IWPdot\ shown is an upper bound because the initial atmosphere
+was saturated and all removal processes were disabled. 
+
+Evidently a simple linear dependence of \IWPdot\ on $w$ will not
+capture the effects of $T$.
+Instead, we define a single parameter approximation that includes both
+$T$ and $w$ effects.
+We implicitly define the dimensionless empirical parameter $c_5$ based
+on the second term on the RHS of (\ref{eqn:qidot_1}):
+\begin{equation}
+{\partial \qi \over \partial t} \equiv 
+c_5 w {\partial \qvi \over \partial z} 
+\label{eqn:c5}
+\end{equation}
+Thus $c_5$ expresses the ice formation tendency as a function of
+supersaturated vapor convergence alone.
+Note that \dqvidz\ is analytically tractable; it depends only on $T$
+\cite[e.g.,][]{WaP86}.  
+Figure~\ref{fig:srcm_w_ss}b shows $c_5$ computed using the initial, not
+the instantaneous, $T$ profile.
+This removes the feedback of heating of the cloud environment on
+\dqvidz\ (but not on \dqidt). 
+Clearly $c_5$ is relatively constant because the linear $w$ and
+exponential $T$ dependencies are factored out. 
+
+% What causes the spread in c_5 here?
+%Lapse rates decrease with altitude, which causes advective cooling to
+%increase, so that the final temperature at 15 km has cooled more than
+%the final temperature at 5 km after an hour of updraft.
+%When you ignore this temperature feedback and compute dqvidz using
+%the initial T, you therefore overestimate the actual dqvidz felt by
+%the model (and present in dqidt) at 15 km relative to 5 km. 
+%Dividing by this artificially inflated dqvidz reduces (in magnitude)
+%c_5  at 15 km relative to 5 km.
+
+\subsection{Dependence of Deposition Rate on Temperature}
+
+This sensitivity study isolates the effect of cloud temperature on
+stratiform deposition.
+As in the updraft sensitivity study, the atmosphere is exactly
+saturated with respect to ice and sedimentation of ice crystals was
+disabled.
+Figure~\ref{fig:srcm_t_ss}a shows the dependence of \IWPdot\ on the
+mid-cloud temperature $T$.
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/srcm_t_ss.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/srcm_t_ss_c5.eps}\vfill
+\end{center}
+\caption[Sensitivity of deposition rate \IWPdot\ and $c_5$ to
+mid-cloud temperature $T$ in a 2~km thick anvil in a saturated
+column]{ 
+Sensitivity of (a) deposition rate \IWPdot\ and (b) $c_5$ to mid-cloud
+temperature $T$ in a 2~km thick anvil in a saturated column.  
+\IWPdot\ computed and scaled as in Figure~\ref{fig:srcm_w_ss}.
+Results are shown for vertical motions of 2, 4, 6, 8, and
+10~\cmxs.\label{fig:srcm_t_ss}} 
+\end{figure}
+As expected from (\ref{eqn:qidot_1}), the deposition tendency is
+exponential in $T$, while the spacing between the curves is linear in 
+$w$. 
+Exponential dependence of IWC on $T$ characterizes observations of
+cirrus formed by large scale ascent \cite[]{Hey77}.
+
+Figure~\ref{fig:srcm_t_ss}b shows the empirical parameter $c_5$ from 
+(\ref{eqn:c5}) falls in nearly the same range as the updraft
+sensitivity study (cf. Figure~\ref{fig:srcm_w_ss}b).
+Indeed, $c_5$ varies $\lesssim 20\%$ for typical upper tropospheric
+ice cloud.
+The spread in $c_5$ is dominated by variations in the lapse rate in
+the ICRCCM $T$ profile, which changes local advective cooling, and by
+the associated saturation vapor density, which determines the mass
+available for deposition. 
+When $c_5$ is computed using instantaneous $T$ (not shown),
+the advectively cooling environment reduces $|\dqvidz|$ and increases
+$!c_5|$ by $\sim 20\%$ to $-1.1 < c_5 < -1.2$.
+This effect is more pronounced at higher altitudes where tropical
+lapse rate and vapor density are smaller, but can be
+ameliorated by horizontal circulation and diabatic heating. 
+
+In summary, the slight variation of $c_5$ over a wide range of $w$ and
+$T$ is appealing for parameterization purposes.
+Therefore ANV models gridbox stratiform deposition due to large scale
+ascent as $A_s c_5 w \dqvidz$.
+We recommend $c_5 = -1.1$ for representing light ($w < 10$~\cmxs)
+ascent between 5--10~km in altitude, where a GCM stratiform ice scheme
+is most active. 
+
+The full equation for stratiform ice in ANV is
+\begin{eqnarray}
+\label{eqn:qi_stb}
+{D\qi \over Dt} & 
+= & 
+A_s c_5 w {\partial \qvi \over \partial z} -
+c_2 \qi - 
+c_3 \qi
+\end{eqnarray}
+where $A_s$ is the GCM-supplied stratiform cloud fraction.
+In non-convecting gridcells with $w > 0$, (\ref{eqn:qi_stb}) is used
+in place of  (\ref{eqn:qi_cnv}), along with (\ref{eqn:qv}) and
+(\ref{eqn:t}). 
+$A_s$ fills the role of $\partial \qvi / \partial t$ in
+(\ref{eqn:qidot_1}), to some extent, because local changes in
+temperature will presumably affect $A_s$ and thus \qidot\ through 
+(\ref{eqn:qi_stb}).
+Note (\ref{eqn:qi_stb}) does not produce ice in still air ($w = 0$).  
+In practice stable cloud fraction $A_s$ produced by many GCM
+cloud schemes is also zero in still or subsiding air.
+Set $A_s = 1$ in subsiding air to allow sublimation.
+Stratiform cloud in moist, radiative cooled regions above anvils may
+be underpredicted by ANV because (\ref{eqn:qi_stb}) lacks stability
+dependence and $w \rightarrow 0$ near the tropopause.
+As mentioned in Section~\ref{sec:anv}, the sublimation rate $c_2\qi$
+is determined (as a fraction of the precipitation rate $c_3\qi$) from
+budget studies which implicitly contain the effects of partial
+cloudiness. 
+Thus the precipitation and sublimation rates in (\ref{eqn:qi_stb}) act 
+independently of cloud fraction $A_s$, exactly as in (\ref{eqn:qi_cnv}).
+
+The stratiform cloud ANV attempts to represent in a GCM gridbox
+can be envisioned as maintained by some unknown, underlying
+distribution of sub-gridscale updrafts (and downdrafts) with 
+mean speed $w$.
+The range of $w$ in Figure~\ref{fig:srcm_w_ss}, 0--20~\cmxs, is
+approximately that reported by \cite{HeP84}.
+Large scale ascent in nonconvecting gridcells at the GCM scale is
+typically $< 5$~\cmxs.
+The sub-gridscale distribution composing $w$ could, if known (e.g.,
+a Poisson distribution with a certain variance), be convolved
+through the $c_5$ term in (\ref{eqn:c5}) to obtain a more realistic
+\qidot.
+Lacking this information, we assume the effects of sub-gridscale
+distributions of $w$ on \qidot\ are incorporated through $A_s$.
+
+\section{Discussion}\label{sec:cem_disc}
+
+We have presented the rationale for, and development of, an ice cloud
+parameterization suitable for a GCM representation of ice cloud
+based on modeled and observed behavior of tropical anvils.
+The methodology of the development is explicit parameterization of the
+physical processes of ice cloud formation and removal: detrainment of 
+convectively formed ice into a stratiform anvil, formation of ice
+through large scale ascent, sublimation, precipitation, and
+evaporation of precipitation.
+Each process was simply modeled in terms of a prognostic GCM variable
+and a single free parameter and incorporated into GCM forecast equations
+for cloud ice, water vapor, and temperature.  
+Each free parameter was determined by a sensitivity study that
+attempted to isolate the respective process.
+The exception is the parameter determining local sublimation ($c_2$);
+it was chosen to match empirical estimates of anvil contributions to
+tropical convective system hydrologic budgets. 
+
+ANV is intended to be the ice phase component of a GCM cloud scheme. 
+It can be wedded to the liquid component of a full cloud scheme by use 
+of a parameterization for the fraction of condensate that is ice.
+Many of the physical processes and assumptions underpinning ANV would 
+need only with minor modifications to be suitable for a prognostic
+liquid water scheme.
+Although we have not done so here, one could perform analogous
+single parameter sensitivity studies for \qldot\ in terms of \Mc, $w$
+and $T$.
+
+We have taken advantage of a hierarchy of models (SRCM, CEM, and GCM)
+and the empirical budget estimates because no single tool was wholly
+adequate. 
+This methodology demonstrated the feasibility of combining the results 
+from a hierarchy of models and observations into a coherent cloud
+parameterization.
+We eschewed incorporating detailed sub-gridscale models into ANV
+although we recognize such models (e.g., cloud fraction) enhance the
+internal consistency of a condensate forecast. 
+The emphasis has been on forecasting ice sequestered in mesoscale
+anvils associated with deep convection because anvils'
+combination of areal extent, longevity, and IWP produces strong
+radiative forcing.
+However, budget studies infer 25--60\% of anvil ice comes from
+mesoscale updrafts outside the convective core region
+\cite[]{LeH80,GaJ91}. 
+This ice is only implicitly parameterized by the $c_1$ term in
+(\ref{eqn:qi_cnv}) and the $c_5$ term in (\ref{eqn:qi_stb}).  
+Future studies should attempt to explicitly parameterize the ice
+formation by intra-anvil circulations, perhaps in terms of radiative
+heating gradients, stability, \qi, and $w$.
+
+% Balance preprint columns
+\ifphdcsz{}{\balance}
+
+% Appendices
+\ifphdcsz{}{\appendix}
+
+% Acknowledgements
+\ifphdcsz{\subsection{Acknowledgements}\label{sec:cem_ack}}{\acknowledgments}
+The authors wish to thank G.~Tripoli for supplying the CEM, and
+J.~Doetzl for programming support.
+CSZ gratefully acknowledges discussions with W.~Grabowski and
+J.~Petch, and guidance in cloud parameterization from P.~Rasch. 
+This work was supported in part by DOE Atmospheric Radiation
+Measurements Program grant DE-AI05-92ER61376 and by NASA
+Earth Observing System project W-17,661. 
+
+% Bibliography
+\ifphdcsz{}{\bibliographystyle{jas}}
+\ifphdcsz{}{\bibliography{/home/zender/tex/bib}}
+
+\ifphdcsz{}{\end{document}}

@@ -1,0 +1,91 @@
+# $Header: /home/zender/cvs/linux/etc/network/interfaces.elnino,v 1.14 2008-01-08 22:33:13 zender Exp $
+# Purpose: Network configuration for elnino.ess.uci.edu
+# /etc/network/interfaces -- configuration file for ifup(8), ifdown(8)
+# Usage:
+# diff ~/linux/etc/network/interfaces.elnino /etc/network/interfaces
+# sudo cp ~/linux/etc/network/interfaces.elnino /etc/network/interfaces
+# /bin/cp -f /etc/network/interfaces ~/linux/etc/network/interfaces.elnino 
+
+# Automatically configured interfaces 
+auto lo
+#auto eth0
+#auto wlan0
+auto eth1
+#auto eth2
+#auto eth3
+
+# The loopback interface
+iface lo inet loopback
+address 127.0.0.1
+netmask 255.0.0.0
+
+# Interface: eth0 wired Fast Ethernet
+
+# LGGE Wired Access
+# lgge-pc194.lgge.obs.ujf-grenoble.fr
+iface eth0 inet static
+	address 192.168.102.194
+	broadcast 192.168.102.255
+	gateway 192.168.102.254
+	netmask 255.255.255.0
+
+# UCInet Wired Access Croul Hall: elnino.ess.uci.edu
+#iface eth0 inet static
+#address 128.200.14.97
+#netmask 255.255.255.0
+#network 128.200.14.0
+#broadcast 128.200.14.255
+#gateway 128.200.14.1
+
+# UCInet Wired Access Croul Hall: snow.ess.uci.edu
+#iface eth0 inet static
+#address 128.200.24.126
+#netmask 255.255.255.0
+#network 128.200.24.0
+#broadcast 128.200.24.255
+#gateway 128.200.24.1
+
+# Interface: eth1 wireless 802.11a/b
+# UCInet Mobile Access, Cliff's Lyons network, Mangonet, Panera
+# Static IP on Harry's wired network
+#iface eth1 inet static
+#	address 192.168.1.74
+#	broadcast 192.168.1.255
+#	gateway 192.168.1.1
+#	netmask 255.255.255.0
+#	network 192.168.1.0
+#	wireless-essid mangonet
+
+#iface eth2 inet static
+#	address 192.168.1.74
+#	broadcast 192.168.1.255
+#	gateway 192.168.1.1
+#	netmask 255.255.255.0
+#	network 192.168.1.0
+#	wireless-essid mangonet
+
+#iface eth3 inet static
+#	address 192.168.1.74
+#	broadcast 192.168.1.255
+#	gateway 192.168.1.1
+#	netmask 255.255.255.0
+#	network 192.168.1.0
+#	wireless-essid mangonet
+
+# Interface: eth0 wired ethernet
+#iface eth0 inet dhcp
+
+# Interface: eth1 wireless external? 802.11a/b
+iface eth1 inet dhcp
+	wireless-essid zendernet
+
+# Interface: eth2 wireless external? 802.11a/b
+iface eth2 inet dhcp
+	wireless-essid zendernet
+
+# Interface: eth3 wireless external? 802.11a/b
+iface eth3 inet dhcp
+	wireless-essid zendernet
+
+iface wlan0 inet dhcp
+	wireless-essid zendernet

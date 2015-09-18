@@ -1,0 +1,20 @@
+# /etc/hosts.lpd
+# Purpose: Install on remote printer server to control access to remote printer queues
+# 128.200.xxx.yyy is UCI
+# 128.200.14.yyy is PSRF
+# 128.200.14.25 is dust.ps.uci.edu
+128.200.14.25
+# 128.200.14.80 is lanina.ps.uci.edu
+128.200.14.80
+# 128.117.xxx.yyy is NCAR
+# 128.117.23 is NCAR CGD
+# 128.117.24 is NCAR CGD
+# 128.117.23.209 is goldhill.cgd.ucar.edu
+128.117.23.209
+# 128.117.32 is NCAR ACD
+# 128.117.32.211 is acd.ucar.edu
+128.117.32.211
+# 192.168.1.1 is dakine.zender.org
+# 192.168.1.2 is lanina.zender.org
+192.168.1.1
+192.168.1.2

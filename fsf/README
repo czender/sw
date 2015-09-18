@@ -1,0 +1,7 @@
+-*-text-*-
+
+This directory, /home/zender/fsf, contains software and documentation
+from the Free Software Foundation. The most important contents are
+currently the GNU getopt() implementation, which the libc default for
+GNU/Linux, but needs to override the native getopt() on all other
+systems. 

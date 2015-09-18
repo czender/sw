@@ -1,0 +1,20 @@
+# /etc/initscript
+# If this script is intalled as /etc/initscript,
+# it is executed by init(8) for every program it
+# wants to spawn like this:
+# /bin/sh /etc/initscript    
+# It can be used to set the default umask and ulimit
+# of all processes. By default this script is installed
+# as /etc/initscript.sample, so to enable it you must
+# rename this script first to /etc/initscript.
+
+# As per Jim Rosinski suggestion to get CCM running on Linux
+# Sets hard (H) and soft (S) stacksizes to unlimited
+# Without this command, RH Linux 6.0 defaults to 8 Mb for each
+# With this command, stacksizes are effectively about 2 Gb
+# Similar results may be achieved by typing "limit stacksize unlimited"
+# at the csh prompt.
+ulimit -Hs unlimited
+ulimit -Ss unlimited
+
+eval exec "$4"

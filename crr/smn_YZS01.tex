@@ -1,0 +1,191 @@
+% $Id$
+
+% Purpose: Seminar on mineral dust modeling
+
+% AGU Itinerary 529601 PIN 5439
+% Usage: 
+% cd ${HOME}/crr;make -W smn_YZS01.tex smn_YZS01.ps;cd 
+
+\documentclass[final,dvips]{foils}
+
+% Standard packages
+\usepackage[usenames]{color} % usenames allows, e.g., ``ForestGreen''
+\usepackage{graphicx} % Defines \includegraphics*
+\usepackage{natbib} % \cite commands from aguplus
+\usepackage{array} % Table and array extensions, e.g., column formatting
+\usepackage[figuresright]{rotating} % Allows sideways figures and tables
+\usepackage{longtable} % Multi-page tables, e.g., acronyms and symbols
+
+% Personal packages
+\usepackage{csz} % Library of personal definitions
+\usepackage{abc} % Alphabet as three letter macros
+\usepackage{dmn} % Dimensional units
+\usepackage{chm} % Chemistry
+\usepackage{dyn} % Fluid dynamics
+\usepackage{aer} % Aerosol physics
+\usepackage{rt} % Radiative transfer
+\usepackage{psd} % Particle size distributions
+\usepackage{smn} % Seminars
+\input{jgr_abb} % JGR-sanctioned journal abbreviations
+
+% Margins
+\topmargin 0in \headheight 0pt \headsep 0pt
+\textheight 9in \textwidth 6.5in
+\oddsidemargin 0in \evensidemargin 0in
+\marginparwidth 0pt \marginparsep 0pt
+\footskip 0pt
+\footnotesep=0pt
+
+\newcommand{\pltsbs}{\ensuremath{\mathrm{HP}}} % [sbs] Highly polluted subscript
+\newcommand{\mrnsbs}{\ensuremath{\mathrm{M}}} % [sbs] Marine subscript
+\newcommand{\ctlsbs}{\ensuremath{\mathrm{C}}} % [sbs] Continental subscript
+\newcommand{\bndsbs}{\ensuremath{\mathrm{BL}}} % [sbs] Boundary layer subscript
+\newcommand{\vllsbs}{\ensuremath{\mathrm{V}}} % [sbs] Valley subscript
+\newcommand{\mtnsbs}{\ensuremath{\mathrm{M}}} % [sbs] Mountain subscript
+\newcommand{\aod}{\ensuremath{\mbox{AOD}}} % [frc] Aerosol Optical Depth
+\newcommand{\aodbnd}{\ensuremath{\aod_{\bndsbs}}} % [frc] Aerosol Optical Depth, boundary layer
+\newcommand{\aodvll}{\ensuremath{\aod_{\vllsbs}}} % [frc] Aerosol Optical Depth, valley
+\newcommand{\aodmtn}{\ensuremath{\aod_{\mtnsbs}}} % [frc] Aerosol Optical Depth, mountain
+\newcommand{\aodbndofHP}{\ensuremath{\aodbnd(\pltsbs)}} % [frc] Aerosol Optical Depth, boundary layer, Highly Polluted air mass
+\newcommand{\aodbndofM}{\ensuremath{\aodbnd(\mrnsbs)}} % [frc] Aerosol Optical Depth, boundary layer, Highly Polluted air mass
+\newcommand{\aodbndofC}{\ensuremath{\aodbnd(\ctlsbs)}} % [frc] Aerosol Optical Depth, boundary layer, Highly Polluted air mass
+\newcommand{\aodvllofHP}{\ensuremath{\aodvll(\pltsbs)}} % [frc] Aerosol Optical Depth, boundary layer, Highly Polluted air mass
+\newcommand{\aodvllofM}{\ensuremath{\aodvll(\mrnsbs)}} % [frc] Aerosol Optical Depth, boundary layer, Highly Polluted air mass
+\newcommand{\aodvllofC}{\ensuremath{\aodvll(\ctlsbs)}} % [frc] Aerosol Optical Depth, boundary layer, Highly Polluted air mass
+% FoilTeX macros
+\MyLogo{} % Appears bottom left corner every page
+\rightfooter{} % Pagenumber is the default
+\leftheader{} % Appears upper left
+\rightheader{} % Appears upper right
+
+\begin{document}
+
+\rotatefoilhead{\huge \textcolor{blue}{Atmospheric Absorption of Solar 
+Radiation by Boundary Layer Aerosol in the Southeastern US: Model
+Estimates on the Basis of New Observations}}\vspace{-1.0in}\Large
+\begin{center}
+Shaocai Yu, Charles S. Zender, V. K. Saxena\\
+Duke University, University of California, Irvine, North Carolina
+State University\\ 
+\bigskip
+Chapman Conference on Solar Radiation\\
+Estes Park, CO August 13--17, 2001\\
+%{\large Thanks to:\\ Bill Collins, Susan Solomon, Francisco Valero, Shaocai Yu}
+\normalsize
+\end{center}
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Objectives \hfill}}\large\vspace{-0.5in} 
+\enlargethispage*{1in} 
+\begin{itemize}
+\item Estimate ADRF using in situ measurements
+\item Compare to other studies
+\begin{itemize}
+\item Different aerosol assumptions (e.g., pure sulfate)
+\item Other regions (e.g., TARFOX)
+\end{itemize}
+\end{itemize}
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Experimental Design \hfill}}\large\vspace{-0.5in} 
+\enlargethispage*{1in} 
+\begin{itemize}
+\item Two identical stations:
+\begin{itemize}
+\item Mt. Mitchell North Carolina
+\item 10~km horizontal separation, 1.05~km vertical separation
+\item MFRSR measures clear-sky Aerosol Optical Depth (AOD):
+\begin{itemize}
+\item 415, 500, 673~nm
+\item Direct and diffuse 
+\end{itemize}
+\item Cloud screening by whole-sky imaging camera
+\item June--December 1995: 34 cloud-free, problem-free days
+\end{itemize}
+\end{itemize}
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Methods \hfill}}\large\vspace{-0.5in} 
+\enlargethispage*{1in} 
+\begin{itemize}
+\item Air mass type determined by \SOd\ and \NOx
+\begin{itemize}
+\item Highly Polluted (\pltsbs), Continental (\ctlsbs), Marine (\mrnsbs)
+\end{itemize}
+\item Boundary layer: $\aodbnd = \aod(\mathrm{Valley})-\aod(\mathrm{Mountain})$
+\begin{itemize}
+\item Indices of refraction
+\item Lognormal size distribution determined by search-graph method
+(Yu et al., JGR, 2000) (iterative fitting procedure employing direct
+and diffuse measurements, CRM)
+\end{itemize}
+\item Aerosol Direct Radiative Forcing (ADRF)
+\begin{itemize}
+\item Instantaneous clear-sky ADRF: NCAR CRM
+\item Annual clear-sky ADRF: 
+\begin{itemize}
+\item Mean optical properties, optical depths for each air mass
+\item Weight by frequency of air mass occurence: 
+34\% Highly Polluted, 43\% Continental, 22\% Marine
+\end{itemize}
+\item Annual all-sky ADRF: Mean cloud fraction (0.61)
+\end{itemize}
+
+\foilhead{\bgl\Large\textcolor{blue}{\hfill Results \hfill}}\large\vspace{-0.5in} 
+\enlargethispage*{1in} 
+Mean $\pm$ SD 0.5~\um\ Total \aodvll\ at Valley:
+\begin{eqnarray}
+\aodvllofHP & = & 0.68 \pm 0.33 \nonumber \\
+\aodvllofC & = & 0.10 \pm 0.04 \nonumber \\
+\aodvllofM & = & 0.29 \pm 0.19 \nonumber
+\end{eqnarray}
+Mean $\pm$ SD 0.5~\um\ Boundary Layer \aodbnd:
+\begin{eqnarray}
+\aodbndofHP & = & 0.50 \pm 0.25 \nonumber \\
+\aodbndofC & = & 0.20 \pm 0.11 \nonumber \\
+\aodbndofM & = & 0.07 \pm 0.03 \nonumber
+\end{eqnarray}
+Fraction $\pm$ SD of 0.5~\um\ AOD in BL:
+\begin{eqnarray}
+\frac{\aodbndofHP}{\aodvllofHP} & = & 0.73 \pm 0.15 \nonumber \\
+\frac{\aodbndofC}{\aodvllofC} & = & 0.68 \pm 0.09 \nonumber \\
+\frac{\aodbndofM}{\aodvllofM} & = & 0.71 \pm 0.15 \nonumber
+\end{eqnarray}
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Boundary layer ADRF
+\hfill}}\large\vspace{-0.5in} 
+%\fcolorbox{SkyBlue}{white}{\parbox{\textwidth}{
+\begin{table}
+\begin{center}
+\begin{tabular}{r *{2}{>{$}l<{$}}}
+Metric & \mbox{Clear Sky} & \mbox{All Sky}\footnote{Assuming cloud fraction = 0.61} \\[0pt]
+& $\wxmS$ & $\wxmS$ \\[0pt]
+\tableline
+\hline \rule{0.0ex}{\hlntblntrskp}%
+TOA & -5 \pm 3 & -2 \pm 1 \\[-10pt]
+Surface & -17 \pm 6 & -7 \pm 2 \\[0pt]
+Atmosphere & 12 \pm 9 & 5 \pm 3 \\[0pt]
+\tableline
+\end{tabular}
+\end{center}
+\caption{Annual mean solar forcing by boundary layer aerosol
+\label{tbl:YZS}}   
+\end{table}
+%}} % end \fcolorbox
+
+\rotatefoilhead{\bgl\Large\textcolor{blue}{\hfill Conclusions \hfill}}\large\vspace{-0.5in} 
+\enlargethispage*{1in} 
+7 months of in situ station observations in SE US suggest:
+\begin{itemize}
+\item Boundary layer aerosol cools region by $2 \pm 1$\,\wxmS
+\item All-sky absorption $5 \pm 3$\,\wxmS
+\end{itemize}
+\item Surface ADRF exceeds pure sulfate ADRF by factor of $\sim 2.5$ 
+\item Future: dirty (multi-component) aerosols
+\end{itemize}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill References\hfill}}\vspace{-0.5in}\large
+% Bibliography
+%\renewcommand\refname{\normalsize Publications}
+\bibliographystyle{jas}
+\bibliography{bib}
+
+\end{document}

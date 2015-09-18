@@ -1,0 +1,38 @@
+  A Prognostic Ice Water Scheme for Anvil Clouds  
+ 
+  Charles S. Zender  
+  J.T. Kiehl  
+  NCAR, P.O. Box 3000, Boulder, CO,
+  80307-3000  
+  303-497-1612  
+  zender@ncar.ucar.edu  
+ 
+We have employed a cumulus ensemble model (CEM) to
+parameterize the mesoscale outflow associated with deep
+convection. Three steps were necessary to parameterize
+results from the CEM into an ice water scheme suitable for
+a GCM. Statistics from the GCM and the CEM were compared to
+evaluate differences in dynamic response to similar large
+scale forcings so that the anvil parameterization could be
+sensibly mapped from the high to the low-resolution model.
+Second, time series of the domain-averaged cloud water,
+vertical updraft, and thermodynamic profiles were evaluated
+to identify the most promising large scale predictors of
+ice water generation and destruction. Third, a mathematical
+formulation for the GCM thermodynamic tendencies was
+formalized to include the most important physical processes
+deduced from the CEM. We have also devised a
+parameterization of ice formation under stable conditions. 
+
+The combined convective/stable
+prognostic ice scheme has been implemented into a new
+version of the NCAR Community Climate Model (CCM2). One
+novel feature of the convective parameterization is that is
+predicts gridbox-averaged ice, thus circumventing the use
+of a cloud fraction. The GCM response to the new prognostic
+ice scheme indicates increased upper tropospheric heating
+and associated acceleration of tropical easterlies.
+Regional analysis indicates that ice water paths may be too
+large at present. Results will be presented from an AMIP-type
+simulation to determine the sensitivity of the current model to
+tropical warm and cold events.

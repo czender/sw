@@ -1,0 +1,428 @@
+% $Id$
+
+% Purpose: Describe Dust Entrainment and Deposition (DEAD) model
+
+% Copyright (c) 1998--2014, Charles S. Zender
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License (GFDL), Version 1.3
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+% GFDL: http://www.gnu.org/copyleft/fdl.html
+
+% The original author of this software, Charlie Zender, seeks to improve
+% it with your suggestions, contributions, bug-reports, and patches.
+% Charlie Zender <zender at uci dot edu>
+% Department of Earth System Science
+% University of California, Irvine
+% Irvine, CA 92697-3100
+
+% URL: http://dust.ess.uci.edu/dead/dead.pdf
+
+% Usage: 
+% dvips -Ppdf -G0 -o ${DATA}/ps/dead.ps ~/crr/dead.dvi;ps2pdf ${DATA}/ps/dead.ps ${DATA}/ps/dead.pdf
+% cd ~/crr;make -W dead.tex dead.txt dead.dvi dead.ps dead.pdf;cd -
+% cd ~/crr;texcln dead;make dead.pdf;bibtex dead;makeindex dead;make dead.pdf;bibtex dead;makeindex dead;make dead.pdf;cd -
+% scp -p ${HOME}/crr/dead.tex ${HOME}/crr/dead.txt ${DATA}/ps/dead.ps ${DATA}/ps/dead.pdf ${HOME}/crr/dead.dvi dust.ess.uci.edu:/var/www/html/dead
+
+% # NB: latex2html works well on dead.tex
+% latex2html -dir /var/www/html/dead dead.tex
+% # NB: tth chokes on dead.tex
+% cd ${HOME}/crr;tth -a -Ldead -p./:${TEXINPUTS}:${BIBINPUTS} < ${HOME}/crr/dead.tex > dead.html
+% scp dead.html dust.ess.uci.edu:/var/www/html/dead
+% # NB: tex4ht works well on dead.tex
+% cd ${HOME}/crr;htlatex dead.tex
+% scp dead*.css dead*.html dust.ess.uci.edu:/var/www/html/dead
+% # NB: tex4moz works well on dead.tex
+% cd ${HOME}/crr;/usr/share/tex4ht/mzlatex dead.tex
+% scp dead*.css dead*.html dead*.xml dust.ess.uci.edu:/var/www/html/dead
+
+\documentclass[12pt,twoside]{article}
+
+% Standard packages
+\usepackage{ifpdf} % Define \ifpdf
+\ifpdf % PDFLaTeX
+\usepackage[pdftex]{graphicx} % Defines \includegraphics*
+\pdfcompresslevel=9
+\usepackage{thumbpdf} % Generate thumbnails
+\usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
+\else % !PDFLaTeX
+\usepackage{graphicx} % Defines \includegraphics*
+\fi % !PDFLaTeX
+\usepackage{amsmath} % \subequations, \eqref, \align
+\usepackage{array} % Table and array extensions, e.g., column formatting
+\usepackage{longtable} % Multi-page tables, e.g., acronyms and symbols
+\usepackage{lscape} % Landscape environment
+\usepackage{makeidx} % Index keyword processor: \printindex and \see
+\usepackage{mdwlist} % Compact list formats \itemize*, \enumerate*
+\usepackage{natbib} % \cite commands from aguplus
+\usepackage{tocbibind} % Add Bibliography and Index to Table of Contents
+\usepackage{url} % Typeset URLs and e-mail addresses
+% fxm: 20001028 /usr/share/texmf/tex/latex/base/showidx.sty breaks hyperref
+%\usepackage{showidx} % Print index entries as marginal notes
+
+% hyperref is last package since it redefines other packages' commands
+% hyperref options, assumed true unless =false is specified:
+% backref       List citing sections after bibliography entries
+% breaklinks    Wrap links onto newlines
+% colorlinks    Use colored text for links, not boxes
+% hyperindex    Link index to text
+% plainpages=false Suppress warnings caused by duplicate page numbers
+% pdftex        Conform to pdftex conventions
+\ifpdf % PDFLaTeX
+\usepackage[backref,breaklinks,colorlinks,linkcolor=blue,urlcolor=blue,hyperindex,plainpages=false,pdftex]{hyperref} % Hyper-references
+\pdfcompresslevel=9
+\else % !PDFLaTeX
+\usepackage[backref,breaklinks,colorlinks,linkcolor=blue,urlcolor=blue,hyperindex,plainpages=false]{hyperref} % Hyper-references
+\fi % !PDFLaTeX
+
+% preview-latex recommends it be last-activated package
+\usepackage[showlabels,sections,floats,textmath,displaymath]{preview} % preview-latex equation extraction
+
+% Personal packages
+\usepackage{csz} % Library of personal definitions
+\usepackage{dmn} % Dimensional units
+\usepackage{chm} % Commands generic to chemistry
+\usepackage{dyn} % Commands generic to fluid dynamics
+\usepackage{abc} % Alphabet as three letter macros
+\usepackage{psd} % Particle size distributions
+\usepackage{jrn_agu} % JGR-sanctioned journal abbreviations
+
+% Commands which must be executed in preamble
+\makeglossary % Glossary described on KoD95 p. 221
+\makeindex % Index described on KoD95 p. 220
+
+% Commands specific to this file
+
+% 1. Primary commands
+
+% 2. Derived commands
+
+% 3. Doubly-derived commands
+
+\topmargin -24pt \headheight 12pt \headsep 12pt
+\textheight 9in \textwidth 6.5in
+\oddsidemargin 0in \evensidemargin 0in
+%\marginparwidth 0pt \marginparsep 0pt
+\setlength{\marginparwidth}{1.5in} % Width of callouts of index terms and page numbers KoD95 p. 220
+\setlength{\marginparsep}{12pt} % Add separation for index terms KoD95 p. 220
+\footskip 24pt
+\footnotesep=0pt
+
+\begin{document} % End preamble
+
+\begin{center}
+\hfill \today\\
+\bigskip
+{\Large \textbf{Dust Entrainment and Deposition (DEAD) model:\\ 
+User's Guide}}\\
+\bigskip
+by Charlie Zender\\
+University of California, Irvine\\
+\end{center}
+Department of Earth System Science \hfill zender@uci.edu\\
+University of California \hfill Voice: (949)\thinspace 891-2429\\
+Irvine, CA~~92697-3100 \hfill Fax: (949)\thinspace 824-3256
+
+% GFDL legalities: http://www.gnu.org/copyleft/fdl.html
+\bigskip\noindent
+Copyright \copyright\ 2000,  Charles S. Zender\\
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version~1.3
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+Texts.
+The license is available online at
+\url{http://www.gnu.org/copyleft/fdl.html}.
+
+\pagenumbering{roman}
+\setcounter{page}{1}
+\pagestyle{headings}
+\thispagestyle{empty}
+%\onecolumn
+\tableofcontents
+\listoftables
+\pagenumbering{arabic}
+\setcounter{page}{1}
+%\markleft{Size Distribution Monograph}
+%\markright{}
+\thispagestyle{empty}
+
+\section{Introduction}\label{sxn:ntr}
+
+This document describes the 
+\trmidx{Dust Entrainment and Deposition model} (\trmidx{DEAD}).
+Complete information on DEAD (release note, source code, and an on-line version) 
+from the \href{http://dust.ess.uci.edu/dead}{DEAD homepage}.  
+The reference article which decribes the physics of DEAD version 1.x is 
+\cite{ZBN03}.
+% ZBA03,ZeT04,GrZ03,GMZ03,
+Numerous other articles use or refer to DEAD, including 
+\cite{CCR01,CRE01,RCE01,CRE02,GZC02,MZL02,BiZ03,LMZ03,LMD03,MLD03,MaL03,LMZ03,ZBN03,ZNT03,GrZ04,OMC04}.
+Many of these articles are available electronically from the
+\href{http://dust.ess.uci.edu/dead}{DEAD homepage}.
+
+\subsection[Contributing]{Contributing}\label{sxn:cnt}
+Obviously, this User's Guide is not finished.
+The most valuable help you can provide is feedback.
+Unless and until I am sure that users read this guide, I am unlikely
+to improve it much.
+\textbf{What is the most important missing information?}
+
+The plan is to add these sections eventually:
+\begin{enumerate*}
+\item Exact physics description
+\begin{enumerate*}
+\item Mobilization
+\item Dry deposition
+\item Wet deposition
+\end{enumerate*}
+\item Graphical output
+\item FAQ: How do I \ldots
+\end{enumerate*}
+
+\subsection[Command Line Arguments]{Command Line Arguments}\label{sxn:cmd_ln}
+Table~\ref{tbl:cmd_ln_dead} summarizes all of the 
+\trmidx{command line arguments} available to control the behavior of
+the \trmidx{Dust Entrainment and Deposition model} (\trmidx{DEAD}).
+DEAD is invoked at the command line by running the \cmdidx{aer} program. 
+\begin{landscape} % Begin tbl:cmd_ln_dead
+\begin{longtable}{ >{\ttfamily}l<{} >{\raggedright}p{20.0em}<{} r l}
+& & & \kill % NB: longtable requires caption as table entry
+\caption[DEAD Command Line Switches]{\textbf{DEAD Command Line Switches}%
+\footnote{\emph{Source:} \cite{DEAD,ZBN03}}%
+\footnote{\cmdprn{cmd\_ln\_dfl} is a standard large value, e.g., 
+$1.0 \times 10^{36}$. 
+DEAD checks for this value for particular variables whose treatment
+depends on whether or not the variable was user-initialized.}%
+\label{tbl:cmd_ln_dead}} \\
+\hline\hline \rule{0.0ex}{\hlntblhdrskp}% 
+\textrm{Switch} & Purpose & Default & Units \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endfirsthead % Lines between and \endfirsthead appear at top of table
+\caption[]{(continued)} \\ % Set label for following pages
+\textrm{Switch} & Purpose & Default & Units \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endhead % Previous block appears at top of every page
+\endlastfoot % Previous block appears at end of table
+\multicolumn{4}{c}{Boolean flags\rule[-0.5ex]{0ex}{1.5ex}} \\[0.0ex]
+--foo\_flg & Foo & true & Flag \\[0.5ex]
+\multicolumn{4}{c}{Variables\rule[-0.5ex]{0ex}{1.5ex}} \\[0.0ex]
+--\cmdidx{dbg\_lvl} & Debugging level & 0 & Index \\[0.5ex]
+--\cmdidx{asp\_rat\_lps\_dfl} & Ellipsoidal aspect ratio & 1.0 & Fraction \\[0.5ex]
+--\cmdidx{drc\_in} & Input directory & \texttt{./} & String \\[0.5ex]
+--\cmdidx{drc\_out} & Output directory & \texttt{./} & String \\[0.5ex]
+--\cmdidx{fl\_ext\_dat} & Name of netCDF file with external forcing data & ``'' & String \\[0.5ex]
+--\cmdidx{hgt\_mdp} & Midlayer height above surface & 95.0 & m \\[0.5ex]
+--\cmdidx{oro} & Orography: ocean=0.0, land=1.0, sea ice=2.0 & 1.0 & Fraction \\[0.5ex]
+--\cmdidx{prs\_mdp} & Environmental pressure & 100825.0 & Pa \\[0.5ex]
+--\cmdidx{prs\_ntf} & Environmental surface pressure & \texttt{prs\_STP} & Pa \\[0.5ex]
+--\cmdidx{q\_H2O\_vpr} & Specific humidity & \texttt{cmd\_ln\_dfl} & \kgxkg \\[0.5ex]
+--\cmdidx{sfc\_typ} & LSM surface type [0..28] & 2 & Index \\[0.5ex]
+--\cmdidx{time\_nbr} & Number of timesteps to simulate & 1 & Number \\[0.5ex]
+--\cmdidx{tpt\_gnd} & Ground temperature & 300.0 & K \\[0.5ex]
+--\cmdidx{tpt\_ice} & Ice temperature & \texttt{tpt\_frz\_pnt} & K \\[0.5ex]
+--\cmdidx{tpt\_mdp} & Environmental temperature & 300.0 & K \\[0.5ex]
+--\cmdidx{tpt\_soi} & Soil temperature & 297.0 & K \\[0.5ex]
+--\cmdidx{tpt\_sst} & Sea surface temperature & 297.0 & K \\[0.5ex]
+--\cmdidx{wnd\_mrd\_mdp} & Surface layer meridional wind speed & 0.0 & \mxs \\[0.5ex]
+--\cmdidx{wnd\_znl\_mdp} & Surface layer zonal wind speed & 10.0 & \mxs \\[0.5ex]
+--\cmdidx{vai\_dst} & Vegetation area index (one-sided) & 0.0 & \mSxmS \\[0.5ex]
+\hline
+\end{longtable}
+\end{landscape} % End tbl:cmd_ln_dead
+
+Table~\ref{tbl:fld_nm_dead} summarizes the \trmdfn{fields} output by DEAD.
+\begin{landscape} % Begin tbl:fld_nm_dead
+\begin{longtable}{ >{\ttfamily}l<{} >{\raggedright}p{20.0em}<{} l}
+& & \kill % NB: longtable requires caption as table entry
+\caption[DEAD Output Fields]{\textbf{DEAD Output Fields}%
+\footnote{\emph{Source:} \cite{DEAD,ZBN03}}%
+\label{tbl:fld_nm_dead}} \\
+\hline\hline \rule{0.0ex}{\hlntblhdrskp}% 
+\textrm{Name(s)} & Purpose & Units \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endfirsthead % Lines between and \endfirsthead appear at top of table
+\caption[]{(continued)} \\ % Set label for following pages
+\textrm{Name(s)} & Purpose & Units \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endhead % Previous block appears at top of every page
+\endlastfoot % Previous block appears at end of table
+\cmdidx{asp\_rat\_lps} & Ellipsoidal aspect ratio & meter \\[0.5ex]
+\cmdidx{cld\_frc\_cnv} & Convective cloud fraction & fraction \\[0.5ex]
+\cmdidx{cld\_frc} (\cmdidx{CLOUD}) & Cloud fraction & fraction \\[0.5ex]
+\cmdidx{cld\_vlm} & Cloud volume & fraction \\[0.5ex]
+\cmdidx{dmt\_max} & Maximum diameter in bin & meter \\[0.5ex]
+\cmdidx{dmt\_min} & Minimum diameter in bin & meter \\[0.5ex]
+\cmdidx{dmt\_mjr} & Major axis of ellipsoid & meter \\[0.5ex]
+\cmdidx{dmt\_mnr} & Minor axis of ellipsoid & meter \\[0.5ex]
+\cmdidx{dmt\_naa} & Number mean diameter analytic & meter \\[0.5ex]
+\cmdidx{dmt\_nma} & Number median diameter analytic & meter \\[0.5ex]
+\cmdidx{dmt\_nmr} & Number median diameter resolved & meter \\[0.5ex]
+\cmdidx{dmt\_nwr} & Number weighted diameter resolved & meter \\[0.5ex]
+\cmdidx{dmt\_sma} & Surface median diameter analytic & meter \\[0.5ex]
+\cmdidx{dmt\_smr} & Surface area median diameter resolved & meter \\[0.5ex]
+\cmdidx{dmt\_swa} & Surface area weighted mean diameter analytic & meter \\[0.5ex]
+\cmdidx{dmt\_swr} & Surface area weighted diameter resolved & meter \\[0.5ex]
+\cmdidx{dmt\_vma\_src} & Mass median diameter of source distribution & meter \\[0.5ex]
+\cmdidx{dmt\_vma} & Mass median diameter analytic & meter \\[0.5ex]
+\cmdidx{dmt\_vmr} & Mass median diameter resolved & meter \\[0.5ex]
+\cmdidx{dmt\_vwa} & Mass weighted mean diameter analytic & meter \\[0.5ex]
+\cmdidx{dmt\_vwr} & Mass weighted diameter resolved & meter \\[0.5ex]
+\cmdidx{dns\_aer} & Particle density & kilogram meter-3 \\[0.5ex]
+\cmdidx{dns\_mdp} & Midlayer density & kilogram meter-3 \\[0.5ex]
+\cmdidx{doy} & Day of year [1.0..367.0) & day \\[0.5ex]
+\cmdidx{dst\_slt\_flx\_rat\_ttl} & Ratio of vertical dust flux to streamwise mass flux & meter-1 \\[0.5ex]
+\cmdidx{flx\_LW\_dwn\_sfc} & Longwave downwelling flux at surface & watt meter-2 \\[0.5ex]
+\cmdidx{flx\_SW\_abs\_sfc} & Solar flux absorbed by ground & watt meter-2 \\[0.5ex]
+\cmdidx{flx\_mss\_dry\_sfc\_ttl} (\cmdidx{DSTSFDRY}) & Total surface flux due to dry deposition & kilogram meter-2 second-1 \\[0.5ex]
+\cmdidx{flx\_mss\_dry\_sfc} (\cmdidx{DSTSFD01}) & Surface flux due to dry deposition & kilogram meter-2 second-1 \\[0.5ex]
+\cmdidx{flx\_mss\_grv\_sfc\_ttl} & Total surface flux due to gravitational settling & kilogram meter-2 second-1 \\[0.5ex]
+\cmdidx{flx\_mss\_grv\_sfc} & Surface flux due to gravitational settling & kilogram meter-2 second-1 \\[0.5ex]
+\cmdidx{flx\_mss\_hrz\_slt\_ttl} & Vertically integrated streamwise mass flux & kilogram meter-1 second-1 \\[0.5ex]
+\cmdidx{flx\_mss\_pcp\_sfc\_ttl} (\cmdidx{DSTSFPCP}) & Total dust reaching surface in precipitation & kilogram meter-2 second-1 \\[0.5ex]
+\cmdidx{flx\_mss\_pcp\_sfc} (\cmdidx{DSTSFP01}) & Dust reaching surface in precipitation & kilogram meter-2 second-1 \\[0.5ex]
+\cmdidx{flx\_mss\_trb\_sfc\_ttl} (\cmdidx{DSTSFTRB}) & Total surface flux due to turbulent mix-out & kilogram meter-2 second-1 \\[0.5ex]
+\cmdidx{flx\_mss\_trb\_sfc} (\cmdidx{DSTSFT01}) & Surface flux due to turbulent mix-out & kilogram meter-2 second-1 \\[0.5ex]
+\cmdidx{flx\_mss\_vrt\_dst\_ttl} (\cmdidx{DSTSFMBL}) & Total vertical mass flux of dust & kilogram meter-2 second-1 \\[0.5ex]
+\cmdidx{flx\_mss\_vrt\_dst} (\cmdidx{DSTSFM01}) & Vertical mass flux of dust & kilogram meter-2 second-1 \\[0.5ex]
+\cmdidx{frc\_thr\_ncr\_drg} & Threshold friction velocity increase from roughness & fraction \\[0.5ex]
+\cmdidx{frc\_thr\_ncr\_wtr} (\cmdidx{FRC\_WET}) & Threshold friction velocity increase from moisture & fraction \\[0.5ex]
+\cmdidx{frc\_trc\_trn\_cnv\_ptn} & Interstitial tracer fraction & fraction \\[0.5ex]
+\cmdidx{gsd\_anl\_src} & Geometric standard deviation of source distribution & fraction \\[0.5ex]
+\cmdidx{gsd\_anl} & Geometric standard deviation & fraction \\[0.5ex]
+\cmdidx{gwc\_sfc} (\cmdidx{GWC\_SFC}) & Gravimetric water content & kilogram kilogram-1 \\[0.5ex]
+\cmdidx{hgt\_mdp} & Midlayer height above surface & meter \\[0.5ex]
+\cmdidx{hgt\_zpd\_mbl} & Zero plane displacement height (mobilization) & meter \\[0.5ex]
+\cmdidx{hgt\_zpd\_dps} & Zero plane displacement height (deposition) & meter \\[0.5ex]
+\cmdidx{lat\_dgr} & Latitude & degrees north \\[0.5ex]
+\cmdidx{lat\_rdn} & Latitude & radians north \\[0.5ex]
+\cmdidx{lat} & Latitude & radians north \\[0.5ex]
+\cmdidx{levp} & Interface pressure & Pascal \\[0.5ex]
+\cmdidx{lev} & Midlayer pressure & Pascal \\[0.5ex]
+\cmdidx{lnd\_frc\_dry} & Dry land fraction & fraction \\[0.5ex]
+\cmdidx{lnd\_frc\_mbl} (\cmdidx{LND\_MBL}) & Bare ground fraction & fraction \\[0.5ex]
+\cmdidx{lon} & Longitude & degrees east \\[0.5ex]
+\cmdidx{mbl\_bsn\_fct} (\cmdidx{BSN\_FCT}) & Erodibility factor & fraction \\[0.5ex]
+\cmdidx{mcdate} & Current date in YYMMDD format & day \\[0.5ex]
+\cmdidx{mcsec} & Seconds past current date at 0Z & second \\[0.5ex]
+\cmdidx{mno\_lng\_mbl} & Monin-Obukhov length (mobilization) & meter \\[0.5ex]
+\cmdidx{mno\_lng\_dps} & Monin-Obukhov length (deposition) & meter \\[0.5ex]
+\cmdidx{mpc\_dst\_ttl} (\cmdidx{DSTMPC}) & Total column mass path of dust & kilogram meter-2 \\[0.5ex]
+\cmdidx{mpc\_dst} (\cmdidx{DSTMPC01}) & Column mass path of dust & kilogram meter-2 \\[0.5ex]
+\cmdidx{mpl\_air} & Air mass path in layer & kilogram meter-2 \\[0.5ex]
+\cmdidx{mss\_cnc\_dst} & Mass concentration of dust & kilogram meter-3 \\[0.5ex]
+\cmdidx{mss\_frc\_CaCO3} & Mass fraction CaCO3 & fraction \\[0.5ex]
+\cmdidx{mss\_frc\_cly} & Mass fraction clay & fraction \\[0.5ex]
+\cmdidx{mss\_frc\_slt} & Mass fraction silt & fraction \\[0.5ex]
+\cmdidx{mss\_frc\_snd} & Mass fraction sant & fraction \\[0.5ex]
+\cmdidx{mss\_frc\_src} & Mass fraction of source distribution & fraction \\[0.5ex]
+\cmdidx{mss\_frc\_trn\_dst\_src} & Fraction of transported dust mass at source & fraction \\[0.5ex]
+\cmdidx{nbdate} & Simulation start date in YYMMDD format & day \\[0.5ex]
+\cmdidx{nbr\_spc\_rsl} & Specific number concentration resolved & number kilogram-1 \\[0.5ex]
+\cmdidx{nbsec} & Simulation start second relative to nbdate & second \\[0.5ex]
+\cmdidx{ndcur} & Current day number of simulation & day \\[0.5ex]
+\cmdidx{nscur} & Seconds relative to ndcur & second \\[0.5ex]
+\cmdidx{nstep} & Timestep & index \\[0.5ex]
+\cmdidx{odxc\_dst\_ttl} (\cmdidx{DSTODXC}) & Total column dust optical depth & fraction \\[0.5ex]
+\cmdidx{odxc\_dst} (\cmdidx{DSTODX01}) & Column dust optical depth & fraction \\[0.5ex]
+\cmdidx{oro} (\cmdidx{ORO}) & Orography: ocean=0.0, land=1.0, sea ice=2.0 & fraction \\[0.5ex]
+\cmdidx{ovr\_src\_snk\_frc} & Overlap of src dist. i with sink bin j & fraction \\[0.5ex]
+\cmdidx{ovr\_src\_snk\_mss\_ttl} & Total transported mass fraction of dust flux & fraction \\[0.5ex]
+\cmdidx{ovr\_src\_snk\_mss} & Mass overlap of src dist. i with sink bin j & fraction \\[0.5ex]
+\cmdidx{pcp\_flx\_sfc} (\cmdidx{PRECT}) & Total precipitation reaching surface & kilogram meter-2 second-1 \\[0.5ex]
+\cmdidx{prs\_dlt} & Pressure thickness & pascal \\[0.5ex]
+\cmdidx{prs\_mdp} & Midlayer pressure & pascal \\[0.5ex]
+\cmdidx{prs\_ntf} & Interface pressure & pascal \\[0.5ex]
+\cmdidx{q\_H2O\_cnd2pcp\_tnd} & Condensed H2O to precipitation tendency & kilogram kilogram-1 second-1 \\[0.5ex]
+\cmdidx{q\_H2O\_cnd\_pcp} & H2O precipitation mixing ratio & kilogram kilogram-1 \\[0.5ex]
+\cmdidx{q\_H2O\_cnd\_tnd} & Net H2O condensate formation tendency & kilogram kilogram-1 second-1 \\[0.5ex]
+\cmdidx{q\_H2O\_cnd} & Condensed H2O mixing ratio & kilogram kilogram-1 \\[0.5ex]
+\cmdidx{q\_H2O\_pcp2vpr\_tnd} & H2O precipitation to vapor tendency & kilogram kilogram-1 second-1 \\[0.5ex]
+\cmdidx{q\_H2O\_pcp\_lqd} & Rain water mixing ratio & kilogram kilogram-1 \\[0.5ex]
+\cmdidx{q\_H2O\_vpr2pcp\_cnv\_tnd} & H2O vapor to convective precipitation tendency & kilogram kilogram-1 second-1 \\[0.5ex]
+\cmdidx{q\_H2O\_vpr} (\cmdidx{Q}) & Water vapor mixing ratio & kilogram kilogram-1 \\[0.5ex]
+\cmdidx{q\_dst\_tnd\_dry\_ttl} (\cmdidx{DSTSSDRY}) & Total dust tendency due to settling and turbulence & kilogram kilogram-1 second-1 \\[0.5ex]
+\cmdidx{q\_dst\_tnd\_dry} (\cmdidx{DSTSSD01}) & Dust tendency due to settling and turbulence & kilogram kilogram-1 second-1 \\[0.5ex]
+\cmdidx{q\_dst\_tnd\_evp\_ttl} (\cmdidx{DSTSSEVP}) & Total evaporation tendency & kilogram kilogram-1 second-1 \\[0.5ex]
+\cmdidx{q\_dst\_tnd\_evp} (\cmdidx{DSTSSE01}) & Evaporation tendency & kilogram kilogram-1 second-1 \\[0.5ex]
+\cmdidx{q\_dst\_tnd\_ncl} & Nucleation scavenging tendency & kilogram kilogram-1 second-1 \\[0.5ex]
+\cmdidx{q\_dst\_tnd\_pcp\_ttl} (\cmdidx{DSTSSPCP}) & Total scavenging tendency & kilogram kilogram-1 second-1 \\[0.5ex]
+\cmdidx{q\_dst\_tnd\_pcp} (\cmdidx{DSTSSP01}) & Scavenging tendency & kilogram kilogram-1 second-1 \\[0.5ex]
+\cmdidx{q\_dst\_tnd\_wet} & Wet deposition (evaporation minus scavenging) tendency & kilogram kilogram-1 second-1 \\[0.5ex]
+\cmdidx{q\_dst\_ttl} (\cmdidx{DSTQ}) & Total dust mixing ratio & kilogram kilogram-1 \\[0.5ex]
+\cmdidx{q\_dst} (\cmdidx{DSTQ01}) & Dust mixing ratio & kilogram kilogram-1 \\[0.5ex]
+\cmdidx{rgh\_mmn\_mbl} & Roughness length momentum (mobilization) & meter \\[0.5ex]
+\cmdidx{rgh\_mmn\_dps} & Roughness length momentum (deposition) & meter \\[0.5ex]
+\cmdidx{rss\_aer} & Aerodynamic resistance & second meter-1 \\[0.5ex]
+\cmdidx{rss\_lmn} & Laminar resistance & second meter-1 \\[0.5ex]
+\cmdidx{rss\_trb} & Resistance for turbulent deposition & second meter-1 \\[0.5ex]
+\cmdidx{rxr\_HNO3\_gas\_dst\_vmr} & Mean rate of HNO3 removal by dust & molecule molecule-1 second-1 \\[0.5ex]
+\cmdidx{rxrc\_HNO3\_dst} & Pseudo first order rate coefficient for HNO3 & second-1 \\[0.5ex]
+\cmdidx{rxrc\_HO2\_dst} & Pseudo first order rate coefficient for HO2 & second-1 \\[0.5ex]
+\cmdidx{rxrc\_N2O5\_dst} & Pseudo first order rate coefficient for N2O5 & second-1 \\[0.5ex]
+\cmdidx{rxrc\_O3\_dst} & Pseudo first order rate coefficient for O3 & second-1 \\[0.5ex]
+\cmdidx{rxrc\_SO2\_dst} & Pseudo first order rate coefficient for SO2 & second-1 \\[0.5ex]
+\cmdidx{scv\_cff\_mss\_avg\_pcp\_nrm\_cnv} & Mass mean scavenging coefficient, precipitation normalized, convective & meter2 kilogram-1 \\[0.5ex]
+\cmdidx{scv\_cff\_mss\_avg\_pcp\_nrm\_str} & Mass mean scavenging coefficient, precipitation normalized, stratiform & meter2 kilogram-1 \\[0.5ex]
+\cmdidx{sfc\_spc\_rsl} & Specific surface area resolved & meter2 kilogram-1 \\[0.5ex]
+\cmdidx{sfc\_typ} & LSM surface type (0..28) & index \\[0.5ex]
+\cmdidx{shm\_nbr} & Schmidt number & fraction \\[0.5ex]
+\cmdidx{snw\_frc} & Fraction of surface covered by snow & fraction \\[0.5ex]
+\cmdidx{snw\_hgt\_lqd} & Equivalent liquid water snow depth & meter \\[0.5ex]
+\cmdidx{spc\_xsx\_ncl\_scv} & Specific cross section for nucleation scavenging & meter2 kilogram-1 \\[0.5ex]
+\cmdidx{stk\_nbr} & Stokes number & fraction \\[0.5ex]
+\cmdidx{sz\_grd} & Size grid interfaces & meter \\[0.5ex]
+\cmdidx{sz\_src} & Mass median diameter of source distribution & meter \\[0.5ex]
+\cmdidx{sz} & Nominal size bin center & meter \\[0.5ex]
+\cmdidx{time} & Days since simulation start & day \\[0.5ex]
+\cmdidx{tm\_adj} & Adjustment timestep (CCM: $2\Delta \tm$, MATCH: $\Delta \tm$) & second \\[0.5ex]
+\cmdidx{tpt\_gnd} (\cmdidx{TPT\_GND}) & Ground temperature & kelvin \\[0.5ex]
+\cmdidx{tpt\_mdp} (\cmdidx{T}) & Midlayer temperature & kelvin \\[0.5ex]
+\cmdidx{tpt\_ptn} & Potential temperature & kelvin \\[0.5ex]
+\cmdidx{tpt\_sfc} (\cmdidx{TS}) & Surface temperature & kelvin \\[0.5ex]
+\cmdidx{tpt\_soi} (\cmdidx{TS1}) & Soil temperature & kelvin \\[0.5ex]
+\cmdidx{tpt\_vrt} & Virtual temperature & kelvin \\[0.5ex]
+\cmdidx{upt\_cff\_H2O2\_dst} & Uptake coefficient for H2O2 to dust & fraction \\[0.5ex]
+\cmdidx{upt\_cff\_HNO3\_dst} & Uptake coefficient for HNO3 to dust & fraction \\[0.5ex]
+\cmdidx{upt\_cff\_HO2\_dst} & Uptake coefficient for HO2 to dust & fraction \\[0.5ex]
+\cmdidx{upt\_cff\_N2O5\_dst} & Uptake coefficient for N2O5 to dust & fraction \\[0.5ex]
+\cmdidx{upt\_cff\_NO3\_dst} & Uptake coefficient for NO3 to dust & fraction \\[0.5ex]
+\cmdidx{upt\_cff\_O3\_dst} & Uptake coefficient for O3 to dust & fraction \\[0.5ex]
+\cmdidx{upt\_cff\_OH\_dst} & Uptake coefficient for OH to dust & fraction \\[0.5ex]
+\cmdidx{upt\_cff\_SO2\_dst} & Uptake coefficient for SO2 to dust & fraction \\[0.5ex]
+\cmdidx{vai\_dst} (\cmdidx{VAI\_DST}) & Vegetation area index, one-sided & meter2 meter-2 \\[0.5ex]
+\cmdidx{vlc\_dry} & Total dry deposition velocity & meter second-1 \\[0.5ex]
+\cmdidx{vlc\_grv} & Gravitational settling velocity & meter second-1 \\[0.5ex]
+\cmdidx{vlc\_trb} & Turbulent deposition velocity & meter second-1 \\[0.5ex]
+\cmdidx{vlm\_spc\_rsl} & Specific volume resolved & meter3 kilogram-1 \\[0.5ex]
+\cmdidx{vmr\_HNO3\_gas} & Gaseous HNO3 volume mixing ratio & molecule molecule-1 \\[0.5ex]
+\cmdidx{vmr\_HO2\_gas} & Gaseous HO2 volume mixing ratio & molecule molecule-1 \\[0.5ex]
+\cmdidx{vmr\_N2O5\_gas} & Gaseous N2O5 volume mixing ratio & molecule molecule-1 \\[0.5ex]
+\cmdidx{vmr\_NO3\_aer} & Particulate NO3 volume mixing ratio & molecule molecule-1 \\[0.5ex]
+\cmdidx{vmr\_O3\_gas} & Gaseous O3 volume mixing ratio & molecule molecule-1 \\[0.5ex]
+\cmdidx{vmr\_SO2\_gas} & Gaseous SO2 volume mixing ratio & molecule molecule-1 \\[0.5ex]
+\cmdidx{vmr\_SO4\_aer} & Particulate SO4 volume mixing ratio & molecule molecule-1 \\[0.5ex]
+\cmdidx{vwc\_sfc} (\cmdidx{VWC\_SFC}) & Volumetric water content & meter3 meter-3 \\[0.5ex]
+\cmdidx{wnd\_frc\_slt} (\cmdidx{WND\_FRCS}) & Saltating friction velocity & meter second-1 \\[0.5ex]
+\cmdidx{wnd\_frc\_thr\_slt} (\cmdidx{WND\_FRCT}) & Threshold friction velocity for saltation & meter second-1 \\[0.5ex]
+\cmdidx{wnd\_frc\_mbl} (\cmdidx{WND\_FRC}) & Friction velocity (mobilization) & meter second-1 \\[0.5ex]
+\cmdidx{wnd\_frc\_dps} & Friction velocity (deposition) & meter second-1 \\[0.5ex]
+\cmdidx{wnd\_mdp} & Surface layer mean wind speed & meter second-1 \\[0.5ex]
+\cmdidx{wnd\_mrd\_mdp} & Meridional wind component & meter second-1 \\[0.5ex]
+\cmdidx{wnd\_rfr\_thr\_slt} (\cmdidx{WND\_RFRT}) & Threshold 10 m wind speed for saltation & meter second-1 \\[0.5ex]
+\cmdidx{wnd\_rfr\_mbl} (\cmdidx{WND\_RFR}) & Wind speed at reference height (mobilization) & meter second-1 \\[0.5ex]
+\cmdidx{wnd\_rfr\_dps} & Wind speed at reference height (deposition) & meter second-1 \\[0.5ex]
+\cmdidx{wnd\_rfr} & Wind speed at reference height & meter second-1 \\[0.5ex]
+\cmdidx{wnd\_znl\_mdp} & Zonal wind component & meter second-1 \\[0.5ex]
+\hline
+\end{longtable}
+\end{landscape} % End tbl:fld_nm_dead
+
+% Bibliography
+%\renewcommand\refname{\normalsize Publications}
+%\nocite{ZeK971}
+\bibliographystyle{agu}
+\bibliography{bib}
+\printindex % Requires makeidx KoD95 p. 221
+
+\end{document}

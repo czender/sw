@@ -1,0 +1,24 @@
+$Id$ -*-text-*-
+
+This directory contains template C++ programs and libraries
+
+This module installs many C++ header files in the include directory
+
+This directory stores 5 executables and 2 libraries:
+
+ccc	       Full C++ testbed
+gsl	       GSL template
+i18n	       Internationalization template
+tst	       C++ test program
+complex	       Test C++ complex implementation
+
+libcsz_c++     Library of utility routines
+libcsm_c++     Library of routines for climate system modeling
+
+These libraries and programs have the following dependencies, which
+must be resolved before the C++ module will compile:
+
+Dependency		File(s) requiring       Module supplying
+libgsl.a		ccc.cc gsl.cc		GSL library
+libgslblas.a					GSL library
+netCDF.hh		ccc.cc			Unidata netCDF

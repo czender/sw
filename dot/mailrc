@@ -1,0 +1,1758 @@
+# $Id$ -*-Fundamental-*-
+
+# Purpose: List of mail aliases for Emacs and mail programs
+
+# Vacation program:
+# http://www.nacs.uci.edu/email/options/index.php?page=vacation
+
+# SPAM exceptions: Add e-mail address to 
+# http://www.oit.uci.edu/email/options/index.php?page=spam_exceptions
+
+# Legend:
+# H = Home
+# W = Work
+# C = Cell
+# S = Skype
+# E = Ekiga
+
+# Usage: Run rebuild-mail-abbrevs() in Emacs after changing .mailrc
+# rebuild-mail-abbrevs() only available once rmail loaded and message sent
+
+# My personal e-mail addresses:
+# zender@uci.edu # Default
+# charlie.zender@uci.edu # UCI alias
+# zender@post.harvard.edu
+# zender@ncar.ucar.edu
+# zender@ucar.edu
+# charlie.zender@gmail.com # Google default
+# zender@users.sourceforge.net
+# zender@lgge.obs.ujf-grenoble.fr (?)
+# charles.zender@gmail.com # Privacy?
+# charlie.zender@kindle.com
+# charlie.zender@free.kindle.com
+# charlie.zender@facebook.com
+# zender@awardwallet.com
+
+# Family: Zenders no DM/NM no RAZ, no RLZ
+# Shari Anderson <sharianderson69@gmail.com>
+# Mom <monaruth2000@Yahoo.com>, Linda Zender <Lzender@att.net>, Michelle Zender <zender.michelle@gmail.com>, Lynn Zender <lzender@zendergroup.org>, John Zender <john@fusiontechnology.com>, Yan Jia <yjia@gatan.com>, Joe Sarcone <joey_sarcone@yahoo.com>, Charlie Zender <zender@uci.edu>
+# Family: Zenders no DM/NM no RLZ
+# Mom <monaruth2000@Yahoo.com>, Linda Zender <Lzender@att.net>, Michelle Zender <zender.michelle@gmail.com>, Lynn Zender <lzender@zendergroup.org>, John Zender <john@fusiontechnology.com>, Yan Jia <yjia@gatan.com>, Joe Sarcone <joey_sarcone@yahoo.com>, Dad <bobzender@att.net>, Charlie Zender <zender@uci.edu>
+# Family: Zenders and DM/NM no RLZ
+# Mom <monaruth2000@Yahoo.com>, Linda Zender <Lzender@att.net>, Michelle Zender <zender.michelle@gmail.com>, Lynn Zender <lzender@zendergroup.org>, John Zender <john@fusiontechnology.com>, Yan Jia <yjia@gatan.com>, Joe Sarcone <joey_sarcone@yahoo.com>, Drew McMullin <drewmlin@gmail.com>, Nicole McMullin <eyeirish@yahoo.com>, Charlie Zender <zender@uci.edu>
+# Family: All-inclusive
+# Mom <monaruth2000@Yahoo.com>, Linda Zender <Lzender@att.net>, Michelle Zender <zender.michelle@gmail.com>, Lynn Zender <lzender@zendergroup.org>, John Zender <john@fusiontechnology.com>, Yan Jia <yjia@gatan.com>, Robynn Zender <robynn.zender@gmail.com>, Carol Rufenach <carolrufenach@gmail.com>, Cliff Rufenach <clrufenach@gmail.com>, Drew McMullin <drewmlin@gmail.com>, Nicole McMullin <eyeirish@yahoo.com>, Joe Sarcone <joey_sarcone@yahoo.com>, Dad <bobzender@att.net>, Charlie Zender <zender@uci.edu>
+# Family: Zenders no DM/NM no RAZ
+# Mom <monaruth2000@Yahoo.com>, Linda Zender <Lzender@att.net>, Michelle Zender <zender.michelle@gmail.com>, Lynn Zender <lzender@zendergroup.org>, John Zender <john@fusiontechnology.com>, Yan Jia <yjia@gatan.com>, Joe Sarcone <joey_sarcone@yahoo.com>, Robynn Zender <robynn.zender@gmail.com>, Charlie Zender <zender@uci.edu>
+# Family: Zenders no DM/NM no RAZ no RLZ
+# Mom <monaruth2000@Yahoo.com>, Linda Zender <Lzender@att.net>, Michelle Zender <zender.michelle@gmail.com>, Lynn Zender <lzender@zendergroup.org>, John Zender <john@fusiontechnology.com>, Yan Jia <yjia@gatan.com>, Joe Sarcone <joey_sarcone@yahoo.com>, Charlie Zender <zender@uci.edu>
+
+# NYT-compatible list
+# monaruth2000@Yahoo.com, bobzender@att.net, zender.michelle@gmail.com, lzender@zendergroup.org, john@fusiontechnology.com, robynn.zender@gmail.com, carolrufenach@gmail.com, clrufenach@gmail.com, drewmlin@gmail.com, eyeirish@yahoo.com, Lzender@att.net, joey_sarcone@yahoo.com, yjia@gatan.com, zender@uci.edu
+
+# Car Pool
+# Robynn Zender <robynn.zender@gmail.com>, Glenn Levine <glevine@uci.edu>, Ursula Levine <uclevine@hotmail.com>
+
+# BCC-oriented Thunderbird- and Webmail-compatible list:
+# Mom <monaruth2000@Yahoo.com>, Linda Zender <Lzender@att.net>, Michelle Zender <zender.michelle@gmail.com>, Lynn Zender <lzender@zendergroup.org>, John Zender <john@fusiontechnology.com>, Yan Jia <yjia@gatan.com>, Robynn Zender <robynn.zender@gmail.com>, Carol Rufenach <carolrufenach@gmail.com>, Cliff Rufenach <clrufenach@gmail.com>, Drew McMullin <drewmlin@gmail.com>, Nicole McMullin <eyeirish@yahoo.com>, Joe Sarcone <joey_sarcone@yahoo.com>, Dad <bobzender@att.net>, Danielle Fouquette <dfouquette@gmail.com>, Manuel Lerdau <mlerdau@virginia.edu>, John Murata <murata@apple.com>, Patrick Hall <PHall64@uol.com.br>, Harry Mangalam <hjm@tacgi.com>, Marian Waterman <mlwaterm@uci.edu>, Curtis Payton <curtis.payton@usace.army.mil>, Mark Taylor <mataylo@sandia.gov>, Mary Ellen Simoni <chez.simoni@gmail.com>, Troy Simoni <troy.simoni@cornell.edu>, Keith Moore <jkmoore@uci.edu>, Luz Delgado <luzdelgado@icloud.com>, Sarah Maillefert <SARAHMAILLEFERT@msn.com>, Julia Lee-Taylor <julial@ncar.ucar.edu>, Jeff Kiehl <jtkon@ncar.ucar.edu>, Shelly Miller <Shelly.Miller@Colorado.edu>, Suzanne Kauffman <suzanne@acroname.com>, Brian Kauffman <kauff@ncar.ucar.edu>, Mark O'Shea <marko63or64@yahoo.com>, Adrian Ramseier <adrian@all4dvd.com>, Judith Ramseier <judith@all4dvd.com>, Charlie Zender <zender@uci.edu> 
+
+# BCC-oriented NYT-compatible list:
+# This list may contain (former) dates who do not know eachother
+# Always send BCC (blind carbon copy) so receivers remain anonymous!
+# monaruth2000@Yahoo.com, bobzender@att.net, zender.michelle@gmail.com, lzender@zendergroup.org, john@fusiontechnology.com, robynn.zender@gmail.com, carolrufenach@gmail.com, clrufenach@gmail.com, drewmlin@gmail.com, eyeirish@yahoo.com, Lzender@att.net, joey_sarcone@yahoo.com, yjia@gatan.com, zender@uci.edu, dfouquette@gmail.com
+
+# Travel messages = Family + Close friends = 
+# John Murata <murata@apple.com>, Patrick Hall <PHall64@uol.com.br>, Harry Mangalam <hjm@tacgi.com>, Marian Waterman <mlwaterm@uci.edu>, Bill Blake <billblake@adelphia.net>, Peter Balogh <BALOGH1@aol.com>, Paula Gabriel and Dannie Hofmann <rosebudbud@earthlink.net>, Ruth Maurice <rmaurice@hewlett.org>, Curtis Payton <curtis.payton@usace.army.mil>, Kai Siedenburg <hikailani@gmail.com>, Mark Taylor <mataylo@sandia.gov>
+
+# Holiday Cards = People who keep in touch with us = Family + Travel messages +
+# Monika Nitsche <nitsche@math.unm.edu>, Lisa lePome <lePome@alumni.caltech.edu>, Jorge Talamantes <jtalamantes@csub.edu>, Julia Lee-Taylor <julial@ncar.ucar.edu>, Jeff Kiehl <jtkon@ncar.ucar.edu>, Ken Leiden <kleiden@maad.com>, Shelly Miller <Shelly.Miller@Colorado.edu>, Megan MacArthur <megan@macarthurhawaii.com>, Eric Bonnici <ericbonnici@mac.com>, Sarah Maillefert <SARAHMAILLEFERT@msn.com>, Suzanne Kauffman <suzanne@acroname.com>, Brian Kauffman <kauff@ncar.ucar.edu>, Brian Eaton <eaton@ncar.ucar.edu>, Paula Drager Fisher <paulad@ncar.ucar.edu>, Paul Stern Grant <grant@cfa.harvard.edu>, Carolyn Stern Grant <stern@cfa.harvard.edu>, Mary Ellen Simoni <chez.simoni@gmail.com>, Troy Simoni <troy.simoni@cornell.edu>, Keith Moore <jkmoore@uci.edu>, Manuel Lerdau <mlerdau@virginia.edu>, 
+
+# Holiday Cards2 Sent them 20071231 letter on 20080401.
+# Renato Pajarola <pajarola@acm.org>, Barbara Pajarola <bpajarola@sunrise.ch>, Brad Sutton <brad@gcal.org>, Brad Dalton <dr.lizard@lacertilia.org>, Andrea Reinkensmeier <reinken@fastmail.fm>, Scott Redeker and Gregg Williams <scottandgregg@verizon.net>, Steve and Carol Raby <sjrabys@earthlink.net>, Debbie and Gilberto Guerra <gg401@prodigy.net>, Franny Eanet <franny.eanet@gmail.com>, Suzanne Morse <srm@ecology.coa.edu>, Sarita Sidhu <sarita@fair-trade-products.com>, Ron Miller <rmiller@giss.nasa.gov>
+
+# ESS Zender group:
+# Henry Butowsky <henryb@hush.com>, Bob Allen <robert.allen@ucr.edu>, Scott Capps <scapps@atmos.ucla.edu>, Qin Han <qhanqhan@gmail.com>, Mike Tosca <mtosca@uci.edu>, Xianwei Wang <xianweiw@uci.edu>, Charlie Zender <zender@uci.edu> 
+# CC: Isabella Velicogna <isabella.velicogna@gmail.com>
+# CC: Steve Jenks <sjenks@uci.edu>, Mark Flanner <flanner@umich.edu>, Daniel Wang <danielw@slac.stanford.edu>
+
+# ESS Modeling PIs:
+# Jay Famiglietti <jfamigli@uci.edu>, Gudrun Magnusdottir <gudrun@uci.edu>, Keith Moore <jkmoore@uci.edu>, Claudia Pasquero <claudia.pasquero@uci.edu>, Michael Prather <mprather@uci.edu>, Francois Primeau <fprimeau@uci.edu>, Jim Randerson <jranders@uci.edu>, Jin-Yi Yu <jyyu@uci.edu>, Charlie Zender <zender@uci.edu>
+
+# ESS Tenured PIs:
+# Ellen Druffel <edruffel@uci.edu>, Jay Famiglietti <jfamigli@uci.edu>, Mike Goulden <mgoulden@uci.edu>, Gudrun Magnusdottir <gudrun@uci.edu>, Michael Prather <mprather@uci.edu>, Jim Randerson <jranders@uci.edu>, Bill Reeburgh <reeburgh@uci.edu>, Eric Saltzman <esaltzma@uci.edu>, Sue Trumbore <setrumbo@uci.edu>, Jin-Yi Yu <jyyu@uci.edu>, Charlie Zender <zender@uci.edu>
+
+# ABC:
+# Paul Dourish <jpd@ics.uci.edu>, Ralph Purdy <repurdy@uci.edu>, Bill Tomlinson <wmt@uci.edu>, Charlie Zender <zender@uci.edu>
+
+# CSE Ex-Officio:
+# Sharon Salinger <salinger@uci.edu>, Rudi Berkelhamer <rcberkel@uci.edu>, Manuel Gomez <mngomez@uci.edu>, David Snow <dsnow@uci.edu>, Marguerite Bonous-Hammarth <mbonoush@uci.edu>
+# CSE Consultants
+.de# Christina Woo <cjwoo@uci.edu>, De Gallow <dgallow@uci.edu>, Fawzi Hermes <fhhermes@uci.edu>, Molly McGuire <mmcguire@uci.edu>
+
+# Senate support:
+# Nancy Clarke <nclarke@uci.edu>, Twyla Forcadela <tforcade@uci.edu>, Carol Gardner <cgardner@uci.edu>, Sue Gumbrecht <gumbrech@uci.edu>, Molly McGuire <mmcguire@uci.edu>, Heike Rau <hrau@uci.edu>
+
+# Men's group:
+# Von Aronson <vonheartwood@aol.com>, Rollie Bennett <sirrollie@aol.com>, Bill Blake <billblake@adelphia.net>, Ted Cowper <tedcowper@hotmail.com>, Jim Perry <perrylove2@cs.com>, Joel Rosenfeld <jrosenfeld1@socal.rr.com>, Charlie Zender <zender@uci.edu>
+
+# Potential Grad students:
+alias goldenson "Naomi Goldenson <naomi.goldenson@gmail.com>" # Vienna 2008
+
+# ESMF lists handled by mailman on www.ess.uci.edu
+alias cie "CIE Faculty Liasons <cie-fac@uci.edu>"
+alias diwg "ESDSWG DIWG <esdswg-interoperability@lists.nasa.gov>"
+alias access "NASA ACCESS List <roses-access@lists.nasa.gov>"
+alias dead "Dust Entrainment And Deposition Mail List <dead@uci.edu>"
+alias esmf "ESMF User Mail List <esmf@uci.edu>"
+alias esmfadm "ESMF Administration Mail List <esmfadm@uci.edu>"
+alias esmfpi "ESMF Principle Investigator Mail List <esmfpi@uci.edu>"
+alias esmfrfp "ESMF Request for Proposal Mail List <esmfrfp@uci.edu>"
+alias esmfvnd "ESMF Potential Vendor Mail List <esmfvnd@uci.edu>"
+alias esmfsa "ESMF System Administrator <esmfsa@uci.edu>"
+alias esmfwww "ESMF Webmasters <esmfwww@dcs.nac.uci.edu>"
+alias esmfwreq "ESMF Work Request System <wreq@dcs.nac.uci.edu>"
+alias ucioptiputer "UCI Optiputer <ucioptiputer@uci.edu>"
+alias watari "Hank Watari <hrwatari@us.ibm.com>"
+alias joseph "Bill Joseph <bjoseph@jrti.com>"
+alias wehara "Darrow Wehara <darrow@sgi.com>"
+alias patchen "Sally Patchen <sally.patchen@hp.com>"
+
+# ESS lists in e.g., ess1.ess.uci.edu:/etc/mailinglists/senate
+alias ess "ESS Department <ess@ess.uci.edu>"
+alias travel "ESS Travel <travel@ess.uci.edu>"
+alias scheduling "ESS Room Scheduling <scheduling@ess.uci.edu>"
+alias senate "ESS Faculty <faculty@ess.uci.edu>"
+alias grads "ESS Graduate Students <grads@ess.uci.edu>"
+alias ugrads "ESS/EES Students <undergrads@ess.uci.edu>"
+alias admin "ESS Administrative Staff <essadmin@ess.uci.edu>"
+alias researchers "ESS Researchers and Postdocs <researchers@ess.uci.edu>"
+alias seminar "ESS Seminar Announcements <essseminar@ess.uci.edu>"
+alias visitor "ESS Visitors <essvisitors@ess.uci.edu>"
+
+# Politicians and elected representatives
+alias gvr "Governor Arnold Schwarzenegger <governor@governor.ca.gov>"
+#alias myr "Honorable Larry Agran <>"
+alias prz "President Barack Obama <president@whitehouse.gov>" # http://www.whitehouse.gov/contact
+alias rpr_2 "Honorable John Campbell <john.campbell@mail.house.gov>" # Congressional District 48, (949) 756-2244
+alias asm_1 "Assemblyman Chuck DeVore, Assembly District 70 <assemblymember.chuck.devore@assembly.ca.gov>"
+alias snt_3 "Senator John Ackerman, Senate District 33 <senator.ackerman@sen.ca.gov>
+alias snt_1 "Senator Barbara Boxer <senator@boxer.senate.gov>"
+alias snt_2 "Senator Dianne Feinstein <senator@feinstein.senate.gov>"
+alias vp "Vice President Dick Cheney <vice.president@whitehouse.gov>"
+
+alias ackerman_j "Senator John Ackerman, Senate District 33 <senator.ackerman@sen.ca.gov>
+#alias agran "Honorable Larry Agran <>"
+alias boxer "Senator Barbara Boxer <senator@boxer.senate.gov>"
+alias bush_g "President George Bush <president@whitehouse.gov>"
+alias campbell_j "Assemblyman John Campbell, Assembly District 70 <assemblymember.john.campbell@assembly.ca.gov>"
+alias cox "Honorable Christopher Cox <christopher.cox@mail.house.com>"
+alias davis_g "Governor Gray Davis <governor@governor.ca.gov>"
+alias feinstein "Senator Dianne Feinstein <senator@feinstein.senate.gov>"
+#alias gore "Honorable Al Gore <>"
+
+# prp_sei graduate student applicants beginning 200408 sdn_grd_02_adv
+alias wang_n "Ning Wang <wangn@uci.edu>" # Received application 20040828 Strikes: bad English, high maintenance, e-mail clock wrong
+alias venkitachalam "Gayathri Venkitachalam <gvenkita@uci.edu>" # Received application 20040903
+
+# prp_sei programmer applicants beginning 200408 prg_anl_03_adv
+alias augustine_j "John Augustine <jea@ics.uci.edu>" # 940 Requested SA 20040708 Received SA 20040719 #2 
+alias christensen_c "Carl Christensen <carlgt1@yahoo.com>" # Received interest 20050119 *** climateprediction.net head programmer!
+alias dalton_n "Niall Dalton <niall@xrnd.com>" # Received interest 20040827
+alias maccallum_i "Iain MacCallum <imacc@comcast.net>" # Requested SA 20040711 #1 **
+alias yan_y "Yuan Yan <yyan@grex.org>" # Received application 20041125
+alias mcinerney_j "Joe McInerney <joemci@ucar.edu>" # Received application 20041206
+
+# ESMF job applicants 200403 prg_anl_02_adv
+# Chao Luo <cl569@cornell.edu> # Requested SA #1 **
+alias esmf_support "ESMF Support E-mail list <esmf_support@list.woc.noaa.gov>"
+alias kim "Saewung Kim <saewungk@uci.edu>" 
+alias nizkorodov "Sergey Nizkorodov <nizkorod@uci.edu>" 
+alias connelly "Dennis Connelly <socalesquire@gmail.com>" # ARAG lawyer
+alias li_j "Jianjun Li <lijj99@yahoo.com>" # Requested SA 20040609 Withdrew 20040625 #2
+alias ahmed_n "Nizam Ahmed <nahmed@sciborg.uwaterloo.ca>" # 007 Requested SA 20040602 Withdrew 20040630
+alias amarasinghe_n "Nandana Amarasinghe <nandanaa@prodigy.net>" # Requested SA 20040602 Withdrew 20040618 #1 ***
+alias augustine_j "John Augustine <jea@ics.uci.edu>" # 940 Requested SA 20040708 Received SA 20040719 #2 
+alias bermudez_l "Luis Bermudez <leb27@drexel.edu>" # Received app 20040826 #2
+alias bing-zhu_w "Wang Bing-zhu <wang1bingzhu@yahoo.com>" # Requested SA 20040528
+alias kathurojo_n "Nathen Kathurojo <navenk@cc.usu.edu>" # Requested SA 20040608 #3
+alias lin_j "Jun Lin <linj@clarkson.edu>" # Requested SA 20040626 (received "no linux machine" response 20040711) #3
+alias maccallum_i "Iain MacCallum <imacc@comcast.net>" # Requested SA 20040711 #1 **
+alias ma "Naiyang Ma <nma@eng.utah.edu>" # Requested SA 20040616 #3
+alias mehta_c "Cyril Mehta <Cyrmeh@aol.com>" Requested SA 20040711 #1 *
+alias meng_x "Xiande Meng <fnxm@uaf.edu>" # Requested SA 20040508 #1 **** Withdrew 20040720 took job at UC Merced
+alias mizoguchi_m "Ken-ichi Mizoguchi <mizoken@umbc.edu>" # Requested SA 20040525 #3
+alias noguchi_k "Koji Noguchi <knoguchi@ics.uci.edu>" # Requested SA 20040701
+alias park_c "Chan-Hee Park <chan.park@ce.gatech.edu>" # Requested SA 20040607 #2
+alias pokratath_r "Rajeevan Pokratath <rajeevan@cmmacs.ernet.in>" # Requested SA 20040617 Withdrew 20040624 #3
+alias potty_j "Jayaraman Potty <jpotty@awi-bremerhaven.de>" # Requested SA 20040701
+alias samarth_s "Rohit Samarth <rohitsami@yahoo.com>" # Requested SA 20040531 Withdrew 20040630
+alias sardesei_m "Milind Sardesai <milind@wwdb.org>" # Requested SA 20040615 #3
+alias sarkar_s "Sudipta Sarkar <ssarkar@gmu.edu>" # 116 Requested SA 20040815 (received SA 20040820) #1 ***
+alias sheng_h "Hua Sheng <huashengca@yahoo.com>" # Requested SA 20040624 #1 **
+alias soiguine_a "Alex Soiguine <alexsoiguine@cox.net>" # Requested SA (received "not enough time" response)
+alias singh_a "Anil Kumar Singh <anilbharat@yahoo.com>" # Requested SA 20040526 Withdrew 20040630 #3
+alias song_y "Yanyun Song <yanyun_song@yahoo.com>" # Received application 20040719
+alias sun_h "Hongyu Sun <sun@cae.wisc.edu>" # Requested SA 20040525 #3
+alias tadesse_a "Alemu Tadesse <alemu_t@yahoo.com>" # Requested SA 20040610 #3
+alias vasudevan_b "Bintu Vasudevan <bintu_gv@yahoo.com>" # 921 Received partial SA 20040602 #2
+alias volberg_o "Ovsei Volberg <volov@umich.edu>" # Requested SA 20040624 #1 ****
+alias wang_j "Jun Wang <jwang06@mailbox.syr.edu>" # Requested SA 20040611 (received "not enough time" response) #2
+alias wang_l "Liang Wang <wliang21@hotmail.com>" # Requested SA 20040525 #2
+alias xu_y "Yiwen Xu <yiwen.xu@dkrz.de>" # Requested SA 20040523 #1 ****
+alias yan_l "Linong Yan <yanlinong04@yahoo.com>" # Requested SA 20040607 #2
+alias yang_p "Ping Yang <pingyang1971@yahoo.com>" # Requested SA 20040528
+alias yassin_m "Mohamed Yassin <mfy@iis.u-tokyo.ac.jp>" # Requested SA 20040528
+alias yoon_y "Yoke Yoon <yoonyt@colorado.edu>" # Withdrew with job at CU #3
+alias zhang_m "Minfeng Zhang <minfeng_zhang@hotmail.com>" # 888 Received SA 20040525 #2
+
+# Job applicants 200303, delete after hire made
+alias chow_j "Jeff Chow <jeffyuchow@yahoo.com>" # 222
+alias lee_h "Hyo Jong Lee <hlee@ics.uci.edu>" # 333
+alias feiguin "Adrian Feiguin <afeiguin@uci.edu>" # 444
+alias liu_c "Chuntao Liu <liuct@uwyo.edu>" # 666
+alias baldwin_c "Cullum Baldwin <cullum_b@yahoo.com>" # Withdrew
+alias gonzales_s "Sarah Gonzales <sgonzale@moho.sdsu.edu>" # Never received SA
+alias li_d "Dapeng Li <dli@sagecomputing.com>" # Never received SA
+alias li_w "Weidong Li <wli@mscs.mu.edu>" # Never received SA
+alias li_s "Shenghui Li <shengui@apl.washington.edu>" # Never received SA
+alias sednev "Igor Sednev <sednev@hotmail.com>" # Never received SA
+alias wang_ja "James S. Wang <jsw@io.harvard.edu>" # Never received SA
+alias zhang_x "Xingyou Zhang <zhanxy@email.uc.edu>" # Never received SA
+alias zhu_l "Lieynan Zhu <zhula@bc.edu>" # Never received SA
+alias bray "John Bray <john.bray@metoffice.com>" # Withdrew, too busy for SA
+alias goswami_s "Sudipta Goswami <sgoswami@esc.cam.ac.uk>" # 100 Rejected after SA
+alias sunderland "Andrew Sunderland <a.g.sunderland@dl.ac.uk>" # Withdrew before SA
+alias wang_ji "Jin Wang <jinwang@ucalgary.ca>" # Withdrew before SA
+alias wang_qi "Qiyi Wang <wangqiy@auburn.edu>" # Rejected before SA
+alias constantine "Alex Constantine <eiappl@yahoo.com>" # Rejected before SA
+
+# DEAD Users
+# Huisheng Bian <bian@code916.gsfc.nasa.gov>, Peter Bragg <p.bragg@sheffield.ac.uk>, Duncan Fairlie <t.d.fairlie@larc.nasa.gov>, Mark Flanner <flanner@umich.edu>, Alf Grini <alf.grini@gmail.com>, Chao Luo <cl569@cornell.edu>, Natalie Mahowald <mahowald@cornell.edu>, Karen Shell <kshell@ucsd.edu>, Svetlana Tsyro <svetlana.tsyro@met.no>, Natasha Dryden <ggp03nld@sheffield.ac.uk>, Andrea Panizza <andreap@na.astro.it>
+
+# Contributors to NCO, round 1:
+alias butowsky "Henry Butowsky <henryb@hush.com>" # Phone: 011-44-1727-759544
+alias butowsky_p "Polly Butowsky <polly@41109.be>" # Phone: 011-32-2-537-6953 (H) 011 32 472 82 62 53 (C)(?)
+alias peterson "Rorik Peterson <ffrap1@uaf.edu>"
+alias kocik "Bill Kocik <bkocik@users.sourceforge.net>"
+
+# Contributors to NCO, round 2:
+alias dix "Martin Dix <Martin.Dix@csiro.au>"
+alias watson "James Watson <jwatson@csee.uq.edu.au>"
+alias schuchardt "Karen Schuchardt <Karen.Schuchardt@pnl.gov>"
+alias shi "Yulin Shi <henryshi2007@gmail.com>" # UCI GPGPU student
+
+# SMU list San Martin d'Uriage
+alias baker_rs "Rob & Stefani Baker <robstefgabiben@orange.fr>" # SMU couple, Gabi, Samantha (2007), 612 Gites de Perival, 38410 SMU, 0476 03 11 16 
+alias buffin "Agnes Buffin <monjardin@mairie-saintmartinduriage.fr>" # Directrice, Jardins d'Enfants
+alias castaing-hugo "Georges et Huguette Castaing-Hugo <georges.vuaille@wanadoo.fr>" # (0)476 89 19 04 SMU villenauve home exchange
+alias gravanis "Stefanie Gravanis <Stefanie.Gravanis@orange.fr>" # SMU Melina's mom, (0)476 73 71 07, Le Cholet, 38320 Herbeys, France
+alias coulombeau "Armelle Coulombeau <acoulombeau@yahoo.fr>" # SMU friends
+alias garin "John Garin <garin.natjean@orange.fr>" # SMU 011 + 33 + 325 + 75 18 64
+alias kern "April Kern <jagsfan@sbcglobal.net>" # Rachel's mom, 240 Chemin du Mollar, 38410 SMU
+alias pavey_a "Anna Pavey <anna.pavey@iteams.org>" # (0)476 01 04 98
+alias simoni "Mary Ellen Simoni <chez.simoni@gmail.com>" # (707) 922-5668 (H, US-local, rings in France) (0)476 72 07 82 (H, French local, rings in France), (0)6 26 96 05 94 (C, French), 2493 route du Chamrousse, 38410 SMU
+alias simoni_t "Troy Simoni <troy.simoni@cornell.edu>" # (0)476 72 07 82 (H), (0)629 62 13 07 (C), (707) 206-7655 (C, rings in France)
+
+# General list
+alias leonard "Peter Leonard <pleonard@sesda3.com>" # NASA
+alias baron "Jeff Baron <jeff@baronanddangelo.org>" # marathoner HR86
+alias vicente "Pedro Vicente <pvicente@uci.edu>" # programmer
+alias ferrell "Wanda Ferrell <wanda.ferrell@science.doe.gov>"
+#alias hansen "Elaine Hansen <hansen%vega.colorado.edu@spot.colorado.edu>"
+alias abatzoglou "John Abatzoglou <jabatzog@uci.edu>"
+alias abdibekov "Ualikhan Abdibekov <uali@academset.kz>"
+alias accomodataions "Accomodations Unlimited <NSF@wedothelegwork.com>"
+alias ackerman_a "Andy Ackerman <andrew.ackerman@nasa.gov>" # 650/604-3522
+alias ackerman_s "Steve Ackerman <stevea@ssecmail.ssec.wisc.edu>"
+alias ackerman_t "Tom Ackerman <ackerman@essc.psu.edu>"
+alias olding "Steve Olding <steven.w.olding@nasa.gov>" # NASA ESDSWG Tech Infusion ICESat (202) 558 4042
+alias berrick "Stephen Berrick <Stephen.W.Berrick@nasa.gov>" # NASA ACCESS program manager (202) 358-1757
+alias hunolt "Greg Hunolt <greghunolt@excel.net>" # NASA ACCESS metrics reporting contact
+alias barth_r "Randy Barth <Randy.Barth@nasa.gov>" # NASA ACCESS MCT support
+alias adams "Jonathan Adams <jmadams@etal.uri.edu>"
+alias diaz-hernandez "José Díaz-Hernández <jose1.diaz@juntadeandalucia.es>" # soil and dust ppr_DiP08
+alias parraga "Jesus Parraga <jparraga@ugr.es>" # soil and dust ppr_DiP08
+alias adams_c "Constance Adams <ca@spacearchitect.org>"
+alias adkins "Jess Adkins <jess@gps.caltech.edu>"
+alias agu "AGU Customer Service <service@agu.org>"
+alias aigerim "Kalybay Aigerim <aigerim_k@academset.kz>"
+alias ajie "Henry Ajie <hoajie@uci.edu>"
+alias alarcon "Marta Alarcon <marta.alarcon@upc.es>"
+alias alberta "Tim Alberta <alberta@snowdog.larc.nasa.gov>"
+alias albertson "John Albertson <jdalbertson@virginia.edu>"
+alias aldrich "Bob Aldrich <raldrich@agu.org>"
+alias alfaro "Stephane Alfaro <alfaro@lisa.univ-paris12.fr>"
+alias allen "Bob Allen <robert.allen@ucr.edu>" # postdoc
+alias allen_c "Carole Allen <allenc@apas.colorado.edu>"
+alias allen_d "Dave Allen <dallen@usgcrp.gov>"
+alias alpert_e "Ethan Alpert <ethan@ncar.ucar.edu>"
+alias alpert_p "Pinhas Alpert <pinhas@cyclone.tau.ac.il>"
+alias ammann "Caspar Ammann <ammann@ncar.ucar.edu>" # (303) 497-1705
+alias ams "AMS Online Weather Studies <onlinewx@dc.ametsoc.org>"
+alias anderson_b "Bob Anderson <rsand@earthsci.ucsc.edu>"
+alias anderson_c "Christine Anderson <caanders@uci.edu>" # My old dean's office analyst
+alias anderson_d "Dan Anderson <anderson@ncar.ucar.edu>"
+alias anderson_d2 "Don Anderson <donald.anderson-1@nasa.gov>" # MAP program director
+alias anderson_g "Gail Anderson <ganderson@plh.af.mil>"
+alias anderson_t "Tad Anderson <tadand@atmos.washington.edu>"
+alias andreae "Meinrat O. Andreae <andreae@mpch-mainz.mpg.de>"
+alias anon "Anonymous Mail Server <anon@anon.penet.fi>"
+alias anthes "Rick Anthes <anthes@ncar.ucar.edu>"
+alias antonelli "Aldo Antonelli <aldo@uci.edu>"
+alias aoki "Teruo Aoki <teaoki@mri-jma.go.jp>"
+alias apache "Apache Users E-mail List <users@httpd.apache.org>" # http://httpd.apache.org/userslist.html
+alias apas "Astrophysical and Planetary Sciences <apsgradsec@aps.colorado.edu>"
+alias arav "Nahum Arav <narav@igpp.llnl.gov>"
+alias arblaster "Julie Arblaster <jma@ncar.ucar.edu>"
+alias archer_c "Cristina Archer <carcher@udel.edu>"
+alias archer_d "David Archer <d-archer@uchicago.edu>"
+alias arimoto "Richard Arimoto <arimoto@cemrc.org>"
+alias arnaud "Didier Voisin <voisin@lgge.obs.ujf-grenoble.fr>" # UJF asst. prof
+alias arnold "Ed Arnold <era@ncar.ucar.edu>"
+alias arnott "Pat Arnott <pat@dri.edu>"
+alias arseneau "Donald Arseneau <asnd@triumf.ca>"
+alias arth "Tina Arth <ccarth@uci.edu>"
+alias arzayus "Krisa Arzayus <krisa.arzayus@noaa.gov>"
+alias avila "Anna Avila <anna.avila@uab.es>"
+alias avissar "Roni Avissar <avissar@gaia.rutgers.edu>"
+alias aydin "Murat Aydin <maydin@uci.edu>"
+alias baas "Andreas Baas <andreas.baas@kcl.ac.uk>" # German/English dust thinker
+alias babat "Lisa Babat <Lisa_Babat@prenhall.com>"
+alias bach "Andy Bach <Andy.Bach@wwu.edu>"
+alias baguena "Angela Baguena <abaguena@gencat.net>"
+alias bainbridge "Bill Bainbridge <wbainbri@nsf.gov>"
+alias baker "Sharon Baker <sjbaker@uci.edu>"
+alias bakkas "Kadur Bakkas <kaderbakkas@hotmail.fr>"
+alias baldasano "Jose Baldasano <jose.baldasano@upc.es>"
+alias balkanski "Yves Balkanski <balkansk@lsce.saclay.cea.fr>"
+alias ball "Steve Ball <ball@ncar.ucar.edu>"
+alias ballantine "Andy Ballantine <andyb@bren.ucsb.edu>"
+alias balogh "Peter Balogh <BALOGH1@aol.com>" # (415) 824-4828 (H), (415) 519-5578 (C)
+alias bamattre "Stephen Bamattre <sbamattr@uci.edu>"
+alias bar-or "Rotem Bar-Or <rotem.bar-or@weizmann.ac.il>"
+alias barcilon "Albert Barcilon <barcilon@met.fsu.edu>"
+alias bardeen "Chuck Bardeen <Charles.Bardeen@lasp.colorado.edu>"
+alias barletta "Barbara Barletta <bbarlett@uci.edu>"
+alias barlow "Janet Barlow <j.f.barlow@rdg.ac.uk>"
+alias barrientos "Rich Barrientos <>" # drums Phone: (949) 276-5812 (H), 933-8967 (C)
+alias barth "Mary Barth <barthm@ncar.ucar.edu>"
+alias bassett "Britt Bassett <britt@windom.netrack.net>"
+alias bates "Timothy Bates <Bates@pmel.noaa.gov>"
+alias battista "Chris Battista <battista@rgs.uci.edu>"
+alias bauer_o "Otto Bauer <Otto.Bauer@adic.com>"
+alias bauer_s "Susanne Bauer <sbauer@giss.nasa.gov>"
+alias baum "Ellen Baum <ebaum@catf.us>" # SPAC CATF
+alias baumann "Daniel Baumann <daniel@debian.org>"
+alias bearden "Kathryn Bearden <kbearden@uci.edu>"
+alias beaupre "Steven Beaupre <beaupre@essgrad.ess.uci.edu>"
+alias becker "Donald Becker <becker@scyld.com>"
+alias beckwith "Jeff Beckwith <beckwith@uci.edu>"
+alias beebe_b "Bub Beebe <BBeebe@smud.org>" # (916) 732-5254
+alias begalli "Domingos Begalli <drb@uci.edu>"
+alias behseta "Sam Behseta <sbehseta@csub.edu>"
+alias bell "Jason Bell <jbell@emerald.ucsc.edu>"
+alias bendale "Rajiv Bendale <bendale@us.ibm.com>"
+alias bendor "Eyal Ben-Dor <bendor@post.tau.ac.il>" # Soil remote sensing/crusting guy from TAU
+alias benford "Gregory Benford <gbenford@uci.edu>" # (949) 856-9008 (H)
+alias bennett "Rollie Bennett <sirrollie@aol.com>"
+alias benter "Thorsten Benter <tbenter@uci.edu>"
+alias beowulf "Beowulf Mail List <beowulf@beowulf.org>"
+alias berg "Aaron Berg <aberg@uoguelph.ca>"
+alias bergametti "Gilles Bergametti <bergametti@lisa.univ-paris12.fr>"
+alias bergin "Mike Bergin <bergin@cmdl.noaa.gov>"
+alias bergman "John Bergman <jwb@cdc.noaa.gov>"
+alias berner "Judith Berner <berner@ncar.ucar.edu>"
+alias bertin "Barbara Bertin <bdbertin@uci.edu>" # Study abroad, Regina's friend
+alias bian "Huisheng Bian <Huisheng.Bian@nasa.gov>" # (301) 614-5092
+alias biasutti "Michela Biasutti <biasutti@atmos.washington.edu>"
+alias hopkins "Francesca Hopkins <fhopkins@uci.edu>"
+alias bishop "Janice Bishop <jbishop@seti.org>"
+alias bishop "Jim Bishop <JKBishop@lbl.gov>"
+alias bison "Bison Help Mailing List <help-bison@gnu.org>"
+alias bitz "Cecelia Bitz <bitz@atmos.washington.edu>"
+alias blackmon "Maurice Blackmon <blackmon@ncar.ucar.edu>"
+alias blake_b "Bill Blake <billblake@adelphia.net>"
+alias blake_d "Don Blake <drblake@uci.edu>"
+alias bliesner "Bette Otto-Bliesner <ottobli@ncar.ucar.edu>"
+alias blinnikov "Misha Blinnikov <msblinnikov@stcloudstate.edu>"
+alias blumstein "Carl Blumstein <blumstei@berkeley.edu>" # CIEE director wnd
+alias boggild "Carl Egede Bøggild <carl.egede.boggild@unis.no>" # cryoconite, svalbard
+alias bolt "Ron Bolt <rpbolt@wsu.edu>"
+alias bonan "Gordon Bonan <bonan@ncar.ucar.edu>"
+alias bond "Tami Bond <yark@uiuc.edu>"
+alias bonnici "Eric Bonnici <ericbonnici@mac.com>" # SMA Hawaii 808-895-5737
+alias book "Christina Book <cbook@ncar.ucar.edu>"
+alias borer "Dave Borer <tull@pgroup.com>"
+alias bortz "Sarah Bortz <bortz@uci.edu>"
+alias bossert "Jim Bossert <bossert@lanl.gov>"
+alias boucher "Olivier Boucher <boucher@loa.univ-lille1.fr>"
+alias boucher "Olivier Boucher <olivier.boucher@metoffice.gov.uk>"
+alias bouvier "Pascal Bouvier <boulder_frog@uswest.net>"
+alias boville "Byron Boville <boville@ncar.ucar.edu>" # dead
+alias boyd_j "Jim Boyd <Jboyd@energy.state.ca.us>"
+alias bradley "Tim Bradley <tbradley@uci.edu>"
+alias bradley_c "Charlene Bradley <bradley@uci.edu>"
+alias brady "Esther Brady <brady@ncar.ucar.edu>"
+alias bragg "Peter Bragg <p.bragg@sheffield.ac.uk>"
+alias brandt "Richard Brandt <brandt@atmos.washington.edu>"
+alias branstator "Grant Branstator <branst@ncar.ucar.edu>"
+alias brase "Wendell Brase <wcbrase@uci.edu>"
+alias brasseur "Guy Brasseur <brasseur@dkrz.de>"
+alias bretherton "Chris Bretherton <breth@atmos.washington.edu>"
+alias briegleb "Bruce Briegleb <bruceb@ncar.ucar.edu>"
+alias brossard "Suzanne Brossard <brossard@us.ibm.com>"
+alias brown "Mike Brown <brownmc@uci.edu>"
+alias brown_m "Maxine Brown <maxine@uic.edu>"
+alias brown_m "Mitchell Brown <mcbrown@uci.edu>" # ESS/Chem. librarian (949) 824-9732
+alias brown_s "Susan Brown <sbrown@energy.state.ca.us>" # (916) 654-4741
+alias bryan "Frank Bryan <bryan@ncar.ucar.edu>"
+alias bryant "Rob Bryant <r.g.bryant@sheffield.ac.uk>"
+alias buccolo "Gina Buccolo <gbuccolo@uci.edu>"
+alias buchanan "Terri Buchanan <buchanat@uci.edu>" # 4-3102
+alias bucholtz "Anthony Bucholtz <anthony@arlo.ucsd.edu>"
+alias buck "Clifton Buck <>" # Fe solubility, works with landing
+alias buja "Lawrence Buja <southern@ncar.ucar.edu>"
+alias bullard "Joanna Bullard <J.E.Bullard@lboro.ac.uk>" # dust girl, poet
+alias bullock "Mark Bullock <bullock@boulder.swri.edu>"
+alias burkholder "Jim Burkholder <jburkholder@al.noaa.gov>"
+alias burleigh "Nancy Burleigh <nm_burleigh@pnl.gov>"
+alias busacca "Alan Busacca <busacca@wsu.edu>"
+alias bush "Brian Bush <bwb@lanl.gov>" # (505) 667-6485
+alias bush_b "Brett Bush <bbush@arlo.ucsd.edu>"
+alias cahill "Tom Cahill <tacahill@ucdavis.edu>"
+alias cakmur "Reha Cakmur <rcakmur@optonline.net>"
+alias caldwell "Ginger Caldwell <cal@ncar.ucar.edu>"
+alias calit2 "Calit2 <calit2@uci.edu>"
+alias cam "CAM Users Mail List <cam-users@ncar.ucar.edu>"
+alias cam-dev "CAM Developer Mail List <cam-dev@cgd.ucar.edu>"
+alias campbell "Campbell Scientific <enviro@campbellsci.com>"
+alias cantwell "Chad Cantwell <ccantwel@uci.edu>"
+alias caploe "Anne Caploe <Acaploe1@aol.com>" # 543 B 30th St., Oakland CA, 94609
+alias capps "Scott Capps <scapps@atmos.ucla.edu>" # (949) 824-2314
+alias carbone "Mariah Carbone <mcarbone@uci.edu>"
+alias carmichael "Greg Carmichael <gregory-carmichael@uiowa.edu>"
+alias carol "Carol Rufenach <carolrufenach@gmail.com>" # 52-415-152-8765 (H, SMA), (303) 747-6346 (H, VOIP rings in SMA), (303) 823-5990 (H, Lyons), PO Box 229 (427 Park Dr.), Lyons CO 80540
+alias caron "John Caron <caron@ncar.ucar.edu>"
+alias carr "George Carr <gcarr@ncar.ucar.edu>"
+alias carrillo "Jaime Carrillo <jcarrill@uci.edu>"
+alias carson "Steve Carson <scarson@ncar.ucar.edu>"
+alias caruso "Steve Caruso <scc@sgi.com>"
+alias catalina "Hotel Catalina and Sotavento <sotavent@mail.giga.com>"
+alias catlett "Charlie Catlett <catlett@mcs.anl.gov>" # 630-252-7867
+alias cavanagh_r "Ralph Cavanagh <rcavanagh@nrdc.org>"
+alias ccm "CCM Mail List <ccm-users@ncar.ucar.edu>"
+alias ccm-progs "CCM Programmers <ccm-progs@ncar.ucar.edu>"
+alias ccsm "CCSM Users Mail List <ccsm-users@cgd.ucar.edu>"
+alias cess "Bob Cess <cess@atmsci.msrc.sunysb.edu>"
+alias chambers "Jeff Chambers <jeff@inpa.gov.br>"
+alias chanan "Laura Chanan <laurachanan@gmail.com>"
+alias chandler "Dave Chandler <dgc@ksu.edu>"
+alias chappell "Adrian Chappell <Adrian.Chappell@csiro.au>" # CTWF nice guy
+alias chappell "Jon Chappell <jhc@cfa.harvard.edu>"
+alias charlock "Tom Charlock <t.p.charlock@larc.nasa.gov>"
+alias chatfield "Bob Chatfield <chatfield@clio.arc.nasa.gov>"
+alias chavez "Pat Chavez <pchavez@usgs.gov>" 
+alias gutierrez "Yasmeen Gutierrez <ycygutie@uci.edu>" # UCI Financial Analyst
+alias cheek "Joseph Cheek <joseph.cheek@polarfoundation.org>" # Science Communications, International Polar Foundation met at EGU 2008
+alias chen "Liu Chen <liuchen@uci.edu>"
+alias chen_b "Baode Chen <bdchen@climate.gsfc.nasa.gov>"
+alias chesler "Robin Chesler <robin.a.chesler@bakernet.com>"
+alias chidthaisong "Amnat Chidthaisong <amnat@ess1.ess.uci.edu>"
+alias chin "Aaron Chin <akchin@soe.ucsd.edu>"
+alias choi "Susan Choi <schoi@uci.edu>"
+alias chou "Ming-Dah Chou <chou@climate.gsfc.nasa.gov>"
+alias chou "Pai Chou <phchou@uci.edu>" # http://www.ece.uci.edu/~chou
+alias chou_p "Pai Chou <phchou@uci.edu>" # EECS (949) 824-3229
+alias christian-smith "Juliet Christian-Smith <jchristiansmith@pacinst.org>" # GAFOS
+alias christopher "Sundar A. Christopher <sundar@nsstc.uah.edu>"
+alias chughtai "Joe Chughtai <chughtaj@spot.colorado.edu>"
+alias chylek "Petr Chylek <chylek@lanl.gov>"
+alias cicerone "Ralph Cicerone <rcicerone@nas.edu>"
+alias cinquini "Luca Cinquini <luca@ncar.ucar.edu>"
+alias clark "Catherine Clark <cclark@chapman.edu>"
+alias clark_r "Roger Clark <rclark@usgs.gov>" # USGS Spectroscopy Library splib guy
+alias clarke "Tony Clarke <tclarke@soest.hawaii.edu>"
+alias cliff "Cliff Rufenach <clrufenach@gmail.com>"
+alias cliff_s "Steven S. Cliff <sscliff@ucdavis.edu>"
+alias clinton "Bill Clinton <president@whitehouse.gov>"
+alias clm-dev "CLM Developer Mail List <clm-dev@www.cgd.ucar.edu>"
+alias clow "Gary Clow <clow@usgs.gov>"
+alias cluck "Larry Cluck <cluck@us.ibm.com>"
+alias coakley "Jim Coakley <coakley@cloud.ats.orst.edu>"
+alias coen "Janice Coen <coen@mmm.ucar.edu>"
+alias coffin "Virginia Coffin <vcoffin@uci.edu>"
+alias coker "Matt Coker <MCoker@ocweekly.com>"
+alias colarco "Peter Colarco <peter.r.colarco@nasa.gov>"
+alias cole_s "Steve Cole <SCole@agu.org>"
+alias coleman "Dani Bundy Coleman <bundy@ncar.ucar.edu>"
+alias collins "Bill Collins <wdcollins@berkeley.edu>" # 510-495-2407 (LBL) 510-643-1885 (UCB)
+alias collins_j "Jan Collins <janet@wallst.com>"
+alias colwell "Will Colwell <wcolwell%orion.dnet@pele.colorado.edu>"
+alias compo "Gil Compo <compo@chinook.colorado.edu>"
+alias conant "Bill Conant <conant@atmo.arizona.edu>"
+alias conley "Andrew Conley <aconley@ncar.ucar.edu>"
+alias conrad_k "Kris Conrad <kconrad@dimensional.com>"
+alias conrad_s "Steve Conrad <sconrad@dimensional.com>"
+alias considine "Geoffrey Considine <considin@monsoon.colorado.edu>"
+alias coolbaugh "Liz Coolbaugh <cool@eklektix.com>"
+alias coolidge "Miles Coolidge <mcoolidg@uci.edu>"
+alias coop "Dudley Co-op <dudcoop@hcs.harvard.edu>"
+alias cooper "Al Cooper <cooperw@ncar.ucar.edu>"
+alias copely "Doug Copely <copely@paradox.colorado.edu>"
+alias corey_c "Cynthia Corey <ccory@cfbf.com>"
+alias cornillon "Peter Cornillon <pcornillon@gso.uri.edu>"
+alias corral "John del Corral <jdcorral@bren.ucsb.edu>"
+alias coulston "Rhonda Coulston <rhondalc3@yahoo.com>"
+alias coveney "Raymond Coveney <coveneyr@umkc.edu>"
+alias cowan "Richard Cowan <richardcowan@cox.net>" # 714-815-4855 (C) Harvard Club Schools Committee
+alias craig "Tony Craig <tcraig@ncar.ucar.edu>"
+alias crawford "Doug Crawford <doug.crawford@ucop.edu>" # UCOP IP guy
+alias crombie "Robert Crombie <rdcrombi@us.ibm.com>"
+alias crosser "Danielle Crosser <dcrosser@nas.edu>" # Kavli GAFOS organizer
+alias crowley "John Crowley <crowley@mpch-mainz.mpg.de>"
+alias cruikshank "Dale Cruikshank <Dale.P.Cruikshank@nasa.gov>"
+alias cryolist "Cryolist <cryolist@lists.colorado.edu>"
+alias crysel "Brad Crysel <crysel@ncar.ucar.edu>"
+alias crystal_cove "Crystal Cove Research at UCI <CrystalCove-Research@uci.edu>"
+alias cse "Council on Student Experience <cse@uci.edu>"
+alias culver "Hoda Anton-Culver <hantoncu@uci.edu>"
+alias curran "Bob Curran <rcurran@hq.nasa.gov>"
+alias curry "Judy Curry <curryja@cloud.colorado.edu>"
+alias dabdub "Donald Dabdub <ddabdub@uci.edu>"
+alias dad "Dad <bobzender@att.net>" # (209) 267-0937 (H)
+alias daily "Colorado Daily <Colorado_Daily@onenet-bbs.org>"
+alias daley "Bill Daley <blldaley@aol.com>"
+alias dallas "Angie Dallas <adallas@sheridanross.com>"
+alias dalton "Brad Dalton <dr.lizard@lacertilia.org>"
+alias daly "Patrick M. Daly <daly@linmpi.mpg.de>"
+alias danabasoglu "Gokhan Danabasoglu <gokhan@ncar.ucar.edu>"
+alias daniel "John Daniel <daniel@al.noaa.gov>"
+alias dingying "Dingying Wei <dingyingwei@yahoo.com>"
+alias dao "Jim Dao <jimdao@uci.edu>"
+alias dargaville "Roger Dargaville <rjd@ncar.ucar.edu>"
+alias dasilva "Arlindo Da Silva <dasilva@niteroi.gsfc.nasa.gov>"
+alias davidson "Bill Davidson <davidsow@uci.edu>"
+alias davis "Ethan Davis <edavis@ucar.edu>"
+alias davis_a "Anthony Davis <adavis@lanl.gov>"
+alias davison "Chris Davison <cbdaviso@uci.edu>"
+alias dawe "Jordan Dawe <freedryk@hotmail.com>"
+alias dcs "Distributed Computing Support <dcs@uci.edu>"
+alias ddd "DDD List <ddd@gnu.org>"
+alias cf "CF Metadata Mail List <cf-metadata@cgd.ucar.edu>"
+alias cf-satellite "CF-Satellite <cf-satellite@unidata.ucar.edu>"
+alias esdswg-opensource "ESDSWG Open Source WG Mail List <esdswg-opensource@lists.nasa.gov>"
+alias esdswg-hdfwg "ESDSWG HDF5 Conventions WG Mail List <esdswg-hdf5wg@lists.nasa.gov>"
+alias esdswg-diwg "ESDSWG Dataset Interoperability WG Mail List <esdswg-diwg@lists.nasa.gov>"
+alias debian "Debian User Mail List <debian-user@lists.debian.org>"
+alias debian-amd64 "Debian AMD64 Mail List <debian-amd64@lists.debian.org>"
+alias debianqa "Debian QA <debian-qa@lists.debian.org>"
+alias debiantetex "Debian TeTeX Maintenance <debian-tetex-maint@lists.debian.org>"
+alias debruyn "Warren de Bruyn <wdebruyn@uci.edu>"
+alias deeds "Mike Deeds <mdeeds@qualcomm.com>"
+alias defanti "Tom DeFanti <tom@uic.edu>"
+alias defries "Erin DeFries <edefries@uci.edu>" # New financial analyst (949) 824-7389
+alias degaetano "Art DeGaetano <atd2@cornell.edu>" # Bob Allen reference
+alias delaygue "Gilles Delaygue <delaygue@ncar.ucar.edu>"
+alias dement "Kevin Dement <dementk@e4e.oac.uci.edu>"
+alias demerjian "Richard Demerjian <rgdemerj@uci.edu>"
+alias demmel "Jim Demmel <demmel@cs.berkeley.edu>" # petascale
+alias demott "Paul DeMott <pdemott@lamar.colostate.edu>"
+alias denbo "Donald Denbo <donald.w.denbo@noaa.gov>"
+alias denning "Scott Denning <denning@atmos.colostate.edu>"
+alias dennis "Cynthia Dennis <cadennis@uci.edu>"
+alias dennis_j "John Dennis <dennis@ncar.ucar.edu>"
+alias dentener "Frank Dentener <frank.dentener@jrc.it>"
+alias deoliveira "Luciana de Oliveira <LDeOliveira@exchange.ML.com>" # bad address
+alias deshler "Terry Deshler <deshler@marten.uwyo.edu>"
+alias dessler "Andy Dessler <ADESSLER@TAMU.EDU>"
+alias detrano "Robert Detrano <rdetrano@uci.edu>"
+alias devries "Tim Devries <tdevries@uci.edu>"
+alias dickinson "Robert E. Dickinson <robted@air.atmo.arizona.edu>"
+alias dienstag "Josh Dienstag <jfd6m@virginia.edu>"
+alias dillner "Ann Marie Dillner <dillner@uiuc.edu>"
+alias diner "David Diner <David.J.Diner@jpl.nasa.gov>"
+alias ding "Chris Ding <cding@nsgi4.lbl.gov>"
+alias disaia "Philip J. DeSaia <pjdisaia@uci.edu>"
+alias disarra "Alcide Giorgio di Sarra <disarra@casaccia.enea.it>"
+alias diuk "Maria Diuk <madiuk@ucla.edu>"
+alias dixon "Keith Dixon <Keith.Dixon@noaa.gov>"
+alias dods-tech "DODS Technical Mailing List <dods-tech@unidata.ucar.edu>"
+alias doedens "Bob Doedens <rdoedens@uci.edu>"
+alias doetzl "Joe Doetzl <doetzl@coop.crn.org>"
+alias doherty "Sarah Doherty <sarahd@atmos.washington.edu>" # IGAC executive director, BC
+alias domine "Florent Dominé <florent@lgge.obs.ujf-grenoble.fr>" # (0)476 82 42 69 (W), (0)476 90 08 94 (H), 12 chemin de Maupertuis, 38240 Meylan
+alias doney "Scott Doney <sdoney@whoi.edu>"
+alias dongarra "Jack Dongarra <dongarra@cs.utk.edu>"
+alias donner "Leo Donner <ljd@gfdl.gov>"
+alias dooros "Dan Dooros <djdooros@uci.edu>"
+alias doughty "Chris Doughty <cdoughty@uci.edu>"
+alias dove "James Dove <dove@shapley.colorado.edu>"
+alias downs "Jennifer Downs <jenndowns@aol.com>"
+alias dozal "Malu Cisneros Dozal <cisnerol@uci.edu>"
+alias dozier "Jeff Dozier <dozier@bren.ucsb.edu>"
+alias drake "Nick Drake <nick.drake@kcl.ac.uk>"
+alias drew "Drew McMullin <drewmlin@gmail.com>"
+alias druffel "Ellen Druffel <edruffel@uci.edu>"
+alias dryden "Natasha Dryden <ggp03nld@sheffield.ac.uk>"
+alias dubey "Manvendra Dubey <dubey@lanl.gov>"
+alias dubovik "Oleg Dubovik <dubovik@aeronet.gsfc.nasa.gov>"
+alias dufresne "Jean-Louis Dufresne <dufresne@icess.ucsb.edu>"
+alias dulac "Jean Francois Dulac <fdulac@cea.fr>"
+alias dupont "Todd Dupont <tdupont@uci.edu>"
+alias duran "Ray Duran <rduran@dynasys.com>"
+alias durlak "Sue Durlak <durlak@ncar.ucar.edu>"
+alias duvair "Pierre duVair <Pduvair@energy.state.ca.us>" # 916 653 8685
+alias duxbury_p "Peggy Duxbury <pduxbury@calpine.com>"
+alias eanet "Franny Eanet <franny.eanet@gmail.com>"
+alias eaton "Brian Eaton <eaton@ncar.ucar.edu>"
+alias economist "The Economist Magazine <letters@economist.com>"
+alias ed "Ed McMullin <sirmudgie@aol.com>" # dead
+alias edwards_j "Jim Edwards <jedwards@ncar.ucar.edu>"
+alias edwards_m "Monica Edwards <medwards@ocregister.com>"
+alias edwards_r "Ross Edwards <Ross.Edwards@dri.edu>"
+alias eee "Electronic Educational Environment Support <eee@uci.edu>"
+alias ehhalt "Dieter Ehhalt <ehhalt@halo.ess.uci.edu>"
+alias eldering "Annmarie Eldering <annmarie.eldering@jpl.nasa.gov>"
+alias ellenandmichael "Ellen and Michael <schechnerjoh@valornet.com>" # SMA/Taos vintners/artists C&C friends
+alias ellis "John Ellis <jellis@ncar.ucar.edu>"
+alias ellyson "Linda Ellyson <lkellyso@uci.edu>"
+alias emmart "Carter Emmart <emmart@ncar.ucar.edu>"
+alias emmons "Louisa Emmons <emmons@ncar.ucar.edu>"
+alias emrich "Dan Emrich <djemrich@uci.edu>"
+alias engel "Tom Engfel <engel@ncar.ucar.edu>"
+alias eos "Eos Newspaper <eos@agu.org>"
+alias epoch "Epoch Maillist <epoch@cs.uiuc.edu>"
+alias epstein "Adam Epstein <adame@math.cornell.edu>"
+alias erle "Frank Erle <EF@uphys1.uphys.uni-heidelberg.de>"
+alias escobedo "Gabrielle Escobedo <gescobed@uci.edu>"
+alias ess_acc "ESS 233 Mail List <42730-w02@classes.uci.edu>"
+alias ess_acc "ESS 282A Mail List <42550-f09@classes.uci.edu>"
+alias ess_atm "ESS 5 Mail List <42020-s05@classes.uci.edu>"
+alias ess_bnd "ESS 204B Mail List <42400-w07@classes.uci.edu>"
+alias ess_ccc "ESS 286A Mail List <42240-f02@classes.uci.edu>"
+alias ess_ccp "ESS 11 Mail List <42020-w07@classes.uci.edu>"
+alias ess_cnt "ESS 110 Mail List <42090-f13@classes.uci.edu>"
+alias ess_gng "ESS H90 Mail List <42070-f10@classes.uci.edu>"
+alias ess_gpc "ESS 280 Mail List <42650-f13@classes.uci.edu>"
+alias ess_lsp "ESS 286B Mail List <42740-f03@classes.uci.edu>"
+alias ess_hyd "ESS 231 Mail List <42550-s11@classes.uci.edu>"
+alias ess_phz "ESS 200B Mail List <42510-f08@classes.uci.edu>"
+alias ess_phz "ESS 223 Mail List <42520-f10@classes.uci.edu>"
+alias ess_prc "ESS 298 Mail List <42799-s15@classes.uci.edu>"
+alias ess_rdn "ESS 211 Mail List <42605-w01@classes.uci.edu>"
+alias ess_sco "ESS 172/272 Mail List <ess_sco-s13@classes.uci.edu>"
+alias etyemezian "Vic Etyemezian <vic@dri.edu>" # dust
+alias doutriaux "Charles Doutriaux <doutriaux1@llnl.gov>" # LLNL UVCDAT guy
+alias eubank "Tamra Eubank <teubank@ncar.ucar.edu>"
+alias ezell "Ken Ezell <krezell@uci.edu>" # UCI bike alternative transportation coordinator ATP
+alias faber "Jack Faber <faber%vega.colorado.edu@spot.colorado.edu>"
+alias fagan "Brian Fagan <brian@brianfagan.com>"
+alias famiglietti "Jay Famiglietti <jfamigli@uci.edu>"
+alias fan "Song-Miao Fan <Songmiao.Fan@noaa.gov>"
+alias farquarson "Ann Farquarson <annfarq@unisono.net.mx>"
+alias farquhar "Patricia Farquhar <farquharp1@hotmail.com>" # (949) 936-6395 (W)
+alias farran "Joseph Farran <jafarran@uci.edu>"
+alias farzan "Mike Farzan <mfarzan@scripps.edu>"
+alias fasullo "John Fasullo <fasullo@ucar.edu>"
+alias fein "Jay Fein <jfein@nsf.gov>"
+alias feinberg "Melanie & Bob Feinberg <bfeinberg@imany.com>"
+alias feingold "Graham Feingold <gfeingold@etl.noaa.gov>"
+alias fenton "Michael Fenton <mmfenton@att.net>" # Newport Beach Child Psychologist/therapist
+alias fern "Cindy Fern <cbfern@uci.edu>"
+alias fernandez "Maud Fernandez <Maud.Fernandez@lgge.obs.ujf-grenoble.fr>" # payroll
+alias fernandez_s "Steve Fernandez <sjf@lanl.gov>" # 505-667-2266
+alias ferons "Jan Ferons <jferons@iusd.org>" # VV
+alias fields "Jason Fields <fieldsj@bv.com>" # Wind energy
+alias fillmore "David Fillmore <fillmore@ncar.ucar.edu>"
+alias fily "Michel Fily <fily@lgge.obs.ujf-grenoble.fr>"
+alias fink "Anne Fink <acfink@uci.edu>"
+alias finlayson-pitts "Barbara Finlayson-Pitts <bjfinlay@uci.edu>"
+alias finley "Brandon Finley <bfinley@uci.edu>"
+alias schliep "Anna Schliep <anna.jeanne.schliep@gmail.com>" # AY 2013 admissions candidate
+alias fischer "Kathy Fischer <kfischer@ncar.ucar.edu>"
+alias fisher "Paula Drager Fisher <paulad@ncar.ucar.edu>"
+alias fishman "Joyce Fishman <Joyce@PolkMajestic.com>" # (303) 302-2527, (800) 748 2059 x. 1527
+alias fitzenberger "Jennifer Fitzenberger <jfitzen@uci.edu>" # Development lady
+alias flanner "Mark Flanner <flanner@umich.edu>" # 1340 19th St, Apt 4, Boulder CO 80302
+alias fleming "Joyce Fleming <jdfleming@ucsd.edu>"
+alias flex "Flex Mail List <help-flex@gnu.org>"
+alias flocke "Siri Flocke <siri@acd.ucar.edu>"
+alias flossmann "Andrea Flossmann <a.flossmann@opgc.univ-bpclermont.fr>"
+alias flyer "Natasha Flyer <flyer@ncar.ucar.edu>"
+alias fnak "Alfred Kastler Foundation <fondation@fnak.fr>"
+alias fodor "Regina Fodor <reginafodor61@gmail.com>" # French tutor (949) 759-7591
+alias foley "Jon Foley <jfoley@facstaff.wisc.edu>"
+alias fomin "Boris Fomin <fba@lcp.msk.su>"
+alias forcadela "Twyla Forcadela <tforcade@uci.edu>" # (949) 824-5163
+alias ford_c "Clare Ford <cebford@uci.edu>"
+alias ford_e "Elizabeth Ford <ejford@uci.edu>"
+alias ford_r "Rupert Ford <r.ford@ic.ac.uk>"
+alias forest "Luette Forest <luette.forrest@gmail.com>"
+alias fouquette "Danielle Fouquette <dfouquette@gmail.com>" # mch Mike DiGiovanna
+alias fournier "Aime Fournier <fournier@ucar.edu>"
+alias fovell "Robert Fovell <rfovell@ucla.edu>"
+alias fowler "Robin Fowler <nobody@colorado.edu>"
+alias frankel "David Frankel <dfrankel@post.tau.ac.il>"
+alias franklin "Steve Franklin <franklin@uci.edu>"
+alias franz "Michael Franz <franz@uci.edu>" # http://www.ics.uci.edu/~franz
+alias frazier "Bruce Frazier <bfrazier@wsu.edu>"
+alias frederick "Donald Frederick <frederik@sdsc.edu>"
+alias fredrick "Tim Fredrick <fredrick@ncar.ucar.edu>"
+alias freeman "Lin Freeman <lin@aris.ss.uci.edu>"
+alias freitas "Saulo Freitas <sfreitas@cptec.inpe.br>"
+alias french "Howard French <french@nytimes.com>"
+alias friedli "Hans Friedli <friedli@ncar.ucar.edu>"
+alias friehe "Carl Friehe <cfriehe@uci.edu>"
+alias frost "Eric Frost <eric.frost@geology.sdsu.edu>"
+alias fruchey "Rick Fruchey <rfruchey@uci.edu>"
+alias fu "Qiang Fu <fuq@climate.utah.edu>"
+alias fuentes "George Fuentes <fuentes@ncar.ucar.edu>"
+alias fuentes_j "Jose Fuentes <jf6s@virginia.edu>"
+alias fulgieri "Sunna Fulgieri <thesunnagroup@gmail.com>" # Gymnastics leotards
+alias fuller "Kirk Fuller <fuller@aerosol.atmos.colostate.edu>"
+alias fung "Kristin Fung <ksfung@uci.edu>" # ESS undergraduate coordinator
+alias fung_i "Inez Fung <inez@sequoia.Atmos.berkeley.edu>"
+alias fusco "Andrew Fusco <fusco@icarus.colorado.edu>"
+alias g95 "G95 Project <g95-develop@lists.sourceforge.net>"
+alias gabriel "Paula Gabriel and Dannie Hofmann <rosebudbud@earthlink.net>" # 310 339 7123 (C)
+alias gallagher "James Gallagher <jgallagher@gso.uri.edu>"
+alias gallet "Jean-Charles Gallet <jean.charles.gallet@npolar.no>" # Florent's grad student
+alias gamby "Rachel Gamby <rgamby@cox.net>"
+alias garcia "Rolando Garcia <rgarcia@ncar.ucar.edu>"
+alias garrett "Tim Garrett <tim.garrett@utah.edu>"
+alias garrison "Ginger Garrison <Ginger_Garrison@usgs.gov>"
+alias garvey "Dr. Dennis Garvey <dgarvey@arl.army.mil>"
+alias gasso "Santiago Gasso <Santiago.Gasso@nasa.gov>" # patagonian dust
+alias gaudinski "Julia Gaudinski <gaudinsk@uci.edu>"
+alias gaudiot "Jean-Luc Gaudiot <gaudiot@uci.edu>"
+alias gauthier "Sylvie Gauthier <sgauthie@rncan.gc.ca>" # fire frequency
+alias gaylord "David Gaylord <gaylordd@wsu.edu>"
+alias gcc "GCC bugs <bug-gcc@gnu.org>"
+alias gcte "GCTE Focus3 <gctef3@ioh.ac.uk>"
+alias geier "Roberta Geier <rjgeier@uci.edu>"
+alias genthon "Christophe Genthon <genthon@lgge.obs.ujf-grenoble.fr>"
+alias genty "Marc Genty <mgenty@ucar.edu>"
+alias geoengineering "Geoengineering Mail List <geoengineering@googlegroups.com>"
+alias george "John P George <john@ncmrwf.gov.in>"
+alias gerland "Sebastian Gerland <sebastian.gerland@npolar.no>"
+alias gerrard "Kim Gerrard <kgerrard@uci.edu>"
+alias gfortran "GNU Fortran Project <fortran@gcc.gnu.org>"
+alias gilbertson "Donna Gilbertson <dagilber@uci.edu>"
+alias gill "Tom Gill <tegill@utep.edu>"
+alias gille "Sarah Gille <sgille@uci.edu>"
+alias gillette "Dale Gillette <GILLETTE.DALE@epamail.epa.gov>"
+alias gillies "Jack Gillies <jackg@dri.edu>"
+alias gimbert "Vincent Gimbert <vincent.gimbert03@imperial.ac.uk>" # dust LW forcing SEVERI Perugia 
+alias ginoux "Paul Ginoux <Paul.Ginoux@noaa.gov>"
+alias gladson "Rebekah Gladson <rgladson@uci.edu>"
+alias glantz "Mickey Glantz <glantz@ucar.edu>"
+alias goddard "Betty and James Goddard <esg_design@hotmail.com>"
+alias goldberg "Dick Goldberg <janard@adelphia.net>" # (951) 659 0709 Idyllwild organizer
+alias goldin "Claudia Goldin <claudia.goldin@state.co.us>"
+alias gomes "Laurent Gomes <gomes@lisa.univ-paris12.fr>"
+alias gomez "Manuel Gomez <mngomez@uci.edu>"
+alias gong "Sunling Gong <Sunling.Gong@ec.gc.ca>"
+alias goodman "Jeff Goodman <goodmanjm@conrad.appstate.edu>"
+alias goodrich "Mike Goodrich <goodrich@ics.uci.edu>"
+alias gopalan "Arun Gopalan <gopalan@ncar.ucar.edu>"
+alias gordonandmuriel "Gordon and Muriel <gordonandmuriel@hotmail.com>" # SMA friends of C&C
+alias goss "Lisa Goss <Lisa.Goss@colorado.edu>"
+alias goteti "Gopi Goteti <ggoteti@uci.edu>"
+alias gotoh "Allison Gotoh <aagotoh@uci.edu>" 
+alias goulden "Mike Goulden <mgoulden@uci.edu>"
+alias gowda "Ashwin Gowda <gowda@uci.edu>"
+alias grabowski "Wojciech Grabowski <grabow@ncar.ucar.edu>"
+alias graciano "Martha Graciano <graciano@uci.edu>"
+alias graff "Irene Graff <imgraff@uci.edu>"
+alias rubado "Annette Rubado-Mejia <>" # Jair's mom
+alias grant_g "Glenn Grant <glenn@60south.com>"
+alias hearn "Julia Hearn <swtinjn@gmail.com>" # Dominic's mom
+alias ludwig_l "Lisa Grant Ludwig <lgrant@uci.edu>" # Lisa Grant Ludwig
+alias grant_p "Paul Stern Grant <grant@cfa.harvard.edu>"
+alias grant_s "Stan Grant <sbgrant@uci.edu>"
+alias grassian "Vicki Grassian <vicki-grassian@uiowa.edu>"
+alias gravaud "Isaline Gravaud <isaline.gravaud@gmail.com>" # LGGE stagiere, brune, elle habite a Paris
+alias grayce "Christopher Grayce <cgrayce@uci.edu>"
+alias graziano "Tory Graziano <graziano@uci.edu>"
+alias green "DeAndra Green <drgreen@soe.ucsd.edu>"
+alias greene "Brett Greene <brettg@uci.edu>"
+alias gregory "Brian Gregory <gregory@nrel.gov>"
+alias grenfell "Tom Grenfell <tcg@atmos.washington.edu>"
+alias griffin "D. W. Griffin <dgriffin@usgs.gov>"
+alias grini "Alf Grini <alf.grini@gmail.com>"
+alias grinspoon "David Grinspoon <david@funkyscience.net>"
+alias griscom "Amanda Griscom <agriscom@feedmag.com>"
+alias grl "GRL Online <grlonline@agu.org>"
+alias grossjohann "Kai Grossjohann <Kai.Grossjohann@CS.Uni-Dortmund.DE>" 
+alias grottoli "Andrea Grottoli <grottoli@uci.edu>"
+alias groves "Shelly Groves <sgroves@uci.edu>"
+alias gruber "Niki Gruber <gruber@splash.princeton.edu>"
+alias grubin "Rick Grubin <grubin@ncar.ucar.edu>"
+alias gsl "GSL Discussion List <gsl-discuss@sources.redhat.com>"
+alias gu_w "Wei-zu Gu <gweizu@yahoo.com>"
+alias guan "Hong Guan <guan@clio.arc.nasa.gov>" # Chatfield's postdoc (female)
+alias guerra "Debbie and Gilberto Guerra <gg401@prodigy.net>" # cousin csn
+alias guidotti "Patrick Guidotti <gpatrick@math.uci.edu>" # (949) 856-3046 (H)
+alias gumbrecht "Susan G. Gumbrecht <gumbrech@uci.edu>"
+alias gutman "Garik Gutman <GGutman@hq.nasa.gov>"
+alias hack "Jim Hack <jhack@ncar.ucar.edu>"
+alias haffke "Colene Haffke <cmhaffke@uci.edu>"
+alias hafner "Jim Hafner <hafner@almaden.ibm.com>"
+alias haine "Thomas Haine <tjhaine@us.ibm.com>"
+alias haley "Mary Haley <haley@ncar.ucar.edu>"
+alias hall "Patrick Hall <PHall64@uol.com.br>" # 11+3846-6538 (H), 11+9947-6913 (C) Rua Jacques Felix 408, #33, São Paulo, SP Brasil 04509-001
+alias hall_a "Alex Hall <alexhall@atmos.ucla.edu>"
+alias hall_p "Pat Hall <hallp@uci.edu>"
+alias halpern "David Halpern <halpern@pacific.jpl.nasa.gov>"
+alias halthore "Rangasayi Halthore <halthore@bnl.gov>"
+alias hamber "Herbert Hamber <hhamber@uci.edu>"
+alias hammond_c "Catherine Hammond <hammondc@uci.edu>"
+alias hammond_s "Steve Hammond <hammond@ncar.ucar.edu>"
+alias han_q "Qin Han <qhanqhan@gmail.com>" # qhan00@hotmail.com
+alias hansell "Rick Hansell <rhansell@climate.gsfc.nasa.gov>"
+alias hansen_j "Jim Hansen <jhansen@giss.nasa.gov>"
+alias hansford "Barbara Hansford <barbm@ucar.edu>"
+alias hanson "Howard Hanson <hph@lanl.gov>"
+alias haques "Colleen Haikes <chaikes@us.ibm.com>"
+alias harkness "Robert Harkness <harkness@ncar.ucar.edu>"
+alias harrison_l "Lee Harrison <lee@asrc.cestm.albany.edu>"
+alias harrison_s "Sandy Harrison <Sandy.Harrison@bristol.ac.uk>"
+alias harrison_t "Trish Harrison <trishtr@aol.com>" # Farmer's Market
+alias hart "Gail Hart <gkhart@uci.edu>" # CHP director
+alias hartnett "Ed Hartnett <ed@unidata.ucar.edu>" # Unidata netCDF
+alias haskins "Bob Haskins <rdh@airs1.jpl.nasa.gov>"
+alias hauglustaine "Didier Hauglustaine <didier@ncar.ucar.edu>"
+alias heald_r "Robert Heald <bheald@nature.berkeley.edu>"
+alias hecht "Matthew Hecht <hecht@ncar.ucar.edu>"
+alias heimbigner "Dennis Heimbigner <dmh@unidata.ucar.edu>" # new Unidata netCDF guy
+alias henderson "Brad Henderson <bhenderson@digitalglobe.com>"
+alias hendon "Harry Hendon <hendon@icarus.colorado.edu>"
+alias hendra "Janai Hendra <jhendra@uci.edu>"
+alias henke "Nic Henke <nic@clusterfs.com>"
+alias hennessee "Sean Hennessee <sean@uci.edu>"
+alias hennig "Amy Hennig <ahennig@ea.com>"
+alias hepponstall "Michael Hepponstall <michael@belikemichael.com>"
+alias herman "Jay Herman <herman@tparty.gsfc.nasa.gov>"
+alias herndon "Andrew Herndon <andrew.herndon@icha.uci.edu>" # ICHA
+alias hershey "John Hershey <hershey@crd.ge.com>"
+alias hertel_m "Mike Hertel <michael.hertel@sce.com>"
+alias hervig "Mark Hervig <hervig@marten.uwyo.edu>"
+alias hess "Peter Hess <hess@ncar.ucar.edu>"
+alias heymsfield "Andy Heymsfield <heyms@mmm.ucar.edu>"
+alias hicks "George Hicks <ghicks@llns.com>"
+alias hidley "Greg Hidley <ghidley@uci.edu>"
+alias highwood "Eleanor Highwood <e.j.highwood@rdg.ac.uk>"
+alias hildebrand "Garrett Hildebrand <gdh@uci.edu>"
+alias hill "Ed Hill <eh3@mit.edu>"
+alias himamauli "Das Himamauli <him@uclink.berkeley.edu>"
+alias hinkley "Todd Hinkley <thinkley@usgs.gov>"
+alias hoar "Tim Hoar <thoar@ncar.ucar.edu>"
+alias hobbs "Peter Hobbs <phobbs@atmos.washington.edu>"
+alias hofmann "David Hofmann <dhofmann@cmdl.noaa.gov>"
+alias holben "Brent Holben <brent@kratmos.gsfc.nasa.gov>"
+alias holcomb "Katherine Holcomb <kholcomb@cs.virginia.edu>"
+alias holl "Sally Holl <sholl@uci.edu>"
+alias holloway "Dan Holloway <d.Holloway@gso.uri.edu>"
+alias holoviak "Judy Holoviak <jholoviak@agu.org>" # (202) 777-7521
+alias holt "Jill Holt <jolt@us.ibm.com>"
+alias horiki "Junko Horiki <horikij@jamstec.go.jp>"
+alias horowitz "Larry Horowitz <larryh@ncar.ucar.edu>"
+alias houck_d "Darcie Houck <Dhouck@energy.state.ca.us>"
+alias howard "Holly Howard <holly@ncar.ucar.edu>"
+alias hpcops "GreenPlanet Administrators <hpcops@ps.uci.edu>" # greenplanet
+alias hsu "N. C. Hsu <hsu@wrabbit.gsfc.nasa.gov>"
+alias hu "Yuqiong (Joan) Hu <yuqiongh@uci.edu>"
+alias huang "Judy Huang <judywuhuang@yahoo.com>" # SB PTA treasurer
+alias huber "Matt Huber <huberm@purdue.edu>"
+alias hudack "Bob Hudack <rjhudack@uci.edu>"
+alias huebert "Barry Huebert <huebert@hawaii.edu>"
+alias huffman "Arlie Huffman <huffman@ucar.edu>"
+alias hunke "Elizabeth Hunke <eclare@lanl.gov>"
+alias hunt "George Hunt <glhunt@uci.edu>"
+alias hurrell "Jim Hurrell <jhurrell@ncar.ucar.edu>"
+alias husar "Rudy Husar <rhusar@me.wustl.edu>"
+alias hutchinson "Rob Hutchinson <RHutchinson@ScheurerArchitects.com>" # Y-princesses (949) 725-7975 (C) (949) 752-4009 (W)
+alias hwang "Jeom-Shik Hwang <jshwang@essgrad.ess.uci.edu>"
+alias iacono "Mike Iacono <mike@gaea.aer.com>"
+alias ibrahim "Abel Ibrahim <agibrahi@uci.edu>"
+alias icenine "Ice Nine Publishing <info@iceninepublishing.com>"
+alias idl "IDL Tech Support <support@rsinc.com>"
+alias iglesias "Mike Iglesias <iglesias@uci.edu>"
+alias ikeda "Megan Ikeda <mikeda@uci.edu>" # dead
+alias ill "NCAR Inter-Library Loan <ncarill@ncar.ucar.edu>"
+alias imam "Bisher Imam <bimam@uci.edu>"
+alias inamdar "Anand Inamdar <ainamdar@ucsd.edu>"
+alias ingram "Helen Ingram <hingram@uci.edu>"
+alias inong "Susan Inong <sinong@uci.edu>"
+alias intl "UCI International Center <intl@uci.edu>"
+alias ionita "Dana Ionita <danielai@gps.caltech.edu>"
+alias ipcc "IPCC WG1 TSU <ipcc-wg1@al.noaa.gov>"
+alias iraci "Laura Iraci <laura.iraci@sri.com>"
+alias isaksen "Ivar Isaksen <i.s.a.isaksen@geo.uio.no>"
+alias iwg "IWG Everybody <iwg-everybody@listserv.gsfc.nasa.gov>"
+alias jacobson_h "Hans-Werner Jacobi <Hans-Werner.Jacobi@awi.de>"
+alias jacobson_w "Mark Jacobson <jacobson@stanford.edu>"
+alias jacox "Bill Jacox <bjacox@uci.edu>" # Ropes course
+alias jae "J. Arid Environments <jae@harcourt.com>"
+alias jaffee_a "Arthur Jaffee <jaffarthur@aol.com>"
+alias jaffee_v "Valerie Jaffee <valerie.jaffee@gmail.com>"
+# alias jaffee_v "Valerie Jaffee <vjaffee@earthlink.net>"
+alias jaffrezo "Jean-luc Jaffrezo <Jean-luc.Jaffrezo@lgge.obs.ujf-grenoble.fr>"
+alias jakob "Rudy Jakob <jakob@dkrz-hamburd.dbp.de>" # dead
+alias jasiewicz "Richard Jasiewicz <rjasiewi@math.uci.edu>"
+alias jenks "Steve Jenks <sjenks@uci.edu>" # (949) 824-9072
+alias jensen_d "Dave Jensen <dave.jensen@wsm.com>"
+alias jensen_e "Eric Jensen <ejensen@fog.arc.nasa.gov>"
+alias jia "Yan Jia <yjia@gatan.com>"
+alias jin "Yufang Jin <yufang@uci.edu>"
+alias jing_m "Ming Jing <mingjing@mail.iggcas.ac.cn>" # 2008 AGU session C04 co-chair
+alias john "John Zender <john@fusiontechnology.com>" # (650) 283-9105 (H) motofab1 (S)
+alias johnson "Danielle Johnson <daniellj@uci.edu>" # (949) 291-6891
+alias johnson_s "Sue Johnson <Sue.A.Johnson@jpl.nasa.gov>"
+alias johnston_b "Bernie Johnston <bjohnston@veribest.com>"
+alias johnston_c "Carolyn Johnston <cpj@vexcel.com>"
+alias johnston_n "Nature Johnston <nature.johnston@yale.edu>" # 
+alias jones_l "Lance Jones <lj@ncar.ucar.edu>"
+alias jones_p "Pat Jones <pajones@uci.edu>"
+alias jordan "Scott Jordan <sjordan@uci.edu>"
+alias jqsrt "J. Quant. Spectros. Radiat. Transfer <jqsrt@notes.cc.sunysb.edu>"
+alias kafatos "Menas Kafatos <kafatos@chapman.edu>" # (714) 289-2048
+alias kahn_b "Brian Kahn <briank@atmos.ucla.edu>"
+alias kahn_r "Ralph Kahn <Ralph.Kahn@jpl.nasa.gov>"
+alias kai "Fuu-Ming Kai <fmkai@uci.edu>"
+alias kailey "Pam Kailey <pkailey@uci.edu>"
+alias kalashnikova "Olga Kalashnikova <olgak@jord.jpl.nasa.gov>"
+alias kallos "George Kallos <kallos@mg.uoa.gr>"
+alias kao_h "Hsun-Ying Kao <hkao@uci.edu>"
+alias karakashian "Todd Karakashian <todd.karakashian@jpl.nasa.gov>"
+alias kathman "Shawn Kathman <shawn.kathmann@pnl.gov>"
+alias kato "Jill Kato <jkkato@uci.edu>" # (949) 824-5205
+alias kato_s "Seiji Kato <kato@essc.psu.edu>"
+alias kauffman "Brian Kauffman <kauff@ncar.ucar.edu>"
+alias kaufman "Yoram Kaufman <kaufman@climate.gsfc.nasa.gov>" # dead
+alias kaye "Jack Kaye <Jack.A.Kaye@nasa.gov>" # (202) 358-0757
+alias keene "Bill Keene <wck@Virginia.edu>"
+alias keith "David Keith <keith@ucalgary.ca>"
+alias kelly "Barbara Kelly <bhkelly@uci.edu>"
+alias kent "Geoffrey Kent <g.s.kent@larc.nasa.gov>"
+alias kessler "John Kessler <jkessler@uci.edu>"
+alias khalsa "Siri Jodha Singh Khalsa <sjsk@nsidc.org>"
+alias khare "Bishun Khare <bkhare@mail.arc.nasa.gov>"
+alias khattatov "Boris Khattatov <boris@ncar.ucar.edu>"
+alias khelif "Marcella Khelif <mkhelif@uci.edu>" # CIE
+alias kiehl "Jeff Kiehl <jtkon@ncar.ucar.edu>"
+alias kiehl_n "Nancy Kiehl <jnkiehl@comcast.net>"
+alias kilburg "Ron Kilburg <ron.kilburg@sbcglobal.net>"
+alias kim "Jamie Kim <jamie_kim@hotmail.com>"
+alias kimble "Wayne Kimble <wkimble@us.ibm.com>"
+alias king_j "James King <kingj@uoguelph.ca>"
+alias kinne "Stefan Kinne <kinne@dkrz.de>"
+alias kinnison "Doug Kinnison <dkin@ncar.ucar.edu>"
+alias kirby "Matt Kirby <mkirby@fullerton.edu>"
+alias kirchstetter "Thomas Kirchstetter <twkirchstetter@lbl.gov>"
+alias kirk "Marshall Kirk <MKIRK2@PARTNERS.ORG>" # dead 
+alias kirkevag "Alf Kirkevag <kirkevag@geofysikk.uio.no>"
+alias kitto "Will Kitto <will@uci.edu>"
+alias kjaer "Katherine Kjaer <kkjaer@uci.edu>" # PS librarian (949) 824-8521
+alias kjelgaard "Jim Kjelgaard <jkjelgaard@wsu.edu>"
+alias klein_a "Abel Klein <aklein@uci.edu>"
+alias kleinman "Michael Kleinman <mtkleinm@uci.edu>"
+alias kleypas "Joanie Kleypas <kleypas@ncar.ucar.edu>"
+alias klinger "Evan Klinger <eklinger@uci.edu>"
+alias kluzek "Erik Kluzek <erik@ncar.ucar.edu>"
+alias knight_b "Ben Knight <bknight@hra.com>"
+alias knippertz "Peter Knippertz <peter.knippertz@kit.edu>" # SAMUM Perugia dust star
+alias knox "Christopher Knox <knoxc@uci.edu>"
+alias koch "Paul Koch <pkoch@emerald.ucsc.edu>"
+alias koch_d "Dorothy Koch <dkoch@giss.nasa.gov>"
+alias kochman "Debbie Kochman <DKochman@aol.com>"
+alias kohfeld "Karen Kohfeld <kek@qc.edu>"
+alias kreidenweiss "Sonia Kreidenweiss <soniak@atmos.colostate.edu>"
+alias krinner "Gerhard Krinner <gerhard@lgge.obs.ujf-grenoble.fr>"
+alias krishnamurthy "Aparna Krishnamurthy <aparnak@tropmet.res.in>" 
+alias krishnamurti "T. N. Krishnamurti <tnk@io.met.fsu.edu>"
+alias krolewski "Alex Krolewski <redsox9322@gmail.com>" # high school student intern
+alias fedora "Fedora User Mail List <users@lists.fedoraproject.org>"
+alias kubuntu "Kubuntu User Mail List <kubuntu-users@lists.ubuntu.com>"
+alias kuester "Falko Kuester <fkuester@uci.edu>" # 824-9320
+alias kuntz "Martin Kuntz <martin@imk.fzk.de>"
+alias kupcha "Ralph Kupcha <rckupcha@uci.edu>"
+alias kurucz "Bob Kurucz <rkurucz@cfa.harvard.edu>"
+alias kwon "Eun Young Kwon <ekwon@uci.edu>"
+alias kylling "Arve Kylling <arve@kaja.gi.alaska.edu>"
+alias lacis "Andy Lacis <ccaal@giss.nasa.gov>"
+alias lackey "Andy Lackey <alackey@cts.com>"
+alias lahey "Lahey Technical Support <support@lahey.com>"
+alias lahsen "Myanna Lahsen <myanna@ncar.ucar.edu>"
+alias lamarque "Jean-Francois Lamarque <lamar@ncar.ucar.edu>"
+alias lamb "Eileen Lamb <elamb@uci.edu>"
+alias lamorey "Gregg Lamorey <gregg.lamorey@dri.edu>"
+alias lancaster "Steve Lancaster <stlancas@athena.mit.edu>"
+alias landing "Bill Landing <wlanding@mailer.fsu.edu>" 
+alias lanoil "Brian Lanoil <lanoilb@gps.caltech.edu>"
+alias large "Bill Large <wily@ncar.ucar.edu>"
+alias larue "John LaRue <jclarue@uci.edu>"
+alias lasica "Scott Lasica <lasica@aeinstein.colorado.edu>"
+alias lasrocas "Las Rocas Reservations <reservations@lasrocas.com>"
+alias latimes "LA Times Op-Ed Submissions <oped@latimes.com>"
+alias lau "Bill Lau <William.F.Lau@nasa.gov>"
+alias lawrence "Mark Lawrence <lawrence@mpch-mainz.mpg.de>"
+alias lawryk "Paul Lawryk <plawryk@us.ibm.com>"
+alias lay "Thorne Lay <thorne@emerald.ucsc.edu>"
+alias ledendecker "Jeff Ledendecker <jledende@uci.edu>"
+alias lee "Jung-Wook Lee <jwlee@essgrad.ess.uci.edu>"
+alias lee-taylor "Julia Lee-Taylor <julial@ncar.ucar.edu>" #
+alias lee_j "Jeff Lee <jeff.lee@ttu.edu>"
+alias legrand "Michel Legrand <legrand@lgge.obs.ujf-grenoble.fr>" # BC/OC HULIS ice cores
+alias leiden "Ken Leiden <kleiden@maad.com>"
+alias lemeur "Emmanuel Le Meur <manu@lgge.obs.ujf-grenoble.fr>" # Manu is Florent/Steph's grad student
+alias lepage "Terry LePage <terry@opendoorcommunication.org>" # UCI NVC teacher
+alias lepome "Lisa lePome <lePome@alumni.caltech.edu>"
+alias lerdau "Manuel Lerdau <mlerdau@virginia.edu>"
+alias lesins "Glen Lesins <lesins@fizz.phys.dal.ca>"
+alias lesser "Janice Lesser <janice@pssclabs.com>"
+alias levin "Zev Levin <zev@hail.tau.ac.il>"
+alias levin "Zev Levin <zevlev@post.tau.ac.il>"
+alias levine "Mark Levine <mlevine@uci.edu>" # History prof 824-8304
+alias levine_g "Glenn Levine <glevine@uci.edu>" # German prof, CIE director
+alias levine_u "Ursula Levine <uclevine@hotmail.com>" # Dentist
+alias levis "Samuel Levis <slevis@ncar.ucar.edu>"
+alias levy "Joel Levy <Joel.Levy@noaa.gov>"
+alias lewis "George Lewis <george.lewis@nbc.com>"
+alias leys "John Leys <jfleys@ozemail.com.au>"
+alias li "Zhanqing Li <li@ccrs.emr.ca>"
+alias li_z "Zhongqin Li <lizq@lzb.ac.cn>" # AGU C04 invited speaker
+alias libtool "Libtool Mail List <libtool@gnu.org>"
+alias light "Bonnie Light <bonnie@apl.washington.edu>"
+alias likins "Blake Likins <blikins@uci.edu>"
+alias lim "David Lim <dave128@ucf.ics.uci.edu>"
+alias lin "Hsiao-Wen Lin <hwlin@uci.edu>"
+alias lin_w "Wenli Gau Lin <wglin@uci.edu>" # Children's center/Verano teacher (949) 824-4752 (W)
+alias linda "Linda Zender <lzender@att.net>" # (209) 267-0937 (H), (209) 256-0776 (C)
+alias lindsay_k "Keith Lindsay <klindsay@ncar.ucar.edu>"
+alias lindsay_s "Seneca Lindsay <dlindsey@uci.edu>"
+alias lindstrom "Dean Lindstrom <deanl@ncar.ucar.edu>"
+alias linux-dell-laptops "Linux Dell Laptops List <linux-dell-laptops@yahoogroups.com>"
+alias liou "Kuo-Nan Liou <knliou@atmos.ucla.edu>"
+alias lipman "Joe Lipman <joelipman@wsm.com>" # (800) 443-6699 x. 277
+alias lipscomb "Bill Lipscomb <lipscomb@lanl.gov>" # (505) 667-0395 
+alias list "Roland List <roland.list@sympatico.ca>"
+alias litvak "Marcy Litvak <mlitvak@mail.utexas.edu>"
+alias litvak_l "Liza Litvak <elitvak@uci.edu>" # (949) 302-2172 (C) ESS H90 TA
+alias liu "Qing Liu <gte710s@mail.gatech.edu>"
+alias lobell "David Lobell <dlobell@stanford.edu>"
+alias lohmann "Ulrike Lohmann <ulrike.lohmann@env.ethz.ch>"
+alias london "Julius London <london@zodiac.colorado.edu>"
+alias lopez "Francisco Lopez <lopez@uci.edu>" 
+alias love "April Love <amlove@uci.edu>"
+alias lovergine "Francesco Paolo Lovergine <frankie@debian.org>"
+alias lowrie "Rob Lowrie <lowrie@lanl.gov>"
+alias lu_h "Hua Lu <luhua@cluster.cances.unsw.edu.au>"
+alias lu_s "Sifang Lu <sifang@sdsc.edu>" # (858) 534-5087
+alias lubin "Dan Lubin <dlubin@ucsd.edu>"
+alias luce "Anne Luce and Bill Gunther <ALuce67004@aol.com>"
+alias lueker "George Lueker <lueker@uci.edu>"
+alias luo "Chao Luo <cl569@cornell.edu>"
+alias lwn "Linux Weekly News <lwn@lwn.net>"
+alias lyjak "Larry Lyjak <lvl@ncar.ucar.edu>"
+alias lynch "Christy Lynch <lynch%vega.colorado.edu@spot.colorado.edu>"
+alias lynn "Lynn Zender <lzender@zendergroup.org>" # (907) 677-8707 (H), (907) 277-2111 (W)
+alias ma "Xia Lin Ma <xma@uci.edu>"
+alias macalady "Jennifer Macalady <jlmacalady@ucdavis.edu>"
+alias macarthur "Megan MacArthur <megan@macarthurhawaii.com>" # SMA Hawaii 808-895-5748
+alias mack "Michelle Mack <mmack@lter.uaf.edu>"
+alias madden "Anne Marie Madden <amadden@iusd.org>" # VV
+alias madronich "Sasha Madronich <sasha@ncar.ucar.edu>"
+alias magnusdottir "Gudrun Magnusdottir <gudrun@uci.edu>"
+alias mahowald "Natalie Mahowald <mahowald@cornell.edu>"
+alias mai "Andy Mai <mai@ncar.ucar.edu>"
+alias maillefert "Sarah Maillefert <SARAHMAILLEFERT@msn.com>" # (443) 995.4325 (C)
+alias mallonee "Dr. Mallonee <drmallonee@earthlink.net>"
+alias mangalam "Harry Mangalam <hjm@tacgi.com>" # (949) 856-2899 (H), (949) 285-4487 (C), Django (C) (949) 282-8914
+alias mangalam_c "Ceileigh Mangalam <ceileigh@cox.net>"
+alias mangalam_d "Django Mangalam <djangomangalam@yahoo.com>"
+alias marandino "Christa Marandino <marandino@essgrad.ess.uci.edu>"
+alias marcum "Erika Marcum <emarcum@ncar.ucar.edu>" # (303) 497-1616
+alias margolis_j "Josh Margolis <jmargolis@cantor.com>" # 
+alias maring "Hal Maring <hal.maring@nasa.gov>"
+alias mark_j "Jason Mark <Jmark@ucsusa.org>"
+alias markel "Vadim Markel <vmarkel@mail.med.upenn.edu>"
+alias markowski "Greg Markowski <ssgrm@verizon.net>"
+alias maroulis "George Maroulis <maroulig@us.ibm.com>"
+alias mars "Mars Society <experts-tech@lists.marssociety.org>"
+alias marsden "David Marsden <dmarsden@nube.ucsd.edu>"
+alias marshak "Sasha Marshak <alexander.marshak@nasa.gov>"
+alias marshall "Shawn Marshall <marshals@ucalgary.ca>"
+alias marticorena "Beatrice Marticorena <marticorena@lisa.univ-paris12.fr>"
+alias martin "Randall Martin <rvmartin@fas.harvard.edu>"
+alias martin_j "Jonathan Martin <jemarti1@wisc.edu>" # Chair of AOS at UWM 
+alias martin_l "Lisa Martinez <lmartin@uci.edu>" # UCI ECEC (949) 824-2100
+alias martin_s "Seelye Martin <seelye.martin-1@nasa.gov>" # IPY program manager
+alias martinelli "Robyn Martinelli <rsmartin@uci.edu>"
+alias martinez-alier "Joan Martinez-Alier <Joan.Martinez.Alier@uab.es>"
+alias martiny "Adam Martiny <amartiny@uci.edu>"
+alias masarie "Ken Masarie <ken@ccg.cmdl.erl.gov>"
+alias maslanik "Jim Maslanik <jimm@northwind.colorado.edu>"
+alias massie "Steve Massie <massie@ncar.ucar.edu>"
+alias matho "Elisabeth Stone Matho <estone@mageos.com>" # 0476 54 03 12 therapist
+alias maurice "Ruth Maurice <rmaurice@hewlett.org>" # Also ruthmaurice@yahoo.com, (650) 234-4681 (W on M/W/F), (650) 494-9056 (H)
+alias mauzerall "Denise Mauzerall <dlm@ncar.ucar.edu>"
+alias mayer "Leslie Mayer <lmayer@ncar.ucar.edu>"
+alias mays "Brian Mays <brian@debian.org>"
+alias mccaa "Jim McCaa <jmccaa@ncar.ucar.edu>"
+alias mcclintock "Bill McClintock <mcclint%pisces.colorado.edu@spot.colorado.edu>"
+alias mcconnell "Joe McConnell <Joe.McConnell@dri.edu>"
+alias mcconnell_c "Claire McConnell <c.l.mcconnell@reading.ac.uk>" # IPY postdoc applicant, Eleanor Highwood's student
+alias mccord "Molly McCord <mccdesign@earthlink.net>"
+alias mccormick "Pat McCormick <mcc@hamptonu.edu>"
+alias mcfarquhar "Greg McFarquhar <mcfarq@atmos.uiuc.edu>"
+alias mcgregor "Cecelia McGregor <cmcgregor@irvinemontessori.com>" # (949) 854-6030
+alias mcguire "Molly McGuire <mmcguire@uci.edu>" # 824-5559 
+alias mckay "Chris McKay <mckay@galileo.arc.nasa.gov>"
+alias mckennaneuman "Cheryl McKenna Neuman <cmckneuman@trentu.ca>"
+alias mclaughlin "Suzanne McLaughlin <smclaugh@uci.edu>"
+alias mclinden "Chris McLinden <cmclinden@halo.ess.uci.edu>"
+alias mcmillan "Andrew McMillan <mcmillan@essgrad.ess.uci.edu>"
+alias mctainsh "Grant McTainsh <g.mctainsh@griffith.edu.au>"
+alias mcwilliams "Jim McWilliams <jcm@atmos.ucla.edu>"
+alias mcwilliams_r "Roger McWilliams <mcw@uci.edu>" # CHP Campuswide Honors Program
+alias meacham "Stephen Meacham <smeacham@nsf.gov>"
+alias vv_news "Vista Verde Newsletter <vistaverdenews@gmail.com>" # Amy
+alias meacham_m "Mike Meacham <mmeacham@ci.chula-vista.ca.us>"
+alias measures "Chris Measures <chrism@soest.hawaii.edu>" # (808) 956-8693 (808) 956-6395 (Kathy Cozumer) chris.measures@lmg.usap.gov on boat
+alias mehrotra "Sharad Mehrotra <smehrotr@uci.edu>"
+alias melvin "Greg Melvin <melvin@oak.mmm.ucar.edu>"
+alias mendelsohn "Rob Mendelsohn <robert.mendelsohn@yale.edu>"
+alias menter "Scott Menter <escott@uci.edu>"
+alias mentors "Debian Mentors <debian-mentors@lists.debian.org>"
+alias menut "Laurent Menut <menut@lisa.univ-paris12.fr>"
+alias menzel "Lucas Menzel <lucas.menzel@geog.uni-heidelberg.de>" # GAFOS
+alias mercurio "Dr. Jon J. Mercurio <jjmartin@arl.army.mil>"
+alias meskhidze "Nicholas Meskhidze <nmeskhi@ncsu.edu>"
+alias meyer_d "David Meyer <dmeyer@uci.edu>"
+alias meyer_j "Joerg Meyer <jmeyer@uci.edu>"
+alias michalsky "Joe Michalsky <joe@hazy.asrc.cestm.albany.edu>"
+alias michelle "Michelle Zender <zender.michelle@gmail.com>" # 
+alias michelson_d "Denise Michelson <michedc@bp.com>"
+alias middlebrook "Ann Middlebrook <middlebrook@cechem.colorado.edu>"
+alias mikami "Masao Mikami <mmikami@mri-jma.go.jp>"
+alias balog "James Balog <jamesbalog@mac.com>" # NGM EIS photographer
+alias miller_j "Judy Miller <judy@ncar.ucar.edu>"
+alias miller_m "Miguel Miller <miguel.miller@noaa.gov>" # NWS San Diego (858) 675 8700
+alias miller_r "Ron Miller <rmiller@giss.nasa.gov>" # (212) 678 5577
+alias helling "Harry Helling <hhelling@crystalcovealliance.org>" # CCSP CCA 1-949-376-6200 x 200 (W)
+alias henry "Alexis Henry <ahenry@surfrider.org>" # Communications Manager, Surfrider Foundation
+alias bader "Dave Bader <DBader@LBAOP.ORG>" # LBAOP Education Director
+alias lulow "Megan Lulow <mlulow@irconservancy.org>" # IRC Senior Field Ecologist
+alias magdziarz "Sue Magdziarz <smagdziarz@crystalcovealliance.org>" # CCSP CCA 1-949-874-2026 (C)
+alias miller_s "Shelly Miller <Shelly.Miller@Colorado.edu>"
+alias miller_scott "Scott Miller <smiller@albany.edu>"
+alias mills "Mike Mills <mmills@ucar.edu>"
+alias miner "Daniel Miner <dminer@ncar.ucar.edu.gov>"
+alias minnis "Patrick Minnis <p.minnis@larc.nasa.gov>"
+alias minschwaner "Ken Minschwaner <krm@kestrel.nmt.edu>"
+alias minster "Bernard Minster <jbminster@ucsd.edu>"
+alias mirin "Art Mirin <mirin@llnl.gov>"
+alias mitchell "David Mitchell <mitch@dri.edu>"
+alias mitchell_t "Todd Mitchell <mitchell@atmos.washington.edu>"
+alias mlawer "Eli Mlawer <mlawer@gaea.aer.com>"
+alias mom "Mom <monaruth2000@Yahoo.com>" # 
+alias moncet "J. L. Moncet <moncet@aer.com>"
+alias monks "Paul S. Monks <P.S.Monks@leicester.ac.uk>"
+alias montagnat "Maurine Montagnat <Maurine.Montagnat@lgge.obs.ujf-grenoble.fr>"
+alias moore "Keith Moore <jkmoore@uci.edu>"
+alias moore "Luz Delgado <luzdelgado@icloud.com>"
+alias moore_m "Mark Moore <mmoore@ncar.ucar.edu>"
+alias moosmuller "Hans Moosmuller <Hans.Moosmuller@dri.edu>"
+alias moran_d "Donna Moran <dmoran@ncar.ucar.edu>"
+alias moran_m "Mike Moran <mikem@ncar.ucar.edu>"
+alias morgan "Bruce Morgan <bamorgan@uci.edu>"
+alias morin "Samuel Morin <samuel.morin@lgge.obs.ujf-grenoble.fr>"
+alias morse "Suzanne Morse <srm@ecology.coa.edu>"
+alias mosallai "Anahita Mosallai <anahitamosallai.mft@gmail.com>" # mch (949) 679-4340 (H)
+alias moskalenko "Oleksandr (Alex) Moskalenko <malex@debian.org>" # new NCO sponsor
+alias moulin "Cyril Moulin <cyril.moulin@cea.fr>"
+alias movies "R.A.M. Movie Votes <movie-vote@ibmpcug.co.uk>"
+alias mu "Mingquan Mu <mmu@uci.edu>" # Jim's postdoc fire
+alias mueller "Sydney Mueller <semuelle@uci.edu>"
+alias mueller "Thomas Mueller <muellert@tropos.de>"
+alias murata "John Murata <murata@apple.com>"
+alias murphy_p "Peter Murphy <murphy@ece.ucdavis.edu>"
+alias murphy_s "Sylvia Murphy <murphys@ncar.ucar.edu>"
+alias myhre "Gunnar Myhre <gunnar.myhre@geofysikk.uio.no>"
+alias mylen "Jean Mylen	<jmylen@iusd.org>"
+alias nacs "Network and Computing Services <nacs@uci.edu>"
+alias nacs-nsp "NACS <nacs-nsp@uci.edu>"
+alias nadeau "Denis Nadeau <denis.nadeau@gmail.com>" # NCO ncks patch
+alias nathan "Barry Nathan <bnathan@uci.edu>"
+alias nature "Nature <nature@nature.com>"
+alias navas "Giulat Navas <navas@lgge.obs.ujf-grenoble.fr>" # Venezuelan mef
+alias naviaux "John Naviaux <jnaviaux@uci.edu>" # H90 undergraduate research
+alias nazarenko "Larissa Nazarenko <lnazarenko@giss.nasa.gov>"
+alias ncar "SCD Consulting <consult1@ncar.ucar.edu>" # 
+alias ncarg "NCAR Graphics Talk Mail List <ncarg-talk@ucar.edu>"
+alias ncl "NCL Talk Mail List <ncl-talk@ucar.edu>"
+alias nco "NCO Announce Mail List <nco-announce@lists.sourceforge.net>"
+alias nco-bugs "NCO Bugs Mail List <nco-bugs@lists.sourceforge.net>"
+alias nearing "Mark Nearing <mnearing@tucson.ars.ag.gov>"
+alias necas "Leah Necas <lray@uci.edu>"
+alias neelin "David Neelin <neelin@atmos.ucla.edu>"
+alias neff "Jason Neff <neffjc@colorado.edu>"
+alias neiswender "Caryn Neiswender <cneiswen@uci.edu>" # ESS IPC Instructional Program Coordinator
+alias nelson "Linda Nelson <lanelson@uci.edu>" # (949) 824-3102
+alias nenes "Athanasios Nenes <nenes@eas.gatech.edu>"
+alias pnetcdf "pnetCDF Mail List <parallel-netcdf@lists.mcs.anl.gov>"
+alias netcdf "netCDF Mail List <netcdfgroup@unidata.ucar.edu>"
+alias hdf "HDF Group Help <help@hdfgroup.org>" # 20110520
+alias hdfeos "HDF-EOS Help <Landover_PGSTLKIT@raytheon.com>" # 20110520
+alias netcdf-hdf "netCDF-HDF Mail List <netcdf-hdf@unidata.ucar.edu>"
+alias netcdf-perl "netCDF/Perl Mail List <netcdf-perl@unidata.ucar.edu>"
+alias acme-workflow "ACME Workflow Team <acme-workflow@lists.llnl.gov>" # Umbrella over diagnostics
+alias acme-diagnostics "ACME Diagnostics Working Team <acme-dwt@lists.llnl.gov>" # sub-set of Workflow
+alias neu "Jessica Neu <jneu@uci.edu>"
+alias newkirk "Newkirk Center <newkirk@uci.edu>"
+alias newman "Dave Newman <newman@uci.edu>"
+alias newnham "David Newnham <david.newnham@rl.ac.uk>"
+alias nickling "Bill Nickling <nickling@uoguelph.ca>"
+alias nicole "Nicole McMullin <eyeirish@yahoo.com>"
+alias nicovic "Slobodan Nickovic <nicko@icod.org.mt>"
+alias nideffer "Rob Nideffer <nideffer@uci.edu>"
+alias nitsche "Monika Nitsche <nitsche@math.unm.edu>"
+alias nolin "Anne Nolin <nolina@geo.oregonstate.edu>"
+alias norris "Joel Norris <jnorris@ucsd.edu>"
+alias norton "Nancy Norton <njn01@ncar.ucar.edu>"
+alias nott "Don Nott <dnott@us.ibm.com>"
+alias nowinski "Nicole Nowinski <nnowinsk@uci.edu>"
+alias npr "All Things Considered/National Public Radio <atc@npr.org>"
+alias nurlybayev "Nurhat Nurlybayev <nurhat@gmail.com>"
+alias nussenzveig "Moyses Nussenzveig <moyses@if.ufrj.br>"
+alias oberdiek "Heiko Oberdiek <oberdiek@ruf.uni-freiburg.de>"
+alias olnet "Marina Olney <marina.olney@gmail.com>" 
+alias oconnor "Laura O'Connor <loconnor@uci.edu>" # Marina's mom (949) 725-1189 (H) Skype l.b.o.connor
+alias octfcu "Orange County Teacher's Federal Credit Union <info@octfcu.org>"
+alias ogren "John Ogren <John.A.Ogren@noaa.gov>"
+alias oit "Office of Information Technology <oit@uci.edu>"
+alias okin "Greg Okin <okin@ucla.edu>"
+alias oleson "Keith Oleson <oleson@ncar.ucar.edu>"
+alias olivia "Olivia Zender <olivia.zender@gmail.com>" # 1-949-732-8605, 1-209-560-6548
+# alias olivia "Olivia Zender <girlofalltalents@gmail.com>" # 1-949-732-8605, 1-209-560-6548
+alias olken "Frank Olken <folken@nsf.gov>" # (703) 292-8930
+alias olsen "Seth Olsen <scolsen@uci.edu>"
+alias olson "Jerry Olson <olson@ncar.ucar.edu>"
+alias opel "Andy Opel <andyo@ori.org>"
+alias opendap "OPeNDAP Mailing List <opendap@unidata.ucar.edu>"
+alias orme "Melissa Orme and Vasilis Marmarelis <melissao@uci.edu>"
+alias orszak "Jeff Orszak <orszak@cfa.harvard.edu>"
+alias oshea "Mark O'Shea <marko63or64@yahoo.com>" # Antarctica guy
+alias ottobliesner "Bette Otto-Bliesner <ottobli@ncar.ucar.edu>"
+alias overpeck "Jonathan Overpeck <jto@ngdc.noaa.gov>"
+alias page "Mike Page <mpage@ncar.ucar.edu>" # 
+alias painter "Tom Painter <Thomas.Painter@jpl.nasa.gov>" # (C) 303.888.7119
+alias pajarola "Renato Pajarola <pajarola@acm.org>"
+alias pajarola_b "Barbara Pajarola <bpajarola@sunrise.ch>"
+alias palangian "Gary Palangian <garyp@rmtc.unisys.com>"
+alias paos "Robert Lambeth <lambeth@monsoon.colorado.edu>"
+alias papadopoulos "Phil Papadopoulos <phil@sdsc.edu>"
+alias parizek "Byron Parizek <parizek@geosc.psu.edu>" # (814) 863-2669
+alias park "Matt Park <mpark@ncar.ucar.edu>"
+alias parker_b "Bill Parker <whparker@uci.edu>"
+alias parker_t "Tom Parker <tparker@ncar.ucar.edu>"
+alias parkhurst_r "Robert Parkhurst <robert_parkhurst@hp.com>"
+alias pasquero "Claudia Pasquero <claudia.pasquero@uci.edu>"
+alias pataki "Diane Pataki <dpataki@uci.edu>"
+alias pathscale "Pathscale Tech Support <support@pathscale.com>"
+alias patte "Edward Patte <epatte@nas.edu>" # Kavli GAFOS organizer
+alias patterson "Ed Patterson <ed.patterson@gtri.gatech.edu>"
+alias pavey "John Pavey <john.pavey@iteams.org>" # SMU
+alias payne "Tony Payne <a.j.payne@bristol.ac.uk>"
+alias payne_m "Meredith Payne <mpayne@coas.oregonstate.edu>"
+alias payton_c "Curtis Payton <curtis.payton@usace.army.mil>"
+alias payton_v "Craig Payton <vcpayton@ix.netcom.com>"
+alias pdftex "PDFTeX Mailing List <pdftex@tug.org>"
+alias pearce "Celia Pearce <celiap@uci.edu>"
+alias pedretti "John Pedretti <pedretti@roguewave.com>"
+alias pelltier "Richard Pelltier <rtpelltier@usgs.gov>"
+alias penner "Joyce Penner <penner@umich.edu>"
+alias perez "Tibisay Perez <tjperez@uci.edu>"
+alias perniciaro "Lola Perniciaro <lolajp@sbcglobal.net>" # Mark's wife
+alias perry "Kevin Perry <perry@metsun1.sjsu.edu>"
+alias petch "Jon Petch <jon.petch@metoffice.gov.uk>"
+alias peterson-kamlade "Lori Peterson-Kamlade <l.kamlade@comcast.net>"
+alias petit "Jean-Robert Petit <petit@lgge.obs.ujf-grenoble.fr>"
+alias petropavlovskikh "Irina Petropavlovskikh <irina@srrb.noaa.gov>"
+alias petzold "Andreas Petzold <andreas.petzold@dlr.de>"
+alias peylin "Philippe Peylin <ppeylin@ella.ens.fr>"
+alias pfeilsticker "Klaus Pfeilsticker <klaus.pfeilsticker@iup.uni-heidelberg.de>"
+alias pgi "PGI Technical Support <trs@pgroup.com>"
+alias phalen "Robert Phalen <rfphalen@uci.edu>"
+alias phelps "Deegie Phelps <deegiep@hotmail.com>" SB teacher
+alias phillips "Duncan Phillips <dphillip@uci.edu>"
+alias picard "Ghislain Picard <ghislain.picard@lgge.obs.ujf-grenoble.fr>" # (0)476 82 42 42 (W), 14 Chemin des Pauttats 38450 Notre-Dame-de-Commiers
+alias piech "Rich Piech <fxm@fxm>" # (0)476 52 01 13 Mary Ellen's friend, Kylie's husband
+alias pierce "Dave Pierce <dpierce@ucsd.edu>"
+alias pike "Gary Pike <gpike@uci.edu>" # (949) 824-5792 Engineering Copy Center
+alias pinto "James Pinto <pinto@monsoon.colorado.edu>"
+alias pittalwala "Iqbal Pittalwala <iqbal@uci.edu>"
+alias poirier "Linda Poirier <lgpoirie@uci.edu>" # 824-7135
+alias polcher "Jan Polcher <Jan.Polcher@lmd.jussieu.fr>"
+alias politovich "Marcia Politovich <marcia@ncar.ucar.edu>"
+alias pope "Shelly Pope <pope@arlo.ucsd.edu>"
+alias porter "John Porter <jrp@kvl.dk>"
+alias portmann "Bob Portmann <portmann@al.noaa.gov>"
+alias prather "Michael Prather <mprather@uci.edu>"
+alias prather_k "Kimberly Prather <kimberly.prather@ucr.edu>"
+alias prentice "Colin Prentice <colin.prentice@bris.ac.uk>"
+alias preunkert "Suzanne Preunkert <preunkert@lgge.obs.ujf-grenoble.fr>" # Legrand's wife
+alias primeau "Francois Primeau <fprimeau@uci.edu>"
+alias prospero "Joe Prospero <jprospero@rsmas.miami.edu>"
+alias pscc "Physical Sciences Computing Committee <pscc@ps.uci.edu>"
+alias pscsg "Physical Sciences Computing Support Group <pscsg@uci.edu>" # 
+alias ptasbaa "Springbrook PTA Amazon Associates <ptasbaa@gmail.com>" # PTA
+alias pulling_w "Wendy Pulling <Wrp8@pge.com>"
+alias pulvirenti "Patricia Pulvirenti <ppp@iastate.edu>"
+alias purpura "Jim Purpura <jim.purpura@noaa.gov>"
+alias purvis "Katie Purvis <kpurvis@jsd.claremont.edu>"
+alias qian "Yun Qian <yun.qian@pnl.gov>" 
+alias qjrms "QJRMS <QJ@royal-met-soc.org.uk>"
+alias qu_x "Xin Qu <xinqu@atmos.ucla.edu>"
+alias querol "Xavier Querol <xavier.querol@ija.csic.es>"
+alias quinn "Patricia Quinn <Quinn@pmel.noaa.gov>"
+alias raby_s "Steve and Carol Raby <steve_raby@att.net>" # (408) 590-7522 (C)
+alias radio "Internet Radio <info@radio.com>"
+alias rahat "Gideon Rahat <msgrah@mscc.huji.ac.il>"
+alias rajput "Al Rajput <rajput@cox.net>" # TASTC OCEC Orange County Engineering Council
+alias ram "Michael Ram <phymram@ice.physics.buffalo.edu>"
+alias ramanathan "V. Ramanathan <vramanathan@ucsd.edu>" # (858) 534-8815 (W)
+alias ramaswamy "V. Ramaswamy <vr@gfdl.gov>"
+alias ramseier_a "Adrian Ramseier <adrian@all4dvd.com>"
+alias ramseier_j "Judith Ramseier <judith@all4dvd.com>"
+alias randall "Dave Randall <randall@redfish.atmos.colostate.edu>"
+alias randerson "Jim Randerson <jranders@uci.edu>" # (949) 824-9030 (W) jim.randerson (S)
+alias raphael "Marilyn Raphael <raphael@oscar.sscnet.ucla.edu>"
+alias rasch "Phil Rasch <philip.rasch@pnl.gov>" # (509) 372-4464 (W)
+alias rath "Janine Rath <janinerae@me.com>" 
+alias raupach "Mike Raupach <raupach@enmech.csiro.au>"
+alias ravishankara "A. R. Ravishankara <ravi@al.noaa.gov>"
+alias ravitz "Jason Ravitz <jravitz@uci.edu>"
+alias ray "Peter Ray <pray@met.fsu.edu>"
+alias redeker_k "Kelly Redeker <red@uci.edu>"
+alias redeker_s "Scott Redeker and Gregg Williams <scottandgregg@icloud.com>" # csn
+alias reeburgh "Bill Reeburgh <reeburgh@uci.edu>"
+alias reeves "Marjorie Reeves <mar@atmos.washington.edu>" # IGAC re-imbursement person
+alias rehbaum "Lisa Rehbaum <lrehbaum@uci.edu>"
+alias rehder "Gregor Rehder <gregor.rehder@io-warnemuende.de>" # GAFOS
+alias reheis "Marith Reheis <mreheis@usgs.gov>"
+alias reid "Jeffrey S. Reid <jreid@spawar.navy.mil>"
+alias reid "Ron Reid <ron.reid@icha.uci.edu>" # ICHA paint guy
+alias reif "John Reif <jreif@cvmbs.colostate.edu>"
+alias reinkensmeier_a "Andrea Reinkensmeier <reinken@fastmail.fm>" # France cell (0)682 62 3580 (C,Andrea) 
+alias reinkensmeier_d "Dave Reinkensmeier <dreinken@uci.edu>" # France cell (0)682 62 1870 (C,Dave) 
+alias remer "Lorraine Remer <Lorraine.A.Remer@nasa.gov>"
+alias renter "Shu-Fang Hsiao <chencc@vghtpe.gov.tw>"
+alias rew_j "Juliana Rew <juliana@ncar.ucar.edu>"
+alias rew_r "Russ Rew <russ@unidata.ucar.edu>" # 
+alias reynolds "Richard Reynolds <rreynolds@usgs.gov>"
+alias rhew "Rob Rhew <rhew@atmos.berkeley.edu>"
+alias ricchiazzi "Paul Ricchiazzi <paul@icess.ucsb.edu>"
+alias ricciardulli "Lucrezia Ricciardulli <lucrezia@ncar.ucar.edu>"
+alias rice_a "Andrew Rice <arice@uci.edu>" 
+alias rice_l "Ligea Rice <ligea@ncar.ucar.edu>"
+alias richardson "Debra J. Richardson <djr@ics.uci.edu>"
+alias richman "Barbara Richman <brichman@agu.org>" # Eos editor
+alias richter "Jadwiga Richter <jrichter@ncar.ucar.edu>"
+alias riddle "Ellen Riddle <riddle%vega.colorado.edu@spot.colorado.edu>"
+alias ridgwell "Andy Ridgwell <andy.ridgwell@bristol.ac.uk>"
+alias rignot "Eric Rignot <erignot@uci.edu>" 
+alias riker "Cathy Riker <cathynyc@email.msn.com>"
+alias riley "Beth Riley <briley@uci.edu>"
+alias ringland "John Ringland <ringland@math.buffalo.edu>"
+alias rivas "Teresa Rivas <rivas@ncar.ucar.edu>"
+alias robbins "Gary Robbins <grobbins@ocregister.com>"
+alias robertson "Andy Robertson <andy@atmos.ucla.edu>"
+alias robock "Alan Robock <robock@envsci.rutgers.edu>"
+alias robynn "Robynn Zender <robynn.zender@gmail.com>" # (949) 331-6593 (C) 823-9344 (H)
+alias rocha "Adrian Rocha <arocha@uci.edu>"
+alias roche "Tom Roche <Tom_Roche@pobox.com>" # NCO doc wiki helper
+alias rocks "Rocks Mailing List <npaci-rocks-discussion@sdsc.edu>"
+alias rodriguez "Marco Rodriguez <rodriguez@cira.colostate.edu>"
+alias roker "Susan Roker <susanroker@yahoo.com>" # therapist
+alias roll "John and Rachel Roll <roll@cfa.harvard.edu>"
+alias rollin "Keith Rollin <keith.rollin@mac.com>"
+alias romaine "Greg Romaine <glr500@yahoo.com>"
+alias romm "Joe Romm <jromm@americanprogress.org>" # blogger wedges Hell and High Water
+alias roode "Dana Roode <droode@uci.edu>"
+alias rose "Michael Rose <mrrose@uci.edu>"
+alias rosenbloom "Nan Rosenbloom <nanr@ncar.ucar.edu>"
+alias rosenfeld "Danny Rosenfeld <daniel.rosenfeld@huji.ac.il>"
+alias rosinski "Jim Rosinski <rosinski@ncar.ucar.edu>"
+alias ross "Stuart Ross <stuross@rgs.uci.edu>" # (949) 824-9602
+alias rossell "Antoni Rossell <rossell@uab.edu>"
+alias rothenberg "Dave Rothenberg <rothenbd@aeinstein.colorado.edu>"
+alias rothman "Larry Rothman <lrothman@cfa.harvard.edu>"
+alias rotman "Doug Rotman <drotman@llnl.gov>"
+alias roush "Ted Roush <troush@mail.arc.nasa.gov>" 
+alias rowland "Sherry Rowland <rowland@uci.edu>"
+alias ruddiman "Bill Ruddiman <wfr5c@virginia.edu>"
+alias rudel_ra "Randy Rudel <randdisle@gmail.com>"
+alias rudel_ru "Russell Rudel <reo9mm@gmail.com>"
+alias rudich "Yinon Rudich <Yinon.Rudich@weizmann.ac.il>"
+alias rupp_r "Richard Rupp <RichardRupp@cs.com>"
+alias rupp_r2 "Richard Rupp <richard_rupp@wsu.edu>"
+alias rupp_s "Susan Rupp <sjrupp@uci.edu>"
+alias rustad "Lindsay Rustad <rustad@maine.edu>"
+alias ryu "Peter Ryu <dryu@uci.edu>"
+alias sabater "Francesc Sabater <fsabater@ub.edu>"
+alias sacchettini "Michel Sacchettini <sacchett@lgge.obs.ujf-grenoble.fr>" # officemate
+alias sakai "Ann Sakai <aksakai@uci.edu>" # 
+alias salby "Murry Salby <murry.salby@colorado.edu>"
+alias salter "Stephen Salter <s.salter@ed.ac.uk>" # Geoengineering
+alias saltzman "Eric Saltzman <esaltzma@uci.edu>" # (C) 1-949-285-2111
+alias sander "Mike Sander <michael@sandersoftware.com>"
+alias sanerib "Donna Sanerib <dlee@ncar.ucar.edu>"
+alias saphores "Jean-Daniel Saphores <saphores@uci.edu>"
+alias saravanan "R. Saravanan <svn@ncar.ucar.edu>"
+alias sarcone "Joe Sarcone <joey_sarcone@yahoo.com>" # Also jsarcone@cdc.gov
+alias sarita "Sarita Sidhu <sarita@fair-trade-products.com>" # www.fair-trade-products.com (949) 202 6063 UCI farmers' market
+alias sariyska "Didi Sariyska <dsariysk@uci.edu>"
+alias sass "Ron Sass <sass@rice.edu>"
+alias sato "Tetsuya Sato <tetsuya@jamstec.go.jp>"
+alias savoie "Dennis Savoie <dsavoie@rsmas.miami.edu>"
+alias saxena "Vin Saxena <vin_saxena@ncsu.edu>"
+alias scacchi "Walt Scacchi <wscacchi@uci.edu>"
+alias schepanski "Kerstin Schepanski <kerstin.schepanski@tropos.de>" # Ina's bright dust student
+alias schiano "Allen Schiano <schiano@uci.edu>"
+alias schimel "Dave Schimel <schimel@ncar.ucar.edu>"
+alias schmid "Beat Schmid <bschmid@mail.arc.nasa.gov>"
+alias schmoltner "Anne-Marie Schmoltner <aschmolt@nsf.gov>"
+alias schneebeli "Martin Schneebeli <schneebeli@slf.ch>"
+alias schneebeli "Martin Schneebeli <schneebeli@slf.ch>"
+alias schneider "Tim Schneider <tls@ncar.ucar.edu>"
+alias schneider_m "Marcus Schneider <marcus@ef.org>"
+alias schneider_s "Steven Schneider <shs@stanford.edu>"
+alias schneidewind "Jeff Schneidewind <jhschnei@uci.edu>"
+alias scholes "Bob Scholes <bscholes@csir.co.za>"
+alias schreiber "Kathleen Schreiber <Kathleen.Schreiber@millersville.edu>"
+alias schroeter "Daniel Schroeter <djschroe@uci.edu>"
+alias schubel "Jerry Schubel <JSchubel@lbaop.org>" # Long Beach aquarium
+alias schubel "Ya Ya Shang <YShang@lbaop.org>" # Long Beach aquarium
+alias schult "Ingrid Schult <schult@dkrz.d400.de>"
+alias schultz "John Schultz <schultz@ceob.nos.noaa.gov>"
+alias schuur "Ted Schuur <tschuur@uci.edu>"
+alias schweitzer "Roland Schweitzer <rhs@cdc.noaa.gov>"
+alias scott "Mike Scott <mscott@uci.edu>"
+alias scuderi "Louis Scuderi <tree@unm.edu>"
+alias scuiry "Daniel Scuiry <daniel.scuiry@ucop.edu>"
+alias sdsc "SDSC Consulting <consult@sdsc.edu>"
+alias seesselberg "Peter Seesselberg <Peter_Seesselberg@Dell.com>"
+alias seinfeld "John Seinfeld <seinfeld@caltech.edu>"
+alias seth "Anji Seth <seth@iri.columbia.edu>"
+alias severinghaus "Jeff Severinghaus <jeffs@lamont.ldgo.columbia.edu>"
+alias shaffer "Dave Shaffer <daveshaffer@home.net>"
+alias shao "Yaping Shao <yshao@uni−koeln.de>"
+alias shapiro_r "Rosella Shapiro <Rshapiro@energy.state.ca.us>"
+alias shapovalov "George Shapovalov <george@gentoo.org>"
+alias sharma "Sangeeta Sharma <Sangeeta.Sharma@ec.gc.ca>" # Env. Canada BC person
+alias shea "Dennis Shea <shea@ncar.ucar.edu>"
+alias shea_k "Kenneth Shea <kjshea@uci.edu>"
+alias sheldon "John Sheldon <jps@server1.gfdl.gov>"
+alias shell "Karen Shell <kshell@ucsd.edu>"
+alias shepherd "Ted Shepherd <tgs@atmosp.physics.utoronto.ca>"
+alias sheridan "P J Sheridan <psheridan@cmdl.noaa.gov>"
+alias sherwood "Steve Sherwood <s.sherwood@unsw.edu.au>" # Bob Allen reference
+alias shibata "Masaaki Shibata <mshibata@yies.pref.yamanashi.jp>"
+alias shields "Christine Shields <shields@ncar.ucar.edu>"
+alias shin "Sang-ik Shin <Sangik.Shin@noaa.gov>"
+alias shine "Keith Shine <k.p.shine@rdg.ac.uk>"
+alias shiver "Lydia Shiver <lydia@ncar.ucar.edu>"
+alias shogren "Sarah Shogren <sshogren@uci.edu>"
+alias shori_j "Jan Shori <jschori@smud.org>"
+alias wysong "Heidi Wysong <hwysong@uci.edu>" # ESS travel assistant
+alias brazil "Callie Brazil <brazilc@uci.edu>" # ESS web lacky
+alias sibley "Morgan Sibley <msibley@uci.edu>" # ESS assistant
+alias siedenburg_j "Jules Siedenburg <j.siedenburg@uea.ac.uk>" # Martin lives in Hove, near Brighton
+alias siedenburg_k "Kai Siedenburg <hikailani@gmail.com>"
+alias siegel "Dave Siegel <davey@icess.ucsb.edu>"
+alias silver "Vicki Silver <>" # 854-1877 (H)
+alias simbulan "Christine Simbulan <csimbula@uci.edu>"
+alias simmons "Gloria Brown Simmons <gbs@uci.edu>"
+alias simmons_e "Elizabeth Simmons <esimmons@msu.edu>"
+alias simon "Eli Simon <esimon@uci.edu>"
+alias simone "Simone <ssebalo@zendergroup.org>"
+alias sincock "Jim Sincock <jim@photocraftlab.com>"
+alias sinton "Jonathan Sinton <JESinton@lbl.gov>"
+alias sitongia "Leonard Sitongia <sitongia@ncar.ucar.edu>"
+alias slashdot "Slashdot <editor@slashdot.org>"
+alias slaven "Kerry Slaven <slaven@ncar.ucar.edu>"
+alias sloan "Lisa Sloan <lcsloan@emerald.ucsc.edu>"
+alias smarr "Larry Smarr <lsmarr@ucsd.edu>"
+alias smecker-hane "Tammy Smecker-Hane <tsmecker@uci.edu>"
+alias smith "Steve Smith <ssmith@pnl.gov>"
+alias smith_r "Ron Smith <ronald.smith@yale.edu>" # Bob Allen reference
+alias smith_t "Tracey Smith <traceysmith5000@yahoo.com>" # SB PTA president
+alias smyth "Padhraic Smyth <smyth@ics.uci.edu>"
+alias snaveley "Allan Snavely <allans@sdsc.edu>" # petascale
+alias soden "Brian Soden <bjs@gfdl.gov>"
+alias soeller "Tony Soeller <tsoeller@uci.edu>"
+alias sokolik "Irina Sokolik <isokolik@eas.gatech.edu>"
+alias sokolov "Mike Sokolov <sokolov@crl.dec.com>"
+alias sokolov_c "Carol Sokolov <csokolov@uci.edu>"
+alias soller "Lana Soller <lana@ncar.ucar.edu>"
+alias solomon "Susan Solomon <solomon@al.noaa.gov>"
+alias song_a "Angela Miri Song < A.M.Song@lse.ac.uk>"
+alias songer "Nancy Songer <songer@spot.colorado.edu>"
+alias sorooshian "Soroosh Sorooshian <soroosh@uci.edu>"
+alias southon "John Southon <jsouthon@uci.edu>"
+alias spangler "Will Spangler <spangler@ncar.ucar.edu>"
+alias speed "Bob Speed <rspeed@uci.edu>" # dead
+alias keeley "Elaine Keeley <ekeeley@iusd.org>" # IUSD SB principal
+alias giridhar "Anu Giridhar <agiridha@iusd.org>" # IUSD SB 2nd grade Montessori teacher
+alias spicer "Marsallay Spicer <mspicer@iusd.org>" # IUSD SB webmaster
+alias spilhaus "Fred Spilhaus <fspilhaus@agu.org>"
+alias spoor "Dianne Spoor <Dianne_Spoor@Dell.com>"
+alias spotz "Bill Spotz <spotz@ncar.ucar.edu>"
+alias srinivasan "Shyam Srinivasan <shyams@es.oit.uci.edu>"
+alias srinivasan_j "J. Srinivasan <jayes@caos.iisc.ernet.in>" # Indian Institute of Science, Bangalore (invited visit at Asilomar)
+alias ssp "Summer Science Program <info@summerscience.org>"
+alias stamnes "Knut Stamnes <knut@gi.alaska.edu>"
+alias starke "Patrick Stärke <patrick.staerke@avh.de>" # Kavli GAFOS organizer
+alias starr "Dave Starr <starr@climate.gsfc.nasa.gov>"
+alias stefanska "Joanne Stefanska <joanne.stefanska@ucop.edu>"
+alias stenchikov "Georgiy Stenchikov <gera@atmos.umd.edu>"
+alias stephens "Pam Stephens <pstephen@nsf.gov>"
+alias stern_b "Britt Stern <britt@ncar.ucar.edu>"
+alias stern_c "Carolyn Stern Grant <stern@cfa.harvard.edu>"
+alias stern_g "Gail Stern <gstern@uclink.berkeley.edu>"
+alias stern_i "Ilana Stern <ilana@ncar.ucar.edu>"
+alias stern_r "Ron Stern <rstern@uci.edu>"
+alias stevens_b "Bjorn Stevens <bstevens@ncar.ucar.edu>"
+alias stevens_m "Mark Stevens <stevens@ncar.ucar.edu>"
+alias stiskin "Ron Stiskin <RZangpo2@aol.com>"
+alias stockwell "William Stockwell <William.Stockwell@noaa.gov>"
+alias stone_m "Marilena Stone <stone@ncar.ucar.edu>"
+alias stordal "Frode Stordal <frode.stordal@nilu.no>"
+alias stowe "Larry Stowe <lstowe@nesdis.noaa.gov>"
+alias strand "Gary Strand <strandwg@ncar.ucar.edu>"
+alias stromberg "Dan Stromberg <strombrg@uci.edu>" # (949) 824-6561 (W) (949) 735-0622 (C)
+alias stuard "Dale Stuard <dalestuard@sbcglobal.net>" # (714) 321-6366 (computer donation guy)
+alias sturdivant "Brenda Sturdivant <Bsturdiv@energy.state.ca.us>"
+alias stuut "Jan-Berend Stuut <jbstuut@marum.de>" # Vienna EGU dust organizer
+alias sun_f "Fengpeng Sun <sunf@uci.edu>"
+alias sun_j "Guozhong (Joe) Sun <guozhons@uci.edu>"
+alias suse "SuSE Support <support@suse.com>"
+alias sutton_b "Brad Sutton <brad@gcal.org>" # boulder
+alias sutton_d "David Sutton <dawasu@verizon.net>" # leavitttown PA
+alias sutton_c "Chuck Sutton <chuckandrett@comcast.net>" # santa maria
+alias swales "Velma Swales <vswales@nsf.gov>"
+alias swap "Bob Swap <rjs8g@virginia.edu>"
+alias sweeney "Mark Sweeney <mark.sweeney@dri.edu>"
+alias syed "Hassan Syed <tsyed@uci.edu>"
+alias sylvester "Sharon Sylvester <ssylvest@uci.edu>"
+alias sysadmin "ACD Systems Staff <sysadmin@acd.ucar.edu>"
+alias systems "CGD Systems Staff <root@bearmtn.cgd.ucar.edu>"
+alias szurmant "Jennifer Szurmant <jszurman@iusd.org>" # SB teacher
+alias takano "Yoshihide Takano <radatn@climate.utah.edu>"
+alias talamantes "Jorge Talamantes <jtalamantes@csub.edu>" # 661.665.7785 (H), 661.664.2335 (W), 661.205.9123 (C)
+alias talbott "Clint Talbott <talbot@bcn.boulder.co.us>"
+alias tanpipat "Noppawan Tanpipat <tanpipat@us.ibm.com>"
+alias tate "Suzanne Kauffman <suzanne@acroname.com>"
+alias tavares "Kathy Tavares <ktavares@uci.edu>"
+alias taylor "Mark Taylor <mataylo@sandia.gov>"
+alias taylor_r "Rick Taylor <richard_taylor@prenhall.com>"
+alias tedesco "Marco Tedesco <mtedesco@umbc.edu>"
+alias tegen "Ina Tegen <itegen@tropos.de>                  "
+alias tellus "Tellus <tellus@misu.su.se>"
+alias testdrive "HP Testdrive Program <testdrive@hp.com>"
+alias texinfo "TeXInfo Help Mailing List <help-texinfo@gnu.org>"
+alias thams "Kurt Thams <73510.3472@compuserve.com>"
+alias theil "Dave Theil <theil@casa.colorado.edu>"
+alias therkelsen_b "Bob Therkelsen <Btherkel@energy.state.ca.us>"
+alias thibaud "Francois P. Thibaud <thibaud@ncar.ucar.edu>"
+alias thomas "Gary Thomas <thomas@alcor.colorado.edu>"
+alias thonicke "Kirsten Thonicke <Kirsten.Thonicke@pik-potsdam.de>"
+alias thornton "Peter Thornton <thornton@ncar.ucar.edu>"
+alias thresher "Bob Thresher <robert_thresher@nrel.gov>" # NREL NWTC director wnd wind
+alias tie "Xuexi Tie <xxtie@ucar.edu>"
+alias titi "Edriss Titi <estiti@uci.edu>"
+alias tomcheck "Dave Tomcheck <tomcheck@uci.edu>"
+alias toohey "Darin Toohey <Darin.Toohey@colorado.edu>"
+alias toomre "Juri Toomre <JToomre@Jila.colorado.edu>"
+alias toon "Brian Toon <toon@lasp.colorado.edu>"
+alias torrelas "Carol Torrelas <cptorrel@uci.edu>"
+alias torres "Omar Torres <torres@qhearts.gsfc.nasa.gov>"
+alias tosca "Mike Tosca <mtosca@uci.edu>" # (860) 306-9211
+alias town "Mike Town <mstown@u.washington.edu>"
+alias tramp "emacs-tramp Mailing List <emacs-rcp@ls6.cs.uni-dortmund.de>"
+alias treseder "Kathleen Treseder <treseder@uci.edu>"
+alias tribbia "Joe Tribbia <tribbia@ncar.ucar.edu>"
+alias tripit "TripIt <plans@tripit.com>"
+alias trist "Alan Trist <caven@dead.net>"
+alias truesdale "John Truesdale <jet@ncar.ucar.edu>"
+alias trumbore "Sue Trumbore <setrumbo@uci.edu>"
+alias tsay "Si Chee Tsay <tsay@climate.gsfc.nasa.gov>"
+alias tso "Bill Tso <tsobill@atm.dal.ca>"
+alias tsyro "Svetlana Tsyro <svetlana.tsyro@met.no>"
+alias tuccillo "Jim Tuccillo <tuccillo@us.ibm.com>"
+alias turco "Rich Turco <turco@ucla.edu>"
+alias turek "Dave Turek <dturek@us.ibm.com>"
+alias turkal "Warren Turkal <wt@penguintechs.org>"
+alias tuttle "Doug Tuttle <dtuttle@iusd.org>" # VV 949-936-6375 (W)
+alias tyler "Stan Tyler <styler@uci.edu>"
+alias uberti "Ted Uberti <euberti@us.ibm.com>"
+alias ubuntu "Ubuntu User Mail List <ubuntu-users@lists.ubuntu.com>"
+alias uci-linux "UCI Linux Mail List <uci-linux@uci.edu>"
+alias udunits "UDUnits Support <support-udunits@unidata.ucar.edu>"
+alias ueha "Hiromi Ueha <huueha@uci.edu>"
+alias uggs "UGGS officers <uggs_man@cubldr.colorado.edu>"
+alias uman "Deborah Uman <deborah.uman@colorado.edu>"
+alias umbanhowar "Charles Umbanhowar Jr. <ceumb@stolaf.edu>" # BC experiments
+alias uvcdat "UV-CDAT Support <uvcdat-support@llnl.gov>"
+alias unidata "netCDF Support <support-netcdf@unidata.ucar.edu>"
+alias unidata "netCDF Java Support <support-netcdf-java@unidata.ucar.edu>"
+alias uno "Itsushi Uno <iuno@riam.kyushu-u.ac.jp>"
+alias vaida "Veronica Vaida <vaida@colorado.edu>"
+alias valent "Dick Valent <valent@ncar.ucar.edu>"
+alias valentin "Christian Valentin <valentinird@laopdr.com>"
+alias valentine "Dave Valentine <dvalenti@uci.edu>"
+alias valero "Francisco Valero <fvalero@ucsd.edu>"
+alias varanasi "Prasad Varanasi <pvaranasi@notes.cc.sunysb.edu>"
+alias vasich "Tom Vasich <tmvasich@uci.edu>"
+alias vaught "Andy Vaught <andy07@g95.org>"
+alias lynnes "Chris Lynnes <Christopher.S.Lynnes@nasa.gov>" # ESDS Giovanni
+alias hegde "Mahabaleshwara Hegde <mahabaleshwa.S.Hegde@nasa.gov>" # ESDS Giovanni
+alias velazquez "Javier Rubio Velazquez <rubioj@quijote.ugto.mx>" # 52-473-732-3535 x. 2271 (GTO, W), fxm (GTO, H)
+alias velicogna "Isabella Velicogna <isabella.velicogna@gmail.com>" # (949) 769-3447 (H) (720) 427-1717 (C) 29 Wharton Ct
+alias verardo "Dave Verardo <dverardo@nsf.gov>"
+alias vertenstein "Mariana Vertenstein <mvertens@ncar.ucar.edu>"
+alias viner "Rita Viner <rita@uci.edu>"
+alias visconti "Guido Visconti <guido.visconti@aquila.infn.it>"
+alias visser "Erika Visser <omaerica@hotmail.com>"
+alias vitko "John Vitko <jvitko@sandia.gov>"
+alias vogelfanger "Eliot Vogelfanger <rozelliotv@webtv.net>"
+alias vogelmann "Andy Vogelmann <avogelmann@ucsd.edu>"
+alias voisin "Didier Voisin <voisin@lgge.obs.ujf-grenoble.fr>" # UJF asst. prof
+alias volz "Frederic Volz <volz@amber.plh.af.mil>"
+alias vonk "Kathy Vonk <kvonk@uci.edu>"
+alias kasibhatla "Prasad Kasibhatla <psk9@duke.edu>"
+alias voss "Frank Voss <fvoss@usf.uni-kassel.de>" # GAFOS
+alias vu "Hanh (Hank) Vu <hank.vu@wsm.com>" # (800) 443-6699 x. 211
+alias vukicevic "Tomi Vukicevic <tomie@ncar.ucar.edu>"
+alias walden "Von Walden <vonw@uidaho.edu>"
+alias waliser "Duane Waliser <waliser@terra.msrc.sunysb.edu>"
+alias walker "Chris Walker <cwalker@uci.edu>"
+alias walker_c "Chris Walker <Christopher_Walker@swissre.com>"
+alias walot "Michelle Walot <mwalot@cox.net>"
+alias walters "Stacy Walters <stacy@ucar.edu>"
+alias wang_d "Daniel Wang <danielw@slac.stanford.edu>" # sip:danielwily@ekiga.net, 4616 Southwick Dr., Plano, TX 75093
+alias wang_h "Hailan Wang <h-wang1@atmos.uiuc.edu>"
+alias wang_j "Jinfeng Wang <jfwang@MIT.EDU>" # Manuel's friend coming to UCI
+#alias wang_x "Xianwei Wang <xianweiw@uci.edu>" # my snow postdoc 
+alias wang_x "Xianwei Wang <wangxw8@mail.sysu.edu.cn>" # my snow postdoc 
+alias wang_z "Zifa Wang <zifawang@mail.iap.ac.cn>"
+alias wang_w "Wenshan Wang <wenshanw@uci.edu>"
+alias warburton "Bo Warburton <bo@warburton.com>"
+alias warren "Steve Warren <sgw@atmos.washington.edu>" # (206) 543-7230
+alias washington_k "Katie Washington <katjapenner@yahoo.com>"
+alias washington_r "Richard Washington <richard.washington@geog.ox.ac.uk>"
+alias washington_w "Warren Washington <wmw@ncar.ucar.edu>"
+alias waterman "Marian Waterman <mlwaterm@uci.edu>" # (949) 285-4431 (C)
+alias waugh "Darryn Waugh <waugh@rua.eps.jhu.edu>"
+alias weatherly "John Weatherly <weather@ncar.ucar.edu>"
+alias weaver "Chris Weaver <chris@fiji.ucsd.edu>"
+alias weber "Wayne Weber <wayne@gotrc.com>"
+alias webster "Peter J. Webster <pjw@willywilly.colorado.edu>"
+alias wei "Ming-Ying Wei <mwei@hq.nasa.gov>"
+alias weintraub "Nancy Weintraub <nweintra@uci.edu>"
+alias welch "Wendy Welch <welch@ncar.ucar.edu>"
+alias werner "Martin Werner <martin.werner@bgc-jena.mpg.de>"
+alias wessel "Frank Wessel <fwessel@uci.edu>"
+alias westphal "Doug Westphal <westphal@nrlmry.navy.mil>"
+alias white_j "V. John White <vjw@ceert.org>"
+alias whitman "Suzanne Whitman <suzanne@ncar.ucar.edu>"
+alias whung "Pai-Yei Whung <Pai-Yei.Whung@noaa.gov>"
+alias wieland "Con Wieland <cwieland@uci.edu>"
+alias wielicki "Bruce Wielicki <b.a.wielicki@larc.nasa.gov>"
+alias wiggs "Giles Wiggs <G.Wiggs@sheffield.ac.uk>"
+alias wild "Oliver Wild <oliver@halo.ess.uci.edu>"
+alias wilkinson "Alice Wilkinson <awilk@us.ibm.com>"
+alias williams "Jack Williams <williams@nceas.ucsb.edu>"
+alias williams_d "Dean Williams <williams13@llnl.gov>"
+alias williamson "Dave Williamson <wmson@ncar.ucar.edu>"
+alias willis "Paula Willis <millieva@aol.com>"
+alias wilson_geordie "Geordie Wilson <geordie@mv.mv.com>"
+alias wilson_jody "Hodar Wilson <jkwilson@bu.edu>"
+alias wilson_n "Nichole Wilson <nlwilson@uci.edu>" # PS Communications
+alias wind_erosion "Wind Erosion list <wind_erosion@lyris.acs.ttu.edu>"
+alias windham "Tom Windham <twindham@ncar.ucar.edu>"
+alias wingate "Beth Wingate <wingate@lanl.gov>"
+alias wiscombe "Warren Wiscombe <wiscombe@climate.gsfc.nasa.gov>"
+alias wiseman "Bill Wiseman <wwiseman@nsf.gov>" # (703) 292-4750 
+alias wolff "Eric Wolff <ewwo@BAS.AC.UK>"
+alias wolonsky "Karl Wolonsky <wolonsky@uci.edu>"
+alias wong_f "Felicity Wong <fwong@argyre.colorado.edu>"
+alias wong_j "Jeff Wong <jeffwong@CCRS.NRCan.gc.ca>"
+alias woodling "Roxanne Woodling <roxanne@emerald.ucsc.edu>"
+alias woodward "Stephanie Woodward <stephanie.woodward@metoffice.com>"
+alias wooley_d "David Wooley <dwooley@ef.org>"
+alias worley "Steve Worley <worley@ncar.ucar.edu>"
+alias wreq_cgd "CGD Work Request System <wreq@cgd.ucar.edu>"
+alias wuebbles "Don Wuebbles <wuebbles@uiatma.atmos.uiuc.edu>"
+alias xie "Pingping Xie <xping@sgi17.wwb.noaa.gov>"
+alias xu_y "Yiwen Xu <chicago_pella_black@yahoo.com>" # IPY postdoc applicant ? carmichael's student
+alias yang_m "MuQun (Kent) Yang <myang6@hdfgroup.org>" # HDF DAP author ESDS
+alias yang "Zong-Liang Yang <liang@mail.utexas.edu>"
+alias yang_p "Ping Yang <pyang@ariel.met.tamu.edu>"
+alias ye "Qian Ye <ye@ucar.edu>"
+alias yeager "Steve Yeager <yeager@ncar.ucar.edu>"
+alias yee "Albert Yee <afyee@uci.edu>"
+alias yoo "Hi Young Yoo <yooh@uci.edu>"
+alias yoshioka "Masaru Yoshioka <yoshioka@ucar.edu>"
+alias young_a "Abby Young <ayoung@iclei.org>"
+alias yu_j "Jin-Yi Yu <jyyu@uci.edu>"
+alias yu_k "Ka Chun Yu <kachun@vela.colorado.edu>"
+alias yu_q "Qin Yu <qinyu@sunrise.pku.edu.cn>"
+alias yu_s "Shaocai Yu <syu2@duke.edu>"
+alias yuanjing "Zhu Yuanjing <lwb@sunrise.pku.edu.cn>"
+alias yunfeng "Luo Yunfeng <lyf@linux2.iap.ac.cn>"
+alias zecca "Mike Zecca <zecca@scnc.aaps.k12.mi.us>"
+alias zecco "Zecco Trading <customerservice@zeccotrading.com>"
+alias zeller "Bill Zeller <wzeller@uci.edu>"
+alias zender "Charlie Zender <zender@uci.edu>" # (949) 856-9787 (H), (949) 891-2429(W), (949) 231-7002 (C)
+alias zender_c "Charlie Zender <zender@uci.edu>"
+alias zeng "Ning Zeng <zeng@atmos.umd.edu>"
+alias zhang_g "Guang Zhang <zhang@fiji.ucsd.edu>"
+alias zhang_h "Huai-min Zhang <hzhang@gso.uri.edu>"
+alias zhang_m "Minghua Zhang <mzhang@atmsci.msrc.sunysb.edu>"
+alias zhang_y "Zhang Yang <zhang@dbg.edu>"
+alias zhao "Chuanfeng Zhao <CZhao@lbl.gov>" # IPY postdoc applicant, Tim Garrett's student
+alias zhou "Liping Zhou <lpzhou@pku.edu.cn>"
+alias zhu "Xin Zhu <xzhu@uci.edu>"
+alias ziegler "Margaret Ziegler <Margaret_Ziegler@Prenhall.com>"
+alias uhills "University Hills Mail List <uhills@uhills.org>"
+alias zobeck "Ted Zobeck <tzobeck@lbk.ars.usda.gov>"
+alias zuidema "Paquita Zuidema <zuidema@monsoon.colorado.edu>"
+# Reunion
+alias sperling "Elisabeth Sperling <elisabethsperling@mac.com>"
+alias corrales "Mark Corrales <corrales@post.harvard.edu>"
+alias goodman "Jeff Goodman <goodmanjm@appstate.edu>"
+alias opel "Andy Opel <aopel@fsu.edu>"
+alias kochman "Debbie Kochman Dean <debbiedeane@earthlink.net>"
+alias gadol "Peter Gadol <pgadol@aol.com>"
+alias agui "Maria Agui Carter <>"
+alias boynton "Ryan Boynton <rsboynton@gmail.com>"
+
+set retrieveinterval='30'
+set bell='1'
+set flash='1'
+set nosuppressautoretrieve
+set asksub
+set noaskcc
+set noaskbcc
+set nohold
+set additionalfields=''
+set templates=''
+set headerlines='10'
+set toolcols='80'
+set popuplines='30'
+set printmail='lpr -p'
+set noexpert
+

@@ -1,0 +1,17 @@
+-*-text-*-
+
+This directory, $(HOME)/linux, contains installation notes and
+customized files which have been required for installing Linux. 
+
+linux.txt	 Step by step instruction sheet of how to modify default
+		 Redhat installation to conform to my Unix environment
+
+X/XF86Config	 Configuration file for XFree86 X server
+X/Xaccel.ini	 Configuration file for Accelerated X server
+X/Xconfig	 Configuration file for Metro X server
+
+Directories:
+etc		Scripts to be installed in /etc (e.g., ppp)
+root		Files to be placed in home of root
+sw		Notes on software installations (e.g., netCDF)
+usr		Scripts to be installed in, e.g., /usr/local

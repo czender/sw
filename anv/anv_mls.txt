@@ -1,0 +1,21 @@
+Outline of Thesis for MLS:
+
+"The Role of Cirrus Anvils in the Energy Budget of the Tropics"
+
+1. GCMs are a good way (the only way) of getting a self-consistent energy budget
+2. Changes in the Tropical energy budget (e.g., due to El Nino) are strongly linked to cirrus
+anvils because the 300 K "threshold" for deep convection is often exceeded. This is weak,
+explain what "changes" you mean, and demonstrate their robustness (in the tropics)
+3. Observations show dSWCF/dLWCF > 1 in the tropics due to El Nino (how robust is this?, use erbe_a data? involve ISCCP data?)
+
+Hypothesis: dSWCF/dLWCF > 1 because of anvils, meaning LW saturation, ice crystals and anvil thickening preferentially boosting SWCF
+
+Methodology:
+
+1. See if the observations show LWCF is "near" saturated
+2. See if you can get a model to reproduce the static LWCF/SWCF fields
+3. Build an anvil simulator in the GCM
+4. Run experiments w/w/o the anvils (control and sens.)
+5. Do the anvil experiments conclusively (within 10-15 w/m2) show a better slope with anvils?
+6. May need to be able to rule out other explanations for dSWCF/dLWCF > 1 (make a list)
+7. Explain your hypothesis in terms of the physics invoked, and the feedbacks involved.

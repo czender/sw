@@ -1,0 +1,60 @@
+% $Id$ -*-LaTeX-*-
+
+% Purpose: Test file for LaTeX 
+% File should be as clean as possible, depending only on generic
+% packages if possible
+
+% Usage: 
+% cd ~/tex;make -W tst.tex tst.dvi tst.ps tst.pdf;cd -
+% cd ~/tex;pdflatex tst.tex;thumbpdf tst;pdflatex tst.tex;cd -
+% cd ~/tex;make -W tst.tex tst.pdf;cd -
+
+% # NB: latex2html works poorly on tst.tex
+% cd ~/tex;latex2html -dir /tmp tst.tex
+
+\documentclass[12pt]{article}
+
+\usepackage{array} % Table and array extensions, e.g., column formatting
+\usepackage{mdwlist} % Compact list formats \itemize*, \enumerate*
+\usepackage[nolists]{endfloat} % Place figures at end for manuscript submittal
+\usepackage{natbib}
+%\usepackage{tipa} % International Phonetic Alphabet
+\usepackage{url} % Typeset URLs and e-mail addresses
+
+% HTML, XML discussed on KoD04 p. 457--459
+% cd ~/tex;latex tst.tex;tex4ht tst.dvi;cd -
+%\usepackage[html]{tex4ht} % HTML output
+%\usepackage[xhtml,docbook]{tex4ht} % XML, DocBook output
+%\usepackage[xhtml,tei]{tex4ht} % XML, TEI output
+%\usepackage[xhtml,mathml]{tex4ht} % XML, MathML output
+
+\usepackage{csz} % Library of personal definitions
+\usepackage{dmn} % Dimensional units
+
+\newcommand{\calit}{Cal-(IT)$^2$}
+
+\begin{document}
+\pagestyle{plain}
+\thispagestyle{empty}
+\cite{KJC01} is a good article.
+
+%textipa: \textipa{[""Ekspl@"neIS@n]}
+$x^{\!\!2}$
+
+Trying the csznote command now:
+\csznote{This should not appear in LaTeX2HTML output.}
+
+Trying a footnote command now:
+\footnote{This should not appear in LaTeX2HTML output.}
+
+\begin{table}
+\begin{tabular}{ >{$}r<{$} >{\raggedright}p{15.0em}<{} l}
+%\begin{tabular}{ rrl }
+& Parameter Description & 
+\end{tabular}
+\end{table}
+
+\bibliographystyle{agu}
+\bibliography{bib}
+
+\end{document}

@@ -1,0 +1,112 @@
+sudo rpm -i HDF-4.1r4-1mdk.i586.rpm 
+
+mv HDF-4.1r4-1mdk.i586.rpm /data/zender/tmp
+tar xvzf HDF4.1r4.tar.gz
+cd HDF4.1r4
+export FC='pgf90'
+./configure -v --prefix=/usr/local/hdf4
+
+#***********************************************************************      
+# 20110520: neige.ess.uci.edu x86_64/EMT64 Debian Ubuntu Natty Narwhal gcc/gfortran hdf5eos
+#***********************************************************************
+cd ${DATA}/tmp
+for fl in hdf5-1.8.5-snap4.tar.gz HDF-EOS5.1.13.tar.Z HDF-EOS5.1.13_TESTDRIVERS.tar.Z HDF-EOS5_REF.pdf HDF-EOS5_UG.pdf ; do
+    wget -c ftp://edhs1.gsfc.nasa.gov/edhs/hdfeos5/latest_release/${fl}
+done
+mv HDF-EOS5.1.13.tar.Z ${DATA}/tmp/hdfeos5.tar.Z
+mv HDF-EOS5.1.13_TESTDRIVERS.tar.Z ${DATA}/tmp/hdfeos5_testdrivers.tar.Z
+mv HDF-EOS5_REF.pdf ${DATA}/tmp/hdf_eos5_rfr.pdf
+mv HDF-EOS5_UG.pdf  ${DATA}/tmp/hdf_eos5_usr.pdf
+# Instead of getting latest version get fixed, known-to-work version
+# scp hdf*.tar.gz dust.ess.uci.edu:/data/zender/tmp
+/bin/rm -r -f ${DATA}/tmp/hdfeos5
+/bin/rm -r -f ${DATA}/tmp/hdf5-1.8.5*
+rsync 'dust.ess.uci.edu:/data/zender/tmp/hdf*.tar.*' .
+rsync 'dust.ess.uci.edu:/data/zender/tmp/hdf*.pdf' .
+tar xvzf ${DATA}/tmp/hdf5-1.8.5-snap4.tar.gz
+tar xvzf ${DATA}/tmp/hdfeos5.tar.Z
+tar xvzf ${DATA}/tmp/hdfeos5_testdrivers.tar.Z
+cd ${DATA}/tmp/hdf5-1.8.5-snap4
+make distclean
+export GNU_TRP=`~/nco/autobld/config.guess`
+export CC='gcc'
+export CFLAGS='-fPIC -m64'
+export CPPFLAGS=''
+export CXX='g++'
+export CXXFLAGS='-fPIC -m64'
+export FC='gfortran'
+export F77='gfortran'
+export F90='gfortran'
+export FCFLAGS=''
+export FFLAGS=''
+export F90FLAGS=''
+# export HDF5_ROOT='/usr/local'
+export HDF5_ROOT='/data/zender/hdf5-1.8.5-snap4'
+./configure --prefix=${HDF5_ROOT} --enable-cxx --enable-fortran --enable-install-include > hdf5.configure.${GNU_TRP}.foo 2>&1
+make > hdf5.make.${GNU_TRP}.foo 2>&1
+# make check > hdf5.check.${GNU_TRP}.foo 2>&1
+scp hdf5.*.foo dust.ess.uci.edu:/var/www/html/tmp
+sudo make install
+
+cd ${DATA}/tmp/hdfeos5
+make distclean
+export CC='/usr/local/bin/h5cc -Df2cFortran'
+export CFLAGS='-DH5_USE_16_API -fPIC -m64'
+export CXXFLAGS='-DH5_USE_16_API -fPIC -m64'
+export HDF5EOS_ROOT='/usr/local'
+# HDF5EOS builds here unless otherwise specified
+./configure --prefix=${HDF5EOS_ROOT} --enable-cxx --enable-fortran --enable-install-include --with-hdf5=${HDF5_ROOT} > hdf5eos.configure.${GNU_TRP}.foo 2>&1
+# 20070507 HDF5 --enable-cxx conflicts with --enable-parallel
+# 20070507 HDF5 --enable-parallel requires parallel filesystem
+# ./configure --prefix=${HDF5EOS_ROOT} --enable-fortran --enable-parallel
+make > hdf5eos.make.${GNU_TRP}.foo 2>&1
+# make check > hdf5eos.check.${GNU_TRP}.foo 2>&1
+scp hdf5eos.*.foo dust.ess.uci.edu:/var/www/html/tmp
+sudo make install
+
+# Build h4toh5
+# http://www.hdfgroup.org/projects/noaa-sds/demo.html
+# h4toh5 -eos -nc4strict AMSR_E_L3_RainGrid_B05_200707.hdf AMSR_E_L3_RainGrid_B05_200707.h5
+fxm
+
+# Build eos52nc4, aka convert_hdfeos5
+# http://hdfeos.net/software/convert_hdfeos5.php
+cd ${DATA}/tmp
+tar xvzf eos52nc4-1.1.tar.gz
+cd ${DATA}/tmp/eos52nc4-1.1
+export CC='/usr/local/bin/h5cc -Df2cFortran'
+export CFLAGS='-fPIC -m64'
+export CXXFLAGS='-fPIC -m64'
+nm -a ${HDF5EOS5_ROOT}/lib/libhe5_hdfeos.a | grep HE5_GDopen
+./configure CC=${HDF5_ROOT}/bin/h5cc --prefix=/usr/local --with-hdf5=${HDF5_ROOT} --with-hdfeos5=${HDF5EOS_ROOT} --with-netcdf4=/usr/local
+make
+make check # fails for some reason
+sudo make install
+eos52nc4 ~/nco/data/in.he5 ~/in.nc4
+
+# Build aug_eos5
+# http://hdfeos.org/software/aug_hdfeos5.php
+cd ${DATA}/tmp
+wget -c http://hdfeos.org/software/aug_eos5/aug_eos5-2.2.tar.gz
+tar xvzf aug_eos5-2.2.tar.gz
+cd ${DATA}/tmp/aug_eos5-2.2
+export CC='/usr/local/bin/h5cc -Df2cFortran'
+export CFLAGS='-fPIC -m64'
+export CXXFLAGS='-fPIC -m64'
+nm -a ${HDF5_ROOT}/lib/libhdf5.a | grep H5Tset_strpad
+nm -a ${HDF5_ROOT}/lib/libhdf5_hl.a | grep H5Tset_strpad
+./configure CC=${HDF5_ROOT}/bin/h5cc --prefix=/usr/local --with-hdf5=${HDF5_ROOT} --with-hdfeos5=${HDF5EOS_ROOT}
+make
+make check # fails for some reason
+sudo make install
+
+# Home-grown check
+eos52nc4 ${DATA}/hdf/MOD10CM.A2007001.005.2007108111758.hdf ${DATA}/hdf/MOD10CM.A2007001.005.2007108111758.nc
+************************************************************************
+Augmentation tool:
+************************************************************************
+
+
+#***********************************************************************
+# 20110520: neige.ess.uci.edu x86_64/EMT64 Debian Ubuntu Natty Narwhal gcc/gfortran hdf5eos
+#***********************************************************************

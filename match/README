@@ -1,0 +1,27 @@
+$Id$ -*-Text-*-
+
+This directory, $HOME/match, contains files and scripts for MATCH, and
+distinct branches of it, such as match_dst.
+
+To learn how the MATCH Dust model was created from the individual
+MATCH and Dust modules, see the description in cvs.tex
+
+How to run the MATCH Dust model on the SGI and Cray:
+
+Set up MATCH control run:
+Compile the code without defining preprocessor token DST
+Unset namelist parameter 'tracnam'
+Set namelist parameter ctitle to, e.g., '$CASE: MATCH/NCEP 3.2.8 control run'
+Remove from namelist parameter 'outtimav': ,'DSTQ01','DSTQ02','DSTQ03','DSTQ04'
+Run as normal MATCH job
+Store results in ctl_mch.txt (Dust controls are compared to this)
+
+Set up Dust control run, transport only:
+Make sure DST_RAD is not set in dst.h
+Compile the code making sure to define preprocessor token DST
+Set namelist parameter 'tracnam' to 'DSTQ01','DSTQ02','DSTQ03','DSTQ04','CWAT'
+Add to namelist parameter 'outtimav': ,'DSTQ01','DSTQ02','DSTQ03','DSTQ04'
+Set namelist parameter title to, e.g., '$CASE: MATCH/NCEP 3.2.8 Dust control run'
+Run as normal MATCH job
+Store results in ctl_trn.txt (BFB with ctl_mch.txt on SGI and Cray)
+

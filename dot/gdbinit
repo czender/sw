@@ -1,0 +1,24 @@
+# $Id$
+
+# Purpose: Startup commands to gdb
+
+# Startup commands to dbx are set in .dbxrc
+# Startup commands to gdb are set in .gdbinit
+# Startup commands to pgdbg are set in .pgdbgrc
+# Startup commands to cvd are set in .cvDebugger
+
+# Catch signals (very helpful)
+handle SIGFPE stop
+handle SIGSEGV stop
+
+# Catch c++ problems
+# Do not place in init file because it requires a process to debug and
+# then DDD will complain if it is started without a target process
+#catch throw
+
+# The main() routine for g77 Fortran programs is in libg2c
+# main() sets up Fortran environment, e.g., iargc(), getarg(), then calls MAIN__
+# Top-level Fortran program unit is known publically as MAIN__
+# To start debugging at entrancce to MAIN__, set temporary breakpoint there
+# Uncomment following line to do so:
+# tbreak MAIN__

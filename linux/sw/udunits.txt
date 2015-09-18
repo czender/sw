@@ -1,0 +1,667 @@
+udunits-1.11 19951103:
+cd /usr/local/src
+ftp ftp.unidata.ucar.edu
+...
+tar -xzvf udunits-1.11.tar.Z
+cd /usr/local/src/udunits-1.11/src
+setenv CFLAGS '-O -DNDEBUG'
+setenv FC g77
+setenv LD_YACC -lbison
+setenv LD_MATH '-L/usr/lib -lm'
+./configure -prefix=/usr/local
+make
+make test
+make install
+make clean
+
+udunits-1.11 20010829 on lanina.ps.uci.edu:
+tar xvzf udunits.tar.Z
+cd udunits-1.11.7/src
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export FC='pgf90'
+export CFLAGS='-O'
+export FFLAGS='-O -w'
+./configure --prefix=/usr/local
+make
+make test
+sudo make install
+make clean
+
+udunits-1.11.7 20030324 on elnino.ess.uci.edu:
+tar xvzf udunits.tar.Z
+cd udunits-1.11.7/src
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export FC='lf95'
+export CFLAGS='-O'
+export FFLAGS='-O -w'
+./configure --prefix=/usr/local
+make
+make test
+sudo make install
+make clean
+
+udunits-1.11.7 20030419 on dust.ess.uci.edu:
+tar xvzf udunits.tar.Z
+cd udunits-1.11.7/src
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export FC='lf95'
+export CFLAGS='-O'
+export FFLAGS='-O -w'
+./configure --prefix=/usr/local
+make
+make test
+sudo make install
+make clean
+
+udunits-1.11.7 20030508 on ashes.ess.uci.edu:
+scp dust.ess.uci.edu:/data/zender/tmp/udunits.tar.Z /data/zender/tmp
+cd /data/zender/tmp
+tar xvzf udunits.tar.Z
+cd udunits-1.11.7/src
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export FC='lf95'
+export CFLAGS='-O'
+export FFLAGS='-O -w'
+./configure --prefix=/usr/local
+make
+make test
+sudo make install
+make clean
+
+udunits-1.12.1 20040419 on sand.ess.uci.edu SuSE 9.0 Linux:
+cd ${DATA}/tmp
+wget http://www.unidata.ucar.edu/packages/udunits/udunits.tar.Z
+tar xvzf udunits.tar.Z
+cd udunits-1.12.1/src
+bash # Use new shell to sandbox environment changes
+export GNU_TRP=`~/nco/autobld/config.guess`
+export CC='gcc'
+export CXX='g++'
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export CFLAGS='-O -fPIC'
+export FC='pgf90'
+export F90='pgf90'
+export FFLAGS='-O -g  -Mrecursive -Mdalign -Mextend'
+export F90FLAGS='-O -g  -Mrecursive -Mdalign -Mextend -Mfree'
+export LDFLAGS='-lm'
+make distclean 2>&1 >foo
+./configure --prefix=/usr/local
+make
+make test
+sudo make install
+make clean
+exit # Exit new shell
+
+udunits-1.11.7 20040628 on ashes.ess.uci.edu:
+cd ${DATA}/tmp
+wget http://www.unidata.ucar.edu/packages/udunits/udunits.tar.Z
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-1.11.7.tar.Z /data/zender/tmp
+tar xvzf udunits-1.11.7.tar.Z
+cd udunits-1.11.7/src
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CXX='g++'
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export CFLAGS='-O'
+export FC='lf95'
+export FFLAGS='-O -w'
+export LDFLAGS='-lm'
+./configure --prefix=/usr/local
+make
+make test
+sudo make install
+make clean
+exit # Exit new shell
+
+udunits-1.11.7 20040628 on ashes.ess.uci.edu:
+cd ${DATA}/tmp
+wget http://www.unidata.ucar.edu/packages/udunits/udunits.tar.Z
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-1.12.2.tar.Z /data/zender/tmp
+tar xvzf udunits-1.12.2.tar.Z
+cd udunits-1.12.2/src
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CXX='g++'
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export CFLAGS='-O'
+export FC='g95'
+export FFLAGS='-O -g -fno-second-underscore'
+export LDFLAGS='-lm'
+./configure --prefix=/usr/local
+make
+make test
+sudo make install
+make clean
+exit # Exit new shell
+
+20041222:
+# sand.ess.uci.edu LINUXAMD64 Debian/Ubuntu Warty Warthog g95
+udunits-1.12.2 
+cd ${DATA}/tmp
+wget http://www.unidata.ucar.edu/packages/udunits/udunits.tar.Z
+tar xvzf udunits-1.12.2.tar.Z
+cd udunits-1.12.2/src
+bash # Use new shell to sandbox environment changes
+export GNU_TRP=`~/nco/autobld/config.guess`
+export CC='gcc-3.4'
+export CXX='g++-3.4'
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export CFLAGS='-O -fPIC -m64 -march=k8'
+export FC='g95'
+export FFLAGS='-O -g -fno-second-underscore'
+export LDFLAGS='-lm'
+make distclean 2>&1 >foo
+./configure --prefix=/usr/local
+make
+make test
+sudo make install
+make clean
+exit # Exit new shell
+
+udunits-1.12.2 20040628 
+soot.ess.uci.edu Fedora Core 2 gcc/g95:
+cd ${DATA}/tmp
+wget http://www.unidata.ucar.edu/packages/udunits/udunits.tar.Z
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-1.12.2.tar.Z /data/zender/tmp
+tar xvzf udunits-1.12.2.tar.Z
+cd udunits-1.12.2/src
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CXX='g++'
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export CFLAGS='-O'
+export FC='g95'
+export FFLAGS='-O -g -fno-second-underscore'
+export LDFLAGS='-lm'
+make distclean 2>&1 >foo
+./configure --prefix=/usr/local
+make
+make test
+sudo make install
+make clean
+exit # Exit new shell
+
+udunits-1.12.2 20050422
+ashes.ess.uci.edu Debian Ubuntu Hoary gcc/g95:
+cd ${DATA}/tmp
+wget http://www.unidata.ucar.edu/packages/udunits/udunits.tar.Z
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-1.12.2.tar.Z /data/zender/tmp
+tar xvzf udunits-1.12.2.tar.Z
+cd udunits-1.12.2/src
+bash # Use new shell to sandbox environment changes
+export CC='gcc-3.4'
+export CXX='g++-3.4'
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export CFLAGS='-O'
+export FC='g95'
+export FFLAGS='-O -g -fno-second-underscore'
+export LDFLAGS='-lm'
+make distclean 2>&1 >foo
+./configure --prefix=/usr/local
+# May be necessary (if so, undo after use with 'sudo rm /usr/bin/cc')
+#sudo ln -s /usr/bin/gcc-3.4 /usr/bin/cc
+make
+make test
+sudo make install
+make clean
+exit # Exit new shell
+
+20050712:
+# silt.ess.uci.edu LINUXAMD64 Debian/Ubuntu Hoary Hedgehog g95
+udunits-1.12.2 
+cd ${DATA}/tmp
+wget http://www.unidata.ucar.edu/packages/udunits/udunits.tar.Z
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-1.12.2.tar.Z .
+tar xvzf udunits-1.12.2.tar.Z
+cd udunits-1.12.2/src
+bash # Use new shell to sandbox environment changes
+export GNU_TRP=`~/nco/autobld/config.guess`
+export CC='gcc'
+export CXX='g++'
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export CFLAGS='-O -fPIC -m64 -march=opteron -mmmx -msse -msse2 -m3dnow -pipe -fexpensive-optimizations -mfpmath=sse,387'
+export FC='g95'
+export FFLAGS='-O -g -fno-second-underscore'
+export LDFLAGS='-lm'
+make distclean 2>&1 >foo
+./configure --prefix=/usr/local
+make
+make test
+sudo make install
+make clean
+exit # Exit new shell
+
+udunits-1.12.2 20050422
+flyash.ess.uci.edu Debian Ubuntu Hoary gcc/g95:
+cd ${DATA}/tmp
+wget http://www.unidata.ucar.edu/packages/udunits/udunits.tar.Z
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-1.12.2.tar.Z /data/zender/tmp
+tar xvzf udunits-1.12.2.tar.Z
+cd udunits-1.12.2/src
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CXX='g++'
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export CFLAGS='-O'
+export FC='g95'
+export FFLAGS='-O -g -fno-second-underscore'
+export LDFLAGS='-lm'
+make distclean 2>&1 >foo
+./configure --prefix=/usr/local
+# May be necessary (if so, undo after use with 'sudo rm /usr/bin/cc')
+sudo ln -s /usr/bin/gcc /usr/bin/cc
+make
+make test
+sudo make install
+make clean
+exit # Exit new shell
+
+udunits-1.12.2 20051022
+cg1.calit2.uci.edu Mac OS X Darwin 8.2 gcc-4.0.0 netcdf-3.6.1-beta3
+cd ${DATA}/tmp
+wget http://www.unidata.ucar.edu/packages/udunits/udunits.tar.Z
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-1.12.2.tar.Z ${DATA}/tmp
+tar xvzf udunits-1.12.2.tar.Z
+cd udunits-1.12.2/src
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CXX='g++'
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export CFLAGS='-O'
+export FC='g95'
+export FFLAGS='-O -g -fno-second-underscore'
+export LDFLAGS='-lm'
+make distclean 2>&1 >foo
+./configure --prefix=${HOME} --bindir=${HOME}/bin/${PVM_ARCH} --libdir=${HOME}/lib/${PVM_ARCH} --mandir=${HOME}/man
+# May be necessary (if so, undo after use with 'sudo rm /usr/bin/cc')
+sudo ln -s /usr/bin/gcc /usr/bin/cc
+make
+make test
+sudo make install
+make clean
+exit # Exit new shell
+
+udunits-1.12.2 20070605
+blueice.ucar.edu AIX 5.3:
+cd 
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-1.12.2.tar.Z .
+gunzip udunits-1.12.2.tar.Z
+tar xvf udunits-1.12.2.tar
+cd udunits-1.12.2/src
+bash # Use new shell to sandbox environment changes
+export GNU_TRP=`~/nco/autobld/config.guess`
+export OBJECT_MODE='64' # AIX-specific hack
+export CC='xlc_r'
+export CFLAGS='-O -qmaxmem=-1 -qarch=auto'
+export CPPFLAGS='-DNDEBUG -I/usr/vacpp/include'
+export CXX='xlC_r'
+export F77='xlf_r'
+export F90='xlf90_r'
+export F90FLAGS='-O -qsuffix=f=f90 -qmaxmem=-1 -qarch=auto'
+export FFLAGS='-O -qarch=auto'
+export UDUNITS_PATH=${HOME}/udunits-1.12.2
+make distclean 2>&1 >foo
+./configure --prefix=${UDUNITS_PATH}
+make
+make test
+make install
+make clean
+exit # Exit new shell
+
+#***********************************************************************
+# 20070806: ashes.ess.uci.edu Debian Ubuntu 7.04 Feisty Fawn gcc/g95 udunits-2.0.0
+# 20070807: sand.ess.uci.edu Debian Ubuntu 7.04 Feisty Fawn gcc/g95 udunits-2.0.0
+#***********************************************************************
+cd ${DATA}/tmp
+wget ftp://ftp.unidata.ucar.edu/pub/udunits/beta/udunits-2.0.0.tar.gz
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-2.0.0.tar.Z /data/zender/tmp
+tar xvzf udunits-2.0.0.tar.gz
+cd udunits-2.0.0
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CXX='g++'
+export FC='g95'
+export F77='g95'
+export F90='g95'
+make distclean 2>&1 >foo
+./configure --prefix=/usr/local
+make
+make check # optional; requires CUNIT installation
+sudo make install
+sudo make install-info install-html install-pdf
+make clean
+exit # Exit new shell
+#***********************************************************************
+# 20070806: ashes.ess.uci.edu Debian Ubuntu 7.04 Feisty Fawn gcc/g95 udunits-2.0.0
+# 20070807: sand.ess.uci.edu Debian Ubuntu 7.04 Feisty Fawn gcc/g95 udunits-2.0.0
+#***********************************************************************
+
+udunits-1.12.4 20071229
+neige.ess.uci.edu Windows Vista gcc/g95:
+cd ${DATA}/tmp
+wget http://www.unidata.ucar.edu/packages/udunits/udunits.tar.Z
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-1.12.4.tar.Z /data/zender/tmp
+tar xvzf udunits-1.12.4.tar.Z
+cd udunits-1.12.4/src
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CXX='g++'
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export CFLAGS='-O'
+export FC='g95'
+export FFLAGS='-O -g -fno-second-underscore'
+export LDFLAGS='-lm'
+make distclean 2>&1 >foo
+./configure --prefix=/usr/local
+# May be necessary (if so, undo after use with 'sudo rm /usr/bin/cc')
+sudo ln -s /usr/bin/gcc /usr/bin/cc
+make
+make test
+sudo make install
+make clean
+exit # Exit new shell
+
+udunits-1.12.4 20080103
+neige.ess.uci.edu ubuntu gutsy gcc/g95:
+cd ${DATA}/tmp
+wget http://www.unidata.ucar.edu/packages/udunits/udunits.tar.Z
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-1.12.4.tar.Z /data/zender/tmp
+tar xvzf udunits-1.12.4.tar.Z
+cd udunits-1.12.4/src
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CXX='g++'
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export CFLAGS='-O -fPIC -m64'
+export FC='g95'
+export FFLAGS='-O -g'
+export LDFLAGS='-lm'
+make distclean 2>&1 >foo
+./configure --prefix=/usr/local
+# May be necessary (if so, undo after use with 'sudo rm /usr/bin/cc')
+sudo ln -s /usr/bin/gcc /usr/bin/cc
+make
+make test
+sudo make install
+make clean
+exit # Exit new shell
+
+#***********************************************************************
+# 20080103: neige.ess.uci.edu Debian Ubuntu 7.10 Gutsy gibbon gcc/g95 udunits-2.0.0
+#***********************************************************************
+cd ${DATA}/tmp
+wget ftp://ftp.unidata.ucar.edu/pub/udunits/beta/udunits-2.0.0.tar.gz
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-2.0.0.tar.Z /data/zender/tmp
+tar xvzf udunits-2.0.0.tar.gz
+cd udunits-2.0.0
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CFLAGS='-fPIC -m64'
+export CXXFLAGS='-fPIC -m64'
+export CXX='g++'
+export FC='g95'
+export F77='g95'
+export F90='g95'
+make distclean 2>&1 >foo
+./configure --prefix=/usr/local
+make
+make check # optional; requires CUNIT installation
+sudo make install
+sudo make install-info install-html install-pdf
+make clean
+exit # Exit new shell
+#***********************************************************************
+# 20080103: neige.ess.uci.edu Debian Ubuntu 7.10 Gutsy gibbon gcc/g95 udunits-2.0.0
+#***********************************************************************
+
+#***********************************************************************
+# 20080504: virga.ess.uci.edu Debian Ubuntu 8.04 Hardy Heron gcc/g95 udunits-1.12.7
+#***********************************************************************
+udunits-1.12.7 20080103
+virga.ess.uci.edu ubuntu gutsy gcc/g95:
+cd ${DATA}/tmp
+wget ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-1.12.7.tar.gz
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-1.12.7.tar.gz /data/zender/tmp
+tar xvzf udunits-1.12.7.tar.gz
+cd udunits-1.12.7/src
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CXX='g++'
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export CFLAGS='-O'
+export FC='g95'
+export FFLAGS='-O -g'
+export LDFLAGS='-lm'
+make distclean 2>&1 >foo
+./configure --prefix=/usr/local
+# May be necessary (if so, undo after use with 'sudo rm /usr/bin/cc')
+sudo ln -s /usr/bin/gcc /usr/bin/cc
+make
+make test
+sudo make install
+make clean
+exit # Exit new shell
+#***********************************************************************
+# 20080504: virga.ess.uci.edu Debian Ubuntu 8.04 Hardy Heron gcc/g95 udunits-1.12.7
+#***********************************************************************
+
+#***********************************************************************
+# 20080504: virga.ess.uci.edu Debian Ubuntu Hardy Heron gcc/g95 udunits-2.0.0
+#***********************************************************************
+cd ${DATA}/tmp
+wget ftp://ftp.unidata.ucar.edu/pub/udunits/beta/udunits-2.0.0.tar.gz
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-2.0.0.tar.Z /data/zender/tmp
+tar xvzf udunits-2.0.0.tar.gz
+cd udunits-2.0.0
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CFLAGS=''
+export CXXFLAGS=''
+export CXX='g++'
+export FC='g95'
+export F77='g95'
+export F90='g95'
+make distclean 2>&1 >foo
+./configure --prefix=/usr/local
+make
+make check # optional; requires CUNIT installation
+sudo make install
+sudo make install-info install-html install-pdf
+make clean
+exit # Exit new shell
+#***********************************************************************
+# 20080504: virga.ess.uci.edu Debian Ubuntu Hardy Heron gcc/g95 udunits-2.0.0
+#***********************************************************************
+
+#***********************************************************************
+# 20080902: glace.ess.uci.edu x86_64/EMT64 Debian Ubuntu Hardy Heron gcc/g95 udunits-1.12.9
+#***********************************************************************
+udunits-1.12.9 20080103
+neige.ess.uci.edu ubuntu gutsy gcc/g95:
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-1.12.9.tar.gz .
+tar xvzf udunits-1.12.9.tar.gz
+cd udunits-1.12.9/src
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CXX='g++'
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export CFLAGS='-O -fPIC -m64'
+export FC='g95'
+export FFLAGS='-O -g'
+export LDFLAGS='-lm'
+make distclean 2>&1 >foo
+./configure --prefix=/usr/local
+# May be necessary (if so, undo after use with 'sudo rm /usr/bin/cc')
+sudo ln -s /usr/bin/gcc /usr/bin/cc
+make
+make test
+sudo make install
+make clean
+exit # Exit new shell
+
+#***********************************************************************
+# 20080915: glace.ess.uci.edu x86_64/EMT64 Debian Ubuntu Hardy Heron gcc/g95 udunits-2.0.0
+#***********************************************************************
+cd ${DATA}/tmp
+wget ftp://ftp.unidata.ucar.edu/pub/udunits/beta/udunits-2.0.0.tar.gz
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-2.0.0.tar.Z /data/zender/tmp
+tar xvzf udunits-2.0.0.tar.gz
+cd udunits-2.0.0
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CFLAGS='-fPIC -m64'
+export CXXFLAGS='-fPIC -m64'
+export CXX='g++'
+export FC='g95'
+export F77='g95'
+export F90='g95'
+make distclean 2>&1 >foo
+./configure --prefix=/usr/local
+make
+make check # optional; requires CUNIT installation
+sudo make install
+sudo make install-info install-html install-pdf
+make clean
+exit # Exit new shell
+#***********************************************************************
+# 20080915: glace.ess.uci.edu x86_64/EMT64 Debian Ubuntu Hardy Heron gcc/g95 udunits-2.0.0
+#***********************************************************************
+
+#***********************************************************************
+# 20090224: ipcc.ess.uci.edu x86_64/EMT64 CentOS 5.1 gcc/g95 udunits-1.12.9
+#***********************************************************************
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-1.12.9.tar.gz .
+tar xvzf udunits-1.12.9.tar.gz
+cd udunits-1.12.9/src
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CXX='g++'
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export CFLAGS='-O -fPIC -m64'
+export FC='gfortran'
+export FFLAGS='-O -g'
+export LDFLAGS='-lm'
+make distclean 2>&1 >foo
+./configure --prefix=/usr/local
+# May be necessary (if so, undo after use with 'sudo rm /usr/bin/cc')
+sudo ln -s /usr/bin/gcc /usr/bin/cc
+make
+make test
+sudo make install
+make clean
+exit # Exit new shell
+
+#***********************************************************************
+# 20090302: givre.ess.uci.edu x86_64/EMT64 Debian Ubuntu Intrepid Ibex gcc/gfortran udunits-1.12.9
+#***********************************************************************
+udunits-1.12.9 20080103
+neige.ess.uci.edu ubuntu gutsy gcc/g95:
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-1.12.9.tar.gz .
+tar xvzf udunits-1.12.9.tar.gz
+cd udunits-1.12.9/src
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CXX='g++'
+export CPPFLAGS='-DNDEBUG -DpgiFortran'
+export CFLAGS='-O -fPIC -m64'
+export FC='g95'
+export FFLAGS='-O -g'
+export LDFLAGS='-lm'
+make distclean 2>&1 >foo
+./configure --prefix=/usr/local
+# May be necessary (if so, undo after use with 'sudo rm /usr/bin/cc')
+sudo ln -s /usr/bin/gcc /usr/bin/cc
+make
+make test
+sudo make install
+make clean
+exit # Exit new shell
+
+#***********************************************************************
+# 20090302: givre.ess.uci.edu x86_64/EMT64 Debian Ubuntu Intrepid Ibex gcc/gfortran udunits-2.0.0
+#***********************************************************************
+cd ${DATA}/tmp
+wget ftp://ftp.unidata.ucar.edu/pub/udunits/beta/udunits-2.0.0.tar.gz
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-2.0.0.tar.gz /data/zender/tmp
+tar xvzf udunits-2.0.0.tar.gz
+cd udunits-2.0.0
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CFLAGS='-fPIC -m64'
+export CXXFLAGS='-fPIC -m64'
+export CXX='g++'
+export FC='gfortran'
+export F77='gfortran'
+export F90='gfortran'
+make distclean 2>&1 >foo
+./configure --prefix=/usr/local
+make
+make check # optional; requires CUNIT installation
+sudo make install
+sudo make install-info install-html install-pdf
+make clean
+exit # Exit new shell
+#***********************************************************************
+# 20090302: givre.ess.uci.edu x86_64/EMT64 Debian Ubuntu Intrepid Ibex gcc/gfortran udunits-2.0.0
+#***********************************************************************
+
+#***********************************************************************
+# 20141126: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 20 gcc 4.8.3
+#***********************************************************************
+sudo yum install expat expat-devel
+cd ${DATA}/tmp
+wget ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-2.2.17.tar.gz
+scp dust.ess.uci.edu:/data/zender/tmp/udunits-2.2.17.tar.gz /data/zender/tmp
+tar xvzf udunits-2.2.17.tar.gz
+cd udunits-2.2.17
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CFLAGS='-fPIC -m64'
+export CXXFLAGS='-fPIC -m64'
+export CXX='g++'
+export FC='gfortran'
+export F77='gfortran'
+export F90='gfortran'
+make distclean 2>&1 >foo
+./configure --prefix=/usr/local
+make
+make check # optional; requires CUNIT installation
+sudo make install
+sudo make install-info install-html install-pdf
+make clean
+exit # Exit new shell
+#***********************************************************************
+# 20141126: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 20 gcc 4.8.3
+#***********************************************************************
+
+#***********************************************************************
+# 20150530: rhea.ccs.ornl.gov RHEL 6.6 Santiago gcc/gfortran 4.8.2 netcdf-4.3.3.1 HDF4 git
+#***********************************************************************
+cd ${DATA}/tmp
+wget ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-2.2.19.tar.gz
+# scp dust.ess.uci.edu:/data/zender/tmp/udunits-2.2.19.tar.gz /data/zender/tmp
+tar xvzf udunits-2.2.19.tar.gz
+cd udunits-2.2.19
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CFLAGS='-fPIC -m64'
+export CXXFLAGS='-fPIC -m64'
+export CXX='g++'
+export FC='gfortran'
+export F77='gfortran'
+export F90='gfortran'
+make distclean 2>&1 >foo
+./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --libdir=${MY_LIB_DIR}
+make
+make check # optional; requires CUNIT installation
+make install
+make install-info install-html install-pdf
+make clean
+exit # Exit new shell
+#***********************************************************************
+# 20150530: rhea.ccs.ornl.gov RHEL 6.6 Santiago gcc/gfortran 4.8.2 netcdf-4.3.3.1 HDF4 git
+#***********************************************************************
+

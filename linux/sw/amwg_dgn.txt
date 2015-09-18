@@ -1,0 +1,22 @@
+AMWG Diagnostics:
+http://www.cgd.ucar.edu/cms/mstevens/diagnostics/
+Pre-requisites are NCL, NCO, ImageMagick
+Edit script ${HOME}/dst/diag040819.csh
+
+# Upstream source locations as of 20060626. Now stored locally on dust.
+wget http://www.cgd.ucar.edu/cms/mstevens/diagnostics/diag.code.tar.gz
+wget ftp://ftp.cgd.ucar.edu/pub/stevens/diag.obs_data.tar.gz
+
+scp dust.ess.uci.edu:/data/zender/tmp/diag.code.tar.gz ${DATA}/tmp
+sudo mkdir -p /datashare/amwg_dgn
+sudo cp ${DATA}/tmp/diag.code.tar.gz /datashare/amwg_dgn
+cd /datashare/amwg_dgn
+sudo tar xvzf diag.code.tar.gz
+sudo rm diag.code.tar.gz
+
+scp dust.ess.uci.edu:/data/zender/tmp/diag.obs_data.tar.gz ${DATA}/tmp
+sudo mv ${DATA}/tmp/diag.obs_data.tar.gz /datashare/amwg_dgn
+cd /datashare/amwg_dgn
+sudo tar xvzf diag.obs_data.tar.gz
+sudo rm diag.obs_data.tar.gz
+mkdir ${DATA}/amwg_dgn # Working directory for script

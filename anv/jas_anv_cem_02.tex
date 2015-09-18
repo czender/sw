@@ -1,0 +1,77 @@
+% $Id$
+
+% Purpose: Cover letter for anv_cem
+
+\magnification=\magstep1
+\input /home/zender/tex/lettermacros %contains acutal letter formatting rules
+
+\addressdefine
+\formalletterhead
+
+\address
+Abby A. Hodges, Editorial Assistant
+Journal of the Atmospheric Sciences
+Atmospheric Science Department
+Colorado State University
+Fort Collins, CO 80523-1371
+
+\body
+Dear Ms. Hodges,
+
+In response to the request of a reviewer of JAS MS 54WC21, ``A
+prognostic ice cloud parameterization for {GCM}s based on modeled and
+observed behavior of tropical anvils'', the following items are
+enclosed: 
+
+\item{1.} A copy of Grabowski, W.W., M.W. Moncrieff, and J.T. Kiehl,
+              1995: Long-term behavior of precipitating tropical 
+                cloud systems:  A numerical study.  Submitted
+                to Quart. J. Roy. Meteor. Soc.
+
+\item{2.} Unfortunately, the CCM3 technical note (Kiehl, J.T., et al.,
+                1996: Description of NCAR Community Climate Model
+                (CCM3).  NCAR Tech. Note.  In preparation.) is not in
+                print yet, so is not available to the reviewer. 
+Instead, we have enclosed a two page excerpt (from another Zender and
+Kiehl manuscript) which describes the diagnostic treatment of
+condensate employed in CCM3.  
+
+Finally, we have discovered a small error in the manuscript which we
+wish to bring to the attention of the reviewer:  
+there should be no factor of $\rho$ in the denominator of the
+$c_4$ term in equations 2 and~3.
+The CCM3 technical note is cited as the source for the empirical
+parameter $c_4$---in fact $c_4$ is identical to the parameter $k_E$
+used in Hilding Sundqvist, Erik Berge, and Jon Egill Kristjansson,
+1989 ``Condensation and Cloud Parameterization Studies with a
+Mesoscale Numerical Weather Prediction Model'', Monthly Weather
+Review, 117, p. 1644. 
+We use the value in their Table~1. 
+Accordingly, the value of $c_4$ in our Table~1 should read $1 \times
+10^{-5}$~m~kg$^{-1/2}$~s$^{-1/2}$ (as in Sundqvist et al., 1989) not
+$1 \times 10^{-5}$~m$^{-2}$~kg$^{1/2}$~s$^{-1/2}$.  
+This error does not affect the rest of the paper.
+
+We think the enclosed information will satisfy the reviewer's request. 
+Thank you for your editorial assistance.
+
+%The CCM3 technical note makes clear functional form for the
+%evaporation of precipitation is a modified form of Sundqvist's method
+%The modification is that the cloud fraction dependence has been omitted. 
+
+% The line after \closing goes before signature, others come after.
+\closing 
+Sincerely,
+Charles S. Zender
+
+\annotations % cc'ing and/or typist's initials go after this
+Enclosures
+%cc: J.T. Kiehl
+
+%\ps % any postscripts go after this
+%P. S. \ 
+
+\endletter % close up the letter
+%\makelabel % print out a mailing label for the envelope?
+\bye % close up the TeX-shop
+

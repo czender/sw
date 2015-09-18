@@ -1,0 +1,328 @@
+; $Id$ -*-Emacs-Lisp-*-
+
+; Purpose: Emacs initialization file
+
+; Usage:
+; cd ~/dot;make dot;cd -
+
+; Contributors: 
+; January 15, 1985 Keith Brezinsky
+; June 21, 1986    Keith Arnaud
+; 1988-1993        Charlie Zender
+; September 1993   Lawrence Buja
+; 1994             Francois Thibaud
+; 1995--           Charlie Zender
+
+(add-to-list 'load-path "~/elisp")
+;(add-to-list 'load-path "/data/zender/tramp/lisp") ; Support TRAMP
+(add-to-list 'load-path "/usr/share/emacs/site-lisp") ; Support AUC TeX (Linux)
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp") ; Support AUC TeX
+
+(defvar running-xemacs nil "flag for testing whether xemacs (lucid) is running")
+(cond ((string-match "XEmacs\\|Lucid" emacs-version)
+  (setq running-xemacs t)))
+
+; Add path to packages which do not come with xemacs by default
+(if running-xemacs  
+; Required for metamail
+(add-to-list 'load-path "/usr/share/emacs/21.2/lisp/mail")) 
+
+(require 'my_keys) ; my ESC/Control key customizations
+(require 'my_macros) ; my ESC/Control key customizations
+;(require 'compress) ; uncompress when loading a .Z file
+;(require 'time-stamp) ; Put time-stamp headers in files
+
+(require 'gnus) ; For mail, news reading
+; fxm: Should only start gnus when connected to network
+;(gnus-other-frame) ; Start news reader in other frame
+
+; 20130607 Fix for dead-keys problem in FC18 with US INTL keyboard
+(require 'iso-transl)
+
+(set-mark-command nil) ; Unknown
+
+; Various settings formerly placed in defaults.el
+; Alter auto-save behavior 20030808 when ashes started munging files
+(setq auto-save-default t) ; Auto-save every buffer
+(setq auto-save-interval 300) ; Number of characters before autosave
+; (setq delete-auto-save-files t) ; Delete auto-save files when a true save is done
+(setq inhibit-startup-message t)
+(setq line-number-mode t) ; Display current line #
+(setq column-number-mode t) ; Display current column #
+(setq require-final-newline t) ; Always end a file with a newline
+(setq next-line-add-newlines nil) ; Stop at end of file, not just add lines
+(setq text-mode-hook 'turn-on-auto-fill)
+(setq sun-esc-bracket t)
+
+;; KDVI compatibility for reverse search 20060529
+(add-to-list 'load-path (expand-file-name "~/elisp/"))
+(require 'kdvi-search)
+(add-hook 'LaTeX-mode-hook (lambda () (local-set-key "\C-x\C-j" 'kdvi-jump-to-line)))
+(add-hook 'tex-mode-hook (lambda () (local-set-key "\C-x\C-j" 'kdvi-jump-to-line)))
+(add-hook 'texinfo-mode-hook (lambda () (local-set-key "\C-x\C-j" 'kdvi-jump-to-line)))
+
+;; Backup behavior 20030808
+(setq version-control t)
+(setq kept-new-versions 2) ; or any other value
+(setq kept-old-versions 2)
+(setq backup-by-copying-when-linked t)
+(setq backup-by-copying-when-mismatch t)
+
+;; Set up the keyboard so the delete key on both the regular keyboard
+;; and the keypad delete the character under the cursor and to the right
+;; under X, instead of the default, backspace behavior.
+(global-set-key [delete] 'delete-char)
+(global-set-key [kp-delete] 'delete-char)
+
+;; Turn on font-lock mode for Emacs but not XEmacs
+(cond ((not running-xemacs) (global-font-lock-mode t)))
+
+; Prevents emacs-19.31 from inserting "#! /bin/tcsh -f" etc.
+(setq executable-insert nil)
+(setq tex-dvi-view-command "xdvi *")
+
+; Visual feedback on selections
+(setq-default transient-mark-mode t)
+
+; Stop at the end of the file, not just add lines
+(setq next-line-add-newlines nil)
+
+; Enable wheelmouse support by default
+(cond (window-system (mwheel-install)))
+
+; 20100914 Add NCL mode during workshop
+(setq auto-mode-alist (cons '("\.ncl$" . ncl-mode) auto-mode-alist))
+(autoload 'ncl-mode "~/elisp/ncl.el") 
+(add-hook 'ncl-mode-hook
+	  (lambda ()  
+	    )
+	  )
+
+; 20140617 Start PO-mode for i18n
+(setq auto-mode-alist
+      (cons '("\\.po\\'\\|\\.po\\." . po-mode) auto-mode-alist))
+(autoload 'po-mode "po-mode" "Major mode for translators to edit PO files" t)
+
+; Auto load files in particular modes
+(setq auto-mode-alist (append '(
+				("\\.F$" . fortran-mode)
+				("\\.Z$" . z-mode)
+				("\\.po$" . po-mode)
+				("\\.com$" . fortran-mode)
+				("\\.f$" . fortran-mode)
+				("\\.f90$" . f90-mode)
+				("\\.F90$" . f90-mode)
+				("\\.m$" . f90-mode)
+				("\\.inf$" . f90-mode)
+				("\\.fax$" . text-mode)
+				("\\.for$" . fortran-mode)
+				("\\.html$" . html-mode)
+				("\\.i$" . c-mode)
+				("\\.inc$" . fortran-mode)
+				("\\.perl$" . perl-mode)
+				("\\.pl$" . perl-mode)
+;				("\\.tex$" . LaTeX-mode)
+				("\\.am$" . Makefile-mode)
+				("\\.in$" . text-mode)
+				("\\.txt$" . text-mode)
+				) auto-mode-alist
+				  )) ; end auto-mode-alist
+
+
+(if running-xemacs 
+(setq save-options-file "~/.xemacs")	; File to save options into
+) ; endif running-xemacs
+
+; popup font menu when pressing control-button
+(setq
+ x-fixed-font-alist
+ '("Font Menu"
+   ("Misc"
+    ("6x12" "-misc-fixed-medium-r-semicondensed--12-110-75-75-c-60-*-1")
+    ("6x13" "-misc-fixed-medium-r-semicondensed--13-120-75-75-c-60-*-1")
+    ("lucida 13"
+     "-b&h-lucidatypewriter-medium-r-normal-sans-0-0-0-0-m-0-*-1")
+    ("7x13" "-misc-fixed-medium-r-normal--13-120-75-75-c-70-*-1")
+    ("7x14" "-misc-fixed-medium-r-normal--14-130-75-75-c-70-*-1")
+    ("9x15" "-misc-fixed-medium-r-normal--15-140-*-*-c-*-*-1")
+    ("")
+    ("clean 8x8" "-schumacher-clean-medium-r-normal--*-80-*-*-c-*-*-1")
+    ("clean 8x14" "-schumacher-clean-medium-r-normal--*-140-*-*-c-*-*-1")
+    ("clean 8x10" "-schumacher-clean-medium-r-normal--*-100-*-*-c-*-*-1")
+    ("clean 8x16" "-schumacher-clean-medium-r-normal--*-160-*-*-c-*-*-1")
+    ("")
+    ("sony 8x16" "-sony-fixed-medium-r-normal--16-120-100-100-c-80-*-1")
+    ("")
+    ("-- Courier --")
+    ("Courier 10" "-adobe-courier-medium-r-normal--*-100-*-*-m-*-*-1")
+    ("Courier 12" "-adobe-courier-medium-r-normal--*-120-*-*-m-*-*-1")
+    ("Courier 14" "-adobe-courier-medium-r-normal--*-140-*-*-m-*-*-1")
+    ("Courier 16" "-adobe-courier-medium-r-normal--*-160-*-*-m-*-*-1")
+    ("Courier 16-b" "-adobe-courier-bold-r-normal--*-160-*-*-m-*-*-1")
+    ("Courier 18" "-adobe-courier-medium-r-normal--*-180-*-*-m-*-*-1")
+    ("Courier 18-b" "-adobe-courier-bold-r-normal--*-180-*-*-m-*-*-1")
+    ("Courier fave2" "-adobe-courier-bold-r-normal-*-20-*-*-*-m-*-*-*")
+    )))
+
+(put 'erase-buffer 'disabled nil)
+
+; Calendar and holidays related stuff
+; Where are we? NCAR: 39°58'41" N - 105°16'29" W - 1865 m ASL
+; Where are we? UCI: 
+(setq calendar-longitude -105.27472) ; Converted to decimal
+(setq calendar-latitude +39.978056) ; Converted to decimal
+(setq calendar-location-name "Irvine, California, USA")
+(setq calendar-time-zone -420.0) ; 7 hours West of Greenwich
+(setq diary-file "~/elisp/diary") ; location of the diary file
+;(setq diary-file (expand-file-name "~/elisp/diary")) ; location of the diary file
+(setq mark-diary-entries-in-calendar t)	; days with an entry are marked +
+
+; Appointment related stuff
+(autoload 'appt-make-list "appt" nil t)
+(setq appt-issue-message t) ; I want to be warned
+(setq appt-message-warning-time 15) ; warning 15 min before appointments
+(setq appt-display-duration 10)	; warning last 10 sec every min
+; Required for some special diary entries
+(setq diary-display-hook
+      (list 'appt-make-list 'fancy-diary-display))
+
+; RMAIL customization
+(setq smtpmail-default-smtp-server "smtp.uci.edu") 
+;(setq smtpmail-default-smtp-server "smtp.west.cox.net") ; Harry's ISP
+;(setq smtpmail-default-smtp-server "mailhub.cgd.ucar.edu") 
+(setq smtpmail-smtp-server smtpmail-default-smtp-server)
+(setq mail-self-blind nil) ; do not offer a "BCC" line
+(setq mail-signature t)	; insertion of ~/.signature
+(setq mail-use-rfc822 t) ; use full blown RFC 822 header parser
+(setq mail-yank-prefix "> ") ; for forward and replies
+(setq mail-host-address "uci.edu") ; 19991228: Replace local machine name with mail server
+(setq rmail-default-file
+      (expand-file-name "~/mail/out")) ; default output mail folder
+(setq mail-from-style 'angles) ; Elvis Parsley <king@grassland.com>
+(setq rmail-default-rmail-file
+      (expand-file-name "~/mail/out")) ; default output mail folder
+(setq mail-archive-file-name
+      (expand-file-name "~/mail/out")) ; outgoing mail carbon copies go there
+(setq rmail-file-name
+      (expand-file-name "~/mail/rmail")) ; name of the "melting pot"
+; NB: Sometimes the rmail file is corrupted by stealing the lock on it.
+; When this happens, edit the rmail file itself so the it has the following lines:
+(setq mail-default-headers
+      "Reply-To: Charlie Zender <zender@uci.edu>
+") ; Well behaved mail programs reply to Reply-To address not From: address
+(setq rmail-redisplay-summary t) ; display summary when changed
+(add-hook 'mail-setup-hook 'mail-abbrevs-setup)	; mail aliases => abbrevs
+
+; fxm: Should be moved to separate mail file
+;(define-mail-abbrev "family" "michelle zender@uci.edu") ; NB: must be define-mail-abbrev when using mail-abbrevs-setup
+
+;  When repying to mail default to not include CC:
+(defun rmail-reply-no-cc () (interactive) (rmail-reply t))
+(add-hook 'rmail-mode-hook
+          '(lambda ()
+             (define-key rmail-mode-map "r" 'rmail-reply-no-cc)
+             (define-key rmail-mode-map "R" 'rmail-reply)
+             (define-key rmail-mode-map [menu-bar mail reply]
+               '("Reply" . rmail-reply-no-cc))
+))
+ 
+(defun rmail-summary-reply-no-cc () (interactive) (rmail-summary-reply t))
+(add-hook 'rmail-summary-mode-hook
+          '(lambda ()
+             (define-key rmail-summary-mode-map "r" 'rmail-summary-reply-no-cc)
+             (define-key rmail-summary-mode-map "R" 'rmail-summary-reply)
+             (define-key rmail-summary-mode-map [menu-bar mail reply]
+               '("Reply" . rmail-summary-reply-no-cc))
+))
+
+; Headers to ignore
+(setq rmail-ignored-headers
+      "^via:\\|^mail-from:\\|^origin:\\|^status:\\|^received:\\|^message-id:\\|^summary-line:\\|^mime-Version:\\|^content\\|^importance:\\|^[Xx]-")
+
+; List of valid incoming mail boxes (after filtering) see also `set-rmail-inbox-list'
+(setq rmail-primary-inbox-list
+      (list
+;       "/var/mail/zender" ; Solaris mail spool area
+; 1998/10/01: Having both mail areas sometimes causes Emacs not to recognize new mail
+; 1998/10/12: Linux and ACD/AIX both use /var/spool/mail/zender
+       "/var/spool/mail/zender"	; Linux and AIX mail spool area
+;       (expand-file-name "~/mail/in") ; incoming mail after ELM reads it
+       )) 
+
+; insert std text in mail (insert-default-mail-text defined in utilities.el)
+;(add-hook 'mail-setup-hook 'insert-default-mail-text)
+
+;; Allow for composition of MIME messages
+;; (from anonymous@archive.cis.ohio-state.edu:/pub/gnu/emacs/elisp-archive)
+;(setq mime-default-charset "ISO-8859-1") ; I want to be able to TX/RX 8859-1
+;(setq mime-primary-boundary "%#%record%#%--") ; message boundary
+(require 'mime-compose)
+
+; 19980704: Next three lines added to use rmime package
+; 20000807: Removed rmime (what did it do anyway?)
+;(add-hook 'rmail-show-message-hook 'rmime-format)
+;(add-hook 'rmail-edit-mode-hook    'rmime-cancel)
+;(autoload 'rmime-format "rmime" "" nil)
+
+; Metamail functionality
+;(require 'mm)
+(require 'metamail)
+
+; 20150623 Fill Coulumn
+;(require 'fill-column-indicator)
+
+(autoload 'sc-cite-original     "supercite" "Supercite 3.1" t)
+(autoload 'sc-submit-bug-report "supercite" "Supercite 3.1" t)
+
+;(autoload 'bbdb         "bbdb-com" "Insidious Big Brother Database" t)
+;(autoload 'bbdb-name    "bbdb-com" "Insidious Big Brother Database" t)
+;(autoload 'bbdb-company "bbdb-com" "Insidious Big Brother Database" t)
+;(autoload 'bbdb-net     "bbdb-com" "Insidious Big Brother Database" t)
+;(autoload 'bbdb-notes   "bbdb-com" "Insidious Big Brother Database" t)
+;(autoload 'bbdb-insinuate-vm       "bbdb-vm"    "Hook BBDB into VM")
+;(autoload 'bbdb-insinuate-rmail    "bbdb-rmail" "Hook BBDB into RMAIL")
+;(autoload 'bbdb-insinuate-mh       "bbdb-mhe"   "Hook BBDB into MH-E")
+;(autoload 'bbdb-insinuate-gnus     "bbdb-gnus"  "Hook BBDB into GNUS")
+;(autoload 'bbdb-insinuate-sendmail "bbdb"       "Hook BBDB into sendmail")
+
+;(setq rmail-mode-hook 'bbdb-insinuate-rmail)
+;(setq mail-setup-hook 'bbdb-insinuate-sendmail)
+
+;; Options Menu Settings
+;; =====================
+(cond
+ ((and (string-match "XEmacs" emacs-version)
+       (boundp 'emacs-major-version)
+       (or (and
+            (= emacs-major-version 19)
+            (>= emacs-minor-version 14))
+           (= emacs-major-version 20))
+       (fboundp 'load-options-file))
+  (load-options-file "/home/zender/.xemacs")))
+;; ============================
+;; End of Options Menu Settings
+;(setq-default ispell-program-name "aspell") 
+(setq-default ispell-program-name "ispell") 
+;(custom-set-variables
+;'(ispell-personal-dictionary "~/elisp/ispell_english"))
+(custom-set-faces)
+
+; Save unreliable software until the end here so rest of stuff gets loaded
+; tramp and preview are not likely to be installed on non-debian machines
+(require 'tex-site) ; Enable AUC TeX (fails on Cygwin?)
+(autoload 'LaTeX-preview-setup "preview") ; preview-latex
+(add-hook 'LaTeX-mode-hook #'LaTeX-preview-setup) ; preview-latex
+; 20150623: loading Tramp hangs Emacs 24.5 on FC22
+;(require 'tramp) ; Use ssh/scp for remote access
+;;(require 'tramp-vc) ; Fixes version control to work with tramp (obsolete as of emacs 23)
+;(setq tramp-debug-buffer nil) ; Set to t when debugging, nil otherwise
+;(setq tramp-verbose 10) ; Increase verbosity for debugging
+;(setq tramp-default-method "ssh")
+; Failed attempt to add TRAMP proxies to enable off-site access to greenplanet
+;(add-to-list 'tramp-default-proxies
+;	     '("\\`greenplanet\\.ps\\.uci\\.edu\\'"
+;	       nil
+;	       "/ssh:dust.ess.uci.edu:"))
+
+
+

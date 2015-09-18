@@ -1,0 +1,11 @@
+Macromedia Flash installation on Mozilla/Firefox browsers
+
+20050603 ashes.ess.uci.edu Debian Ubuntu 5.04 Hoary
+
+scp dhcp-086159.mobile.uci.edu:/data/zender/tmp/install_flash_player_7_linux.tar.gz /data/zender/tmp
+cd ${DATA}/tmp
+tar xvzf install_flash_player_7_linux.tar.gz
+cd install_flash_player_7_linux/
+sudo ./flashplayer-installer
+
+Choose, e.g., /usr/lib/mozilla-firefox or /usr/lib/firefox for browser directory 

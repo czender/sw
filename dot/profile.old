@@ -1,0 +1,160 @@
+# -*-sh-*-
+
+# $Id$
+
+# Purpose: Universal .kshrc file
+# NB: This is executed on ksh shells after (the system-wide) /etc/profile 
+
+stty sane
+stty erase '^h' intr '^c' kill '^u' stop '^s' start '^q'
+# echo 'erase=BS(^h)  intr=(^c)  kill=NAK(^u)'
+set NOTIFY
+
+#  Comment out the following 2 lines if you do not want the path in your prompt
+PROMPTPATH=true; export PROMPTPATH
+cd .
+
+#  Console or normal terminal?
+echo "`tty`"
+if [ `tty` = /dev/lft0 ] ; then
+    /usr/bin/X11/xinit
+    stty sane >> /dev/console
+    cd .
+else
+    if [ -e /usr/local/bin/frm ] ; then
+	/usr/local/bin/frm
+    fi # endif
+if [ `hostname` = "acd" ] ; then
+    if [ -s "$MAIL" ] ; then # This is at Shell startup. In normal
+	echo "$MAILMSG"       # operation, the Shell checks
+    fi                    # periodically.
+    biff y
+    alias mt="tctl -f /dev/rmt0.1"
+    alias browse="smbclient -U \'\' -N -L"
+    alias doctor="export DISPLAY=doctor:0.0"
+    alias fredrick="export DISPLAY=fredrick:0.0"
+    alias janeway="export DISPLAY=janeway:0.0"
+    alias voyager="export DISPLAY=voyager:0.0"
+    alias acdxload="nice nohup /X/X11/bin/xload -geometry 150x60+275-0 -scale 3 -bg LightBlue -fg black &"
+    NQS_SERVER=paiute.ucar.edu;	export NQS_SERVER
+fi # endif acd.ucar.edu
+
+#csz++
+# Path environment variables
+    export PVM_ARCH=`$HOME/sh/pvmgetarch`
+    export DATA="$HOME/data"
+    export CONTRIB="$HOME/contrib"
+    export TEXMFDIR=/usr/local/teTeX/texmf # One level above bibtex, tex,
+    export IDL_DIR=/usr/local/rsi/idl
+    PATH="./:$HOME/sh:$HOME/bin/$PVM_ARCH:$CONTRIB/bin:/local/bin:/usr/local/bin:/bin:/usr/bin:/etc:/sbin:/usr/sbin:/usr/ucb:/usr/bin/X11:/usr/local/dcs/bin:/usr/local/ncarg/bin:/usr/local/sbin:/usr/local/netscape:/usr/local/teTeX/bin:/usr/lpp/X11/bin"; export PATH
+
+    export MANPATH=$HOME/man:/usr/local/man:/usr/man/preformat:/usr/man:/usr/X11/man:/usr/openwin/man:/usr/local/atalk/man:/usr/local/dcs/man
+
+    export MY_BIN_DIR="${HOME}/bin/${PVM_ARCH}"
+    export MY_LIB_DIR="${HOME}/lib/${PVM_ARCH}"
+    export MY_OBJ_DIR="${HOME}/obj/${PVM_ARCH}"
+    export MY_INC_DIR="${HOME}/include"
+
+# Software environment variables
+    export BIBINPUTS=.:${HOME}/tex//:$TEXMFDIR/bibtex// # // is recursive
+    export TEXINPUTS=.:${HOME}/tex//:$TEXMFDIR/tex// # // is recursive
+    export CVSROOT=:pserver:zender@bearmtn.cgd.ucar.edu:/home/zender/cvs
+    export CVSUMASK=007 # Default file permissions for CVS
+    export EDITOR=emacs # Default editor
+    export FCEDIT=emacs
+    export GZIP=--quiet # Squelch warnings when reading from tapes, see gzip(1)
+    export HISTSIZE=1024 # # of lines kep in history
+    export IDL_PATH=${IDL_DIR}/lib
+    export MAILCAPS=${HOME}/.mailcap # Where metamail learns how to decode multimedia
+    export METAMAIL_TMPDIR=${DATA}/tmp # Where metamail writes temporary files
+    export NCARG_ROOT=/usr/local/ncarg # NCAR Graphics location
+    export PAGER=less # Default pager (usually 'less' or 'more')
+    export PRINTER=acdps4n # Default printer
+#    export PRINTER=hpcolor4 # Default color printer
+#    export PRINTER=hpcolor4 # Default color printer, transparency
+#    export PRINTER=acdps4nd # Default printer, duplex
+    export TEXEDIT=emacs # Yet another default editor
+    export TMOUT=400000 # [s] Timeout period for shells
+    export VISUAL=emacs # Yet another default editor
+    export XINITRC=/local/X/X11/xinitrc # .xinitrc file to use
+
+# Software aliases
+    alias cleanup='rm *~ .[a-zA-Z]~ #*# core *.tmp *foo foo* *.o *.bak *.trace gmeta aaaa* *-t.tex* *.bbl *.blg *.log *.aux *.dlog *.cp *.cps *.fn *.fns *.ky *.pg *.toc *.tp *.vr *.lof *.lot *.dvi'
+    alias corerm='rm `find . -name core -print`'
+    alias cp='cp -i -p'
+    alias csrc='source ${HOME}/.cshrc'
+    alias dir='ls -laF | more'
+    alias dotgrep='egrep \!* .[a-zA-Z]*'
+    alias env='env | sort | more'
+    alias gss1='export DISPLAY=gss1.acd.ucar.edu:0'
+    alias kira='export DISPLAY=kira.acd.ucar.edu:0'
+    alias h="history"
+    alias idl='${IDL_PATH}/bin/idl'
+    alias ksrc='. ${HOME}/.profile'
+    alias ls='ls -LF'
+    alias m="${PAGER}"
+    alias make="gmake"
+    alias mv='mv -i'
+    alias odin='export DISPLAY=odin.cgd.ucar.edu:0'
+    alias rcp='rcp -p'
+    alias rm="rm -i"
+    alias temperature='finger temperature@atd.ucar.edu'
+    alias z='export DISPLAY=z.ppp.ucar.edu:0'
+    alias fix='sudo enable $2' # Fix ACD printer queues
+    alias test='echo $2' # Test command line handling
+
+# Path aliases
+    alias hac='cd ${HOME}/aca'
+    alias haccp='cp \!* ${HOME}/aca/\!*'
+    alias han='cd ${HOME}/anv'
+    alias hancp='cp \!* ${HOME}/anv/\!*'
+    alias har='cd ${HOME}/arese'
+    alias harcp='cp \!* ${HOME}/arese/\!*'
+    alias hav='cd ${HOME}/avhrr'
+    alias havcp='cp \!* ${HOME}/avhrr/\!*'
+    alias hcc='cd ${HOME}/ccm'
+    alias hcccp='cp \!* ${HOME}/ccm/\!*'
+    alias hcl='cd ${HOME}/cld'
+    alias hclcp='cp \!* ${HOME}/cld/\!*'
+    alias hcr='cd ${HOME}/crm'
+    alias hcrcp='cp \!* ${HOME}/crm/\!*'
+    alias hdm='cd ${HOME}/dmr'
+    alias hdmcp='cp \!* ${HOME}/dmr/\!*'
+    alias hds='cd ${HOME}/dst'
+    alias hdscp='cp \!* ${HOME}/dst/\!*'
+    alias hdo='cd ${HOME}/dot'
+    alias hdocp='cp \!* ${HOME}/dot/\!*'
+    alias hjo='cd ${HOME}/job'
+    alias hjocp='cp \!* ${HOME}/job/\!*'
+    alias hmi='cd ${HOME}/mie'
+    alias hmicp='cp \!* ${HOME}/mie/\!*'
+    alias htx='cd ${HOME}/txt'
+    alias htxcp='cp \!* ${HOME}/txt/\!*'
+    alias hft='cd /ftp/pub/zender'
+    alias hftcp='cp \!* /ftp/pub/zender/\!*'
+    alias hid='cd ${HOME}/idl'
+    alias hidcp='cp \!* ${HOME}/idl/\!*'
+    alias hnc='cd ${HOME}/nc'
+    alias hnccp='cp \!* ${HOME}/nc/\!*'
+    alias hrd='cd ${HOME}/crm/dst'
+    alias hrdcp='cp \!* ${HOME}/crm/dst/\!*'
+    alias hrt='cd ${HOME}/rt'
+    alias hrtcp='cp \!* ${HOME}/rt/\!*'
+    alias hrv='cd ${HOME}/rvw'
+    alias hrvcp='cp \!* ${HOME}/rvw/\!*'
+    alias hte='cd ${HOME}/tex'
+    alias htecp='cp \!* ${HOME}/tex/\!*'
+    alias hww='cd /src/web/web-data/cms/zender'
+    alias hwwcp='cp \!* /src/web/web-data/cms/zender/\!*'
+
+    alias dps='cd ${DATA}/ps'
+    alias dpscp='cp \!* ${DATA}/ps/\!*'
+    alias dtm='cd ${DATA}/tmp'
+    alias dtmcp='cp \!* ${DATA}/tmp/\!*'
+    alias dze='cd ${DATA}'
+#csz--
+
+# "set -o emacs" line must be last, it sets up command history editing
+    set -o emacs
+fi # endif
+

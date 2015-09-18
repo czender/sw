@@ -1,0 +1,31 @@
+# $Id$ -*-shell-script-*-
+
+# Purpose: Commands executed when user logs out of terminal or window
+
+# Bash login shells execute one of (in order) .bash_profile, .bash_login, .profile
+# .bashrc is executed at the start of any subshell
+# .bash_logout is executed every time a Bash login shell exits
+
+# Do some cleanup for interactive shells
+# ENVIRONMENT will always be set in NQS (qsub), but ENVONLY may not be
+if [ ! -z "${ENVONLY}" -a -n "${PS1}" -a ! -z "${ENVIRONMENT}" ]; then
+
+    if [ -f /bin/click ]; then
+	/bin/click -n
+    fi # endif click
+    clear # Clear screen
+	
+    if [ -f /usr/ucb/whoami ]; then
+	echo "User `/usr/ucb/whoami` logged out at `date`" # Print username and time
+	echo ""
+    fi # endif whoami
+
+    if [ -f /usr/games/fortune ]; then
+	/usr/games/fortune # Run fortune program
+	echo ""
+    fi # endif fortune
+
+fi # endif interactive shell
+
+
+

@@ -1,0 +1,37 @@
+// $Id$
+// ncgen -b -o ${DATA}/aca/idx_rfr_GADS.nc ${HOME}/idx_rfr/idx_rfr_GADS.cdl
+
+netcdf idx_rfr_GADS {
+dimensions:
+	bnd=8;
+variables:
+
+	:RCS_Header = "$Id$";
+	:history = "";
+	:source="GADS(Global Aerosol Data Set),
+ssam90";
+
+	float bnd(bnd);
+	bnd:long_name = "Band center wavelength";
+	bnd:units = "micron";
+	bnd:C_format = "%.5g";
+
+	float idx_rfr_seasalt_GADS_rl(bnd);
+	idx_rfr_seasalt_GADS_rl:long_name = "Seasalt real index of refraction";
+	idx_rfr_seasalt_GADS_rl:units = "";
+	idx_rfr_seasalt_GADS_rl:C_format = "%.4g";
+
+	float idx_rfr_seasalt_GADS_img(bnd);
+	idx_rfr_seasalt_GADS_img:long_name = "Seasalt imaginary index of refraction";
+	idx_rfr_seasalt_GADS_img:units = "";
+	idx_rfr_seasalt_GADS_img:C_format = "%.3g";
+
+data:	
+ bnd = 0.250,  0.300,  0.350,  0.400,  0.450,  0.500,  0.550,  0.600;
+
+ idx_rfr_seasalt_GADS_rl = 
+	1.373, 1.361, 1.355, 1.351, 1.349, 1.347, 1.345, 1.344;
+
+ idx_rfr_seasalt_GADS_img = 
+        4.028e-7, 1.635e-7, 3.011e-8, 3.953e-9, 2.751e-9, 2.078e-9, 2.558e-9, 1.128e-8;
+}

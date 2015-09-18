@@ -1,0 +1,14 @@
+
+#***********************************************************************
+# 20051205: ashes.ess.uci.edu Debian Ubuntu 5.10 Breezy Badger gcc/g95
+#***********************************************************************
+cd ${DATA}/tmp
+wget http://www.unidata.ucar.edu/downloads/idv/latest/ftp/idv_1_3b1_linux_i586_installer.bin
+scp ashes.ess.uci.edu:/data/zender/tmp/idv_1_3b1_linux_i586_installer.bin .
+chmod a+x idv_1_3b1_linux_i586_installer.bin
+sudo mkdir /usr/local/idv
+sudo ./idv_1_3b1_linux_i586_installer.bin
+sudo ln -s -f /usr/local/idv/IDV_1.3B1 /usr/local/idv/idv
+# Run with
+sudo ln -s -f /usr/local/idv/IDV_1.3B1/runIDV /usr/local/bin/idv
+

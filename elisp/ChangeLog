@@ -1,0 +1,8 @@
+2002-04-15  Charlie Zender  <zender@uci.edu>
+
+	* my_macros.el: Added nice Fortran string format RX converter
+
+1999-01-27  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Initial implementation of module elisp-1_0
+

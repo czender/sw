@@ -1,0 +1,15 @@
+LABEL=/                 /                       ext2    defaults        1 1
+LABEL=/data             /data                   ext2    defaults        1 2
+LABEL=/home             /home                   ext2    defaults        1 2
+/dev/cdrom              /mnt/cdrom              iso9660 noauto,owner,ro 0 0
+/dev/hdc                /mnt/floppy             auto    noauto,owner    0 0
+LABEL=/tmp              /tmp                    ext2    defaults        1 2
+LABEL=/usr              /usr                    ext2    defaults        1 2
+LABEL=/usr/local        /usr/local              ext2    defaults        1 2
+none                    /proc                   proc    defaults        0 0
+none                    /dev/pts                devpts  gid=5,mode=620  0 0
+/dev/hda10              swap                    swap    defaults        0 0
+/dev/hda1		/wnd			vfat	 user,exec,dev,suid,rw,uid=500,gid=2400 1 1
+fileserver-n8.ucar.edu:/fs/cgd/home0    /ncar/fs/cgd/home0   nfs     exec,dev,suid,rw,noauto 0 0
+fileserver-n8.ucar.edu:/fs/cgd/data0    /ncar/fs/cgd/data0   nfs     exec,dev,suid,rw,noauto 0 0
+fileserver-n8.ucar.edu:/fs/cgd/csm      /ncar/fs/cgd/csm     nfs     exec,dev,suid,rw,noauto 0 0

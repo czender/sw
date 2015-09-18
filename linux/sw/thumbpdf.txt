@@ -1,0 +1,15 @@
+Thumbpdf 20020921:
+cp thumbpdf.tar.gz ${DATA}/tmp
+cd ${DATA}/tmp
+tar xvzf thumbpdf.tar.gz 
+cd thumbpdf
+sudo mkdir ${TEXMFDIR}/tex/generic/thumbpdf
+sudo mkdir -p ${TEXMFDIR}/doc/generic/thumbpdf
+sudo mv readme.txt ${TEXMFDIR}/doc/generic/thumbpdf/readme.txt
+sudo mv thumbpdf.tex ${TEXMFDIR}/tex/generic/thumbpdf/thumbpdf.tex
+sudo mv thumbpdf.sty ${TEXMFDIR}/tex/generic/thumbpdf/thumbpdf.sty
+sudo texhash
+mv thumbpdf.pl thumbpdf
+chmod a+x thumbpdf
+sudo mv thumbpdf /usr/local/bin
+hash -r

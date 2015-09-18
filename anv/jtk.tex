@@ -1,0 +1,121 @@
+% $Id$
+
+% Purpose: Assemble one-shot graphics
+
+%\documentclass[onecolumn,final,10pt]{report}
+%\documentclass[final]{article}
+\documentclass[twocolumn,final,11pt]{article}
+\usepackage{natbib} % \cite commands from aguplus
+\usepackage[figuresright]{rotating} % allows sideways figures and tables
+\usepackage{graphicx} % defines \includegraphics*
+\usepackage{longtable} % multi-page tables, e.g., acronyms and symbols
+\usepackage{ifthen} % Boolean and programming commands
+
+\usepackage{/home/zender/tex/csz} % all my local definitions
+\input{/home/zender/tex/jgr_abb}
+
+\topmargin -48pt   \headheight 12pt \headsep 18pt
+\textheight 723pt \textwidth 470pt
+\oddsidemargin 0pt \evensidemargin 0pt
+\marginparwidth 72pt \marginparsep 7pt
+\footskip 0pt
+\footnotesep=14pt
+%\textwidth 330pt
+
+\renewcommand\textfraction{0.}
+\setcounter{totalnumber}{10}
+\setcounter{topnumber}{10}
+\setcounter{dbltopnumber}{10}
+\setcounter{bottomnumber}{10}
+\renewcommand\topfraction{1.}
+\renewcommand\dbltopfraction{1.}
+\renewcommand\bottomfraction{1.}
+\renewcommand\floatpagefraction{1.}
+\renewcommand\dblfloatpagefraction{1.}
+
+\begin{document}
+
+% These don't seem to work before \begin{document}
+\setlength\abovecaptionskip{9pt}
+\setlength\belowcaptionskip{9pt}
+
+\setlength\floatsep{0pt}
+\setlength\textfloatsep{0pt}
+\setlength\dblfloatsep{0pt}
+\setlength\dbltextfloatsep{0pt}
+\setlength\intextsep{0pt}
+%\setlength\floatsep{18pt \@plus 2pt \@minus 4pt}
+%\setlength\textfloatsep{18pt \@plus 2pt \@minus 4pt}
+%\setlength\dblfloatsep{18pt \@plus 2pt \@minus 4pt}
+%\setlength\dbltextfloatsep{18pt \@plus 2pt \@minus 4pt}
+%\setlength\intextsep{20pt \@plus 4pt \@minus 4pt}
+
+\pagenumbering{roman}
+\setcounter{page}{1}
+\pagestyle{myheadings}
+\thispagestyle{empty}
+\onecolumn
+\listoffigures
+\twocolumn
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\markright{Climatologies of ERBE and CCM3}
+
+%***********************************************************************
+% Insert scratch commands below here
+%***********************************************************************
+
+\pagestyle{empty}
+\markright{}
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=6in]{/data2/zender/ps/erbe_b_8589_LWCF.eps}\vfill
+\vspace{.5in}
+\includegraphics*[width=6in]{/data2/zender/ps/sld012d_7993_LWCF.eps}\vfill
+\end{center}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=6in]{/data2/zender/ps/erbe_b_8589_SWCF.eps}\vfill
+\vspace{.5in}
+\includegraphics*[width=6in]{/data2/zender/ps/sld012d_7993_SWCF.eps}\vfill
+\end{center}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=6in]{/data2/zender/ps/erbe_b_8589_FSNT.eps}\vfill
+\vspace{.5in}
+\includegraphics*[width=6in]{/data2/zender/ps/sld012d_7993_FSNT.eps}\vfill
+\end{center}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=6in]{/data2/zender/ps/erbe_b_8589_FLNT.eps}\vfill
+\vspace{.5in}
+\includegraphics*[width=6in]{/data2/zender/ps/sld012d_7993_FLNT.eps}\vfill
+\end{center}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=6in]{/data2/zender/ps/erbe_b_8589_FLNTC.eps}\vfill
+\vspace{.5in}
+\includegraphics*[width=6in]{/data2/zender/ps/sld012d_7993_FLNTC.eps}\vfill
+\end{center}
+\end{figure*}
+\clearpage
+
+%***********************************************************************
+% Insert scratch commands above here
+%***********************************************************************
+
+\end{document}
+

@@ -1,0 +1,594 @@
+% $Id$
+
+% Purpose: Seminar on mineral dust and atmospheric chemistry
+
+% Usage: 
+% cd ${HOME}/crr;make -W smn_dst_chm.tex smn_dst_chm.ps;cd -
+
+\documentclass[final,dvips]{foils}
+
+% Standard packages
+\usepackage[usenames]{color} % usenames allows, e.g., ``ForestGreen''
+\usepackage{graphicx} % Defines \includegraphics*
+\usepackage{natbib} % \cite commands from aguplus
+\usepackage{array} % Table and array extensions, e.g., column formatting
+\usepackage[figuresright]{rotating} % Allows sideways figures and tables
+\usepackage{longtable} % Multi-page tables, e.g., acronyms and symbols
+\usepackage{ifthen} % Boolean and programming commands
+
+% Personal packages
+\usepackage{csz} % Library of personal definitions
+\usepackage{abc} % Alphabet as three letter macros
+\usepackage{dmn} % Dimensional units
+\usepackage{chm} % Chemistry
+\usepackage{dyn} % Fluid dynamics
+\usepackage{aer} % Aerosol physics
+\usepackage{rt} % Radiative transfer
+\usepackage{szdst} % Size distributions
+\usepackage{smn} % Seminars
+\input{jgr_abb} % JGR-sanctioned journal abbreviations
+
+% Margins
+\topmargin 0in \headheight 0pt \headsep 0pt
+\textheight 9in \textwidth 6.5in
+\oddsidemargin 0in \evensidemargin 0in
+\marginparwidth 0pt \marginparsep 0pt
+\footskip 0pt
+\footnotesep=0pt
+
+% FoilTeX macros
+\MyLogo{} % Appears bottom left corner every page
+\rightfooter{} % Pagenumber is the default
+\leftheader{} % Appears upper left
+\rightheader{} % Appears upper right
+
+\begin{document}
+\raggedright % Default is justified
+
+\rotatefoilhead{\Huge \textcolor{blue}{Chemistry on Mineral Dust in MOZART}}\vspace{-.5in}\LARGE
+\begin{center}
+Charles S. Zender\par
+\medskip
+NCAR ACD \& CGD\par
+ACD - LLNL Meeting\\
+May 27, 1999\\
+\bigskip
+\bigskip
+{\large Thanks to:\\ Guy Brasseur, Jeff Kiehl, Phil Rasch, Stacy Walters}
+\normalsize
+\end{center}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill Mineral Dust Overview \hfill}}\vspace{-0.5in}\large
+\begin{itemize}
+\item Particles range from $0.1 < \dmt < 20$~\um 
+\begin{itemize}
+\item Mass fractions of parent soil cause size segregation
+\item Sedimentation rates require multiple bins or modes
+\item Long range transport of accumulation mode ($> 1000$~km)
+\item Medium range transport of $3 < \dmt < 10$~\um ($> 100$~km)
+\item Long range transport above PBL
+\end{itemize}
+\item Composition highly regionally variable
+\begin{itemize}
+\item Solubles \& insoluble components
+\item \AldOt, \SiOd, \Fe, \Mn, \CaCOt, \NaCl, Soil organics \ldots
+\item Aqueous chemistry in clear sky: longer $\tm$, smaller $\vlm$
+\end{itemize}
+\end{itemize}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill Heterogeneous Chemistry \& Mineral Dust\hfill}}\vspace{-0.5in}\large
+Full aqueous chemistry may occur on wetted particles
+\begin{itemize}
+\item Conversion of gaseous \HNOt, \NdOc\ to particulate \NOtm
+\item Uptake of \HOd, possibly \HdOd\ 
+\item Oxidize \SOd\ in non-polluted regions
+\item Reduce \Ot\ by removing gas phase precursors (\NOy)
+\end{itemize}
+Poorly understood reactions on dry particles
+\begin{itemize}
+\item Direct destruction of \Ot\ on dry particles 
+\item \Fe, \Mn, \C(s) reactions?
+\end{itemize}
+\clearpage
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill \NOy\ Chemistry \hfill}}\vspace{-0.75in}\large
+\enlargethispage*{0.5in}
+\begin{itemize}
+\item Uptake of \NdOc\ occurs on both dry and wet particles
+\begin{itemize}
+\item Rates on dry particles may be very small
+\item $[\NdOc]$ production highest at night in phase with \RH
+\end{itemize}
+\item Aqueous \NdOc\ forms \HNOt
+\begin{reaction}
+\NdOc + \HdO \yields 2\HNOt % DCZ96 p. 22871 (7)
+\label{rxn:chm_NO3}
+\end{reaction}
+\item \chmphz{\HNOt}{g} is \textit{very} soluble, forms more
+\chmphz{\HNOt}{aq}
+\item \chmphz{\HNOt}{aq} dissociates to \NOtm
+\item Observations suggest \NOtm\ is quickly neutralized by \CaCOt
+\item Uptake of \NO, \NOd, and \NOt\ assumed negligible
+\end{itemize}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill pH Dependence\hfill}}\vspace{-0.5in}\large
+Observations suggest \NOtm\ is quickly neutralized by \CaCOt
+\begin{rxnarray*}
+\HNOt + \CaCOt & \yields & \Cadp\NOtm + \HCOtm \\ % DCZ96 p. 22872 (8a)
+\HNOt + \Cadp\NOtm + \HCOtm & \yields & \Ca(\NOt)_2 + \HdO + \COd \\ % DCZ96 p. 22872 (8b)
+\hline
+& & \nonumber \\[-1.0ex]
+\mbox{Net: }2\HNOt + \CaCOt & \yields & \Ca(\NOt)_2 + \HdO + \COd \nonumber
+\label{rxn:chm_HNO3}
+\end{rxnarray*}
+Observations suggest \HNOt\ and \SOd\ uptake proceeds only when
+alkalinity of \Cadp\ exceeds acidity of \NOtm\ and \SOqdm
+\begin{rxnarray*}
+[\NOtm] + 2[\SOqdm] & < & 2[\Cadp] \nonumber
+\end{rxnarray*}
+\begin{itemize}
+\item Assume \Cadp\ mass fraction of mineral dust is $\approx 5\%$
+\end{itemize}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill \NdOc\ Uptake \hfill}}\vspace{-0.5in}\large
+\begin{table}
+\begin{center}
+\begin{tabular}[c]{ l >{\raggedright}p{2in}<{} >{$}l<{$} >{$}l<{$} >{$}l<{$} l }
+Gas & Surface & \tpt & \mssuptcff & \Delta & Ref. \\[0.0ex]
+& Composition & \mbox{K} & & & \\[0.0ex]
+\hline\hline
+\multicolumn{6}{c}{$\NdOc + \HdO \yields 2\HNOt$} \\[0.0ex]
+\NdOc & \HdO (l) & 260\mbox{--}295 & 0.05 & 2 & JPL97 \\[1.0ex]
+\note{\NdOc} & \HdSOq$\cdot$n\HdO (l) & 195\mbox{--}300 & \approx 0.1 & & JPL97 \\[1.0ex]
+\multicolumn{6}{c}{$\NdOc + \mbox{Surface} \yields \mbox{Products}$} \\[0.0ex]
+\NdOc & \NHqdSOq (l) & & 0.06\mbox{--}0.12 & & DCZ96 \\[1.0ex] % XXX: not sure about phase 
+\note{\NdOc} & \HdSOq$\cdot$n\HdO (l) & & 0.06\mbox{--}0.12 & & DCZ96 \\[1.0ex]
+\multicolumn{6}{c}{$\NdOc + \NaCl \sldprn \yields \ClNOd + \NaNOt \sldprn$} \\[0.0ex]
+\NdOc & \NaCl (s) & 300 & 0.0005 & 20 & JPL97 \\[1.0ex]
+\note{\NdOc} & \NaCl (l) & 300 & > 0.02 & 20 & JPL97 \\[1.0ex]
+\end{tabular}
+\end{center}
+\end{table}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill \HNOt\ Uptake \hfill}}\vspace{-0.5in}\large
+\enlargethispage*{1in}
+\begin{table}
+\begin{center}
+\begin{tabular}[c]{ l >{\raggedright}p{2in}<{} >{$}l<{$} >{$}l<{$} >{$}l<{$} l }
+Gas & Surface & \tpt & \mssuptcff & \Delta & Ref. \\[0.0ex]
+& Composition & \mbox{K} & & & \\[0.0ex]
+\hline\hline
+\multicolumn{6}{c}{$\HNOt + \mbox{Surface} \yields \mbox{Products}$} \\[0.0ex]
+\HNOt & \HdO (l) & 268 & 0.07 & & SeP97 \\[1.0ex]
+\note{\HNOt} & \HdO (l) & 293 & 0.19 & & SeP97 \\[1.0ex]
+\multicolumn{6}{c}{$\HNOt + \C \sldprn \yields \mbox{Products}$} \\[0.0ex]
+\HNOt & C(s) & 190\mbox{--}440 & 0.04 & 5 & JPL97 \\[1.0ex]
+\multicolumn{6}{c}{$\HNOt + \Na \X \sldprn \yields \Hu \X + \NaNOt$} \\[0.0ex]
+\HNOt & \NaCl (s) & 295\mbox{--}298 & 0.02 & 3 & JPL97 \\[1.0ex]
+\note{\HNOt} & \NaBr (s) & \approx 290 & 0.02 & 10 & JPL97 \\[1.0ex]
+\note{\HNOt} & \KBr (s) & \approx 290 & 0.02 & 10 & JPL97 \\[1.0ex]
+\note{\HNOt} & \KCl (s) & \approx 290 & 0.02 & 10 & JPL97 \\[1.0ex]
+\end{tabular}
+\end{center}
+\end{table}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill \HOx\ Chemistry \hfill}}\vspace{-0.5in}\large
+\begin{itemize}
+\item Aqueous \HOd\ is destroyed by \Fe\ or \Cu, producing \HdOd
+\begin{rxnarray}
+\label{rxn:HO2+FeIII_FeII+O2+H+}
+\HOd + \FeIII & \yields & \FeII + \Od + \Hp \\ % DCZ96 p. 22871 (5)
+\label{rxn:HO2+FeII+H+_FeIII+H2O2}
+\HOd + \FeII + \Hp & \yields & \FeIII + \HdOd % DCZ96 p. 22871 (6) (Typo in JGR?)
+\end{rxnarray}
+\item Assume \HOd\ reactions are gas phase diffusion limited
+\item \chmphz{\HdOd}{g} and \chmphz{\HdOd}{aq} ignored 
+\begin{itemize}
+\item Reasonable assumption for wetted aerosol, but not clouds
+\item Photochemistry and (\ref{rxn:HO2+FeII+H+_FeIII+H2O2}) and 
+may be significant \HdOd\ source in clouds \cite[]{AFA94}
+\end{itemize}
+\item Uptake of \chmphz{\OH}{g} ignored due to timescale
+\end{itemize}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill \HOd\ Uptake \hfill}}\vspace{-0.5in}\large
+\begin{table}
+\begin{center}
+\begin{tabular}[c]{ l >{\raggedright}p{2in}<{} >{$}l<{$} >{$}l<{$} >{$}l<{$} l }
+Gas & Surface & \tpt & \mssuptcff & \Delta & Ref. \\[0.0ex]
+& Composition & \mbox{K} & & & \\[0.0ex]
+\hline\hline
+\HOd & \HdO (l) & 275 & > 0.02 & & JPL97 \\[0.0ex]
+\note{\HOd} & \HdO (l) & & > 0.01$--$0.2 & & DCZ96 \\[0.0ex]
+\note{\HOd} & \NHqHSOq (aq) & 293 & > 0.2 & & JPL97 \\[0.0ex]
+\note{\HOd} & \LiNOt (aq) & 293 & > 0.2 & & JPL97 \\[0.0ex]
+\note{\HOd} & \NaCl (s) & 295 & 0.02 & 5 & JPL97 \\[0.0ex]
+\note{\HOd} & \KCl (s) & 295 & 0.02 & 5 & JPL97 \\[0.0ex]
+\note{\HOd} & \HdSOq (l) & 295 & > 0.05 & 5 & DCZ96 \\[0.0ex]
+\end{tabular}
+\end{center}
+\end{table}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill \Ot\ Uptake \hfill}}\vspace{-0.5in}\large
+\enlargethispage*{1in}
+\begin{itemize}
+\item Mechanism is unclear, possibly \Fe, \Mn, or organics
+\item Uptake decreases with wetting
+\end{itemize}
+\begin{table}
+\begin{center}
+\begin{tabular}[c]{ l >{\raggedright}p{2in}<{} >{$}l<{$} >{$}l<{$} >{$}l<{$} l }
+Gas & Surface & \tpt & \mssuptcff & \Delta & Ref. \\[0.0ex]
+& Composition & \mbox{K} & & & \\[0.0ex]
+\hline\hline
+\multicolumn{6}{c}{$\Ot + \mbox{Surface} \yields \mbox{Products}$\rule[-0.5em]{0em}{1.5em}} \\[0.0ex]
+\Ot & \chmphz{\AldOt}{s} & 210\mbox{--}300 & & & JPL97 \\[0.0ex]
+\note{\Ot} & \chmphz{C}{s} & \approx 300 & 0.003 & 20 & JPL97 \\[0.0ex]
+\note{\Ot} & \chmphz{C}{s} & & 0.0004 & & DCZ96 \\[0.0ex] % Fendel et al. (1995)
+\note{\Ot} & \chmphz{Fe}{s} & & 0.0004 & & DCZ96 \\[0.0ex] % Fendel et al. (1995)
+\note{\Ot} & \NaCl (s) & \approx 300 & > 2 \times 10^{-10} & 20 & JPL97 \\[0.0ex]
+\end{tabular}
+\end{center}
+\end{table}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill Ozone Deposition Observations%
+%\footnote{\emph{Source:} \cite{DCZ96}}%
+\hfill}}\vspace{-0.5in}\small
+\enlargethispage*{1in}
+%\begin{table}
+\begin{minipage}{\hsize} % Minipage necessary for footnotes KoD95 p. 110 (4.10.4)
+\renewcommand{\footnoterule}{\rule{\hsize}{0cm}\vspace{-0cm}} % KoD95 p. 111
+\begin{center}
+\begin{tabular}{ >{\raggedright}p{1.2in}<{} >{\raggedright}p{1.1in}<{} >{$}l<{$} >{$}r<{$} >{$}r<{$} l }
+\hline
+Texture & Condition & \vlcdps & \rssdps & \mssuptcff & Reference \\[0.0ex]
+& & \mbox{\mxs} & \mbox{\sxm} & & \\[0.0ex]
+\hline
+& & & & & \\[-1.0ex]
+Sand & Moist & 0.0025 & 400 & 2.7 \times 10^{-5} & Ald69 \\[0.0ex]
+Sand & Dry & 0.005 & 200 & 5.5 \times 10^{-5} & Ald69 \\[0.0ex]
+Bare soil & Loamy & 0.025\mbox{--}0.05 & 20\mbox{--}40 &
+2.7\mbox{--}5.4 \times 10^{-4} & TRW73 \\[0.0ex]
+Bare soil & High $\vwc$ & 0.0077\mbox{--}0.014 & 70\mbox{--}130
+& 8.5\mbox{--}17 \times 10^{-5} & TRW73 \\[0.0ex]
+Bare soil & Cold & 0.10 & 10 & 1.1 \times 10^{-3} & WCW81 \\[0.0ex]
+Sand & Day & 0.025 & 40 & 2.7 \times 10^{-4} & GaR80 \\[0.0ex]
+Sand & Night & 0.017 & 60 & 1.9 \times 10^{-4} & GaR80 \\[0.0ex]
+Sand & Loamy, dry & 0.033 & 30 & 3.6 \times 10^{-4} & GaR80 \\[0.0ex]
+Sand & & 0.0014 & 714 & 1.5 \times 10^{-5} & Gar76 \\[0.0ex]
+\CaCOt & & 0.0022 & 455 & 2.4 \times 10^{-5} & Gar76 \\[0.0ex]
+Soil & $\vwc = 27\%$ & 0.0084 & 119 & 9.2 \times 10^{-5} & Gar76 \\[0.0ex]
+Soil & $\vwc = 4\%$ & 0.0176 & 57 & 1.9 \times 10^{-4} & Gar76 \\[0.0ex]
+Sand, rock & Day & 0.0011 & 909 & 1.2 \times 10^{-5} & SBP87 \\[0.0ex]
+Sand, rock & Night & 0.0003 & 3333 & 3.3 \times 10^{-6} & SBP87 \\[0.0ex]
+Sahara & Day & 0.0015 & 667 & 1.6 \times 10^{-5} & GHM95 \\[0.0ex]
+Sahara & Night & 0.00065 & 1538 & 7.1 \times 10^{-6} & GHM95 \\[0.0ex]
+%\hline
+\end{tabular}
+\end{center}
+\end{minipage}
+%\end{table}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill \SOx\ Chemistry \hfill}}\vspace{-0.5in}\large
+\begin{itemize}
+\item Gaseous \SOd\ is oxidized by \OH\ 
+\begin{rxnarray}
+\label{rxn:oxd_SO2_gas}
+\SOd + \OH + \Od & \yields & \SOt + \HOd \\ % DCZ96 p. 22872 (13a)
+\SOt + \HdO & \yields & \HdSOq % DCZ96 p. 22872 (13b)
+\end{rxnarray}
+\begin{itemize}
+\item Aerosol(s) and cloud compete for \HdSOq\ uptake
+\end{itemize}
+\item Gaseous \SOd\ diffuses to aerosol 
+
+\end{itemize}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill Reactive Uptake Coefficients for MOZART \hfill}}\vspace{-0.5in}\large
+\begin{minipage}{\hsize} % Minipage necessary for footnotes KoD95 p. 110 (4.10.4)
+Most values adopted from \cite{DCZ96}, $\RHthr = 50\%$
+\begin{eqnarray*}
+\mssuptcff(\HOd \rightarrow \mbox{dust}) & = & 0.1 \\ % DCZ96 p. 22871 
+\mssuptcff(\Ot \rightarrow \mbox{dust}) & = & 0.00005 \\ % DCZ96 p. 22874 
+^{a}\mssuptcff(\NdOc \rightarrow \mbox{dust}) & = &\left\{
+\begin{array}{l@{\quad:\quad}r}
+0.001 & \RH < \RHthr \\ % DCZ96 p. 22871 
+0.1 & \RH \ge \RHthr % DCZ96 p. 22871 
+\end{array} \right.
+\\
+^{a}\mssuptcff(\HNOt \rightarrow \mbox{dust}) & = & 0.1 \\ % DCZ96 p. 22872 
+^{a}\mssuptcff(\SOd \rightarrow \mbox{dust}) & = &\left\{
+\begin{array}{l@{\quad:\quad}r}
+3 \times 10^{-4} & \RH < \RHthr \\ % DCZ96 p. 22872 
+0.1 & \RH \ge \RHthr % DCZ96 p. 22872 
+\end{array} \right.
+\label{eqn:mss_upt_cff_N2O5_dust}
+\end{eqnarray*}
+\end{minipage}
+$^{a}$\footnotesize{Uptake only when $[\NOtm] + 2[\SOqdm] < 2[\Cadp]$}%
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill Dust Composition\hfill}}\vspace{-0.5in}\large
+Windblown dust aerosol is idealized as an insoluble core surrounded by
+a dry, soluble component, e.g., \CaCOt, \NaCl.  
+\begin{eqnarray}
+\mssaerdry & = & \mssaerslt + \mssaernsl \\
+\mssaerttl & = & \mssaerdry + \mssaerwtr
+\label{eqn:mss_aer_ttl_dfn}
+\end{eqnarray}
+\emph{Definitions:}
+\begin{table}
+\begin{tabular}{ >{$}r<{$} l}
+\mssaernsl & Insoluble component \\[0.0ex]
+\mssaerslt & Dry mass of soluble component \\[0.0ex]
+\mssaerdry & Dry mass (insoluble + soluble) \\[0.0ex]
+\mssaerwtr & Liquid water mass \\[0.0ex]
+\mssaerttl & Total mass (dry + water) \\[0.0ex]
+\end{tabular}
+\end{table}
+\begin{itemize}
+\item Assume $\mssaerCadp = 0.05 \mssaerdry$
+\end{itemize}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill Activity Coefficient \hfill}}\vspace{-0.5in}\large
+The \textit{activity coefficient} $\actcff$ measures the thermodynamic
+properties of the particle coating relative to pure water
+\begin{equation}
+% Han76 p. 80 (2.6a)
+\actcff = { \molnbrwtr \over \molnbrwtr + \vnthff \molnbrslt }
+\label{eqn:act_cff_dfn}
+\end{equation}
+\emph{Definitions:}
+\begin{table}
+\begin{tabular}{ >{$}r<{$} l}
+\actcff & Activity of liquid coating \\[1.0ex]
+\molnbrwtr & Mole number of water \\[1.0ex]
+\molnbrslt & Mole number of the dry solute \\[1.0ex]
+\vnthff & van't Hoff factor \\[1.0ex]
+\end{tabular}
+\end{table}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill Hygroscopic Growth \hfill}}\vspace{-0.5in}\large
+Thermodynamic equilibrium imposes relationship between water
+component $\mssaerwtr$ and dry component $\mssaerdry$:
+\begin{eqnarray}
+% Han76 p. 94 (2.41a)
+{ \mssaerwtr \over \mssaerdry } & = & 
+{ \mlmic \RH \over 1 - \RH } \\
+\mlmic & = & { \mssaerwtr ( 1 - \RH ) \over \mssaerdry \RH}
+\label{eqn:mlmic_dfn}
+\end{eqnarray}
+\emph{Definitions:}
+\begin{table}
+\begin{tabular}{ >{$}r<{$} l}
+\RH & Relative humidity \\[1.0ex]
+\mlmic & Mass increase coefficient (empirical) \\[0.0ex]
+\end{tabular}
+\end{table}
+\begin{itemize}
+\item Infer $\mlmic$ from bulk samples (\ref{eqn:mlmic_dfn}) 
+\item Parameterize $\mlmic = \mlmic(\RH)$, neglect hysteresis
+\end{itemize}
+
+\foilhead{%\bgl
+\Large\textcolor{blue}{\hfill Saharan Dust Hygroscopicity%
+\footnote{\emph{Source:} \cite{Han76}, p.~115, Table~IV}%
+\hfill}}\vspace{-0.5in}\small
+\enlargethispage*{1in}
+%\begin{table}
+\begin{minipage}{\hsize} % Minipage necessary for footnotes KoD95 p. 110 (4.10.4)
+\renewcommand{\footnoterule}{\rule{\hsize}{0cm}\vspace{-0cm}} % KoD95 p. 111
+\begin{center}
+\begin{tabular}{ >{$}l<{$} >{$}l<{$} >{$}r<{$} c >{$}l<{$} >{$}l<{$} >{$}r<{$} }
+\hline 
+\multicolumn{3}{c}{\rule[-7pt]{0.0ex}{4.0ex} Increasing $\actcffwtr$} & & 
+\multicolumn{3}{c}{\rule[-7pt]{0.0ex}{4.0ex} Decreasing $\actcffwtr$} 
+\\[0.0ex] \cline{1-3} \cline{5-7}
+\actcffwtr & \mlmic & \mssaerwtr / \mssaerdry & & 
+\actcffwtr & \mlmic & \mssaerwtr / \mssaerdry \\[0.0ex] 
+\hline \rule{0.0ex}{3.0ex} 
+0.204 & 0.032 & 0.008 & & & & \\[0.0ex]
+& & & & 0.224 & 0.049 & 0.014 \\[0.0ex]
+& & & & 0.294 & 0.045 & 0.019 \\[0.0ex]
+0.349 & 0.024 & 0.013 & & & & \\[0.0ex]
+0.457 & 0.021 & 0.018 & & & & \\[0.0ex]
+& & & & 0.506 & 0.047 & 0.048 \\[0.0ex]
+0.590 & 0.024 & 0.034 & & & & \\[0.0ex]
+& & & & 0.623 & 0.072 & 0.119 \\[0.0ex]
+0.648 & 0.033 & 0.060 & & & & \\[0.0ex]
+0.700 & 0.088 & 0.206 & & & & \\[0.0ex]
+& & & & 0.701 & 0.175 & 0.410 \\[0.0ex]
+0.751 & 0.130 & 0.392 & & & & \\[0.0ex]
+& & & & 0.753 & 0.158 & 0.482 \\[0.0ex]
+0.789 & 0.133 & 0.497 & & & & \\[0.0ex]
+0.843 & 0.120 & 0.644 & & & & \\[0.0ex]
+0.896 & 0.107 & 0.922 & & & & \\[0.0ex]
+0.900 & 0.105 & 0.945 & & & & \\[0.0ex]
+0.955 & 0.075 & 1.604 & & & & \\[0.0ex]
+0.971 & 0.072 & 2.411 & & & & \\[0.0ex]
+0.976 & 0.071 & 2.887 & & & & \\[0.0ex]
+0.986 & 0.067 & 4.719 & & & & \\[0.0ex]
+0.990 & 0.065 & 6.435 & & & & \\[0.0ex]
+0.997 & 0.065 & 20.90 & & & & \\[0.0ex]
+1.000 & 0.081 & \infty & & & & \\[0.0ex]
+%\hline
+\end{tabular}
+\end{center}
+\end{minipage}
+%\end{table}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill Equilibrium Size \hfill}}\vspace{-0.5in}\large
+\begin{itemize}
+\item Bulk $\mlmic$ applies to individual size bins
+\item Neglecting curvature, (\ref{eqn:mlmic_dfn}) gives $\rds/\rdsdry$ 
+\end{itemize}
+\begin{eqnarray}
+% Han76 p. 123 (6.1)
+{ \rds \over \rdsdry } & = & \left(
+1 + { \mlmic \dnsdry \RH \over \dnswtr ( 1 - \RH ) }
+\right)^{1/3}
+\label{eqn:hyg_grw_rds_Han76_1}
+\end{eqnarray}
+\emph{Definitions:}
+\begin{table}
+\begin{tabular}{ >{$}r<{$} l}
+\rds & Wet particle size \\[0.0ex]
+\rdsdry & Dry particle size \\[0.0ex]
+\dnswtr & Density of liquid water ($1.0$~\gxcmC)\\[0.0ex]
+\dnsdry & Density of dry aerosol ($\approx 2.5$~\gxcmC) \\[0.0ex]
+\end{tabular}
+\end{table}
+\begin{itemize}
+\item Validity of (\ref{eqn:hyg_grw_rds_Han76_1}) requires 
+$\rdsdry > 0.1$~\um, $\RH < 0.95$ 
+\end{itemize}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill Equilibrium Size, Continued \hfill}}\vspace{-0.5in}\large
+\enlargethispage{0.5in}
+\begin{itemize}
+\item Include curvature effects 
+\item (\ref{eqn:hyg_grw_rds_Han76_2}) valid for $\rdsdry > 0.04$, $\RH < 0.99$
+\end{itemize}
+\begin{eqnarray}
+% Han76 p. 123 (6.2)
+\lefteqn{ 
+{ \rds \over \rdsdry } = \left(
+1 + { \mlmic \dnsdry \RH \over \dnswtr ( 1 - \RH ) } 
+\right)^{1/3} - 
+} \nonumber \\
+& & 
+{ 2 \sfctns \spcvlmwtr \over \gascstwtr \tpt \rdsdry } 
+{ \RH \over 1 - \RH } 
+\left(
+1 + { \mlmic \dnsdry \RH \over \dnswtr ( 1 - \RH ) } 
+\right)^{-1/3}
+\label{eqn:hyg_grw_rds_Han76_2}
+\end{eqnarray}
+\emph{Definitions:}
+\begin{table}
+\begin{tabular}{ >{$}r<{$} l}
+\sfctns & Surface tension ($\approx 0.00761$~\Nxm) \\[0.0ex]
+\spcvlmwtr & Specific volume of liquid water ($0.001$~\mCxkg) \\[0.0ex]
+\gascstwtr & Specific gas constant of water ($461.65$~\jxkgK) \\[0.0ex]
+\tpt & Temperature \\[0.0ex]
+\end{tabular}
+\end{table}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill Mass Transfer \hfill}}\vspace{-0.5in}\large
+Assuming heterogeneous reactions are gas-phase diffusion-limited,
+the flux of \A\ to a particle of radius $\rds$ is 
+\begin{eqnarray}
+% DCZ96 p. 22871 (2), SeP97 p. 636 (11.128), SeP97 p. 606 (11.43)
+\rxrsfc (\rds) & = & 4 \pi \rds \dffA \vntcff \times
+\left(
+{ \frac{3}{4} \mssuptcff ( 1 + \kndnbr ) \over 
+\kndnbr^{2} + \kndnbr + 0.283 \kndnbr \mssuptcff + \frac{3}{4} \mssuptcff }
+\right)^{-1}
+\label{rxn:rxr_sfc_dfn}
+\end{eqnarray}
+\emph{Definitions:}
+\begin{table}
+\begin{tabular}{ >{$}r<{$} l}
+\rxrsfc & Diffusion-limited uptake rate \\[0.0ex]
+\dffA & Binary diffusivity of \A\ in air \\[0.0ex]
+\vntcff & Ventilation coefficient ($\approx 1$) \\[0.0ex]
+\kndnbr & Knudsen number $= \mfp / \rds$ \\[0.0ex]
+\mfp & Mean free path ($\approx 3 \dffA / \vlcmlcA$)\\[0.0ex]
+\mssuptcff & Mass uptake coefficient \\[0.0ex]
+\end{tabular}
+\end{table}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill Mass Transfer, Continued \hfill}}\vspace{-0.5in}\large
+The total sink of species \A\ (\A = \NdOc, \HNOt, \HOd, \SOd) due to
+heterogeneous chemistry on mineral dust is  
+\begin{eqnarray}
+{ d [\A] \over d \tm } & = & -\rxrsfcttl [\A] \\
+\rxrsfcttl & = & \int_{0}^{\infty} \rxrsfc( \rds ) \dst ( \rds ) \,
+d\rds = \sum_{\iii = 1}^{\NNN} \rxrsfc_\iii \cnc_\iii
+\label{eqn:snk_ttl_A}
+\end{eqnarray}
+\emph{Definitions:}
+\begin{table}
+\begin{tabular}{ >{$}r<{$} l}
+\rxrsfcttl & Total pseudo first order rate coefficient [\xs] \\[0.0ex]
+\NNN & Number of dust bins ($\NNN = 4$) \\[0.0ex]
+\cnc_\iii & Number concentration of $\iii$th bin [\xmC] \\[0.0ex]
+\tm & Time ($\dlttm \approx 30$~m) \\[0.0ex]
+\end{tabular}
+\end{table}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill Model Flow \hfill}}\vspace{-0.5in}\large
+\begin{enumerate}
+\item Update Gases: \NOy, \HOx, \Ot, \SOd, \SOqdm(g)
+\item Compute equilibrium wet sizes $\rds_\iii$ for new \RH\
+\item Redistribute particulate \NOtm, \SOqdm among bins (how?)
+\item Compute kinetic diffusion/thermodynamic equilibria 
+\item \HOd, \Ot\ uptake on all sizes
+\item \HNOt, \SOd\ uptake where $[\NOtm] + 2[\SOqdm] < 2[\Cadp]$
+\item Physics (sources, transport, dry \& wet deposition)
+\end{enumerate}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill Model Optimization \hfill}}\vspace{-0.5in}\large
+\begin{itemize}
+\item Collapse \NNN\ size bins to 1 or 2 bins for chemistry
+\begin{itemize}
+\item Supported by observations
+\item Reduces computational overhead
+\end{itemize}
+\item Treat \textit{all} aerosol as single system of $\mssaernsl + 
+\mssaerCadp + \mssaerwtr + \mssaerNOt + \mssaerSOq + \mssaerNHq$
+\begin{itemize}
+\item Integrates all aerosols into one framework
+\item Builds on work of Barth/Tie/Erickson/Durlak
+\item Requires box model for validation
+\item Long time frame
+\end{itemize}
+\item Regional specification of \Cadp\ \cite[]{CaS98}
+\end{itemize}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill Aerosol Interactions \hfill}}\vspace{-0.5in}\large
+\begin{itemize}
+\item Competition for gas uptake between clouds, \NHqdSOq, dust, \ldots
+\begin{itemize}
+\item Uptake weighted by surface area, uptake coefficient
+\item Competition/coagulation with \NaCl\ in MBL
+\item Competition with \SOd\ oxidation
+\end{itemize}
+\item Dust aerosol may activate into cloud droplets
+\begin{itemize}
+\item Allows processing of more \SOqdm, \Ot\ in clouds
+\end{itemize}
+\end{itemize}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill References\hfill}}\vspace{-0.5in}\large
+% Bibliography
+%\renewcommand\refname{\normalsize Publications}
+\bibliographystyle{jas}
+\bibliography{bib}
+
+\end{document}
+
+
+

@@ -1,0 +1,312 @@
+% FM95AB.STY -- AGU 1995 Fall Meeting Abstract Form. 
+% 
+% This style is written so that authors who are 
+% familiar with LaTeX, can print the abstract 
+% prior to sending meeting abstracts electronically
+% to the AGU office.  The page design is based on the
+% existing AGU paper format. 
+
+\def\revtex@ver{1.3}        % Version number. 
+\def\revtex@date{25 JUL 95} % Revision date. 
+\def\revtex@org{AGU}        % Organization. 
+\def\revtex@jnl{EOS}        % Applicable journal
+\def\revtex@genre{abstract} % Document "type".
+
+\typeout{\revtex@org\space 
+    \ifx\revtex@jnl\@empty\else\revtex@jnl\space\fi 
+    \revtex@genre\space substyle, v\revtex@ver\space 
+<\revtex@date>.} 
+
+\def\revtex@pageid{\xdef\@thefnmark{\null} 
+    \@footnotetext{This \revtex@genre\space was prepared with the
+    \revtex@org\space \revtex@jnl\space Rev\TeX\space macros 
+v\revtex@ver.}} 
+ 
+\def\society@name{American Geophysical Union} 
+\def\society@abbrev{\revtex@org} 
+\def\society@address{2000 Florida Ave., NW\\Washington, DC 20009}
+
+\def\society@phone{202-462-6900} 
+\def\society@email{agu@agu.org} 
+ 
+\def\fee@CHECK{50} 
+\def\fee@CARD{50} 
+\def\fee@PO{50} 
+\def\fee@LATE{1000000} 
+\let\fee@AMEX=\fee@CARD 
+\let\fee@MC=\fee@CARD 
+\let\fee@VISA=\fee@CARD 
+\let\fee@BILL=\fee@PO 
+ 
+\def\jnl@issue#1#2#3{\gdef\jnl@yr{#1}\gdef\jnl@vol{#2} 
+\gdef\jnl@nr{#3}} 
+\jnl@issue{\number\year}{N}{M} 
+ 
+\newdimen\abwidth \abwidth 11.8cm 
+\newdimen\standardabheight \standardabheight 18cm 
+\newdimen\extendedabheight \extendedabheight 28cm 
+ 
+\newdimen\abheight \abheight\standardabheight 
+ 
+\def\extendedabstract{\global\abheight\extendedabheight 
+    %\global\adminheight 10.5in 
+    \global\textheight 11.2in} 
+ 
+\newdimen\title@hang \title@hang 1em 
+\newdimen\auth@hang \auth@hang 1em 
+ 
+\let\title@font\bf 
+\let\auth@font\relax 
+ 
+\def\presentingauthor#1{\@temptokena=\expandafter{\auth@list} 
+    
+\xdef\auth@list{\the\@temptokena\@authdlm\underline{\auth@font#1}
+} 
+    \gdef\@authdlm{;\space}} 
+ 
+\def\author#1{\@temptokena=\expandafter{\auth@list} 
+    \xdef\auth@list{\the\@temptokena\@authdlm\mbox{\auth@font#1}}
+
+    \gdef\@authdlm{;\space}} 
+ 
+\def\authoraddress#1{\@temptokena=\expandafter{\auth@list} 
+    \xdef\auth@list{\the\@temptokena\space(#1;}} 
+ 
+\def\authorphone#1{\@temptokena=\expandafter{\auth@list} 
+    \xdef\auth@list{\the\@temptokena\space ph.\space#1;}} 
+ 
+\def\authoremail#1{\@temptokena=\expandafter{\auth@list} 
+    \xdef\auth@list{\the\@temptokena\space e-mail:\space#1)}} 
+ 
+\def\auth@list{} 
+\def\@authdlm{} 
+ 
+\def\abstract{\vbox to\abheight\bgroup 
+    \minipage{\abwidth} 
+    
+\noindent{\hangindent=\title@hang\hangafter=1\title@font\@title\par} 
+    \vspace{2.0ex} 
+    \noindent{\hangindent=\auth@hang\hangafter=1\auth@list\par} 
+    \vspace{2.0ex}} 
+ 
+\def\endabstract{\endminipage\vfil\par 
+    %\ifdim\abheight=\standardabheight 
+      %\hbox to\abwidth{\hrulefill} 
+      %Abstract \#\@refnum\space 
+      %submitted for \@meetingid\space [Section \@sectionid] 
+    %\fi 
+    \egroup 
+    \validate@admin\@admininfo} 
+ 
+\def\@minipagerestore{\parindent\z@\parskip 1.4ex} 
+ 
+\def\meetingid#1{\gdef\@meetingid{#1}} \def\@meetingid{} 
+\def\memberid#1{\gdef\@memberid{#1}} \def\@memberid{} 
+\def\sponsor#1{\gdef\@sponsor{#1}} \def\@sponsor{} 
+\def\correspondingname#1{\gdef\@correspondingname{#1}} 
+    \def\@correspondingname{} 
+\def\correspondingaddress#1{\gdef\@correspondingaddress{#1}} 
+    \def\@correspondingaddress{} 
+\def\correspondingcity#1{\gdef\@correspondingcity{#1}} 
+    \def\@correspondingcity{} 
+\def\correspondingstate#1{\gdef\@correspondingstate{#1}} 
+    \def\@correspondingstate{} 
+\def\correspondingpostal#1{\gdef\@correspondingpostal{#1}} 
+    \def\@correspondingpostal{} 
+\def\correspondingcountry#1{\gdef\@correspondingcountry{#1}} 
+    \def\@correspondingcountry{} 
+\def\correspondingphone#1{\gdef\@correspondingphone{#1}} 
+    \def\@correspondingphone{} 
+\def\correspondingfax#1{\gdef\@correspondingfax{#1}} 
+    \def\@correspondingfax{} 
+\def\correspondingemail#1{\gdef\@correspondingemail{#1}} 
+    \def\@correspondingemail{} 
+\def\sectionid#1{\gdef\@sectionid{#1}} \def\@sectionid{} 
+\def\specialsessionid#1{\gdef\@specialsessionid{#1}} 
+\def\@specialsessionid{} 
+\def\indexterm#1{\@temptokena=\expandafter{\@indextermlist} 
+    \xdef\@indextermlist{\the\@temptokena\@idxtdlm\mbox{#1}} 
+    \gdef\@idxtdlm{,\space}} 
+\def\themeid#1{\gdef\@themeid{#1}} \def\@themeid{} 
+\def\postertype#1{\gdef\@postertype{#1}} \def\@postertype{} 
+\def\titleonly#1{\gdef\@titleonly{#1}} \def\@titleonly{} 
+\def\previoussubmissioninfo#1#2{\gdef\@prevsubpct{#1} 
+    \gdef\@prevsubwhere{#2}} \def\@previoussubmissioninfo{}{} 
+\def\paymentmethod#1{\gdef\@payment{#1}} \def\@payment{} 
+\def\cardholder#1{\gdef\@cardholder{#1}} \def\@cardholder{} 
+\def\accountnumber#1{\gdef\@account{#1}} \def\@account{} 
+\def\expirationdate#1{\gdef\@expdate{#1}} \def\@expdate{} 
+\def\paymentamount#1{\gdef\@paymentamount{#1}} 
+\def\@paymentamount{} 
+\def\papertype#1{\gdef\@papertype{#1}} \def\@papertype{} 
+\def\programchair#1{\gdef\@programchair{#1}} \def\@programchair{}
+
+\def\specialinstructions#1{\gdef\@instructions{#1}} 
+\def\@instructions{} 
+\def\studentauthor#1{\gdef\@studentauthor{#1}} 
+\def\@studentauthor{} 
+ 
+\def\@indextermlist{} 
+\def\@idxtdlm{} 
+ 
+\def\referencenum#1{\gdef\@refnum{#1}} \def\@refnum{0000} 
+\def\received#1{\gdef\@rcptdate{#1}} \def\@rcptdate{\revtex@date}
+
+\def\sessionid#1#2{\gdef\@session{#1.#2} 
+    \markboth{{\rm\@session}}{{\rm\@session}}} 
+\def\@session{0.00} 
+ 
+\newdimen\adminwidth \adminwidth 7cm 
+\newdimen\adminheight \adminheight\textheight 
+ 
+\def\box@checked{\fbox{\tt X}} 
+\def\box@open{\fbox{$\phantom{\hbox{\tt X}}$}} 
+ 
+\def\validate@admin{ 
+    \ifx\@empty\@meetingid\gdef\@meetingid{{\bf No meeting ID.}} 
+     \typeout{WARNING: No meeting ID.}\fi 
+    \ifx\@empty\@memberid 
+        \ifx\@empty\@sponsor\gdef\@memberid{{ 
+        \bf No member or sponsor ID.}} 
+     \typeout{WARNING: No member or sponsor ID.}\fi 
+    \fi 
+    \ifx\@empty\@sectionid\gdef\@sectionid{WARNING: No
+section}\fi 
+    \ifx\@empty\@prevsubpct\gdef\@prevsubpct{0}\fi 
+    \ifx\@empty\@prevsubwhere\gdef\@prevsubwhere{published
+elsewhere} 
+         \fi 
+    \ifx\@empty\@paymentamount\gdef\@paymentamount{\fee@CARD}\fi 
+    \ifx\@empty\@postertype\gdef\@postertype{N/A}\fi 
+    \ifx\@empty\@titleonly\else\gdef\@titleonly{title only}\fi 
+    \ifx\@empty\@papertype\gdef\@papertype{N/A}\fi 
+    \def\@tempa{I} 
+    \ifx\@tempa\@papertype 
+     \ifx\@empty\@programchair\gdef\@programchair{{ 
+         \bf None given.}} 
+     \typeout{WARNING: No program chair.}\fi 
+    \fi 
+    \ifx\@empty\@instructions\gdef\@instructions{No special
+instructions} 
+         \fi 
+    \ifx\@empty\@studentauthor\gdef\@studentauthor{Regular
+author} 
+     \else\gdef\@studentauthor{Student author}\fi 
+} 
+ 
+\def\@admininfo{\vbox to\adminheight\bgroup 
+    \minipage{\adminwidth}\parindent\z@\parskip 2ex\raggedright 
+    {\begin{center}\bf\society@name\\Abstract Form\end{center}} 
+    \vskip 0.15in 
+    \hbox to\adminwidth{\hskip\leftmargin{\it Reference \#} 
+\@refnum\hfil} 
+    \hbox to\adminwidth{\hskip\leftmargin{\it Session} 
+\@session\hfil} 
+    \vskip 0.25in 
+    \begin{enumerate} 
+    \item\@meetingid\par 
+    \item\ifx\@empty\@memberid Paper sponsored by \@sponsor. 
+        \else\@memberid\par\fi 
+    \item\begin{enumerate} 
+        \item\tabcolsep\z@\begin{tabular}[t]{l} 
+        \@correspondingname\\\@correspondingaddress\\ 
+     \@correspondingcity, \@correspondingstate\space 
+     \@correspondingpostal\space\@correspondingcountry\\ 
+     \@correspondingemail 
+        \end{tabular} 
+        \item\@correspondingphone 
+        \item\@correspondingfax 
+        \end{enumerate}\par 
+    \item\@sectionid\par 
+    \item\begin{enumerate} 
+        \item\@specialsessionid 
+        \item\@indextermlist 
+        \item\@themeid 
+        \end{enumerate}\par 
+    \item\@postertype\ifx\@empty\@titleonly\relax\else, 
+\@titleonly\fi\par 
+    \item\@prevsubpct\%\space\@prevsubwhere\par 
+    \item Charge \$\@paymentamount\space to \@cardholder\space 
+        \@payment\space card \@account, expires \@expdate\par 
+    \item\@papertype\ifx\@empty\@programchair\relax\else, 
+      Program chair: \@programchair\fi\par 
+    \item\@instructions\par 
+    \item\@studentauthor\par 
+    \end{enumerate} 
+    \endminipage\vfil 
+    \hbox to\adminwidth{\hfil Date received: \@rcptdate} 
+    \hbox to\adminwidth{\hfil Date formatted: \@date} 
+    \hbox to\adminwidth{\hfil Form version: \revtex@ver} 
+    %\hbox to\adminwidth{\hfil \revtex@jnl\space 
+     %vol \jnl@vol, nr \jnl@nr, \jnl@yr} 
+    \egroup} 
+ 
+\def\deg{\hbox{$^\circ$}} 
+\def\sun{\hbox{$\odot$}} 
+\def\earth{\hbox{$\oplus$}} 
+\def\alt{\mathrel{\hbox{\rlap{\hbox{\lower4pt\hbox{$\sim$}}}\hbox
+
+{$<$}}}} 
+\def\agt{\mathrel{\hbox{\rlap{\hbox{\lower4pt\hbox{$\sim$}}}\hbox
+
+{$>$}}}} 
+\def\sq{\hbox{\rlap{$\sqcap$}$\sqcup$}} 
+\def\arcmin{\hbox{$^\prime$}} 
+\def\arcsec{\hbox{$^{\prime\prime}$}} 
+\def\fd{\hbox{$.\!\!^{\rm d}$}} 
+\def\fh{\hbox{$.\!\!^{\rm h}$}} 
+\def\fm{\hbox{$.\!\!^{\rm m}$}} 
+\def\fs{\hbox{$.\!\!^{\rm s}$}} 
+\def\fdg{\hbox{$.\!\!^\circ$}} 
+\def\farcm{\hbox{$.\mkern-4mu^\prime$}} 
+\def\farcs{\hbox{$.\!\!^{\prime\prime}$}} 
+\def\fp{\hbox{$.\!\!^{\scriptscriptstyle\rm p}$}} 
+\def\micron{\hbox{$\mu$m}} 
+ 
+\let\la=\alt 
+\let\ga=\agt 
+ 
+\def\plotone#1{{\centering \leavevmode 
+    \epsfxsize=\columnwidth \epsfbox{#1}}} 
+ 
+\def\plottwo#1#2{{\centering \leavevmode 
+    \epsfxsize=.45\columnwidth \epsfbox{#1} \hfil 
+    \epsfxsize=.45\columnwidth \epsfbox{#2}}} 
+ 
+\def\plotfiddle#1#2#3#4#5#6#7{{\centering \leavevmode 
+    \vbox to#2{\rule{0pt}{#2}} 
+    \special{psfile=#1 voffset=#7 hoffset=#6 vscale=#5 hscale=#4 
+angle=#3}}} 
+ 
+\textwidth 2\abwidth 
+\textheight 9in 
+\voffset=0.5in 
+\hoffset=-0.5in 
+ 
+\oddsidemargin \z@ 
+\evensidemargin \z@ 
+\topmargin \z@ 
+\footheight \z@ 
+\parindent \z@ 
+\parskip 1ex 
+\columnsep 2pc \advance\textwidth by\columnsep \twocolumn 
+\advance\hoffset by-.5\columnsep 
+ 
+\adminheight\textheight 
+\leftmarginii 18pt 
+ 
+\newif \if@final \@finalfalse 
+ 
+\if@final 
+  \headsep .25in 
+  \ps@empty 
+  \@fileswfalse 
+  \jnl@issue{FIX ME}{0}{0} 
+  \@input{times.sty} 
+  \advance\textheight by-\headheight 
+  \advance\textheight by-\headsep 
+\else 
+  \headheight \z@ 
+  \headsep \z@ 
+  \ps@empty 
+\fi 

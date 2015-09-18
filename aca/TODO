@@ -1,0 +1,12 @@
+$Id$
+
+Items which need work for swnb, nbm, aca, and friends
+
+2. Find method or location for default input files that works for everyone. Perhaps this should involve a command-line overridable data path, e.g., /data/zender/aca or /usr/tmp/aca which would be prefixed to all data files. Default would be ./
+5. Fix bug that causes aer_sng,azi_sng,bga_sng,opt_dep_sng,plr_sng,str_sng global attributes to have size 0 in output file swnb2.nc
+7. Fix OpenMP multi-threading: problem appears to be that disort2 does not support threads
+13. Fix references to u0u which is undefined in disort2
+14. Find/Incorporate coral PAR file:
+    Ley, A.: The distribution of absorbed light energy for algal photosynthesis. In. New York: Plenum Press 1980
+    Prézelin, B. B., A. C. Ley and F. T. Haxo: Effects of growth irradiance on the photosynthetic action spectra of the marine dinoflagellate. Glenodinium sp. Planta 130, 251%Gâ%@256 (1976)
+15. 

@@ -1,0 +1,77 @@
+# Purpose: Configuration file for pbuilder
+
+# Based on Debian Sid chroot example received 20070723 from 
+# Oleksandr (Alex) Moskalenko <malex@debian.org>
+# File in /usr/share/pbuilder/pbuilderrc is default template
+# /etc/pbuilderrc is the one meant for editing
+# Read pbuilderrc.5 for notes on specific options
+
+# cp ~/dot/pbuilderrc ~/.pbuilderrc
+# diff ~/linux/etc/pbuilderrc /etc/pbuilderrc
+# sudo cp ~/linux/etc/pbuilderrc /etc/pbuilderrc
+# sudo scp ~/linux/etc/pbuilderrc virga.ess.uci.edu:/etc/pbuilderrc
+
+# Usage: 
+# DIST=sid sudo pbuilder create
+
+# Multi-chroot support from https://wiki.ubuntu.com/PbuilderHowto
+if (( ${#DIST} > 0 )); then
+        DISTRIBUTION="$DIST"
+        BASETGZ="`dirname $BASETGZ`/$DIST-base.tgz"
+        BUILDRESULT="/var/cache/pbuilder/$DIST/result/"
+        APTCACHE="/var/cache/pbuilder/$DIST/aptcache/"
+	# fxm: Assume sid for now
+	MIRRORSITE="http://http.us.debian.org/debian"
+else
+# Specify distribution for "pbuilder update"
+	DISTRIBUTION='sid'
+	MIRRORSITE="http://http.us.debian.org/debian"
+# Specify cache for APT
+	#APTCACHE="/var/cache/pbuilder/aptcache/"
+	#BASETGZ=/var/cache/pbuilder/base.tgz
+	#BUILDRESULT=/var/cache/pbuilder/result/
+fi
+
+APTCACHEHARDLINK="yes"
+REMOVEPACKAGES="lilo"
+#HOOKDIR="/usr/lib/pbuilder/hooks"
+HOOKDIR=""
+
+#EXTRAPACKAGES=gcc3.0-athlon-builder
+#export DEBIAN_BUILDARCH=athlon
+#BUILDPLACE=/var/cache/pbuilder/build/
+#OTHERMIRROR="deb ftp://ftp.us.debian.org/debian sid main"
+#NONUSMIRRORSITE=http://non-us.debian.org/debian-non-US
+#OTHERMIRROR="deb http://www.home.com/updates/ ./"
+#OTHERMIRROR="http://http.us.debian.org/debian/ sid main"
+#export http_proxy=http://your-proxy:8080/
+USEPROC=yes
+USEDEVPTS=yes
+USEDEVFS=no
+
+# Make debconf not interact with user
+export DEBIAN_FRONTEND="noninteractive"
+
+DEBEMAIL="Charlie Zender <zender@uci.edu>"
+
+# For pbuilder debuild
+BUILDSOURCEROOTCMD="fakeroot"
+PBUILDERROOTCMD="sudo"
+
+# Default is to build everything. Passed on to dpkg-buildpackage
+#DEBBUILDOPTS="-b"
+DEBBUILDOPTS=""
+
+# APT configuration files directory
+APTCONFDIR=""
+
+# Username and ID used by pbuilder, inside chroot. Needs fakeroot, really
+BUILDUSERID=3555
+BUILDUSERNAME=zender
+
+# BINDMOUNTS is a space-separated list of things to mount inside chroot
+BINDMOUNTS=""
+
+# Set debootstrap variant to 'buildd' type
+DEBOOTSTRAPOPTS[0]='--variant=buildd'
+# unset DEBOOTSTRAPOPTS

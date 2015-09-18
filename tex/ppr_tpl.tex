@@ -1,0 +1,352 @@
+%***********************************************************************
+% RCS Identification
+%***********************************************************************
+% $Author: zender $
+% $Date$
+% $Id$
+% $Revision$
+% $Locker:  $
+% $RCSfile: ppr_tpl.tex,v $
+% $Source: /home/zender/cvs/tex/ppr_tpl.tex,v $
+% $Id$
+% $State: Exp $
+%
+% Purpose: Template for quickie papers.
+%
+% $Log: not supported by cvs2svn $
+% Revision 1.1.1.1  1998-09-15 01:49:58  zender
+% Imported sources
+%
+% Revision 1.2  1993/10/11  20:37:20  zender
+% lots of tiny mods made.
+%
+% Revision 1.1  1993/05/30  23:41:14  zender
+% Initial revision
+%
+%***********************************************************************
+
+%***********************************************************************
+% Begin TeX notes
+%***********************************************************************
+% This is written for preprocessing by tib, the citation handler.
+% To use all the features of tib the following commands are necessary:
+% 
+% alias tib       'tib -d /u4/boettner/tib ' 		;in the .cshrc file 
+% alias tiblist   'tiblist -d /u4/boettner/tib '	;in the .cshrc file 
+%
+% tibdex clouds.ref		;creates INDEX
+% tib -s jgr clouds.tex		;creates clouds-t.tex
+%				;(-s = style, jgr = J. Geophys. Res. format)
+% tib clouds.tex		;uses default style
+% tex clouds-t.tex		;creates clouds-t.log and clouds-t.dvi
+% xdvi clouds-t.dvi		;X window previewer
+% dvips clouds-t.dvi		;creates clouds-t.ps
+% tiblist -s jgr clouds.ref	;creates tex file directly from references
+% tiblook <keyword>		;locates entry from reference file
+%
+% In order to include citations in the text do the following:
+% <, ramaswamy detwiler ,> includes the unique citation which has both
+% ramaswamy and detwiler as keywords in running text with
+% the year in parenthesis, while [, reference ,] (where the ``,'' is a ``.'')
+% puts the whole citation in parenthesis.
+%
+% This also uses the AMS TeX eplain.tex macro package for equation
+% numbering.  To define an equation number, place \eqdef{eqname} right
+% AFTER the equation.  To reference it in the text, use \eqref{eqname}
+% The same goes for figures, only use \figdef and \figref. CAUTION:
+% The figdef and eqdef macros use the same registers so naming a
+% figure the same as an equation will confuse it.
+%
+% Note the following style points: the word ``figure'' should always
+% be capitalized in text, i.e., and spelled in full at the beginning
+% of a sentence but abbreviated in the middle of a sentence. ``Table''
+% and ``Plate'' are the same but should never be abbreviated. And
+% letters identifying subgraphs, i.e., Fig.~7{\it a\/} are italicized 
+% in JGR but not JAS.
+% 
+% {\it Italicized\/} words should be followed by ``\/'' to adjust the
+% next space correctly (except when the following character is a
+% period or a comma). 
+% 
+% Forced spaces in math mode can be made by using the \ character,
+% although that allows line breaks (unlike ~ which doesn't work in
+% math mode), e.g., $\lambda = 8\ \mu$ instead of $\lambda = 8$~$\mu$.
+%
+%$$
+%e^{i\pi}=-1
+%\eqdef{eqn_name}
+%$$
+%
+%Figure~\figref{fig_name}{\it a\/} is on the next page.
+%
+%$$
+%e^{i\pi}=-1 \qquad\hbox{equation with text for $0 < w < 20$, 
+%{\it IWP} in g/m$^2$, $w$ in cm/s} 
+%\eqdef{eqn_name2}
+%$$
+%
+% Here's an example of a bulleted outline:
+%\vskip 1em
+%\item{a.} First
+%
+%\item{b.} Second
+%\itemitem{} sub-item
+%\itemitem{} sub-item
+%
+%\vskip 1em
+%
+%***********************************************************************
+% End TeX notes
+%***********************************************************************
+
+%***********************************************************************
+% Begin Preamble
+%***********************************************************************
+% Define general page, paragraph, and line formatting here.
+% macros for equation numbering
+\input /cgd/home/zender/tex/eplain
+% personal TeX definitions of item and month name
+\input /cgd/home/zender/tex/utilities
+% for inclusion of postscript figures /usr/local/lib/tex_family/tex/inputs/epsf.tex
+\input epsf
+% have tex report size of picture in output
+\epsfverbosetrue
+%
+\magnification=\magstep1
+\font\ninerm=cmr9
+\font\tenrm=cmr10
+\font\titlefont=cmr10 scaled\magstep1
+\font\slanttitlefont=cmsl10 scaled\magstep1
+\baselineskip=12pt
+\null
+%
+%Definitions, hyphenations, and macros.
+\def\reff{ {$r_{\rm e}$} }
+\def\IWP{ {\it IWP\/} }
+\hyphenation{va-por}
+\hyphenation{depo-sition}
+\hyphenation{short-wave}
+\hyphenation{long-wave}
+\hyphenation{anal-yzed}
+\hyphenation{envi-ron-mental}
+\hyphenation{cond-itions}
+\hyphenation{trop-ical}
+\hyphenation{meso-scale}
+\hyphenation{near-ly}
+\hyphenation{}
+\hyphenation{}
+\hyphenation{}
+\hyphenation{}
+%
+%***********************************************************************
+% End Preamble
+%***********************************************************************
+
+%***********************************************************************
+% Begin Title Page
+%***********************************************************************
+%Skip the page number on the title page
+\pageno=-1
+\headline={\tenrm {\it Draft of \today~~\timestring} \hfil \folio}
+\footline={\hfil}
+\nopagenumbers
+\baselineskip=20pt
+\ {\rm }
+\vskip 2.truein
+\centerline{Title of Paper}
+\centerline{Charles S. Zender}
+\vskip .5truein
+{\obeylines\smallskip
+\centerline{National Center for Atmospheric Research%
+\footnote*{The National Center for Atmospheric Research is sponsored by the National Science Foundation.}}
+\centerline{Boulder, Colorado 80307-3000}
+\vskip 1.truein
+\centerline{\today}}
+\centerline{{\it To be Submitted to JGR Atmospheres 1994}}
+\vfill\eject
+%
+%***********************************************************************
+% End Title Page
+%***********************************************************************
+
+%***********************************************************************
+% Begin Abstract 
+%***********************************************************************
+%Create the abstract:
+\bigskip
+\centerline{\it Abstract}
+\smallskip
+\baselineskip=20pt
+{\parindent=0truein \narrower \smallskip \ninerm
+\noindent
+Abstractulate here
+\smallskip}
+\baselineskip=20pt
+\vfill\eject
+%
+%***********************************************************************
+% End Abstract 
+%***********************************************************************
+
+%***********************************************************************
+% Begin Body of Paper
+%***********************************************************************
+\beginsection{1. Introduction} %the next line must be blank!
+
+The intro begins here. 
+%This will restore page numbering for rest of the manuscript. It
+%should go somewhere before page two text begins.
+\pageno=1
+\headline={\tenrm {\it Draft of \today~~\timestring} \hfil [\oldstyle\folio\tenrm]}
+%\headline={\tenrm \hfil [\oldstyle\folio\tenrm]}
+\footline={\hfil}
+%
+Ending line of a section.
+\medskip
+\noindent{\sl Sub-section heading}\nobreak
+
+Subsection begins here.
+
+\beginsection{2. Second Section} %the next line must be blank!
+
+%
+\medskip
+\baselineskip=20pt
+\noindent{\it Acknowledgements.}
+The authors wish to thank everybody.
+This work was supported in part by Earth Observing System project
+W-17,661. 
+\baselineskip=20pt
+%
+\vfill\eject
+%***********************************************************************
+% End Body of Paper
+%***********************************************************************
+
+%***********************************************************************
+% Begin Appendices
+%***********************************************************************
+%\centerline{APPENDIX}
+%\bigskip
+%\noindent{\bf Appendix name here}
+%\bigskip
+%
+%\vfill\eject
+%***********************************************************************
+% End Appendices
+%***********************************************************************
+
+%***********************************************************************
+% Begin References
+%***********************************************************************
+% A percent followed immediately by tib citations means the citations
+% will be added to the reference list but won't be cited by tib
+% anywhere in the paper.  this is useful for citations which had to
+% be formatted by hand.
+% the following .[] is used by tib to generate the reference list
+%[,extra references,],[,more references,] 
+\centerline{REFERENCES}
+\bigskip
+.[]
+\vfill\eject
+%***********************************************************************
+% End References
+%***********************************************************************
+
+%***********************************************************************
+% Begin Tables
+%***********************************************************************
+\nopagenumbers
+\baselineskip=16pt
+% The '#' means ``stick the text of each column entry in this place''.
+% The '&' is like the the tab key on the typewriter, TeX backs up to
+% the beginning of the current column then advances one column exactly.
+% \cr signifies the end of the row, all unfilled columns are assumed
+% blank (TeXbook, p. 231). 
+% Here's an example of a formatted table placed in the middle of the text:
+%\midinsert
+%$$
+%\vbox{
+%\halign{
+% Here is the template for the table:
+%# \hfil \qquad & # \hfil \qquad \cr
+%
+%\noalign{\hrule}
+%\noalign{\vskip-2pt}
+%\noalign{\hrule}
+%\noalign{\vskip6pt}
+%\multispan2{\hfil Initial Properties of Standard Cloud \hfil} \cr
+%\noalign{\vskip4pt}
+%\noalign{\hrule}
+%\noalign{\vskip4pt}
+%Cloud base (km) & 11\cr
+%Maximum vertical updraft (cm-s$^{-1}$) & 5\cr
+%\noalign{\vskip4pt}
+%\noalign{\hrule}
+%
+%} % end halign
+%} % end vbox
+%$$
+\baselineskip=12pt
+%{\bf Table~1.} The initial cloud properties are shown above. 
+%The {\it mean\/} properties are vertical averages within the cloud. 
+\baselineskip=16pt
+%\endinsert
+%
+%
+\baselineskip=16pt
+\vfill\eject
+%***********************************************************************
+% End Tables
+%***********************************************************************
+
+%***********************************************************************
+% Begin Figure Captions
+%***********************************************************************
+%Print out the figure captions on their own pages in their own font.
+%Skip the page number on the figure caption pages.
+\nopagenumbers
+\baselineskip=20pt
+%
+%Here's a typical figure caption:
+%\bigskip
+%\vbox{
+%\noindent{\bf  Figure~\figdef{fig_name}}.
+%({\it a\/}) Figure blurb goes here.
+%({\it b\/}) 
+%}
+%
+%Reset the font from the figure caption settings to the text body:
+\baselineskip=20pt
+\tenrm
+\vfill\eject
+%***********************************************************************
+% End Figure Captions
+%***********************************************************************
+
+%***********************************************************************
+% Begin Figure Graphics w/o captions
+%***********************************************************************
+%
+%\epsfxsize=6.5in
+%\null\bigskip\centerline{\epsffile{/home/zender/web/papers/cir_rad_sens/figure_1.ps}}
+%\bigskip\vbox{\centerline{\noindent{\bf Figure~1}.}}
+%
+%***********************************************************************
+% End Figure Graphics w/o captions
+%***********************************************************************
+
+%***********************************************************************
+% End Document
+%***********************************************************************
+%
+\bye
+
+
+
+
+
+
+
+
+

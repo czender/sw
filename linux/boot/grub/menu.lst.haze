@@ -1,0 +1,135 @@
+# $Header: /home/zender/cvs/linux/boot/grub/menu.lst.haze,v 1.2 2004-09-28 00:58:46 zender Exp $
+# Purpose: Menu file for GRUB bootloader
+# Usage:
+# diff /boot/grub/menu.lst ~/linux/boot/grub/menu.lst.haze
+# diff ~/linux/boot/grub/menu.lst.haze /boot/grub/menu.lst 
+
+# cp /boot/grub/menu.lst ~/linux/boot/grub/menu.lst.haze
+# sudo cp ~/linux/boot/grub/menu.lst.haze /boot/grub/menu.lst
+# sudo scp /home/zender/linux/boot/grub/menu.lst.haze haze.ess.uci.edu:/boot/grub/menu.lst
+
+default saved
+timeout 15
+color cyan/blue white/blue
+foreground ffffff
+background 2f5178
+splashimage /boot/grub/mepis.xpm.gz
+
+title MEPIS at hda1, kernel 2.4.26
+kernel (hd0,0)/boot/vmlinuz-2.4.26 root=/dev/hda1 nomce vga=788 hdb=ide-scsi 
+
+title MEPIS at hda1, kernel 2.6.5
+kernel (hd0,0)/boot/vmlinuz-2.6.5 root=/dev/hda1 nomce psmouse.proto=imps vga=788 
+
+title Sid kernel 2.6.8
+kernel (hd0,0)/boot/vmlinuz-2.6.8-1-686 root=/dev/hda1 nomce psmouse.proto=imps vga=788 
+initrd	/boot/initrd.img-2.6.8-1-686
+savedefault
+
+title MEMTEST
+kernel /boot/memtest86.bin
+
+title Use a qwerty keyboard with GRUB
+setkey y y
+setkey Y Y
+setkey q q
+setkey Q Q
+setkey w w
+setkey W W
+setkey a a
+setkey A A
+setkey semicolon semicolon
+setkey colon colon
+setkey z z
+setkey Z Z
+setkey m m
+setkey M M
+setkey comma comma
+setkey less less
+setkey period period
+setkey greater greater
+setkey slash slash
+setkey bracketright bracketright
+setkey backslash backslash
+setkey doublequote doublequote
+setkey 1 1
+setkey exclam exclam
+setkey 2 2
+setkey at at
+setkey 3 3
+setkey numbersign numbersign
+setkey 4 4
+setkey dollar dollar
+setkey 5 5
+setkey percent percent
+setkey 6 6
+setkey caret caret
+setkey 7 7
+setkey ampersand ampersand
+setkey 8 8
+setkey asterisk asterisk
+setkey 9 9
+setkey parenleft parenleft
+setkey 0 0
+setkey parenright parenright
+setkey minus minus
+setkey backquote backquote
+setkey tilde tilde
+setkey braceright braceright
+setkey question question
+setkey braceleft braceleft
+setkey quote quote
+setkey underscore underscore
+
+title Utiliser un clavier azerty avec GRUB
+setkey y y
+setkey Y Y
+setkey a q
+setkey A Q
+setkey z w
+setkey Z W
+setkey q a
+setkey Q A
+setkey m semicolon
+setkey M colon
+setkey w z
+setkey W Z
+setkey comma m
+setkey question M
+setkey semicolon comma
+setkey period less
+setkey colon period
+setkey slash greater
+setkey exclam slash
+setkey dollar bracketright
+setkey asterisk backslash
+setkey percent doublequote
+setkey ampersand 1
+setkey 1 exclam
+setkey tilde 2
+setkey 2 at
+setkey doublequote 3
+setkey 3 numbersign
+setkey quote 4
+setkey 4 dollar
+setkey parenleft 5
+setkey 5 percent
+setkey minus 6
+setkey 6 caret
+setkey backquote 7
+setkey 7 ampersand
+setkey underscore 8
+setkey 8 asterisk
+setkey caret 9
+setkey 9 parenleft
+setkey at 0
+setkey 0 parenright
+setkey parenright minus
+setkey less backquote
+setkey greater tilde
+setkey numbersign braceright
+setkey backslash question
+setkey bracketright braceleft
+setkey braceleft quote
+setkey braceright underscore
+

@@ -1,0 +1,1 @@
+APMD_OPTIONS="-p 10 -w 5 -W -r /usr/local/bin/i7500_apmd.sh"

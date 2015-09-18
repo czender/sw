@@ -1,0 +1,211 @@
+% $Id$
+
+% Purpose: Macros for business letters. This file should be included
+% in the actual TeX letter file with \include lettermacros
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin Define fonts.  
+% Special fonts are loaded with true sizes so that they are not
+% affected by magnification.  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\font\smallheadfont=cmr10 at 10truept
+\font\sendaddressfont=cmr10 
+\font\tenrm=cmr10
+\font\tenrmPTtwelve=cmr10 at 12.00truept	  
+\font\tenssMone=cmss10 scaled\magstep1
+\font\tenssMzero=cmss10 scaled\magstep0
+\font\eightslMzero=cmsl8 scaled\magstep0
+\font\seventiMzero=cmti7 scaled\magstep0
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% End Define fonts.  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin Page layout
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\raggedbottom % allows the bottom of each page to float slightly, turn
+	      % off with \normalbottom
+\interlinepenalty=1000 % penalty for breaking pages within a
+		       % paragraph, normally set to 0 and to 100
+		       % within footnotes
+\hsize=6.25truein % width of each normal line of text on page
+\voffset=24pt % bulk vertical offset of each page when printed
+\advance\vsize by-\voffset
+\parindent=0pt % make blocky paragraphs
+\parskip=0pt % no extra space or stretchability in vertical space between paragraphs
+\nopagenumbers % page numbering will be done manually 
+\newdimen\longindentation \longindentation=4truein % where the date goes
+
+\headline={\ifnum\pageno>1
+%  \tenrm To \addressee\hfil\today\hfil Page \folio
+  \hfil Page \folio
+  \else\hfil\fi}
+
+\footline=
+{\ifnum\formalfooter=1 % test if we want a fancy footer
+\vbox{
+\baselineskip=8pt
+\seventiMzero
+\centerline
+{The National Center for Atmospheric Research is operated by the University 
+Corporation}
+\centerline
+{for Atmospheric Research under sponsorship of the National Science 
+Foundation.}
+\vskip.2em
+\centerline {An Equal Opportunity/Affirmative Action Employer}
+}\fi} % end if formalfooter
+%
+\footline={\ifnum\pageno>1 \hfil \fi}
+\def\nofooter{\footline={\hfil}}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% End Page layout
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin Mode macros.
+% These discriminate between regular paragraphs and special letterhead
+% formats and disallow page breaks between the \body and the beginning
+% of a \ps.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\beginlinemode{\endmode
+        \begingroup\obeylines \def\endmode{\par\endgroup}}
+\def\beginparmode{\endmode
+        \begingroup\parskip=\medskipamount \def\endmode{\par\endgroup}}
+\let\endmode=\par
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% End Mode macros.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin Define User macros
+% These are the macros which may be included in the actual TeX letter.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newbox\theaddress
+\def\address{\beginlinemode\getaddress}
+{\obeylines\gdef\getaddress #1
+  #2
+  {#1\gdef\addressee{#2}%
+    \global\setbox\theaddress=\vbox\bgroup\raggedright%
+    \hsize=\longindentation \everypar{\hangindent2em}#2
+    \def\endmode{\egroup\endgroup \copy\theaddress \bigskip}}}
+%
+\def\today{
+  \ifcase\month\or
+  January\or February\or March\or April\or May\or June\or July\or August
+  \or September\or October\or November\or December
+  \fi
+  \space\number\day, \number\year
+}
+%
+\def\endletter{\endmode\vfill\supereject}
+%
+\def\body{\beginparmode}
+%
+\def\closing{\beginlinemode\getclosing}
+{\obeylines\gdef\getclosing #1
+  #2
+  {#1\nobreak\bigskip \leftskip=\longindentation #2
+    \nobreak\bigskip\bigskip\bigskip % space for signature
+    \def
+    {\endgraf\nobreak}}}
+%
+\def\annotations{\beginlinemode\def\par{\endgraf\nobreak}\obeylines\par}
+%
+\def\ps{\beginparmode\nobreak
+  \interlinepenalty5000\def\par{\endgraf\penalty5000}}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% End Define User macros
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin Letterhead entry point macro. 
+% Define my return address for the letterhead and a return address for
+% mailing labels. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\addressdefine{
+%  \def\sendingaddress{Charles S. Zender\par
+%    Climate Modelling Section\par
+%    zender@ncar.ucar.edu\par
+%    (303)\thinspace 497-1612\par}
+  \def\sendingaddress{Charles S. Zender\par
+    NCAR ASP \& CGD\par
+    P. O. Box 3000\par
+    Boulder, CO 80307-3000\par
+    zender@ncar.ucar.edu\par
+    (303)\thinspace 497-1612\par}
+%  \def\sendingaddress{CHARLES S. ZENDER\par
+%    CLIMATE MODELLING SECTION\par
+%    ZENDER@NCAR.UCAR.EDU\par
+%    (303)\thinspace 497-1612\par}
+  \def\returnaddress{Charles S. Zender\par
+    NCAR ASP & CGD\par
+    P. O. Box 3000\par
+    Boulder, CO 80307-3000}
+  }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% End Letterhead entry point macro. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin Compose letterhead
+% Lays out theinstitution's letterhead, my return address and the
+% current date.  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\countdef\formalfooter=37 % places the footer switch value in register 37
+\def\formalletterhead{\pageno=1 \def\addressee{} \ncarletterhead
+\formalfooter=1 % turn on the formal footer
+  {\leftskip=\longindentation
+    {\baselineskip14truept\sendaddressfont\sendingaddress}
+    \bigskip\bigskip\tenrm\today\bigskip}}
+\def\informalletterhead{\pageno=1 \def\addressee{} 
+\formalfooter=0 % turn off the formal footer
+  {\leftskip=\longindentation
+    {\baselineskip14truept\sendaddressfont\sendingaddress}
+    \bigskip\bigskip\tenrm\today\bigskip}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% End Compose letterhead
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin Define the glorious banner of NCAR! 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\ncarletterhead{
+\vglue-\voffset
+\tenrmPTtwelve
+\centerline {NATIONAL\enspace CENTER\enspace FOR\enspace ATMOSPHERIC\enspace 
+RESEARCH}
+\vskip3pt
+\tenssMone
+\centerline {Climate and Global Dynamics Division}
+\tenssMzero
+\centerline {P.O. Box 3000 $\bullet$ Boulder, Colorado 80307-3000}
+\vskip-1.5pt
+\eightslMzero
+\centerline {Telephone:  (303)\thinspace 497-1000 $\bullet$ FAX:  (303)\thinspace 497-1324}
+\vskip2truept
+%\hrule
+\vskip10truept
+%return the font to normal
+\tenrm
+} %end \def\ncarletterhead
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% End Define the glorious banner of NCAR! 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin Define how to make a mailing label
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\makelabel{\endletter\hbox{\vrule
+    \vbox{\hrule \kern6truept
+      \hbox{\kern6truept\vbox to 2truein{\hsize=\longindentation
+	  \smallheadfont\baselineskip10truept\returnaddress
+          \vfill\moveright 2truein\copy\theaddress\vfill}%
+        \kern6truept}\kern6truept\hrule}\vrule}
+  \pageno=0\vfill\eject}		
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% End Define how to make a mailing label
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

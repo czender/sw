@@ -1,0 +1,10 @@
+$Id$
+
+This directory, ~/sltsbl, contains routines to generate and parameterize 
+saltation-sandblasting physics simulations. The original routines are all 
+by Alf Grini who implemented the saltation-sandblasting theory of Alfaro 
+& Gomes (2001).
+
+lookuptable_final.f	Alf's original (F77) code, unmodified
+sltsbl.F90		Cleaned up, F95 version of Alf's code
+formatlab.m		MATLAB routines for plotting data

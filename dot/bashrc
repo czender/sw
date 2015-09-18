@@ -1,0 +1,1347 @@
+# $Id$ -*-shell-script-*-
+
+# Purpose: Universal .bashrc file, executed at start of any sub-shell
+
+# Source: Translation of ~/dot/cshrc v. 1.106 of 20000103
+# 20000103: Function definitions are not allowed inside if statements in Bash 2.x
+
+# Bash login shells execute one of (in order) .bash_profile, .bash_login, .profile
+# .bashrc is executed at start of any subshell
+# .bash_logout is executed every time a Bash login shell exits
+# System-wide versions in /etc/bashrc and /etc/profile are
+
+# Bash implements many features not supported by standard shells
+# One gotcha is that Bash functions may be defined with either of two syntaxes:
+# 1. fnc_nm () { foo ; }
+# 2. function fnc_nm { foo ; }
+# Standard /bin/sh syntax is only guaranteed to support the former method 
+
+# Usage: 
+# /bin/cp -f ${HOME}/.bashrc /fs/cgd/home0/${USER}
+# scp -p ${HOME}/dot/bashrc dust.ess.uci.edu:.bashrc
+# scp -p ${HOME}/dot/bashrc ipcc.ess.uci.edu:.bashrc
+# scp -p ${HOME}/dot/bashrc rhea.ccs.ornl.gov:.bashrc
+# scp -p ${HOME}/dot/bashrc cooley.alcf.anl.gov:.bashrc
+
+# RedHat Linux 7.x does not define PS1 in /etc/bashrc
+if [ -f /etc/bashrc ]; then
+# fxm: 20030206 Seems to cause infinite recursion
+#    source /etc/bashrc
+    sleep 0 # fxm
+fi # endif
+
+function fl_is_exe {
+# Purpose: Check if file exists and is executable
+# Usage: if fl_is_exe ${fl} ; then ; ${fl} ; fi
+    local fl
+    fl=${1} # String substitution operator NeR98 p. 95, 98
+    fl=${fl:?"ERROR: fl_is_exe() requires filename as argument"}
+    test -f "${fl}" -a -x "${fl}"
+    # By default, functions return exit status of last command executed
+} # end fl_is_exe()
+
+function lprpdf {
+# Purpose: Convert PDF file to Postscript, send result to printer
+# Usage: lprpdf ${fl}
+    local fl
+    local cmd
+    fl=${1}
+# acroread -toPostScript -level2 -size letter -pairs -shrink ${fl} ${fl/pdf/ps}
+    cmd="pdf2ps ${fl} ${fl/pdf/ps}; lpr ${fl/pdf/ps}; rm ${fl/pdf/ps}"
+    printf "Issuing command: ${cmd}\n"
+    ${cmd}
+} # end restart()
+
+function restart {
+# Purpose: Restart daemon
+# Usage: restart ${dmn}
+    local dmn
+    local cmd
+    dmn=${1}
+    cmd="sudo /etc/init.d/${dmn} restart"
+    printf "Issuing command: ${cmd}\n"
+    ${cmd}
+} # end restart()
+
+function start {
+# Purpose: Start daemon
+# Usage: start ${dmn}
+    local dmn
+    local cmd
+    dmn=${1}
+    cmd="sudo /etc/init.d/${dmn} start"
+    printf "Issuing command: ${cmd}\n"
+    ${cmd}
+} # end start()
+
+function stop {
+# Purpose: Stop daemon
+# Usage: stop ${dmn}
+    local dmn
+    local cmd
+    dmn=${1}
+    cmd="sudo /etc/init.d/${dmn} stop"
+    printf "Issuing command: ${cmd}\n"
+    ${cmd}
+} # end stop()
+
+function bsh_mjr_vrs_ge_2 {
+# Purpose: Return true if major version of Bash shell is >= 2
+# Usage: if bsh_mjr_vrs_ge_2 ; then ...; fi
+    local vrs
+    if [ -n ${BASH_VERSION} ]; then
+	let vrs=${BASH_VERSION%%.*} # NeR98 p. 100
+	if [ ${vrs} -ge 2 ] ; then # NeR98 p. 153
+	    return 0; # 0 is true in shell-ese
+	fi # endif
+    fi # endif
+    # By default, functions return exit status of last command executed
+    return 1; # 1 is false in shell-ese
+} # end fl_is_exe()
+
+# 20150519: List dimensions in netCDF file
+function ncdmnlist { ncks --cdl -m ${1} | cut -d ':' -f 1 | cut -d '=' -s -f 1 ; }
+# 20120402: List variables in netCDF file
+function nclist { ncks -m ${1} | grep -E ': type' | cut -f 1 -d ' ' | sed 's/://' | sort ; }
+# 20120519: Obtain attribute values in netCDF file
+# Invoke with ncattget $att_nm $var_nm $fl_nm
+function ncattget { ncks -M -m ${3} | grep -E -i "^${2} attribute [0-9]+: ${1}" | cut -f 11- -d ' ' | sort ; }
+# 20121113: Which variables have units attributes with a given value?
+# Invoke with ncunits $att_val $fl_nm
+function ncunits { ncks -M -m ${2} | grep -E -i " attribute [0-9]+: units.+ ${1}" | cut -f 1 -d ' ' | sort ; }
+# Invoke with ncrecsz $fl_nm
+function ncrecsz { ncks -M ${1} | grep -E -i "^Record dimension:" | cut -f 8- -d ' ' ; }
+# Invoke with ncdmnsz $dmn_nm $fl_nm
+function ncdmnsz { ncks -m -M ${2} | grep -E -i ": ${1}, size =" | cut -f 7 -d ' ' | uniq ; }
+# Invoke with ncmax $var_nm $fl_nm
+function ncmax { ncap2 -O -C -v -s "foo=${1}.max();print(foo)" ${2} ~/foo.nc | cut -f 3- -d ' ' ; }
+# Invoke with ncavg $var_nm $fl_nm
+function ncavg { ncap2 -O -C -v -s "foo=${1}.avg();print(foo)" ${2} ~/foo.nc | cut -f 3- -d ' ' ; }
+# Invoke with ncmdn $var_nm $fl_nm
+function ncmdn { ncap2 -O -C -v -s "foo=gsl_stats_median_from_sorted_data(${1}.sort());print(foo)" ${2} ~/foo.nc | cut -f 3- -d ' ' ; }
+# Invoke with ncrng $var_nm $fl_nm
+function ncrng { ncap2 -O -C -v -s "foo_min=${1}.min();foo_max=${1}.max();print(foo_min,\"%f\");print(\" to \");print(foo_max,\"%f\")" ${2} ~/foo.nc ; }
+
+# 20010520: USER is not automatically set on Solaris
+if [ -z "${USER}" ]; then
+    export USER=`whoami`
+fi # endif USER
+
+if fl_is_exe ${HOME}/sh/pvmgetarch ; then
+    export PVM_ARCH=`${HOME}/sh/pvmgetarch`
+elif fl_is_exe /fs/cgd/home0/${USER}/sh/pvmgetarch ; then
+    export PVM_ARCH=`/fs/cgd/home0/${USER}/sh/pvmgetarch`
+else
+    export PVM_ARCH=LINUX
+fi # endif pvmgetarch
+
+if fl_is_exe ${HOME}/nco/autobld/config.guess ; then
+    export GNU_TRP=`${HOME}/nco/autobld/config.guess` # GNU triplet
+fi # endif GNU_TRP
+
+# 19991201: Sometimes HOST is not set in qsub batch mode
+if [ -z "${HOST}" ]; then
+    if fl_is_exe /bin/hostname ; then
+	export HOST=`/bin/hostname`
+    elif fl_is_exe /usr/bin/hostname ; then
+	export HOST=`/usr/bin/hostname`
+    else
+	# 20070423 SGI tempest uses this method
+	export HOST=`uname -n `
+    fi # endif hostname exists
+fi # endif HOST
+
+# Use Tcsh-6.06 REMOTEHOST variable to set DISPLAY
+if [ -n "${REMOTEHOST}" ]; then
+    export DISPLAY="${REMOTEHOST}:0"
+else 
+    case "${PVM_ARCH}" in 
+    SUN* ) 
+# Setting DISPLAY to unix:0 automatically fouls up cvs ccm checkins
+#	export DISPLAY="unix:0"
+	unset DISPLAY
+	# Enables Sun's shared memory transport
+	export XSUNTRANSPORT=shmem
+	export XSUNSMESIZE=256
+    ;; # endif SUN*
+    esac # endcase ${PVM_ARCH}
+fi # endif local host
+
+# Clean up frequently set environment variables (many Makefiles depend on these)
+#unset CC
+#unset CXX
+#unset FC
+#unset F90
+#unset CFLAGS
+#unset FFLAGS
+#unset F90FLAGS
+#unset LDFLAGS
+
+# Export primary custom environment variables (many Makefiles depend on these)
+export MY_BIN_DIR=${HOME}/bin
+export MY_LIB_DIR=${HOME}/lib
+export MY_OBJ_DIR=${HOME}/obj
+export MY_INC_DIR=${HOME}/include
+
+# *PATH:
+# Do NOT use ~ in setting paths. MANPATH, e.g., does not expand ~ when searching paths
+
+# PATH:
+# Make sure /usr/local/bin comes after all the specialized (/opt)
+# install directories in order to get the latest versions of, e.g., emacs.
+# /usr/ucb/bin should also come after the /opt directories, which
+# contain programs that supercede /usr/ucb/bin, e.g., cc.
+
+# LD_LIBRARY_PATH:
+# Sun ld searches -L libraries first, then LD_LIBRARY_PATH, if any, 
+# then built-in standard library directories: /lib, /usr/lib, and /usr/local/lib.  
+# Sun ld does not find libraries specified by -L,-l unless they appear after object file names 
+# Library link order is significant, so load -lsunmath last
+# /usr/ucblib causes some GNU installations to fail, 
+# JMR reports removing /usr/ucblib causes metamail to fail.
+# IBM ld searches -L libraries first, then LIBPATH, if any,
+# then built-in standard library directories: /usr/lib, /lib 
+# IBM ld recognizes LIBPATH environment variable (not LD_LIBRARY_PATH)
+
+# MANPATH:
+# Put /usr/local/man last. 
+
+# Initalize all paths to current directory (insecure, but frequently useful)
+LD_LIBRARY_PATH='./'
+MANPATH='./'
+PATH='./'
+
+# My executables 
+PATH=${PATH}\:${HOME}/sh
+PATH=${PATH}\:${HOME}/bin
+
+# Set operating system dependent paths and packages...
+case "${PVM_ARCH}" in 
+    
+    AIX* ) # AIX on acd.ucar.edu, AIX46K on blackforest
+	export NCARG_ROOT='/usr/local/ncarg'
+	export OBJECT_MODE='64' # AIX-specific hack
+        export LC_ALL='C' # Quiet Locale warnings on ESQF
+#        export PERL_BADLANG=1 # Quiet Locale warnings on ESQF
+	export SYSTYPE='BSD'
+	export X11='/usr/lib/X11'
+	case "${HOST}" in 
+	    esqf* ) # UCI
+#		export DATA=/ptmp/${USER}
+		export DATA=/data/${USER}
+		export NETCDF_INC=/usr/local/include
+		export NETCDF_LIB=/usr/local/lib # 64 bit ABI (default)
+		export TEXMFDIR='/fxm' # One level above bibtex, tex,
+		case "${HOST}" in 
+		    esqf0[1-7]* ) # UCI
+		    export OMP_NUM_THREADS=8 # OpenMP
+		    ;; # endif UCI
+		    esqf0[8]* ) # UCI
+		    export OMP_NUM_THREADS=32 # OpenMP
+		    ;; # endif UCI
+		esac # endcase ${HOST}
+		;; # endif UCI
+	esac # endcase ${HOST}
+	
+	PATH=${PATH}\:/usr/local/bin
+	PATH=${PATH}\:/usr/bin
+	PATH=${PATH}\:/usr/ucb
+# Five directories specific to IBM SP
+	PATH=${PATH}\:/usr/lpp/xlf/lib
+	PATH=${PATH}\:/usr/lpp/xlf/bin
+	PATH=${PATH}\:/usr/lpp/X11/bin
+	PATH=${PATH}\:/usr/vac/bin
+	PATH=${PATH}\:/usr/vacpp/bin
+	PATH=${PATH}\:/bin
+	PATH=${PATH}\:/sbin
+	PATH=${PATH}\:/usr/sbin
+	PATH=${PATH}\:/usr/bin/X11
+	PATH=${PATH}\:${NCARG_ROOT}/bin
+	PATH=${PATH}\:/usr/local/sbin
+	case "${HOST}" in 
+	    esqf* ) # UCI
+		PATH=${PATH}\:/usr/lpp/LoadL/full/bin
+		MANPATH=${MANPATH}\:/usr/lpp/LoadL/full/man
+		;; # endif UCI
+	esac # endcase ${HOST}
+	
+	MANPATH=${MANPATH}\:${HOME}/nco/man
+	MANPATH=${MANPATH}\:/local/man
+	MANPATH=${MANPATH}\:/usr/man
+	MANPATH=${MANPATH}\:/usr/local/man
+
+# AIX uses LIBPATH not LD_LIBRARY_PATH
+# Set LD_LIBARARY_PATH for consistency, then copy to LIBPATH
+# 20061129: LD_LIBRARY_PATH behavior is inexplicable on bluevista---do not set
+#	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MY_LIB_DIR}
+#	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
+#	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
+# fxm LIBPATH behavior is inexplicable on ESQF---do not export
+#	export LIBPATH=${LD_LIBRARY_PATH}
+
+	;; # endif AIX*
+    
+    ALPHA* ) # 
+	
+	export NETCDF_INC=/usr/local/include
+#    export NETCDF_LIB=/usr/local/lib32/r4i4 # 32 bit ABI
+	export NETCDF_LIB=/usr/local/lib64/r4i4 # 64 bit ABI (default)
+	export OMP_NUM_THREADS=4 # OpenMP
+	export SYSTYPE=BSD
+	export X11=/usr/lib/X11
+	PATH=${PATH}\:/local/bin
+	PATH=${PATH}\:/usr/local/bin
+	PATH=${PATH}\:/bin
+	PATH=${PATH}\:/usr/bin
+	PATH=${PATH}\:/sbin
+	PATH=${PATH}\:/usr/sbin
+	PATH=${PATH}\:/usr/ucb
+	PATH=${PATH}\:/usr/bin/X11
+	
+	MANPATH=${MANPATH}\:${HOME}/nco/man
+	MANPATH=${MANPATH}\:/local/man
+	MANPATH=${MANPATH}\:/usr/man
+	MANPATH=${MANPATH}\:/usr/local/man
+	;; # endif ALPHA*
+    
+    CRAY )
+	export DATA=/fs/cgd/data0/${USER}
+	export NCARG_ROOT=/usr/local/lib/ncarg
+	export NETCDF_INC=/usr/local/include
+	export NETCDF_LIB=/usr/local/lib
+	export OMP_NUM_THREADS=8 # OpenMP
+	export SYSTYPE=SVR4
+	if [ -d /fs/cgd/home0/${USER}/sh ]; then 
+	    PATH=${PATH}\:/fs/cgd/home0/${USER}/sh
+	fi # endif
+	PATH=${PATH}\:/ccm/proc/tools
+	PATH=${PATH}\:/fs/cgd/home0/jet/craybin
+	PATH=${PATH}\:/usr/bin/X11
+	PATH=${PATH}\:/bin
+	PATH=${PATH}\:/usr/bin
+	PATH=${PATH}\:/usr/ucb
+	PATH=${PATH}\:/usr/local/bin
+	MANPATH=${MANPATH}\:/usr/man
+	MANPATH=${MANPATH}\:/X/X11/man
+	MANPATH=${MANPATH}\:/usr/local/man
+    # Only CRAY has PrgEnv module for C++
+	if [ -f '/opt/modules/modules/init/bash' ]; then
+	    source /opt/modules/modules/init/bash
+	    module load modules PrgEnv nqe mpt
+	fi # endif 
+	;; # endif CRAY
+    
+    HPPA* ) # 
+	
+	export NETCDF_INC=/usr/local/include
+#    export NETCDF_LIB=/usr/local/lib32/r4i4 # 32 bit ABI
+	export NETCDF_LIB=/usr/local/lib64/r4i4 # 64 bit ABI (default)
+	export OMP_NUM_THREADS=4 # OpenMP
+	export SYSTYPE=BSD
+	export X11=/usr/lib/X11
+	PATH=${PATH}\:/local/bin
+	PATH=${PATH}\:/usr/local/bin
+	PATH=${PATH}\:/bin
+	PATH=${PATH}\:/usr/bin
+	PATH=${PATH}\:/sbin
+	PATH=${PATH}\:/usr/sbin
+	PATH=${PATH}\:/usr/ucb
+	PATH=${PATH}\:/usr/bin/X11
+	
+	MANPATH=${MANPATH}\:${HOME}/nco/man
+	MANPATH=${MANPATH}\:/local/man
+	MANPATH=${MANPATH}\:/usr/man
+	MANPATH=${MANPATH}\:/usr/local/man
+	;; # endif HPPA*
+    
+    LINUX* ) # LINUX on i386 machines, LINUXALPHA on Alpha CPUs, LINUXAMD64 on Opteron and EMT64 CPUs
+#    export CLASSPATH=.:/usr/local/ncBrowse/ncBrowse.jar:/usr/local/ncBrowse/HTTPClient.jar:/usr/local/ncBrowse/noaa_pmel.jar:/usr/local/ncBrowse/netcdf2dods.jar # Location of Java archives
+	export IDL_DIR='/usr/local/rsi/idl'
+	export INFOPATH="./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/share/info"
+	export MPSTKZ='8M' # For PGI CCM http://www.pgroup.com/ppro_docs/pgiws_ug/pgi30u02.htm#Heading14
+#	export NCARG_ROOT='/usr/local/ncarg' # Hand-installed
+	export NCARG_ROOT='/usr' # RPM-installed
+	export NCARG_ROOT_LIB='/usr/share' # RPM-installed
+	export SYSTYPE='BSD' # Used by killproc
+#	export TEXMFDIR='/usr/share/texmf' # One level above bibtex, tex,
+#	export TEXMFDIR='/usr/share/texlive' # One level above bibtex, tex,
+	export TEXMFDIR='/usr/share/texmf-texlive' # One level above bibtex, tex,
+	export X11='/usr/X11R6'
+	case "${HOST}" in 
+	    cooley* ) export DATA="/projects/HiRes_EarthSys/${USER}" ; ;; # endif ALCF
+	    edison* ) export DATA="${HOME}/data" ; ;; # endif NERSC
+	    gplogin* ) export DATA="/data/${USER}" ; ;; # endif EMT64 Rocks Cluster
+	    hpc* ) export DATA="/data/users/${USER}" ; ;; # endif hpc
+	    hopper* ) export DATA="${HOME}/data" ; ;; # endif NERSC
+	    mirage* ) export DATA="/glade/scratch/${USER}" ; ;; # endif mirage
+	    pileus* ) export DATA="/home/${USER}/data" ; ;; # endif CADES
+	    rhea* ) export DATA="/lustre/atlas/proj-shared/cli115/${USER}" ; ;; # endif OLCF
+	    ys* ) export DATA="/glade/p/work/${USER}" ; ;; # endif NCAR
+		* ) export DATA="/data/${USER}" ; ;; # endif default
+	esac # endcase ${HOST}
+# PKG_ROOT is where non-default sysadmin-installed packages reside
+# PKG_ROOT is usually argument to configure --prefix=${PKG_ROOT}
+# ROCKS_ROLLS_ROOT is where Rocks clusters put rolls
+	case "${HOST}" in 
+	    gplogin* | mirage* | hpc* | pbs* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # endif EMT64 Rocks Cluster
+	esac # endcase ${HOST}
+	case "${HOST}" in 
+	    aerosol* ) PKG_ROOT='/opt/local' ; ;; # endif MAC OS X
+	    gplogin* ) PKG_ROOT='/sopt' ; ;; # endif EMT64 Rocks Cluster
+	    ipcc* ) PKG_ROOT='/opt' ; ;; # endif Rocks cluster
+	    pbs* ) PKG_ROOT='/usr/local' ; ;; # endif Ubuntu-stock
+	    mirage* ) PKG_ROOT='/fs/local' ; ;; # endif NCAR cluster
+	    hpc* ) PKG_ROOT='/software' ; ;; # endif Torque machines
+	    virga* ) PKG_ROOT='/usr/local' ; ;; # endif Ubuntu-stock
+	    * ) PKG_ROOT='/usr/local' ; ;; # endif default
+	esac # endcase ${HOST}
+	export NETCDF_ROOT="${PKG_ROOT}"
+	export NETCDF4_ROOT="${PKG_ROOT}"
+	case "${HOST}" in 
+# Use local build rather than RPM to get linking correct
+	    gplogin* ) export NETCDF_ROOT="/home/pvicente/install/netcdf-4.3.0" ; export NETCDF4_ROOT="/home/pvicente/install/netcdf-4.3.0" ; ;; # endif EMT64 Rocks Cluster
+#	    gplogin* ) export HDF5_ROOT="${PKG_ROOT}/hdf5-1.8.11"; export NETCDF_ROOT="${PKG_ROOT}/netcdf/netcdf411-gcc-serial" ; export NETCDF4_ROOT="${PKG_ROOT}/netcdf/netcdf411-gcc-serial" ; ;; # endif EMT64 Rocks Cluster
+#	    gplogin* ) export HDF5_ROOT="${PKG_ROOT}/HDF5"; export NETCDF_ROOT="${PKG_ROOT}/ifort_icpc" ; export NETCDF4_ROOT="${PKG_ROOT}/ifort_icpc" ; ;; # endif EMT64 Rocks Cluster
+	    mirage* ) export HDF5_ROOT="${PKG_ROOT}"; export NETCDF_ROOT="${PKG_ROOT}" ; export NETCDF4_ROOT="${PKG_ROOT}" ; ;; # endif NCAR cluster
+	    hpc* ) export NETCDF_ROOT="${PKG_ROOT}/netcdf" ; export NETCDF4_LIB="${PKG_ROOT}/netcdf4" ; ;; # endif HPC
+	    ipcc* ) export NETCDF_ROOT='/opt/netcdf' ; ;; # endif Opteron cluster
+	    pbs* ) export NETCDF_ROOT='/usr/local' ; ;; # endif Opteron cluster
+#		export LD_ASSUME_KERNEL='2.4.1' # Prevents IPCC PGI linker complaints
+	esac # endcase ${HOST}
+	export NETCDF_INC="${NETCDF_ROOT}/include"
+	export NETCDF_LIB="${NETCDF_ROOT}/lib"
+	case "${HOST}" in 
+	    # 20130214: Support NCAR modules on yellowstone by removing custom environment variables
+	    ys* | rhea* ) unset NETCDF_ROOT ; unset NETCDF4_ROOT ; unset NETCDF_INC ; unset NETCDF_LIB ; ;; # endif NCAR, ORNL
+	esac # endcase ${HOST}
+
+# OpenMP
+	case "${HOST}" in 
+		ashes* | ess1* | flyash* ) export OMP_NUM_THREADS='1' ; ;; # endif uniprocessor
+		clay* | neige* | silt* | virga* ) export OMP_NUM_THREADS='2' ; ;; # endif dual processor
+		aerosol* | givre* | hpc* | pbs* | tephra* ) export OMP_NUM_THREADS='4' ; ;; # endif quad processor
+		glace* | gplogin* | grele* | roulee* | snow* ) export OMP_NUM_THREADS='8' ; ;; # endif dual-quad processor
+		mirage* | pileus* | rhea* | ys* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-octet processor
+	esac # endcase ${HOST}
+
+	# Set MPI
+        # fxm: temporary NCO hack: Machines with MPI_ROOT set are assumed to have parallel filesystems for NCO builds
+	case "${HOST}" in 
+	    gplogin* ) export MPI_ROOT_OLD='/usr/mpi/intel/openmpi-1.5.1' ; ;; # endif EMT64 Rocks Cluster OpenMPI
+#	    givre* | roulee* ) export MPI_ROOT='/usr/lib64/openmpi' ; ;; # endif OpenMPI
+	esac # endcase ${HOST}
+	# Set NCARG
+	case "${HOST}" in 
+	    gplogin* ) NCARG_ROOT='/sopt/ncl' ; ;; # endif EMT64 Rocks Cluster
+	esac # endcase ${HOST}
+	# Set PGI
+	case "${HOST}" in 
+	    gplogin* ) PGI_ROOT="${PKG_ROOT}/pgi-10.6" ; PGI_BIN_ROOT="${PGI_ROOT}/linux86-64/10.6" ; ;; # endif EMT64 Rocks Cluster
+	    ipcc* ) PGI_ROOT="${PKG_ROOT}/pgi" ; PGI_BIN_ROOT="${PGI_ROOT}/linux86-64/7.1-5" ; ;; # endif IPCC
+	    hpc* ) PGI_ROOT="${PKG_ROOT}/pgi" ; PGI_BIN_ROOT="${PGI_ROOT}/linux86-64/7.2-3" ; ;; # endif HPC
+	esac # endcase ${HOST}
+	# Set MPICH_ROOT
+	case "${HOST}" in 
+	    ipcc* ) MPICH_ROOT="${PGI_ROOT}/mpich2" ; ;; # endif Opteron cluster
+	    pbs* ) MPICH_ROOT="${PKG_ROOT}/mpich/gnu" ; ;; # endif Opteron cluster
+	    * ) MPICH_ROOT="${PKG_ROOT}/mpich" ; ;; # endif HPC and default
+	esac # endcase ${HOST}
+	if [ -n "${ROCKS_ROLLS_ROOT}" ]; then
+	    TORQUE_ROOT="${ROCKS_ROLLS_ROOT}/torque"
+	fi # endif ROCKS_ROLLS_ROOT
+	
+	case "${HOST}" in 
+	    mirage* ) # x86-64
+		PATH=${PATH}\:/fs/local/bin\:/fs/local/32/bin
+		;; # endif NCAR cluster
+	esac # endcase ${HOST}
+	PATH=${PATH}\:/usr/local/bin
+	PATH=${PATH}\:/usr/local/sbin # Debian
+	PATH=${PATH}\:/bin
+	PATH=${PATH}\:/sbin
+	PATH=${PATH}\:/usr/bin
+	PATH=${PATH}\:/usr/sbin
+	PATH=${PATH}\:${X11}/bin
+	if [ -n "${MPI_ROOT}" ]; then
+		PATH=${PATH}\:${MPI_ROOT}/bin # OpenMPI
+	fi # endif MPI_ROOT
+	if [ -n "${NCARG_ROOT}" ]; then
+	    PATH=${PATH}\:${NCARG_ROOT}/bin
+	fi # endif PGI_ROOT
+	if [ -n "${ROCKS_ROLLS_ROOT}" ]; then
+		PATH=${PATH}\:${PKG_ROOT}/rocks/bin
+		PATH=${PATH}\:${MPICH_ROOT}/bin
+		PATH=${PATH}\:${TORQUE_ROOT}/bin
+#		PATH=${PATH}\:${PKG_ROOT}/rocks/sbin
+#		PATH=${PATH}\:${PKG_ROOT}/pathscale/bin
+#		PATH=${PATH}\:${PKG_ROOT}/gridengine/bin/lx26-amd64
+#		PATH=${PATH}\:${PKG_ROOT}/ganglia/bin
+	fi # endif ROCKS_ROLLS_ROOT
+	if [ -n "${PGI_BIN_ROOT}" ]; then
+	    PATH=${PATH}\:${PGI_BIN_ROOT}/bin
+	fi # endif PGI_ROOT
+
+	case "${HOST}" in 
+	    neige* ) # x86-64
+		PATH=${PATH}\:/usr/local/android-sdk-linux_x86-1.0_r2
+		;; # endif G1-development machines
+	esac # endcase ${HOST}
+	case "${HOST}" in 
+	    gplogin* | mirage* ) # x86-64
+		PATH=${PATH}\:${ICC_ROOT}/bin/intel64
+		;; # endif greenplanet
+	    givre* | neige* | roulee* ) 
+		PATH=${PATH}\:/usr/local/cuda/bin ; ;; # endif CUDA
+	    pileus* ) PATH=${PATH}\:/opt/ACME/bin ; ;; # endif CADES
+	    *) # Default
+		PATH=${PATH}\:${ICC_ROOT}/bin
+		PATH=${PATH}\:${IFC_ROOT}/bin
+		;; # endif default
+	esac # endcase ${HOST}
+	
+	MANPATH=${MANPATH}\:${HOME}/nco/man
+	MANPATH=${MANPATH}\:/usr/local/man
+	MANPATH=${MANPATH}\:/usr/share/man
+	MANPATH=${MANPATH}\:/usr/man
+	MANPATH=${MANPATH}\:${X11}/man
+	MANPATH=${MANPATH}\:/usr/lib/perl5/man
+#	MANPATH=${MANPATH}\:${PGI}/man
+	MANPATH=${MANPATH}\:${NCARG_ROOT}/man
+	MANPATH=${MANPATH}\:${PKG_ROOT}/man
+	
+	case "${HOST}" in 
+	    mirage* ) # x86-64
+		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/fs/local/lib\:/fs/local/32/lib 
+		;; # endif NCAR cluster
+	esac # endcase ${HOST}
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${X11}/lib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MY_LIB_DIR}
+	case "${HOST}" in 
+	    gplogin* | mirage* ) # x86-64
+		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${ICC_ROOT}/lib/intel64
+		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/home/pvicente/install/udunits-2.1.24/lib
+		;; # endif greenplanet
+	    *) # Default
+		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${ICC_ROOT}/lib
+		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${IFC_ROOT}/lib
+		;; # endif default
+	esac # endcase ${HOST}
+	case "${HOST}" in 
+	    gplogin* ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PGI}/linux86-64/7.2-3/lib ; ;;
+	    ipcc* ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PGI}/linux86-64/7.1-5/lib ; ;;
+	    hpc* ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PGI}/linux86-64/7.2-3/lib ; ;;
+	esac # endcase ${HOST}
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${NETCDF4_ROOT}/lib
+	case "${HOST}" in 
+	    givre* | roulee* ) # Fedora uses LIB64 directory
+		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib64
+		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/lib64
+		;; # endif LIB64
+	esac # endcase ${PVM_ARCH}
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${NCARG_ROOT}/lib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
+	case "${HOST}" in 
+	    # 20130916: Support NCAR modules on yellowstone by removing custom environment variables
+#	    ys* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/apps/opt/udunits/2.1.24/gnu/default/lib; ;; # endif NCAR
+	    pileus* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/ACME/lib\:/opt/ACME/uvcdat-2.2-build/install/Externals/lib; ;; # endif CADES
+	    rhea* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/sw/redhat6/udunits/2.1.24/rhel6.4_intel13.1.3/lib; ;; # endif ORNL
+	    ys* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/apps/opt/udunits/2.1.24/intel/12.1.4/lib; ;; # endif NCAR
+	esac # endcase ${HOST}
+	case "${HOST}" in 
+	    givre* | neige* | roulee* ) # CUDA
+		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/cuda/lib
+		;; # endif CUDA
+	    pbs* ) 
+		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PKG_ROOT}/gridengine/lib/lx26-amd64
+		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PKG_ROOT}/globus/lib
+		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PKG_ROOT}/mpich/gnu/lib
+		;; # endif x86-64
+	    esmf* ) # 
+#		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PGI}/linux86/lib
+		;; # endif i386 machines
+	esac # endcase ${PVM_ARCH}
+	if [ -n "${MPI_ROOT}" ]; then
+		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MPI_ROOT}/lib # OpenMPI
+		PATH=${PATH}\:/usr/local/parallel/bin # OpenMPI
+		MANPATH=${MANPATH}\:/usr/local/parallel/man
+	fi # endif MPI_ROOT
+
+# HTTP proxy at LGGE needed for googleearth
+# Removed 20080420: dangerous! interferes with aptitude and possibly other stuff
+#	export http_proxy='http://proxy.uci.edu/proxy_config.pac'
+#	export http_proxy='http://proxy.ujf-grenoble.fr/auto-proxy.pac'
+	;; # endif LINUX*
+    
+    MACOSX* ) # MACOSX on PowerPC and (beginning 20140529), x86_64 machines
+	export DATA=/Users/${USER}/data
+	export INFOPATH=./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/share/info
+	export NETCDF_ROOT=/opt/local
+#	export NETCDF_INC=/opt/local/include
+#	export NETCDF_LIB=/opt/local/lib
+#	export NETCDF_INC=${HOME}/include
+#	export NETCDF_LIB=${HOME}/lib
+	export UDUNITS_INC=/opt/local/include/udunits2 # MacPorts location
+	case "${HOST}" in 
+	    aerosol* ) export OMP_NUM_THREADS=4 ; ;; # endif aerosol*
+	    cg1* ) export OMP_NUM_THREADS=2 ; ;; # endif cg1*
+	       * ) export OMP_NUM_THREADS=1 ; ;; # endif *
+	esac # endcase ${HOST}
+# GCC_RCH_ARG and ICC_RCH_ARG set CPU architecture only
+# Select ABI flags (i.e., 32 or 64 bit) at make time
+	case "${HOST}" in 
+	    cg1* ) export GCC_RCH_ARG='-mcpu=970' ; ;; # endif PowerPC 970
+	esac # endcase ${HOST}
+	export SYSTYPE='BSD' # Used by killproc
+	export PYTHONPATH=/usr/lib/portage/pym
+	export TEXMFDIR=/opt/local/share/texmf-texlive # One level above bibtex, tex,
+	
+	PATH=${PATH}\:/opt/local/libexec/gnubin # Up-to-date GNU commands from port install coreutils
+	PATH=${PATH}\:/usr/local/bin # Custom-built 3rd party packages
+	PATH=${PATH}\:/opt/local/bin # MacPorts packages
+	PATH=${PATH}\:/opt/local/sbin # MacPorts packages
+	PATH=${PATH}\:/usr/bin # OS X defaults
+	PATH=${PATH}\:/bin # OS X coreutils
+	PATH=${PATH}\:/usr/sbin # OS X root coreutils
+	PATH=${PATH}\:/sbin # OS X root coreutils
+	PATH=${PATH}\:/opt/X11/bin # X
+	
+	MANPATH=${MANPATH}\:${HOME}/nco/man
+	MANPATH=${MANPATH}\:/usr/local/share/man
+	MANPATH=${MANPATH}\:/opt/local/man
+	MANPATH=${MANPATH}\:/usr/share/man
+	
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MY_LIB_DIR}
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/local/lib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
+
+# fxm: 20051022 Chris Knox says use DYLD_LIBRARY_PATH
+# fxm: 20140531 Unsure this is wise
+#	export DYLD_LIBRARY_PATH=${LD_LIBRARY_PATH}
+	;; # endif MACOSX*
+    
+    SGI* ) # SGI6, SGI64, SGIMP64
+	export DATA="/ptmp/${USER}"
+	export INFOPATH=./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/freeware/info:/usr/gnu/info
+	export NCARG_ROOT=/contrib
+	export OMP_NUM_THREADS=4 # OpenMP
+	export SYSTYPE=SVR3
+	export X11=/usr/lib/X11
+	
+	if [ "${HOST}" = 'tempest' ]; then
+	    export NETCDF_INC=/usr/local/include
+	    export NETCDF_LIB=/usr/local/lib64/r4i4 # 64 bit ABI (default)
+	fi # endif tempest
+	
+	if [ -d /fs/cgd/home0/${USER}/sh ]; then
+	    PATH=${PATH}\:/fs/cgd/home0/${USER}/sh
+	fi # endif sh
+	if [ "${PVM_ARCH}" = 'SGI64' ]; then
+	    PATH=${PATH}\:${HOME}/bin/SGIMP64
+	elif [ "${PVM_ARCH}" = 'SGIMP64' ]; then
+	    PATH=${PATH}\:${HOME}/bin/SGI64
+	fi # endif SGI
+	PATH=${PATH}\:/usr/gnu/bin
+	PATH=${PATH}\:/usr/freeware/bin
+	PATH=${PATH}\:/local/bin
+	PATH=${PATH}\:/bin 
+	PATH=${PATH}\:/usr/bin/X11
+	PATH=${PATH}\:/usr/bin
+	PATH=${PATH}\:/usr/ucb
+	PATH=${PATH}\:/usr/bsd
+	PATH=${PATH}\:/sbin
+	PATH=${PATH}\:/usr/sbin
+	PATH=${PATH}\:/usr/local/bin
+	PATH=${PATH}\:/usr/etc
+	PATH=${PATH}\:/usr/lib
+	
+	MANPATH=${MANPATH}\:/usr/freeware/man
+	MANPATH=${MANPATH}\:/usr/share/catman
+	MANPATH=${MANPATH}\:/usr/share/catman/a_man
+	MANPATH=${MANPATH}\:/usr/share/catman/g_man
+	MANPATH=${MANPATH}\:/usr/share/catman/p_man
+	MANPATH=${MANPATH}\:/usr/share/catman/u_man
+	MANPATH=${MANPATH}\:/usr/share/catman/local
+	MANPATH=${MANPATH}\:/usr/share/man
+	MANPATH=${MANPATH}\:/usr/local/man
+	MANPATH=${MANPATH}\:/usr/man
+	MANPATH=${MANPATH}\:/usr/gnu/catman
+	if [ -f '/opt/modules/modules/init/bash' ]; then
+	    source /opt/modules/modules/init/bash
+	    module purge
+	    if [ "${HOST}" = 'tempest' ]; then
+		module load MIPSpro mpt scsl nqe modules
+	    fi # endif tempest
+	fi # endif
+	
+    # Setting LD_LIBRARY_PATH on SGI64 is hairy, because there are
+    # no fewer than three such environment variables: 
+    # LD_LIBRARY_PATH, LD_LIBRARY_PATH64, LD_LIBRARY_PATH32, LD_LIBRARY_PATHn32
+    # Fortunately, not setting LD_LIBRARY_PATH seems to work fine.
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MY_LIB_DIR}
+	;; # endif SGI6, SGI64, SGIMP64
+    
+    SUN* ) # SUN4, SUN4SOL2, SUNMP
+	export DATA=/fs/cgd/data0/${USER}
+	export INFOPATH=./:${HOME}/nco/doc:${HOME}/elisp/tramp:/opt/local/info
+	export NETCDF_INC=${HOME}/include
+	export NETCDF_LIB=${HOME}/lib
+	export OPENWINHOME=/usr/openwin
+	export SYSTYPE=SVR4
+#    export X11=/opt/X11R6-11
+	export X11=/usr/X
+	export TEXMFDIR=/contrib/texmf/lib/texmf # One level above bibtex, tex,
+	
+	if [ -d /fs/cgd/home0/${USER}/sh ]; then 
+	    PATH=${PATH}\:/fs/cgd/home0/${USER}/sh
+	fi # endif sh
+	if [ "${PVM_ARCH}" = 'SUNMP' ]; then
+	    PATH=${PATH}\:${HOME}/bin/SUN4SOL2
+	elif [ "${PVM_ARCH}" = 'SUN4SOL2' ]; then
+	    PATH=${PATH}\:${HOME}/bin/SUNMP
+	fi # endif SUN
+	PATH=${PATH}\:/opt/local/bin
+	PATH=${PATH}\:/bin
+	PATH=${PATH}\:/usr/bin
+	PATH=${PATH}\:/usr/ccs/bin
+	PATH=${PATH}\:/usr/ccs/lib
+	PATH=${PATH}\:/usr/sbin
+	PATH=${PATH}\:/opt/local/SUNWspro/bin
+	PATH=${PATH}\:/opt/SUNWspro/bin
+	PATH=${PATH}\:/usr/local/bin
+# 19971107: ${X11}/bin has much newer, better xmkmf than ${OPENWINHOME}/bin
+# However, Xsun in ${OPENWINHOME}/bin is supposed to be better than Xserver in ${X11}/bin
+# 20010702: X files have moved
+	PATH=${PATH}\:${X11}/bin
+	PATH=${PATH}\:/usr/ucb
+	PATH=${PATH}\:/opt/local/frame/bin
+	
+	MANPATH=${MANPATH}\:${HOME}/nco/man
+	MANPATH=${MANPATH}\:/opt/local/man
+	MANPATH=${MANPATH}\:/usr/man
+	MANPATH=${MANPATH}\:${X11}/man
+	MANPATH=${MANPATH}\:/usr/openwin/man
+	MANPATH=${MANPATH}\:/cgdops/man
+	MANPATH=${MANPATH}\:/opt/SUNWspro/man
+	MANPATH=${MANPATH}\:/usr/local/man
+	
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/local/SUNWspro/lib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/SUNWspro/lib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${OPENWINHOME}/lib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${X11}/lib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MY_LIB_DIR}
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/local/lib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/ucblib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/dt/lib
+	;; # endif SUN4, SUN4SOL2, SUNMP
+    
+    WIN32* ) # Cygwin on x86 machines
+	export DATA=/data/${USER}
+	export CLASSPATH=".:/usr/local/antlr-2.7.7/antlr.jar:${HOME}/sh" # Java archives
+	export INFOPATH=./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/share/info
+	export LC_CTYPE='en_US.UTF-8' # Required for Subversion to handle special characters like "tromsø" Windows requires 'UTF-8' rather than 'utf8'
+	export MPSTKZ=8M # For PGI CCM http://www.pgroup.com/ppro_docs/pgiws_ug/pgi30u02.htm#Heading14
+	export NETCDF_INC=/usr/local/include
+	export NETCDF_LIB=/usr/local/lib
+	export OMP_NUM_THREADS=1
+	export SYSTYPE='BSD' # Used by killproc
+	export TEXMFDIR='/usr/share/texmf' # One level above bibtex, tex,
+	export X11=/usr/X11R6
+	
+    # /usr/bin MUST appear before WIN32 system directories
+	PATH=${PATH}\:/bin
+	PATH=${PATH}\:/sbin
+	PATH=${PATH}\:/usr/local/bin
+	PATH=${PATH}\:/usr/bin
+	PATH=${PATH}\:/usr/sbin
+	PATH=${PATH}\:${X11}/bin
+	PATH=${PATH}\:/cygdrive/c/WINDOWS/System32
+
+	MANPATH=${MANPATH}\:${HOME}/nco/man
+	MANPATH=${MANPATH}\:/usr/man
+	MANPATH=${MANPATH}\:/usr/share/man
+	MANPATH=${MANPATH}\:${X11}/man
+	MANPATH=${MANPATH}\:/usr/local/man
+	MANPATH=${MANPATH}\:/usr/lib/perl5/man
+	MANPATH=${MANPATH}\:${NCARG_ROOT}/man
+	
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${X11}/lib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MY_LIB_DIR}
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
+	;; # endif WIN32*
+    
+esac # endcase ${PVM_ARCH}
+
+# Default compilers
+AR='ar'
+#AR_macports='gcc-ar-mp-4.9'
+CC_clang='clang'
+# 20150109: Introduce -D_DEFAULT_SOURCE in place of deprecated (as of gcc 4.9.2) -D_BSD_SOURCE -D_POSIX_SOURCE
+CC_gcc='gcc -std=c99 -pedantic -D_DEFAULT_SOURCE'
+CC_gcc_pre_4_9='gcc -std=c99 -pedantic -D_BSD_SOURCE -D_POSIX_SOURCE'
+CC_gcc_macports='gcc-mp-4.9 -std=c99 -pedantic -D_DEFAULT_SOURCE'
+CC_icc='icc -std=c99 -D_DEFAULT_SOURCE'
+CC_pathcc='pathcc -std=c99 -D_DEFAULT_SOURCE'
+CC_pgcc='pgcc -c9x -D_DEFAULT_SOURCE'
+CXX_clang='clang -std=c++11'
+CXX_gxx='g++ -std=c++11'
+CXX_gxx_macports='g++-mp-4.9 -std=c++11'
+CXX_icpc='icpc'
+CXX_pathCC='pathCC'
+CXX_pgCC='pgCC'
+FC_g95='g95'
+FC_gfortran='gfortran'
+FC_gfortran_macports='gfortran-mp-4.9'
+FC_ifort='ifort'
+FC_pathf95='pathf95'
+FC_pgf95='pgf95'
+# Compiler names for MPICH specifically held in MPICH_CC and MPICH_CXX
+# Compiler names for generic MPI libraries held in MPI_CC and MPI_CXX
+# MPI_CC and MPI_CXX depend upon MPICH version (MPICH or MPICH2)
+# and, sometimes, compiler (icc finds mpi.h automatically, gcc needs help)
+case "${HOST}" in 
+#    aerosol* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif clang/clang/macports
+    aerosol* ) export LINUX_CC=${CC_gcc_macports} ; export LINUX_CXX=${CXX_gxx_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif all MacPorts
+    ashes* | clay* | flyash* | glace* | gplogin* | grele* | mirage* | pbs* | tephra* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC="${LINUX_CC} -I/usr/include/mpich2" ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK -I/usr/include/mpich2" ;; # endif gcc/g++/gfortran MPICH2
+    ipcc* ) export LINUX_CC=${CC_pathcc} ; export LINUX_CXX=${CXX_pathCC} ; export LINUX_FC=${FC_pathf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # endif pathcc/pathCC/pathf95 MPICH2
+    gplogin* ) export LINUX_CC=${CC_icc/icc/mpicc} ; export LINUX_CXX=${CXX_icpc/icpc/mpiCC} ; export LINUX_FC=${FC_ifort/ifort/mpif90} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort OpenMPI	
+    gplogin* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort OpenMPI GreenPlanet is special because it has a parallel filesystem, lustre, and hence can take advantage of MPI I/O when compiler is MPI-aware. However, compiler switches in all of my custom Makefiles are triggered by vendor-compiler names, e.g., gfortran, ifort, and xlf90, rather than the generic mpicc/mpiCC/mpif90, which are ambiguous. Hence we use this method to designate the invocation command (e.g., "mpif90" or "pgf90") together with the underlying compiler (e.g., "gfortran" or "pgf90"): MPI=Y tells Makefile to invoke compiler with 'mpicc', 'mpif90', etc., but LINUX_CC/CXX/FC point to underlying compilers. Makefile sets compiler-specific switches and options using LINUX_CC/CXX/FC, then, afterwards, sets CC/CXX/FC to 'mpicc/mpiCC/mpif90'. Alternate method, shown in preceding line, sets LINUX_CC/CXX/FC directly to 'mpicc/mpiCC/mpif90' here in bashrc, but then compiler-specific switches in Makefile are missed.
+    hpc* ) export LINUX_CC=${CC_pgcc} ; export LINUX_CXX=${CXX_pgCC} ; export LINUX_FC=${FC_pgf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # endif pgcc/pgCC/pgf95 MPICH2
+#   soot* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_g95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX=${LINUX_CXX} ;; # endif icc/icpc/g95 MPICH
+    givre* | neige* | roulee* | silt* | snow* | virga* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # endif gcc/g++/gfortran OpenMPI
+    rhea* | ys* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
+    nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # endif gcc/g++/g95 MPICH 
+esac # endcase ${HOST}
+# LAMMPICC and LAMPICXX are OS-independent
+export LAMMPICC=${LINUX_CC}
+export LAMMPICXX=${LINUX_CXX} 
+
+# GCC_RCH_ARG, ICC_RCH_ARG, PGI_RCH_ARG, and PSC_RCH_ARG set CPU architecture only
+# Select ABI flags (i.e., 32 or 64 bit) at make time
+# NB: Pathscale documents extensive set of PSC_* flags on User's Guide p. 149--151
+case "${HOST}" in 
+    ashes* ) export GCC_RCH_ARG='-march=pentium4' ; export ICC_RCH_ARG='-axW -mtune=pentium4' ; ;; # endif Pentium4-M
+    aerosol* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='' ; ;; # endif Intel Core i7
+    flyash* ) export GCC_RCH_ARG='-march=pentium3' ; export ICC_RCH_ARG='-axK -mcpu=pentiumpro' ; ;; # endif Pentium3
+    clay* | pbs* | silt* | tephra* ) export GCC_RCH_ARG='-march=opteron -mmmx -msse -msse2 -m3dnow -pipe -fexpensive-optimizations -mfpmath=sse,387' ; export ICC_RCH_ARG='-axW -mcpu=pentium4' ; export PGI_RCH_ARG='-tp=amd64 -fast -Minfo=all' ; export PSC_RCH_ARG='-march=opteron -mmmx -msse -msse2 -m3dnow -pipe -fexpensive-optimizations' ; ;; # endif Opteron
+    esqf* ) export GCC_RCH_ARG='-mtune=power4' ; export ICC_RCH_ARG='' ; ;; # endif Power4
+    givre* | glace* | grele* | neige* | roulee* | snow* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-axP -mcpu=pentium4 -msse3' ; ;; # endif Core2 Extreme EMT64
+    gplogin* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-ipo -no-prec-div -Wl,-z,muldefs' ; ;; # endif Core2 Extreme EMT64
+    mirage* | ys* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='-ipo -no-prec-div -Wl,-z,muldefs' ; ;; # endif Core2 Extreme EMT64
+    lanina* ) export GCC_RCH_ARG='-march=k6-2' ; export ICC_RCH_ARG='' ; ;; # endif AMD K6-2
+    virga* ) export GCC_RCH_ARG='-march=pentium4' ; export ICC_RCH_ARG='-axP -mcpu=pentium4 -msse3' ; ;; # endif Core Duo
+esac # endcase ${HOST}
+# Set ICC_ROOT, IFC_ROOT
+case "${HOST}" in
+    aerosol* ) export ICC_ROOT='' ; export IFC_ROOT='' ; ;; # endif IA32
+    ashes* | flyash* | virga* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # endif IA32
+    clay* | givre* | glace* | grele* | neige* | pbs* | roulee* | silt* | snow* | tephra* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # endif IA64
+    gplogin* ) export ICC_ROOT='/sopt/intel/Compiler/11.0/081' ; export IFC_ROOT='/sopt/intel/Compiler/11.0/081' ; ;; # endif EMT64 Rocks Cluster
+    ipcc* ) export ICC_ROOT='/opt/intel/cce/9.1.038' ; export IFC_ROOT='/opt/intel/fce/9.1.032' ; ;; # endif IPCC
+    hpc* ) export ICC_ROOT='/software/intel/cc' ; export IFC_ROOT='/software/intel/fc' ; ;; # endif HPC
+esac # endcase ${HOST}
+
+if fl_is_exe /bin/hostname ; then
+    if [ `/bin/hostname` = 'meeker' ]; then
+	export PVM_ARCH=SUNMP
+# NB: use 'man products' for all SCD product info
+	PATH=/local/bin:${PATH}
+	PATH=/fs/local/bin:${PATH}
+	export DATA=/fs/cgd/data0/${USER}
+	export X11=/usr/lib/X11
+    fi # endif meeker
+fi # endif hostname
+
+# System-specific environments
+case "${HOST}" in
+    cooley* ) export PROJID='HiRes_EarthSys' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
+    edison* | hopper* ) export PROJID='HiRes_EarthSys' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
+    rhea* ) export PROJID='cli115' ; export MY_MEMBERWORK="${MEMBERWORK}/${PROJID}" ; export MY_PROJWORK="${PROJWORK}/${PROJID}/${USER}" ; export MY_WORLDWORK="${WORLDWORK}/${PROJID}/${USER}" ; export DATA="${MY_PROJWORK}" ; ;;
+esac # endcase ${HOST}
+
+# Export the big three
+export LD_LIBRARY_PATH
+export MANPATH
+export PATH
+
+# Turn on command echoing with time stamps if in batch mode (from `man qsub`) 
+if [ -n "${ENVIRONMENT}" ]; then
+    if [ "${ENVIRONMENT}" = 'BATCH' ]; then
+	set timestamp
+	set echo
+    fi # endif BATCH
+fi # endif ENVIRONMENT
+# It is vewy vewy bad to allow a .cshrc or .bashrc file to write output
+# Unfortunately, $?prompt test does not work on AIX, so try .login test for non-interactive bail outs
+if [ -n "${JOB_NAME}" -a -n "${QUEUE}" ]; then
+    case "${QUEUE}" in 
+	*_int_* )
+	    exit 0 # Bail out if this is a non-interactive shell
+	;; # endif *_int_*
+    esac # endcase ${QUEUE}
+fi # endif in job queue
+
+# PS1 is not defined for non-interactive logins (as of RedHat 7.x)
+# Thus exiting when PS1 is not defined causes scp to fail
+# fxm: Perhaps SHLVL is a better test?
+#if [ -z "${PS1}" ]; then
+#    exit 0 # Bail out if this is a non-interactive shell
+#fi # endif $prompt
+
+if [ -n "${TERM}" ]; then
+    if [ "${TERM}" = 'xterm' ]; then
+	export GRAPHCAP='X11'
+    fi # endelse xterm
+    export GRAPHCAP=${TERM}
+fi # endif TERM
+
+# Built-in shell variables
+#set bell-style visible  # Turn off annoying bell
+set -o ignoreeof        # Disallow C-d to exit shell
+shopt -s checkwinsize   # Check window size, update values of LINES and COLUMNS
+umask 022		# Default file permissions
+
+# 20070419: SGI bash does not allow extglob setting
+case ${PVM_ARCH} in
+    SGI* ) sleep 0 ; ;; # endif SGI*
+    * ) 
+	shopt -s extglob        # Extended regular expressions in filename globbing
+    ;; # endif *
+esac # endcase PVM_ARCH
+
+case ${PVM_ARCH} in
+# 20010707: SGI bash does not allow ulimit setting
+# 20030916: AIX bash does not allow ulimit setting
+    AIX* )
+	ulimit -c 0 # Maximum size of core files created
+    ;; # endif CRAY | LINUX* | SUN* 
+    CRAY | LINUX* | SUN* )
+	ulimit -s unlimited # Set soft stacksize limit to unlimited (cf. /etc/initscript)
+    ;; # endif CRAY | LINUX* | SUN* 
+esac # endcase ${PVM_ARCH}
+
+# Per-shell variables
+HISTCONTROL='ignoredups' # Ignore duplicate lines
+HISTFILESIZE='500'      # Number of history lines to save in file
+HISTFILESIZE="~/.bash_history" # File to archive history lines
+HISTSIZE='500'          # Number of history lines to save
+MAILPATH='/var/mail/${USER}' # Shell checks here to notify about new mail
+
+# Universal environment variables
+export CVSROOT=":ext:${USER}@dust.ess.uci.edu:${HOME}/cvs"
+export CVSUMASK='002'   # Default file permissions for CVS
+export CVS_RSH='ssh'    # Needed for ssh access to NCAR CGD CVS
+export DATA_RT="${DATA}/aca" # Input data for mie, ccc, swnb2, clm
+export EDITOR='emacs'	# Default editor
+export EMAIL="${USER}@uci.edu" # Email address (for dch)
+export ESHELL='/bin/sh' # Shell to use from Emacs (Emacs does not like tcsh)
+export GPGKEY='6F635D10' # GPG key ID
+export GZIP='--quiet'   # Squelch warnings when reading from tapes, see gzip(1)
+export MAILCAPS="${HOME}/.mailcap" # Where metamail learns how to decode multimedia
+export METAMAIL_TMPDIR="${DATA}/tmp" # Where metamail writes temporary files
+export NCO_AVOID_BM_REPORT='1' # Skip prompt to return report in NCO_bm.pm
+export NCVIEWBASE="${HOME}/.ncview" # Location of files for ncview
+export PAGER='less'	# Default pager (usually 'less' or 'more')
+export PI='3.14159265358979323844' # Pi
+#export PI=$(echo "scale=10;4*a(1)" | bc -l) # Pi Deprecated 20150824 because of low precision
+export PS1='\u@\h:\w\$ ' # Prompt user@host:cwd$ NeR98 p. 71 NB: single quotes
+#export SVNROOT="svn+ssh://dust.ess.uci.edu/home/${USER}/svn/trunk"
+export SVNROOT="svn+ssh://dust.ess.uci.edu/data/home/${USER}/svn/trunk"
+export TZ='PST8PDT'	# Colorado=MST7MDT, California=PST8PDT, Paris=CET-1CEST
+# export TZ='Asia/Kolkata' # India Bengaluru
+#export TZ='CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00' # Full POSIX style http://www.di-mgt.com.au/wclock/tz.html
+#export PS1='\u@\h:${PWD}\$ ' # Prompt user@host:cwd$ NeR98 p. 71 NB: single quotes
+#export EMACSLOADPATH='/data/${USER}/tramp/lisp' # Emacs load path
+#export MALLOC_CHECK_=1 # Enable rudimentary malloc() debugging
+
+# Derived universal environment variables
+export SVN_EDITOR="${EDITOR}" # Yet another default editor
+export TEXEDIT="${EDITOR}" # Yet another default editor
+export VISUAL="${EDITOR}" # Yet another default editor
+
+case ${PVM_ARCH} in
+# Older commands, e.g., enscript, output postscript directly to ${PRINTER}
+    AIX* | LINUX* | WIN32* )
+	#export PRINTER='hp4050' # UCI croul
+	#export PRINTER='hp4250' # LGGE office
+	case ${HOST} in
+#	    aerosol* | ashes* | flyash* | neige* | roulee* | virga* ) export PRINTER='canon_mg8120' ; ;; # Irvine home office
+	    aerosol* | ashes* | flyash* | neige* | roulee* | virga* ) export PRINTER='dell5130' ; ;; # Irvine home office
+	    givre* | glace* | gplogin* | grele* ) export PRINTER='hp4700' ; ;; # UCI Croul 3323 (my office)
+#	    givre* | glace* | gplogin* | grele* ) export PRINTER='hpm600' ; ;; # UCI Croul mail room
+	esac # endcase ${HOST}
+	#export PRINTER='hp4350' # UCI Croul 3242 (common area)
+	#export PRINTER='hpm600' # UCI Croul mail room
+	#export PRINTER='hp5180' # SMU home
+	#export PRINTER='lp'
+    ;; # endif AIX* | LINUX*
+    SUN* )
+	export PRINTER='gemini'
+	export LPDEST="${PRINTER}"
+    # lp -d net.acd.ucar.edu:acdps4n cshrc # From CGD to ACD
+    # lpr -Prenoir@bearmtn.cgd.ucar.edu ~/idl/idl.ps # From lanina to CGD
+    # lp -d renoir # CGD color printer paper
+    # lp -d renoir -o tray2 # CGD color printer transparency
+    ;; # endif SUN*
+    * )
+	export PRINTER='lp'
+    ;; # endif default
+esac # endcase ${PVM_ARCH}
+
+# Directory alias key: format is SDD where
+# S = System abbreviation
+# DD = first two letters of directory name
+# System (S) abbreviations:
+# D = Data local data directory, /data/${USER} (not backed up)
+# H = Home directory, ${HOME}, /home/${USER} (suns), /u0/${USER} (shavano), /home0/${USER} (ELs), /fs/cgd/home0/${USER} (SGIs) (backed up daily)
+# S = SCD partitions, /fs/cgd/home0/${USER}, /fs/cgd/data0/${USER} (backed up by SCD)
+# T = Auxiliary disk storage, /data/${USER}/_aux0_ (not backed up)
+# U = User temporary storage, /usr/tmp/${USER} (rarely scrubbed)
+# V = Data Volatile storage, $TMPDIR (scrubbed often)
+# Filesystems mounted on /net: (not working yet)
+# ls /net/dust.acd.ucar.edu/gs/${USER}
+# ls /net/sunray2.cgd.ucar.edu/home/${USER}
+
+# Directory aliases
+alias dac='cd ${DATA}/aca' # ; function daccp { cp ${1} ${DATA}/aca ; }
+alias dmi='cd ${DATA}/mie' # ; function dmicp { cp ${1} ${DATA}/mie ; }
+alias dmn='cd ${DATA}/mny' # ; function dmncp { cp ${1} ${DATA}/mny ; }
+alias dic='cd ${DATA}/icr' # ; function diccp { cp ${1} ${DATA}/icr ; }
+alias dpp='cd ${DATA}/ppr' # ; function dppcp { cp ${1} ${DATA}/ppr ; }
+alias dps='cd ${DATA}/ps' # ; function dpscp { cp ${1} ${DATA}/ps ; }
+alias dtm='cd ${DATA}/tmp' # ; function dtmcp { cp ${1} ${DATA}/tmp ; }
+alias dze='cd ${DATA}' # ; function dzecp { cp ${1} ${DATA} ; }
+
+alias hbi='cd ${HOME}/bin' ; function hbicp { cp ${1} ${HOME}/bin ; }
+alias hac='cd ${HOME}/aca' ; function haccp { cp ${1} ${HOME}/aca ; }
+alias hcp='cd ${HOME}/c++' ; function hcpcp { cp ${1} ${HOME}/c++ ; }
+alias hcr='cd ${HOME}/crr' ; function hcrcp { cp ${1} ${HOME}/crr ; }
+alias hdo='cd ${HOME}/dot' ; function hdocp { cp ${1} ${HOME}/dot ; }
+alias hds='cd ${HOME}/dst' ; function hdscp { cp ${1} ${HOME}/dst ; }
+alias hf='cd ${HOME}/f' ; function hfcp { cp ${1} ${HOME}/f ; }
+alias hic='cd ${HOME}/icr' ; function hiccp { cp ${1} ${HOME}/icr ; }
+alias hid='cd ${HOME}/idl' ; function hidcp { cp ${1} ${HOME}/idl ; }
+alias hjo='cd ${HOME}/job' ; function hjocp { cp ${1} ${HOME}/job ; }
+alias hjr='cd ${HOME}/jrn' ; function hjrcp { cp ${1} ${HOME}/jrn ; }
+alias hmi='cd ${HOME}/mie' ; function hmicp { cp ${1} ${HOME}/mie ; }
+alias hnc='cd ${HOME}/nco' ; function hnccp { cp ${1} ${HOME}/nco ; }
+alias hpr='cd ${HOME}/prp' ; function hprcp { cp ${1} ${HOME}/prp ; }
+alias hrv='cd ${HOME}/rvw' ; function hrvcp { cp ${1} ${HOME}/rvw ; }
+alias hte='cd ${HOME}/tex' ; function htecp { cp ${1} ${HOME}/tex ; }
+
+alias pze='cd /ptmp/${USER}' ; function pzecp { cp ${1} /ptmp/${USER} ; }
+
+alias stm='cd /fs/cgd/home0/${USER}/tmp' ; function stmcp { cp ${1} /fs/cgd/home0/${USER}/tmp ; }
+alias sze='cd /fs/cgd/home0/${USER}' ; function szecp { cp ${1} /fs/cgd/home0/${USER} ; }
+
+alias uze='cd /usr/tmp/${USER}' ; function uzecp { cp ${1} /usr/tmp/${USER} ; }
+
+if [ -n "${TMPDIR}" ]; then 
+    alias vze='cd ${TMPDIR}' ; function vzecp { cp ${1} ${TMPDIR} ; }
+fi # endif
+
+# Aliases: Unlike csh, sh requires quotes on RHS of alias
+# Universal aliases
+#alias m="${PAGER}"
+#alias ncbrowse='java ncBrowse.Browser' # netCDF file browser
+alias ashes='ssh -X -p 264 68.109.196.84' # Forward to 192.168.1.75:22 (to ashes from outside)
+alias bc='bc -l' # -l = defines standard math library and sets scale to 20
+alias beepoff='xset b off' # Turn beep sound off for quiet work envionments
+alias yellowstone='ssh -X yellowstone.ucar.edu' # Yubikey 5573
+alias rhea='ssh -X rhea.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
+alias acmetest='ssh -X acmetest.ornl.gov' # then leapfrog to pileus
+alias pileus='ssh -X pileus-login01.ornl.gov' # then leapfrog to pileus
+alias cooley='ssh -X cooley.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
+alias hopper='ssh -X hopper.nersc.gov' # pw_hgh (case-sensitive!)
+alias edison='ssh -X edison.nersc.gov' # pw_hgh (case-sensitive!)
+alias bsrc="source ${HOME}/.bashrc"
+alias chm='chmod 644 *.*' # Make readable
+alias clay='ssh -X clay.ess.uci.edu'
+alias cln='rm *~ .[a-zA-Z]~ \#\*\# core core.* *.tmp *foo foo* *.o *.bak *.trace gmeta aaaa* thumb???.png thumbdta.tex *-t.tex* *.bbl *.blg *.log *.glo *.aux *.dlog *.cp *.cps *.fn *.fns *.ky *.pg *.toc *.tp *.vr *.lof *.lot *.dvi *.ttt *.fff *.stackdump PET0.*'
+alias compress='gzip'
+alias corerm='rm `find . -name core -print`'
+alias cp='cp -i -p' # -i = inquire, -p = preserve mode and time
+alias csrc="source ${HOME}/.cshrc"
+alias cvc='cvs commit -m ""'
+alias cvu='cvs update -kk'
+alias detex='detex -c' # -c = echo rather than delete cite{} commands
+alias df='df -k' # -k = units are kB rather than 512 B
+alias diff='diff -c -w' # -c = print 3 lines around diff, -w = ignore whitespace diffs
+alias dir='ls -laF | more'
+alias du='du -k' # -k = units are kB rather than 512 B
+alias dust='ssh -X dust.ess.uci.edu'
+alias egrep='egrep -i' # -i = case insensitive
+alias en='export LANG=en_GB.utf8;export LANGUAGE=en_GB:en:fr_FR:fr;export LC_ALL=en_GB.utf8'
+alias es='export LANG=es'
+alias fr='export LANG=fr_FR.utf8;export LANGUAGE=fr_FR:fr:en_GB:en;export LC_ALL=fr_FR.utf8'
+alias ess_gng='ssh -X 42080s12@eee.uci.edu'
+alias ess_cnt='ssh -X 42100s12@eee.uci.edu'
+alias ess_sco='ssh -X 42350w13@eee.uci.edu'
+alias gbsh="/bin/cp ${HOME}/dot/bashrc.greenplanet ${HOME}/.bashrc;source ${HOME}/.bashrc"
+alias aerosol='ssh -X aerosol.ess.uci.edu'
+alias firn='ssh -X firn.ess.uci.edu'
+alias givre='ssh -X givre.ess.uci.edu'
+alias roulee='ssh -X roulee.ess.uci.edu'
+alias aerosol='ssh -X aerosol.ess.uci.edu'
+alias glace='ssh -X glace.ess.uci.edu'
+alias greenplanet='ssh -X gplogin2.ps.uci.edu'
+alias grele='ssh -X grele.ess.uci.edu'
+alias grep='egrep -i' # -i = case insensitive
+alias gv='gv -watch' # --watch = Check file periodically
+alias h='history'
+alias hdfview='env LD_LIBRARY_PATH=/usr/lib hdfview'
+alias idv='/usr/local/idv/runIDV'
+alias ksrc="source ${HOME}/.profile"
+alias ls='ls -F' # -F = mark directories with /, links with @, etc.
+alias mirage='ssh -X mirage0.ucar.edu'
+alias hpc='ssh -X hpc.oit.uci.edu'
+alias mv='mv -i' # -i = inquire
+alias neige='ssh -X -p 267 68.109.196.84' # Forward to 192.168.1.77:22 (to neige from outside)
+alias nvr='env | sort | more'
+alias panoply='java -jar /data/zender/tmp/PanoplyJ/jars/Panoply.jar'
+alias toolsui='java -jar /data/zender/tmp/toolsUI-4.3.jar'
+alias pbs='ssh -X pbs.ess.uci.edu'
+alias ps2pdf='ps2pdf -dMaxSubsetPct=100 -dCompatibilityLevel=1.2 -dSubsetFonts=true -dEmbedAllFonts=true -sAutoRotatePages=PageByPage -sColorConversionStrategy=LeaveColorUnchanged'
+alias pslz="ps -l -U ${USER}" # -f = Full listing -U username
+alias psz="ps -f -U ${USER}" # -f = Full listing -U username
+alias qz="qstat -u ${USER} -rn" # -u username -rn nodelist
+alias rcp='rcp -p' # -p = preserve mode, time
+alias rm='rm -i' # -i = inquire
+alias rst='set noglob; eval `resize`; unset noglob'
+alias rsync='rsync -av' # -p = preserve mode, time, -C = enable compression
+alias scp='scp -p -C' # -p = preserve mode, time, -C = enable compression
+alias silt='ssh -X silt.ess.uci.edu'
+alias snow='ssh -X snow.engin.umich.edu'
+alias ssh='ssh -X' # -X = enable X11 forwarding
+alias svc='svn commit -m ""'
+alias svu='svn update'
+alias temperature='finger temperature@atd.ucar.edu'
+alias tephra='ssh -X tephra.ess.uci.edu'
+alias topz='top -U${USER}' # -Uusername
+alias uncompress='gunzip'
+alias vg='echo "valgrind --leak-check=yes --show-reachable=yes --suppressions=${HOME}/nco/doc/valgrind.txt --tool=memcheck ncks -D 5 -O ${HOME}/nco/data/in.nc ~/foo.nc > ~/foo 2>&1"'
+alias virga='ssh -X -p 265 68.109.196.84' # Forward to 192.168.1.76:22 (to virga from outside)
+alias visad='java -Xmx128m -jar /usr/local/visad/visad.jar' # visad file browser
+alias weather='finger weather@unidata.ucar.edu'
+alias xclock='xclock -digital -chime -update 1 -face Times-32' # For timing
+alias xlswins='xlswins -format decimal'
+alias xmd='xmodmap ~/.xmodmaprc' # Swap caplock<->ctrl keys
+alias xmerge="xrdb -merge ${HOME}/.Xdefaults"
+alias xwininfo='xwininfo -int'
+
+# Begin section not yet merged with cshrc 
+alias x16='startx -- -bpp 16 :1' # Start 16 bpp display acessible as Ctl-Alt-F8
+# End section not yet merged with cshrc
+function bin_obj_rm { rm "${HOME}/bin/*/${1} ${HOME}/obj/*/${1}.o ${HOME}/obj/*/${1}.d" ; }
+function dotgrep { 'egrep ${1} .[a-zA-Z]*' ; }
+function difffunc { diff -c -w ${1} ${2} | more ; } # -c = print 3 lines around diff, -w = ignore whitespace diffs
+function dirtdiff { scp ${1} dirt.ess.uci.edu:${PWD}/foo; ssh dirt.ess.uci.edu diff -c ${PWD}/${1} ${PWD}/foo ; }
+function dirtscp { scp ${1} dirt.ess.uci.edu:${PWD} ; }
+function fl_rm { 'set tmp = `find . -name ${1} -print`;rm ${tmp}' ; }
+function m { ${PAGER} ${*} ; } # 
+function wind { lp -ovd -dwind ${1} ; } # Wind duplex
+function winds { lp -osimplex -dwind ${1} ; } # Wind simplex
+
+# System-dependent aliases
+case ${PVM_ARCH} in
+
+    LINUX* | WIN32* )
+    eval `dircolors -b` # Set environment variable LS_COLORS for ls
+    alias ls='ls --color=auto' # Use color if standard output is terminal
+    alias dir='ls --color=auto -laF | more'
+    alias who='who --lookup' # --lookup prints machine name of logons
+    ;; # endif LINUX*
+
+    SUN* )
+    alias man='man -F'
+    ;; # endif SUN*
+
+esac # endcase ${PVM_ARCH}
+
+# Windows only
+case ${PVM_ARCH} in
+    WIN32* )
+# Recommendations from Cygwin ~/.bashrc 20071228:
+    set -o notify # Don't wait for job termination notification
+    set -o ignoreeof # Do not use ^D to exit
+    shopt -s nocaseglob # Use case-insensitive filename globbing
+    shopt -s histappend # Make bash append rather than overwrite history on disk
+    shopt -s cdspell # Ignore small typos when changing directory
+    export CYGWIN='nodosfilewarning' # http://www.cygwin.com/cygwin-ug-net/using-cygwinenv.html
+    ;; # endif WIN32*
+esac # endcase ${PVM_ARCH}
+
+# MSS
+case ${PVM_ARCH} in
+    SGI* | CRAY )
+# NB: 19980413 Having eval mscdsetup in .cshrc prevents timely logins whenever the MSS is down or very busy. This happens frequently so do not uncomment this in .cshrc.
+#        alias mss='eval `mscdsetup -sh`'
+
+# Keys to stop running programs, back-up over characters typed and erase whole line
+    stty intr '^c' erase '^?' kill '^u'
+    ;; # endif SGI* | CRAY 
+esac # endcase ${PVM_ARCH}
+
+# SCRIP
+case ${PVM_ARCH} in
+# Create target directory with setupTargetDir ${DATA}/scrip
+    LINUX* )
+	export SCRIPDIR="${DATA}/scrip"
+	export SCRIPEXEDIR="${DATA}/scrip"
+	export SCRIPARCH='linuxgfortran_serial'
+    ;; # endif LINUX* )
+esac # endcase ${PVM_ARCH}
+
+# TeX installation
+case ${PVM_ARCH} in
+# Place PDFTeX before TeX so, e.g., pdftexinfo.tex is loaded first
+    AIX* | LINUX* | MACOSX* | SUN* | WIN32* )
+    export TEXINPUTS=".:${HOME}/tex//:${HOME}/crr//:${DATA}/fgr//:${DATA}/ps//:${TEXMFDIR}/pdftex//:${TEXMFDIR}/tex//::" # // is recursive, :: activates default system search paths
+    export BIBINPUTS=".:${HOME}/tex//:${TEXMFDIR}/bibtex//::" # // is recursive, :: activates default system search paths
+#    export TEXMFCNF=${TEXMFDIR}/web2c # One level above bibtex, tex,
+#    export THUMBPDF="--debug --verbose --device=mono" # Arguments to thumbpdf
+    ;; # endif SUN* | LINUX* | AIX* | SGI* )
+esac # endcase ${PVM_ARCH}
+
+if [ "${PVM_ARCH}" = 'CRAY' ]; then
+    alias ccm2nc='/fs/cgd/csm/bin/J90/ccm2nc'
+    alias make='gnumake --jobs 8'
+fi # endif Cray
+
+# Use g prefix when not GNU defaults
+case ${PVM_ARCH} in
+    SUN* | AIX* )
+	alias tar='gtar'
+    ;; # endif SUN* | AIX*
+esac # endcase ${PVM_ARCH}
+case ${PVM_ARCH} in
+    AIX* )
+#	alias make='gmake --jobs=4'
+	alias make='gmake'
+	;; # endif AIX*
+    MACOSX* )
+	alias make='gmake'
+	alias time='gtime'
+	alias ldd='otool -L'
+	;; # endif MACOSX*
+esac # endcase ${PVM_ARCH}
+# If machine is capable of parallel make...
+if [ "${HOST}" = 'dirt.ess.uci.edu' -o "${PVM_ARCH}" = 'SGIMP64' ]; then
+    alias make='gmake --jobs 4' # Using NCPUS + 1 is better
+fi # endif dirt
+
+# Licenses for IDL and PGI are handled by FlexLM
+# FlexLM is started in /etc/rc.d/rc.local by executing
+# /usr/local/rsi/idl/bin/lmgrd
+# Running lmgrd as root is not recommended but is expedient
+# IDL lmgrd starts vendor-specific license daemons for both IDL and PGI
+# This is because contents of PGI license file are in IDL license file
+# Users must have LM_LICENSE_FILE environment variable point to both license files
+case ${PVM_ARCH} in
+    LINUX* )
+    export IDL_DEVICE='X'
+# Obsolete directory only necessary for cw_bselector in IBP
+    export IDL_PATH=${HOME}/idl:${IDL_DIR}/lib:${IDL_DIR}/lib/obsolete:/usr/local/hiphop
+    export IDL_STARTUP="${HOME}/.idl"
+    export MATLABPATH=/usr/local/matlab7/netcdf/netcdf:/usr/local/matlab7/netcdf/mexcdf:/usr/local/matlab7/netcdf/netcdf/ncfiles:/usr/local/matlab7/netcdf/netcdf/nctype:/usr/local/matlab7/netcdf/netcdf/ncutility
+
+#    alias lmgrd="${IDL_DIR}/bin/lmgrd" # Start license daemon 
+#    alias lmstat="${IDL_DIR}/bin/lmstat -a" # Status of license daemon
+# IDL -autow option opens GUI if possible, -nw opens CLI
+    alias idl="${IDL_DIR}/bin/idl -autow"
+#    alias idl="${IDL_DIR}/bin/idl -nw"
+# Environment for Ferret plotting package 
+#    export FER_DIR='/contrib/ferret-5.0'
+#    export FER_GO=". ${FER_DIR}/go ${FER_DIR}/examples ${FER_DIR}/contrib ${HOME}/ferret/go"PGI
+#    export FER_PALETTE=". ${FER_DIR}/ppl ${HOME}/ferret/ppl" # palettes
+
+    case ${HOST} in
+    aerosol* | ashes* | flyash* | givre* | glace* | grele* | neige* | roulee* | virga* )
+	export INTEL_LICENSE_FILE='/opt/intel/cc/9.0/licenses:/opt/intel/fc/9.0/licenses'
+#	export LM_LICENSE_FILE='1700@sand.ess.uci.edu'
+	export LM_LICENSE_FILE='1700@ess1.ess.uci.edu'
+    ;; # endif using network licenses
+    clay* | silt* ) 
+        export INTEL_LICENSE_FILE='/opt/intel/licenses'
+        export LM_LICENSE_FILE='1700@sand.ess.uci.edu'
+    ;; # endif IA64
+    dhcp* )
+	export LM_LICENSE_FILE='1726@fileserver.ucar.edu'
+    ;; # endif visiting NCAR
+    dirt* )
+	export INTEL_LICENSE_FILE='/opt/intel/cc/9.0/licenses:/opt/intel/fc/9.0/licenses'
+	export LM_LICENSE_FILE="${IDL_DIR}/../license/license.dat:${PGI}/license.dat"
+    ;; # endif using licenses directly on license server
+    gplogin* ) 
+        export INTEL_LICENSE_FILE='/opt/intel/licenses'
+        export LM_LICENSE_FILE='7496@hpc.oit.uci.edu'
+    ;; # endif EMT64 Rocks Cluster
+    pbs* ) 
+        export LM_LICENSE_FILE="${PGI}/license.dat"
+    ;; # endif Opteron cluster
+    hpc* ) 
+	export INTEL_LICENSE_FILE='/software/icc/licenses:/software/ifc/licenses'
+        export LM_LICENSE_FILE="7496@hpc.oit.uci.edu"
+    ;; # endif Opteron cluster
+    pbs* | tephra* )
+        export LM_LICENSE_FILE="${PGI}/license.dat"
+    ;; # endif Opteron cluster
+    sand* )
+# Remove PGI server from sand
+	export LM_LICENSE_FILE="${PGI}/license.dat"
+        export INTEL_LICENSE_FILE='/opt/intel/licenses'
+#	export LM_LICENSE_FILE="${IDL_DIR}/../license/license.dat:${PGI}/license.dat"
+    ;; # endif using licenses directly on license server
+    esac # endcase ${HOST}
+
+    export PATHSCALE_SUBSCRIPTION_DAEMON='ipcc.calit2.uci.edu:7143'
+
+;; # endif LINUX*
+esac # endcase ${PVM_ARCH}
+
+if [ "${PVM_ARCH}" != "CRAY" ]; then
+    # Output from shjob, ecjob, etc. is saved here
+    export CLOG="${HOME}/.log.crayjob"
+    export NCARG_GKS_OUTPUT='gmeta'
+    export XAPPLRESDIR="${X11}/lib/X11/app-defaults:${DATA}/app-defaults"
+
+    alias print='enscript -G -fHelvetica10'
+    alias print2='enscript -2G -fHelvetica10'
+    alias print2r='enscript -2rG -fHelvetica10'
+    alias print5r='enscript -2rG -fHelvetica5'
+    alias print7r='enscript -2rG -fHelvetica7'
+    alias printr='enscript -rG -fHelvetica10'
+    alias printt='enscript -G -fCourier9'
+    alias printt2r='enscript -2rG -fCourier7' # printt2r -o ~/foo.ps ~/trv/trv_san_francisco_201012.txt
+    alias printtr='enscript -rG -fCourier11'
+    alias smallfry='xterm -geometry 95x6+0+0 -sb -sl 80 -sk -n Smallfry -T Smallfry -iconic -fn 6x10 \&'
+
+fi # endif not CRAY
+
+# fxm: Function definitions are not allowed within if statements as in bash-2.x
+function backup { cp ${1} ${HOME}/backup ; }
+function texcln { /bin/rm ${1}.4ct ${1}.4tc ${1}.aux ${1}.bbl ${1}.blg ${1}.brf ${1}.cp ${1}.cps ${1}.css ${1}.dvi ${1}.fff ${1}.fn ${1}.glo ${1}.html ${1}.idx ${1}.idv ${1}.ilg ${1}.ind ${1}.ky ${1}.lg ${1}.lof ${1}.log ${1}.lot ${1}.out ${1}.pg ${1}.tmp ${1}.toc ${1}.tp ${1}.tpt ${1}.ttt ${1}.vr ${1}.xml ${1}.xref ; }
+
+# Commands that depend on Bash version
+if bsh_mjr_vrs_ge_2; then
+# Pattern matching and replacement operator // was introduced in Bash 2.0
+# 20070423: Nevertheless bash 2.00.0 on tempest chokes on these statements
+# 20090822: Escaping dollar-sign causes shell to check values each time
+    if [ "${HOST}" != 'tempest' ]; then
+	alias classpath="echo -e \${CLASSPATH//:/'\n'}" # NeR98 p. 102
+	alias path="echo -e \${PATH//:/'\n'}" # NeR98 p. 102
+	alias manpath="echo -e \${MANPATH//:/'\n'}" # NeR98 p. 102
+	alias ld_library_path="echo -e \${LD_LIBRARY_PATH//:/'\n'}" # NeR98 p. 102
+    fi # endif
+fi # endif
+
+# Enable programmable completion features (may be enabled system-wide in /etc/bash.bashrc)
+if [ -f /etc/bash_completion ]; then
+    source /etc/bash_completion # bash_completion present on Debian systems
+fi
+
+# Force path to be displayed
+cd .		

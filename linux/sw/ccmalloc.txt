@@ -1,0 +1,22 @@
+
+ccmalloc-0.3.8 on lanina redhat 7.2 20020127:
+http://www.inf.ethz.ch/personal/biere/projects/ccmalloc/
+mv ccmalloc-0.3.8tar.gz /data/zender/tmp
+tar xvzf ccmalloc-0.3.8.tar.gz
+cd /data/zender/tmp/ccmalloc-0.3.8
+./configure --prefix=/usr/local
+make
+sudo make install
+
+Uninstall: 
+sudo /bin/rm -f \
+/usr/local/bin/ccmalloc \
+/usr/local/lib/libccmalloc.a \
+/usr/local/share/ccmalloc/ccmalloc.cfg \
+/usr/local/lib/ccmalloc-g++.o \
+/usr/local/lib/ccmalloc-gcc.o \
+
+RPM installation:
+sudo rpm -i ccmalloc-0.3.4-2.i386.rpm
+sudo rpm -e ccmalloc-0.3.4-2.i386.rpm
+

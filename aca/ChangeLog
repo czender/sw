@@ -1,0 +1,963 @@
+2013-06-12  Charlie Zender  <zender@uci.edu>
+
+	* Need to test how HITRAN 2012 changes swnb2 relative to HITRAN 2008
+
+	* Updated ln_nbr_max, and re-ran htrn2nb on all SW-active gases	for swnb2
+
+	* Verified swnb2 still works with HITRAN 2008
+
+2013-06-11  Charlie Zender  <zender@uci.edu>
+
+	* Updating to HITRAN 2012
+
+2011-04-03  Charlie Zender  <zender@uci.edu>
+
+	* Alter Makefile compile and link to use nc-config --fflags, --flibs
+
+2010-08-09  Charlie Zender  <zender@uci.edu>
+
+	* Default to NETCDFF=Y and link to libnetcdff.a by default
+
+2010-01-12  Charlie Zender  <zender@uci.edu>
+
+	* cd;svn tag -c f-2.2.0 aca f (fxm)
+
+	* Improve MPI compilation on greenplanet
+
+	* Update CRM homepage location from NCAR to dust.ess.uci.edu
+
+	* Fix uninitialized memory access bug caused by confusing flg_msm and flg_snw.
+	Confusing because clm uses flg_snw in same sense that swnb2 uses flg_msm.
+	Should be consistent across programs.
+
+	* clm now writes multi-layer snow model data only when flg_snw is true.
+	In netCDF3 a zero-length dimension for lev_snw has cascading effects.
+	One is that zero-length dimensions are interpreted as the record dimension!
+	But netCDF4 allows multiple record dimensions, so lev_snw and ... another
+
+2010-01-08  Charlie Zender  <zender@uci.edu>
+
+	* Replace declarations like "character src_rfr_sng*200" with initialization
+	statements so that valgrind thinks strings are initialized when used.
+
+2009-11-22  Charlie Zender  <zender@uci.edu>
+
+	* Change more occurances of _up to _upw
+
+	* Fix more pedantic errors caught by GCC gfortran 4.4.1
+
+2009-08-04  Charlie Zender  <zender@uci.edu>
+
+	* Deprecate -fno-second-underscore from gfortran compilation
+
+	* Allow linking to distro- (i.e., Debian-) supplied libnetcdff.a
+	by using new NETCDFF=Y switch
+
+2009-05-14  Charlie Zender  <zender@uci.edu>
+
+	* Do not die in cloudy profiles with -m 0.0 specified
+
+	* Verified that changing to HITRAN 2008 parameters only changes
+	MLS profiles by ~0.1 W m-2 surface insolation.
+
+2009-03-26  Charlie Zender  <zender@uci.edu>
+
+	* Fix gfortran compiler warnings for nonconforming tabs and unused variables
+
+2008-09-02  Charlie Zender  <zender@uci.edu>
+
+	* Fix some diagnostic divide-by-zeros in night-time simulations
+
+2008-09-01  Charlie Zender  <zender@uci.edu>
+
+	* Implement mss_val=1.0e36
+
+	* swnb2 completes when slr_zen_ngl_cos <= 0.0
+
+2008-08-31  Charlie Zender  <zender@uci.edu>
+
+	* Noticed (again?) that calday may have "off-by-one" error
+	I remember this problem from years ago, not the solution
+	CCM3/Bri92 solar zenith angle routines seem to require [0.0,365.0)
+	Yet CCM CRM input format (that I wrote!) asks for [1.0,366.0)
+	Perhaps lcl_yr_day=calday+1.0 and 
+	CRM wants lcl_yr_day and CCM3/Bri92 wants calday?
+	In that case calday=t_local in CCM3/Bri92
+	
+2008-07-03  Charlie Zender  <zender@uci.edu>
+
+	* Allow command line to set visible and NIR albedos two at a time
+
+2008-06-20  Charlie Zender  <zender@uci.edu>
+
+	* This is, unfortunately, the same discrepancy as in early May
+	However at least the code now makes sense
+	In particular, CCY83 D/E computations all occur before DISORT
+
+	* Discrepancy: DISORT albedo is 0.89 and two-stream D/E approx. is 0.98 
+	
+	* Finish adding direct beam reflectance, transmittance properties
+
+2008-05-04  Charlie Zender  <zender@uci.edu>
+
+	* Start adding direct beam reflectance, transmittance properties
+
+2008-05-03  Charlie Zender  <zender@uci.edu>
+
+	* Discrepancy: DISORT albedo is 0.89 and two-stream D/E approx. is 0.98 
+
+	* Determine R and T for adding/doubling from CCY83 two stream technique
+
+2008-05-02  Charlie Zender  <zender@uci.edu>
+
+	* Add rfl_spc_snw and trn_spc_snw for snow layer optical properties
+
+	* Change rfl_spc_snw to rfl_spc_snw_sfc
+
+2008-04-09  Charlie Zender  <zender@uci.edu>
+
+	* Fix --dns_snw bug that set density to zero
+
+2008-04-07  Charlie Zender  <zender@uci.edu>
+
+	* Add --dns_snw switch to swnb2
+
+2008-04-02  Charlie Zender  <zender@uci.edu>
+
+	* Add --dpt_snw switch to swnb2
+
+	* Changed surface pressure from 1013.00 to 1013.25 mb in all columns
+
+2008-02-05  Charlie Zender  <zender@uci.edu>
+
+	* Add -3 and -4 switches for netCDF output file type
+
+2008-02-04  Charlie Zender  <zender@uci.edu>
+
+	* Changed definition of snowpack transmittance and absorptance
+
+2008-01-16  Charlie Zender  <zender@uci.edu>
+
+	* Add stt_mie attribute for HG vs. Mie phase functions
+
+	* Add stt_msm attribute for snow model
+
+2008-01-15  Charlie Zender  <zender@uci.edu>
+
+	* Differentiate between multi-layer snow model (--flg_msm) and
+	snow constituent optical property (--flg_snw) activity. 
+
+	* flg_snw is true by default and is back-compatible with atm-only files
+
+2008-01-13  Charlie Zender  <zender@uci.edu>
+
+	* Until mie computes PMOM correctly use g for PMOM(1)
+
+2008-01-12  Charlie Zender  <zender@uci.edu>
+
+	* tst_case_HG also gives expected answers (with >~ 16 streams)
+
+	* Verified tst_case_Ray gives expected answer
+
+	* Remove -Q switch from most diagnostics (i.e., H2OH2O is off)
+
+2008-01-11  Charlie Zender  <zender@uci.edu>
+
+	* Aerosol/cloud properties now on ~10 nm grid by default
+
+	* Change default cloud properties from old BPB lqd_10.nc/ice_20.nc
+	to aer_h2o_lqd_rds_swa_10_lrz.nc and aer_h2o_ice_rds_swa_20_lrz.nc
+	Necessary to provide newly-required phase function information
+
+	* Compiles again after open heart surgery on phase functions
+
+2008-01-10  Charlie Zender  <zender@uci.edu>
+
+	* Simplified weighting of HG and Mie phase functions. Still buggy.
+
+2008-01-08  Charlie Zender  <zender@uci.edu>
+
+	* Verified --flg_mie changes reflectance by an unbelievable amount
+	Error is either in swnb or in mie program lgn_cff_xpn determination 
+
+	* Output lgn_xpn_cff_Mie_ttl when used
+
+	* Activate new functionality with --flg_mie
+
+	* Segregated particle scattering into HG and Mie components
+	Mie now refers to scattering fraction treated with Mie phase function
+	HG refers to scattering fraction approximated as Henyey Greenstein
+	
+2008-01-07  Charlie Zender  <zender@uci.edu>
+
+	* Symptom of inadvertently altered answer changes is
+	WARNING >>>>>>  UPBEAM--SGECO says matrix near singular
+
+	* Add stubs to use phase function moments in snow properties
+
+2007-12-18  Charlie Zender  <zender@uci.edu>
+
+	* cd;cvs tag -c f-2_1_0 aca f
+	cd;cvs tag -c aca-2_1_0 aca f
+	Changes since f-2_0_2, aca-2_0_2: netCDF3 works w/w/o snow
+	Rayleigh scattering bugfix (changes answers!), flexibility
+
+	* Always initialize (usually to 0.0) snowpack CWP/LWP/IWP/bga/aer 
+
+	* clm now writes netCDF3 files even if netCDF4 is available
+	This will help avoid ${DATA_RT} repository differences among
+	netCDF3/netCDF4 systems.
+
+	* Verified netCDF3 and netCDF4 versions give identical answers
+
+	* Do not write vertically resolved snow variables unless snow
+	present. This allows swnb2 to work with netCDF3 again.
+
+2007-12-15  Charlie Zender  <zender@uci.edu>
+
+	* Turn off extrapolation of aerosols, clouds into snowpack by default
+
+	* Fix regression from earlier fix where inadvertently was setting
+	single scattering albedo equal to zero (rather than one) in pure
+	Rayleigh scattering environments.
+
+	* Allow --flx_frc_drc_TOA to set direct/diffuse partitioning
+
+2007-12-14  Charlie Zender  <zender@uci.edu>
+
+	* Verify FZR07/GWM94 results approximately reproduced
+
+	* Fix to work with single-layer snow optical properties again
+
+	* Add capability for vertically varying snow optical properties
+
+	* Allow layer to be pure Rayleigh scattering again without causing
+	divide-by-zero error when computing asm_prm_Mie_ttl
+
+	* Add 'make data_rt' target to update ${DATA_RT}=${DATA}/aca
+
+	* Archive all text files to CVS for safety, consistency
+
+2007-11-18  Charlie Zender  <zender@uci.edu>
+
+	* Remove Rayleigh scattering optical depth from asm_prm_Mie_ttl
+	Longstanding bug caught by Mark Flanner
+
+2007-11-13  Charlie Zender  <zender@uci.edu>
+
+	* cd;cvs tag -c f-2_0_2 aca f
+	cd;cvs tag -c aca-2_0_2 aca f
+	Changes since f-1_5_1, aca-1_5_1: Impurities really work
+	This also synchronizes with original f versioning system
+	
+2007-11-12  Charlie Zender  <zender@uci.edu>
+
+	* Fix switch logic so impurities are on by default when snow is on
+
+	* Change cmd_ln_odxc_obs_mpr to cmd_ln_mmr_mpr_snw and hook it in
+
+	* Fix dimension errors for scalar snow variables in netCDF output
+
+2007-11-10  Charlie Zender  <zender@uci.edu>
+
+	* cd;cvs tag -c f-1_5_1 aca f
+	cd;cvs tag -c aca-1_5_1 aca f
+	Changes since f-1_5_0, aca-1_5_0: Snow impurities almost work
+
+	* netCDF3 non-snow mode temporarily broken by attempting to store
+	more than one zero-sized dimension (lev_snw, levp_snw).
+
+	* Impurity code now works
+
+	* Fix plain snow last week sometime
+
+2007-11-01  Charlie Zender  <zender@uci.edu>
+
+	* Defined reflectance=0 where insolation<=0. Use missing_values instead?
+
+	* Snow reflectance looks good red-ward of 0.29 um
+	  Blue-ward of there, reflectances go haywire, possibly due to UV
+	  attenuation of denominator (downwelling flux at snow).
+
+	* Added eight useful snow diagnostics
+
+	* cd;cvs tag -c f-1_5_0 aca f
+	cd;cvs tag -c aca-1_5_0 aca f
+	Changes since f-1_4_0, aca-1_4_0: Snow, netCDF4, gfortran, GPL3, shr_kind_mod
+
+	* Code runs and writes reasonable-seeming output
+
+	* Initialize dark hidden corners of snowpack physics
+
+2007-10-31  Charlie Zender  <zender@uci.edu>
+
+	* Extended gaseous and aerosol species mass paths into snowpack
+
+	* Extended coordinate grids and state variables through snowpack
+
+	* Incorporated all snowpack optical depths to DISORT
+
+	* Changing lev_nbr to lev_nbr_atm where appropriate
+
+	* Integrated mpl_snw into most physics. Compiles.
+
+2007-10-30  Charlie Zender  <zender@uci.edu>
+
+	* Add flg_snw-optional reads of snowpack properties
+
+2007-10-01  Charlie Zender  <zender@uci.edu>
+
+	* Enable netCDF4 building at Makefile level
+
+2007-03-30  Charlie Zender  <zender@uci.edu>
+
+	* All codes use shr_kind_mod.F90 instead of precision.F90
+
+2007-09-11  Charlie Zender  <zender@uci.edu>
+
+	* Change from GPL2 to GPL3
+
+2007-08-31  Charlie Zender  <zender@uci.edu>
+
+	* Define tau=utau in swnb2 when user-defined grids not used
+	This solves unrepresentable number errors in g95 netCDF output
+	
+2007-03-30  Charlie Zender  <zender@uci.edu>
+
+	* All codes use shr_kind_mod.F90 instead of precision.F90
+
+2007-02-25  Charlie Zender  <zender@uci.edu>
+
+	* Move Rayleigh scattering spectral property out of level loop
+
+2007-02-23  Charlie Zender  <zender@uci.edu>
+
+	* Re-tried swnb2 on Opteron with PGI pgf95 in double precision: 
+	Still get "Floating point exception".
+
+2007-02-19  Charlie Zender  <zender@uci.edu>
+
+	* Deprecate underflow-trapping on ESMF. Just ain't worth it.
+
+	* gfortran mysterious writes missing values into wvl_grd_rfl and rfl_spc_sfc
+	I conclude that gfortran is buggy and breaks fl_rfl feature
+	Left some gfortran debugging in at dbg_lvl == 3
+	g95 works fine on all platforms.
+
+	* Carefully use multiplication factors to allow O2X to run in
+	single-precision without causing underflow 
+
+	* Change abs_xsx_O2O2 storage to double precision to fix underflow 
+	problem when saving to netCDF file
+
+	* Add spectral surface reflectance option --fl_rfl
+
+	* Make drc dff NIR vsb albedos command line arguments to swnb2
+
+2007-02-17  Charlie Zender  <zender@uci.edu>
+
+	* Noted that swnb2 failures only seem to occur in double precision
+	Some of these errors may be caused by using O2X which has numbers
+	of O(10^-46) that require double precision
+	
+	* Remove azimuthal angle change in calls to Minnaert and
+	LommelSeeliger BRDFs since they are azimuthal-independent
+
+	* Remove wavelengths in calls to Cox-Munk, Hapke, Minnaert,
+	RahmanPinty, LommelSeeliger, RossThick, and LiSparse BRDF
+	parameterizations since they are wavelength-independent 
+
+	* More tweaks, AIX and Linux now blow-up in same place
+
+	* Define chn_nbr in all cases
+
+	* Make compliant with 'gfortran -std=gnu'
+
+2007-02-16  Charlie Zender  <zender@uci.edu>
+
+	* Fix compilation on AIX by changing "double precision" to
+	real(selected_real_kind(p=12))
+
+2007-02-14  Charlie Zender  <zender@uci.edu>
+
+	* swnb2.F90: Fix most g95 compiler warnings
+
+2006-11-25  Charlie Zender  <zender@uci.edu>
+
+	* Ported to gfortran
+
+2006-09-28  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c f-1_4_0 ~/aca ~/f
+	cvs tag -c aca-1_4_0 ~/aca ~/f
+	Changes since f-1_3_3, aca-1_3_3: Support PGI, PathScale, Intel
+	better, improve sng homepage
+
+2006-08-05  Charlie Zender  <zender@uci.edu>
+
+	* pathf95 builds and executes all programs
+
+2005-08-02  zender  <zender@uci.edu>
+
+	* Add Scott Capps' cape_mdl.F90
+
+2005-07-28  Charlie Zender  <zender@uci.edu>
+
+	* Changed wvl_sz to wvl_dlt
+
+	* Increase maximum DISORT2 layers back to 110 for ARESE simulations
+
+	* Moved column data storage location from ${DATA}/dst to ${DATA}/swnb2
+
+	* Read in lev_nbr before allocating when CLM_NC_INPUT
+
+2005-07-14  Charlie Zender  <zender@uci.edu>
+
+	* Successfully ran with g95 on AMD64, and with ifort 8.1 on x86
+
+2005-05-29  Charlie Zender  <zender@uci.edu>
+
+	* Added CH4 to swnb2
+
+2004-11-10  Charlie Zender  <zender@dust.ps.uci.edu>
+
+	* cvs tag -c f-1_3_2 aca f
+	cvs tag -c aca-1_3_2 aca f
+	Changes since f-1_3_1, aca-1_3_1: RT suite works with g95
+
+	* Tested default swnb2 with g95 against lf95. Resultls are close:
+	(lf95) ncks -v flx_bb_dwn_sfc swnb.nc yields flx_bb_dwn_sfc = 505.709
+	(g95)  ncks -v flx_bb_dwn_sfc swnb.nc yields flx_bb_dwn_sfc = 505.704
+	Results were obtained with single precision swnb2
+	
+	* g95 swnb2 complains about unfree'd memory
+
+	* Made clm text read g95-compliant
+
+2004-11-09  Charlie Zender  <zender@uci.edu>
+
+	* Typecast all brdf functions for g95 implicit-none compliance
+
+	* g95 clm does not correctly read lat_dgr from input files
+
+	* Most things work with g95 now 
+
+	* Changed wrapping in swnb2 to compile with g95
+
+2004-11-04  Charlie Zender  <zender@dust.ps.uci.edu>
+
+	* Added flx_spc_dwn_frc_sfc and flx_spc_dwn_frc_sfc_blr
+
+	* cvs tag -c f-1_3_1 aca f
+	cvs tag -c aca-1_3_1 aca f
+	Changes since f-1_3_0, aca-1_3_0: Dynamic arrays for all netCDF output,
+	all netCDF call nf90_ wrapped
+	
+	* Finished implementation of dynamic arrays for all netCDF output
+	variables 
+
+2004-11-03  Charlie Zender  <zender@dust.ps.uci.edu>
+
+	* Fixed bug caused by re-using lev_dmn_id from input file in
+	output file. Probably introduced bug last month.
+
+	* Changed alt to dynamic variable, still have same write problems
+
+	* Writing static variables to nf90 interface causes errors:
+		swnb2Edge+start exceeds dimension bound
+		swnb2: ERROR swnb2: put_var alt in swnb2.F90
+
+2004-10-11  Charlie Zender  <zender@uci.edu>
+
+	* nf90_wrp() all remaining actively called functions
+
+2004-09-28  Charlie Zender  <zender@uci.edu>
+
+	* Add swnb2 flags to manipulate in-cloud absorption
+
+	* Change default behavior to force_cld_lvl_2b_sat=true in clm.F90 
+
+2004-06-15  Charlie Zender  <zender@uci.edu>
+
+	* swnb2.F90 (swnb2): Change force_lqd_phz getopt to toggle switch.
+	This may resolve a bug that caused forcce_lqd_phz to always be false.
+
+2004-06-13  Charlie Zender  <zender@uci.edu>
+
+	* swnb2.F90 (swnb2): Added convenient command line switches
+
+	* cvs tag -c f-1_3_0 aca f
+	cvs tag -c aca-1_3_0 aca f
+	Changes since f-1_2, aca-1_2_3: Build changes for new mie
+	resonance studies and ESMF compatibility
+
+	* Build changes for mie resonance/aca studies
+
+	* Fix incorrect dimension for mlc_sng upstream
+
+	* Built all code with xlf95 on ESMF
+
+	* Makefile (lib_cln): Updated to latest Fortran makefile switches
+	from f module
+
+2003-07-19  Charlie Zender  <zender@uci.edu>
+
+	* swnb2.F90: Moved acronyms to abb.tex
+
+2003-07-10  Charlie Zender  <zender@uci.edu>
+
+	* Use correct long_names for abs_spc_atm, abs_spc_sfc
+
+2003-05-19  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c aca-1_2_3
+	Changes since aca-1_2_2: Removed more rcd+= constructs
+	Version sent to Chris Cappa
+
+	* Added GPL copyright notices to all code prior to distribution
+	with radiation codes
+
+	* Implement most, but not all, functionality required to build
+	automatic distros.
+
+	* README,INSTALL: Describe procedure for distribuiting *.F90 versions
+
+2002-09-19  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c aca-1_2_2
+	Changes since aca-1_2_1: swnb2 and htrn2nb work again, lf95
+	compatibility 
+
+	* Specify srt and cnt vectors so mismatched get_var calls
+	do not produce errors
+
+	* Fix bug where asm_prm_Mie_ice was used before defined
+	This important bug fix allows swnb2 to work again
+	
+	* Makefile and programs compatible with lf95 PRC=[S,D]
+
+2002-07-03  Charlie Zender  <zender@uci.edu>
+
+	* swnb2.F90 (swnb2): Fix reference to chn_SRF outside of mode_std
+
+	* First builds of aca suite on AIX platform
+
+2002-07-02  Charlie Zender  <zender@uci.edu>
+
+	* clm.F90 (clm): Use slr_crd_mdl from libcsm_f90
+
+2002-06-13  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c aca-1_2_1
+	Changes since aca-1_2_0: Everything now builds on Linux.
+	Problem with wvl_grd_mk where wvl_nbr is unknown during call
+	must still be fixed in nbm.
+	
+2002-06-12  Charlie Zender  <zender@uci.edu>
+
+	* Moved dat_prn_f77() to libcsz_f90.a
+
+2002-04-21  Charlie Zender  <zender@uci.edu>
+
+	* rt_mdl.F90: Merged csz_mdl.F90 into rt_mdl.F90
+
+2001-12-30  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c aca-1_2_0
+	Changes since aca-1_1_4: Default for all routines is now F90
+	f-1_7_0 is required to support aca-1_2_0
+	
+	* Converted H2OH2O.F, O3.F, O2X.F and NO2.F to .F90
+
+	* Removed swnb2.F, swnb.F, rt_utl.F, clm_utl.F
+
+2001-12-29  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c aca-1_1_4
+	Changes since aca-1_1_3: Introduced .F90 versions, removed
+	all #includes from clm and swnb2, using modules. aca-1_1_4
+	is the last tag which will contain clm.F and swnb2.F.
+	
+	* swnb2.F90 (swnb2): 
+
+	* Convert rt_utl.F to rt_mdl.F90, clm_utl.F to clm_mdl.F90
+
+	* bdref.f (BDREF): Changed from bdref to brdf (bi-directional
+	reflectance distribution function)
+
+	* clm_utl.F: Clean up and use string module
+
+	* swnb2.F,clm.F: Use string module everywhere
+
+2001-12-28  Charlie Zender  <zender@uci.edu>
+
+	* swnb2.F,clm.F: Call getarg_err with alterable expression
+
+2001-11-13  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c aca-1_1_3
+	* cvs tag -c aca-1_1_2
+
+	* swnb2.F (swnb2): Made alterations required to use fortran 90
+	libraries instead of libcsz_f77.
+
+2001-09-25  Charlie Zender  <zender@uci.edu>
+
+	* Validated that new O3, O2X, clm, NO2, H2OH2O executables agree
+	to within machine precision with old executables for default
+	behavior. 
+
+2001-09-24  Charlie Zender  <zender@uci.edu>
+
+	* Converted O3.F, O2X.F, clm.F, NO2.F, H2OH2O.F, htrn2nb.F,
+	clm_utl.F to allocatable arrays 
+
+	* cvs tag -c aca-1_1_1
+
+	* Implemented netCDF F90 interface. Routines compile but have
+	not been validated.
+
+2001-09-23  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c swnb2-1_0_7
+	1.0.7 is a synchronization tag prior to upgrading to netCDF F90
+	interface. 1.0.7 is out of order since I've already tagged 1.1!
+
+2001-07-26  Charlie Zender  <zender@uci.edu>
+
+	* clm.F, swnb2.F: Upgraded command line parsing to new POSIX
+	compatibility 
+
+2001-07-21  Charlie Zender  <zender@uci.edu>
+
+	* swnb2.F (swnb2): Updated aca programs to use ftn_ namespace
+	routines put required with libcsz from f-1_3
+
+2001-06-23  Charlie Zender  <zender@uci.edu>
+
+	* Correct spelling is isotopomer not isopotomer
+
+2001-06-15  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c swnb2-1_1_0 aca c/date_time.c time f ck/htrn.c slr_spc
+
+	* Changed mie2nc to use wvl instead of bnd for coordinate, and
+	changed swnb to expect wvl dimension in ice and lqd files. 
+	This allows mie() to generate valid ice and lqd files
+	automatically, because expected dimension, wvl, is same as in aer
+	files. 
+
+	* Fixed mie2nc to read gsd and rds_ffc
+
+	* Changed liq to lqd in filenames
+
+2001-05-02  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c swnb2-1_0_6 aca c/date_time.c time f ck/htrn.c slr_spc
+
+	* Add --dbg long option
+
+	* Update to CCM3 conventions by renaming 
+	 alb_NIR_str_zen_ngl->alb_sfc_NIR_drc
+         alb_NIR_weak_zen_ngl->alb_sfc_NIR_dff
+         alb_vis_str_zen_ngl->alb_sfc_vsb_drc
+         alb_vis_weak_zen_ngl->alb_sfc_vsb_dff
+	This update means is backwards incompatible in that the new swnb2
+	will only work with column profiles generated by the new clm
+	
+2001-04-30  Charlie Zender  <zender@uci.edu>
+
+	* Expanded cmd_ln to 500 chars
+
+	* Found problem in long argument/string parsing routines where
+	--drc_in option only works correctly when compiled with OPTS=D
+	and not when optimized with pgf90 compiler only. 
+	Presumably strings are not zeroed with optimized version and this
+	causes/exposes problems. 
+
+	* Fixed bug in swnb suite where tpt_Malkmus_fit parameter was
+	declared an integer 
+
+2001-04-21  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c swnb2-1_0_5 aca c/date_time.c time f ck/htrn.c slr_spc
+
+	* Fixed htrn2nb to work when ln_lo = 0.0 cm-1 by redefining method
+	of deriving wavelength grid fromm that particular value
+
+	* Removed -Ktrap=fp from pgf90 Linux compilation since it was
+	causing SIGFPE to dump core. 64 bit machines do not have this
+	problem.
+
+2001-04-19  Charlie Zender  <zender@uci.edu>
+
+	* Updated NO2.F so it works again
+
+	* The crashes on Solaris and the Linux laptop were
+	caused by exceeding soft resource on stacksize limit which may be
+	set to unlimited with the command. 
+	ulimit -s unlimited
+	Placing this command in the /etc/initscript file is recommended.
+	So the problem was not a software bug in the program at all, just
+	in my environment.
+	
+2001-04-18  Charlie Zender  <zender@uci.edu>
+
+	* Removed some superfluous dependencies from Makefile
+
+	* cvs tag -c swnb2-1_0_4 aca c/date_time.c time f ck/htrn.c slr_spc
+
+	* Removed last known instance of funny character strings so netCDF
+	headers have no funny non-alphanumeric characters left. Any
+	remaining weirdness in ncBrowse() behavior or core dumping is
+	presumably not due to Fortran string issues involving buffer
+	overwrites.
+
+	* cvs tag -c swnb2-1_0_3 aca c/date_time.c time f ck/htrn.c slr_spc
+
+	* Verified swnb2 and clm appear to work with new drc_in handling
+
+2001-04-16  Charlie Zender  <zender@uci.edu>
+
+	* Tried to get rid of all funny characters from string attributes
+
+	* Gave swnb2-1_0_2 to David Marsden
+
+	* cvs tag -c swnb2-1_0_2 aca c/date_time.c time f ck/htrn.c slr_spc
+
+	* Code works fine on SGI and Linux (dust), not sure what problem
+	is on lanina and Sun
+
+	* cvs tag -c swnb2-1_0_1 aca c/date_time.c time f ck/htrn.c slr_spc
+
+	* Re-added obtaining prf_sng from fl_clm
+
+	* Switched to nf_open/close_csz() 
+
+	* swnb2 still dumps core before reaching main fortran code on
+	lanina, sun
+
+	* Finished implemented --drc_in argument parsing to allow data
+	files to reside in any specified directory
+
+2001-04-13  Charlie Zender  <zender@uci.edu>
+
+	* Removed special data directory for SGI, in preparation for
+	adding long options getopt handling
+
+	* cvs tag -c swnb2-1_0 aca c/date_time.c time f htrn slr_spc
+
+	* Added helpful stop's to disort2 to warn about array size
+	incompatibility 
+
+	* Changed disort2.f memory consumption from 20 levels to 92 levels
+	and from 48 streams to 16 streams
+
+2001-04-10  Charlie Zender  <zender@uci.edu>
+
+	* Tagged aca-1_2 which appears to work on all OSs and has no known
+	bugs 
+
+	* cvs tag -c aca-1_2 aca c/date_time.c time f
+
+	* Fixed problems on Linux where sending automatically-allocated
+	arrays to putenv() in one function and then using gmtime() (which
+	requires getevn()) in another function causes core dump because
+	system does not allocate its own memory for putenv() arguments
+	As noted in Linux putenv() man page, resulting behavior is subtle
+	and best solution seems to be to allocate new memory each time
+	putenv() is called. The total memory leak is small if a given
+	program does not call putenv() too often.
+
+2001-02-03  Charlie Zender  <zender@uci.edu>
+
+	* Added local and global upper and lower quanta to output
+
+2000-09-22  Charlie Zender  <zender@uci.edu>
+
+	* Fixed certain band indexes, e.g., bnd_idx_lqd, that should have
+	been threadprivate but were not. Now they are initialized in the
+	parallel region so just being private is OK.
+
+2000-09-20  Charlie Zender  <zender@uci.edu>
+
+	* OpenMP is compiling fine with default(none) on both IRIX and
+	Linux. However, code now segfaults with even 1 thread. Bummer.
+
+	* Noted that SGI f90 does not compile htrn2nb
+
+	* Fixed OpenMP syntax for clauses on continuation lines
+
+	* Made OpenMP loop default(none) and finished list of private
+	variables 
+
+2000-09-17  Charlie Zender  <zender@uci.edu>
+
+	* Boosted max_nbr_aer_bnd from 200 to 1700 bands
+
+	* disort2 prints temperature step warnings when tpt_dlt > 10
+	This is common in 18-level profiles. disort1 only printed warnings
+	when tpt_dlt > 20.
+
+	* Finished OpenMP implementation by adding lists of shared() and
+	private() variables. Unfortunately multi-threaded version has
+	errors and disort() exits with "Input variable  UTAU  in error"
+
+2000-09-15  Charlie Zender  <zender@uci.edu>
+
+	* Compared swnb2 to swnb on mls_clr.nc. Difference in absorbed
+	flux flx_bb_abs_atm = 0.00289917, and in surface insolation
+	flx_bb_dwn_sfc = -0.000732422 are small. David say probably due to
+	new disort2 Nakajima intensity method. 
+
+	* Changed string lengths from 100->200 to beat down string
+	overwrite bugs. IRIX f90 catches these problems and other
+	platforms do not.
+
+	* Improved optimization switches on SGI in Makefile
+
+	* Changed default location on SGI to /usr/tmp/zender/aca
+
+	* Protected OMP statements with #ifdef's for non-OMP compilers
+
+	* Removed annoying print output from disort2
+
+	* Added OMP directives to main spectral loop of swnb2
+
+	* Changed default output file to swnb2.nc, fixed a few more string
+	lengths 
+
+	* Changed swnb to use d1mach and r1mach from disort2 
+	Benefit is that swnb used to core dump when machine.F was compiled
+	with optimization. machine.F is now obsolete so swnb now runs fine
+	when compiled with optimization.
+
+	* Moved utility routines errmsg etc. from machine.F to end of
+	disort1 and disort2.
+
+2000-09-14  Charlie Zender  <zender@uci.edu>
+
+	* Added TODO file so me and David Fillmore can coordinate future work
+
+	* Donald Denbo, author of ncbrowse, informed me that reason for
+	strange netCDF behavior on swnb.nc files is probably string
+	related. Giving wrong long_name string attribute length to netCDF 
+	is easy to do with Fortran. Apparently netCDF is unable to protect 
+	itself from overwriting certain areas of memory when this is done.
+	Corrected many string length routines, and now text attributes
+	appear to work fine.
+	
+2000-09-13  Charlie Zender  <zender@uci.edu>
+
+	* Modernized Makefile to be all F90
+
+	* Fixed bug in cnc_H2OH2O_CFT99 that caused SIGFPE when RH_lqd=0.0
+
+1999-12-17  Charlie Zender  <zender@dust.ps.uci.edu>
+
+	* Fixed -M switch in swnb and nbm so that user-specified aerosol
+	optical depths work from the command line
+
+	* Removed f77 legacy IEEE and timing codes from all
+	programs. Using f90 date_time() procedure instead.
+
+1999-12-16  Charlie Zender  <zender@dust.ps.uci.edu>
+
+	* Verified executable runs on two CPUs and that answers are
+	bit-for-bit with single threaded version. However, there is
+	absolutely no speedup so I am suspicious that OpenMP is working
+	correctly. 20000917: Realized OpenMP was not working at all.
+
+	* Added OpenMP parallel do directives to main spectral loop
+
+	* Working on upgrading build environment
+
+1999-12-09  Charlie Zender  <zender@dust.ps.uci.edu>
+
+	* Fixed bug where htrn2nc.pl was writing HWHM_tmp_dpn_xpn but
+	htrn2nb.F was reading HWHM_tmp_dpn_xpn.
+
+1999-07-03  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Modified some of CRM text output routines to use explicit
+	formatting in order to work with PGI F90 80 character limits for
+	list-directed (asterisk) formatting
+
+1998-11-30  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Tagged this version as aca-1_1
+
+1998-11-29  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Changed default Malkmus narrow band size to 5 cm-1 for all gases
+	except H2O. This changes answers w/r/t SWNB because O2 is now 5
+	cm-1. 
+
+	* Moved all Malkmus absorption computations into mlk_abs()
+
+	* Added CH4 and N2O to nbm
+
+	* Renamed swnb_new as nbm for Narrow Band Model to reflect its
+	capabilit of running in longwave regions 
+
+1998-11-28  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Changed clm to use longitude in [0,360]. clm still works
+	correctly with CRM files with longitude in [-180,180], but works
+	internally in [0,360] domain wherever possible.
+
+	* The new narrow band parameters are ~10% larger than the old
+	Compared S_p_abs_cff_mss in mlk_H2O.nc vs. swnb_H2O.nc
+
+	* Tested swnb_new against swnb with similar wavelength grids.
+	Only difference in grids is outside H2O region where swnb_new uses
+	regularly spaced bins rather than WMO85 grid. The two codes agree
+	to within 3 W m-2 for atmospheric absorption and insolation for
+	most conditions.
+
+	* Changed from _int to _ntf for "interface" 
+
+1998-11-27  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Added CH4, N2O, CFC11 and CFC12 capabilities to clm. Currently
+	only use average column mixing ratios, and should upgrade to use 
+	vertical profiles when available, e.g., from AFGL.
+
+1998-11-26  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Improved wvl_grd_mk() and added provisional -v -V -q and -j
+	switches to support it
+
+	* Using new vec_val2idx() and vec_set_real() functions
+
+	* Updated swnb_new with recent swnb changes
+
+Wed Oct 28 15:36:15 1998  Charlie Zender  <zender@sanitas-e0.cgd.ucar.edu>
+
+	* Tagged all files with aca-1_0, gave this version to Bill Collins
+
+	* Removed setting gmt_yr=1995 and lon_dgr=-97 in clm since these
+	variables are now part of CRM 2.x input files. The behavior of clm
+	predicted slr_zen_ngl should be checked, e.g., against crm, for
+	all longitudes and times of day.
+
+1998-10-25  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Replaced obsolete nomenclature in clm and clm_utl and swnb
+
+	* Added more error checking to clm and clm_utl netCDF I/O
+
+	* Updated arese.pl and clm_utl.F to work with /data instead of
+	/data2 
+
+	* Added -C flag to clm to discriminate between CRM 1.x and 2.x.
+	Implemented this -C flag in arese.pl 
+	
+Mon Aug 31 19:22:45 1998  Charlie Zender  <zender@odin.cgd.ucar.edu>
+
+	* Initial source imports should not compile because programs
+	expect *.h Fortran include suffixes, which are obsolete now and
+	should be replaced by *.com include files. 
+
+	* Created module aca
+

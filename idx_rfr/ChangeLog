@@ -1,0 +1,30 @@
+2006-07-01  Charlie Zender  <zender@uci.edu>
+
+	* Standardized Roush hematite in idx_rfr_Fe2O3.cdl 
+
+2006-06-21  Charlie Zender  <zender@uci.edu>
+
+	* Added Roush data hematite_ext.oc hematite_ord.oc nacl_1.oc
+	nacl_2.oc sio2.glass sio2ext.oc sio2ext_2.oc sio2ord.oc
+	sio2ord_2.txt 
+
+2006-06-19  Charlie Zender  <zender@uci.edu>
+
+	* Add limestone from QOL78
+
+2004-09-13  Charlie Zender  <zender@uci.edu>
+
+	* Added Flatau's compilation of NaCl and soot as idx_rfr_Fla04.cdl
+
+2001-11-11  Charlie Zender  <zender@uci.edu>
+
+	* idx_rfr_Dub01.cdl: Added Aeronet indices of refraction from Oleg Dubovik
+
+1998-09-22  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Added Makefile with .cdl -> .nc conversion
+
+1998-09-10  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Finished implementation of module idx_rfr.
+

@@ -1,0 +1,76 @@
+#!/bin/sh
+# This script will be executed *after* all the other init scripts.
+# You can put your own initialization stuff in here if you don't
+# want to do the full Sys V style init stuff.
+# Usage:
+# sudo cp ~zender/linux/etc/rc.d/rc.local /etc/rc.d/rc.local
+# sudo scp ~zender/linux/etc/rc.d/rc.local dust.ess.uci.edu:/etc/rc.d/rc.local
+
+# This is the only command in the default RH9 rc.local
+touch /var/lock/subsys/local
+
+#csz++
+# Purpose: /etc/rc.d/rc.local modifications
+if [ -f /sbin/dhcpcd ]; then
+# 20010702: Run DHCP while at CGD
+    case "${HOST}" in 
+	cgd85* ) 
+	    # echo "Starting dhcpcd in rc.local for client DHCP access"
+	    # -d logs messages in /var/log/messages
+	    # /sbin/dhcpcd -d
+	    echo "Remember to start dhcpcd for client DHCP access"
+	;; # endif cgd85*
+    esac # endcase ${HOST}
+fi
+if [ -f /usr/local/rsi/idl/bin/lmgrd ]; then
+# NB: Running lmgrd as root is not recommended
+# 20010402: Run lmgrd only on dust
+    case "${HOST}" in 
+	dust* | seasalt* ) 
+	    echo "Starting lmgrd in rc.local for IDL and/or PGI"
+	    /usr/local/rsi/idl/bin/lmgrd
+	;; # endif dust*
+    esac # endcase ${HOST}
+else
+    echo "/usr/local/rsi/idl/bin/lmgrd does not exist"
+    echo "idl_lmgrd IS NOT running!"
+fi
+# Deprecate this section once ntpd works
+# 20000729: Synchronize time with NIST
+# Only synchronize with machines guaranteed to be up, or boots may fail when timekeeper is down
+# ntp.ucsd.edu = 132.239.254.49 is a nearby Level 2 server
+tm_srv='ntp.ucsd.edu'
+echo "Synchronizing system time and hardware clock time with ${tm_srv}..."
+ntpdate -s ${tm_srv}
+/sbin/hwclock --systohc
+#csz--
+
+if [ -f /etc/redhat-release ]; then
+    R=$(cat /etc/redhat-release)
+
+    arch=$(uname -m)
+    a="a"
+    case "_$arch" in
+	    _a*) a="an";;
+	    _i*) a="an";;
+    esac
+
+    NUMPROC=`egrep -c "^cpu[0-9]+" /proc/stat`
+    if [ "$NUMPROC" -gt "1" ]; then
+        SMP="$NUMPROC-processor "
+        if [ "$NUMPROC" = "8" -o "$NUMPROC" = "11" ]; then
+            a="an"
+        else
+            a="a"
+        fi
+    fi
+
+    # This will overwrite /etc/issue at every boot.  So, make any changes you
+    # want to make to /etc/issue here or you will lose them when you reboot.
+    echo "" > /etc/issue
+    echo "$R" >> /etc/issue
+    echo "Kernel $(uname -r) on $a $SMP$(uname -m)" >> /etc/issue
+
+    cp -f /etc/issue /etc/issue.net
+    echo >> /etc/issue
+fi

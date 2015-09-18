@@ -1,0 +1,1290 @@
+<!-- $Header$
+
+Purpose: CRM homepage
+
+Usage:
+http://dust.ess.uci.edu/crm/index.shtml
+file:/home/zender/crm/doc/index.shtml
+/bin/cp -f ~/crm/doc/index.shtml /web/web-data/cms/crm/index.shtml
+scp -p ~/crm/doc/index.shtml dust.ess.uci.edu:/var/www/html/crm/index.shtml
+-->
+
+<!--
+Anti-Spam measures taken from
+http://ddi.digital.net/~gandalf/spamfaq.html
+
+Do unto others:
+<a href="mailto:root@[127.0.0.1]"></a>
+
+This requires Server Side includes:
+<a href="mailto:abuse@!--#echo var="REMOTE_ADDR"-- ">Anti spambot</a>
+
+Send Spam to central authority for documentation:
+<a href="mailto:news.admin.net-abuse.email@myriad.alias.net"></a>
+
+Try to disable Spammers' machines:
+<a href="mailto:'halt'@localhost">Lynx Users: do not follow this link</a>
+<a href="mailto:;halt;@localhost">Lynx Users: do not follow this link</a>
+-->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+   <TITLE>CRM Homepage</TITLE>
+   <META NAME="GENERATOR" CONTENT="Mozilla/3.04Gold (X11; I; Linux 2.0.0 i686) [Netscape]">
+   <META NAME="Author" CONTENT="Charlie Zender">
+   <META NAME="Keywords" CONTENT="CRM, CCM, CCM3, Column Radiation Model,
+ Radiative Transfer, Cloud forcing">
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#FFF8DC" LINK="#0000FF" VLINK="#008080" ALINK="#FF0000">
+
+<TABLE WIDTH="100%" >
+<TR>
+<TD align="left" valign="top">/ <A HREF="http://www.ucar.edu/metapage.html">NCAR</A>
+/ <A HREF="http://www.cgd.ucar.edu/">CGD</A> / <A HREF="http://www.cgd.ucar.edu/cms">CMS</A>
+/ <A HREF="http://www.cgd.ucar.edu/cms/ccm3">CCM3</A> / </TD>
+
+<TD align="right" valign="top">[ <A HREF="http://www.cgd.ucar.edu/cms/ccm3">CCM3
+</A>] [ <A HREF="http://www.cgd.ucar.edu/cms/ccm3/processor.html">Processor
+</A>] [ <A HREF="http://www.cgd.ucar.edu/cms/ccm3/lsm">LSM
+</A>] [ <A HREF="http://www.cgd.ucar.edu/csm">CSM </A>] </TD>
+</TR>
+</TABLE>
+
+<P>
+<HR></P>
+
+<H1 ALIGN=CENTER>Welcome to the CRM Homepage</H1>
+
+<dd><IMG SRC="../bullets/redball.gif" HEIGHT=14 WIDTH=14> <A HREF="#Definition">What is the CRM?</A> </DD>
+<dd><IMG SRC="../bullets/redball.gif" HEIGHT=14 WIDTH=14> <A HREF="#News">CRM News</A> </DD>
+<dd><IMG SRC="../bullets/redball.gif" HEIGHT=14 WIDTH=14> <A HREF="#Download">Download CRM software</A> </DD>
+<dd><IMG SRC="../bullets/redball.gif" HEIGHT=14 WIDTH=14> <A HREF="#FAQ">FAQ</A> </DD>
+<dd><IMG SRC="../bullets/redball.gif" HEIGHT=14 WIDTH=14> <A HREF="#README">README</A> </DD>
+<dd><IMG SRC="../bullets/redball.gif" HEIGHT=14 WIDTH=14> <A HREF="#LICENSE">LICENSE</A> </DD>
+<dd><IMG SRC="../bullets/redball.gif" HEIGHT=14 WIDTH=14> <A HREF="#LICENSE.ccm3">LICENSE.ccm3</A> </DD>
+<dd><IMG SRC="../bullets/redball.gif" HEIGHT=14 WIDTH=14> <A HREF="#LICENSE.crm">LICENSE.crm</A> </DD>
+<dd><IMG SRC="../bullets/redball.gif" HEIGHT=14 WIDTH=14> <A HREF="#INSTALL">INSTALL</A> </DD>
+<dd><IMG SRC="../bullets/redball.gif" HEIGHT=14 WIDTH=14> <A HREF="#ChangeLog">ChangeLog</A> </DD>
+<dd><IMG SRC="../bullets/redball.gif" HEIGHT=14 WIDTH=14> <A HREF="#Version">Version Info</A> </DD>
+<dd><IMG SRC="../bullets/redball.gif" HEIGHT=14 WIDTH=14> <A HREF="#Bugs">Known Problems</A> </DD>
+
+<HR>
+
+<DT><A NAME="Definition"></A></DT>
+<H2>What is the CRM?</H2>
+
+<P>The Column Radiation Model, or CRM, is a standalone version of the radiation
+model used in the NCAR Community Climate Model (<A HREF="http://www.cgd.ucar.edu/cms/ccm3">CCM</A>).
+The CRM is composed of the actual subroutines from the <A HREF="http://www.cgd.ucar.edu/cms/ccm3">CCM3</A>
+that have been modified as little as possible in order to run in a standalone
+mode. The CRM is freely available (see below) and is a useful tool for
+scientific studies of the Earth's solar and infrared energy budgets,
+greenhouse gas and aerosol radiative forcing, and column energy
+closure experiments. 
+
+<p>
+The CRM has been in maintenance mode (no new features) since 2005.
+NCAR's General Circulation Models (GCMs) CCM2, CCM3, CAM1, and CAM2
+used physics nearly (and exactly, in the case of CCM3) identical to
+this CRM codebase during their operational lives from 1992--2004.
+Hence CRM radiative fluxes are indistinguishable from those models.
+
+<p>
+The NCAR CAM3 GCM, released in 2004, uses the nearly the same
+shortwave and longwave radiative physics as its predecessors. 
+However, CAM3 updated the line parameters for the longwave physics.
+Also, CAM3 adopted an improved cloud overlap scheme. 
+Hence clearsky longwave radiative fluxes, and clear and cloudy sky
+short and longwave fluxes, will have small, and, in the case of
+fractional cloud overlap, significant differences between CRM and
+CAM3.
+CAM4 and CAM5, released in 2010, use AER RRTM radiative physics.
+These are completely different from the CRM radiative physics, and
+hence all answers will differ.
+
+<p>
+CRM accuracy is good enough for most purposes, especially for changes 
+radiative fluxes due to changes in inputs such as solar zenith angle
+and GHG concentrations.
+CRM is hard to beat when you want &ldquo;back of the envelope&rdquo;
+speed and simplicity. 
+This especially includes flux changes, e.g., forcings due to clouds,
+changing atmospheric parameters and trace gas concentrations, and
+doubling CO2 experiments.
+However, advances in radiative line databases and physics (e.g., cloud 
+overlap) mean it is no longer suitable for high accuracy 
+(< ~1 W/m2) absolute radiative flux computation.
+For higher accuracy (< ~1 W/m2), use another model, like RRTM.
+<HR></P>
+
+<DT><A NAME="News"></A></DT>
+<H2>CRM News</H2>
+
+<!-- 
+<hr></p>
+<dt><a name="literature"></a></dt>
+<h2>See the <tt><a href="http://dust.ess.uci.edu/crm/literature">literature</a></tt>
+file.</h2>
+<p><tt>`literature'</tt> is a list of papers in the scientific literature that employ the CRM. 
+\cite{IMC00}
+-->
+
+<p>
+2012/09/17: 
+CRM&nbsp;2.1.7 is released.
+Updates compiler settings for new netCDF library structure.
+Clarifies licenses for CCM3 and CRM-specific components.
+Executable tested and working on Linux with <tt>gfortran</tt> compiler.
+
+<p>
+2010/07/07: 
+CRM&nbsp;2.1.6 is released.
+Updates compiler settings and netCDF4 compatibility.
+Executable tested and working on Linux with <tt>gfortran</tt>
+and <tt>ifort</tt> compilers. 
+AIX and xlf95 still cause a segfault, patches welcome! 
+
+<p>
+2009/08/24: 
+CRM&nbsp;2.1.5 is released.
+It has Makefile updates that allow it to work with <tt>gfortran</tt>
+and with netCDF4.
+
+<p>
+2006/02/03: 
+Maintaining this distribution at NCAR was too difficult because of the
+security perimeter. The CRM homepage and distribution is now on
+<tt>dust.ess.uci.edu</tt>. 
+The new version is CRM&nbsp;2.1.4.
+It has small Makefile changes.
+
+<p>
+2005/12/15: 
+Updated location for <a href="http://mensch.org/xcrm/crm.cgi">CRM Online</a>.
+I should also mention, since I do not update this page very often,
+that I occasionally do update the Makefile to maintain compatibility
+with new compiler switches, etc.
+So the code has not been completely frozen since 2000.
+In fact, I added eight new diagnostic output fields in 2001.
+However, I have stopped updating the CRM version number.
+If this bothers you, let me know and I will revert to making
+tradiational, numbered releases.
+
+<p>
+2000/02/25: CRM 2.1.2 is released. 
+This fixes inconsistencies in <tt>mls_clr.out</tt> and <tt>mls_cld.out</tt> 
+accidentally introduced in CRM 2.1.1.
+These sample output files should once again agree (to roundoff) with
+files produced by the CRM as built from scratch. 
+
+<p>
+2000/01/04: CRM 2.1.1 is released.
+CRM 2.1.1 is a bugfix release.
+This version fixes a bug introduced in 2.1.0 in which the diagnostic
+arrays containing the vertical profile of the LW fluxes (variables
+flx_LW_dwn, flx_LW_up and flx_LW_net) were not always initialized
+correctly. 
+On some machine/compiler combinations, this bug caused incorrect
+answers in these arrays (especially if the CRM was compiled with PLON > 1). 
+Single level fields (e.g., flnt, flntc, flns, flds, flus) were not
+affected by this bug.  
+Thanks to Mike Iacono for reporting the bug and supplying the patch. 
+Users of Solaris <tt>f90</tt> and Solaris <tt>f77</tt> should read the
+<A HREF="#Bugs">Known Problems</A> before deciding whether to upgrade.
+
+<p>
+There is now a WWW front end to the CRM available on the Web.
+Professor Brian Fiedler of the School of Meteorology at the University
+of Oklahoma has created a simple point and click interface to the CRM
+called <a href="http://mensch.org/xcrm/crm.cgi">CRM Online</a>.
+<a href="http://mensch.org/xcrm/crm.cgi">CRM Online</a>
+allows interactive setting of tropospheric and stratospheric
+temperatures, CO2 mixing ratio, and specific humidity.
+
+<P>
+1999/09/07: CRM 2.1 is released.
+Version 2.1 includes archival of many more diagnostic quatities.
+New quantities which are now automatically archived include spectral 
+optical depths, spectral fluxes, vertical profiles of SW and LW
+fluxes, and spectral albedos.
+In addition, the build mechanism has been simplified and generalized.
+There are no new physics and answers do not change so upgrading is not
+necessary. 
+CRM 2.1 requires a decent Fortran 90 compiler to advantage of these
+new features.
+</P>
+<P>
+Who should upgrade? 
+User who would like access to vertical and spectral information 
+previously unavailable in the CRM diagnostics should upgrade.
+Download sample 
+<A HREF="http://dust.ess.uci.edu/crm/mls_clr.out">text</A>  
+and <A HREF="http://dust.ess.uci.edu/crm/crm.nc">netCDF</A>
+output files from the CRM version 2.1 to see if you would benefit from
+upgrading.
+Users of Solaris <tt>f90</tt> and Solaris <tt>f77</tt> should read the
+<A HREF="#Bugs">Known Problems</A> before deciding whether to upgrade.
+</P>
+
+<P>
+1999/07/02: CRM 2.0.2 is released.
+Version 2.0.2 is a maintenance release.
+Changes include improved FAQ, build features, and more diagnostices in
+crm.nc.
+There are no new physics and answers do not change so upgrading is not
+necessary. 
+</P>
+
+<P>
+1998/08/28: CRM 2.0 is released.
+Version 2.0 is based on the newly released CCM 3.6, and implements all applicable CCM namelist parameters.
+Run-time specification of for these parameters (e.g., trace gas concentrations, orbital parameters, aerosol optical depth) is implemented via additional lines in the input files.
+The new input files are backwards compatible with older CRM input files.
+Many more diagnostics (e.g., optical depths, spectral albedos) are implemented.
+All users are urged to upgrade to CRM 2.0
+</P>
+
+<P>
+1998/07/22: CRM 1.16 is released.
+Version 1.16 uses a new directory structure more similar to the CCM directory structure. There are no physics changes in CRM 1.16. The new directory structure is now under CVS control and this should facilitate maintainance of the CRM.
+</P>
+
+<P>
+1998/07/10: CRM 1.15 is released.
+Version 1.15 fixes a bug introduced in the surface radiation budget (SRB) diagnostics of CRM 1.13 (released March, 1998).
+The direct/diffuse partitioning of fluxes in versions 1.13--1.14 of the CRM was incorrect.
+The total and spectral fluxes were not affected by this bug.
+See the <TT><A HREF="http://dust.ess.uci.edu/crm/ChangeLog">ChangeLog</A></TT> for details.
+All users are urged to upgrade to CRM 1.15.
+<HR></P>
+
+<DT><A NAME="Download"></A></DT>
+<H2>Download <A HREF="http://dust.ess.uci.edu/crm/crm.tar.gz">CCM3
+CRM software</A> source distribution.</H2>
+
+<P>The distribution includes the complete CRM source code necessary to
+build and run the CRM on your own machine. 
+<HR></P>
+
+<DT><A NAME="FAQ"></A></DT>
+<H2>See the <TT><A HREF="http://dust.ess.uci.edu/crm/FAQ">FAQ</A></TT>
+file.</H2>
+
+<P><TT>`FAQ'</TT> is a list of Frequently Asked Questions about the CRM.
+Please read this file before sending questions to the CRM maintainers.
+
+<HR></P>
+
+<DT><A NAME="README"></A></DT>
+<H2>See the <TT><A HREF="http://dust.ess.uci.edu/crm/README">README</A></TT>
+file.</H2>
+
+<P><TT>`README'</TT> briefly describes the CCM3 CRM, links to further documentation,
+and contact information for further questions. 
+
+<HR></P>
+
+<DT><A NAME="LICENSE"></A></DT>
+<DT><A NAME="LICENSE.ccm3"></A></DT>
+<DT><A NAME="LICENSE.crm"></A></DT>
+<H2>See the <TT><A HREF="http://dust.ess.uci.edu/crm/LICENSE">LICENSE</A></TT>,
+<TT><A HREF="http://dust.ess.uci.edu/crm/LICENSE">LICENSE.ccm3</A></TT>, and
+<TT><A HREF="http://dust.ess.uci.edu/crm/LICENSE">LICENSE.crm</A></TT> files.</H2>
+
+<P><TT>`LICENSE'</TT> describes the CCM3 CRM software licenses.
+<TT>`LICENSE.ccm3'</TT> is the (original NCAR CCM3) license which covers the CCM3 files.
+<TT>`LICENSE.crm'</TT> is the (CC BY-NC-SA 3.0) license which covers the CRM-specific files.
+
+<HR></P>
+
+<DT><A NAME="INSTALL"></A></DT>
+<H2>See the <TT><A HREF="http://dust.ess.uci.edu/crm/INSTALL">INSTALL</A></TT>
+file.</H2>
+
+<P><TT>`INSTALL'</TT> describes the CCM3 CRM installation instructions.
+These commands download, build, and run the CRM on my Ubuntu laptop:
+<tt>
+<pre class="example">
+uname -a
+/bin/rm -r ~/foo                                                      
+mkdir ~/foo                                                           
+cd ~/foo                                                              
+wget http://dust.ess.uci.edu/crm/crm.tar.gz                           
+tar xvzf crm.tar.gz
+cd crm/bld         
+make       
+cd ../bin
+./crm < ../data/mls_cld.in
+</pre>
+</tt>
+This results in the following output on my laptop:
+<tt>
+<pre class="example">
+zender@neige:~$ date
+samedi 15 septembre 2012, 18:15:53 (UTC-0700)
+zender@neige:~$ uname -a
+Linux neige 3.2.0-30-generic #48-Ubuntu SMP Fri Aug 24 16:52:48 UTC 2012 x86_64 x86_64 x86_64 GNU/Linux
+zender@neige:~$ /bin/rm -r ~/foo                                                      
+zender@neige:~$ mkdir ~/foo                                                           
+zender@neige:~$ cd ~/foo                                                              
+zender@neige:~/foo$ wget http://dust.ess.uci.edu/crm/crm.tar.gz                           
+--2012-09-15 18:15:55--  http://dust.ess.uci.edu/crm/crm.tar.gz
+Résolution de dust.ess.uci.edu (dust.ess.uci.edu)... 128.195.185.76
+Connexion vers dust.ess.uci.edu (dust.ess.uci.edu)|128.195.185.76|:80... connecté.
+requête HTTP transmise, en attente de la réponse... 200 OK
+Longueur: 309499 (302K) [application/x-gzip]
+Sauvegarde en : «crm.tar.gz»
+
+100%[==========================================>] 309 499     1,27M/s   ds 0,2s    
+
+2012-09-15 18:15:56 (1,27 MB/s) - «crm.tar.gz» sauvegardé [309499/309499]
+zender@neige:~/foo$ tar xvzf crm.tar.gz
+./crm/
+./crm/data/
+./crm/data/mls_clr.out
+./crm/data/mls_clr.in
+./crm/data/mls_cld.out
+./crm/data/mls_cld.in
+./crm/bin/
+./crm/bin/crm.nc
+./crm/bin/crm
+./crm/bin/README
+./crm/src/
+./crm/src/eul/
+./crm/src/eul/pmgrid.h
+./crm/src/eul/prgrid.h
+./crm/src/eul/pagrid.h
+./crm/src/physics/
+./crm/src/physics/trcmix.F
+./crm/src/physics/cldefr.F
+./crm/src/physics/trcems.F
+./crm/src/physics/crdcae.h
+./crm/src/physics/cldems.F
+./crm/src/physics/compbl.h
+./crm/src/physics/radini.F
+./crm/src/physics/radctl.F
+./crm/src/physics/comvmr.h
+./crm/src/physics/trcab.F
+./crm/src/physics/comsol.h
+./crm/src/physics/radcsw.F
+./crm/src/physics/radded.F
+./crm/src/physics/radclr.F
+./crm/src/physics/zenith.F
+./crm/src/physics/radems.F
+./crm/src/physics/radclw.F
+./crm/src/physics/radtpl.F
+./crm/src/physics/aermix.F
+./crm/src/physics/radoz2.F
+./crm/src/physics/torgrid.F
+./crm/src/physics/trcpth.F
+./crm/src/physics/coreiorad.h
+./crm/src/physics/trcabn.F
+./crm/src/physics/crdcon.h
+./crm/src/physics/comindx.h
+./crm/src/physics/radinp.F
+./crm/src/physics/trcplk.F
+./crm/src/physics/radabs.F
+./crm/src/physics/fmrgrid.F
+./crm/src/crm/
+./crm/src/crm/netcdf.F
+./crm/src/crm/params.h
+./crm/src/crm/crm.F
+./crm/src/crm/crmsrb.h
+./crm/src/crm/misc.h
+./crm/src/control/
+./crm/src/control/comozp.h
+./crm/src/control/ptrrgrid.h
+./crm/src/control/perturb.h
+./crm/src/control/resetr.F
+./crm/src/control/comctl.h
+./crm/src/control/comlun.h
+./crm/src/control/comhst.h
+./crm/src/control/comtim.h
+./crm/src/control/blkdat.F
+./crm/src/dom/
+./crm/src/dom/albocean.F
+./crm/src/dom/albedo.h
+./crm/src/csm_share/
+./crm/src/csm_share/orb.h
+./crm/src/csm_share/orb.F
+./crm/src/csm_share/orb_cosz.h
+./crm/src/srchutil/
+./crm/src/srchutil/wheneq.F
+./crm/src/srchutil/whenfgt.F
+./crm/src/srchutil/isrchfle.F
+./crm/src/srchutil/isrchfgt.F
+./crm/src/srchutil/whenflt.F
+./crm/src/srchutil/intmax.F
+./crm/src/srchutil/whenne.F
+./crm/src/ccmlsm_share/
+./crm/src/ccmlsm_share/getmem.F
+./crm/src/ccmlsm_share/implicit.h
+./crm/src/ccmlsm_share/endrun.F
+./crm/src/ccmlsm_share/freemem.F
+./crm/obj/
+./crm/obj/README
+./crm/doc/
+./crm/doc/TODO
+./crm/doc/LICENSE
+./crm/doc/ChangeLog
+./crm/doc/TAG
+./crm/doc/LICENSE.ccm3
+./crm/doc/VERSION
+./crm/doc/INSTALL
+./crm/doc/FAQ
+./crm/doc/LICENSE.crm
+./crm/doc/MANIFEST
+./crm/doc/index.shtml
+./crm/doc/README
+./crm/doc/ANNOUNCE
+./crm/doc/AEROSOL
+./crm/bld/
+./crm/bld/crm_dst.pl
+./crm/bld/pvmgetarch
+./crm/bld/Makefile
+zender@neige:~/foo$ cd crm/bld         
+zender@neige:~/foo/crm/bld$ make       
+Building dependency file ../obj/whenne.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/whenflt.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/whenfgt.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/wheneq.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/isrchfle.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/isrchfgt.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/intmax.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/zenith.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/trcpth.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/trcplk.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/trcmix.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/trcems.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/trcabn.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/trcab.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/torgrid.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/radtpl.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/radoz2.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/radinp.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/radini.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/radems.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/radded.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/radctl.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/radcsw.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/radclw.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/radclr.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/radabs.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/fmrgrid.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/cldems.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/cldefr.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/aermix.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/albocean.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/orb.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/resetr.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/blkdat.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/getmem.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/freemem.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/endrun.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/netcdf.d
+/bin/sh: 1: makdep: not found
+Building dependency file ../obj/crm.d
+/bin/sh: 1: makdep: not found
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/crm.o ../src/crm/crm.F
+Warning: Nonconforming tab character in column 2 of line 255
+Warning: Nonconforming tab character in column 2 of line 257
+Warning: Nonconforming tab character in column 2 of line 272
+Warning: Nonconforming tab character in column 2 of line 1446
+Warning: Nonconforming tab character in column 2 of line 1448
+Warning: Nonconforming tab character in column 2 of line 1463
+../src/crm/crm.F:927.38:
+
+      subroutine writeric(nabem,absems,lngbuf,nrow)                            
+                                      1
+Warning: Unused dummy argument 'absems' at (1)
+../src/crm/crm.F:927.45:
+
+      subroutine writeric(nabem,absems,lngbuf,nrow)                            
+                                             1
+Warning: Unused dummy argument 'lngbuf' at (1)
+../src/crm/crm.F:927.31:
+
+      subroutine writeric(nabem,absems,lngbuf,nrow)                            
+                               1
+Warning: Unused dummy argument 'nabem' at (1)
+../src/crm/crm.F:927.50:
+
+      subroutine writeric(nabem,absems,lngbuf,nrow)                            
+                                                  1
+Warning: Unused dummy argument 'nrow' at (1)
+../src/crm/crm.F:933.37:
+
+      subroutine readric(nabem,absems,lngbuf,nrow)                             
+                                     1
+Warning: Unused dummy argument 'absems' at (1)
+../src/crm/crm.F:933.44:
+
+      subroutine readric(nabem,absems,lngbuf,nrow)                             
+                                            1
+Warning: Unused dummy argument 'lngbuf' at (1)
+../src/crm/crm.F:933.30:
+
+      subroutine readric(nabem,absems,lngbuf,nrow)                             
+                              1
+Warning: Unused dummy argument 'nabem' at (1)
+../src/crm/crm.F:933.49:
+
+      subroutine readric(nabem,absems,lngbuf,nrow)                             
+                                                 1
+Warning: Unused dummy argument 'nrow' at (1)
+../src/crm/crm.F:939.48:
+
+      subroutine outfld(name,tmp ,plond,lat,hbuf)                              
+                                                1
+Warning: Unused dummy argument 'hbuf' at (1)
+../src/crm/crm.F:939.43:
+
+      subroutine outfld(name,tmp ,plond,lat,hbuf)                              
+                                           1
+Warning: Unused dummy argument 'lat' at (1)
+../src/crm/crm.F:939.28:
+
+      subroutine outfld(name,tmp ,plond,lat,hbuf)                              
+                            1
+Warning: Unused dummy argument 'name' at (1)
+../src/crm/crm.F:939.39:
+
+      subroutine outfld(name,tmp ,plond,lat,hbuf)                              
+                                       1
+Warning: Unused dummy argument 'plond' at (1)
+../src/crm/crm.F:939.32:
+
+      subroutine outfld(name,tmp ,plond,lat,hbuf)                              
+                                1
+Warning: Unused dummy argument 'tmp' at (1)
+../src/crm/crm.F:945.27:
+
+      subroutine radozn(lat     ,pmid    ,o3vmr   )                            
+                           1
+Warning: Unused dummy argument 'lat' at (1)
+../src/crm/crm.F:945.47:
+
+      subroutine radozn(lat     ,pmid    ,o3vmr   )                            
+                                               1
+Warning: Unused dummy argument 'o3vmr' at (1)
+../src/crm/crm.F:945.37:
+
+      subroutine radozn(lat     ,pmid    ,o3vmr   )                            
+                                     1
+Warning: Unused dummy argument 'pmid' at (1)
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/netcdf.o ../src/crm/netcdf.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/endrun.o ../src/ccmlsm_share/endrun.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/freemem.o ../src/ccmlsm_share/freemem.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/getmem.o ../src/ccmlsm_share/getmem.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/blkdat.o ../src/control/blkdat.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/resetr.o ../src/control/resetr.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/orb.o ../src/csm_share/orb.F
+Warning: Nonconforming tab character in column 2 of line 7
+Warning: Nonconforming tab character in column 2 of line 9
+Warning: Nonconforming tab character in column 2 of line 10
+Warning: Nonconforming tab character in column 2 of line 14
+Warning: Nonconforming tab character in column 2 of line 15
+Warning: Nonconforming tab character in column 2 of line 16
+Warning: Nonconforming tab character in column 2 of line 17
+Warning: Nonconforming tab character in column 2 of line 18
+Warning: Nonconforming tab character in column 2 of line 19
+Warning: Nonconforming tab character in column 2 of line 20
+Warning: Nonconforming tab character in column 2 of line 43
+Warning: Nonconforming tab character in column 2 of line 44
+Warning: Nonconforming tab character in column 2 of line 48
+Warning: Nonconforming tab character in column 2 of line 268
+Warning: Nonconforming tab character in column 2 of line 270
+Warning: Nonconforming tab character in column 1 of line 340
+Warning: Nonconforming tab character in column 1 of line 355
+Warning: Nonconforming tab character in column 2 of line 356
+Warning: Nonconforming tab character in column 1 of line 358
+Warning: Nonconforming tab character in column 1 of line 362
+Warning: Nonconforming tab character in column 1 of line 363
+Warning: Nonconforming tab character in column 1 of line 365
+Warning: Nonconforming tab character in column 1 of line 369
+Warning: Nonconforming tab character in column 1 of line 370
+Warning: Nonconforming tab character in column 1 of line 372
+Warning: Nonconforming tab character in column 1 of line 376
+Warning: Nonconforming tab character in column 2 of line 661
+Warning: Nonconforming tab character in column 2 of line 675
+Warning: Nonconforming tab character in column 2 of line 677
+../src/csm_share/orb.h:40.37:
+    Included at ../src/csm_share/orb.F:261:
+
+      parameter (ORB_NOT_YEAR_BASED = ORB_UNDEF_INT )                          
+                                     1
+Warning: Possible change of value in conversion from REAL(8) to INTEGER(4) at (1)
+../src/csm_share/orb.h:40.37:
+    Included at ../src/csm_share/orb.F:626:
+
+      parameter (ORB_NOT_YEAR_BASED = ORB_UNDEF_INT )                          
+                                     1
+Warning: Possible change of value in conversion from REAL(8) to INTEGER(4) at (1)
+../src/csm_share/orb.F: In function ‘orb_params’:
+../src/csm_share/orb.F:457:0: attention : ‘fvelp’ may be used uninitialized in this function [-Wuninitialized]
+../src/csm_share/orb.F:267:0: note: ‘fvelp’ was declared here
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/albocean.o ../src/dom/albocean.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/aermix.o ../src/physics/aermix.F
+Warning: Nonconforming tab character in column 2 of line 312
+Warning: Nonconforming tab character in column 2 of line 314
+Warning: Nonconforming tab character in column 2 of line 329
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/cldefr.o ../src/physics/cldefr.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/cldems.o ../src/physics/cldems.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/fmrgrid.o ../src/physics/fmrgrid.F
+../src/physics/fmrgrid.F:3.37:
+
+      subroutine fmrgrid(qrs     ,qrl     ,qrsm    ,qrlm    )                  
+                                     1
+Warning: Unused dummy argument 'qrl' at (1)
+../src/physics/fmrgrid.F:3.56:
+
+      subroutine fmrgrid(qrs     ,qrl     ,qrsm    ,qrlm    )                  
+                                                        1
+Warning: Unused dummy argument 'qrlm' at (1)
+../src/physics/fmrgrid.F:3.28:
+
+      subroutine fmrgrid(qrs     ,qrl     ,qrsm    ,qrlm    )                  
+                            1
+Warning: Unused dummy argument 'qrs' at (1)
+../src/physics/fmrgrid.F:3.47:
+
+      subroutine fmrgrid(qrs     ,qrl     ,qrsm    ,qrlm    )                  
+                                               1
+Warning: Unused dummy argument 'qrsm' at (1)
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/radabs.o ../src/physics/radabs.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/radclr.o ../src/physics/radclr.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/radclw.o ../src/physics/radclw.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/radcsw.o ../src/physics/radcsw.F
+D.2698]’../src/physics/radcsw.F: In function ‘radcsw’:
+../src/physics/radcsw.F:965:0: attention :  may be used uninitialized in this function [-Wuninitialized]
+D.2698]’../src/physics/radcsw.F:850:0: attention :  may be used uninitialized in this function [-Wuninitialized]
+D.2698]’../src/physics/radcsw.F:849:0: attention :  may be used uninitialized in this function [-Wuninitialized]
+D.2698]’../src/physics/radcsw.F:588:0: attention :  may be used uninitialized in this function [-Wuninitialized]
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/radctl.o ../src/physics/radctl.F
+Warning: Nonconforming tab character in column 2 of line 480
+Warning: Nonconforming tab character in column 2 of line 482
+Warning: Nonconforming tab character in column 2 of line 497
+Warning: Nonconforming tab character in column 1 of line 523
+Warning: Nonconforming tab character in column 1 of line 524
+Warning: Nonconforming tab character in column 1 of line 525
+Warning: Nonconforming tab character in column 1 of line 526
+Warning: Nonconforming tab character in column 1 of line 528
+../src/physics/comindx.h:4.23:
+    Included at ../src/physics/radctl.F:69:
+
+        integer ixuadv      ! user advected tracer beginning index             
+                       1
+Warning: Nonconforming tab character at (1)
+../src/physics/comindx.h:5.21:
+    Included at ../src/physics/radctl.F:69:
+
+      integer ixunad      ! user non-advected tracer beginning index           
+                     1
+Warning: Nonconforming tab character at (1)
+../src/physics/comindx.h:6.21:
+    Included at ../src/physics/radctl.F:69:
+
+      integer ixcldw      ! cloud water beginning index                        
+                     1
+Warning: Nonconforming tab character at (1)
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/radded.o ../src/physics/radded.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/radems.o ../src/physics/radems.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/radini.o ../src/physics/radini.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/radinp.o ../src/physics/radinp.F
+Warning: Nonconforming tab character in column 2 of line 275
+Warning: Nonconforming tab character in column 2 of line 277
+Warning: Nonconforming tab character in column 2 of line 292
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/radoz2.o ../src/physics/radoz2.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/radtpl.o ../src/physics/radtpl.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/torgrid.o ../src/physics/torgrid.F
+../src/physics/torgrid.F:6.37:
+
+     $                   h2ommr  ,cld     ,effcld  ,clwp    )                  
+                                     1
+Warning: Unused dummy argument 'cld' at (1)
+../src/physics/torgrid.F:4.38:
+
+     $                   h2ommrm ,cldm    ,effcldm ,clwpm   ,                  
+                                      1
+Warning: Unused dummy argument 'cldm' at (1)
+../src/physics/torgrid.F:6.56:
+
+     $                   h2ommr  ,cld     ,effcld  ,clwp    )                  
+                                                        1
+Warning: Unused dummy argument 'clwp' at (1)
+../src/physics/torgrid.F:4.57:
+
+     $                   h2ommrm ,cldm    ,effcldm ,clwpm   ,                  
+                                                         1
+Warning: Unused dummy argument 'clwpm' at (1)
+../src/physics/torgrid.F:6.49:
+
+     $                   h2ommr  ,cld     ,effcld  ,clwp    )                  
+                                                 1
+Warning: Unused dummy argument 'effcld' at (1)
+../src/physics/torgrid.F:4.50:
+
+     $                   h2ommrm ,cldm    ,effcldm ,clwpm   ,                  
+                                                  1
+Warning: Unused dummy argument 'effcldm' at (1)
+../src/physics/torgrid.F:6.31:
+
+     $                   h2ommr  ,cld     ,effcld  ,clwp    )                  
+                               1
+Warning: Unused dummy argument 'h2ommr' at (1)
+../src/physics/torgrid.F:4.32:
+
+     $                   h2ommrm ,cldm    ,effcldm ,clwpm   ,                  
+                                1
+Warning: Unused dummy argument 'h2ommrm' at (1)
+../src/physics/torgrid.F:5.56:
+
+     $                   pmid    ,pint    ,pmln    ,piln    ,t       ,         
+                                                        1
+Warning: Unused dummy argument 'piln' at (1)
+../src/physics/torgrid.F:3.57:
+
+      subroutine torgrid(pmidm   ,pintm   ,pmlnm   ,pilnm   ,tm      ,         
+                                                         1
+Warning: Unused dummy argument 'pilnm' at (1)
+../src/physics/torgrid.F:5.38:
+
+     $                   pmid    ,pint    ,pmln    ,piln    ,t       ,         
+                                      1
+Warning: Unused dummy argument 'pint' at (1)
+../src/physics/torgrid.F:3.39:
+
+      subroutine torgrid(pmidm   ,pintm   ,pmlnm   ,pilnm   ,tm      ,         
+                                       1
+Warning: Unused dummy argument 'pintm' at (1)
+../src/physics/torgrid.F:5.29:
+
+     $                   pmid    ,pint    ,pmln    ,piln    ,t       ,         
+                             1
+Warning: Unused dummy argument 'pmid' at (1)
+../src/physics/torgrid.F:3.30:
+
+      subroutine torgrid(pmidm   ,pintm   ,pmlnm   ,pilnm   ,tm      ,         
+                              1
+Warning: Unused dummy argument 'pmidm' at (1)
+../src/physics/torgrid.F:5.47:
+
+     $                   pmid    ,pint    ,pmln    ,piln    ,t       ,         
+                                               1
+Warning: Unused dummy argument 'pmln' at (1)
+../src/physics/torgrid.F:3.48:
+
+      subroutine torgrid(pmidm   ,pintm   ,pmlnm   ,pilnm   ,tm      ,         
+                                                1
+Warning: Unused dummy argument 'pmlnm' at (1)
+../src/physics/torgrid.F:5.62:
+
+     $                   pmid    ,pint    ,pmln    ,piln    ,t       ,         
+                                                              1
+Warning: Unused dummy argument 't' at (1)
+../src/physics/torgrid.F:3.63:
+
+      subroutine torgrid(pmidm   ,pintm   ,pmlnm   ,pilnm   ,tm      ,         
+                                                               1
+Warning: Unused dummy argument 'tm' at (1)
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/trcab.o ../src/physics/trcab.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/trcabn.o ../src/physics/trcabn.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/trcems.o ../src/physics/trcems.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/trcmix.o ../src/physics/trcmix.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/trcplk.o ../src/physics/trcplk.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/trcpth.o ../src/physics/trcpth.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/zenith.o ../src/physics/zenith.F
+Warning: Nonconforming tab character in column 2 of line 173
+Warning: Nonconforming tab character in column 2 of line 175
+Warning: Nonconforming tab character in column 2 of line 190
+Warning: Nonconforming tab character in column 2 of line 234
+Warning: Nonconforming tab character in column 2 of line 235
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/intmax.o ../src/srchutil/intmax.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/isrchfgt.o ../src/srchutil/isrchfgt.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/isrchfle.o ../src/srchutil/isrchfle.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/wheneq.o ../src/srchutil/wheneq.F
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/whenfgt.o ../src/srchutil/whenfgt.F
+Warning: Nonconforming tab character in column 1 of line 49
+Warning: Nonconforming tab character in column 1 of line 50
+Warning: Nonconforming tab character in column 1 of line 51
+Warning: Nonconforming tab character in column 1 of line 52
+Warning: Nonconforming tab character in column 1 of line 53
+Warning: Nonconforming tab character in column 1 of line 54
+Warning: Nonconforming tab character in column 1 of line 55
+Warning: Nonconforming tab character in column 1 of line 56
+Warning: Nonconforming tab character in column 1 of line 57
+Warning: Nonconforming tab character in column 1 of line 58
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/whenflt.o ../src/srchutil/whenflt.F
+Warning: Nonconforming tab character in column 1 of line 49
+Warning: Nonconforming tab character in column 1 of line 50
+Warning: Nonconforming tab character in column 1 of line 51
+Warning: Nonconforming tab character in column 1 of line 52
+Warning: Nonconforming tab character in column 1 of line 53
+Warning: Nonconforming tab character in column 1 of line 54
+Warning: Nonconforming tab character in column 1 of line 55
+Warning: Nonconforming tab character in column 1 of line 56
+Warning: Nonconforming tab character in column 1 of line 57
+Warning: Nonconforming tab character in column 1 of line 58
+gfortran -c -fcray-pointer -ffixed-line-length-132 -Wall -fdefault-real-8 -O -g -fopenmp -DPRC_DBL  -DENABLE_NETCDF4 -DLINUXAMD64 -DHOSTNAME='neige' -DUSER='zender' -DSUN -I../src/crm -I../src/ccmlsm_share -I../src/control -I../src/csm_share -I../src/dom -I../src/eul -I../src/physics -I../src/srchutil -I/usr/local/include -g -O2 -I/usr/include -I/usr/local/include  -o ../obj/whenne.o ../src/srchutil/whenne.F
+gfortran -o ../bin/crm ../obj/crm.o ../obj/netcdf.o ../obj/endrun.o ../obj/freemem.o ../obj/getmem.o ../obj/blkdat.o ../obj/resetr.o ../obj/orb.o ../obj/albocean.o ../obj/aermix.o ../obj/cldefr.o ../obj/cldems.o ../obj/fmrgrid.o ../obj/radabs.o ../obj/radclr.o ../obj/radclw.o ../obj/radcsw.o ../obj/radctl.o ../obj/radded.o ../obj/radems.o ../obj/radini.o ../obj/radinp.o ../obj/radoz2.o ../obj/radtpl.o ../obj/torgrid.o ../obj/trcab.o ../obj/trcabn.o ../obj/trcems.o ../obj/trcmix.o ../obj/trcplk.o ../obj/trcpth.o ../obj/zenith.o ../obj/intmax.o ../obj/isrchfgt.o ../obj/isrchfle.o ../obj/wheneq.o ../obj/whenfgt.o ../obj/whenflt.o ../obj/whenne.o  -fopenmp -L/home/zender/lib/LINUXAMD64 -L/usr/local/lib -L/usr/local/lib -lnetcdff -L/usr/lib -lnetcdff -lnetcdf -lgomp -lpthread
+chmod 755 ../bin/crm
+zender@neige:~/foo/crm/bld$ cd ../bin
+zender@neige:~/foo/crm/bin$ ./crm < ../data/mls_cld.in
+Begin CCM3 Column Radiation Model
+CCM3 CRM Results:
+Conventions:
+ Shortwave fluxes are positive downward
+ Longwave fluxes are positive upward
+ Net Radiative fluxes are positive downward (into the system)
+ Fluxes defined to be zero are not reported (e.g., LW down flx TOA)
+Abbreviations, Acronyms and Definitions:
+ LW   = Longwave
+ LWCF = Longwave Cloud Forcing
+ NCF  = Net Cloud Forcing = SWCF+LWCF
+ NIR  = Near Infrared (0.7 < lambda < 5.0 microns)
+ N7   = NOAA7 satellite NIR instrument weighted flux
+ NRF  = Net Radiative Flux: sum of SW and LW fluxes
+ SW   = Shortwave
+ SWCF = Shortwave Cloud Forcing
+ TOA  = Top of Atmosphere
+ Vis  = Visible (0.2 < lambda < 0.7 microns)
+ atm  = Atmosphere
+ clr  = Clear sky (diagnostic computation with no clouds)
+ ctr  = Center
+ dff  = Diffuse flux
+ drc  = Direct flux
+ dwn  = Downwelling
+ frc  = Fraction
+ lqd  = Liquid
+ mpc  = Mass path column
+ net  = Net flux = downwelling minus upwelling flux
+ spc  = Spectral
+ sfc  = Surface level
+ vmr  = Volume mixing ratio
+ wvl  = Wavelength
+ um   = Microns
+ up   = Upwelling
+
+Sun-Earth Geometry:
+ Year AD                        =         1950
+ Day of year (Greenwich)        =    83.333332999999996     
+ Local solar hour               =    7.9999919999999065     
+ Latitude                       =    0.0000000000000000       degrees
+ Longitude                      =    0.0000000000000000       degrees
+ Solar zenith angle             =    60.006426939895000       degrees
+ Cosine solar zenith angle      =   0.49990285369214305     
+ Earth-sun distance             =    1.0059325192939617       AU
+ Solar constant                 =    1367.0000000000000       W m-2
+
+Shortwave (SW) results ( < 5.0 um):
+ SW albedo               =   0.64855027183365421     
+ SW albedo (clr)         =   0.15776995325900103     
+ SW down flux TOA        =    687.42129010193571       W m-2
+ SW up flux TOA          =    445.82726455985164       W m-2
+ SW up flux TOA (clr)    =    108.45442480862459       W m-2
+ SW net flux TOA         =    241.59402554208407       W m-2
+ SW net flux TOA (clr)   =    578.96686529331112       W m-2
+ SW flux abs atm         =    154.05085095811444       W m-2
+ SW flux abs atm (clr)   =    147.09762376477846       W m-2
+ SW down flux sfc        =    97.270193982188488       W m-2
+ SW up flux sfc          =    9.7270193982188431       W m-2
+ SW net flux sfc         =    87.543174583969645       W m-2
+ SW net flux sfc (clr)   =    431.86924152853265       W m-2
+ SW cloud forcing TOA    =   -337.37283975122705       W m-2
+ SW cloud forcing sfc    =   -344.32606694456302       W m-2
+ SWCF(sfc)/SWCF(TOA)     =    1.0206099198692555     
+
+Longwave (LW) results ( > 5.0 um):
+ LW up flux TOA          =    267.96613801758429       W m-2
+ LW up flux TOA (clr)    =    287.53299794213541       W m-2
+ LW up flux sfc          =    423.61602484320002       W m-2
+ LW down flux sfc        =    409.54216208685472       W m-2
+ LW net flux sfc         =    14.073862756345305       W m-2
+ LW net flux sfc (clr)   =    76.151795435598359       W m-2
+ LW cloud forcing TOA    =    19.566859924551125       W m-2
+ LW cloud forcing sfc    =    62.077932679253053       W m-2
+
+Net Radiative Flux results (NRF=SW+LW):
+ NRF up flux TOA         =    713.79340257743593       W m-2
+ NRF down flux TOA       =    687.42129010193571       W m-2
+ NRF net flux TOA        =   -26.372112475500217       W m-2
+ NRF net flux TOA (clr)  =    291.43386735117571       W m-2
+ NRF up flux sfc         =    433.34304424141885       W m-2
+ NRF down flux sfc       =    506.81235606904318       W m-2
+ NRF net flux sfc        =    73.469311827624338       W m-2
+ NRF net flux sfc (clr)  =    355.71744609293432       W m-2
+ NRF cloud forcing TOA   =   -317.80597982667592       W m-2
+ NRF cloud forcing sfc   =   -282.24813426531000       W m-2
+
+Specified atmospheric constituents:
+ Visible AOD =   0.14000000000000001     
+ H2O mpc     =    29.454209666780891       kg m-2
+ O3  mpc     =   6.94675271971903312E-003  kg m-2
+ O3  mpc     =    324.40844162844905       Dobson
+ CO2 vmr     =   3.55000000000000010E-004
+ N2O vmr     =   3.11000000000000019E-007
+ CH4 vmr     =   1.71400000000000002E-006
+ F11 vmr     =   2.80000000000000015E-010
+ F12 vmr     =   5.03000000000000021E-010
+
+Column extinction optical depths:
+ Visible band = 0.3500--0.6400 um
+ Tau total    =    29.334182554606052     
+ Tau Ray      =   0.15516970540340488     
+ Tau aer      =   0.28847859104317242     
+ Tau lqd      =    28.873635345682999     
+ Tau ice      =    0.0000000000000000     
+ Tau O3       =   1.68989124764766172E-002
+ Tau H2O      =    0.0000000000000000     
+ Tau O2       =    0.0000000000000000     
+ Tau CO2      =    0.0000000000000000     
+
+Visible spectral fluxes:
+ Visible band          = 0.3500--0.6400 um
+ Down spc flux TOA     =    855.10230610373151       W m-2 um-1
+ Up spc flux TOA       =    653.61521433356563       W m-2 um-1
+ Down spc flux sfc     =    169.21758715910667       W m-2 um-1
+ Down spc flux dff sfc =    169.21758714723106       W m-2 um-1
+ Down spc flux drc sfc =   1.18756128259699050E-008  W m-2 um-1
+ Up spc flux sfc       =    16.921758715910670       W m-2 um-1
+
+Solar TOA radiation budget components:
+ SW alb TOA              =   0.64855027183365432     
+ Vis alb TOA             =   0.74017258648792661     
+ NIR alb TOA             =   0.56889479398591236     
+ alb(NIR)/alb(SW) TOA    =   0.87717917745600349     
+ alb(NIR)/alb(Vis) TOA   =   0.76859749249196485     
+ SW down flux TOA        =    687.42129010193571       W m-2
+ SW up flux TOA          =    445.82726455985176       W m-2
+ SW net flux TOA         =    241.59402554208395       W m-2
+ Vis down flux TOA       =    319.69626970254683       W m-2
+ Vis up flux TOA         =    236.63041483627586       W m-2
+ Vis net flux TOA        =    83.065854866270968       W m-2
+ NIR down flux TOA       =    367.72502039938900       W m-2
+ NIR up flux TOA         =    209.19684972357584       W m-2
+ NIR net flux TOA        =    158.52817067581316       W m-2
+ NIR net flux TOA N7     =    162.05709333668412       W m-2
+ NIR net flux TOA N7 (clr) =    347.26750368616774       W m-2
+
+Solar surface radiation budget components:
+ SW alb sfc              =   0.10000000000000003     
+ Vis alb sfc             =   9.99999999999999917E-002
+ NIR alb sfc             =   0.10000000000000001     
+ SW down flux sfc        =    97.270193982188474       W m-2
+ SW down flux drc sfc    =   9.54686828851683266E-009  W m-2
+ SW down flux dff sfc    =    97.270193972641607       W m-2
+ SW down flux dff/drc    =    10188701785.028309     
+ Vis down flux sfc       =    60.696507504847354       W m-2
+ Vis down flux drc sfc   =   4.43992384746736910E-009  W m-2
+ Vis down flux dff sfc   =    60.696507500407428       W m-2
+ Vis down flux dff/drc   =    13670619043.394192     
+ NIR down flux sfc       =    36.573686477341141       W m-2
+ NIR down flux drc sfc   =   5.10694444104946356E-009  W m-2
+ NIR down flux dff sfc   =    36.573686472234193       W m-2
+ NIR down flux dff/drc   =    7161559498.9160280     
+
+
+Cloud microphysics:
+ Level  Pressure      r_e lqd      r_e ice      Ice frc
+     #        mb           um           um          frc
+   1       2.026    5.0000000   30.0000000    0.0000000
+   2       5.470    8.7350000   30.0000000    0.7470000
+   3      15.296   10.0000000   30.0000000    1.0000000
+   4      33.936   10.0000000   30.0000000    1.0000000
+   5      60.780   10.0000000   30.0000000    1.0000000
+   6     103.225   10.0000000   30.0000000    1.0000000
+   7     161.270   10.0000000   30.0000000    1.0000000
+   8     234.510   10.0000000   30.0000000    1.0000000
+   9     323.046   10.0000000   30.0000000    1.0000000
+  10     420.091    7.2925000   29.2650049    0.4585000
+  11     516.833    5.0000000   24.4899803    0.0000000
+  12     613.473    5.0000000   19.7199901    0.0000000
+  13     709.910    5.0000000   14.9600197    0.0000000
+  14     799.156    5.0000000   10.5549852    0.0000000
+  15     873.003    5.0000000   10.0000000    0.0000000
+  16     931.555    5.0000000   10.0000000    0.0000000
+  17     974.810    5.0000000   10.0000000    0.0000000
+  18    1002.769    5.0000000   10.0000000    0.0000000
+
+SW Spectral Fluxes:
+ Band Wvl Min  Wvl Max  Wvl Ctr      TOA Dwn       TOA Up      Srf Dwn       Srf Up
+    #      um       um       um   W m-2 um-1   W m-2 um-1   W m-2 um-1   W m-2 um-1
+   1   0.2000   0.2450   0.2225   22.7307307   12.9027456    0.0000000    0.0000000
+   2   0.2450   0.2650   0.2550   47.7414086   41.4693592    0.0000000    0.0000000
+   3   0.2650   0.2750   0.2700   88.6773464   67.7151235    0.0000000    0.0000000
+   4   0.2750   0.2850   0.2800  115.8992295   58.6031126    0.0000000    0.0000000
+   5   0.2850   0.2950   0.2900  197.7711052   44.3626240    0.0000000    0.0000000
+   6   0.2950   0.3050   0.3000  265.9632971   19.6402877    0.0000000    0.0000000
+   7   0.3050   0.3500   0.3275  402.3094910  213.2488038   56.2226388    5.6222639
+   8   0.3500   0.6400   0.4950  855.1023061  653.6152143  169.2175872   16.9217587
+   9   0.6400   0.7000   0.6700  749.1975500  569.5430716  151.5564747   15.1556475
+  10   0.7000   5.0000   2.8500   42.5345608   33.9376324    7.4542510    0.7454251
+  11   0.7010   5.0000   2.8505   17.6917535   11.4549067    0.9592833    0.0959283
+  12   0.7010   5.0000   2.8505   10.1095734    3.1703644    0.0922187    0.0092219
+  13   0.7010   5.0000   2.8505    5.8972512    0.0760835    0.0000000    0.0000000
+  14   0.7010   5.0000   2.8505    4.0438294    0.0003431    0.0000000    0.0000000
+  15   0.7020   5.0000   2.8510    2.4437154    0.0006095    0.0000000    0.0000000
+  16   0.7020   5.0000   2.8510    1.5167888    0.0014611    0.0000000    0.0000000
+  17   2.6300   2.8600   2.7450   18.6470497    0.0823764    0.0000000    0.0000000
+  18   4.1600   4.5500   4.3550    2.0688913    0.0137407    0.0000000    0.0000000
+  19   4.1600   4.5500   4.3550    1.1637514    0.0749413    0.0000000    0.0000000
+
+SW Scattering:
+ Interface  Pressure      SW down    SW direct   SW diffuse   SW dff/drc
+         #        mb        W m-2        W m-2        W m-2          frc
+   1           1.013  683.8718826  683.7883494    0.0835332    0.0001222
+   2           3.748  680.7854339  680.4934889    0.2919450    0.0004290
+   3          10.383  677.0905623  676.3352693    0.7552930    0.0011167
+   4          24.616  672.4883784  670.7500503    1.7383281    0.0025916
+   5          47.358  667.9325005  664.5614619    3.3710386    0.0050726
+   6          82.002  663.5662375  657.6027507    5.9634868    0.0090685
+   7         132.248  659.7361138  649.8980975    9.8380163    0.0151378
+   8         197.890  655.9433380  641.1013925   14.8419454    0.0231507
+   9         278.778  648.6275125  627.7868900   20.8406225    0.0331970
+  10         371.568  633.9932387  606.5444035   27.4488352    0.0452545
+  11         468.462  618.4717334  584.4247280   34.0470054    0.0582573
+  12         565.153  603.2050330  562.8640896   40.3409434    0.0716708
+  13         661.691  586.7990327  540.4471639   46.3518688    0.0857658
+  14         754.533  569.7315713  517.8476218   51.8839495    0.1001915
+  15         836.079  104.3398848    0.0000000  104.3398848 ************
+  16         902.279  103.3210235    0.0000000  103.3210234 ************
+  17         953.183  100.5377588    0.0000000  100.5377588 ************
+  18         988.789   98.5908200    0.0000000   98.5908199 ************
+  19        1013.000   97.2701940    0.0000000   97.2701940 ************
+
+SW Fluxes:
+ Interface  Pressure      SW down        SW up       SW Net
+         #        mb        W m-2        W m-2        W m-2
+   1           1.013  683.8718826  442.2778571  241.5940255
+   2           3.748  680.7854339  442.4673203  238.3181136
+   3          10.383  677.0905623  443.1360309  233.9545314
+   4          24.616  672.4883784  444.4654310  228.0229474
+   5          47.358  667.9325005  445.8407372  222.0917633
+   6          82.002  663.5662375  446.8021760  216.7640615
+   7         132.248  659.7361138  446.8873039  212.8488099
+   8         197.890  655.9433380  446.4073376  209.5360004
+   9         278.778  648.6275125  445.5134047  203.1141077
+  10         371.568  633.9932387  444.5041212  189.4891176
+  11         468.462  618.4717334  443.6829032  174.7888302
+  12         565.153  603.2050330  443.3524239  159.8526091
+  13         661.691  586.7990327  444.2403217  142.5587111
+  14         754.533  569.7315713  448.1124523  121.6191190
+  15         836.079  104.3398848   15.1094061   89.2304787
+  16         902.279  103.3210235   14.6930639   88.6279596
+  17         953.183  100.5377588   12.4036475   88.1341113
+  18         988.789   98.5908200   10.8082645   87.7825555
+  19        1013.000   97.2701940    9.7270194   87.5431746
+
+LW Fluxes:
+ Interface  Pressure      LW down        LW up       LW Net
+         #        mb        W m-2        W m-2        W m-2
+   1           1.013    1.1400789  269.1062169  267.9661380
+   2           3.748    3.1372767  268.3873420  265.2500654
+   3          10.383    5.5952204  267.3186150  261.7233946
+   4          24.616    8.6439748  266.5829170  257.9389422
+   5          47.358   11.6921415  266.7697993  255.0776578
+   6          82.002   15.0054357  268.1397912  253.1343555
+   7         132.248   18.8055889  270.3833805  251.5777916
+   8         197.890   24.4675970  274.6216112  250.1540142
+   9         278.778   45.4378344  283.0376071  237.5997728
+  10         371.568   79.5549301  296.6598322  217.1049022
+  11         468.462  115.3525972  312.4445450  197.0919478
+  12         565.153  151.7930206  328.3278760  176.5348555
+  13         661.691  191.7237685  344.3781635  152.6543950
+  14         754.533  234.1118367  358.6580383  124.5462016
+  15         836.079  383.6840451  399.9328401   16.2487950
+  16         902.279  392.3595818  410.3822305   18.0226487
+  17         953.183  399.9053653  417.2137573   17.3083919
+  18         988.789  405.5444735  421.4177971   15.8733236
+  19        1013.000  409.5421621  423.6160248   14.0738628
+
+Total SW+LW Fluxes:
+ Interface  Pressure         Down           Up          Net
+         #        mb        W m-2        W m-2        W m-2
+   1           1.013  685.0119615  711.3840740  -26.3721125
+   2           3.748  683.9227106  710.8546624  -26.9319518
+   3          10.383  682.6857827  710.4546459  -27.7688632
+   4          24.616  681.1323531  711.0483480  -29.9159949
+   5          47.358  679.6246420  712.6105365  -32.9858945
+   6          82.002  678.5716732  714.9419672  -36.3702940
+   7         132.248  678.5417027  717.2706845  -38.7289818
+   8         197.890  680.4109349  721.0289488  -40.6180139
+   9         278.778  694.0653469  728.5510119  -34.4856650
+  10         371.568  713.5481688  741.1639534  -27.6157846
+  11         468.462  733.8243306  756.1274482  -22.3031177
+  12         565.153  754.9980536  771.6803000  -16.6822464
+  13         661.691  778.5228012  788.6184852  -10.0956840
+  14         754.533  803.8434080  806.7704907   -2.9270826
+  15         836.079  488.0239299  415.0422462   72.9816837
+  16         902.279  495.6806053  425.0752944   70.6053109
+  17         953.183  500.4431242  429.6174048   70.8257194
+  18         988.789  504.1352935  432.2260616   71.9092319
+  19        1013.000  506.8123561  433.3430442   73.4693118
+
+Heating rates:
+ Level  Pressure           SW           LW          Net
+     #        mb      K day-1      K day-1      K day-1
+   1       2.026   10.1012971   -8.3750287    1.7262684
+   2       5.470    5.5463144   -4.4825613    1.0637530
+   3      15.296    3.5146047   -2.2423781    1.2722266
+   4      33.936    2.1994546   -1.0610470    1.1384076
+   5      60.780    1.2969041   -0.4730514    0.8238527
+   6     103.225    0.6571569   -0.2612621    0.3958949
+   7     161.270    0.4256117   -0.1829192    0.2426926
+   8     234.510    0.6695472   -1.3089065   -0.6393593
+   9     323.046    1.2383258   -1.8627043   -0.6243785
+  10     420.091    1.2794798   -1.7418823   -0.4624025
+  11     516.833    1.3027376   -1.7929901   -0.4902525
+  12     613.473    1.5107569   -2.0861446   -0.5753876
+  13     709.910    1.9020780   -2.5532482   -0.6511702
+  14     799.156    3.3495745  -11.1999216   -7.8503471
+  15     873.003    0.0767571    0.2259776    0.3027346
+  16     931.555    0.0818179   -0.1183338   -0.0365160
+  17     974.810    0.0832647   -0.3398908   -0.2566261
+  18    1002.769    0.0833850   -0.6268172   -0.5434322
+Wrote results to crm.nc                                                                          
+Added SRB results to crm.nc                                                                          
+End CCM3 CRM
+zender@neige:~/foo/crm/bin$ 
+</pre>
+</tt>
+
+<HR></P>
+
+<DT><A NAME="ChangeLog"></A></DT>
+<H2>See the <TT><A HREF="http://dust.ess.uci.edu/crm/ChangeLog">ChangeLog</A></TT>
+file.</H2>
+
+<P><TT>`ChangeLog'</TT> contains the most up-to-date information on the
+latest CRM improvements. There is no need to install minor, unannounced
+upgrades to CRM unless a problem you are having with CRM is listed in <TT>`ChangeLog'</TT>
+as having been fixed in the latest revision. 
+<HR></P>
+
+<DT><A NAME="Version"></A></DT>
+<H2>Current release of CRM is <!--#include virtual="VERSION"--> </H2>
+<P>You can easily tell whether you have the most recent version, and whether you should upgrade by reading the <TT><A HREF="http://dust.ess.uci.edu/crm/ChangeLog">ChangeLog</A></TT>.
+
+<HR></P>
+
+<DT><A NAME="Bugs"></A></DT>
+<H2>Known Problems with CRM:</H2>
+
+<b>20110301: CRM compiled on recent Fedora or Debian does not link</b>:
+<ul>
+<li>Symptoms: 
+output routine. Some versions of Solaris <TT>f90</TT> will produce
+garbage in the netCDF output file, but some will core dump.</li>
+<li>Cause: Input data to netCDF output routines is single precision not
+double precision. Related to 19990907 problem below.</li>
+<li>Solution: Either convert all CRM code to double precision,
+or convert <tt>netcdf.F</tt> file to expect single precision, 
+or live without netCDF output.</li>
+</ul>
+
+<b>20000211: CRM compiled in single precision Solaris <TT>f90</TT> dumps core</b>:
+<ul>
+<li>Symptoms: After printing the Heating Rates, CRM dies in the netCDF
+output routine. Some versions of Solaris <TT>f90</TT> will produce
+garbage in the netCDF output file, but some will core dump.</li>
+<li>Cause: Input data to netCDF output routines is single precision not
+double precision. Related to 19990907 problem below.</li>
+<li>Solution: Either convert all CRM code to double precision,
+or convert <tt>netcdf.F</tt> file to expect single precision, 
+or live without netCDF output.</li>
+</ul>
+
+<b>20000113: Solaris <TT>f90</TT> fails to compile code</b>:
+<ul>
+<li>Symptoms: <tt>radcsw.F</tt>, <tt>radclw.F</tt>, <tt>radded.F</tt>
+fail to compile because of <tt>CDIR IVDEP</tt> directives</li>
+<li>Cause: Unknown, probably dependent on compiler version</li>
+<li>Solution: Comment out <TT>CDIR IVDEP</TT> directives in these files</li>
+</ul>
+
+<b>19990907: GNU <TT>make</TT> version 3.77 has a bug in wildcard
+function on Solaris causing <TT>make</TT> to fail</b>:
+<ul>
+<li>Symptoms: <TT>make</TT> command fails because source file list is
+empty. This can be verified by typing <TT>make debug</TT></li> 
+<li>Cause: Bug in GNU <TT>make</TT></li>
+<li>Solution: Use GNU <TT>make</TT> version 3.76 or 3.78 on Solaris</li>
+</ul>
+
+<b>19990907: Solaris <TT>f90</TT> does not support <TT>-r8 -i4</TT></b>:
+<ul>
+<li>Symptoms: CRM produces single precision results and netCDF output
+file crm.nc is full of garbage (or dumps core as in 20000211 problem)</li>
+<li>Cause: Compiler limitation, use of non-standard Fortran by CRM</li>
+<li>Workaround: Use <TT>f77</TT> on Solaris and <TT>#undef CRM_SRB</TT>
+in <TT>misc.h</TT> to remove Fortran90 code.
+See <TT><A HREF="http://dust.ess.uci.edu/crm/INSTALL">INSTALL</A></TT> file 
+for example compile command. 
+Note that most diagnostic fields require the Fortran90 code, so a CRM 
+compiled with <TT>f77</TT> will produce much smaller output files.</li>
+<li>Alternate workaround: Do not use CRM version 2.1 or later on
+Solaris</li>
+</ul>
+
+<P>
+<HR></P>
+
+<TABLE WIDTH="100%" >
+<TR>
+<TD align="left" valign="bottom">/ <A HREF="http://www.ucar.edu/metapage.html">NCAR</A>
+/ <A HREF="http://www.cgd.ucar.edu/">CGD</A> / <A HREF="http://www.cgd.ucar.edu/cms">CMS</A>
+/ <A HREF="http://www.cgd.ucar.edu/cms/ccm3">CCM3</A> / </TD>
+
+<TD align="right" valign="top">[ <A HREF="http://www.cgd.ucar.edu/cms/ccm3">CCM3
+</A>] [ <A HREF="http://www.cgd.ucar.edu/cms/ccm3/processor.html">Processor
+</A>] [ <A HREF="http://www.cgd.ucar.edu/cms/ccm3/lsm">LSM
+</A>] [ <A HREF="http://www.cgd.ucar.edu/csm">CSM </A>] </TD>
+</TR>
+</TABLE>
+
+<P>
+<HR></P>
+Address questions and comments about the CRM to 
+<address>
+<a href="mailto:surname@uci.edu">Charlie &ldquo;my surname is zender&rdquo; Zender</a></address>
+
+</BODY>
+</HTML>

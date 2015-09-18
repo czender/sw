@@ -1,0 +1,22 @@
+# Usage: 
+# sudo scp ~/linux/etc/hosts.allow dust.ess.uci.edu:/etc
+
+# hosts.allow	This file describes the names of the hosts which are
+#		allowed to use the local INET services, as decided
+#		by the '/usr/sbin/tcpd' server.
+
+
+#csz++ 19991212: As per http://www.linuxdoc.org/HOWTO/ISP-Hookup-HOWTO-2.html
+#ALL: LOCAL
+#csz--
+
+# All machines with static IP in Zender group cluster
+portmap: 128.200.14.25
+portmap: 128.200.14.39
+portmap: 128.200.14.62
+portmap: 128.200.14.73
+portmap: 128.200.14.80
+portmap: 128.200.14.90
+portmap: 128.200.14.97
+portmap: 128.200.14.98
+

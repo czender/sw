@@ -1,0 +1,64 @@
+# -*-text-*-
+image/*; showpicture %s
+image/x-xwd; showpicture %s; description="An X11 window image dump in X-XWD format"
+
+message/partial; showpartial %s %{id} %{number} %{total}
+message/external-body; showexternal %s %{access-type} %{name} %{site} %{directory} %{mode} %{server}; \
+	needsterminal; composetyped = extcompose %s; \
+	description="A reference to data stored in an external location"
+
+x-sun-attachment; sun-to-mime.csh %s
+audio-file; sun-audio-file.csh %s
+application/postscript; ghostview %s
+audio/*;       playfix %s; \
+x-mozilla-flags=prompt
+text/html;netscape -remote 'openURL(file:%s)'
+default; cat %s; copiousoutput
+#mailcap entry added by Netscape Helper
+image/gif;xv -8 -perfect -geometry +10+10 %s; \
+x-mozilla-flags=internal
+#mailcap entry added by Netscape Helper
+image/jpeg;xv -8 -perfect -geometry +10+10 %s; \
+x-mozilla-flags=internal
+#mailcap entry added by Netscape Helper
+image/tiff;xv -8 -perfect -geometry +10+10 %s
+#mailcap entry added by Netscape Helper
+image/x-xbitmap;xv -8 -perfect -geometry +10+10 %s
+#mailcap entry added by Netscape Helper
+image/x-xpixmap;xv -8 -perfect -geometry +10+10 %s
+#mailcap entry added by Netscape Helper
+image/x-xwindowdump;xv -8 -perfect -geometry +10+10 %s
+#mailcap entry added by Netscape Helper
+image/x-portable-anymap;xv -8 -perfect -geometry +10+10 %s
+#mailcap entry added by Netscape Helper
+image/x-portable-bitmap;xv -8 -perfect -geometry +10+10 %s
+#mailcap entry added by Netscape Helper
+image/x-portable-graymap;xv -8 -perfect -geometry +10+10 %s
+#mailcap entry added by Netscape Helper
+image/x-portable-pixmap;xv -8 -perfect -geometry +10+10 %s
+#mailcap entry added by Netscape Helper
+application/x-dvi;xdvi %s
+#mailcap entry added by Netscape Helper
+application/pdf;acroread %s
+application/vnd.sun.xml.writer;/home/zender/.openoffice/soffice %s
+application/vnd.sun.xml.writer.global;/home/zender/.openoffice/soffice %s
+application/vnd.stardivision.writer;/home/zender/.openoffice/soffice %s
+application/vnd.stardivision.writer-global;/home/zender/.openoffice/soffice %s
+application/x-starwriter;/home/zender/.openoffice/soffice %s
+application/vnd.sun.xml.writer.template;/home/zender/.openoffice/soffice %s
+application/vnd.sun.xml.calc;/home/zender/.openoffice/soffice %s
+application/vnd.stardivision.calc;/home/zender/.openoffice/soffice %s
+application/x-starcalc;/home/zender/.openoffice/soffice %s
+application/vnd.sun.xml.calc.template;/home/zender/.openoffice/soffice %s
+application/vnd.sun.xml.impress;/home/zender/.openoffice/soffice %s
+application/vnd.stardivision.impress;/home/zender/.openoffice/soffice %s
+application/vnd.stardivision.impress-packed;/home/zender/.openoffice/soffice %s
+application/x-starimpress;/home/zender/.openoffice/soffice %s
+application/vnd.sun.xml.impress.template;/home/zender/.openoffice/soffice %s
+application/vnd.sun.xml.draw;/home/zender/.openoffice/soffice %s
+application/vnd.stardivision.draw;/home/zender/.openoffice/soffice %s
+application/x-stardraw;/home/zender/.openoffice/soffice %s
+application/vnd.sun.xml.draw.template;/home/zender/.openoffice/soffice %s
+application/vnd.sun.xml.math;/home/zender/.openoffice/soffice %s
+application/vnd.stardivision.math;/home/zender/.openoffice/soffice %s
+application/x-starmath;/home/zender/.openoffice/soffice %s

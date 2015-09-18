@@ -1,0 +1,2471 @@
+% $Id$
+
+% Purpose: Abbreviations used in programming, writing, and bibliography
+
+% Copyright (c) 1998--2014, Charles S. Zender
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License (GFDL), Version 1.3
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+% GFDL: http://www.gnu.org/copyleft/fdl.html
+
+% The original author of this software, Charlie Zender, seeks to improve
+% it with your suggestions, contributions, bug-reports, and patches.
+% Charlie Zender <zender at uci dot edu>
+% Department of Earth System Science
+% University of California, Irvine
+% Irvine, CA 92697-3100
+
+% URL: http://dust.ess.uci.edu/doc/abb/abb.pdf
+
+% Usage (see also end of file):
+% cd ~/crr;make -W abb.tex abb.dvi abb.ps abb.pdf abb.txt;cd -
+
+\documentclass[12pt,twoside]{article}
+
+% Standard packages
+\usepackage{ifpdf} % Define \ifpdf
+\ifpdf % PDFLaTeX
+\usepackage[pdftex]{graphicx} % Defines \includegraphics*
+\pdfcompresslevel=9
+\usepackage{thumbpdf} % Generate thumbnails
+\usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
+\else % !PDFLaTeX
+\usepackage{graphicx} % Defines \includegraphics*
+\fi % !PDFLaTeX
+\usepackage{array} % Table and array extensions, e.g., column formatting
+\usepackage[dayofweek]{datetime} % \xxivtime, \ordinal
+\usepackage{longtable} % Multi-page tables, e.g., acronyms and symbols
+\usepackage{makeidx} % Index keyword processor: \printindex and \see
+\usepackage{natbib} % \cite commands from aguplus
+\usepackage{times} % Postscript Times-Roman font KoD99 p. 375
+\usepackage{url} % Typeset URLs and e-mail addresses
+
+% hyperref is last package since it redefines other packages' commands
+% hyperref options, assumed true unless =false is specified:
+% backref       List citing sections after bibliography entries
+% baseurl       Make all URLs in document relative to this
+% bookmarksopen Unknown
+% breaklinks    Wrap links onto newlines
+% colorlinks    Use colored text for links, not boxes
+% hyperindex    Link index to text
+% plainpages=false Suppress warnings caused by duplicate page numbers
+% pdftex        Conform to pdftex conventions
+% Colors used when colorlinks=true:
+% linkcolor     Color for normal internal links
+% anchorcolor   Color for anchor text
+% citecolor     Color for bibliographic citations in text
+% filecolor     Color for URLs which open local files
+% menucolor     Color for Acrobat menu items
+% pagecolor     Color for links to other pages
+% urlcolor      Color for linked URLs
+\ifpdf % PDFLaTeX
+\usepackage[backref,breaklinks,colorlinks,citecolor=blue,linkcolor=blue,urlcolor=blue,hyperindex,plainpages=false,pdftex]{hyperref} % Hyper-references
+\pdfcompresslevel=9
+\else % !PDFLaTeX
+\usepackage[backref=false,breaklinks,colorlinks=false,hyperindex,plainpages=false]{hyperref} % Hyper-references
+\fi % !PDFLaTeX
+
+% Commands which must be executed in preamble
+\makeindex % Index described on KoD95 p. 220
+
+% Personal packages
+\usepackage{csz} % Library of personal definitions
+\usepackage{dmn} % Dimensional units
+\usepackage{chm} % Commands generic to chemistry
+%\input{jgr_abb} % JGR-sanctioned journal abbreviations
+
+% Commands specific to this file
+\newcommand{\ant}[1]{(\textit{ant.}~\texttt{#1})}
+\newcommand{\syn}[1]{(\textit{syn.}~\texttt{#1})}
+
+\topmargin -24pt \headheight 12pt \headsep 12pt
+\textheight 9in \textwidth 6.5in
+\oddsidemargin 0in \evensidemargin 0in
+\marginparwidth 0pt \marginparsep 0pt
+\footskip 24pt
+\footnotesep=0pt
+
+\begin{document}
+
+\begin{center}
+Online: \url{http://dust.ess.uci.edu/doc} \hfill Built: \shortdate\today, \xxivtime\\
+\bigskip
+{\Large \textbf{Abbreviations for Scientific Programs}}\\
+\bigskip
+by Charlie Zender\\
+\end{center}
+
+\pagenumbering{roman}
+\setcounter{page}{1}
+\pagestyle{headings}
+\thispagestyle{empty}
+%\onecolumn
+\tableofcontents
+\pagenumbering{arabic}
+\setcounter{page}{1}
+%\markleft{Abbreviation Cheat Sheet}
+%\markright{}
+\thispagestyle{empty}
+
+\section{General Points}
+
+This document describes programming \textit{abbreviations}.
+Abbreviations are quite general: Any shortened
+form of a word, phrase, or concept is an abbreviation.
+Hence, abbreviations can be acronyms, initialisms, or nicknames.
+Concise abbreviations for variable names are especially important
+because they help make a program become self-documenting and thus
+easier to maintain.
+Consistent abbreviations across programs are important because then
+whole suites of code can be updated an improved in a more modular
+fashion. 
+An alternative method of naming variables is the \trmdfn{Hungarian
+notation} method originated by Charles Simonyi of Microsoft
+\url{http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnvsgen/html/hunganotat.asp}
+
+\subsection{Abbreviations}
+Abbreviations are usually used for variable names in a program.
+Naming a variable appropriately often speeds up programming by
+reducing the introduction of bugs to the program, and by making future 
+maintenance easier.
+An effective abbreviation has a number of desirable qualities.
+\begin{itemize}
+\item Concise
+\item Unambiguous
+\item Easy to remember
+\item Distinct from English
+\end{itemize}
+
+Here are some guidelines which help in creating abbreviations with
+these qualities: 
+\begin{enumerate}
+\item A common acronym, if it exists, is preferable to creating a new
+abbreviation (e.g., \verb'SWCF').
+\item Abbreviations which do not contain common letter combinations of the
+English language are much easier to program.
+Searching and replacing uncommon letter combinations lessens the risk
+of corrupting plain text and comments in the program. 
+For example, using \verb'flx' rather than \verb'flux' saves only one
+letter, but makes code maintenance much easier. 
+\item Phonetic abbreviations are often superior mnemonics.
+Use, e.g.,\verb'nvr' rather than \verb'env' for ``environment''.
+Phonetic abbreviations make it easier to use consonants, which are
+better than vowels in abbreviations.
+\item All things being equal, three letter abbreviations, or groups of
+them, are best.
+Three letters are easy to remember yet there are enough permutations
+to abbreviate almost atomic concept into a three letter abbreviation.
+\item Single letter abbreviations, e.g. ``\verb't' = temperature'',
+are always a mistake. 
+It is nearly impossible to perform a quick search or
+search-and-replace on a single letter variable.
+\item Sometimes an abbreviation is an acronym but is not capitalized.
+Capitalize the abbreviation when it is common (e.g., \verb'SWCF'), but
+leave it lowercase when it is uncommon (e.g., \verb'mpc'). 
+\end{enumerate}
+
+\subsection{Variable Names}
+Use underscores to aggregate abbreviations into longer groups which
+compose a variable name.
+Underscores are easier to proofread than the X-style capitalization 
+method, e.g., \verb'flx_bb_dwn_sfc' vs.\ \verb'FlxBbDwnSfc' or
+\verb'FluxBroadbandDownSurface'.  
+Variables names constructed in this manner have the desirable property
+that, when they are alphabetized, related variables are grouped
+together. 
+
+\subsection{Definitions}
+Often an abbreviation is used to keep a quantity distinct from a
+related but distinct quantity. 
+In these cases the abbreviations are called \textit{antonyms}.
+In the list, the antonym of a given definition is indicated by
+``{\textit ant.}''.
+vvvOccasionally an abbreviation has a synonym, too.
+In the list, the synonyms are indicated by ``{\textit syn.}''.
+
+The abbreviation is followed by the definition.
+In some cases the definition has multiple related meanings---these are
+separated by commas, e.g., ``\verb'abs' = absorption, absorbed, absorbing''.
+
+In a few cases, the definition has multiple distinct meanings---these
+are separated from one another by ``or'', e.g., 
+``\verb'aer' = aerosol, aerosol-laden (turbid), or aerodynamic''.
+
+\section{Abbreviations}\label{sxn:abb}
+
+% Macros provided by \hyperref:
+% \hyperdef{category}{name}txt % Mark text with category.name
+% \hyperref{URL}{category}{name}{text} % Link text to URL#category.name
+% \hyperbaseurl{URL} % Prepend URL to following URLs
+% Samples that work:
+%\hyperref{sxn}{}{}
+%\hyperref{}{sxn}{abb}{fxm} % Link text to URL#category.name
+%\hypertarget{sxn:abb}{}
+% Actual targets
+\hyperbaseurl{file:///data/zender/ps/abb.pdf}
+\hypertarget{sxn:abb}{}
+%\hypertarget{sxn:abb}{hypertarget sxn:abb pointed to by a hyperlink}
+Abbreviations of business, financial, and travel terms:
+% Package array defines >{\bfseries}l syntax
+\begin{longtable}[>{\bfseries}l]{>{\ttfamily}r l}
+AA & Adverse Action \\
+AC & Authorization Code \\
+AC70 & fxm (Access Code 70?) \\
+AF & Annual Fee \\
+AGC & Amazon Gift Card \\
+AOR & App-O-Rama, Application-O-Rama \\
+AP & Amazon Payments \\
+AW & AwardWallet \\
+AX & American Express \\
+BB & Bluebird \\
+BC & Bancorp \\
+BF & BeFrugal \\
+BP & Bill Pay \\
+BX & Business Expense \\
+CA & Cash-Advance \\
+CB & Cash-Back or Category Bonus \\
+CC & Credit Card \\
+CI & Credit Issuer \\
+CK & Credit Karma \\
+CL & Credit Limit \\
+CRA & Credit Rating Agency \\
+CSR & Customer Service Representative \\
+DC & Debit Card \\
+EF & ExpertFlyer.com \\
+FA & Fraud Alert \\
+FR & Financial Review \\
+FT & FlyerTalk \\
+GB & GoBank \\
+GC & Gift Card \\
+GCB & GE Capital Bank \\
+GCM & Gift Card Mall \\
+GGD & Grocery/Gas/Drugs \\
+GP & Google Play \\
+GS & Gas Station \\
+GW & Google Wallet \\
+HD & Home Depot \\
+HP & Hard Pull \\
+Kate & Walmart ATM? \\
+KV & Kiva \\
+LL & Load Limits \\
+MB & Metabank \\
+MC & MoneyCenter (in Walmart) or Money Card (Walmart product) or MasterCard \\
+MGC & Metabank Gift Card \\
+MO & Money Order \\
+MS & Manufactured Spend \\
+MVD & MyVanilla Debit Card \\
+NAF & No Annual Fee \\
+NF & No Fee \\
+OD & Office Depot \\
+OM & OfficeMax \\
+OSS & Office Supply Store \\
+OV & One Vanilla \\
+OVGC & OneVanilla Gift Card \\
+PFF & Purchased for Friend (e.g., GCs) \\
+PP & PayPal \\
+PPMC & PayPal MyCash \\
+PPRP & PayPal Reload Pack \\
+RA & Rite-Aid \\
+RB & Retention Bonus \\
+RPC & Reloadable Prepaid Card (VRC, PPRP) \\
+RR & fxm (like BB at WM?) \\
+Rite Aid & Rite Aid \\
+SB & Starbucks \\
+S4C & Savingforcollege \\
+SM & Send Money \\
+SP & Soft Pull or Shopping Portal \\
+SRV & (AmEx) Serve \\
+RDB & REDbird = Target Prepaid REDcard \\
+ST DL & Suntrust Delta (debit card) \\
+TCB & TopCashBack \\
+USB & US Bank \\
+VGC & Vanilla Gift Card (not Visa GC by convention) \\
+VR & Vanilla Reload \\
+VRC & Vanilla Reload Card \\
+VSE & Visa Savings Edge \\
+VVC & Vanilla Visa Card \\
+WM & WalMart \\
+WP & fxm \\
+ACH & Automated Clearing House \\
+ADR & American Depository Receipt \\
+ADS & American Depository Share \\
+AFR & Applicable Federal Rate \\
+AGI & Adjusted Gross Income \\
+FTR & Effective Tax Rate \\
+MAGI & Modified Adjusted Gross Income \\
+AMC & After Market Closes \\
+APR & Annual Percentage Rate \\
+APY & Annual Percentage Yield \\
+ARL & Airline Record Locator \\
+ARM & Adjustable Rate Mortgage \\
+ATN & Airline Ticket Number (13 digit number) \\
+BCON & Beacon Power \\
+BIC & Bank Identifier Code \\
+BK & Bankruptcy \\
+BMO & Before Market Opens \\
+BP & La Banque Postale \\
+C1 & CapitalOne \\
+CAP & Capital Accumulation Payment \\
+CB & Carte Bleue \\
+CBP & Customs \& Border Protection \\
+CCP & Compte Courant Postal (checking account, carte bleu too) \\
+CDW & Collision Damage Waiver \\
+CPH & Copenhagen stock exchange \\
+CSC & Card Security Code (three digit credit card security number) \\
+COAF & Capital One Auto Finance \\
+CTC & Child Tax Credit \\
+HOH & Head of Household \\
+ETC & Electronic Travel Certificate (monetary voucher towards future purchases) \\
+CVN & (Credit) Card Verification Number \\
+CVV2 & Specific Type of CVN \\
+DAB & Distributeurs Automatiques de Billets \\
+DBP & Defined Benefit Plan \\
+DCP & Defined Contribution Plan \\
+STL & Short-term Loan \\
+MTL & Mid-term Loan \\
+LTL & Long-term Loan \\
+DDG & ProShares Short Oil \& Gas ($-1 \times$ DJIA oil) ETF \\
+DDM & ProShares Ultra Dow30 ($+2 \times$ DJIA) ETF \\
+DEQM & Double Elite Qualifying Miles \\
+DFSA & Dependent Care Flexible Spending Account \\
+DHS & Department of Homeland Security \\
+DJIA & Dow Jones Industrial Average \\
+DMB & Daily Minimum Balance \\
+DMCSB & Daily Minimum Combined Share Balance (sum of all accounts) \\
+DOG & ProShares Short Dow30 ($-1 \times$ DJIA) ETF \\
+DUG & ProShares UltraShort Oil \& Gas ($-2 \times$ DJIA oil) ETF \\
+DXD & ProShares UltraShort Dow30 ($-2 \times$ DJIA) ETF \\
+EAFE & Europe, Australasia, and Far East index \\
+EBITDA & Earnings Before Interest, Taxes, Depreciation, and Amortization \\
+ECN & Electronic Communication Network \\
+EDC & Direxion Daily Emerging Markets Bull ($+3 \times$ MSCI EMI) ETF \\
+EEM & iShares MSCI EMI (emerging markets) ETF \\
+EEV & ProShares UltraShort emerging market ($-2 \times$ MSCI EMI) ETF \\
+EFA & iShares MSCI EAFE (large-cap foreign G7 stock) ETF \\
+EIN & Employer Identification Number \syn{EIN} \\
+EMA & Exponential Moving Average \\
+EMI & Emerging Markets Index \\
+EMV & Europay MasterCard Visa (standard for smart card) \\
+EOB & Explanation of Benefits \\
+EPS & Earnings Per Share \\
+EQM & Elite Qualifying Miles \\
+ETA & Electronic Travel Authority (Australian visa) \\
+ETF & Exchange Traded Fund (tracks an index, e.g., DJIA) \\
+FAA & Fly American Act or Federal Aviation Administration \\
+FCU & Federal Credit Union \\
+FEIE & Foreign Earned Income Exemption \\
+FICA & Federal Insurance Contributions Act (FICA = OASDI + MEDICARE?) \\
+FMV & Fair Market Value \\
+FRE & Freddie Mac \\
+FRM & Fixed Rate Mortgage \\
+FRR & Flat-Rate Reimbursement \\
+FSA & Flexible Spending Account \\
+FSB & Federal Savings Bank \\
+FTF & Foreign Transaction Fee (credit card fee on currency exchanges) \\
+FTIN & Federal Tax Identity Number \\
+GLD & Gold (bullion) tracking ETF \\
+GM & General Motors \\
+GOES & Global Online Enrollment System \\
+GS & Goldman Sachs \\
+HAPC & Highest Average Plan Compensation \\
+HFSA & Health Flexible Spending Account \\
+HTB & Hard-To-Borrow (fee) \\
+HYMMBA & High Yield Money Market Banking Account \\
+IOSA & InterestPlus Online Savings Account \\
+ITIN & Individual Tax Identity Number \syn{FTIN} \\
+KBB & Kelley Blue Book \\
+LTV & Loan-To-Value ratio \\
+LVS & Las Vegas Sands \\
+MACD & Moving Average Convergence/Divergence \\
+MAW & Monthly Automated Withdrawl \\
+MC & Master Card \\
+MCB & Medical Contributions Base \\
+MChip & MasterCard implementation of EMV smart card standard \\
+ME & Moving Expenses \\
+MIE & Meals and Incidental Expenses \\
+MSCI & Morgan Stanley Capital International \\
+MTDC & Modified Total Direct Costs (overheat rate) \\
+MTL & Mechel OAO (ADR) \\
+CBAF & Cross-Border Assessment Fee (charged by MC and Visa for FX) \\
+NASDAQ & National Association of Securities Dealer Automated Quotation system \\
+NAV & Net Asset Value (share price) \\
+NCE & No-Cost Extension \\
+NPE & Non-Passenger Escort \\
+OASDI & Old Age, Survivors, and Disability Insurance \\
+OCTFCU & Orange County Teacher's Federal Credit Union \\
+OFX & Office Financial Exchange (file format/extension) \\
+OSA & Online Savings Account \\
+OTC & Over-the-Counter (pseudo stock exchange) \\
+OTCBB & Over-the-Counter Bulletin Board (pseudo stock exchange) \\
+OTM & Out-of-The-Money \\
+PAI & Personal Accident Insurance \\
+PCOR & Preliminary Change of Ownership Report \\
+PINK & Telephone-based (pseudo stock exchange) \\
+PNR & Passenger Name Record (record locator) \\
+QDRO & Qualified Domestic Relations Order \\
+QFX & Quiken Financial Exchange (file format/extension) \\
+QID & ProShares UltraShort QQQ ($-2 \times$ NASDAQ) \\
+QOQ & Quarter-over-quarter (e.g., QOQ EPS) \\
+QQQ & Any NASDAQ-tracking ETF \\
+QQQQ & PowerShares QQQ ($+1 \times$ NASDAQ) \\
+RAQVAM & Risques Autres que V\'{e}hicule \`{a} Moteur (insurance policy covering risks other than motor vehicles) \\
+RIB & Relev\'{e} d'Identit\'{e} Bancaire \\
+RL & Record Locator \\
+RSI & Relative Strength Index \\
+S31 & SEC Section~31 Fee (based on valued of trade) \\
+SDS & ProShares UltraShort S\&P500 ($-2 \times$ S\&P500) \\
+SFFCU & SchoolsFirst Federal Credit Union \\
+SG & Soci\'{e}t\'{e} G\'{e}n\'{e}rale \\
+SKF & ProShares UltraShort Financials ($-2 \times$ DOW) ETF \\
+SMA & Simple Moving Average \\
+SNS & Saturday-Night-Stay \\
+SPDR & Standard \& Poor's Depositary Receipt (aka ``spider''), tracks S\&P500 \\
+SPY & S\&P500-tracking ETF \\
+SSO & ProShares Ultra S\&P500 ($+2 \times$ DOW) ETF \\
+SWIFT & Society for Worldwide Interbank Financial Telecommunication \\
+TAF & Trading Activity Fee (based on number of shares traded) \\
+TEQM & Triple Elite Qualifying Miles \\
+TER & Travel Expense Report \\
+TID & Travel of Indefinite Duration \\
+TIP & Tax Savings on Insurance Premiums \\
+TRF & Travel Reimbursement Form \\
+TTC & Toutes Taxes Comprises (tax included) \\
+TTP & Trusted Traveler Program \\
+TVA & Taxe \`{a} la Valeur Ajout\'{e}e (value-added tax) \\
+TZA & Direxion Small Cap Bear 3X Shares ($-3 \times$ Russell 2000 small cap)\\
+URP & Ultimate Rewards Points \\
+AXD & American Express Dollars \\
+MRP & Membership Rewards Points (AmEx) \\
+BAA & British Airways Avios \\
+HHP & HHonors Points \\
+UAUA & United Airlines \\
+UCRP & University of California Retirement Plan (pension) \\
+UCRSP & University of California Retirement Savings Plan (403b + 457b + DC)\\
+VAM & V\'{e}hicule \`{a} Moteur (insurance policy covering motor vehicles) \\
+VSDC & VISA implementation of EMV smart card standard \\
+VWDRY & Vestas Wind ADR ($+3 \times$ VWDRY = VWS) \\
+VWS & Vestas Wind Systems \\
+VWSYF & Vestas Wind ADR ($+1 \times$ VWSYF = VWS) \\
+XLE & Select Sector Energy sector SPDR ETF \\
+XLF & Financial sector SPDR ETF \\
+XLK & Technology sector SPDR ETF \\
+XLP & Consumer staples sector SPDR ETF \\
+XLY & Consumer discretionary sector SPDR ETF \\
+NSC & Negotiated Salary Component \\
+NSTP & Negotiated Salary Trial Program \\
+SBS & Scale-Based Salary \\
+TUCS & Total UC Salary \\
+adm & annual decimal rate \ant{annual percentage rate} \\
+amz & Amazon.com \\
+apr & appreciation or annual percentage rate \ant{annual decimal rate} \\
+bc & booking class \\
+bp & boarding pass \\
+brk & breakfast \\
+chs & Chase \\
+cpn & coupon \\
+crd & credit (card) \\
+eqf & Equifax \\
+xpr & Experian \\
+trn & TransUnion \\
+fco & FICO \\
+ctr & contract \\
+csh & cash \\
+dcp & defined contribution plan \\
+ddc & deduction \\
+df & duty-free \\
+dml & default mail address \\
+dnr & dinner \\
+dpr & depreciation \\
+dsc & discount \\
+dyc & daycare \\
+eqt & equity \\
+fbc & fare basis code \\
+fdl & firstname.lastname \\
+fdr & federal \\
+ff & frequent flyer \\
+ffdl & fancy firstname.lastname \\
+ffm & frequent flyer miles \\
+ffp & frequent flyer program \\
+fnm & first name \\
+fnn & financial \\
+fx & foreign exchange \\
+fxr & foreign exchange rate \\
+gml & Google mail (Gmail) address \\
+gt & gate \\
+gtc & good-until-cancelled \\
+gvt & government \\
+hm & home \syn{hm}, \ant{ofc} \\
+hse & house \syn{hm}, \ant{ofc} \\
+htl & hotel \\
+lfd & last four digits \\
+lml & Lonely mail address \\
+lnc & lunch \\
+lnm & lastname (surname) \\
+lp & Lonely Planet \\
+mdc & medical \\
+thk & travel hacking (thacking) \\
+mny & money \\
+mrp & manufacturer's retail price \\
+mrt & mortgage \\
+ncm & income \\
+nrcr & non-recurring \ant{rcr} \\
+nsr & insurance \\
+nqr & inquiry \\
+ntr & interest \\
+nvc & invoice \\
+nvs & invest, investment \\
+oa & operating airline \\
+ofc & office \ant{hse}, \ant{hm} \\
+payg & pay-as-you-go \\
+phn & phone \\
+pmt & payment \\
+po & purchase order \\
+prc & price, purchased \\
+prn & principal \\
+prp & property \\
+ptn & patent \\
+rht & rhetoric \\
+rmb & reimburse \\
+rnt & rental \\
+rsr & reservation \\
+rtr & retirement \\
+sgn & signature (i.e., Visa Signature card) \\
+s/h & shipping \& handling \\
+slr & salary \\
+sml & spam mail address \\
+snk & snack \\
+sp & store price \\
+stt & state \\
+tbf & time between flights \\
+trm & terminal \\
+trv & travel \\
+uml & University mail address \\
+vs & Visa \\
+wts & with tax and shipping (i.e., all-inclusive price) \\
+xpn & expense \\
+ytd & year-to-date \\
+\end{longtable}
+
+Physical units and dimensions:
+\begin{longtable}[>{\bfseries}l]{>{\ttfamily}r l}
+B & byte \\
+\end{longtable}
+
+% Begin Health
+Health: % hlt
+\begin{longtable}[>{\bfseries}l]{>{\ttfamily}r l}
+GAD & Generalized Anxiety Disorder \\
+HSP & Highly Sensitive Person \\
+IBS & Irritable Bowel Syndrome \\
+PF & Plantar Fasciitis \\
+PP & Placenta Previa \\
+RCT & Relational Cultural Theory \\
+RMD & Recurrent Major Depression \\
+TGL & Triglycerides \\
+fml & family \\
+frnd & friend \\
+gft & gift \\
+hlt & health \\
+ku & kid unfriendly \\
+lv & love \\
+msc & music \\
+nic & nothing in common \\
+potm & pleasures of the mind \\
+ptr & poetry \\
+rlt & relationship \\
+slf & self \\
+swm & swimming \\
+sx & sex \\
+tgtbt & too good to be true \\
+\end{longtable}
+% end Health
+
+Consumer electronics
+\begin{longtable}[>{\bfseries}l]{>{\ttfamily}r l}
+1080i & Interlaced (not progressive) scan HDTV 1920x1080 video mode \ant{1080p} \\
+1080i60 & 1080i HDTV mode at 60/,fps (an ATSC standard, common in OTA broadcasts) \\
+1080p & Progressive (not interlaced) scan HDTV 1920x1080 video mode, aka ``Full HD'' \ant{1080i} \\
+1080p24 & 1080p HDTV mode at 24/,fps (an ATSC and video mastering standard) \\
+1080p30 & 1080p HDTV mode at 30/,fps (an ATSC standard) \\
+1600p & Progressive (not interlaced) scan HDTV 2560x1600 video mode \ant{1080i} \\
+720p & Progressive (not interlaced) scan HDTV 1280x720 video mode \ant{1080p} \\
+720p60 & 720p HDTV mode at 60/,fps (an ATSC standard, common in OTA broadcasts) \\
+A/V & Audio/Video \\
+A2DP & Advanced Audio Distribution Profile (Bluetooth profile) for HQ stereo \\
+AFH & Adaptive Frequency-hopping spread spectrum (Bluetooth technology) \\
+AMP & Alternate MAC PHY (Bluetooth technology) \\
+ATA & Advanced Technology Attachment (storage-to-bus adaptor) \syn{IDE} \\
+ATSC & Advanced Television Systems Committee (commences 20090217) \\
+AVI & Audio Video Interleave \\
+AVOD & Audio/Video On Demand \syn{VOD} \\
+AVRCP & Audio/Video Remote Control Profile (Bluetooth profile) for remote controls \\
+Anynet & Samsung brand-name for CEC (HDMI remote control language) \syn{CEC} \\
+BNC & Bayonet Neill-Concelman (RF connector to terminate coaxial cable) \\
+BT & Bluetooth \\
+BT~1.1 & Bluetooth Standard, c.~2002 includes RSSI \\
+BT~1.2 & Bluetooth Standard, c.~2003 includes AFH, eSCO \\
+BT~2.0 & Bluetooth Standard, c.~2004 includes EDR \\
+BT~2.1 & Bluetooth Standard, c.~2007 includes EIR, EPR, SSP, NFC \\
+BT~3.0 & Bluetooth Standard, c.~2009 includes AMP \\
+Bpp & bytes per pixel \\
+CEA & Consumer Electronics Association \\
+CEC & Consumer Electronics Control (HDMI remote control language) \\
+CRT & Cathode Ray Tube \\
+CUDA & Compute Unified Device Architecture \\
+DAB & Digital Audio Broadcasting standard \syn{Eureka~147} \\
+DAB+ & Revised DAB standard \\
+DFP & Digital Flat Panel \\
+DL & Dual-Link \\
+DLNA & It stands for Digital Living Network Alliance \\
+DM & Display Mode \\
+DMS-59 & 59-Pin connector that supports two DVI Dual Link digital channels or two VGA analog channels from a single connector \\
+DP & DisplayPort, 20-pins \ant{HDMI} \\
+DP-1.0 & DP standard, c.~200605 \\
+DP-1.1 & DP standard, c.~200801, supports fiber optic cables, DPCP, HDCP \\
+DP-1.1a & DP standard, c.~200802, supports eDP \\
+DP-1.2 & DP standard, c.~2009, supports double bandwidth, MiniDP connector \\
+DPCP & DisplayPort Content Protection (DRM), based on 128-bit AES encryption \\
+DRM & Digital Restrictions Management \\
+DTV & Digital Television \\
+DVI & Digital Visual Interface (older than HDMI, DP) \\
+DVI-A & DVI Analog (analog only) \\
+DVI-D & DVI Digital (digital only, can be single- or dual-link) \\
+DVI-D DL & DVI-D Dual Link: Capable of WQXGA$ = 2560 \times 1600$~\@~60\,\Hz\ \\
+DVI-D SL & DVI-D Single Link: Capable of WUXGA$ = 1920 \times 1200$~\@~60\,\Hz\ \\
+DVI-DL & DVI Dual-Link. Contains second data link. (NB: ambiguous! Could be DVI-D (most likely) or DVI-I) \\
+DVI-I & DVI Integrated (digital \& analog, can be single- or dual-link) \\
+DVI-M1-DA & DVI Integrated (digital, analog, \& USB) \\
+ECN & Engineering Change Notice \\
+EDID & Extended Display Identification Data \\
+EDGE & Enhanced Data rates for GSM Evolution \\
+EDR & Enhanced Data Rate (Bluetooth technology) \\
+EDTV & Enhanced-definition Television (DTV, progressive scan, analog resolution, 640x480=480p, 768x576=576p) \\
+EIR & Extended Inquiry Response (Bluetooth technology) \\
+EPHC & Epson PowerLite Home Cinema (projector) \\
+EPR & Encryption Pause Resume (Bluetooth technology) \\
+ExpressCard & Hardware standard for cards. Supports both PCIe and USB~2.0 buses. Either 34 or 54\,mm wide. (26-pin, c.~2003, supersedes PCMCIA) \\ 
+ExpressCard/34 & 34\,mm ExpressCard (rectangular shape)\\ 
+ExpressCard/54 & 54\,mm ExpressCard (L-shaped) \\ 
+ExtUSB & Proprietary (by HTC) USB 11-pin connector backwards compatible with Mini-USB. Includes extra pins to direct mount audio/video I/O. \\
+FF & Form Factor \\
+FPD & Flat Panel Display \\
+GPGPU & General-Purpose computation on Graphics Processing Units \\
+GPU & Graphical Processing Unit \\
+GPU & Graphics Processing Units \\
+GTF & Generalized Timing Formula \\
+HD Radio & brand-name for iBiquity's IBOC technology, US Standard \\
+HDCP & High-bandwidth Digital Content Protection (DRM) \\
+HDMI & High-definition Multimedia Interface (newer than DVI, older than DP) \ant{DP} \\
+HDMI Type~A & Single link (19 pins) connector. Does not support 2560x1600. \\
+HDMI Type~B & Dual link (29 pins) connector. Supports 2560x1600. \\
+HDMI Type~C & Dual link (29 pins) mini-connector. Supports 2560x1600. \\
+HDMI~1.0 & HDMI Standard, c.~2002, includes 1080p/UXGA \\
+HDMI~1.1 & HDMI Standard, c.~2004, includes DVD audio \\
+HDMI~1.2 & HDMI Standard, c.~2005, includes CEC features \\
+HDMI~1.3 & HDMI Standard, c.~200606, includes Dolby TrueHD, DTS-HD, defined cable Categories~1 and~2, Type~C mini-connector \\
+HDMI~1.3a & HDMI Standard, c.~200611, includes cable, CEC, Type~C clarifications \\
+HDMI~1.3b & HDMI Standard, c.~200703, includes compliance testing revisions \\
+HDMI~1.3b1 & HDMI Standard, c.~200711, includes Type~C testing revisions \\
+HDMI~1.3c & HDMI Standard, c.~200808, includes active cable testing \\
+HDMI~1.4 & HDMI Standard, c.~200905, includes HDMI ethernet, 3840x2160p and 4096x2160p resolutions \\
+HDTV & High Definition TV, $1920 \times 1080$ resolution, 16:9 aspect ratio \\
+HDTV & High-definition Television (DTV, 1280x720=720p, 1920x1080=1080i, 1920x1080=1080p60) \\
+HDTV DM DVI-DL & $1920 \times 1080$~\@~85\,\Hz\ with GTF blanking ($2 \times 126$\,MHz) \\
+HDTV DM DVI-SL & $1920 \times 1080$~\@~60\,\Hz\ with CVT-RB blanking (139\,MHz) \\
+HSDPA & High Speed Downlink Packet Access, improved W-CDMA protocol \\
+HSPA & High Speed Packet Access: Combination of HSDPA and HSUPA, capable of 14/5.8~Mbps down/up \\
+HSPA+ & Evolved High Speed Packet Access, improved HSPA capable of 42/11~Mbps down/up \\
+HSUPA & High Speed Uplink Packet Access, improved W-CDMA protocol \\
+HTC & High Tech Computer Corporation \\
+HTC Desire & Android PDA, c.~201002; optical trackpad, runs HTC-Sense, $480 \times 800$ resolution, 5~Mp w/LED flash \\
+HTC Dream & Android PDA, c.~200809, branded T-Mobile~G1; $320 \times 480$ resolution, includes slide-keyboard \\
+HTC Evo 4G & Android PDA, branded Sprint Evo, c.~201006; $480 \times 800$ resolution, 8~Mp w/LED flash (rear), 1.3 Mp (front), HDMI out \\
+HTC G2 & Android PDA, c.~201009, branded T-Mobile~G2, 3.7'' WVGA, 800~MHz CPU, HSPA+, 5~Mp \\
+HTC Hero & Android PDA, c.~200912, branded T-Mobile G2~Touch; includes 3.5\,mm audio jack \\
+HTC Incredible & Android PDA, branded Droid Incredible, c.~201005; $480 \times 800$ resolution, 8~Mp w/LED flash \\
+HTC Legend & Android PDA, branded Sprint Hero2, c.~201004; $320 \times 480$ resolution, 5~Mp \\
+HTC Magic & Android PDA, c.~200907, branded T-Mobile~G2, myTouch~3G; lacks keyboard \\
+HTC Passion & Android PDA, c.~201001, branded Google Nexus One; noise-canceling microphones \\
+HXGA & Hex[adecatuple] Extended Graphics Array, $4096 \times 3072$ resolution, 4:3 aspect ratio \\
+IBOC & In-Band On-Channel (way of adding digital to analog broadcasts) \\
+IEC & International Electrotechnical Commission \\
+LDI & LVDS Display Interface (standard for connecting graphics card to LFP using LVDS) \\
+LFP & Local Flat Panel \\
+LGD & LG Display (LCD panel supplier), formerly \syn{LPL}) \\
+LPL & LG Phillips (LCD panel supplier, now \syn{LGD}) \\
+LTE & Long Term Evoluation (based on GSM, successor to HSPA) capable of 300/75~Mbps down/up \\
+LVDS & Low-voltage Differential Signaling (low-power electrical signaling system) \ant{TMDS} \\
+Mini PCIe, PCI-E & PCI Express Mini Card (expansion card for PCIe bus) (c.~2005) \\
+Mini-TOSLINK & Miniature TOSLINK (found on Apple computers) \\
+MiniDP & Miniature DisplayPort (newest standard), 20-pins \ant{HDMI} \\
+Motorola Droid & Android PDA, carrier Verizon, branded Motorola Milestone (w/GSM), c.~200911; $854 \times 480$ resolution, 5~Mp w/LED flash (rear), HDMI out \\
+Motorola Droid~X & Android PDA, carrier Verizon, c.~201007; $480 \times 848$ resolution, 8~Mp w/LED flash (rear), HDMI out \\
+NFC & Near Field Communication (Bluetooth technology) \\
+NFC & Near Field Communication \\
+NTSC & National Television System Committee, broadcasts at 640x480=480i \\
+OTA & Over-The-Air (TV broadcasting signal) \\
+OTG & On-The-Go (terminology for portable devices, e.g., PDAs) \\
+PAL & Broadcasts at 768x576=576i \\
+PATA & Parallel Advanced Technology Attachment (older, slower than SATA) \ant{SATA} \\
+PBP & Picture-By-Picture \\
+PC, PCMCIA Card & Hardward card type (c.~1991, superseded by ExpressCard) \\
+PCI & Peripheral Component Interconnect (c.~1993, older, different FF than PCI-X, PCIe) \\
+PCI-X & PCI eXtended (c.~1998, newer than PCI, older than PCIe) \ant{PCIe} \\
+PCIe, PCI-E & PCI Express (c.~2004, newer than PCI and PCI-X) \ant{PCI-X} \\
+PCMCIA & Personal Computer Memory Card International Association (refers to hardward card type) \syn{PC card} \\
+PDA & Personal Digital Assistant \\
+PIP & Picture-In-Picture \\
+QXGA & Quad eXtended Graphics Array, $2048 \times 1536$ resolution, 4:3 aspect ratio \\
+QXGA DM DVI-DL & $2048 \times 1536$~\@~75\,\Hz\ with GTF blanking ($2 \times 170$\,MHz) \\
+RCA & Radio Corporation of America (A/V adaptor plug) \\
+RIHD & Onkyo brand-name for CEC (HDMI remote control language) \syn{CEC} \\
+RSSI & Received Signal Strength Indicator (Bluetooth technology) \\
+S/PDIF & Sony/Philips Digital Interconnect Format (digital audio signal protocol) \syn{IEC 60958 type~II} \\
+SATA & Serial Advanced Technology Attachment (storage-to-bus adaptor) \ant{PATA} \\
+SCSI & Small Computer Systems Interface (communications protocol for high-performance hard disks) \\
+SDTV & Standard-definition Television (DTV, interlaced scan, analog resolution, 640x480=480i, 768x576=576i PAL) \\
+SL & Single-Link \\
+SSP & Secure Simple Pairing (Bluetooth technology) \\
+SXGA & Super eXtended Graphics Array, $1280 \times 1024$ resolution, 5:4 aspect ratio \\
+SXGA DM DVI-SL & $1280 \times 1024$~\@~85\,\Hz\ with GTF blanking (159\,MHz) \\
+Samsung & Android PDA, c.~201012, carrier T-Mobile, branded Google Nexus S; $480 \times 800$ resolution, 5~Mp w/LED flash (rear), NFC \\
+Samsung Epic 4G & Android PDA, c.~201007, branded Samsung Epic; \\
+TAA & Trade Agreement Act (computer purchase compliance-related) \\
+TMDS & Transition Minimized Differential Signaling (used in DVI, HDMI) \ant{LVDS} \\
+TOSLINK & TOShiba-LINK (optical fiber connector used for audio signals) \\
+U160 & SCSI variety emulated by IDE RAID farm \\
+USB & Universal Serial Bus \\
+USB EMU & Enhanced mini-USB connector (EMU) (11-pin, $~3 \times 7$\,mm rectangle, one beveled corner, G1) \\
+USB Micro-A & Micro USB Standard-A connector ($~1.5 \times 7$\,mm) \\
+USB Micro-AB & Micro USB Dual Standards A~\&~B connector (5-pin, $~1.5 \times 7$\,mm rectangle, all square corners) \\
+USB Micro-B & Micro USB Standard-B connector (5-pin, $~1.5 \times 7$\,mm, two beveled corners). USB Micro is the modern (~2010) standard for cell-phone connectors used by, e.g., Nexus One, and by Amazon Kindle \\
+USB Mini-A & Miniature USB Standard-A connector (5-pin, $~3 \times 7$\,mm rectangle, two beveled corners), deprecated c.~2007 \\
+USB Mini-AB & Miniature USB Dual Standards (A~\&~B) connector ($~3 \times 7$\,mm) \\
+USB Mini-B & Miniature USB Standard-B connector (5-pin, $~3 \times 7$\,mm rectangle, all square corners). Forward compatible with HTC EMU/ExtUSB on G1. \\
+USB-A & USB Standard-A connector (4-pin, flattened rectangle) \\
+USB-B & USB Standard-B connector, carries power (4-pin, square with beveled corners) \\
+USB~1.0 & USB ``Low-Speed'' (187.5\,\kBxs) Standard, c.~1996 \\
+USB~1.1 & USB ``Full-Speed'' (1.5\,\MBxs) Standard, c.~1998 \\
+USB~2.0 & USB ``High-Speed'', ``Hi-Speed'' (60\,\MBxs) Standard (includes ``micro-USB'' USB, c.~2000 \\
+USB~3.0 & USB ``SuperSpeed'' (625\,\MBxs) Standard, c.~2008 \\
+UXGA DM DVI-SL & $1600 \times 1200$~\@~60\,\Hz\ with GTF blanking (161\,MHz) \\
+UXGA, UGA & Ultra eXtended Graphics Array, $1600 \times 1200$ resolution, 4:3 aspect ratio \\
+VDPAU & Video Decode and Presentation API for Unix \\
+VESA & Video Electronics Standards Association \\
+VGA & Video Graphics Array (an analog-standard interface) ($640 \times 480$ resolution) \\
+VIERA Link & Sony brand-name for CEC (HDMI remote control language) \syn{CEC} \\
+VIERA-Cast & Panasonic technology for streaming multimedia from Internet to HDTVs \\
+VOD & Video On Demand \syn{AVOD} \\
+W-CDMA & Widband Code Division Multiple Access, 3G mobile telecommunication standard \\
+WFP & Widescreen Flat Panel \\
+WQUXGA & Wide Quad Ultra Extended Graphics Array, $3840 \times 2400$ resolution, 16:10 aspect ratio \\
+WQUXGA DM DVI-DL & $3840 \times 2400$~\@~33\,\Hz\ with GTF blanking ($2 \times 159$\,MHz) \\
+WQUXGA DM DVI-SL & $3840 \times 2400$~\@~17\,\Hz\ (164\,MHz) \\
+WQXGA & Wide Quad eXtended Graphics Array, $2560 \times 1600$ resolution, 16:10 aspect ratio \\
+WQXGA DM DVI-DL & $2560 \times 1600$~\@~60\,\Hz\ with GTF blanking ($2 \times 174$\,MHz) \\
+WSXGA, WXGA+ & non-standard term for, usually, $1440 \times 900$ resolution \\
+WSXGA, WXGA+ DM DVI-SL & $1440 \times 900$~\@~60\,\Hz\ (107\,MHz) \\
+WUXGA & Widescreen Ultra eXtended Graphics Array, $1920 \times 1200$ resolution, 16:10 resolution \\
+WUXGA DM DVI-SL & $1920 \times 1200$~\@~60\,\Hz\ with CVT-RB blanking (154\,MHz) \\
+WXGA & Wide eXtended Graphics Array, a non-standard: $1280 \times 800$ resolution, aspect ratio 16:10, or $1366 \times 768$ resolution, aspect ratio 16:9 \\
+X:~Display & The resolution and depth of a given \textit{Screen} \\
+X:~Monitor & Physical display surface \\
+X:~RandR & Resize and Rotate (X-Windows extension) \\
+X:~Screen & Combination of \textit{Monitor} with graphics \textit{Device} \\
+X:~Xinerama & \\
+azw & Filename extension for Amazon e-books \\
+bpp & bits per pixel \\
+eDP & Embedded DisplayPort, internal connection standard (graphics cards to notebook displays) \\
+eSATA & external Serial Advanced Technology Attachment (SATA) \\
+eSCO & Extended Synchronous Connections (Bluetooth technology) \\
+fps & frames per second \\
+knd & Amazon Kindle \\
+mbp & Filename extension for Amazon e-books notes/annotations \\
+pap & Personal Audio Player \\
+pda & Personal Digital Assistant \\
+phl & Filename extension for Amazon e-books icons? \\
+pmp & Personal Media Player \\
+twn & TwinView (NVidia X-display mode) \\
+\end{longtable}
+
+Geographical places, stations, regions, and features:
+\hyperlink{sxn:abb}{this points to sxn:abb}
+\begin{longtable}[>{\bfseries}l]{>{\ttfamily}r l}
+AAr & Antarctic \\
+Arc & Arctic \\
+Brb & Barbados \\
+Brm & Bermuda \\
+Izn & Iza\~{n}a \\
+SMA & St.~Miguel de Allende \\
+SMU & St.~Martin d'Uriage \\
+Svl & Svalbard \\
+ULB & Uriage le~Bains \\
+WaD & WAIS Divide \\
+\end{longtable}
+
+Initials (often used as change markers in source code):
+\begin{longtable}[>{\bfseries}l]{>{\ttfamily}r l}
+ag  & Alf Grini \\
+bcb & Byron C. Boville \\
+bee & Brian E. Eaton \\
+bk  & Brian Kahn \\
+cl  & Chao Luo \\
+csz & Charles Sutton Zender \\
+dap & Diana A. Pataki \\
+dlw & Daniel L. Wang \\
+dmw & David M. Williamson \\
+fd  & Florent Domin\'{e} \\
+jcg & Jean-Charles Gallet \\
+jmr & Jim M. Rosinski \\
+jpm & Joseph P. McConnell \\
+jtk & Jeffrey T. Kiehl \\
+mat & Mark A. Taylor \\
+mcb & Michael C. Brown \\
+mgf & Mark G. Flanner \\
+mt  & Michael Tosca \\
+nmm & Natalie M. Mahowald \\
+pjr & Philip J. Rasch \\
+qh  & Qin Han \\
+rah & Rick A. Hansell \\
+rlm & Ron L. Miller
+rkr & Russell K. Rew \\
+sbc & Scott Blair Capps \\
+swb & Stephen W. Berrick \\
+xtcb & Tami C. Bond \\
+\end{longtable}
+
+% English Acronyms
+% These are all valid English acronyms
+% Sometimes they are used in variable names, in which case the
+% variable has the same semantic context as the Acronym
+\begin{longtable}[>{\bfseries}l]{>{\ttfamily}r l}
+% Package array defines >{\bfseries}l syntax
+AAA & Arctic Absorbing Aerosol \\
+AAS & Atomic Absorption Spectrometry \\
+ABI & Application Binary Interface \\
+ACADIS & Advanced Cooperative Arctic Data and Information Service \\
+ACCESS & Advancing Collaborative Connections for Earth System Science (NASA ROSES Program) \\
+ACE & Army Corps of Engineers \\
+ACM & Association for Computing Machinery \\
+ACP & Atmospheric Chemistry (NSF GEO AGS Program) \\
+ACP & Atmospheric Chemistry Program (NSF GEO ATM program) or Advanced Cyberinfrastructure Program \\
+ACRM & (NASA) Atmospheric Composition Research and Modeling \\
+ADT & Anomalous Diffraction Theory \\
+AER & Atmospheric \& Environmental Research \\
+AERONET & Aerosol Robotic Network \\
+AFGL & Air Force Geophysical Laboratory \\
+AGU & American Geophysical Union \\
+AISR & Applied Information Systems Research (NASA ROSES program) \\
+AIX & IBM variant of UNIX used in ESMF \\
+ALD & Active Layer Depth (of permafrost) \\
+ALW & Adiabatic Liquid Water \\
+AMAP & Arctic Monitoring and Assessment Program \\
+AMBT & Air Mass Back-Trajectory \\
+AMSR-E & Advanced Microwave Scanning Radiometer (satellite instrument) \\
+AMWG & (CCSM) Atmospheric Model Working Group \\
+ANENA & Association Nationale pour l'Etude de la Neige et des Avalanches \\
+ANS & Arctic Natural Sciences Program \\
+ANTLR & ANother Tool for Language Recognition \\
+ANWR & Arctic National Wildlife Refuge (ANWAR) \\
+AO & Announcement of Opportunity (NASA RFP) \syn{RFP}, \syn{FOA}, \syn{CFP} \\
+KNMI & Royal Netherlands Meteorological Institute \\
+CFP & Call for Proposals \syn{RFP}, \syn{FOA}, \syn{AO} \\
+AOGCM & (Coupled) Atmosphere-Ocean General Circulation Model \\
+API & Application Programmer Interface \\
+GBD & Global Burden of Disease \\
+AR4 & Fourth (IPCC Climate) Assessment Report \\
+AR5 & Fifth (IPCC Climate) Assessment Report \\
+ARC & (NSF) Division of Arctic Sciences \\
+ARF & Aerosol Radiative Forcing \\
+ARM & Atmospheric Radiation Measurement \\
+ARMA & Auto-Regressive Moving-Average \\
+ASE & Advanced Science and Engineering \\
+ASIRT & Aerosol Snow Ice Radiative Transfer \\
+ASR & Atmospheric System Research (DOE ARM Program) \\
+AST & Abstract Symbol Table \\
+ATM & (NSF) Division of Atmospheric Sciences \\
+ATSR & Along Track Scanning Radiometer and Microwave Sounder \\
+AVHRR & Advanced Very High Resolution Radiometer (satellite instrument) \\
+AVIRIS & Airborne Visible/Infrared Imaging Spectrometer \\
+BAAQMD & Bay Area Air Quality Management District \\
+BATS & Biosphere-Atmosphere Transfer Scheme \\
+BAU & Business As Usual \\
+BEC & Biogeochemistry-Ecosystem-Circulation (model) \\
+BECA & Bureau of Educational and Cultural Affairs (US DoS) \\
+BET & Brunauer-Emmett-Teller (surface area) \\
+BEV & Battery Electric Vehicle \\
+BFI & Buckminster Fuller Institute \\
+BGC & Biogeochemistry \\
+BGCWG & (CCSM) Biogeochesmistry Working Group \\
+BGF & Bare Ground Fraction \\
+BIRN & Biomedical Informatics Research Network \\
+BRDF & Bi-directional Reflectance Distribution Function \\
+BTS & Bug Tracking System \\
+CA & Cooperative Agreement \\
+CADD & Centralized Analysis of Distributed Data \\
+CALYPSO & Cloud-Aerosol Lidar and Infrared Pathfinder Satellite Observation \\
+CAM & Community Atmosphere Model or Complex Angular Momentum \\
+CARRE & Central Asia Research and Remediation Exchange \\
+CASTNET & Clean Air Status and Trends NETwork \\
+CAT & Cap And Trade \\
+CBA & Cost-Benefit analysis \\
+CBET & Chemical, Bioenngineering, Environmental, and Transport Systems (NSF ENG Division) \\
+CCAP & Center for Clean Air Policy \\
+CCAR & California Climate Action Registry \\
+CCCAC & California Climate Change Advisory Committee \\
+CCM & Community Climate Model \\
+CCN & Cloud Condensation Nuclei \\
+CCNC & Cloud Condensation Nuclei Counter \\ 
+CCS & Carbon Capture and Storage \\
+CCS & Coal with Carbon Capture and Storage \\
+CCSM & Community Climate System Model \\
+CDC & Center for Disease Control \\
+CDHS & California Department of Health Services \\
+CDI & Cyber-Enabled Discovery and Innovation (NSF Cross-cutting program) \\
+CDNC & Cloud Droplet Number Concentration \\
+CDO & Climate Data Operators \\
+CDP & Cloud Droplet Probe \\ 
+CE & Civil Engineering or Corresponding Editor \\
+CEC & California Energy Commission \\
+CENIC & Corporation for Education Network Initiatives in California \\
+CERES & Clouds and Earth's Radiant Energy System (satellite instrument) \\
+CF & Climate \& Forecast (metadata convention) \\
+CFC & Chloro-fluorocarbon \\
+CFEP & Center for Educational Partnerships \\
+CFVR & Critical Friction Velocity Ratio \\
+CGS & Centimeter Gram Second units \\
+CH4 & \CHq\ \\
+CHP & California Highway Patrol \\
+CHRS & Center for Hydrometeorology and Remote Sensing \\
+CICE & Los Alamos sea ice model \\
+CIES & Council for International Exchange of Scholars \\
+CISE & Computer and Information Science and Engineering (NSF Directorate) \\
+CITI & Center for Information Technology and Infrastructure \\
+CL & Client Library \\
+CLD & Climate and Large-Scale Dynamics \\
+CLEAN & addressing Climate Change through Learning, Empowerment, Action, and Networking \\
+CLM & Common Land Model  \\
+CLMUG & Community Land Model User's Guide \\
+CMG & Climate Modeling Grid \\
+CMIP3 & Coupled Model Intercomparison Project \\
+CN & Condensation Nuclei \\
+CNH & Dynamics of Coupled Natural and Human Systems (NSF Program) \\
+CNRS & Centre Nationale de la Research Scientifique \\
+CNS & Computer and Network Systems \\
+CO2 & \COd\ \\
+CO2e & Equivalent \COd \\
+COSMOS & California State Summer School in Mathematics and Science \\
+CP4SMP & Competitive Program for Science Museums and Planetariums Plus Opportunities for NASA Visitor Centers and Other Informal Education Institutions \\
+CPC & Climate Protection Campaign \\
+CPC & Condensation Particle Counter \\ 
+CPT & Climate Process Team (NSF GEO AGS CLD Program) \\
+CPU & Central Processing Unit \\
+CRDF & Civilian Research and Development Foundation \\
+CRF & Cloud Radiative Forcing \\
+CRM & Column Radiation Model \\
+CRYSTAL-FACE & Cirrus Regional Study of Tropical Anvils and Cirrus Layers---Florida Area Cirrus Experiment \\
+CSE & Computer Science and Engineering \\
+CSIM & Community Sea Ice Model \\
+CSP & Concentrated Solar Power \\
+CSRM & Cloud System Resolving Model \\
+CST & Client-Server Traffic \\
+CSTP & Client-Server Traffic Protocol \\
+CSUB & California State University at Bakersfield \\
+CSV & Comma-Separated Value \\
+CTM & Chemistry Transport Model \\
+CVS & Concurrent Versions System \\
+CVWG & (CCSM) Climate Variability Working Group \\
+CWC & Condensed Water Content \\
+CWP & Condensed Water Path \\
+CalEPA & California Environmental Protection Agency \\
+CalIT2 & California Institute for Telecommunications and Information Technology \\
+CalREN-2 & California Regional Network \\
+CalREN-XD & California Research Network, Experimental Development \\
+CentOS & Community Enterprise Operating System \\
+DADD & Distributed Analysis of Distributed Data \\
+DD & Debian Developer \\
+DDA & Discrete Dipole Approximation \\
+DDD & Data-Driven Discovery \\
+DDPO & Debian Developer's Packages Overview \\
+DDR & Distributed Data Reduction \\
+DEAD & Dust Entrainment And Deposition Model \\
+DEBITS & Deposition of Biogeochemically Important Trace Species \\
+DECADE & Diverse Educational Community and Doctoral Experience \\
+DGA & Division of Grants and Agreements \\
+DHS & Department of Homeland Security \\
+DI & De-Ionized \\
+DIC & Data-Intensive Computing \\
+DIF & Dissolved Iron Fraction \\
+DIRTMAP & Dust Indicators and Records of Terrestrial and MArine Paleoenvironments \\
+DKMS & Dynamic Kernel Module Support \\
+DNMG & Debian New Maintainer's Guide \\
+DOAS & Differential Optical Absorption Spectroscopy \\
+DOCCD & Database of Optical Constants for Cosmic Dust \\
+DODS & Distributed Oceanographic Data Server \\
+DOI & Digital Object Identifier \\
+DPG & Distributed Power Generation \\
+DRUM & Davis Rotating Unit Monitoring \\
+DTG & Depth to Groundwater \\
+DUFISSS & DUal-Frequency Integrating Sphere for Snow SSA Measurement \\
+DWP & Department of Water and Power \\
+E/PO & Education \& Public Outreach \\
+EA/WR & Eastern Atlantic/Western Russia \\
+ECE & Electrical and Computer Engineering \\
+ECMWF & European Center for Medium-range Weather Forecasts \\
+ECTNA & Eastern and Central Tropical North Atlantic \\
+EDXRF & Energy Dispersive X-Ray Fluorescence \\
+EECS & Electrical Engineering and Computer Science \\
+EES & Earth and Environmental Science or Environmental Engineering and Sustainability (Cluster in NSF ENG CBET) \\
+EGG-TRAM & Emissions-to-Global-Grid Transfer Routine for Aerosol Microphysics \\
+EHP & Elevated Heat Pump \\
+EID & Emerging Infectious Disease \\
+EMA & Effective Medium Approximation \\
+EMEP & European Monitoring and Evaluation Program \\
+EMMF & Economical Multi-scale Modeling Framework \\
+EMN & Effective Machine Name \\
+ENG & Engineering (NSF Directorate) \\
+ENSO & El Ni\~no-Southern Oscillation \\
+EOS & Earth Observing System \\
+EOSDIS & Earth Observing System Data and Information System \\
+EQSAM & EQuilibrium Simplified Aerosol Model \\
+ESA & European Space Agency \\
+ESC & Earth Simulator Center \\
+DSIA & Data Stewardship Interest Area \\
+ESDSWG & Earth Science Data System Working Groups \\
+ESE & Earth Science Enterprise (NASA) or Environment, Society, and Economy (NSF GEO/SBE Program), or Earth Systems Engineering (NSF ENG Program) \\
+HWG & (NASA ESDS Conventions for) HDF5 Working Group
+ESG & Earth System Grid \\
+ESI & Electronic Supplementary Information \\
+ESIG & Environmental and Societal Impacts Group \\
+ESM & Earth System Model \\
+ESMF & Earth System Modeling Facility \\
+ESS & Earth System Science (Department) \\
+ESTO & Earth Systems Technology Office \\
+SFA & Scientific Focus Area (DOE prgorammatic concept) \\
+EaSM & Earth System Models (NSF Panel) \\
+FAA & Federal Aviation Administration \\
+FAR & First Assessment Report \\
+FC & Forecast Cluster \\
+FDTD & Finite-Differerence-Time-Domain \\
+FIM & Fire Injection Module \\
+FIPSE & Fund for the Improvement of Postsecondary Education (DOE program) \\
+FNF & Friends aNd Family \\
+FOA & Funding Opportunity Announcement (DOE RFP) \syn{RFP}, \syn{AO} \\
+FOCUS & Faculty Outreach Collaborations Uniting Scientists, Students and Schools \\
+FOI & Field Of Interest \\
+FRE & Fire Radiative Energy \\
+FRP & Fire Radiative Power \\
+FSB & Foreign Scholarship Board \\
+FSU & Former Soviet Union \\
+FTA & Fire Thermal Anomaly \\
+FTBFS & Fails to Build from Source \\
+FTE & Full-time Employee \\
+FV & Field site Visits \\
+GADS & Global Aerosol Data Set \\
+GARMA & Generalized Auto-Regressive Moving-Average \\
+GB & Gigabyte \\
+GCM & General Circulation Model \\
+GDP & Gross Domestic Product \\
+GDS & GrADS-DODS Server \\
+GEO & Geosciences (NSF Directorate) \\
+GEON & Geosciences Network \\
+GEOS-CHEM & Goddard Earth Observing System Chemistry Model \\
+GEWEX & Global Energy and Water Cycle Experiment \\
+GFED & Global Fire Emissions Database \\
+GFP & Guidebook for Proposers \\
+GFS & Global File System \\
+GHG & Greenhouse Gas \\
+GHGI & Greenhouse Gas Intensity \\
+GISS & Goddard Institute for Space Studies \\
+GLD & Geomorphology and Land-Use Dynamics \\
+GLIDE & General Land Ice Dynamic Elements (core of GLIMMER) \\
+GLIMMER & Ice Sheet Model of Payne et~al. \\
+GLX & OpenGL Extension to the X~Window System \\
+GMI & Global Modeling Initiative \\
+GNOME & GNU Object Module Environment \\
+GOA & Geometric Optics Approximation \\
+GOES & Geostationary Earth Orbiting Satellite \\
+GPFS & General Parallel File System \\
+GPL & GNU General Public License \\
+GPL3 & GNU General Public License version~3 \\
+GRACE & Gravity Recovery and Climate Experiment (satellite instrument) \\
+GRAVITY & Graphics, Visualization, and Imaging Technology \\
+GSC & GEOS-CHEM \\
+GSFC & Goddard Space Flight Center \\
+GW & Global Warming \\
+GWP & Global Warming Potential \\
+Gb & Gigabit \\
+GrADS & Grid Analysis and Display System \\
+H2OH2O & \HdOHdO \\
+H2SO4 & \HdSOq\ \\
+HCFC & Halogenated CFCs \\
+HDF & Hierarchical Data Format \\
+HDF-SDS & HDF Scientific Data Set format (\texttt{*.hdf} files) \\
+HDF4EOS & HDF version~4 EOS data format (\texttt{*.he2, *.he4, *.hdfeos} files) \\
+HDF5EOS & HDF version~5 EOS data format (\texttt{*.he5} files) \\
+HFCV & Hydrogen Fuel Cell Vehicle \\
+HG & Henyey-Greenstein (phase function) \\
+HIPerWall & High-Performance Visualization System for Collaborative Earth System Sciences \\ 
+HNLC & High Nutrient Low Chlorophyll \\
+HPC & High Performance Computing \\
+HPCC & High Performance Computing Center \\
+HPVM & High-Performance Virtual Machines \\
+HSE & Hollow Sphere Equivalent \\
+HTML & Hypertext Markup Lanuage \\
+HTTP & Hypertext Transfer Protocol \\
+HULIS & Humic-like Substances \\
+HUSWO & Hourly United States Weather Observations \\
+IAF & Ice Albedo Feedback \\
+IAMAS & International Association of Meteorology and Atmospheric Sciences \\
+IBL & Internal Boundary Layer \\
+IBM & International Business Machines \\
+IC & International Conferences \\
+IC & Ion Chromatography \\
+ICCID & Integrated Circuit Card Identifier \\
+ICS & Information and Computer Sciences \\
+ICTA & Institut de Ci\`{e}ncia i~Tecnologia Ambientals (Institute of Environmental Science and Technology) \\
+ICoD & Euro-Mediterranean Centre for Insular Coast Dynamics (ICoD) \\
+IDE & Integrated Drive Electronics (commodity PC hard disks) or Integrated Development Environment \\
+IDL & International Date Line \\
+IFS & Integrated Forecast System \\
+IGPP & Institute of Geophysics and Planetary Physics \\
+II & Information Integration \\
+IIE & Institue of International Education \\
+III & Information Integration and Informatics (NSF CISE IIS Program) \\
+IIPS & Interactive Information Processing Systems \\
+IIS & Information and Intelligent Systems (NSF CISE Division) \\
+IMSI & Integrated Mobile Subscriber Identity \\
+IN & Ice Nuclei \\
+IOM & Institute of Mathematics (Almaty, Kazakhstan) \\
+IOP & Intensive Observing Period \\
+IPA & Independent Pixel Approximation or International Phonetic Alphabet \\
+IPCC & Intergovernmental Panel on Climate Change \\
+IPO & Interprocedural Optimization \\
+IPY & International Polar Year \\
+IRES & International Research Experience for Students (NSF Program) \\
+ISC & International Symposium on Coccidioidomycosis \\
+ISDAC & Indirect and Semi-Direct Aerosol Campaign \\
+ISG & Integrated Sinusoidal Grid \\
+ISHMS & Integrated Surface Hourly Meteorological Station \\
+ISHO & Integrated Surface Hourly Observations \\
+ISSDS & International Symposium on Sand and Dust Storms \\
+ISTC & International Science and Technology Center \\
+ITA & Intent to Adopt \\
+ITD & Ice Thickness Distribution \\
+ITT & Measurement of Pollution in the Troposphere (satellite instrument) \\
+IWC & Ice Water Content \\
+IWP & Ice Water Path \\
+JAMSTEC & Japan Institute of Marine Science and Technology \\
+JC & Journal Club \\
+JISAO & Joint Institute for the Study of the Atmosphere and Ocean \\
+JIT & Just-in-time \\
+JPL & Jet Propulsion Laboratory \\
+KDE & K~Desktop Environment \\
+LAC & Light Absorbing Carbon \\
+LAISSE & LGGE Albedo Integrating Sphere for Snow Experiments \\
+LAN & Local Area Network \\
+LANL & Los Alamos National Laboratory \\
+LAPACK & Linear Algebra PACKage \\
+LBAOP & Long Beach Aquarium of the Pacific \\
+LBF & Large Blocksize Filesystem \\
+LBL & Line-by-line \\
+LEP & Laboratory for Environmental Planning \\
+LES & Large Eddy Simulation \\
+LFS & Large File Support \\
+LGGE & Laboratoire de Glaciologie et G\'{e}ophysique de l'Environnement (Grenoble, France) \\
+LHS & Left Hand Side \\
+LIDAR & LIght Detection And Ranging \\
+LKM & Linux Kernel Module \\
+LLJ & Low-level Jet \\
+LLNL & Lawrence Livermore National Laboratory \\
+LMWG & (CCSM) Land Model Working Group \\
+LOSU & Level of Scientific Understanding \\
+LSLZ & Lower Sonoran Life Zone \\
+LSM & Land Surface Model \\
+LTP & Long-Term Probability \\
+LW & Longwave (radiation) \\
+LWC & Liquid Water Content \\
+LWCF & Longwave Cloud Forcing \\
+LWP & Liquid Water Path \\
+MABL & Marine Atmospheric Boundary Layer \\
+MAC & Media Access Control \\
+MAE & Mechanical and Aerospace Engineering \\
+MAR & Mass Accumulation Rate \\
+MARSWIT & Mars Surface Wind Tunnel \\
+MASAIS & Measurement of Albedo and specific Surface Area using an Integrating Sphere \\
+MATRIX & Multiconfiguration Aerosol TRacker of mIXing state \\
+MBD & Metrics Baseline Document (for NASA ACCESS) \\
+MBWA & Mobile Broadband Wireless Access (e.g., IEEE 802.20) \\
+MCD & MODIS Combined Dataset \\
+MCT & Metrics Collection Tool (for NASA ACCESS) \\
+MD & Mineral Dust \\
+MERRA & Modern Era Retrospective-analysis for Research and Applications \\
+MFC & Missing From Collection \\
+MFO & Multi-File Operator \\
+MINATROC & Mineral Dust and Tropospheric Chemistry \\
+MISR &  Multi-angle Imaging Spectro-Radiometer (satellite instrument) \\
+MKS & Meter-Kilogram-Second units \\
+MLE & Maximum Likelihood Estimation \\
+MM5 & PennState/NCAR Mesoscale Model version~5 \\
+MMD & Mass Median Diameter \\
+MMF & Multi-scale Modeling Framework \\
+MMWR & Morbidity and Mortality Weekly Report \\
+MNP & Mojave National Preserve \\
+MODI & Multi-Orifice Deposit Impactor (MODI) \\
+MODIS &  Moderate Resolution Imaging Spectroradiometer (satellite instrument) \\
+MOP & Microphysical Optical Properties \\
+MOPITT & Measurement of Pollution in the Troposphere (satellite instrument) \\
+MOSAIC & MOdel for Simulating Aerosol Interactions and Chemistry \\
+MOUDI & Multi-Orifice Uniform Deposit Impactors (MOUDI) \\
+MOZART & Model for Ozone and Related Tracers \\
+MOZIR & Infrared (radiation) or Infection Rate \\
+MPC & Medium Performance Computing \\
+MPI & Message Passing Interface \\
+MPMD & Multiple Program Multiple Data \\
+MRMVF & Multi-Record Multi-Variable File \\
+FRCG & First Record of Current Group \\
+LRCG & Last Record of Current Group \\
+LDRF & Last Desired Record in File \\
+MRO & Multi-Record Output \\
+MSG & Meteosat Second Generation \\
+MSP & Math Science Partnership \\
+MSc & Marine Stratocumulus \\
+NAA & Neutron Activation Analysis \\
+NACS & Network and Computing Services \\
+NASA & National Aeronautic and Space Administration \\
+NBC & Nuclear, Biological, and Chemical weapons \\
+NC & National Conferences \\
+NCAR & National Center for Atmospheric Research \\
+NCCS & NASA Center for Computational Sciences \\
+NCCS & National Center for Computational Sciences (DOE) \\
+NCDC & National Climatic Data Center \\
+NCEP & National Center for Environmental Prediction \\
+NCEP & National Commission on Energy Policy \\
+NCO & netCDF Operators \\
+NCVweb & NetCDF Viewer Web \\
+NDVI & Normalized Difference Vegetation Index \\
+NEMS & DOE National Energy Modeling System \\
+NERSC & National Energy Research Scientific Computing Center \\
+NGS & National Geographic Society \\
+NH & Northern Hemisphere \\
+NH4 & \NHq\ \\
+NHS & National and Homeland Security \\
+NIC & National Ice Center \\
+NIR & Near Infrared \\
+NMI & NSF Middleware Initiative \\
+NMU & Non-Naintainer Upload \\
+NO2 & \NOd\ \\
+NOAA & National Oceanic and Atmospheric Administration \\
+NOMADS & NOAA Operational Model Archive and Distribution System \\
+NOPP & National Oceanographic Partnership Program \\
+NPACI & National Partnership for Advanced Computational Infrastracture \\
+NPOESS & National Polar-orbiting Operational Environmental Satellite System \\
+NPS & National Park Service \\
+NRA & NASA Research Announcement \\
+NRDC & National Resources Defense Council \\
+NSA & North Slope of Alaska \\
+NSF & National Science Foundation \\
+NSIDC & National Snow and Ice Data Center \\
+NSS & Non-Sea Salt Sulphate \\
+NSSC & NASA Shared Services Center \\
+NUG & NCO User's Guide \\
+NVODS & National Virtual Ocean Data System \\ 
+NWS & National Weather Service \\
+O2 & \Od\ \\
+O2000 & Model of SGI shared memory supercomputer at UCI (\texttt{krein}) \\
+O2N2 & \OdNd\ \\
+O2O2 & \OdOd\ \\
+O2X & \OdX\ \\
+O3 & \Ot\ \\
+OAR & Oceanic and Atmospheric Research \\
+OBGC & Ocean Biogeochemistry \\
+OCHO & OCHO \\
+OCI & Office of Cyberinfrastructure (NSF Office) \\
+OEM & Ocean Ecosystem Model \\
+OISE & Office of International Science and Engineering (NSF Division-Level Organization) \\ 
+OLLI & Osher Lifelong Learning Institute \\
+OLR & Outgoing Longwave Radiation \\
+ONI & Optical Networking Initiative \\
+OPAC & Optical Properties of Aerosols and Clouds \\ 
+OPC & Optical Particle Counter \\ 
+OPP & Office of Polar Programs (NSF Office) \\
+OPeNDAP & Open-source Project for a Network Data Access Protocol \\
+ORB & Object Ring Buffer \\
+ORNL & Oak Ridge National Laboratory \\
+OLCF & Oak Ridge Leadership Computing Facility \\
+OSL & Optically Stimulated Luminescence (dating technique) \\
+OpenMP & Standard API for SMPP \\
+OpenACC & Open ACCelerators for SMPP \\
+OptIPuter & Optical networking Internet Protocol computer \\
+DAG & Directed Acyclic Graph (history type used by GitHub) \\
+PAPI & Performance Application Programming Interface \\
+PAR & Photosynthetically Active Radiation \\
+PAS & Personal Access System \\
+PCG & Petascale Collaboratory for the Geosciences \\
+PCMDI & Program for Climate Model Development and Intercomparison \\
+PCWG & Polar Climate Working Group \\
+PEBCAK & Problem Exists Between Chair And Keyboard \\
+PGE & Pacific Gas \& Electric Company \\
+PI & Principle Investigator \\
+PIO & Parallel I/O \\
+PIR & Personal Interview Report \\
+PM10 & Particles finer than 10\,\um\ in diameter \\
+PM2.5 & Particles finer than 2.5\,\um\ in diameter \\
+POC & Point of Contact \\
+POLARCAT & POLar study using Aircraft, Remote sensing, surface measurements and modeling of Climate, chemistry, Aerosols and Transport (IPY project) \\
+POP & Parallel Ocean Program \\
+POP$+$OEM & POP with Ocean Ecosystem Model embedded \\
+PPA & Personal Package Archive \\
+PPA & Plane Parallel Approximation \\
+PRIDE & Puerto Rico Dust Experiment \\
+PSC & Pathscale \\
+PSCTF & Physical Sciences Communications Task Force \\
+PTS & Package Tracking System (Debian) \\
+PVFS & Parallel Virtual File System \\
+PVM & Parallel Virtual Machine \\
+R2D2 & Remote Reduction of Distributed Data \\
+RAID & Redundant Array of Independent Disks \\
+RAM & Random Access Memory \\
+RC & Release Critical \\
+RCAST & fxm \\
+RCS & Research Computing Services \\
+RDB & Relational databases \\
+RDG & Rayleigh-Debye-Gans \\
+REE & Rare Earth Element \\
+RFP & Request for Package or Request for Proposals \syn{FOA}, \syn{AO} \\
+RFS & Request for Sponsor  \\
+RGB & Red Green Blue \\
+RH & Relative Humidity \\
+RHS & Right Hand Side \\
+RLL & Regular Latitude Longitude \\
+ROI & Region Of Interest \\
+RPM & RedHat Package Manager \\
+RPS & Renewable Portfolio Standards \\
+RR & Reaction Rates \\
+RRDR & Remote Reduction of Distributed Data \\
+RRT & Rapid Response Team \\
+RSP & (NASA) Radiation Sciences Program \\
+RT & Radiative Transfer \\
+RTM & River Transport Model \\
+SACC & Swiss-American Chamber of Commerce \\
+SAF & Snow Albedo Feedback \\
+SAL & Saharan Air Layer \\
+SAMSON & Solar and Meteorological Surface Observational Network \\
+SAN & Storage Area Network \\
+SAO & Semi-Annual Oscillation \\
+SAR & Second Assessment Report \\
+SAS & surface-atmosphere system \\
+SBE & Social, Behavioral, and Economic Sciences (NSF Directorate) \\
+SC4 = SC$^{4}$ & Southern California Climate Change Consortium \\
+SCAQMD & South Coast Air Quality Management District \\
+SCCOOS & Southern California Coastal Ocean Observing System \\
+SCD & Study Center Directorship \\
+SCF & Snow Cover Factor \\
+SCI & Shared Cyberinfrastructure \\
+SDCI & Software Development for Cyberinfrastructure (NSF OCI program) \\
+SDO & Scientific Data Operators \\
+SDS & Scientific Data Set Format \\
+SDSC & San Diego Supercomputer Center \\
+SDSU & San Diego State University \\
+SDSWS & (WMO) Sand and Dust Storm Warning System \\
+SEI & Science and Engineering Informatics or Stockholm Environment Institute \\
+SEIII & Science and Engineering Information Integration and Informatics \\
+SEM & Scanning Electron Microscope \\
+SEVIRI & Spinning Enhanced Visible and InfraRed Imager \\
+SFO & Single-File Operator \\
+SGD & Smart Grid Demonstrations \\
+SGER & Small Grant for Exploratory Research \\
+SGI & Silicon Graphics Incorporated \\
+SH & Southern Hemisphere \\
+SHADE & Saharan Dust Experiment \\
+SI & System Internationale \\
+SIM & Subscriber Identity Module \\
+SL & Southern Levant \\
+SLD & Semi-Lagrangian Dynamics \\
+SLR & Sea Level Rise \\
+SMD & Science Mission Directorate \\
+SMP & Symmetric Multi-Processing, Shared Memory Parallelism \\
+SMPP & Shared Memory Parallel Programming \\
+SMUD & Sacramento Municipal Utilities District \\
+SNICAR & SNow, ICe, and Aerosol Radiative model \\
+SNSF & Swiss National Science Foundation \\
+SO4 & \SOq\ \\
+SOFeX & Southern Ocean Iron Experiment \\
+SOI & Southern Oscillation Index \\
+SOIREE & Southern Ocean Iron Enrichment Experiment \\
+SOM & Supporting Online Material \\
+SP & Senior Personnel or Super-Parameterization \\
+SPEW & Speciated Pollutant Emission Wizard \\
+SPMD & Single Program Multiple Data \\
+SPS & South Pole Station \\
+SPS & UCI School of Physical Sciences \\
+SPV & Solar PhotoVoltaics \\
+SRB & Storage Resource Broker \\ % SCCOOS data model at SDSC includes OPeNDAP
+SRES & Special Report on Emissions Scenarios \\
+SRM & Solar Radiation Management \\
+SS & Saltation-Sandblasting \\
+SSA & Specific Surface Area \\
+SSDRA & Server-Side Data Reduction \& Analysis \\
+SSI & UCI Summer Science Institute \\
+SSP & Summer Science Program \\
+SSS & Sea Salt Sulphate \\
+SST & Sea Surface Temperature \\
+STP & Standard Temperature and Pressure \\
+SUCCESS & Subsonic Aircraft: Contrail and Cloud Effects Special Study \\
+SW & Shortwave (radiation) or Southwest or Summer Workshops \\
+SWAMP & Script Workflow Analysis for MultiProcessing \\
+SWCF & Shortwave Cloud Forcing \\
+SWE & Snow Water Equivalent \\
+SciDAC & Scientific Discovery through Advanced Computing \\
+TAR & Third Assessment Report \\
+TB & Terabyte \\
+TC & Tropical Cyclone \\
+TEOM & Tapered Element Oscillating Microbalance \\
+TG & Temperature Gradient \\
+TH & Thermostat Hypothesis \\
+TIPA & The International Phonetic Alphabet \\
+TL & Thermoluminescence (dating technique) \\
+TNA & Tropical North Atlantic \\
+TNEF & Transport-Neutral Encapsulation Format (\texttt{winmail.dat}) \\
+TOA & Top of Atmosphere \\
+TOMS & Total Ozone Mapping Spectrometer (satellite instrument) \\
+TRL & Technology Readiness Level \\
+UAB & Universitat Aut\`{o}noma de Barcelona (Autonomous University of Barcelona) \\
+UARP & (NASA) Upper Atmosphere Research Program \\
+UB & Universitat Barcelona (University of Barcelona) \\
+UCAR & University Corporation for Atmospheric Research \\
+UCEAP & University of California Education Abroad Program \\
+UCI & University of California, Irvine \\
+UDF & Universal Disk Format \\
+UNCCD & United Nations Convention to Combat Desertification \\
+UNIX & Generic name for operating system \\
+UOEAP & Universitywide Office of the University of California Education Abroad Program \\
+UPC & Universitat Polit\`{e}cnica de Catalunya (Polytechnical University of Barcelona) \\
+UPMC & Universit\'{e} P.~et~M.\ Curie \\
+URI & University of Rhode Island \\
+UV & User Visits to LEP \\
+VC & Visualization Cluster \\
+VCR & Vice Chancellor for Research \\
+VR & Virtual Reality \\
+WAIS & West Antarctic Ice Sheet \\
+WCGGWI & West Coast Governors' Global Warming Initiative \\
+WCRP & World Climate Research Programme \\
+WG & Working Group \\
+WG1 & (IPCC) Working Group One (Scientific Basis of Climate Change) \\
+WKB & Wentzel-Kramers-Brillouin (theory) \\
+WLAN & Wireless Local Area Network (e.g., IEEE 802.11, WiFi) \\
+WMAN & Wireless Metropolitan Area Network (e.g., IEEE 802.16, WiMAX) \\
+WMD & Weapons of Mass Destructiona \\
+WNPP & Work-Needing and Prospective Packages \\
+WPAN & Wireless Personal Area Network (e.g., IEEE 802.15, Bluetooth) \\
+WPWP & Western Pacific Warm Pool \\
+WRF & Weather Research and Forecasting (model) \\
+WSTNA & Western and Subtropical North Atlantic \\
+WWAN & Wireless Wide Area Network (e.g., IEEE 802.16, WiMAX) \\
+WiMAX & Worldwide Inter-operability for Microwave Access (IEEE 802.16) \\
+XML & Extensible Markup Language \\
+YD & Younger-Dryas \\
+YKW & You Know Who \\
+ZKB & Zero known bugs \\
+netCDF & network Common Data Format \\
+p655 & 8-CPU IBM computer node in ESMF \\
+p690 & 32-CPU IBM computer node in ESMF \\
+\end{longtable}
+
+% Programming abbreviations
+% These terms may not be used as is in English text
+% The are used in variable names to build up a semantic context which
+% describes the purpose of the variable as completely as possible.
+% Often uppercase acronyms, listed above, appear below in lowercase
+\begin{longtable}[>{\bfseries}l]{>{\ttfamily}r l}
+% Package array defines >{\bfseries}l syntax
+ALMOD & average layer monochromatic optical depth \\
+ALT & average layer transmission \\
+CEWI & Compiler Error Warning Initializer \\
+HG & Henyey-Greenstein \\
+IT & Interface Transmission \\
+IT & Interface transmission \\
+ITOD & Interface Transmission Optical Depth \\
+LMOD & Layer Monochromatic Optical Depth \\
+LMT & Layer Monochromatic Transmission \\
+LT & Layer Transmission \\
+LTOD & Layer Transmission Optical Depth \\
+RUVICFFU & Retain Unused Variables In Comments For Future Use \\
+Ray & Rayleigh \\
+SS & Sensitivity Study \\
+aa & azimuthal average \\
+aapt & Android Asset Packaging Tool \\
+abb & abbreviation \\
+abs & absorption, absorbed, absorbing \\
+aca & anomalous cloud absorption \\
+acc & annual cycle \\
+acm & accomodation or accomplishment \\
+act & activity \\
+acu & altocumulus \\
+adb & adding-doubling (radiative transfer method) or Android Debugging Bridge \\
+adp & adaptation \ant{mtg} \\
+aer & aerosol, aerosol-laden (turbid) \ant{cln}, or aerodynamic \\
+afr & afforestation \\
+agr & agricultural \\
+alb & albedo \\
+all & all, every, entire \\
+alp & associated Legendre polynomial \\
+alw & adiabatic liquid water or allow \\
+amp & ampersand \\
+amt & amount \\
+anl & analyzed or analytic \ant{rsl} \\
+anm & animation or anomaly or anonymous \\
+apk & Android application \\
+apm & applied math \\
+apn & append \ant{ppn} or appendix \\
+apr & annual progress report or approve, approved or aperture \\
+apt & appointment \\
+arf & aerosol radiative forcing \\
+ash & apparent sink heat \\
+asm & asymmetry (as in asymmetry parameter) or asymptote \\
+asp & aspherical \ant{sph} \\
+atm & atmosphere or atmospheric \\
+att & attribute \\
+avg & average, mean \\
+axz & axis, axes \\
+azi & azimuth, azimuthal \\
+bb & broadband \\
+bbc & broad branch crystal \ant{hxg} \\
+bbd & black body \\
+bbl & bubble \\
+bch & batch or beach \\
+bck & backscatter \ant{fwd} or backup \\
+bcl & baroclinic \ant{brt} \\
+bdy & birthday \\
+bfr & buffer \\
+bgf & bigfile \\
+bio & biological \\
+bkf & backfill \\
+blk & block or black \\
+bll & bell \\
+bln & boolean \\
+blr & bluer (shorter wavelength) \ant{rdr} \\
+bm & beam or benchmark \\
+bmb & biomass burning \\
+bnd & band or bounded, boundary \\
+bnr & binary \\
+bool & Boolean\\
+bp & pointer to \texttt{byte} \\
+bppv & bits per packed value \\
+brd & broadened, broadening \\
+brn & Brownian or barn \\
+brt & brightness (temperature) or barotropic \ant{bcl} \\
+bsc & backscatter \\
+bsl & Bessel \\
+btm & bottom, lowermost \ant{top} \\
+bvr & bi-variate \ant{uvr} \\
+bw & black and white \\
+bwn & Bowen (ratio) \\
+bxm & box model \\
+cbc & cubic \\
+ccd & coccidioidomycosis \\
+cch & cache \\
+ccn & cloud condensation nuclei \\
+cdnc & cloud droplet number concentration \\
+cff & coefficient \\
+cfg & configure \\
+chk & check or checksum \\
+chm & chemistry \\
+chn & channel \\
+chn & chapter \\
+cht & cheatsheet \\
+ck & cook, cooking \\
+ck & correlated-{\textit k} \\
+ckn & cooking \\
+clb & Coulomb \\
+clc & collection \\
+cld & cloud, cloudy or all sky \ant{clr} \\
+cll & collision or cell or collimated \\
+clm & column or climate \\
+cln & clean (aerosol-free) \ant{aer} or clean (memory) \ant{drt} or calendar \\
+clq & colloquium \\
+clr & color or clear (cloud-free) \ant{cld} \\
+cls & Celsius \ant{klv} or class or close \ant{opn} or classical \ant{qnt} \\
+cly & clay \\
+cmd & command \\
+cml & cumulative \\
+cmm & communicator \\
+cmn & common \\
+cmp & compare or compress, compressed, compression \\
+cn & condensation nuclei \\
+cnc & concentration or conclusion \\
+cnd & condensate, condensed or conductivity, conductance \\
+cnf & conform \\
+cnk & chunk \\
+cnm & continuum \ant{ln} or economic, economical \\
+cnn & canonical \\
+cnp & canopy \\
+cns & consulate \\
+cnsc & consecutive \\
+cnt & count or continuum or controversy \\
+cnv & convergence or convert or convention \\
+cor & core \ant{mnt} \\
+cos & cosine \\
+cp & copy or pointer to \texttt{char} \\
+cpc & capacity \\
+cpl & capillary \\
+cpt & caption \\
+cpv & computational precision variable \\
+cpx & complex \\
+crc & correction or circumference or circle \\
+crd & coordinate \\
+crl & curl \ant{dvr} or coral \\
+crp & creep (surface) or cryptography \\
+crr & current \\
+crs & Cirrus or course \ant{hrz} or cross \ant{dot} \\
+crs & crust, crustal \\
+crt & Cartesian \ant{sph} or critical \syn{thr} or create \\
+csn & seasonal \\
+cst & cast or constant or constituent or coast, coastal \\
+csza & cosine solar zenith angle \\
+ctg & category or contiguous \\
+ctl & control \ant{xpt} \\
+ctr & center, central or counter \\
+cv & curriculum vitae \\
+cvr & centennial variability \\
+cw & carbon and water \\
+cyl & cylinder \ant{sph} \\
+dat & data \\
+day & night \ant{ngh} \\
+dbg & debug \\
+dbl & double \ant{flt} \\
+dbn & debian \\
+dcc & diurnal cycle \\
+dcr & decreasing or decrement \\
+dcx & double\_complex \\
+dd & day of month (two digit format) \syn{dom} \\
+ddd & day of year (three digit format) \syn{doy} \\
+ddm & direct-diffuse mean \\
+ddp & dry deposition \\
+dep & depth, as in optical depth \\
+dex & Dalvik executable \\
+dff & diffuse (radiation) \ant{drc} or diffusion, diffusivity (deprecated) \\
+dfl & default or deflate, deflated \ant{nfl} \\
+dfn & definite or define, definition \\
+dfr & deforestation \\
+dfr & differential or defer, deferred \\
+dfs & diffuse (radiation) or diffusion, diffusivity (preferred) \\
+dgn & diagnostic or diagonal \\
+dgr & degrees \ant{rdn} \\
+dgs & digest \\
+dgt & digit \\
+dle & delta-Eddington (radiative transfer method) \\
+dlq & deliquesence \\
+dlr & dollar \\
+dlt & delta, difference \\
+dmd & diamond dust \\
+dmg & Disk Image (MacIntosh filetype) \\
+dmm & deci-millimeter (m$^{-4}$) or dim, dimming \\
+dmn & dimension \\
+dmr & dimer \\
+dmt & diameter \ant{rds} \\
+dmy & dummy \\
+dnd & do not delete or dendrite, dendritic \\
+dne & does not exist \\
+dnl & delete whitespace up to new line (M4 comment) \\ 
+dnm & denominator \ant{nmr} \\
+dns & density \\
+dom & day of month \syn{dd} \\
+dot & dot product \ant{crs} \\
+doy & day of year \syn{ddd} \\
+dp & pointer to \texttt{double} \\
+dpl & dipole or duplicate \\
+dpp & Doppler \\
+dps & deposition \\
+dpt & depth \\
+drc & direct \ant{dff} or direction \\
+drg & drag \\
+drk & dark \ant{lgt} \\
+drn & duration \\
+drs & address \\
+drt & dirty (memory) \ant{cln} \\
+drv & driver or derived, derivation or derivative \\
+drw & Darwin \\
+dsc & description or discussion or discriminant or discretization \\
+dsd & drop size distribution \ant{psd} \\
+dsh & dash \\
+dsk & disk \\
+dsr & desert \\
+dsr & discrete-ordinates (radiative transfer method) \\
+dss & disease \\
+dst & distribution or distance or dust \\
+dtc & detector \\
+dvc & device \\
+dvd & divide \ant{mlt} \\
+dvn & deviation \\
+dvr & decadal variability or divergence \ant{crl} \\
+dwn & down, downwelling \ant{up} \\
+dwp & dew point \\
+dwt & dry weight \\
+dyn & dynamic \\
+edc & education \\
+eid & emerging infectious diseases \\
+emu & emulate \\
+enm & enumerated \\
+epd & epidemiology \\
+eps & epsilon or Encapsulated PostScript \\
+eqm & equilibrium \\
+eqn & equation \\
+eqx & equinox \ant{sls} \\
+err & error \\
+est & East \ant{wst} \\
+evl & evaluate \\
+evn & even (symmetric) \ant{odd} \\
+ext & extinction \\
+fch & fetch \\
+fct & factor \\
+fcx & float\_complex \\
+ffc & effective \\
+fgr & figure \\
+fk & fake \\
+fl & file or firstnamelastname (no space) \\
+flc & fluctuating, fluctuation \\
+fld & field or fluid \\
+flg & flag \\
+flk & flake \\
+fll & fill or full or Fall \\
+fls & false \ant{tru} \\
+flt & filter or float \ant{dbl} \ant{int} \\
+flw & flow or follow or fellowship or follow-up \\
+flx & flux \syn{rrd} \\
+fml & family \\
+fn & first name \ant{ln} \\
+fnc & function \\
+fnl & final \\
+fnt & font \\
+fp & pointer to \texttt{float} \\
+frc & fraction or forcing or friction \\
+frd & Froude or Faraday \\
+frl & fractal \\
+frm & formula \\
+frn & foreign (broadened) \ant{slf} \\
+frnd & friend \\
+frq & frequency \ant{wvn} \ant{wvl} \ant{prd} \\
+frr & Fourier \\
+frs & Fresnel or first \ant{lst} \\
+frs & forest \\
+fsh & efficiency or offshore \ant{nsh} \\
+fsn & fusion \\
+fst & offset \\
+ftr & future \\
+fwd & forward \ant{rvr} or forward scatter \ant{bck} \\
+fxm & fix me (debugging) \\
+fzz & fuzzy (band averaged) \\
+gaa & global annual average \\
+gam & global annual mean \\
+gcc & global climate change \\
+gdp & gravitational deposition \\
+gds & geodesic \\
+gdwt & gram dry weight \\
+gft & gift \\
+glb & global or greatest lower bound \\
+glc & glacier, glacial, glaciogenic \\
+gml & Gmail address \\
+gmm & gamma \\
+gmr & geomorphology, geomorphic \\
+gmt & Greenwich Mean Time or geometric \\
+gnd & ground or agenda \\
+gng & geo-engineering \\
+gnm & genome, genomic \\
+gnr & generic or generator \\
+goa & geometric optics approximation \\
+gpd & gas phase diffusion \\
+grd & grid or gradient \ant{crl} \\
+grp & group \\
+grv & gravity, gravitation \\
+grw & grow, growth \\
+gry & grey \\
+gsd & geometric standard deviation \\
+gss & Gauss, Gaussian \\
+gw & Gaussian weight \\
+gwc & gravimetric water content \\
+hch & heterogeneous chemistry \\
+hdl & headline \\
+hdr & header \\
+heat & heating \\
+heg & HDF EOS Grid \\
+hgh & high \ant{low} \\
+hgt & height \ant{wdt} \\
+hh & hour of day (two digit format) \syn{hr} \\
+hi & high, uppermost \ant{lo} \\
+hlc & holocene \\
+hmr & humor \\
+hmd & humidity \\
+hmg & homogeneous \ant{nhm} \\
+hms & hemisphere \\
+hnd & handle \\
+hnr & Henry or honor, honors \\
+hr & hour \\
+hrd & surface hoar \\
+hrs & depth hoar \\
+hrv & Harvard \\
+hrz & horizontal \ant{vrt} or high-resolution \\
+hst & history \\
+htrn & HITRAN \\
+hxd & hexadecimal \\
+hxg & hexagon, hexagonal \ant{bbc} \\
+hyd & hydrology \\
+i18n & internationalization \\
+iaf & ice albedo feedback \\
+icc & interannual cycle or ice core \\
+icr & ice core \\
+id & identifier \\
+idx & index or indices \\
+iff & if and only if \\
+ilg & illegal \ant{lgl} \\
+img & imaginary or image \\
+in & input \ant{out} \\
+ini & initial, initialize \\
+inq & inquire \\
+int & integer \ant{flt} \\
+ipc & interparticle cohesion \\
+ipm & isopotomer \\
+ips & idiom and practice of science \\
+ipt & isopotomer \\
+iso & isotope or isothermal \\
+ist & interstitial \\
+itp & isotope \\
+itr & iterator or iteration \\
+ivr & interannual variability \\
+jc & journal club \\
+jrn & journal \\
+kdz & kids \\
+klv & Kelvin \ant{cls} \\
+kml & Keyhole Markup Language \syn{kmz} \\
+kmz & zipped (compressed) Keyhole Markup Language file \syn{kml} \\
+knd & Knudson \\
+knm & kinematic \\
+knt & kinetic \\
+kyt & kite \\
+l10n & localization \\
+lac & light absorbing carbon \\
+lai & leaf area index \ant{vai,sai} \\
+lak & lake \\
+lat & latitude \ant{lon} \\
+lbl & label or line-by-line \\
+lbr & library \\
+lcl & local \\
+lcn & location \\
+ldr & lidar \\
+lev & level \\
+lfc & lifecycle \\
+lft & lift or left \ant{rgt} or lifetime \\
+lgf & logfile \\
+lgl & legal \ant{ilg} \\
+lgn & lognormal or legend \\
+lgt & light \ant{drk} or lightning \\
+liq & liquid \\
+lkt & look-up table \\
+llm & illumination \\
+lmn & element or laminar \\
+ln & line or natural logarithm or last name (surname) \ant{fn} \\
+lnd & land \ant{ocn} \\
+lng & long or length or language \\
+lnr & linear \ant{nlr} \\
+lnt & lenticular \\
+lo & low, lowermost \ant{hi} \\
+loi & letter of intent \\
+lon & longitude \ant{lat} \\
+los & letter of support \\
+low & low \ant{hgh} \\
+lp & pointer to \texttt{long} \\
+lpl & Laplace, Laplacian \\
+lqd & liquid \ant{sld} \\
+lrb & larboard \syn{prt} \ant{srb} \\
+lrb & larboard \syn{prt} \ant{srb} \\
+lrn & Lorentz, Lorentzian \\
+lrv & least rapidly varying \\
+lsc & last significant character \\
+lsf & line shape factor \\
+lss & loess \\
+lst & list or last \ant{frs} \\
+ltn & latent (heat) \ant{sns} or latency \\
+ltr & letter or liter \\
+lub & least upper bound \\
+lut & lookup table \\
+lvl & level \\
+m17n & multilingualization \\
+max & maximum \ant{min} \\
+mbl & mobilization \\
+mca & multi-component aerosol \\
+mcr & micron \\
+md & mode \\
+mdl & modal \ant{sxn} or model \ant{obs}, \ant{msr} \\
+mdm & medium \ant{prt}, \ant{core}, \ant{ncl} \\
+mdn & median \\
+mdp & midpoint \ant{ntf} \\
+mds & modulus \\
+mfp & mean free path \\
+mgn & magnetism, magnetic \\
+mie & Mie \\
+min & minimum \ant{max} \\
+mjr & major \\
+mk & make, create \\
+mlc & molecule, molecular \\
+mlg & mileage \\
+mlk & Malkmus or Milankovitch \\
+mll & molality (\molxkg) \\
+mlmic & mean linear mass increase coefficient \\
+mlr & molarity (\molxl) \\
+mlr & molarity (\molxl) \\
+mls & mid-latitude summer or mean line spacing \\
+mlt & multiply \ant{dvd} or multiple \ant{sgl} \\
+mlw & mid-latitude winter \\
+mm & month of year or minute of hour (two digit format) \syn{moy, mth} \\
+mmn & moment or momentum \\
+mmr & mass mixing ratio or memory \\
+mmt & mammatus \\
+mmw & mean molecular weight \\
+mnz & immunization \\
+mnc & Monte Carlo \\
+mng & monograph \\
+mnm & minimum \ant{mxm} \\
+mno & Monin-Obukhov \\
+mnr & minor or mineral, mineralogy \\
+mnt & monotonic or minute or mantissa or mantle \ant{cor} \\
+mod & modulus \\
+mom & moment (e.g., in Legendre expansion) \\
+mono & monochromatic \\
+moy & month of year \syn{moy} \\
+mpc & mass path column or impaction \\
+mpl & implementation or mass path layer \\
+mpr & empirical \\
+mrd & (mass) mixing ratio in dry air \ant{mrm} \\
+mrk & Markov or mark \\
+mrm & (mass) mixing ratio in moist air \ant{mrd} \\
+mrr & mirror \\
+mrv & most rapidly varying \\
+mrz & Mars, Martian \\
+msc & miscellaneous or music \\
+msg & message \\
+msk & mask \\
+msl & mean sea level \\
+msn & emission \\
+msr & measured, measurement \ant{mdl}, \syn{obs} \\
+mss & mass or missing (value) \\
+mst & moisture, moist (air) \ant{dry} \\
+msv & emissivity \\
+mtd & metadata or method \\
+mtg & meeting or mitigation \ant{adp} \\
+mth & month \syn{moy, mm} or math \\
+mtm & metamorphism \\
+mtr & meter or metric \\
+mtx & matrix \ant{ncl} \\
+mvs & Microsoft Visual Studio \\
+mvsc & Microsoft Visual Studio Compiler \\
+mwb & Maxwell-Boltzmann \\
+mxg & Maxwell Garnett \ant{brg} \\
+mxm & maximum \ant{mnm} \\
+naa & number average analytic \\
+nar & number average resolved \\
+nb & narrow band \\
+nbr & number \\
+nc & netCDF \\
+ncl & nucleation or nucleus, nuclei, nuclear or inclusion \syn{core}, \syn{prt}, \ant{mtx} or include \ant{xcl} or ancillary \\
+ncr & increasing or increment or encrypted \ant{ucr} or anchor \\
+ncv & natural climate variability \\
+ncw & nuclear winter \\
+ndc & normalized device coordinates \\
+ndf & indefinite \\
+ndn & indent, indentation or endianness \\
+ndf & indefinite \\
+ndm & non-dimensional or endemic \\
+ndr & indirect effect or nadir, downward looking \ant{zen} \\
+nfc & infection \\
+nfl & inflate \ant{dfl} \\
+nfn & infinite \\
+nfr & info., information \\
+ngh & night \ant{day} or neighbor \\
+ngs & {\AA}ngstr\"{o}m \\
+nhm & inhomogeneous \ant{hmg} \\
+nlr & non-linear \ant{lnr} \\
+nm & name \\
+nma & number median analytic \\
+nmn & nominal or non-monotonic \\
+nmr & number median resolved or numeric or numerator \ant{dnm} \\
+nms & namespace \\
+npc & number path column \\
+npl & number path level \\
+nrg & energy or inorganic \ant{rgn} \\
+nrs & inertia \\
+nrs & nurse, nursing \\
+nrt & North \ant{sth} \\
+nsh & onshore \ant{fsh} \\
+nsl & insolation \\
+nsm & ensemble \\
+nsr & answer \\
+nst & instrument or instantiate, instantiation or instructor, instruction \\
+nsz & Nussenzweig \\
+ntc & interception or notice \\
+ntf & interface \ant{mdp} \\
+ntg & integral or integer \\
+nth & enthalpy \\
+ntl & initial or initials \\
+tmc & atomic \ant{ntm} \\
+ntm & intermediate or non-atomic \ant{tmc} \\
+ntn & intensity or radiance \\
+ntp & interpolate, interpolant or entropy \\
+ntr & introduction \ant{cnc} or internal \ant{xtr} or nutrient or entertainment \\
+nts & note to self \\
+ntt & annotate, annotated, notation \\
+ntv & interval, interview \\
+ntw & network \\
+ntz & units \\
+nvr & environment \ant{prc} or inversion or never \\
+nvt & invitation \\
+nwa & number weighted average analytic \\
+nwr & number weighted average resolved \\
+nwt & Newton \syn{rph}, Newtonian \\
+nxt & next \ant{prv} or \ant{crr} \\
+obl & oblate \ant{prl} \\
+obs & observed, observation \ant{mdl}, \syn{msr} \\
+ocn & ocean \ant{lnd} \\
+oda[c,l] & optical depth absorption [column,layer] \\
+odd & odd (anti-symmetric) \ant{evn} \\
+ods[c,l] & optical depth scattering [column,layer] \\
+odx & extinction optical depth \\
+odx[c,l] & optical depth extinction [column,layer] \\
+off & offsest \\
+omp & OpenMP \\
+op & operation \\
+opn & open \ant{cls} \\
+opt & optical or option or optimal \\
+osm & osmotic \\
+osw & offshore wind \\
+out & output \ant{in} \\
+ovl & overlay \\
+ovr & overlap \\
+pbl & public \ant{prv} or planetary boundary layer \\
+pcc & polar climate change \\
+pch & photochemistry \ant{hch} or pch \\
+pck & pack, packed \ant{upk} \\
+pcl & Peclet or parcel \ant{nvr} \\
+pcp & precipitation \\
+pct & percent \\
+pd & present day \\
+pdd & photodiode \\
+pfl & profile \\
+pfo & pseudo-first order \\
+pforc & pseudo-first order rate coefficient \\
+pfx & prefix \\
+pht & photon \\
+phy & phytolith \\
+phz & phase \\
+plc & place or policy or paleoclimate \\
+plk & Planck \\
+pll & palette or pollution \\
+pln & plant or plain \syn{ucr} or planar \ant{sld} \\
+plp & plane parallel \\
+plr & polar, as in polar angle \ant{azi} \\
+plt & plot \\
+plt & politics, political \\
+pmr & partial molar refraction (optical approximation) \\
+pmp & pre-empt, pre-emption \\
+pnl & panel \\
+pnr & panorama \\
+pnt & point \\
+ppl & population or popular \ant{prv} \\
+ppn & prepend \ant{apn} \\
+ppp & pre-proposal \\
+ppr & partial pressure or paper \\
+prc & process or photodissociation rate coefficient or precision \\
+prd & period \ant{frq} or product \\
+prg & program \\
+prj & projection \\
+prl & parallel \ant{prp} or prolate \ant{obl} or parliamentarian \\
+prm & parameter or prime or permafrost \\
+prn & print, printer or parentheses, parenthetical, or period or parent \\
+prp & property or perpindicular \ant{prl} or proposal or propre (clean) \ant{sal} \\
+prs & pressure or parse or person or press \\
+prt & partial or partition or port \syn{lbr} \ant{sbr} \\
+prv & peer-reviewed \ant{ppl} or preserve, preserving \\
+prv & private \ant{pbl} or previous or provisional \\
+prx & approximation \\
+psd & particle size distribution \ant{dsd} \syn{szdst} or pseudonym \\
+psd & postdoc \\
+psn & position \\
+pss & Poisson or parent snow sample \\
+pst & positive or poster or pesticide \\
+pth & path \\
+ptn & potential \\
+ptr & pointer or poetry \\
+pwr & power \\
+pyr & pyrocumulus \\
+qck & QuikSCAT \\
+qdr & quadratic or quadruple \\
+qnt & quantum \ant{cls} \\
+qrk & quark \\
+qst & saturated mixing ratio \\
+rat & rate \\
+rbn & rebin \\
+rbt & rebase \\
+rbt & rebuttal \\
+rcd & return code \\
+rch & research \\
+rcm & recompute \\
+rcp & reciprocal \\
+rcr & recurrence \ant{nrcr} or recursive \\
+rct & rectangle, rectangular \ant{rrg} \\
+rdb & erodible, erodibility \\
+rdc & reduced or radioactivity \\
+rdd & retain degenerate dimensions \\
+rdl & radial \\
+rdn & radian \ant{dgr} or radiation \\
+rdr & order \ant{rrd} or redder (longer wavelength) \ant{blr} \\
+rds & radius \ant{dmt} \\
+rec & record \\
+rf & reef \\
+rfl & reflectance \\
+rfr & refraction or reference or refresh \\
+rgd & rigid \\
+rgh & roughness \\
+rgl & regular \\
+rgn & region or original, origin or organic \ant{nrg} \\
+rgr & regression or regrid \\
+rgt & right \ant{lft} \\
+rhd & relative humidity at deliquescence \\
+rjc & reject, rejected \\
+rl & real \\
+rlh & roughness length heat \\
+rlm & roughness length momentum \\
+rlt & relative \\
+rlv & roughness length water vapor \\
+rma & resonance of maximum amplitude \\
+rmn & remaining or Riemann \\
+rmt & remote \\
+rnb & rainbow \\
+rnd & raindrop \\
+rng & range \\
+rnk & rank \\
+rnr & renormalize \\
+rnt & orientation \\
+rph & Raphson \syn{nwt} \\
+rpk & repack \\
+rpl & replicate, replicant \\
+rpr & reprint or repair \\
+rpt & report \\
+rqr & require \\
+rqs & request \\
+rrd & irradiation, irradiance \syn{flx}, \ant{ntn} or re-order \ant{rdr} \\
+rrg & irregular \ant{rct} \\
+rsd & residue or residual \\
+rsl & resolved \ant{anl} or result \\
+rsn & resolution \\
+rsr & resource \\
+rss & resistance \\
+rst & reset \\
+rtc & article \\
+rte & route \\
+rth & arithmetic or orthogonal, orthonormal \\
+rtl & run-time linking \\
+rtp & ready-to-post \\
+rtr & retrieval or router \\
+rts & ready-to-send \\
+rtt & rotated, rotation, rotational, rotator \\
+rvr & reverse \ant{fwd} or river, riverine \\
+rvw & review \\
+rx & regular expression \\
+rxn & reaction \\
+rxr & reaction rate \\
+rxrc & reaction rate coefficient \\
+ryl & Rayleigh \\
+ryn & Reynolds \\
+ryt & ray-tracing \\
+rzh & erosion \\
+saa & surface area average analytic \\
+sai & stem area index \ant{vai,lai} \\
+sal & sal (dirty) \ant{prp} \\
+sar & surface area average resolved \\
+sas & sub-Arctic summer or surface-atmosphere system \\
+saw & sub-Arctic winter \\
+sbf & Spherical bessel function \\
+sbl & sublimation \\
+sbr & subroutine \\
+sbs & subscript \ant{sps} \\
+sbt & subtract \ant{add} \\
+sca & scattering \ant{abs} \\
+scc & seasonal cycle \\
+scd & schedule \\
+scf & snow cover fraction \\
+sch & search \\
+scl & scale or school \\
+scn & second or scan \\
+scr & security or secret \\
+sct & scatter, scattering, scatterometer, or structure \\
+scv & scalar value or scavenge, scavenging \\
+sd & side \\
+sdm & sediment \\
+sdn & student \\
+sdv & standard deviation \\
+seb & surface energy budget \\
+sec & second \\
+sfc & surface \\
+sft & software \\
+sfx & suffix \\
+sgl & single \ant{mlt} \\
+ebk & e-book \\
+sgn & sign or assignment or significand \\
+nsg & unsigned \\
+sgs & sub-gridscale \\
+shf & shuffle \\
+shm & Schmidt \\
+shp & shape or ship \\
+shr & Sherwood \\
+sht & short \\
+sin & sine \\
+skp & skip \ant{usd} \\
+sl & soil \\
+slb & slab or solubility \\
+slc & slice \\
+sld & solid \ant{pln} \ant{lqd} \\
+slf & self (broadened) \ant{frn} \\
+sln & solution \\
+slp & slip \\
+slr & solar \\
+sls & solstice \ant{eqx} or slash \\
+slt & solute \ant{slv} or silt or saltation, saltator \\
+slv & solvent \ant{slt} or solve, solver \\
+sma & surface area median analytic \\
+sml & similarity \\
+smm & summation \\
+smp & soil matric potential or sample or simple or symmetric multi-processing \\
+smr & Summer or surface area median resolved or summary \\
+snd & sonde or sand \\
+sng & string \\
+snp & snap or snowpack \\
+sns & sensitivity or sensible (heat) or sunset \\
+snw & snow \\
+sov & separation of variables \\
+sp & pointer to \texttt{short} \\
+spc & special or spectral \ant{bb} or specific or spectroscopy or space \\
+spf & superfluous or spitfire \\
+sph & sphere, spherical \ant{cyl} \ant{asp} \\
+spl & supplement \\
+spm & summary for policymakers \ant{tsm} \\
+spn & span \\
+spr & Spring or sparse or super \\
+sps & superscript \ant{sbs} \\
+sqr & square, squared \\
+srb & starboard \ant{prt} \ant{lrb} \\
+src & source or structure \\
+srd & stride \\
+srf & surface reflectance feedback \\
+srg & storage \\
+srl & spiral \\
+srm & stream \\
+srs & series \\
+srt & start or sort \\
+srv & service or server \\
+ss & single scattering or sensitivity study or second of minute (two digit format) \\
+ssh & secret \\
+ssl & sea-salt \\
+stb & stable or stability \\
+stc & sticking (coalescence) \\
+std & standard \\
+stg & stagger \\
+sth & South \ant{nrt} \\
+stk & Stokes or stack \\
+stl & satellite \\
+stm & stimulated \\
+stmt & statement \\
+stp & step \\
+str & star or strength or stress \\
+stt & status, state or statement or students' t-test \\
+stx & stratosphere-troposphere exchange \\
+sty & style \\
+sv & save \\
+svd & saturation vapor density \\
+svm & saturation vapor mixing ratio \\
+svn & subversion \\
+svp & saturation vapor pressure \\
+svr & seasonal variability \\
+svy & survey \\
+sw & software \\
+swa & surface area weighted average analytic \\
+swg & software engineering \\
+swr & surface area weighted average resolved \\
+sxn & section or sectional \ant{modal} \\
+sys & system \\
+sz & size \\
+sza & solar zenith angle \\
+szdst & size distribution \\
+tbl & table \\
+tca & tropical cirrus anvil \\
+tch & teacher \\
+tck & tick \\
+tdl & tidal \\
+tdp & turbulent deposition \\
+thk & thick, thickness \\
+thr & threshold or therapy \\
+thw & thaw \\
+tlk & talk \\
+tln & outline \\
+tm & time \\
+tmp & temporary \\
+tmr & timer \\
+tms & TOMS or timeseries \\
+tmw & teamwork \\
+tnd & tendency \\
+tnr & tenure \\
+tns & tensor \\
+tnt & tentative \\
+top & top, uppermost \ant{btm} \\
+tpg & topography, topographic \\
+tpt & temperature \\
+smf & ESMF \\
+tps & Tempest (remapping suite) \\
+trb & turbulent, turbulence \\
+trc & tracer \\
+trg & trace gas or target or trigger \\
+trm & thermal or term or termination \\
+trn & transmittance, transmission or transformation or trend or translation, translational (energy) \\
+trp & tropics, tropical or triplet \\
+tru & true \ant{fls} \\
+trv & traverse \\
+tsm & technical summary \ant{spm} \\
+tst & test \\
+ttl & total or title \\
+txt & text or texture (soil) \\
+typ & type \\
+ucr & un-encrypted (plain text) \ant{ncr} \\
+um & micron, micrometer \\
+unk & unknown \\
+nsx & intersection \ant{unn} \\
+unn & union \ant{nsx} \\
+up & upward, upwelling \ant{dwn} \\
+upk & unpack, unpacked \ant{pck} \\
+upt & uptake \\
+upw & upward, upwelling \ant{dwn} \\
+usd & used \ant{skp} \\
+usg & usage \\
+usr & user \\
+uvr & uni-variate \ant{bvr} \\
+vaa & volume average analytic \\
+vai & vegetation area index (leaf + stem) \ant{lai,sai} \\
+val & value \\
+var & variability or variable or volume average resolved \\
+vbr & vibration \\
+vct & vector \\
+vec & vector \\
+vf & Valley Fever \\
+vgt & vegetation or Voigt \\
+vlc & volcano, volcanic \\
+vld & valid, model validation dataset \\
+vlm & volume \\
+vlw & volume-weighted \\
+vma & volume median analytic \\
+vmr & volume median resolved \\
+vnt & event or ventilation \\
+vp & pointer to \texttt{void} \\
+vpr & vapor \\
+vrb & verbose \\
+ncs & ancestor \\
+vrn & variance \\
+vrs & version or various \\
+vrt & vertical \ant{hrz} or vortex, vortice or vertice \\
+vs & Visual Studio \\
+vsb & visible \\
+vsc & viscous, viscosity \\
+vsh & vector spherical harmonic \\
+vta & volume-to-area \\
+vwa & volume weighted average analytic \\
+vwc & volumetric water content \\
+vwr & volume weighted average resolved \\
+vzn & visualization \\
+wbl & Weibull \\
+wbn & wind bin \\
+wdp & wet deposition \\
+wdt & width \ant{hgt} \\
+wdw & window \\
+wgt & weight, weighted \\
+wht & white \\
+winoc & water insoluble organic carbon \ant{wsoc} \\
+wk & weak or week \\
+wnd & wind or Windows \\
+wnt & Winter \\
+wrd & award \\
+wrk & work \\
+wrp & wrap \\
+wsoc & water soluble organic carbon \ant{winoc} \\
+wst & West \ant{est} \\
+wt & wait \\
+wth & weather \\
+wtl & wetland \\
+wtm & mass-weighted \\
+wtn & number-weighted \\
+wtr & water \\
+wts & surface area-weighted or spectrally weighted \\
+wtv & volume-weighted \\
+wtx & cross sectional area-weighted \\
+wv & wave \\
+wvl & wavelength \ant{wvn} \\
+wvn & wavenumber \ant{wvl} \\
+xaa & cross-sectional area average analytic \\
+xab & extended abstract \\
+xar & cross-sectional area average resolved \\
+xbt & exhibit \\
+xcf & eXperimental Computing Facility (\texttt{gimp} file format) \\
+xcl & exclude \ant{ncl} \\
+xcs & excess \\
+xct & Executable \\
+xct & excited (state) \\
+xem & extended effective medium \\
+xma & cross-sectional area median analytic \\
+xmp & example \\
+xmr & cross-sectional area median resolved \\
+xnt & eccentricity (orbital)\\
+xpc & expected \\
+xpn & exponent, exponential or expand, expanded \ant{pck} \\
+xpr & expression or expire \\
+xpt & experiment \ant{ctl} \\
+xrf & cross reference \\
+xsa & cross-sectional area \\
+xst & exist, exists \\
+xsx & cross-section, cross-sectional (area) \\
+xtn & extend, extended \\
+xtr & extrapolate \ant{ntp} or extract or external \ant{ntr} \\
+xwa & cross-sectional area-weighted average analytic \\
+xwr & cross-sectional area-weighted average resolved \\
+yld & yield \\
+yr & year \syn{yyyy} \\
+yyyy & year (four digit format) \syn{yr} \\
+zen & zenith, upward-looking \ant{ndr} \\
+zpd & zero plane displacement \\
+zro & zero \\
+zta & zeta \\
+\end{longtable}
+
+% Bibliography
+%\renewcommand\refname{\normalsize Publications}
+%\nocite{ZeK971}
+%\bibliographystyle{agu}
+%\bibliography{/home/zender/tex/bib}
+
+\csznote{ 
+% Usage: Place usage here at end of file so comment character % not needed
+cd ~/crr;make -W abb.tex abb.dvi abb.ps abb.pdf abb.txt;cd -
+
+# dvips -Ppdf -G0 -o ${DATA}/ps/abb.ps ~/crr/abb.dvi;ps2pdf ${DATA}/ps/abb.ps ${DATA}/ps/abb.pdf
+# cd ~/crr;texcln abb;make abb.pdf;bibtex abb;makeindex abb;make abb.pdf;bibtex abb;makeindex abb;make abb.pdf;cd -
+scp -p ~/crr/abb.tex ~/crr/abb.txt ~/crr/abb.dvi ${DATA}/ps/abb.ps ${DATA}/ps/abb.pdf dust.ess.uci.edu:/var/www/html/doc/abb
+
+% # NB: latex2html works well on abb.tex
+# cd ~/crr;latex2html -dir /var/www/html/doc/abb abb.tex
+# NB: tth works well on abb.tex
+# cd ~/crr;tth -a -Labb -p./:${TEXINPUTS}:${BIBINPUTS} < abb.tex > abb.html
+# scp abb.html dust.ess.uci.edu:/var/www/html/doc/abb
+# NB: tex4ht works well on abb.tex
+cd ${HOME}/crr;htlatex abb.tex
+scp abb*.css abb*.html dust.ess.uci.edu:/var/www/html/doc/abb
+# NB: tex4moz works well on abb.tex
+cd ${HOME}/crr;/usr/share/tex4ht/mzlatex abb.tex
+scp abb*.css abb*.html abb*.xml dust.ess.uci.edu:/var/www/html/doc/abb
+} % end csznote on usage
+
+\end{document}

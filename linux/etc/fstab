@@ -1,0 +1,18 @@
+/dev/hda5               /                       ext2    defaults        1 1
+/dev/hda6               /data                   ext2    defaults        1 2
+/dev/hda7               /home                   ext2    defaults        1 2
+/dev/cdrom	/mnt/cdrom	iso9660	 user,exec,dev,suid,ro,noauto,users 0 0
+/dev/hda10              /tmp                    ext2    defaults        1 2
+/dev/hda8               /usr                    ext2    defaults        1 2
+/dev/hda9               /usr/local              ext2    defaults        1 2
+/dev/hda1		/wnd			vfat    defaults,user,exec,dev,suid,rw 0 0
+/dev/hda11              swap                    swap    defaults        0 0
+/dev/fd0                /mnt/floppy             vfat    defaults,users,noauto 0 0
+/dev/hdc		/mnt/ls120		vfat	defaults,users,noauto 0 0
+none                    /proc                   proc    defaults        0 0
+none                    /dev/pts                devpts  gid=5,mode=620  0 0
+krein.math:/dks9d2s0    /dks9d2s0       nfs      exec,dev,suid,rw 1 1
+krein.math:/dks9d3s0    /dks9d3s0       nfs      exec,dev,suid,rw 1 1
+krein.math:/dks9d4s0    /dks9d4s0       nfs      exec,dev,suid,rw 1 1
+krein.math:/dks9d5s0    /dks9d5s0       nfs      exec,dev,suid,rw 1 1
+

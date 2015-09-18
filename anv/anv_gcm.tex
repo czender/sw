@@ -1,0 +1,1831 @@
+% $Id$
+
+% Purpose: ANV parameterization implementation paper.
+
+\ifphdcsz{}{
+
+%\documentclass[twoside,agupp]{aguplus}
+%\documentclass[twoside,draft,agupp]{aguplus} % excludes figures
+\documentclass[agums]{aguplus}
+%\documentclass[twoside,agums]{aguplus}
+%\documentclass[jgrga]{aguplus}
+
+%  AGU++ OPTIONS
+%\printfigures        % ADDS FIGURES AT END
+%\doublecaption{35pc} % CAPTIONS PRINTED TWICE
+\sectionnumbers      % TURNS ON SECTION NUMBERS
+%\extraabstract       % ADDS SUPPLEMENTAL ABSTRACT
+%\afour               % EUROPEAN A4 PAPER SIZE
+%\figmarkoff          % SUPPRESS MARGINAL MARKINGS
+
+%  AGUTeX OPTIONS AND ENTRIES
+%\tighten             % TURNS OFF DOUBLE SPACING, has no effect with agupp
+%\singlespace         % RESTORES SINGLE SPACING
+%\doublespace         % RESTORES DOUBLE SPACING
+
+\usepackage{graphicx} % defines \includegraphics*
+\usepackage{ifthen} % Boolean and programming commands
+\usepackage{longtable} % for long tables, like acronyms and symbols
+\usepackage{tabularx} % for long tables, like acronyms and symbols
+
+\usepackage{/home/zender/tex/csz} % all my local definitions
+\input{/home/zender/tex/jgr_abb}
+%\usepackage{/home/zender/tex/jrn_abb} % Define abbreviations used in bib.bib
+
+% NB: The \lefthead and \righthead will be automatically uppercased by
+% the jgrga documentstyle 
+\lefthead{Zender and Kiehl}
+%\righthead{Climate sensitivity to anvil condensate phase, height, and size}
+\righthead{Climate sensitivity to tropical anvil representation}
+\received{date1}
+\revised{date2}
+\accepted{date3}
+\journalid{JGRD}{Journal date}
+\articleid{page1}{page2}
+\paperid{94JZ12345}
+% The $ in the following line screws up the hilit19 highlighting
+%\ccc{0000-0000/00/94JZ-12345\$05.00}
+\ccc{0000-0000/00/94JZ-12345\05.00}
+% \cpright{PD}{1994}
+% \cpright{Crown}{1994}
+% (No \ccc{} for Crown copyrights.)
+\cpright{AGU}{1994}
+
+\authoraddr{J. T. Kiehl and Charles S. Zender, National Center for Atmospheric
+Research, P.O. Box 3000, Boulder, CO 80307-3000}
+
+%\slugcomment{Submitted to \jcl, May~13, 1996. Copyright \copyright 1996 AMS.}
+\slugcomment{\today}
+
+\begin{document}
+} % not phdcsz
+
+% NB: title must be lowercased by hand. The documentstyle does not enforce it.
+%\def\paperchaptertitle{Sensitivity of a climate simulation to vertical
+%distribution, phase, and size of anvil condensate through radiative effects}  
+\def\paperchaptertitle{Sensitivity of a climate simulation to
+representation of tropical anvil}  
+\ifphdcsz{\chapter{\paperchaptertitle}\label{chap:gcm}}{\title{\paperchaptertitle}}
+\ifphdcsz{}{\author{Charles S. Zender and J. T. Kiehl}}
+\ifphdcsz{}{\affil{National Center for Atmospheric Research, Boulder, Colorado}}
+
+\ifphdcsz{\section{Abstract}}{\begin{abstract}}
+Climate sensitivity to the representation of tropical anvil is
+investigated using a simple prognostic ice cloud scheme in a 
+version of the National Center for Atmospheric Research Community
+Climate Model.
+Two numerical climate integrations are forced by 1985--1989 sea
+surface temperature (SST):
+the control, with diagnostic ice cloud, and the experiment, with
+ice cloud forecast from modeled and observed characteristics of
+tropical anvil lifecycle (i.e., convective origin, vertical profile,
+phase, mesoscale precipitation, and lifetime).
+The sensitivity experiment predicts enhanced ice and reduced liquid
+over most latitudes.    
+Increase in hydrometeor size associated with anvil weakens cloud
+radiative extinction per unit mass by factors of 1--3.
+The weaker mass extinction efficiency approximately balances enhanced
+ice amount so that anvil ice mass quadruples without biasing the mean
+radiative energy balance.
+
+Enhanced anvil perturbs the tropical upper troposphere temperature
+structure more strongly in winter, when the column is clearer and
+anvil radiatively heats the troposphere above 200~mb. 
+In the summer tropics, enhanced anvil reduces radiative cooling up to 
+200~mb, and enhances cooling above that.
+The prognostic anvil is less strongly coupled to SST.
+Based on the 1987 El Ni\~no, the underprediction of shortwave cloud
+forcing sensitivity to SST indicates anvil ice crystal size or habit
+may be sensitive to SST.
+The prognostic anvil formulation improves longwave cloud radiative
+response to SST cooling but worsens response to warming $> 2\
+\dgr$C.  
+In conjunction with weaker mass extinction efficiency of large ice,
+this weakens the feedback between longwave cloud forcing and
+convection over SST maxima.  
+The net response of convection is a shift toward the winter hemisphere
+in solstice months.
+These changes lead to a significant response in the extratropical
+height field in January. 
+
+% Reread the paper, find the clearest, strongest points, and put them
+% in the abstract
+\ifphdcsz{}{\end{abstract}}
+
+\section{Introduction}\label{sec:gcm_intro}
+
+The role of cirrus anvil in determining the diabatic heating which
+drives the general circulation is widely recognized.
+Previous studies \cite[e.g.,][]{WeS80,ALV88,RaR891} show the sign and
+magnitude of radiative heating in the upper troposphere depend
+strongly on cirrus height, thickness, mass, and microphysical
+characteristics such as particle size and shape. 
+Cirrus anvils produce a radiative influence long after deep convection
+ceases \cite[]{ALV88}, and respond to equatorial sea surface
+temperature (SST) increase by radiatively reducing column energy
+\cite[]{RaC91}. 
+Anvils further influence the climate system by processing moisture 
+\cite[]{LeH80} and storing water in the upper troposphere
+\cite[]{SuL931}.  
+This study examines how condensate amount, ice fraction, and particle
+size interact to radiatively force the climate system in a general
+circulation model (GCM) when the anvil ice distribution is determined
+by a prognostic scheme.
+
+%The prevalence of non-convective cirrus in the atmosphere is
+%documented by \cite{WHL88} and \cite{RoS91}.
+
+In \cite{ZeK961} we developed a simple prognostic ice scheme, called
+ANV, that encapsulates the following characteristics of tropical
+anvils:
+Deep convection is the ultimate source of tropical upper tropospheric
+extended clouds, i.e., tropical anvils \cite[e.g.,][]{WeS80}. 
+The relative area of convecting cores to the associated anvil is
+$\lesssim 10\%$ \cite[]{FDR90}.
+Anvil lifetime, typically 6~hr \cite[]{ALV88}, exceeds the duration 
+of deep convection by many hours.
+Anvil generates roughly 40\% of total precipitation in tropical
+convective systems \cite[]{GaH83}. 
+Observations and numerical simulations
+\cite[e.g.,][]{WSS931,SLT94,GMK95} show time mean condensate mixing
+ratio \qc\ in tropical convective systems varies little (and can
+increase), from the freezing level to $\sim 300$~mb, above which \qc\
+decreases rapidly.  
+
+In the present study we replace the diagnostic ice cloud in the 
+National Center for Atmospheric Research Community Climate Model (NCAR
+CCM) with prognostic ice cloud from ANV to study climate sensitivity
+to the radiative effects of these observed and modeled anvil features. 
+Changes in condensate distribution due to the above details of anvil
+specification are shown to significantly impact simulated climate
+through three mechanisms: ice fraction, crystal size, and vertical
+distribution. 
+
+%Advantages of a prognostic, rather than diagnostic, condensate
+%treatment in a GCM include allowing cloud to act as a tropospheric
+%moisture reservoir \cite{SuL931}, allowing water transport to occur in
+%the condensed phase (where its radiative effects are enhanced), and
+
+The CCM and ANV models are summarized in section~\ref{sec:gcm_model}. 
+Section~\ref{sec:vld} compares the models' mean global simulated
+climate statistics to each other and analyses.
+Section~\ref{sec:sst} examines response to SST forcing in the 1987 El
+Ni\~no. 
+Section~\ref{sec:reg} describes the seasonal cycle of the energy
+budget of the central Indian Ocean.
+Section~\ref{sec:gcm_disc} contains a discussion and conclusions.
+
+\section{Model Description}\label{sec:gcm_model}
+
+The control model, denoted CCM, contains four improvements over CCM2
+\cite[]{HBB93} in the area of cloud physics:   
+Ice phase condensate is treated with the radiative scheme of
+\cite{EbC92}.
+A continental/maritime distinction is made in the effective radius of
+cloud droplets \cite[]{Kie942}.
+Total condensed water path (CWP) is diagnosed from column precipitable
+water rather than prescribed by latitude. 
+Large scale precipitation can evaporate between the cloud and surface.
+
+The sensitivity experiment, denoted ANV, is the prognostic ice scheme
+of \cite{ZeK961} implemented in this version of the CCM (details in
+Appendix~\ref{app:anv_imp}).  
+Only radiative feedbacks of prognostic ice are enabled, thermodynamic
+feedbacks (i.e., latent heating and moisture) are turned off in ANV.
+This section presents the CCM and ANV formulations for cloud
+condensate, ice fraction, hydrometeor size, and their radiative
+implications.
+
+\subsection{Condensate Formation}\label{sec:qc}
+
+CCM utilizes a diagnostic treatment of condensate.
+In CCM, grid box average \qc\ is logarithmically proportional to
+total column  vapor \Qv\ and linearly proportional to local cloud
+fraction $A$ through
+\begin{eqnarray}
+\label{eqn:qc}
+\qc & = & A \rho_\ell / \rho \\
+\label{eqn:rhol}
+\rho_\ell & = & \rho_\ell^0 e^{(-z/h_\ell)} \\
+\label{eqn:hl}
+h_\ell & = & 810 \ln \Qv
+\end{eqnarray}
+where $\rho$ is density, $\rho_\ell^0 \equiv .18$~\gxmC\
+is ``in-cloud'' condensed water density at the surface, $z$ is height,
+and $h_\ell$ is the scale height of condensed water.
+Note the strong coupling of \qc\ to local surface temperature by the
+Clausius-Clapeyron relationship implicit in (\ref{eqn:hl}).
+Inserting tropical values for \Qv\ we find $h_\ell \lesssim 4$~km so
+that \qc\ monotonically decreases from the surface (for fixed $A$).
+A drawback to this procedure is that the upper tropospheric peak in
+\qc\ profile of an anvil system \cite[e.g., Figure~3 of][]{ZeK961}
+must be captured by significantly modulating $A$ across the anvil deck
+(\ref{eqn:qc}).  
+
+ANV treats ice condensate as a prognostic variable.
+In ANV, ice production for the entire convecting column above freezing
+level is proportional to convective mass flux at 500~mb.
+New ice is homogeneously distributed to all freezing, convecting
+layers. 
+This apportionment increases condensate sequestered in the upper
+troposphere, a primary goal of this study.  
+Precipitation is forecast from mesoscale budget estimates.
+Stratiform ice generation is prognosed from vertical updraft,
+temperature, and cloud fraction.  
+
+\subsection{Ice Fraction}\label{sec:fice}
+
+\cite{SuS94} analyze the importance of the cloud ice mass fraction,
+\fice, to radiative fluxes. 
+They show treating mixed phase cloud as 100\% liquid can result in
+greater error than neglecting the ice mass completely.
+Insufficient data exist to know the climatological \fice\ of anvil
+with certainty.
+Metastable supercooled liquid in cloud is known to occur at $-40\
+\dgr$C \cite[]{HeS89}, but not in significant quantities at GCM
+scale (i.e., over areas of $\sim 100^2$~\kmS\ for $\sim 1$~hr).   
+Motivated by data of \cite{RaH94}, CCM partitions diagnostic
+condensate between liquid and ice via  
+\begin{equation}
+\ficeccm = \cases{
+  0 & $T > - 10$~\dgr C \cr
+  -{T+10 \over 20} & $-10 \geq T \geq -30$~\dgr C \cr
+  1 & $T < -30$~\dgr C \cr}
+\label{eqn:ficeccm}
+\end{equation}
+Motivated by recent mid-latitude observations \cite[]{MoJ94} and
+tropical simulations \cite[e.g., Figure~3 of][]{ZeK961}, ANV restricts
+diagnostic liquid condensate (and, hence, mixed phase cloud) to a
+narrower and warmer range than the CCM (\ref{eqn:ficeccm}) according
+to
+\begin{equation}
+\ficeanv = \cases{
+  0 & $T > 0$~\dgr C \cr
+  -{T \over 5} & $0 \geq T \geq -5$~\dgr C \cr
+  1 & $T < -5$~\dgr C \cr}
+\label{eqn:ficeanv}
+\end{equation}
+Since the CCM classifies some condensate as cold as $-30~\dgr$C as
+liquid (\ref{eqn:ficeccm}), while ANV has no liquid colder than
+$-5$~\dgr C (\ref{eqn:ficeanv}), it is clear the ANV atmosphere
+will contain much more ice than the CCM. 
+The coldest liquid water in ANV, at $-5\ \dgr$C, is warmer than 
+observations and is further discussed in Section~\ref{sec:cld}.
+
+\subsection{Hydrometeor Size}\label{sec:rdsffc}
+
+Model cloud droplet effective radius \rel\ is fixed at 10~\um\ over
+ocean and sea ice but varies from 5--10~\um\ over land.
+Ice crystal effective radius \rei\ represents an equivalent surface
+area sphere and varies linearly with a normalized pressure coordinate.
+Over ocean this results in $\rei = 10$~\um\ for $p > 800$~mb to  
+$\rei = 30$~\um\ for $p < 400$~mb.
+
+Due to enlargement of the glaciated atmosphere in ANV
+(\ref{eqn:ficeccm}--\ref{eqn:ficeanv}), and the pressure/phase
+dependence of \rdsffc, hydrometeor size plays as important a role as
+condensate amount in determining net radiative effects of 
+condensate differences in the present experiment.
+The simulated tropical temperature structure led to the following
+distribution of ice fraction and \rdsffc: 
+The majority of \qc\ is large ice crystal ($\rei = 25$--30~\um)
+for $p < 550$~mb in ANV and $p < 300$~mb in CCM. 
+CCM has half liquid droplet ($\rel = 10$~\um) and half large ice for
+$300 < p < 400$~mb.
+The majority of \qc\ is liquid droplet for $p > 400$~mb in the CCM and
+$p > 550$~mb in ANV.
+
+We realize prescribing \rdsffc\ based on pressure and phase (i.e.,
+temperature) is not physically consistent with mass-conserving
+microphysics because it ignores the relation between size
+distribution, \rdsffc, and \qc.
+We employ diagnostic \rdsffc\ in the interim as prognostic
+parameterizations for \rdsffc\ (which require assumptions about, e.g.,
+size distribution and aerosol effects) mature. 
+
+\subsection{Cloud Radiative Properties}\label{sec:ebc}
+
+The radiative treatment of liquid, ice, and mixed phase cloud in CCM
+is reported by \cite{Kie961}.
+We summarize the salient features here.
+The radiative properties of a cloud layer depend to first order on
+cloud mass (expressed as condensed water path CWP in \gxmS), phase
+(ice, liquid, or mixed), and hydrometeor effective radius (\rdsffc). 
+Solar single scattering and longwave emissivity properties are from
+\cite{Sli89} (liquid) and \cite{EbC92} (ice).
+Cloud extinction optical depth $\tau$ is defined as
+\begin{equation}
+\label{eqn:tau}
+\tau = \CWP (a + b\rdsffc^{-1})
+\end{equation}
+where $a$ and $b$ are empirical constants with spectral dependence.
+For ice, $a$ is small so $\tau$ varies inversely with \rdsffc.
+Thus increased CWP can offset increased \rdsffc\ and visa versa. 
+Absorption and forward scattering increase with \rdsffc.
+Ice crystals of a given (equivalent area) \rdsffc\ absorb more strongly
+(in the visible and near-infrared) and scatter more isotropically than
+liquid droplets.
+Thus ice and mixed phase cloud absorbs more than liquid cloud for a
+given $\tau$.
+\cite{Kie961} describes the change in heating rate due to ice vs.\
+liquid radiative properties for an upper tropospheric ice cloud as a
+function of \rdsffc.
+
+Optical depth of a given anvil \qc\ is usually \textit{less} in ANV
+than CCM because ice crystals are up to 6 times larger than liquid
+droplets in the models. 
+In other words, tropical upper tropospheric ice in both models is
+significantly more transparent than lower tropospheric (e.g., arctic)
+ice and liquid.  
+% CZP III p. 121
+Consider the example of a single layer cloud of mass 25~\gxmS, which
+is comparable to the difference in monthly average CWP between ANV and
+CCM over regions of deep convection (Figure~\ref{fig:8589_TOTCWP}
+below).  
+The visible optical depth of this cloud is 2.1 if upper tropospheric 
+ice, 6.1 if lower tropospheric ice, and more than 4.0 if liquid.
+
+Longwave radiative effects of cloud also depend upon CWP, phase,
+and \rdsffc. These determine cloud emissivity through
+\begin{eqnarray}
+\label{eqn:emissivity}
+\epsilon & = & 1 - \exp[-1.66(\kappal \LWP + \kappai \IWP)] \\
+\label{eqn:kappai1}
+\kappai & = & .005 + \rei^{-1}
+\end{eqnarray}
+where LWP and IWP are the liquid and ice water path, respectively,
+the $\kappa$ are longwave mass absorption coefficients (\mSxg), \rei\
+is in \um, and $\kappal \equiv .090361$. 
+The emissivity of the example cloud is .796 if upper tropospheric ice,
+.987 if lower tropospheric ice, and .976 if liquid (approximately the
+emissivity of a 65~\gxmS\ upper tropospheric ice cloud).
+This scaling is highly non-linear, and diminishes as IWP increases and
+the cloud becomes opaque ($\epsilon \rightarrow 1$).
+
+In summary, condensate phase and size are inextricably linked to 
+temperature and pressure through simple parameterizations which
+neglect mesoscale conditions. 
+We refer to the decrease in $\tau$ (\ref{eqn:tau}) and $\kappa$
+(\ref{eqn:kappai1}) per unit mass in 20--30~\um\ ice crystal relative
+to 5--10~\um\ liquid droplet as the weaker mass extinction (extinction
+efficiency per unit mass) of ice.
+Weaker mass extinction characterizes ANV since $\ficeanv > \ficeccm$
+(\ref{eqn:ficeccm}--\ref{eqn:ficeanv}).
+
+\subsection{Observational Analyses}\label{sec:obs}
+
+\cite{HBK94} and \cite{KHB94} analyze the climate simulation produced
+by CCM2, upon which the present models are based.
+We use European Center for Medium Range Weather Forecasts (ECMWF)
+analyses archived at T42 resolution on 14 pressure levels
+\cite[]{Tre92} for validation of dynamical fields.
+Six Januarys and Julys between July, 1989 and January, 1995,
+inclusive, were averaged into the climatological analyses below.
+The models employ a hybrid vertical coordinate which smoothly
+transitions from a sigma (terrain-following) coordinate near the
+surface to a pressure coordinate above 200~mb.
+Model fields shown are vertically interpolated to pressure levels for
+comparison to ECMWF analyses (e.g., $T$, $U$).
+Vertical fields without an ECMWF counterpart (e.g., \qc) are plotted
+in the model hybrid coordinate but labeled with the approximate
+pressure for clarity.
+
+Earth Radiation Budget Experiment (ERBE) data archived at T42
+resolution \cite[]{HuC92} are available for 52 months from from
+February, 1985 to May, 1989, inclusive. 
+Thus ERBE climatologies shown below include five (February--May) or
+four (June--January) years of monthly data.
+The difference between clear sky and all-sky flux measures the impact
+of cloud absorption and scattering on the surface-atmosphere system,
+known as cloud forcing. 
+The effect of cloud on terrestrial or longwave (LW) radiation, that
+is, the reduction in outgoing longwave radiation (OLR) due to cloud
+condensate, is called the longwave cloud forcing (LWCF).
+Shortwave cloud forcing (SWCF) is defined as the net increase in
+reflected shortwave (SW) flux at the top of atmosphere due to
+cloud scattering and absorption.
+
+Clear sky data was sometimes unavailable for a given pixel and month,
+especially near tropical convective centers.
+The climatological values presented average all months of available
+data. 
+Estimated uncertainty in monthly averaged flux is $\sim 10$~\wxmS.  
+The ERBE scene identification algorithm has difficulty distinguishing
+ice- and snow-covered surfaces from cloud. 
+Therefore cloud forcing data poleward of 60\dgr\ is uncertain.
+
+\section{Model Results and Validation}\label{sec:vld}
+
+CCM and ANV were integrated from September 1, 1984 to January 1, 1990 
+using monthly varying SST from AMIP \cite[]{Gat92} as a lower
+boundary condition. 
+The AMIP dataset is thought to be accurate to 1~\dgr K.
+As described above, CCM diagnoses \qi\ while ANV forecasts \qi\ based
+on observed and modeled anvil behavior.
+Significant differences in the model results show the climate response
+to the radiative effects of changed \qc, \fice, and \rdsffc. 
+
+This section illustrates changes in the simulated climate in the
+order: cloud, radiation, thermodynamics, dynamics.
+The focus is ensemble mean January and July.
+Most results are shown as multi-panel figures, January on the left,
+July (if included) on the right. 
+Observational analyses, if available, are in the top panel.
+Models follow in the order CCM then ANV and $\Delta \psi$ refers to 
+the inter-model difference (ANV$-$CCM) in predicted $\psi$. 
+
+\subsection{Cloud Climatology}\label{sec:cld}
+
+A global climatology of \qc\ does not exist at present, so
+validations of GCM predictions of \qc\ rely on indirect measurements, 
+notably top of atmosphere cloud radiative properties. 
+We illustrate the following aspects of simulated \qc:
+geographic distribution, vertical distribution, and ice fraction.
+Hydrometeor size is described in Section~\ref{sec:rdsffc} above.
+
+ANV sequesters more total condensate in the upper troposphere.
+Figure~\ref{fig:xavg_8589_QC} contours the ensemble mean January and
+July vertical profiles of zonal average condensate \qc.
+\begin{figure*}
+\ifams{}{\begin{center}
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/amip5_xavg_8589_01_QC.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/amip5_xavg_8589_07_QC.eps}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_xavg_8589_01_QC.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_xavg_8589_07_QC.eps}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_8589_amip5_8589_xavg_01_QC.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_8589_amip5_8589_xavg_07_QC.eps}%
+\end{center}}
+\ifams{\figbox{.5\hsize}{4in}{
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/amip5_xavg_8589_01_QC.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/amip5_xavg_8589_07_QC.eps}\vfill
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_xavg_8589_01_QC.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_xavg_8589_07_QC.eps}\vfill
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_8589_amip5_8589_xavg_01_QC.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_8589_amip5_8589_xavg_07_QC.eps}%
+}}{}
+\caption[Condensate mixing ratio \qc\ for January and July
+1985--1989 simulated by CCM, ANV, and ANV$-$CCM]{
+Condensate mixing ratio \qc\ (\mgxkg) for (left) January and (right)
+July 1985--1989 simulated by (top) CCM, (middle) ANV, and (bottom)
+ANV$-$CCM: (a) January CCM, (b) July CCM, (c) January ANV, (d) July
+ANV, (e) January ANV$-$CCM, and (f) July ANV$-$CCM. 
+For a--d contours are .5, 1, 2, 4, 6, 8, 10, 15, 20, 30, 40, 50, 60,
+and 70~\mgxkg\ and shading indicates $\qc > 6$~\mgxkg.
+For e--f contour interval is 2~\mgxkg\ and shading indicates where ANV
+has less condensate than CCM.  
+\label{fig:xavg_8589_QC}}   
+\end{figure*}
+Contour resolution increases with height to allow comparison of
+radiatively important upper tropospheric \qc\ differences.
+The strong meridional structure of \qc\ peaks in summertime tropics,
+mid-latitudes, and the polar boundary layer. 
+The largest model differences occur in the ascending branch of
+the Hadley cell, and in winter mid-latitudes.
+ANV exceeds CCM \qc\ by up to 10~\mgxkg\ ($\sim 200\%$) from
+600--200~mb except in summer polar latitudes. 
+Strongly reduced polar \qc, and an associated relaxed winter
+inversion, improved simulated LWCF and surface temperature, as 
+discussed below.    
+We stress ANV did not require more vigorous vertical motion to
+increase upper tropospheric \qc\ because ANV can predict more ice than
+CCM for a given mass flux profile.
+
+To first order, LWCF varies as $\Ts^4 - \Tc^4$, where \Ts\ and \Tc\
+are surface and cloud top temperatures, respectively. 
+Small differences in \qc\ near the tropical tropopause can thereby
+cause large differences in LWCF.
+ANV predicts .1--2~\mgxkg\ more \qc\ than CCM from 100--200~mb;
+this corresponds to only .1~\gxmS\ CWP in the zonal monthly average. 
+
+Figure~\ref{fig:8589_TOTCWP} shows the zonal variation of \qc\ in
+terms of CWP, the sum of IWP and LWP.
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/amip5_8589_01_TOTCWP.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/amip5_8589_07_TOTCWP.eps}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_8589_01_TOTCWP.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_8589_07_TOTCWP.eps}%
+\end{center}
+\caption[Geographic distribution of condensed water path from 
+January and July 1985--1989 simulated by CCM and ANV]{
+Geographic distribution of condensed water path (\gxmS) from 
+(left) January and (right) July 1985--1989 simulated by (top) CCM and
+(bottom) ANV: (a) January CCM, (b) July CCM, (c) January ANV, and (d)
+July ANV. 
+Contour interval is 25~\gxmS. 
+%Shading indicates $\CWP > 75$~\gxmS.
+\label{fig:8589_TOTCWP}}   
+\end{figure*}
+CWP exhibits stronger zonal structure in the tropics than
+mid-latitudes. 
+The weakness of mid-oceanic tropical CWP maxima is symptomatic of poor
+simulation of deep convection over the maritime ITCZ. 
+This deficiency is shown more clearly in the LWCF field below.
+ANV enhances CWP by up to 100~\gxmS\ over the American, African, and
+Indonesian convective centers.
+
+In January ANV reduces CWP by 10--40~\gxmS\ over a significant
+fraction of the Northern continents and by 5~\gxmS\ over the southern
+ocean (south of 40~$\dgr$S).
+This CWP reduction is largely from reduced stratiform, not convective,
+condensate.
+CWP maxima over the Andes and Tibetan Plateau are enhanced by
+unrealistic locking of precipitating circulations over steep
+orography, a known model bias \cite[]{HBK94}. 
+%Regions of deep convective activity with $\Delta \CWP > 25$~\gxmS\
+%(i.e., Melanesia, West Australia, West China, the Congo and Amazon
+%basins in January, and Thailand, Ethiopia, and central America in
+%July) show mixed but generally positive changes in LWCF, and generate
+%locally enhanced convection due to greatly associated radiative
+%heating from 300--200~mb (see below). 
+
+Comparable CWP belies dramatic differences in condensate phase.
+Figure~\ref{fig:xavg_8589_CP} distinguishes modeled condensate
+burdens by phase.
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/xavg_8589_01_TOTLWP.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/xavg_8589_07_TOTLWP.eps}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/xavg_8589_01_TOTIWP.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/xavg_8589_07_TOTIWP.eps}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/xavg_8589_01_TOTCWP.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/xavg_8589_07_TOTCWP.eps}%
+\end{center}
+\caption[Zonal average column condensate burdens from
+1985--1989 January and July simulations by CCM and ANV]{
+Zonal average column condensate burdens (\gxmS) from
+1985--1989 (left) January and (right) July simulations by (solid) CCM
+and (dashed) ANV of (a,b) LWP, (c,d) IWP, and (e,f) CWP.   
+\label{fig:xavg_8589_CP}}   
+\end{figure*}
+Since \qi\ was not archived (or prognosed) in the CCM simulation, we
+used monthly mean $T$ and \qc\ to compute \qi\ from
+(\ref{eqn:ficeccm}), and determined \ql\ as the residual.
+This method accurately estimates \qi\ in the mixed phase region
+since $T$ and $\qi/\qc$ are linearly related (\ref{eqn:ficeccm}).
+
+Maritime LWP from the 1987--1995 Special Sensor Microwave/Imager (SSMI)
+data of \cite{WeG94} (not shown) has been compared to the simulated data.
+Both models underpredict LWP in the ITCZ and winter hemisphere.
+CCM and ANV predictions of LWP over the zonally symmetric southern
+ocean (Figure~\ref{fig:xavg_8589_CP}a,b) are $\sim 20$~\gxmS\ high and
+low, respectively. 
+Global satellite data to validate CWP does not exist, but the
+prediction of higher CWP in mid-latitudes than tropics is consistent
+with SSMI data.  
+We also compared the vertical profile of ice fraction in the tropics  
+to the three week cumulus ensemble simulation used to develop ANV.
+Table~\ref{tbl:fice} shows ensemble July \fice\ averaged over the
+equatorial Pacific (140--270~$\dgr$E,
+10~$\dgr$S--10~$\dgr$N) for each GCM layer in the mixed phase
+region.
+\begin{table}
+\begin{center}
+\caption{Modeled ice fraction \fice\ over the equatorial Pacific in 
+July\label{tbl:fice}} 
+\vspace{5pt}
+\begin{tabularx}{\hsize}{ccccc}
+\hline
+& & & & \\[-5pt]
+%$p$~mb & $T\ \dgr$C & CCM & ANV & CEM \\[4pt]  
+% XXX: reinsert footnotes for preprints
+$p$~mb & $T\ \dgr$C & CCM & ANV & CEM\ifphdcsz{\footnote{values at
+same $T$ from cumulus ensemble model integration
+\cite[]{GMK95}.}}{\tablenotemark{\textit{a}}} \\[4pt]  
+\hline
+% NB: ncwa -O -a lat,lon -w gw -v PRES,T,QC,QICE,QL -d lat,-10.,10. -d lon,140.,270. amip5_8589_07.nc foo.nc
+% NB: ncks -C -H -v PRES,T,QICE,QC,QL foo.nc | m
+& & & & \\[-6pt]
+251 & $-42$ & 1 & 1 & 1 \\ % CEM lvl 27
+325 & $-27$ & .84 & 1 & 1 \\ % CEM lvl 24
+409 & $-15$ & .24 & 1 & 1 \\ % CEM lvl 20
+501 & $-5$ & 0 & .98 & .91 \\ % CEM lvl 16
+598 & 2 & 0 & .12 & .25 \\ % CEM lvl 13
+695 & $9$ & 0 & 0 & .04 \\ % CEM lvl 11
+787 & 15 & 0 & 0 & 0 \\[4pt] % CEM lvl 8
+\hline
+& & & & \\[-8pt]
+\end{tabularx}
+\ifphdcsz{}{\tablenotetext{\textit{a}}{values at same $T$ from cumulus
+ensemble model integration \cite[]{GMK95}.}}
+\end{center}
+\end{table}
+ANV underestimates liquid condensate near 500~mb but otherwise agrees
+with the CEM.
+Allowing mixed phase cloud to occur as cold as roughly $-10\
+\dgr$C (\ref{eqn:ficeccm}--\ref{eqn:ficeanv}) would alleviate 
+biases against both SSMI observations and CEM simulations.
+\cite{GrM96} improved the simulated mid-latitude radiation budget by
+narrowing the temperature range of mixed phase cloud from
+$-15$--0~\dgr C to $-9$--0~\dgr C.
+
+Cloud drives circulation by altering total diabatic heating \QT.
+Diabatic heating includes latent heating (\QL), radiation (\QR), and
+diffusion (turbulence).
+Figure~\ref{fig:xavg_8589_QDIABAT} shows the change in zonal average
+\QT.
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/spcp_85_8589_amip5_8589_xavg_01_QDIABAT.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/spcp_85_8589_amip5_8589_xavg_07_QDIABAT.eps}\vfill
+\end{center}
+\caption[Difference (ANV$-$CCM) in simulated zonal average diabatic
+heating \QT\ between ANV and CCM for January and July 1985--1989]{ 
+Difference (ANV$-$CCM) in simulated zonal average diabatic heating
+\QT\ (\kxday) between ANV and CCM for (a) January and (b) July
+1985--1989. 
+Contour interval is .1~\kxday. 
+Shading indicates where ANV cools more (heats less) than CCM. 
+\label{fig:xavg_8589_QDIABAT}}   
+\end{figure}
+Above the boundary layer on monthly timescales $\QT \approx \QR +
+\QL$.
+Above 200~mb, where \QL\ is negligible, $\Delta \QT$ is due to $\Delta
+\QR$ (not shown) which may be inferred from $\Delta \qc$
+(Figure~\ref{fig:xavg_8589_QC}e,f).
+Reduction of highly absorbing liquid beneath 400~mb increases the net
+infrared flux to the upper troposphere.
+This allows ANV to cool more efficiently beneath 400~mb but enhances
+anvil base heating from 400--200~mb.
+Enhanced anvil ice above 200~mb increases cloud top cooling in summer
+deep cloud regions but increases anvil heating in the clearer regions
+of winter subsidence.  
+
+Examination of solar heating (not shown) reveals reduced optical depth
+keeps the intrinsically greater solar absorption of ice relative to
+liquid (Section~\ref{sec:ebc}) from causing a ubiquitous heating
+increase above 600~mb.  
+Solar heating change in the upper troposphere was secondary to LW
+heating change, but ameliorated LW cooling above 250~mb in summer and
+bolstered LW heating in winter.   
+% We know the winter hemisphere TUT $\Delta \QR$ above 200~mb is > 0
+% because of enhanced \qc\ absorption and not weaker optical
+% properties leading to enhanced net (upwards positive) LW flux at the
+% level because QSW is also positive above 200~mb, which can only be
+% due to enhanced \qc\ (recall fice = 1 above 300~mb in both models,
+% so intrinsically greater absorption (1-omegahat) of ice cannot
+% explain QSW differences above 300~mb).
+
+Thus above 200~mb the \QR\ signal from enhanced tropical anvil is the
+heating/cooling dipole straddling the equator in
+Figure~\ref{fig:xavg_8589_QDIABAT}. 
+The warming pole is $\gtrsim 2$ times stronger than the cooling in
+most months.
+The dipole structure shows enhanced anvil ice
+(Figure~\ref{fig:xavg_8589_QC}) modulates mean \QR\ by the \QR\
+profile of ``deep'' cloud in the ascending Hadley region, and of
+``anvil'' cloud in the descending region \cite[terminology of][their
+Figure~16]{RaR891}. 
+The radiative relaxation time of anvil from 200--100~mb is
+15--75~days.  
+
+Change in extratropical \QT\ is also dominated by \QR.
+Reduced \qc\ (Figure~\ref{fig:xavg_8589_QC}e,f) and optical depth
+reduce shortwave heating above 500~mb in the summer hemisphere
+extratropics; excess insolation and stronger absorption per unit mass
+of ice increase solar heating beneath 500~mb. 
+Longwave cooling in the lower extratropical troposphere is enhanced by
+reduced condensate.
+Consequently a layer of the mid-troposphere is heated (relatively) by
+exposure to warmer radiating surfaces beneath.
+The CCM confines cloud to the polar boundary layer over Antarctica in 
+July while ANV predicts more \qc\ above the polar night inversion and
+less beneath (Figure~\ref{fig:xavg_8589_QC}). 
+Cloud in the inversion enhances cooling since it is warmer than the
+surface (there is no compensating SW heating in polar night). 
+Thus ANV radiatively weakens the Antarctic winter inversion.
+% NB: Magnitude of polar nite heating signal is 10 K/day in SHW, 1.5
+% K/day in NHW.
+
+Change in tropical \QT\ beneath 200~mb is dominated by change in \QL.
+Convection intensifies from 0--10~\dgr N in ANV in both seasons,
+reflecting an enhanced ITCZ, notably over Micronesia, the east
+Indian Ocean, and northeast of Brazil. 
+Deep convection in the remainder of the ascending branch of the Hadley
+circulation is reduced. 
+The cause of the convective reorganization involves a weaker linking
+between SST, \qc, LWCF, and convection; this is discussed below.
+Change in tropical water vapor (not shown) strongly resembles $\Delta
+\QL$. 
+
+\subsection{Radiation Fields}\label{sec:rad}
+
+In many respects the present CCM radiative climatology is similar to,
+but improved upon, NCAR CCM2's \cite[]{KHB94}. 
+The present analysis focuses on changes from CCM to ANV.
+We show cloud forcing without albedo or OLR since the direct radiative
+effects of changes in water vapor were $\mathcal{O}(10\%)$ of the 
+effect from changes in \qc\ and its radiative properties.  
+The near-global increase in ice fraction prescribed
+(\ref{eqn:ficeccm}--\ref{eqn:ficeanv}) and predicted
+(Figure~\ref{fig:xavg_8589_CP}) by ANV tends to reduce cloud forcing 
+by increasing \rdsffc\ which weakens mass extinction efficiency
+(\ref{eqn:tau}--\ref{eqn:kappai1}). 
+Thus in regions of cloud forcing constancy or increase, ANV increased
+CWP (or, for LWCF, possibly cloud height) enough to overcome weaker
+mass extinction.
+
+Qualitatively, SWCF convolves CWP, \rdsffc, and insolation.
+Thus SWCF peaks over convective centers and summertime extratropics. 
+Figure~\ref{fig:8589_SWCF} compares modeled to observed SWCF in
+January and July conditions.
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/erbe_b_8589_01_SWCF.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/erbe_b_8589_07_SWCF.eps}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/amip5_8589_01_SWCF.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/amip5_8589_07_SWCF.eps}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_8589_01_SWCF.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_8589_07_SWCF.eps}%
+\end{center}
+\caption[Geographic distribution of shortwave cloud forcing SWCF
+for 1985--1989 January and July ERBE, CCM, and ANV]{
+Geographic distribution of shortwave cloud forcing SWCF (\wxmS) for
+1985--1989 January and July (a,b) ERBE, (c,d) CCM, and (e,f) ANV.  
+\label{fig:8589_SWCF}}   
+\end{figure*}
+Neither model captures the narrow, mid-oceanic ITCZ tongue (also true
+for LWCF, shown below).
+The simulated South Pacific convergence zone is more diffuse in ANV.
+
+ANV increases SWCF (decreases insolation) over West Australia,
+Southeast Asia, and North Africa in January and over the US, Panama,
+Australia, and equatorial oceans in July. 
+ANV decreases SWCF over the central Indian Ocean and circumpolar
+region in January, and over the central Pacific (from
+0--35~$\dgr$N) and Arctic in July. 
+
+Excessive cloud forcing over winter desert in ANV has two causes.
+First, subsidence over African and Arabian desert decreased as upper
+level divergence in the Indo-Pacific decreased (shown below).
+This allows more cloud to form.
+Second, ANV removes all ice cloud with parameterized sublimation and
+precipitation processes with fixed timescales that have no explicit
+dependence on saturation vapor deficit \cite[]{ZeK961}.
+The timescales of these removal processes are inappropriately long for
+winter desert, leading to excessively persistent cloud.
+
+Figure~\ref{fig:xavg_8589_SWCF} shows zonal average SWCF for January
+and July. 
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/xavg_8589_01_SWCF.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/xavg_8589_07_SWCF.eps}\vfill
+\end{center}
+\caption[Zonal average shortwave cloud forcing SWCF from ERBE,
+CCM, and ANV for January and July]{ 
+Zonal average shortwave cloud forcing SWCF (\wxmS) from ERBE
+(solid), CCM (dotted), and ANV (dashed) for (a) January and (b) July.
+\label{fig:xavg_8589_SWCF}}   
+\end{figure}
+The models predict similar equatorial LWP beneath 600~mb 
+(Figures~\ref{fig:xavg_8589_QC}c,d and~\ref{fig:xavg_8589_CP}a,b),
+but ANV has up to 5 times more equatorial IWP.
+Thus agreement in modeled tropical zonal SWCF illustrates how
+increased IWP can radiatively offset increased \rdsffc\ (\ref{eqn:tau}).
+The weak January zonal maxima in ANV at 60~$\dgr$S resembles the
+disparity in modeled CWP (Figure~\ref{fig:xavg_8589_CP}e).
+% NB: This is interesting because you would infer from the 60S maxima 
+% that SWCF is entirely due to CWP differences, not tau/fice changes.
+% Vertical profile/mean photon path length differences might be
+% important here.
+ANV worsens the zonal bias at the July ITCZ by improving (increasing)
+SWCF in the equatorial east Pacific and Atlantic oceans without
+reducing SWCF in the Indo-Pacific.
+ANV eliminates nearly half the 40~\wxmS\ bias poleward of
+60~$\dgr$N in July.
+
+Qualitatively, LWCF convolves CWP with $\Ts^4 - \Tc^4$.
+Thus LWCF peaks in the tropics and declines toward the poles.
+Figure~\ref{fig:8589_LWCF} compares modeled to observed LWCF.
+\begin{figure*}[p]
+\begin{center}
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/erbe_b_8589_01_LWCF.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/erbe_b_8589_07_LWCF.eps}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/amip5_8589_01_LWCF.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/amip5_8589_07_LWCF.eps}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_8589_01_LWCF.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_8589_07_LWCF.eps}%
+\end{center}
+\caption[Geographic distribution of longwave cloud forcing LWCF
+for 1985--1989 January and July ERBE, CCM, and ANV]{
+Geographic distribution of longwave cloud forcing LWCF (\wxmS) for
+1985--1989 January and July (a,b) ERBE, (c,d) CCM, and (e,f) ANV. 
+\label{fig:8589_LWCF}}   
+\end{figure*}
+Neither model captures the mid-oceanic ITCZ.
+ANV introduced or worsened LWCF biases in January over southeast Asia,
+greater Bangladesh, the northern hemisphere storm track, and North
+African and Arabian desert.
+ANV ameliorated or eliminated biases in January over Eurasia (north of
+40~$\dgr$N), Micronesia, the west Indian and circumpolar oceans
+in January, and over Greenland and the northeast Atlantic and central
+Pacific oceans in July.
+Cirrus reduction over the Indian Ocean in January accompanies a
+significant improvement in regional upper level divergence (shown
+below).  
+
+The change in maritime LWCF is of particular interest since SST
+forcing was identical in the models.
+The strongest tropical maritime LWCF reductions occurred over the
+center of the Pacific and Indian Ocean warm pools, where SST gradients
+(not shown) are small.
+Recall CCM \qc, which determines LWCF, varies approximately
+exponentially with SST during convection
+(\ref{eqn:qc}--\ref{eqn:hl}). 
+The SST boundary condition damps short timescale negative feedbacks to
+convection (surface evaporation and SWCF) while allowing positive
+feedbacks (LWCF, latent heating, low-level convergence).  
+Thus (\ref{eqn:qc}--\ref{eqn:hl}) enhance cooperation between \qc,
+LWCF, and convection, attracting CCM LWCF maxima to SST maxima. 
+In contrast ANV \qc\ (hence LWCF) peaks with maximum 500~mb convective
+intensity, which is not necessarily collocated with SST maxima. 
+Thus decoupling SST from \qc\ couples LWCF more tightly to other
+factors determining convective intensity, e.g., atmospheric
+instability, evaporation, and surface level wind \cite[]{FDR90,Hac94}.
+Weaker mass extinction of ice further weakens the feedback between
+convection and LWCF in ANV.
+
+Significant reductions in LWCF occur in the extratropics.
+Reduced LWCF over extratropical ocean is a climatological
+improvement both seasons, though too strong in northern winter.
+The verisimilitude of LWCF poleward of 60~$\dgr$N is difficult to
+assess due to unreliable and missing ERBE data.
+ANV may have improved LWCF over Asia in January (this is supported by
+surface temperature, discussed below) and over July in Greenland.
+
+Figure~\ref{fig:xavg_8589_LWCF} shows zonal average LWCF for January
+and July. 
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/xavg_8589_01_LWCF.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/xavg_8589_07_LWCF.eps}\vfill
+\end{center}
+\caption[Zonal average longwave cloud forcing LWCF from ERBE,
+CCM, and ANV for January and July]{
+Zonal average longwave cloud forcing LWCF (\wxmS) from ERBE
+(solid), CCM (dotted), and ANV (dashed) for (a) January and (b) July.
+\label{fig:xavg_8589_LWCF}}   
+\end{figure}
+The weakened equatorial maxima in ANV in both seasons stems from the
+Indo-Pacific, discussed further in Section~\ref{sec:reg}.
+In the tropics, where ANV has more high cloud than CCM
+(Figure~\ref{fig:xavg_8589_CP}), weaker absorption by large ice
+crystals (\ref{eqn:emissivity}) causes weaker LWCF. 
+The prognostic stratiform ice significantly improves the northern
+hemisphere July simulation due to reduced \qc\
+(Figure~\ref{fig:xavg_8589_QC}f) and weaker mass extinction efficiency
+of the enhanced ice fraction. 
+
+The zonal symmetry of the southern ocean is conducive to demonstrating
+the sensitivity of LWCF to ice fraction using zonal average quantities
+(although the arguments also apply regionally and in the tropics). 
+LWCF over the circumpolar ocean (40--70~$\dgr$S) in July is weaker
+in ANV (by $\sim 3$~\wxmS), which has up to 100\% more condensate
+above 600~mb than CCM (Figure~\ref{fig:xavg_8589_QC}d).
+This ice abundance is nearly balanced by reduced liquid so $\Delta \CWP
+\approx 4$~\gxmS\ over the region, i.e., ANV sequesters a larger
+fraction of a fixed CWP in the upper troposphere as ice. 
+%(We speculate the reduced low-level meridional temperature gradient in
+%SHW (see below) reduces baroclinic activity and associated condensate
+%formation beneath 550~mb while \qc\ above 550~mb increases in ANV due
+%to temperature sensitivity in its stratiform ice generation).
+For condensate of the same phase and size this vertical redistribution
+would increase LWCF.
+However, ice is more transmissive to upwelling terrestrial radiation
+per unit mass than liquid due to intrinsic optical properties
+(\ref{eqn:kappai1}) coupled to larger \rdsffc.
+Figure~\ref{fig:xavg_8589_CP} shows the liquid to ice mass
+ratio reverses from 2:1 in CCM to 1:2 in ANV.
+Thus the greater transmittance of ice relative to liquid actually
+causes increased high level cloud to reduce LWCF.
+A combination of this mechanism and reduced upper tropospheric \qc\
+causes stronger LWCF reduction over the southern ocean in January
+and over NH landmasses in July.
+
+\subsubsection{Seasonal Cycle}\label{sec:sc}
+
+% Perhaps cite the Cess et al. 92 study (JGR v. 97, p. 7613) on ERBE
+% seasonal cycle.
+% Where does Roeckner get his ERBE data? it looks nothing like ours!
+% In LoR95 he shows ERBE data ostensibly from 8906--8912
+% In ChR96 he shows a distinctly different SWCF seasonal cycle graph
+% than we get with our data here.
+
+We illustrate the seasonal sensitivity of cloud radiative forcing to
+anvil representation by plotting the difference between the zonal
+average of the ensemble monthly mean and the 5-year mean.
+Note the seasonal cycle contains nearly half the power of the tropical
+SST boundary condition and all the power of top of atmosphere
+insolation.
+Figure~\ref{fig:anom_xavg_8589_0112_SWCF} shows the seasonal cycle of
+SWCF. 
+\begin{figure}
+\begin{center}
+\setlength{\widthdim}{\halfwidth}\ifphdcsz{\setlength{\widthdim}{.9\widthdim}}{}
+\includegraphics*[width=\widthdim]{/data/zender/fgr/phd/erbe_b_anom_xavg_8589_0112_SWCF.eps}\vfill
+\includegraphics*[width=\widthdim]{/data/zender/fgr/phd/amip5_anom_xavg_8589_0112_SWCF.eps}\vfill
+\includegraphics*[width=\widthdim]{/data/zender/fgr/phd/spcp_85_anom_xavg_8589_0112_SWCF.eps}\vfill
+\end{center}
+\caption[Seasonal amplitude of zonal average shortwave cloud forcing
+for ERBE, CCM, and ANV]{
+Seasonal amplitude of zonal average shortwave cloud 
+forcing (\wxmS) for (a) ERBE, (b) CCM, and (c) ANV. 
+Shading indicates ensemble monthly value is less than the 5~year
+mean. 
+Contour interval is 10~\wxmS.
+Tickmarks represent mid-month values (i.e., N represents
+November~15). 
+\label{fig:anom_xavg_8589_0112_SWCF}}   
+\end{figure}
+The tropical quadrupole pattern marks the biannual crossing of the
+equator by the ITCZ. 
+The seasonal cycle in ANV is slightly weaker in general, but the
+models are hard to distinguish. 
+Both skillfully predict the north-south and winter-summer
+asymmetries. 
+
+The seasonal cycle of LWCF, shown in
+Figure~\ref{fig:anom_xavg_8589_0112_LWCF}, reveals significant model
+differences.
+\begin{figure}
+\begin{center}
+\setlength{\widthdim}{\halfwidth}\ifphdcsz{\setlength{\widthdim}{.9\widthdim}}{}
+\includegraphics*[width=\widthdim]{/data/zender/fgr/phd/erbe_b_anom_xavg_8589_0112_LWCF.eps}\vfill
+\includegraphics*[width=\widthdim]{/data/zender/fgr/phd/amip5_anom_xavg_8589_0112_LWCF.eps}\vfill
+\includegraphics*[width=\widthdim]{/data/zender/fgr/phd/spcp_85_anom_xavg_8589_0112_LWCF.eps}\vfill
+\end{center}
+\caption[Same as Figure~\ref{fig:anom_xavg_8589_0112_SWCF} but for 
+longwave cloud forcing]{
+Same as Figure~\ref{fig:anom_xavg_8589_0112_SWCF} but for longwave
+cloud forcing. 
+Contour interval is 4~\wxmS.
+\label{fig:anom_xavg_8589_0112_LWCF}}   
+\end{figure}
+ANV exacerbates the weak bias in tropical LWCF at both solstices.
+Unrealistically persistent cloud over desert, mentioned above, weakens
+and worsens the seasonal amplitude in ANV by reducing inter-solstitial
+LWCF change. 
+This land influence makes Figure~\ref{fig:anom_xavg_8589_0112_LWCF}
+a poor estimator of the linear response of LWCF to the SST boundary
+condition, discussed in Section~\ref{sec:sst}.
+Northern hemisphere tropical extrema in both models are determined
+more by strong, diffuse forcing (or lack thereof) from the
+Indo-Pacific than by ITCZ variation, as observed.
+
+\subsection{Dynamic and Thermodynamic Fields}\label{sec:dyn}
+
+As described above, ANV reduced diabatic heating in the summer
+hemisphere tropics (Figure~\ref{fig:xavg_8589_QDIABAT}), especially
+over zonally cohesive SST maxima (Figure~\ref{fig:8589_LWCF}).
+Figure~\ref{fig:pres_xavg_8589_01_MPSI} shows the January meridional
+stream function \mpsi.  
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/ecmwf_pres_xavg_9095_01_MPSI.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/amip5_pres_xavg_8589_01_MPSI.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/spcp_85_pres_xavg_8589_01_MPSI.eps}\vfill
+\end{center}
+\caption[January meridional stream function \mpsi\ for ECMWF, CCM, and
+ANV]{ 
+January meridional stream function \mpsi\ (\kgxs)
+for (a) ECMWF, (b) CCM, and (c) ANV.
+Features below $\sim 800$~mb may be artifacts of orography.
+Contour interval is $2 \times 10^{10}$~\kgxs.  
+\label{fig:pres_xavg_8589_01_MPSI}}
+\end{figure}
+Weaker summer diabatic heating in ANV reduced Hadley cell strength by
+13\% in January, and 7\% in July (not shown).
+A weaker Hadley cell accompanied weaker latent and radiative heating
+in the tropical mid-troposphere in previous studies
+\cite[e.g.,][]{RHD89,SRB94}.
+Associated with reduced \mpsi\ is reduced transport of angular
+momentum and heat to the winter hemisphere extratropics
+\cite[e.g.,][]{LiH88}. 
+Reduced subsidence is conducive to enhanced convection in the
+wintertime tropics.
+
+The January 200~mb velocity potential $\chi$ in
+Figure~\ref{fig:pres_8589_01_CHI} shows the geographic variation of
+large scale divergent motion associated with the altered diabatic
+heating.  
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/ecmwf_pres_9095_01_CHI.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/amip5_pres_8589_01_CHI.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/spcp_85_pres_8589_01_CHI.eps}\vfill
+\end{center}
+\caption[January 200~mb velocity potential $\chi$ for
+ECMWF, CCM, and ANV]{
+January 200~mb velocity potential $\chi$ (\mSxs) for (a)  
+ECMWF, (b) CCM, and (c) ANV.
+Contour interval is $3 \times 10^6$~\mSxs. 
+Shading indicates divergence ($\chi < 0$).
+\label{fig:pres_8589_01_CHI}}
+\end{figure}
+As mentioned in regards to LWCF, ANV eliminates the divergence center
+over the Indian Ocean warm pool in January.
+The local energetics of this circulation change are detailed in
+Section~\ref{sec:reg} below. 
+Examination of $\Delta \chi$ (not shown) reveals compensating
+subsidence is reduced over the North African and Arabian deserts,
+worsening LWCF there (Figure~\ref{fig:8589_LWCF}). 
+Divergence associated with the Australian monsoon circulation shifts
+northeastward from the Pacific warm pool.
+This improves the extent of divergence over the north Pacific.
+Changes in July $\chi$ (not shown) are less significant.
+
+%ANV improves the location of the descending branch of the Pacific
+%Walker cell, shifting it 20~$\dgr$W of CCM on the equator. 
+%ANV worsens (shirts east) the intensity west Pacific center of
+%divergence. 
+%The models situate the center of TWP divergence $\sim 20\ \dgr$E
+%of the analyzed position, and overpredict its magnitude.
+%Too-strong subsidence over Africa occurs in January also (not
+%shown) and contributes to the suppression of high cloud over
+%central Africa (Figure~\ref{fig:8589_LWCF}) in both models
+%(Figure~\ref{fig:8589_LWCF}). 
+%NB: Interestingly, the January Walker cell, as deduced from the 200~mb
+%divergence field, shows no lessening in extent or strength, although
+%the reduction in LWCF, and Hadley intensity, is much stronger during
+%that season than July. Why?
+
+Figure~\ref{fig:pres_xavg_8589_T} shows the CCM zonal average
+temperature $T$ bias against ECMWF analyses together with $\Delta T$
+for January and July.    
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/amip5_8589_ecmwf_9095_pres_xavg_01_T.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/amip5_8589_ecmwf_8994_pres_xavg_07_T.eps}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_8589_amip5_8589_xavg_01_T.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_8589_amip5_8589_xavg_07_T.eps}%
+\end{center}
+\caption[CCM zonal average temperature $T$ bias against ECMWF analyses
+and $T$ difference (ANV$-$CCM) for 1985--1989 January and July]{
+CCM zonal average temperature $T$ bias (\dgr K) against 1989--1995
+ECMWF analyses and $T$ difference (ANV$-$CCM) (left) January and
+(right) July: (a) January CCM$-$ECMWF, (b) July CCM$-$ECMWF, (c)
+January ANV$-$CCM, and (d) July ANV$-$CCM.
+Contour interval is (a,b)~1 and (c,d) .5~\dgr K. 
+Shading indicates where (a,b) $\CCM < \ECMWF$ (i.e., CCM is colder
+than ECMWF) and (c,d) $\ANV < \CCM$.
+\label{fig:pres_xavg_8589_T}}   
+\end{figure*}
+A systematic tropospheric cold bias of 0--2~\dgr K is apparent in
+both models, with larger biases of 6--12~\dgr K at the summer
+polar tropopause. 
+ANV warms the 50~mb beneath the tropical tropopause by
+2--3~$\dgr$K, roughly 5 times the standard deviation of 
+zonal average monthly $T$ from a 10~yr AMIP CCM2 simulation.
+The increase in tropical upper tropospheric temperature includes
+anvil-induced increase in radiative equilibrium $T$
+(Figure~\ref{fig:xavg_8589_QDIABAT}) and decreased heat export by the
+Hadley cell (Figure~\ref{fig:pres_xavg_8589_01_MPSI}). 
+The near meridional symmetry of the $T$ increase reflects the
+inability of the upper troposphere to maintain large temperature
+gradients \cite[]{LiH88}.
+There is no significant change in tropical atmospheric stability
+beneath 200~mb. 
+
+ANV is 1--9~$\dgr$K warmer than CCM near the Antarctic surface in
+July, a significant change even in this highly variable region. 
+This is due to radiative weakening of the inversion because of less
+cloud during polar night, as discussed above.
+The resulting reduction in the low-level equator to pole temperature
+gradient reduces the energy available for baroclinic activity.
+
+Changes in extratropical stratiform cloud distribution and cloud
+optical properties can significantly alter land surface temperature
+\Ts\ \cite[e.g.,][]{Kie942}.
+The most significant \Ts\ change in January occurred in central and
+north Asia, where ANV reduced CWP by 10--50~\gxmS\ 
+(Figure~\ref{fig:xavg_8589_CP}).
+Reduced cloud cover enhanced LW cooling here by 5--15~\wxmS.
+Wintertime insolation was too weak to compensate so \Ts\ declined
+by $\gtrsim 5\ \dgr$C over large regions, compared to model
+gridpoint variability of $\lesssim 4\ \dgr$C.
+% NB: Case 422 TS1s over US, Siberia in January is < 4 K
+In July, increased low and mid-level CWP over the US interior reduced
+surface solar absorption by 10--35~\wxmS. 
+Reduced surface absorption decreased \Ts\ 3--4~$\dgr$C, compared to
+model variability of $\lesssim 1.5\ \dgr$C.  
+% NB: Case 422 TS1s over US in July is 0--1.5 K
+Both \Ts\ decreases improve model climatological biases relative to
+\cite{LeW90} (not shown).
+
+Figure~\ref{fig:pres_xavg_8589_U} shows ECMWF analyzed and model
+simulated zonal average zonal wind $U$.
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/ecmwf_pres_xavg_9095_01_U.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/ecmwf_pres_xavg_8994_07_U.eps}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/amip5_pres_xavg_8589_01_U.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/amip5_pres_xavg_8589_07_U.eps}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_pres_xavg_8589_01_U.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_pres_xavg_8589_07_U.eps}%
+\end{center}
+\caption[Zonal average zonal wind $U$ for January and July ECMWF, CCM,
+and ANV]{ 
+Zonal average zonal wind $U$ (\mxs) for (left) January and
+(right) July (a,b) 1989--1994 ECMWF, (c,d) 1985--1989 CCM, and (e,f)
+1985--1989 ANV.  
+Contour interval is 5~\mxs.
+Shading indicates easterly zonal winds ($U < 0$).
+\label{fig:pres_xavg_8589_U}}
+\end{figure*}
+Model differences are $< 6$~\mxs\ and model standard deviation is  
+$< 3$~\mxs.
+Most biases in CCM appear in ANV, notably a 2--12~\mxs\ westerly bias
+in the tropics above 800~mb.
+ANV worsens (accelerates) the 100-200~mb westerly bias by 2--6~\mxs\
+from 10~$\dgr$S--10~$\dgr$N in both seasons. 
+This enhanced westerly bias cannot be explained by thermal adjustment 
+(Figure~\ref{fig:pres_xavg_8589_T}) but is consistent with two changes
+in the Hadley circulation.
+First, a weaker Hadley cell reduces export of eastward momentum. 
+Second, the equatorward shift of tropical heating
+(Figure~\ref{fig:xavg_8589_QDIABAT}) decreases the asymmetry of the
+meridional circulation about the equator, to which the strength of
+upper level tropical easterlies is strongly sensitive \cite[]{LiH88}.
+Extratropical $U$ changes fall within the range of model variability.
+
+%Weakened upper level westerlies and retreat of the SHS jet have been 
+%correlated to reduced LWCF (Figure~\ref{fig:xavg_8589_LWCF}) in
+%previous studies \cite[e.g.,][]{SlS88}. 
+
+%Examination of the geographic distribution of upper level winds (not
+%shown) reveals the following:
+%SHS jet intensity weakens due to favorable broadening of the jet over
+%the southwest Atlantic. 
+%NHW jet simulation appears unchanged but results from 
+%improvements in upper level winds over Asia compensating for
+%unrealistic split flow over the central Pacific. 
+%NHS jet location is improved, due to improved simulation of the
+%North American and East Asian jets.
+
+Strong diabatic heating sources in the tropics can excite
+extratropical planetary waves \cite[e.g.,][]{HoK81}.  
+In January ANV formed two distinct heating sources in the Micronesian
+region associated with a northward shift of Australian Monsoon
+precipitation. 
+First, enhanced precipitation of up to 7.5~\mmxday\ from
+145--170~$\dgr$E to 3~$\dgr$S--7~$\dgr$N increased
+mid-tropospheric heating rates by up to 2.7~\kxday.
+This precipitation reduces a dry bias relative to the climatology of 
+\cite{LeW90} (not shown).
+Second, enhanced anvil cloud from 165--195~$\dgr$E to
+5--15~$\dgr$N increased 250--100~mb diabatic heating by up to
+1.5~\kxday.
+The latter heating was entirely due to radiative absorption by
+increased upper level anvil, not condensation. 
+
+% NB: 1 mm/day = 29 W/m2
+The response of the extratropical circulation to the altered
+heating appears in Figure~\ref{fig:pres_8589_Z2TEST}, which depicts
+the 500~mb height field $\Phi$.  
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.33\hsize]{/data/zender/fgr/phd/ecmwf_pres_9095_01_Z2TEST.eps}%
+\includegraphics*[width=.33\hsize]{/data/zender/fgr/phd/amip5_pres_8589_01_Z2TEST.eps}%
+\includegraphics*[width=.33\hsize]{/data/zender/fgr/phd/spcp_85_pres_8589_01_Z2TEST.eps}%
+\end{center}
+\caption[January 500~mb geopotential height field $\Phi$ for
+30--90~$\dgr$N from ECMWF 1990--1995 analyses and model 
+simulations of 1985--1989 by CCM and ANV]{
+January 500~mb geopotential height field $\Phi$ (gpm) for
+30--90~$\dgr$N from (a) ECMWF 1990--1995 analyses and model 
+simulations of 1985--1989 by (b) CCM and (c) ANV.
+Contour interval is 10~gpm. 
+\label{fig:pres_8589_Z2TEST}}   
+\end{figure*}
+% NB: 10~yr. ECMWF observed standard deviation of January $\Phi$ over the PNA is ???~m.
+% NB: 20~yr. CCM2 388 modeled standard deviation of January $\Phi$ over the PNA is 40--80~m.
+% NB: HBK94 p. 20793 Figure~6a,b is standard deviation of the daily
+% differences from the monthly mean.
+ANV significantly alters stationary wave patterns from the central
+Pacific to west Europe.
+ANV deepens the central Pacific trough and shifts it $\sim 10 
+\dgr$~E.
+The associated ridge splits flow around California but reproduces 
+observed ridging over the west coast of Canada, absent in CCM.
+ANV strengthens the ridge over west Europe, as observed, and shifts
+the central European trough $\sim 20 \dgr$~E towards analyses. 
+Model differences are 1--3 times model standard deviation in the
+vicinity of these ridges. 
+A similar North American response, also linked to a northward shift of
+Australian monsoon precipitation, occurred in \cite{Kie942}.
+
+\section{Cloud Response to SST Forcing in the Equatorial
+Pacific}\label{sec:sst}
+
+The Equatorial Pacific SST anomaly associated with the 1987 El Ni\~no
+provides a stringent test of model ability to mimic observed
+changes in convective patterns and associated anvil cloud.
+ANV physics, which explicitly represent tropical anvil lifecycle,  
+differ significantly from the diagnostic cloud physics in CCM.
+Thus differences in cloud forcing response to SST anomalies will
+reveal differences in model coupling of SST to convection.
+
+During the 1987 El Ni\~no the center of deep convection, accompanying
+a large positive SST anomaly, shifted from the west to the central
+equatorial Pacific. 
+Cloud forcing responded by increasing in the central and east
+equatorial Pacific through much of 1987, while cooler SST reduced
+cloud forcing in the west.
+\cite{HaM93} and \cite{Cho94} emphasize cloud enhancement from
+10~$\dgr$S--10~$\dgr$N was largely compensated by clearer sky
+from 10--30$\dgr$ in both hemispheres.
+We focus on the equatorial Pacific region from $10\
+\dgr$S--$10\ \dgr$N and use the strong SST signal there to
+test the deep convective response of the models. 
+Note atmospheric response could not feed back to SST (a prescribed
+boundary condition).  
+
+Figure~\ref{fig:anom_yavg_10S10N_8589_0160_SWCF} shows the 
+evolution of the SWCF anomaly (from the 5-year mean) of this region in
+Hovm\"oller (longitude-time) format.
+\begin{figure}
+\begin{center}
+\ifphdcsz{\setlength{\heightdim}{.9\textheight}}{\setlength{\heightdim}{\textheight}}
+\includegraphics*[width=\halfwidth,height=.31\heightdim]{/data/zender/fgr/phd/erbe_b_anom_yavg_10S10N_8589_0160_SWCF.eps}\vfill
+\includegraphics*[width=\halfwidth,height=.28\heightdim]{/data/zender/fgr/phd/amip5_anom_yavg_10S10N_8589_0160_SWCF.eps}\vfill
+\includegraphics*[width=\halfwidth,height=.31\heightdim]{/data/zender/fgr/phd/spcp_85_anom_yavg_10S10N_8589_0160_SWCF.eps}\vfill
+\end{center}
+\caption[Hovm\"oller diagrams of shortwave cloud forcing 
+anomaly in the Equatorial Pacific for ERBE, CCM, and ANV]{
+Hovm\"oller diagrams of shortwave cloud forcing anomaly (\wxmS) in the
+Equatorial Pacific (averaged 10\dgr S--10\dgr N) for (a)
+ERBE, (b) CCM, and (c) ANV.  
+Month 1 is January 1985.  
+Contour interval is 10~\wxmS. 
+\label{fig:anom_yavg_10S10N_8589_0160_SWCF}}
+\end{figure}
+The El Ni\~no SST anomaly appears as the SWCF minimum which passes
+from West to East Pacific in late 1986.
+Both models capture the morphology of the 1987 changes reasonably
+well, but exaggerate zonal structure. 
+ANV produces more anomalies $> 20$~\wxmS\ than CCM, except near
+90~$\dgr$W, where ANV variability is too weak.
+The minima near 170~$\dgr$W in January 1987 is too weak in CCM but
+too far east in ANV.
+In January 1988 the minima is too weak in CCM, too strong in ANV.
+
+Figure~\ref{fig:anom_yavg_10S10N_8589_0160_LWCF} shows the
+corresponding LWCF anomaly.
+\begin{figure}
+\begin{center}
+\ifphdcsz{\setlength{\heightdim}{.9\textheight}}{\setlength{\heightdim}{\textheight}}
+\includegraphics*[width=\halfwidth,height=.31\heightdim]{/data/zender/fgr/phd/erbe_b_anom_yavg_10S10N_8589_0160_LWCF.eps}\vfill
+\includegraphics*[width=\halfwidth,height=.28\heightdim]{/data/zender/fgr/phd/amip5_anom_yavg_10S10N_8589_0160_LWCF.eps}\vfill
+\includegraphics*[width=\halfwidth,height=.31\heightdim]{/data/zender/fgr/phd/spcp_85_anom_yavg_10S10N_8589_0160_LWCF.eps}\vfill
+\end{center}
+\caption{Same as Figure~\ref{fig:anom_yavg_10S10N_8589_0160_SWCF} but
+for longwave cloud forcing.
+\label{fig:anom_yavg_10S10N_8589_0160_LWCF}}
+\end{figure}
+As with SWCF, ANV produces larger LWCF anomalies than CCM---this is
+most apparent in the west and central Pacific. 
+The 40--50~\wxmS\ anomaly in late 1986 is again too weak in CCM but
+too far east in ANV. 
+In summary, CCM and ANV manifest distinct but realistic convection
+changes in response to El Ni\~no: 
+ANV produces cloud forcing anomalies closer in maximum strength to
+ERBE than CCM, but positioned too far east. 
+
+In the spirit of \cite{RaC91} and \cite{Cho94}, we examine the
+response of cloud forcing and \qc\ to SST forcing by subtracting the
+equatorial Pacific climate of Spring (average of March, April, and
+May) 1985 from Spring 1987. 
+They chose Spring because equatorial SST peaks in April (when the
+seasonal cycle peaks), and proximity to the equinox maximizes the
+hemispheric symmetry of solar forcing. 
+The Spring SST of the entire equatorial Pacific (10~\dgr
+S--10~\dgr N, 140~\dgr E--90~\dgr W) warmed .9~\dgr K
+from 1985 to 1987, while the central equatorial Pacific alone
+(10~\dgr S--10~\dgr N, 180--130~\dgr W) warmed
+1.2~\dgr K. 
+Differencing the cold year (1985) Spring from the warm (1987) removes
+the mean cloud forcing state and isolates the cloud forcing
+sensitivity (which implicitly includes any reorganization of
+convection patterns) to SST change.
+Mean ANV and CCM cloud forcing in this region are approximately equal 
+(Figures~\ref{fig:8589_SWCF} and~\ref{fig:8589_LWCF}).
+
+Figure~\ref{fig:reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF} plots 
+$\delta$LWCF vs.\ $\delta$SWCF for the equatorial Pacific
+($\delta$ refers to $1987 - 1985$ temporal change for a given model,
+not to inter-model change). 
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.33\hsize]{/data/zender/fgr/phd/erbe_b_reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF.eps}%
+\includegraphics*[width=.33\hsize]{/data/zender/fgr/phd/amip5_reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF.eps}%
+\includegraphics*[width=.33\hsize]{/data/zender/fgr/phd/spcp_85_reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF.eps}%
+\end{center}
+\caption[$1987-1985$ differences in Spring quarter (March, April, and
+May) mean maritime LWCF and SWCF over the Equatorial Pacific for ERBE,
+CCM, and ANV]{ 
+$1987-1985$ differences in Spring quarter (March, April, and May) 
+mean maritime LWCF and SWCF (\wxmS) over the Equatorial Pacific 
+(10~\dgr S--10~\dgr N, 140~\dgr E--90~\dgr W)
+for (a) ERBE, (b) CCM, and (c) ANV.
+Solid line is least-squares fit.
+\label{fig:reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF}}   
+\end{figure*}
+Crosses represent GCM gridpoints ($\sim 300^2$~\kmS).
+Gridpoints with $\delta \LWCF < -20$~\wxmS\ are more copious in ANV,
+but extend unrealistically beyond $\delta \LWCF < -50$~\wxmS.
+The slope $m \equiv \delta \SWCF / \delta \LWCF$ approximately
+measures the reduction in surface insolation relative to the increase
+in atmospheric heating. 
+ERBE shows local net cloud forcing response to El Ni\~no is a linear
+($|r| = .94$), moderately negative feedback ($|m| \approx 1.2$), i.e.,
+the albedo effect of anvil responds more strongly to local SST
+anomalies than the greenhouse effect. 
+\cite{RaC91}, in their Table~1, showed $|m| > 1$ over the equatorial
+Pacific independent of which non-El Ni\~no season or year is used for
+$\delta$. 
+Moreover, the same qualitative behavior is ubiquitous over equatorial
+Pacific subregions (i.e., east, central, west) (not shown).
+Thus predicting $m$ is a necessary condition for coupled
+ocean-atmosphere GCMs used for climate change research. 
+
+ANV and CCM predict $m \approx -.95$, i.e., cloud forcing is a weak
+positive local feedback to column energy for equatorial Pacific SST
+change, rather than a moderate negative feedback, as observed.
+This model agreement is surprising because \cite{RaC91} argue
+$|m| > 1$ due to radiative properties of tropical anvil, which is
+diagnosed in CCM, but prognosed in ANV.
+Analyzing the dependence of cloud forcing on SST provides insight
+here.
+Figure~\ref{fig:reg_Pacific_Equatorial_87m85_0305_TS1_LWCF} shows the
+trend of $\delta$LWCF with $\delta$SST is itself linear.
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.33\hsize]{/data/zender/fgr/phd/erbe_b_reg_Pacific_Equatorial_87m85_0305_TS1_LWCF.eps}%
+\includegraphics*[width=.33\hsize]{/data/zender/fgr/phd/amip5_reg_Pacific_Equatorial_87m85_0305_TS1_LWCF.eps}%
+\includegraphics*[width=.33\hsize]{/data/zender/fgr/phd/spcp_85_reg_Pacific_Equatorial_87m85_0305_TS1_LWCF.eps}%
+\end{center}
+\caption[Same as Figure~\ref{fig:reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF}
+but for SST and LWCF]{
+Same as Figure~\ref{fig:reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF}
+but for SST (\dgr K) and LWCF.
+\label{fig:reg_Pacific_Equatorial_87m85_0305_TS1_LWCF}}   
+\end{figure*}
+The identical abscissa, AMIP $\delta$SST, appears in all three panels.
+Modeled LWCF sensitivities to $\delta$SST are most distinct for
+$\delta \SST < 0$ and $> 2\ \dgr$C, where ANV response is too
+strong and too weak, respectively.
+Despite model differences in anvil representation, the trends of
+$\delta$LWCF with $\delta$SST closely agree with each other and
+observations: ERBE, CCM, and ANV slopes are 17.0, 16.0, and
+15.7~\wxmSk, respectively.   
+Corresponding trends of $\delta$SWCF with $\delta$SST (not shown)
+are $-20.1$, $-12.8$, and $-15.5$~\wxmSk, with correlations  $-.59$,
+$-.43$, and $-.44$, respectively. 
+
+If we assume nonlinear coupling of cloud forcing sensitivity to the
+ocean-atmosphere system may be neglected, the conclusion is the models
+underpredict $|m|$ largely due to underpredicting $\delta$SWCF rather
+than overpredicting $\delta$LWCF. 
+Since observed cloud forcing response is linear with $\delta$SST, the
+major uncertainty in this conclusion is whether the mean cloud forcing 
+state in the modeled equatorial Pacific (Figures
+\ref{fig:8589_SWCF}--\ref{fig:8589_LWCF}) is sufficiently realistic. 
+%A new version of CCM, CCM3 \cite[]{KBB96}, improves mean cloud forcing but
+%not cloud forcing response to $\delta$SST.
+
+Why is modeled $\delta$SWCF too weak with modeled $\delta$LWCF so
+close to ERBE?   
+Recall that upper tropospheric \rdsffc\ is time-invariant
+(Section~\ref{sec:rdsffc}) so $\delta \rdsffc \approx 0$.
+Thus $\delta$CWP largely determines $\delta$SWCF (\ref{eqn:tau}).
+We examine $\delta \qc$ to see if CWP response to $\delta$SST is too
+weak.
+Figure~\ref{fig:yavg_10S10N_87m85_MAM_QC} shows modeled $\delta \qc$
+for 1987$-$1985 over the equatorial Pacific averaged for Spring. 
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/amip5_yavg_10S10N_87m85_MAM_QC.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/spcp_85_yavg_10S10N_87m85_MAM_QC.eps}\vfill
+\end{center}
+\caption[Longitude-height profile of the $1987-1985$ difference in
+Spring quarter (March, April, and May) mean condensate \qc\ over the
+equatorial Pacific simulated by CCM and ANV]{
+Longitude-height profile of the $1987-1985$ difference in Spring
+quarter (March, April, and May) mean condensate \qc\ (\mgxkg) over the
+equatorial Pacific (averaged 10~\dgr S--10~\dgr N, 
+ocean only) simulated by (a) CCM and (b) ANV.
+Contour interval is 2~\mgxkg.
+Shading indicates \qc\ decrease from 1985 to 1987.
+% NB: IDL gets the shading of the first -'ve contour wrong when land
+% is masked so i included land points in this file, no significant
+% difference from maritime only above 400 mb.
+\label{fig:yavg_10S10N_87m85_MAM_QC}}   
+\end{figure}
+High cloud increases in both models over the central equatorial
+Pacific (where $\delta$SST peaks), and decreases over the western
+equatorial Pacific.
+ANV predicts $\delta \qc$ extrema at the same longitude as CCM
+(145~$\dgr$E, 175~$\dgr$W), but roughly 100~mb higher,
+and 2--4 times stronger.
+Yearly LWCF (not shown) suggests \qc\ should increase from
+140--110~$\dgr$W, as ANV predicts.  
+CWP response does not appear too weak in either model, but reliable
+observational estimates do not exist to verify this.
+
+In summary, the model coupling of $\delta$CWP to $\delta$SST is
+distinct and strong in both models.
+Thus both models predict the necessary combination of change in cloud
+height and $\delta$CWP to obtain reasonable $\delta$LWCF.   
+We speculate that ERBE data may show a significant sensitivity of
+shortwave hydrometeor optical properties (\rdsffc\ or habit) to equatorial
+Pacific SST change, and neglecting this sensitivity biases modeled
+SWCF response.  
+A physical mechanism to cause hydrometeor optical properties to
+respond to $\delta$SST is not obvious.
+One plausible mechanism is the presence of small ice crystals: 
+Cloud forcing is strongly linked to $\delta$SST in the equatorial
+region. 
+The cloud forcing response is due to tropical anvil, whose cloud top
+temperature presumably decreases with SST \cite[e.g.,][]{RaC91}.  
+\cite{KKW93} observed large numbers of small ice crystals in the tops 
+of tropical anvil, and proposed homogeneous nucleation as their
+source. 
+Small ice crystals enhance SWCF relative to LWCF in opaque cloud 
+(i.e., $\epsilon \sim 1$) \cite[]{ZeK94}.
+The coefficients employed in (\ref{eqn:tau}--\ref{eqn:kappai1})
+neglect crystals smaller than 20~\um.
+Neglecting small crystals could therefore account for some of the bias
+in $\delta$SWCF. 
+Methods of testing this are discussed in Section~\ref{sec:gcm_disc}.
+
+% NB: CRM sensitivity studies in tropics at noon show:
+% 1 mg/kg condensate difference at p = 150 mb, T=200, 
+% rho = .25 kg/m3 is .25 g/m2 for a 1 km thick cloud. 
+% Deconvolving the spatial and temporal averaging to obtain what the
+% radiation code feels instaneously and you might get 2.5 g/m2 more in
+% CCM than ANV.
+% .25 g/m2 changes LWCF by 4 W/m2 by itself, or by .5 W/m2 when on top
+% of a 70 g/m2 cloud between 550--200 mb.
+% 2.5 g/m2 changes LWCF by 30 W/m2 by itself, or by 5 W/m2 when on top
+% of a 70 g/m2 cloud between 550--200 mb.
+% Vapor is ~ 10x less efficient at reducing OLR in clear sky than
+% condensate at the tropopause (per unit mixing ratio). 
+
+\section{Central Indian Ocean}\label{sec:reg}
+
+The central Indian Ocean (15~$\dgr$S--5~$\dgr$N,
+60--80~$\dgr$E)  
+stands out as a region where the explicit parameterization of
+tropical anvil significantly altered local cloud forcing and
+dynamics (Figures~\ref{fig:8589_SWCF}, \ref{fig:8589_LWCF}, and 
+\ref{fig:pres_8589_01_CHI}). 
+In this section we examine the seasonal cycle of the central Indian
+Ocean to identify processes which maintain energy balance in the
+changed regional climate.
+
+The simulated seasonal cycle of cloud in the central Indian Ocean is
+shown in Figure~\ref{fig:reg_xyavg_Indian_Central_0112_QC}.
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/amip5_xyavg_reg_Indian_Central_8589_0112_QC.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/spcp_85_xyavg_reg_Indian_Central_8589_0112_QC.eps}\vfill
+\end{center}
+\caption[Seasonal cycle of simulated condensate \qc\ over the central
+Indian Ocean for 1985--1989]{
+Seasonal cycle simulated condensate \qc\ (\mgxkg) over the central
+Indian Ocean (15~\dgr S--5~\dgr N, 60--80~\dgr E) for
+1985--1989 (a) CCM and (b) ANV.  
+Contour interval is 2~\mgxkg.
+Shading indicates $\qc > 6$~\mgxkg.
+\label{fig:reg_xyavg_Indian_Central_0112_QC}}   
+\end{figure}
+The figure shows $\Delta \qc > 0$ from 550--200~mb for all seasons.
+The factor of 2--3 increase in anvil ice tends to improve LWCF but not
+SWCF (shown below).
+$\Delta \qc$ is a minimum in January, when CCM is relatively cloudy
+and ANV is relatively clear.
+The coolest maximum SST in the central Indian Ocean occurs in January,
+although the minimum mean SST occurs in August.
+Reduced deep convection in ANV in January
+(cf. Figure~\ref{fig:pres_8589_01_CHI}) is probably a consequence of
+weaker specified coupling of \qc\ to SST (\ref{eqn:qc}--\ref{eqn:hl})
+discussed above.  
+
+Figure~\ref{fig:xyavg_reg_8589_0112_ocean_CF} shows the seasonal cycle
+of central Indian Ocean cloud forcing.
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/xyavg_reg_Indian_Central_8589_0112_SWCF.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/phd/xyavg_reg_Indian_Central_8589_0112_LWCF.eps}\vfill
+\end{center}
+\caption[Seasonal amplitude in regional shortwave and longwave
+cloud forcing over central Indian Ocean for ERBE, CCM, and ANV]{ 
+Seasonal amplitude in regional (a) shortwave and (b) longwave
+cloud forcing (\wxmS ) over the central Indian Ocean
+(15~\dgr S--5~\dgr N,60--80~\dgr E) for ERBE (solid), CCM
+(dotted), and ANV (dashed).
+\label{fig:xyavg_reg_8589_0112_ocean_CF}}
+\end{figure}
+The models predict a seasonal cycle peaking in January, of amplitude
+15--25~\wxmS\ stronger than observed.
+The bias in total cloud (SWCF) is present from October--May, while the
+bias in high cloud (LWCF) peaks from May--October.
+% NB: XXX check ISCCP high cloud
+ANV weakens the amplitude of the cloud forcing cycles, with the
+greatest difference from CCM occuring in January.
+ANV improves high cloud from December--April, but this has little
+effect on the SWCF bias.
+As a result, ANV worsens net monthly cloud forcing $\NCF \equiv \LWCF
++ \SWCF$. 
+ERBE has $0 < \NCF < -10$~\wxmS\ in the region
+(this small magnitude is typical of the tropics \cite[]{Kie941}). 
+CCM and ANV have NCF $\approx -20$ and $-30$~\wxmS, respectively. 
+
+Figure~\ref{fig:xyavg_reg_Indian_Central_8589} shows
+the vertical profile of simulated diabatic heating components over 
+the central Indian Ocean for January conditions.
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/amip5_xyavg_reg_Indian_Central_8589_01.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/phd/spcp_85_8589_amip5_8589_xyavg_reg_Indian_Central_01.eps}%
+\end{center}
+\caption[Model simulated profiles of diabatic heating
+and differences between models (ANV$-$CCM) over the central 
+Indian Ocean for 1985--1989 January]{
+Model simulated profiles of (a) diabatic heating
+(\kxday), and (b) differences between models (ANV$-$CCM) for the
+central Indian Ocean (15~\dgr S--5~\dgr N, 60--80~\dgr E) 
+for 1985--1989 January.
+Heatings shown are total diabatic (solid), shortwave (dotted),
+longwave (short dash), resolved (dash-dot), turbulent
+(dash-dot-dot-dot), and convective (long dash).
+Note difference in scales.
+\label{fig:xyavg_reg_Indian_Central_8589}}
+\end{figure*}
+The heating profile is typical of deep convective regions in the
+models.
+Convective heating dominates radiative from the boundary layer to
+250~mb. 
+Large scale heating in the upper troposphere, representing stratiform
+condensation in anvil, enhances latent heating but the stratiform
+precipitation evaporatively cools the lower troposphere.
+SW heating is 30--60\% of LW cooling from 800--200~mb, and dominates
+\QT\ from 150--100~mb \cite[]{RaR891}. 
+
+Differences between ANV and CCM profiles range from 10--50\% of mean
+heating rates.
+Weaker vertical motion and upper level divergence
+(Figure~\ref{fig:pres_8589_01_CHI}) compensate the large reduction
+in convective heating and precipitation (3~\mmxday).
+The profile of LW heating change is always negative due to significant
+reduction of cloud mass in January.
+This is atypical of tropical summer, when the response to prognostic
+anvil is normally enhanced cloud base heating and cloud top cooling
+(cf. Figure~\ref{fig:xavg_8589_QDIABAT}).
+Reduced column vapor and condensate absorptivity increase LW cooling 
+by $\sim 30\%$ from 800--400~mb and enhance anvil-base heating near
+300~mb. 
+Differences in diabatic heating components are $< .2$~\kxday\ in July,
+when much of the central Indian Ocean is colder than 28~$\dgr$C, 
+and modeled cloud forcing agrees
+(Figure~\ref{fig:xyavg_reg_8589_0112_ocean_CF}).  
+
+%Figure~\ref{fig:xyavg_reg_Indian_Central_8589_0112_SEB} shows surface
+%energy budget components from the central Indian Ocean. 
+%\begin{figure}
+%\begin{center}
+%\includegraphics*[width=\halfwidth,height=.135\textheight]{/data/zender/fgr/phd/xyavg_reg_Indian_Central_8589_0112_FSNS.eps}\vfill
+%\includegraphics*[width=\halfwidth,height=.12\textheight]{/data/zender/fgr/phd/xyavg_reg_Indian_Central_8589_0112_FLNS.eps}\vfill
+%\includegraphics*[width=\halfwidth,height=.12\textheight]{/data/zender/fgr/phd/xyavg_reg_Indian_Central_8589_0112_SHFLX.eps}\vfill
+%\includegraphics*[width=\halfwidth,height=.12\textheight]{/data/zender/fgr/phd/xyavg_reg_Indian_Central_8589_0112_LHFLX.eps}\vfill
+%\includegraphics*[width=\halfwidth,height=.12\textheight]{/data/zender/fgr/phd/xyavg_reg_Indian_Central_8589_0112_E_P.eps}\vfill
+%\includegraphics*[width=\halfwidth,height=.135\textheight]{/data/zender/fgr/phd
+%/xyavg_reg_Indian_Central_8589_0112_NET.eps}\vfill
+%\end{center}
+%\caption[Simulated seasonal cycle of central Indian Ocean 
+%surface energy budget components from CCM and ANV]{ 
+%Simulated seasonal cycle of central Indian Ocean 
+%surface energy budget components (a) net shortwave
+%flux, (b) net longwave flux, (c) sensible heat flux, (d) latent heat
+%flux, (e) evaporation$-$precipitation, and (f) net surface energy from
+%CCM (solid), and ANV (dashed).  
+%Positive fluxes heat the surface.
+%Units are \wxmS\ except E$-$P, which is \mmxday.
+%\label{fig:xyavg_reg_Indian_Central_8589_0112_SEB}}   
+%\end{figure}
+%Inter-model differences in surface flux components (panels a--e) tend
+%to compensate so that net surface energy (panel f) changes $< 20$~\wxmS. 
+%Interestingly, the greatest inter-model differences in the seasonal
+%cycle of surface fluxes occur in January, when net surface flux does
+%not change at all.
+%The region is more reflective in ANV during southern hemisphere
+%winter, though always more condensate-laden
+%(Figures~\ref{fig:reg_xyavg_Indian_Central_0112_QC}--\ref{fig:xyavg_reg_8589_0112_ocean_CF}).
+%This reduces surface insolation May--December.
+%Longwave cooling modestly increases January--April, owing to weaker
+%summertime convection. 
+%Variations in other surface fluxes are not as significant.
+%In southern summer, cooler, drier boundary layer air increases latent
+%and sensible fluxes in ANV. 
+%Monthly differences in surface wind speed are $ < 1$~\mxs.
+
+In summary, the central Indian Ocean exemplifies three characteristics
+of the Indo-Pacific response to prognostic anvil.
+First, anvil condensate is consistently greater.
+Second, enhanced anvil mass roughly balances weaker mass
+extinction efficiency---this prevents increased bias in SWCF and LWCF 
+individually, but not necessarily their sum.
+Third, convection is generally weaker in summer and stronger in
+winter.  
+
+\section{Discussion and Conclusions}\label{sec:gcm_disc}
+
+Radiative forcing from cirrus anvil plays a dominant role in
+determining the diabatic heating which drives the general circulation.
+We have investigated the sensitivity of the simulated climate to
+the radiative effects of a representation of ice cloud prognosed from 
+modeled and observed characteristics of tropical anvil. 
+In particular, we replaced a representation of tropical cloud which
+diagnoses cloud mass from column vapor with a prognostic
+representation which forecasts anvil generation from the vertical
+profile of convective mass flux and anvil precipitation from mesoscale
+budget estimates.
+The direct effect of this prognostic anvil representation is to
+sequester more condensate in the upper troposphere, a larger fraction
+of which is ice.
+These changes in condensate distribution and ice fraction agree with
+recent observations \cite[]{WSS931,GrM96} and simulations in cumulus
+ensemble models \cite[]{SLT94,GMK95}. 
+We stress the control model includes diagnostic ice cloud---the
+sensitivity experiment shows the impact of forecasting ice cloud based
+on the physics of tropical anvil.
+
+Cloud radiative forcing could have changed by three mechanisms in this
+experiment (modulo total condensate amount): intrinsic differences in
+ice vs.\ liquid optical properties (for a given effective radius
+hydrometeor), coupling of hydrometeor size to temperature,
+pressure, and phase, and changes in the vertical distribution of
+condensate. 
+The results showed all three mechanisms were important in preserving
+a realistic climate simulation: 
+The enhanced ice amount and fraction in the prognostic anvil were
+approximately balanced by weaker mass extinction only because
+anvil vertical location was tied to larger hydrometeor size.
+The southern ocean in July and the central Indian Ocean in January 
+were used to demonstrate this balance is important globally.
+In these regions LWCF decreased (and improved) although upper
+tropospheric cloud actually increased.
+The strongest bias of the ANV prognostic anvil scheme is too-strong
+cloud forcing over wintertime desert, due to weak sublimation in
+subsidence regimes.
+This causes significant weakening of the annual cycle of zonal average
+LWCF.
+
+Enhanced anvil perturbs the tropical upper troposphere temperature
+structure more strongly in winter, when the column is clearer and
+anvil radiatively heats the troposphere above 200~mb. 
+In the summer tropics, enhanced anvil occurs in a ``deep cloud''
+environment, reducing radiative cooling up to 200~mb, and enhancing
+cooling above that. 
+Reduced optical depth keeps the intrinsically greater solar absorption
+of ice relative to liquid from causing a ubiquitous heating increase
+above 600~mb.
+Radiative heating contributes to warming the region just below the
+tropical tropopause 2--3~$\dgr$K.   
+
+The prognostic anvil is less strongly coupled to SST.
+Based on the 1987 El Ni\~no, the prognostic anvil formulation improves
+longwave cloud radiative response to SST cooling but worsens response
+to warming $> 2\ \dgr$C. 
+In conjunction with weaker mass extinction of ice, this weakens the
+feedback between longwave cloud forcing and convection over SST maxima.
+The net response of convection is a shift toward the winter hemisphere
+in solstice months.
+This eliminates a persistent convective bias in January over the
+central Indian Ocean.
+Moreover, increased convection and high cloud north of the equator
+propagate Rossby waves to the extratropics.  
+This causes significant ridging in the 500~mb height field over the
+west coasts of North America and Europe, substantially improving
+agreement with analysis. 
+
+%Large changes in non-anvil, stratiform cloud cover and optical
+%properties occurred in the extratropics, notably northern hemisphere
+%landmass.
+%In January, reduced cloud enhanced surface longwave cooling
+%by 5--15~\wxmS in central and north Asia; this cooled surface
+%temperature by $\gtrsim 5\ \dgr$C.
+%In July, increased cloud reduced reduced surface solar absorption by 
+%$10--35$~\wxmS in the US interior, cooling the surface
+%3--4~$\dgr$C. 
+
+%The ratio of ice to liquid condensate from 600--300~mb and the 
+%difference between ice and liquid hydrometeor size are two
+%microphysical quantities which are prescribed by the models
+%(Sections~\ref{sec:fice} and~\ref{sec:rdsffc}) but for which great
+%uncertainty exists.
+%Had the former not reversed (Figure~\ref{fig:xavg_8589_CP}), or 
+%the latter been smaller, enhanced anvils could have unrealistically 
+%increased optical depth, emissivity, and cloud forcing.
+
+The underprediction of shortwave cloud forcing sensitivity to SST
+indicates anvil ice crystal size or habit may be sensitive to SST.
+As mentioned previously, the parameterizations which link \taui\ and
+\kappai\ to \rei\ (\ref{eqn:tau}--\ref{eqn:kappai1}) neglect the
+presence of small ice crystals, whose abundance is also uncertain. 
+\cite{EbC92} based the coefficients of
+(\ref{eqn:tau}--\ref{eqn:kappai1}) on ice crystal distributions of
+hexagonal columns with major axis length $L > 20$~\um, the limit of
+particle detectors at that time. 
+%We extended optical properties and size distributions from that study
+%to $L = 10$~\um\ to account for the presence of smaller ice crystals.
+%We find \kappai\ increases to
+%\begin{equation}
+%\label{eqn:kappai2}
+%\kappai = .005 + (\rei - 5)^{-1}.
+%\end{equation}
+%For $\rei = 30$~\um, parameterizations (\ref{eqn:kappai1}) and
+%(\ref{eqn:kappai2}) yield $\kappai = .038$ and .045~\mSxg,
+%respectively, a 15\% increase.
+Accounting for crystals $L < 20$~\um\ increases both LWCF and SWCF for
+a given \qi\ \cite[]{ZeK94}. 
+\cite{SuS95} developed parameterizations analogous to
+\cite{EbC92} but which account for small crystals, and include
+strong temperature dependence for cold ($T < -40\ \dgr$C) ice.
+This temperature dependence, which they base on observed temperature
+trends of small crystal number and crystal habit, strongly increases
+the mass extinction efficiency of cold cirrus.
+Ice crystal optical property parameterizations suitable for GCMs are 
+also needed for more complex crystal habits than solid hexagonal
+columns \cite[e.g.,][]{TaL95} as these habits may dominate in anvil.  
+GCMs should test if such parameterizations rectify underprediction of
+SWCF response relative to LWCF response demonstrated in El Ni\~no
+experiments in Section~\ref{sec:sst}.  
+Moreover, observations which simultaneously constrain IWP, \rei, and
+radiative fluxes are required to test these parameterizations.
+Programs such as ARM are currently assembling such data.
+%NB: Which EOS platforms are doing likewise?
+
+In summary, the prognostic representation of ice cloud based on anvil
+behavior produced a radiative climatology in overall agreement with
+the control model (and observations) despite a large increase in
+anvil condensate.
+Climate features sensitive to anvil representation include 
+tropical upper troposphere temperature structure, cloud forcing
+response to SST change, Hadley cell strength, warm pool convection,
+and the North American flow field in winter.
+Obviously, these results are based on a particular anvil
+representation in a single GCM and must be viewed as a sensitivity 
+study. 
+More physically based tropical anvil for future studies should
+include diagnostic (or prognostic) effective hydrometeor radius based
+on observed crystal size distributions.
+Such studies, which will further constrain the mechanisms determining
+cloud radiative response to SST change, are underway at NCAR.
+
+% Balance preprint columns
+\ifphdcsz{}{\balance}
+
+% Appendices
+\ifphdcsz{}{\appendix\section{Implementation of ANV}\label{app:anv_imp}\input{/home/zender/anv/anv_imp}}
+
+%\section{Symbols}\label{app:sym}
+%\iftwocol{\begin{tabular}{l p{.7\hsize}}}{\begin{tabular}{r l}}
+%$A_s$ & stratiform cloud fraction \\
+%\end{tabular}
+
+%\section{Acronyms}\label{app:abb}
+%\iftwocol{\begin{tabular}{l p{.6\hsize}}}{\begin{tabular}{r l}}
+%WPWP & West Pacific Warm Pool \\
+%\end{tabular}
+
+% Acknowledgements
+\ifphdcsz{\subsection{Acknowledgements}\label{sec:gcm_ack}}{\acknowledgments}
+CSZ gratefully acknowledges discussions with B.~Briegleb,
+R.~Saravanan, and D.-Z.~Sun.
+G.~Branstator provided insight interpreting
+Figure~\ref{fig:pres_8589_Z2TEST}.  
+P.~Rasch provided helpful guidance with cloud parameterization. 
+This work was supported in part by NASA Earth Observing System project
+W-17,661 and by DOE Atmospheric Radiation Measurements Program grant
+DE-AI05-92ER61376.
+
+% Bibliography
+\ifphdcsz{}{\bibliographystyle{jas}}
+\ifphdcsz{}{\bibliography{/home/zender/tex/bib}}
+
+\ifphdcsz{}{\end{document}}
+

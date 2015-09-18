@@ -1,0 +1,77 @@
+# printcap formatted for kjos
+
+# csz++
+# 19991219
+# /etc/printcap
+# Purpose: BSD-style print queue capabilities
+# Usage: sudo cp ~/linux/etc/printcap /etc/printcap
+# Downloaded HP Laserjet4 filter hp4laser from ftp://metalab.unc.edu/pub/Linux/system/printing/
+# Adding it as an input filter appears to solve the problem of not ejecting last page of jobs
+# :if=/usr/local/bin/hp4laser:
+# with odd-numbers of pages
+# 20000317 Combined UCI printer queues and home printer queues
+# 20000317 Added CGD printer queues
+# csz--
+
+##PRINTTOOL3## REMOTE 
+tek360:\
+	:sd=/var/spool/lpd/tek360:\
+	:mx#0:\
+	:sh:\
+	:rm=128.200.14.8:\
+	:rp=lp:
+##PRINTTOOL3## REMOTE 
+tek360T:\
+	:sd=/var/spool/lpd/tek360T:\
+	:mx#0:\
+	:sh:\
+	:rm=128.200.14.8:\
+	:rp=tek360T:
+##PRINTTOOL3## REMOTE 
+didi:\
+	:sd=/var/spool/lpd/didi:\
+	:mx#0:\
+	:sh:\
+	:rm=128.200.14.41:\
+	:rp=lp:
+##PRINTTOOL3## REMOTE 
+hp4050:\
+	:sd=/var/spool/lpd/hp4050:\
+	:mx#0:\
+	:sh:\
+	:rm=dust.ps.uci.edu:\
+	:rp=hp4050:
+##PRINTTOOL3## REMOTE 
+hplj5l:\
+	:sd=/var/spool/lpd/hplj5l:\
+	:mx#0:\
+	:sh:\
+	:rm=dakine:\
+	:rp=hplj5l:
+##PRINTTOOL3## LOCAL 
+lp0|lp:\
+	:sd=/var/spool/lpd/lp0:\
+	:mx#0:\
+	:sh:\
+	:lp=/dev/lp0:
+##PRINTTOOL3## REMOTE 
+renoir:\
+	:sd=/var/spool/lpd/renoir:\
+	:mx#0:\
+	:sh:\
+	:rm=bearmtn.cgd.ucar.edu:\
+	:rp=renoir:
+##PRINTTOOL3## REMOTE 
+renoirt:\
+	:sd=/var/spool/lpd/renoirt:\
+	:mx#0:\
+	:sh:\
+	:rm=bearmtn.cgd.ucar.edu:\
+	:rp=renoirt:
+##PRINTTOOL3## REMOTE 
+gemini:\
+	:sd=/var/spool/lpd/gemini:\
+	:mx#0:\
+	:sh:\
+	:rm=bearmtn:\
+	:rp=gemini:

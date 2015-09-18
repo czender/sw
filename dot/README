@@ -1,0 +1,15 @@
+$Id$ -*-text-*-
+
+This directory, ~/dot, contains system files and shell scripts which
+set up the user environment.
+These are usually known as "dot" files
+It is important that .rhosts and .authorized_keys be mode 600
+
+.Xdefaults    X resources
+.cshrc	      C-shell
+.fvwm2rc      FVWM2 window manager
+.login	      Session login
+.mailrc	      Mail aliases 
+.rhosts	      Remote hosts
+.xinitrc      X environment
+

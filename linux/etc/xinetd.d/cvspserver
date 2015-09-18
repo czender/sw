@@ -1,0 +1,30 @@
+# $Header: /home/zender/cvs/linux/etc/xinetd.d/cvspserver,v 1.4 2003-03-18 01:58:57 zender Exp $
+# Purpose: Control CVS password server for servers running xinetd, e.g., RedHat Linux
+# History:
+# 20010430: David D. Hagood posted to info.cvs
+# 20030316: Modified by C. Zender for dust.ess.uci.edu
+# Usage:
+# sudo scp ~/linux/etc/xinetd.d/cvspserver /etc/xinetd.d/cvspserver 
+# sudo scp ~/linux/etc/xinetd.d/cvspserver dust.ess.uci.edu:/etc/xinetd.d/cvspserver
+
+# After modification, restart xinetd server with 
+# sudo /etc/rc.d/init.d/xinetd restart
+# sudo killall -HUP xinetd <-- This appears to restart all daemons. Rather severe!
+
+# According to Hagood, "The /home/cvs dirctory created to work around CVS bug #1, the 'cannot access /root/.cvsignore' error: create this directory, make it owned by root, readable by all, and not writable by anybody, and CVS will be happy."
+
+service cvspserver
+{
+disable = no
+id = cvspserver
+env = HOME=/home/cvs
+socket_type = stream
+protocol = tcp
+port = 2401
+wait = no
+user = root
+log_on_failure += USERID
+server = /usr/bin/cvs
+server_args = -f --allow-root=/home/zender/cvs pserver
+#server_args = -f --allow-root=/home/zender/cvs/c++ --allow-root=/home/zender/cvs/f pserver
+}

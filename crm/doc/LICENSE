@@ -1,0 +1,24 @@
+CRM and CCM3 Licenses:
+
+Everything originally distributed with the NCAR CCM3 is
+redistributable under the terms of the original NCAR CCM3 license,
+contained in the file LICENSE.ccm3. Most of this was written by
+Jeffrey Kiehl and Bruce Briegleb. The copyright holder is NCAR. We
+call these files "the CCM3 files". They include all files in the CRM
+distribution except those under the directories src/crm, doc, and bld.
+
+Most files in the directories src/crm, doc, and bld were written by
+Charlie Zender for the CRM. They were never distributed with CCM3.  We
+call these "the CRM-specific files". Their copyright holder is Charlie
+Zender. He is also the CRM maintainer. The CRM-specific files may be
+(re-)distributed under the terms of the more restrictive CC BY-NC-SA
+3.0 license contained in LICENSE.crm. This license allows use of the
+CRM-specific files free-of-charge for academic and non-commercial
+purposes. All other uses involving redistribution must obtain written
+permission in advance from the copyright holder.  He may be contacted
+at
+
+Charlie Zender <zender at uci dot edu>
+Department of Earth System Science
+University of California, Irvine
+Irvine, CA 92697-3100

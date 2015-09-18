@@ -1,0 +1,66 @@
+2008-01-05  Charlie Zender  <zender@uci.edu>
+
+	* disambiguated duplicate entry names
+
+2007-08-28  Charlie Zender  <zender@uci.edu>
+
+	* ltx.tex: Add TIPA examples
+
+2005-12-03  Charlie Zender  <zender@uci.edu>
+
+	* Update index.shtml for agu04, complete psd example
+
+	* bib.bib: Remove multiple "and and"'s from database
+
+2004-06-21  Charlie Zender  <zender@uci.edu>
+
+	* Created tex/index.shtml from linux/index.shtml to demonstrate
+	how to build Zender documents from LaTeX source
+
+2003-07-21  Charlie Zender  <zender@uci.edu>
+
+	* bib.bib: Replace journal abbreviation macros with expanded text
+	so the bib.bib no longer requires jrn_agu.sty
+
+2003-07-06  Charlie Zender  <zender@uci.edu>
+
+	* Use \upmu from upgreek.sty for upright micro in dimensions
+
+2003-03-15  Charlie Zender  <zender@uci.edu>
+
+	* Change zenletter class to 3 Whistler Ct., add Olivia
+
+2003-02-24  Charlie Zender  <zender@uci.edu>
+
+	* Added upgreek class, bm class
+
+2003-02-10  Charlie Zender  <zender@uci.edu>
+
+	* Added epigraph class
+
+2002-09-23  Charlie Zender  <zender@uci.edu>
+
+	* Made packages preview-latex aware
+
+	* Added LaTeX version printing and ProvidesPackage{} mechanism
+
+2002-09-21  Charlie Zender  <zender@uci.edu>
+
+	* Added pdfthumb and dvips documentation
+
+2001-11-03  Charlie Zender  <zender@uci.edu>
+
+	* smn_cit.tex: Added smn_cit for pdfscreen development
+
+2001-08-03  Charlie Zender  <zender@uci.edu>
+
+	* ltx.tex,csz.sty: Added \CC description
+
+2001-06-26  Charlie Zender  <zender@uci.edu>
+
+	* ltx.tex: Adopted ifpdf.sty
+
+2001-03-28  Charlie Zender  <zender@uci.edu>
+
+	* Modified \trmidx to take optional phrase to use in index
+

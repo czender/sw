@@ -1,0 +1,5 @@
+#csz++ 19991212: As per http://www.linuxdoc.org/HOWTO/ISP-Hookup-HOWTO-2.html
+loopback	127.0.0.0
+localnet	0.0.0.0
+#csz--
+

@@ -1,0 +1,3 @@
+sh: /etc/ppp/ppp-on-dialer: No such file or directory
+sh: /etc/ppp/ras-on-dialer: Permission denied
+Usage: /usr/sbin/chat [-v] [-t timeout] [-r report-file] {-f chat-file | chat-script}

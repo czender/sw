@@ -1,0 +1,70 @@
+# 
+# Please do not change this file until you receive your permanent
+# license.  Modifying this file may cause your temporary license to
+# fail.
+#
+# csz++
+# Usage:
+# sudo cp ~/linux/usr/local/pgi/license.dat.lanina /usr/local/pgi/license.dat
+# lmgrd server is started by /etc/rc.d/rc.local
+# lmgrd fails when IDL and PGI licenses use different port numbers
+# IDL wants to use port 1700, while PGI wants to use port 7496
+# Be sure real licenses precede original temporary licences 
+# Temporary licenses should be commented out or deleted or else
+# "WARNING: duplicate license file lines" will result on lmgrd startup
+
+# PGI style license installed 20000329 for lanina.ps.uci.edu (wireless card)
+FEATURE pghpf-linux86 pgroupd 3.200 31-dec-0 0 8B98C091F694BBDE94AF \
+    VENDOR_STRING=109584:4:zender HOSTID=PGI=00022DE00982E206E42C6F \
+    ck=88
+FEATURE pgf90-linux86 pgroupd 3.200 31-dec-0 0 0B08D0A1BB3E8F184E86 \
+    VENDOR_STRING=109584:4:zender HOSTID=PGI=00022DE00982E206E42C6F \
+    ck=7
+FEATURE pgf77-linux86 pgroupd 3.200 31-dec-0 0 7BA8C0117C9134374916 \
+    VENDOR_STRING=109584:4:zender HOSTID=PGI=00022DE00982E206E42C6F \
+    ck=239
+FEATURE pgprof pgroupd 3.200 31-dec-0 0 2BB84001ADB03A1E1472 \
+    VENDOR_STRING=109584:4:zender HOSTID=PGI=00022DE00982E206E42C6F \
+    ck=25
+FEATURE pgdbg pgroupd 3.200 31-dec-0 0 BBA890E1D596B0DB735F \
+    VENDOR_STRING=109584:4:zender HOSTID=PGI=00022DE00982E206E42C6F \
+    ck=39
+
+## PGI style license installed 20010717 for cgd85.cgd.ucar.edu (Leonard's card on top, my card on bottom)
+#FEATURE pghpf-linux86 pgroupd 3.200 31-dec-0 0 9BB860A11DC332FBEFAF \
+#    VENDOR_STRING=502421:4:zender HOSTID=PGI=0010A4E0A7A7CB06E42C6F \
+#    ck=33
+#FEATURE pgf90-linux86 pgroupd 3.200 31-dec-0 0 BBC810914459360141C8 \
+#    VENDOR_STRING=502421:4:zender HOSTID=PGI=0010A4E0A7A7CB06E42C6F \
+#    ck=191
+#FEATURE pgf77-linux86 pgroupd 3.200 31-dec-0 0 2B68A0C10D74C52CECFE \
+#    VENDOR_STRING=502421:4:zender HOSTID=PGI=0010A4E0A7A7CB06E42C6F \
+#    ck=37
+#FEATURE pgprof pgroupd 3.200 31-dec-0 0 FB38F0519533566DE85D \
+#    VENDOR_STRING=502421:4:zender HOSTID=PGI=0010A4E0A7A7CB06E42C6F \
+#    ck=233
+#FEATURE pgdbg pgroupd 3.200 31-dec-0 0 5BD87091A3C4F987CAFD \
+#    VENDOR_STRING=502421:4:zender HOSTID=PGI=0010A4E0A7A7CB06E42C6F \
+#    ck=79
+
+## PGI style license installed 20010717 for cgd85.cgd.ucar.edu (Leonard's card)
+#
+#FEATURE pghpf-linux86 pgroupd 3.200 31-dec-0 0 8B5830319AA0E052CC0C \
+#    VENDOR_STRING=109584:4:zender HOSTID=PGI=0010A4E0A7A7CB06E42C6F \
+#    ck=150
+#FEATURE pgf90-linux86 pgroupd 3.200 31-dec-0 0 DB6810E151E678F416B9 \
+#    VENDOR_STRING=109584:4:zender HOSTID=PGI=0010A4E0A7A7CB06E42C6F \
+#    ck=17
+#FEATURE pgf77-linux86 pgroupd 3.200 31-dec-0 0 3B888071F84B936DEBF5 \
+#    VENDOR_STRING=109584:4:zender HOSTID=PGI=0010A4E0A7A7CB06E42C6F \
+#    ck=38
+#FEATURE pgprof pgroupd 3.200 31-dec-0 0 FB4860A19459DDD7EABD \
+#    VENDOR_STRING=109584:4:zender HOSTID=PGI=0010A4E0A7A7CB06E42C6F \
+#    ck=46
+#FEATURE pgdbg pgroupd 3.200 31-dec-0 0 1B185001BE2137F481B4 \
+#    VENDOR_STRING=109584:4:zender HOSTID=PGI=0010A4E0A7A7CB06E42C6F \
+#    ck=219
+
+# csz--
+
+

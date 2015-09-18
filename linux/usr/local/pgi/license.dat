@@ -1,0 +1,57 @@
+# 
+# Please do not change this file until you receive your permanent
+# license.  Modifying this file may cause your temporary license to
+# fail.
+#
+# In the SERVER line below, replace 'server' with the
+# hostname of the computer running the license daemons.
+# In the DAEMON line, the location of the pgroupd daemon
+# may need to be modified.
+#
+# csz++
+# Following licenses received 19991213 for PGI 3.1 on dust.ps.uci.edu
+# lmgrd fails when IDL and PGI licenses use different port numbers
+# IDL wants to use port 1700, while PGI wants to use port 7496
+#SERVER dust.ps.uci.edu 00c04f60738d 7496
+SERVER dust.ps.uci.edu 00c04f60738d 1700
+DAEMON pgroupd /usr/local/pgi/linux86/bin/pgroupd
+# Be sure real licenses precede original temporary licences 
+# Temporary licenses should be commented out or deleted or else
+# "WARNING: duplicate license file lines" will result on lmgrd startup
+# csz--
+FEATURE pghpf-linux86 pgroupd 3.100 31-dec-0 1 5BF800E1144EF6847142 \
+    VENDOR_STRING=109584:4 HOSTID=00c04f60738d ck=213
+FEATURE pgf90-linux86 pgroupd 3.100 31-dec-0 1 DBA86061A65DC51F18BB \
+    VENDOR_STRING=109584:4 HOSTID=00c04f60738d ck=39
+FEATURE pgf77-linux86 pgroupd 3.100 31-dec-0 1 7B1830F11E1BC10DEFB4 \
+    VENDOR_STRING=109584:4 HOSTID=00c04f60738d ck=27
+FEATURE pgprof pgroupd 3.100 31-dec-0 1 AB7880112F3BB07D4687 \
+    VENDOR_STRING=109584:4 HOSTID=00c04f60738d ck=244
+FEATURE pgdbg pgroupd 3.100 31-dec-0 1 FBD880A1C45C8CCBA8BC \
+    VENDOR_STRING=109584:4 HOSTID=00c04f60738d ck=87
+#FEATURE pghpf-linux86 pgroupd 0.0 31-dec-0 0 0 \
+#         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48
+#FEATURE pgf77-linux86 pgroupd 0.0 31-dec-0 0 0 \
+#         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48
+#FEATURE pgf90-linux86 pgroupd 0.0 31-dec-0 0 0 \
+#         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48
+#FEATURE pgprof pgroupd 0.0 31-dec-0 0 0 \
+#         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48
+#FEATURE pgdbg pgroupd 0.0 31-dec-0 0 0 \
+#         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48
+FEATURE pgcc-linux86 pgroupd 0.0 31-dec-0 0 0 \
+         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48
+FEATURE pgCC-linux86 pgroupd 0.0 31-dec-0 0 0 \
+         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48
+FEATURE pghpf-sol86 pgroupd 0.0 31-dec-0 0 0 \
+         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48
+FEATURE pgf77-sol86 pgroupd 0.0 31-dec-0 0 0 \
+         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48
+FEATURE pgf90-sol86 pgroupd 0.0 31-dec-0 0 0 \
+         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48
+FEATURE pgcc-sol86 pgroupd 0.0 31-dec-0 0 0 \
+         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48
+FEATURE pgCC-sol86 pgroupd 0.0 31-dec-0 0 0 \
+         VENDOR_STRING=999999:4:x HOSTID=PGI= ck=48
+
+

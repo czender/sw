@@ -1,0 +1,160 @@
+% $Id$
+
+% Purpose: Response to Reviewer B of Zen99 for JGR
+
+% Usage:
+% cd ~/crr;make -W o2x_jgr_03.tex o2x_jgr_03.ps;cd -
+% cd ~/crr;make -W o2x_jgr_03.tex o2x_jgr_02.ps o2x_jgr_03.ps o2x_jgr_04.ps;cd -
+% latex o2x_jgr_03; dvips -o /data/zender/ps/o2x_jgr_03.ps o2x_jgr_03.dvi
+
+\documentclass[12pt,twoside]{article}
+
+% Standard packages
+\usepackage{graphicx} % defines \includegraphics*
+\usepackage{natbib} % \cite commands from aguplus
+\usepackage{ifthen} % Boolean and programming commands
+
+% Personal packages
+\usepackage{csz} % Library of personal definitions
+\usepackage{dmn} % Dimensional units
+\usepackage{chm} % Commands generic to chemistry
+\input{jgr_abb} % JGR-sanctioned journal abbreviations
+
+% Commands specific to this file
+\usepackage{o2x} % Commands specific to O2*X work
+
+\begin{document}
+ 
+\noindent
+Revisions to Manuscript JGRd-1999R036, \\
+\begin{center}\normalsize
+``Global climatology of abundance and solar absorption of oxygen
+collision complexes'' 
+\end{center}
+\medskip\noindent
+by Charlie Zender \\
+\medskip\noindent
+Date: July 11, 1999
+
+\medskip\noindent\textbf{Response to Reviewer~B}\medskip
+
+I thank Dr. Portmann for thoroughly reading the manuscript and
+carefully commenting on the study.
+This manuscript has benefitted from his constructive criticism. 
+
+\medskip\noindent\textbf{Specific Comments}
+
+\begin{enumerate}
+% 1
+\item Condensing the manuscript: In my opinion, the two tables and
+nine figures in the original manuscript were necessary to present a
+climatology of some very general properties of atmospheric absorption
+which have never been examined before.
+In contrast to Reviewer~B, Reviewer~A seems to find all the original
+figures useful and even asks for another figure (to compare radiance
+residuals). 
+In balancing my response to these reviews with my scientific
+objectives, I have therefore elected to eliminate Figure~5b but to
+keep Figures~6 and~8.
+\begin{enumerate}
+\item Done.
+\item I disagree with Reviewer~B on his points~1b and~1c.
+Figures~6 and~8 are essential to adequately explaining a central
+result of the study concerning the geographical and seasonal
+dependence of the forcing efficiency of \OdX\ (and thus other well
+mixed collision complexes).
+Figures~6 and~8 show, concisely and unequivocally, that the small
+differences between the forcings in the polar summer are the result of
+large differences in \OdX\ forcing efficiency between the Northern and
+Southern hemispheres. 
+
+Yes, Figure~6 is intended to show that the summertime and wintertime
+\OdX\ abundances are very similar.  
+But it also shows that the difference between the Northern and
+Southern polar regions is nearly a factor of two (which is not
+``small''). 
+Figure~8 shows the \OdX\ forcing during polar summer is nearly
+symmetric about the equator.
+Unless Figure~6 is available, most readers will assume that the
+JJA forcing is so similar to the DJF forcing in Figure~8 because the
+\OdX\ loadings are similar. 
+But Figure~6 shows unequivocally that the polar \OdX\ loadings are
+significantly different (nearly a factor of two).
+
+This finding is a general property of the atmosphere, illustrated here
+with \OdX, but worthy of note for all collision pairs
+(and, to a lesser extent, for gaseous solar absorption in general). 
+A given mass of collision pairs will soak up 75\% more energy in
+summer at the Sorth pole than at the North pole.
+The forcing efficiency difference is 30\% for the whole polar region. 
+Reviewer~A seemed to find the differences in forcing efficiency
+interesting, and I believe many readers will as well.
+
+Figures~4 and~7 alone are insufficient to make this point for two
+reasons. 
+First, seasonal plots of $\npcOdX$ are needed to show that the DJF
+and JJA $\npcOdX$ abundances are similar.
+Second, there is too much structure in geographic representation of
+the DJF and JJA absorption fields (Figures~7a and~7c) to expect a
+reader to compute the zonal averages of each in his head and then 
+to mentally intercompare the results.
+
+\end{enumerate}
+% 2
+\item p.~23: The revised manuscript includes the polar summertime 
+tropopause and troposphere temperature biases of the CCM on p.~24.
+% 3
+\item p.~21: Agreed.
+The revised manuscript reads ``Radiative forcing in other
+non-overlapped, optically thin bands \ldots''.
+% 4
+\item p.~24: I agree with the Reviewer's point and that is why the
+original statement contained the proviso ``by themselves''---because 
+in order for gaseous absorption to explain a clear sky diffuse
+radiation bias one needs to invoke the additional argument that the
+aerosol optical depth has been systematically mis-measured in a number
+of standard aerosol channels. 
+Perhaps the original manuscript is too vague, but developing this
+point any further would require a lengthy digression into the
+literature of aerosol processes, Gas ``X'', and relevant results from
+field experiments which are beyond the scope of this study.
+As stated, the manuscript simply illustrates the neutral and
+non-controversial point that gaseous absorption alone cannot remedy a
+clear sky diffuse radiation bias. 
+The revised manuscript reads ``\ldots by themselves (i.e., without
+invoking aerosol processes) \ldots'', which is more specific but does
+not require additional off-topic speculation.
+% 5
+\item Figure~1: Agreed. 
+The lines in Figure~1 are now thicker, and I changed one of the blues
+to a yellow to make it easier to differentiate \Od\ from \OdNd.
+% 6
+\item Figure~2: Agreed.
+The caption of Figure~2 now ends with ``The line spectra of \HdO,
+\COd, and \Od\ are averaged over 10~\xcm.'' 
+The lines in Figures~2 are now thicker---using different line patterns
+did not help.
+Putting the lines on a log scale de-emphasized the \OdX\ features
+too much.
+The purpose of the picture is to show the spectral regions which
+\OdX\ absorption occurs in spectral windows, and which is overlapped
+with other absorption.
+The spectral region near 1.27~\um\ is especially hard to read because
+there are five gaseous absorption processes to depict.
+I have changed the caption to tell the reader that the continua are
+all shown in Figure~1, and that line absorption from \HdO, \Od, and
+\COd\ has been added.
+Figure~1 and the text explain the important features to the
+interested reader.
+% 7
+\item Figure~3: Done.
+\end{enumerate}
+
+% Bibliography
+%\renewcommand\refname{\normalsize References}
+%\bibliographystyle{agu}
+%\bibliography{bib}
+
+\end{document}
+
+

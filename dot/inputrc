@@ -1,0 +1,14 @@
+# $Id$
+
+# Purpose: Initialization file for readline
+
+# NB: Do NOT copy use cygwin settings in UNIX environment because something
+# cause CR to beep rather than work
+
+# Universal values:
+
+# Values suggested for cygwin:
+#set meta-flag on
+#set convert-meta off
+#set output-meta on
+set completion-ignore-case on

@@ -1,0 +1,254 @@
+# $Id$
+
+MenuFont "9x15"		# and menus
+TitleFont "9x15"	# and title bars
+
+# no title bars for these programs
+NoTitle { "xbiff" "xclock" "xeyes" "xload" "xbiff++" 
+	"xmasmail" "TWM Icon Manager" "Minibuffer @ peace"
+	"xmeter" }
+SqueezeTitle
+WarpCursor		
+# when an icon is opened, move cursor to the middle of the new window.
+BorderWidth	2
+ResizeFont	"fixed"
+Zoom 5
+RandomPlacement
+# Setting NoTitleFocus is a really bad idea because idl text widgets will
+# steal the focus and make it so you have to use f.unfocus to get it back.
+#NoTitleFocus 
+#NoBackingStore
+#NoSaveUnder
+#DecorateTransients
+#DontMoveOff
+#NoRaiseOnMove
+#NoRaiseOnResize
+#NoRaiseOnDeiconify
+
+Color {
+	BorderColor "red"
+	TitleForeground "white"
+	Titlebackground "blue"
+
+	MenuForeground "Yellow"
+	MenuBackground "darkgreen"
+	MenuTitleBackground "blue"
+	MenuTitleForeground "white"
+        MenuShadowColor "black"
+
+	IconForeground "darkgreen"
+	IconBackground "cadetblue"
+	IconBorderColor "green"
+	IconManagerForeground "black"
+	IconManagerBackground "grey"
+}
+# define colors to use for title bars, window borders, icons, and menus.
+
+#button=keys:context:function
+#
+button1 =    : title	: f.raise 
+button1 =  s : title	: f.lower
+button2 =    : title	: f.move 
+button2 = c  : title	: f.resize 
+button2 =    : root	: f.menu "FrameMenu"
+button2 =    : icon	: f.move
+button3 =    : root	: f.menu "RootMenu"
+button3 =    : title    : f.menu "button3"
+# define that actions of the mouse buttons in various windows,
+# and in conjunction with the shift and control keys.
+
+menu "RootMenu" 
+{
+"Root Menu"     f.title
+"Applications"      f.menu  "Applications"
+"Rlogins"	f.menu "Rlogins"
+"FTPs"		f.menu "FTPs"
+"Screen Options"    f.title
+"Lock Screen"	!"xlock &"
+"Clear Colormap"    !"clear_colormap"
+"Redisplay All"	f.refresh
+"TWM Options"   f.title
+#"Focus with Pointer"	f.unfocus
+"Restart"	f.twmrc
+"Quit"	        f.quit
+}
+# define a menu
+
+#NB using -name [the_name] associates resources with the_name, so e.g., windows
+#opened wouldn't get the generic xterm resources unless they were installed 
+#specifically for the_name, i.e. no autoraise toggle.
+#-n installs the name on the icon.
+#-title installs the name on the open window titlebar
+
+menu "Rlogins"
+{
+ "Rlogins" f.title
+	"djinn.cgd.ucar.edu" !"rcmd djinn.cgd.ucar.edu xterm -title djinn -n djinn -geometry 80x24 -fn 10x20 -sk -sb &"
+	"flagstaff.cgd.ucar.edu" !"rcmd flagstaff xterm -title flagstaff -n flagstaff -geometry 80x24 -sk -sb &"
+	"isis.cgd.ucar.edu" !"rcmd isis.cgd.ucar.edu xterm -title isis -n isis -geometry 80x24 -fn 10x20 -sk -sb &"
+	"shiva.cgd.ucar.edu" !"rcmd shiva.cgd.ucar.edu xterm -title shiva -n shiva -geometry 80x24 -fn 10x20 -sk -sb &"
+	"sanitas.cgd.ucar.edu" !"rcmd sanitas.cgd.ucar.edu xterm -title sanitas -n sanitas -geometry 80x24 -fn 10x20 -sk -sb &"
+	"starfury.cgd.ucar.edu" !"rcmd starfury.cgd.ucar.edu xterm -title starfury -n starfury -geometry 80x24 -fn 10x20 -sk -sb &"
+	"ute.ucar.edu" !"xterm -title ute -n ute -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e telnet ute.ucar.edu &"
+	"dataproc.ucar.edu" !"xterm -title dataproc -n dataproc -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e telnet dataproc.ucar.edu &"
+}
+
+Menu "FTPs"
+ {
+    "FTPs"     f.title
+
+	"alcor.colorado.edu" !"xterm -title 'ftp alcor' -n 'ftp alcor' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp alcor.colorado.edu &"
+	"archive.cis.ohio-state.edu" !"xterm -title 'ftp archive.cis.ohio-state.edu' -n 'ftp archive.cis.ohio-state.edu' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp archive.cis.ohio-state.edu &"
+	"bogart.colorado.edu" !"xterm -title 'ftp bogart' -n 'ftp bogart' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp bogart.colorado.edu &"
+	"chief.ucar.edu" !"xterm -title 'ftp chief' -n 'ftp chief' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp chief.ucar.edu &"
+	"cmns-sun.think.com" !"rcmd cmns-sun.think.com xterm -title 'ftp cmns-sun' -n 'ftp cmns-sun' -geometry 80x24 -fn 10x20 -sk -sb &"
+	"expo.lcs.mit.edu" !"xterm -title 'ftp expo.lcs.mit.edu' -n 'ftp expo.lcs.mit.edu' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp expo.lcs.mit.edu &"
+	"ftp.uu.net" !"xterm -title 'ftp ftp.uu.net' -n 'ftp ftp.uu.net' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp ftp.uu.net &"
+	"ftp.ncsa.uiuc.edu" !"xterm -title 'ftp ftp.ncsa.uiuc.edu' -n 'ftp ftp.ncsa.uiuc.edu' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp ftp.ncsa.uiuc.edu &"
+	"maxim.colorado.edu" !"xterm -title 'ftp maxim' -n 'ftp maxim' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp maxim.colorado.edu &"
+	"poplar.mmm.ucar.edu" !"xterm -title 'ftp poplar' -n 'ftp poplar' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp poplar.mmm.ucar.edu &"
+	"prep.ai.mit.edu" !"xterm -title 'ftp prep.ai.mit.edu' -n 'ftp prep.ai.mit.edu' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp prep.ai.mit.edu &"
+	"shavano.ucar.edu" !"xterm -title 'ftp shavano' -n 'ftp shavano' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp shavano.ucar.edu &"
+	"ucsu.colorado.edu" !"xterm -title 'ftp ucsu' -n 'ftp ucsu' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp ucsu.colorado.edu &"
+}
+
+Menu "Applications"
+{
+    "Applications"      f.title
+    "SCD xmDSL"         !"rsh dsl.ucar.edu -l xmdsl peace.cgd:0" 
+    "Screen Print"      !"xprintcopy &"
+    "ghostview"		!"ghostview &"
+    "xcalc"       	!"xcalc &"
+    "xclock"            !"xclock -analog -geometry 70x70 &"
+    "xdbx"          !"/usr/local/bin/xdbx &"
+    "xdvi"    !"xdvi &"
+    "xgopher"         	!"xgopher &"
+    "xload"        !"xload &"
+    "xmag"         !"xmag &"
+    "xman"    !"xman &"
+    "xmosaic"    !"xmosaic &"
+    "xpostit"       !"xpostit -sv &"
+    "xrn"       !"/X11/bin/xrn &"
+    "xterm"        !"xterm -name `hostname` &"
+}
+ 
+menu "FrameMenu"
+{
+"Frame Menu"    f.title
+"Close"		f.iconify
+"Move"		f.move
+"Resize"	f.resize
+"Autoraise Toggle"	f.autoraise
+"Expose"	f.raise
+"Hide"		f.lower
+"Redisplay"	f.winrefresh
+"Destroy"	f.destroy
+}
+
+# zender additions to default ncar .twmrc file
+
+AutoRaise
+{
+   "(Tek)"
+   "./gmeta"
+   "Calculator"
+   "CCM Graphs"
+   "Distributed Software Libraries"	
+   "FileView"	
+   "Ghostview"	
+   "Histogram"
+   "IDL Cloud Graphs"
+   "IDL Help"
+   "Ivy"
+   "Manual Page"
+   "SAOimage"
+   "Scatterplot"
+   "Super Mongo(Tek)"
+   "TWM"
+   "Untitled"
+   "Xman"
+   "Xsaber"
+   "Xsaber-C"
+   "Xterm"
+   "cdbx"	
+   "emacs"
+   "epoch"
+   "gmeta"
+   "idt"
+   "xbiff++"
+   "xcalc"
+   "xclock"
+   "xclouds"	
+   "xdbx"
+   "xdvi"
+   "xload"
+   "xman"
+   "xmasmail"
+   "xmeter"
+   "xrn"
+   "xterm"
+}
+
+ShowIconManager
+SortIconManager
+IconifyByUnmapping
+IconFont "9x15"		# fonts to use for icons
+IconManagerGeometry	"=100x10+1048+0"
+IconManagerFont		"variable"
+IconManagerDontShow
+{
+    "topBox"
+    "xbiff"
+    "xbiff++"
+    "xclock"
+    "xload"
+    "xmasmail"
+    "xmeter"
+}
+
+UnknownIcon	".fractal_bitmap"
+#IconDirectory	"/usr/include/X11/bitmaps"
+IconDirectory	"/u2/zender"
+
+#ForceIcons
+#Icons
+#{
+#    "xterm"	"xterm.icon"
+#}
+
+Function "raise-n-focus"
+{
+    f.raise
+    f.focus
+}
+
+menu "button3"
+{
+"Cut File"		f.cutfile
+"Destroy Window"	f.destroy
+"Focus on Window"	f.focus
+"ForceMove Window"	f.forcemove
+"Hide Icon Mgr"		f.hideiconmgr
+"Iconify"		f.iconify
+"Lower Window"		f.lower
+"Move Window"		f.move
+"Raise Window"		f.raise
+"Raise or Lower"	f.raiselower
+"Raise-n-Focus"		f.function "raise-n-focus"
+"Refresh Screen"	f.refresh
+"Refresh Window"	f.winrefresh
+"Resize Window"		f.resize
+"Show Icon Mgr"		f.showiconmgr
+"Version"		f.version
+}
+
+Monochrome
+{
+    BorderColor "black"
+    BorderTileForeground "black"
+    BorderTileBackground "white"
+    TitleForeground "black"
+    TitleBackground "white"
+}
+
+

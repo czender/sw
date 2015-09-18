@@ -1,0 +1,37 @@
+Linux Java from Blackdown URL: http://www.blackdown.org/java-linux.html
+
+20020730 Install java 1.4 on lanina RH Linux 7.2:
+cd /usr/local
+sudo mkdir java
+sudo mv j2re-1.4.1-beta-linux-i586.bin java
+cd java
+sudo ./j2re-1.4.1-beta-linux-i586.bin 
+sudo ln -s /usr/local/java/j2re1.4.1/plugin/i386/mozilla/javaplugin_oji.so /usr/lib/mozilla/plugins/
+
+cd ~/
+mkdir tmp
+cd tmp
+cp /usr/local/java/j2re1.4.1/javaws-1_2-linux-int.zip .
+unzip javaws-1_2-linux-int.zip
+cd ~
+tmp/install.sh
+/usr/local/java/j2re1.4.1
+/bin/rm -r tmp
+
+20040830 Install Sun java 1.4.2 on elnino.ess.uci.edu Debian Sid:
+su
+/bin/rm -r /usr/local/java;mkdir -p /usr/local/java;cd /usr/local/java
+scp dust.ess.uci.edu:/data/zender/tmp/j2re-1_4_2_05-linux-i586.bin .
+chmod a+x j2re-1_4_2_05-linux-i586.bin
+./j2re-1_4_2_05-linux-i586.bin
+cd /usr/lib/mozilla/plugins
+ln -s /usr/local/java/j2re1.4.2_05/plugin/i386/ns610-gcc32/libjavaplugin_oji.so .
+
+20041228 Install Sun java 1.4.2 on sand.ess.uci.edu Ubuntu Debian AMD64:
+su
+/bin/rm -r /usr/local/java;mkdir -p /usr/local/java;cd /usr/local/java
+scp dust.ess.uci.edu:/data/zender/tmp/j2re-1_4_2_05-linux-i586.bin .
+chmod a+x j2re-1_4_2_05-linux-i586.bin
+./j2re-1_4_2_05-linux-i586.bin
+cd /usr/lib/mozilla/plugins
+ln -s /usr/local/java/j2re1.4.2_05/plugin/i386/ns610-gcc32/libjavaplugin_oji.so .

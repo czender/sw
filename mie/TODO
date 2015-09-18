@@ -1,0 +1,18 @@
+$Id$
+
+*************
+mie Wish list
+*************
+1. Allow swa and vma specification for multi-modal distributions
+2. Automatically use Rayleigh limit for sz_prm >~ 30, override with --no_ryl_lmt
+3. Finish separation of idx_rfr file retrieval from usage
+4. Allow wrn_ntp_flg to work for constructors that use ntp_vec()
+8. Bug: mie -dbg=5 --wvl_grd=SWNB fails but mie --wvl_grd=SWNB completes
+9. Implement self test that lim x -> \infty (Q_bck) = R(0) BoH83 p. 123 (4.83), p. 478
+11. Change no_foo to no-foo?
+12. Optimize option parsing to avoid unecessary if statements, perhaps generate hash key?
+13. Need mechanism to warn/exit when user option is found in option database structure opt_lng but not acted on later
+17. -o conflicts with positional argument
+18. Compute cnc_nbr_vts_anl at high resolution for cnc_nbr_sph_rsl_frc
+19. Allow multi-component aerosols specification from command line for EMAs
+20. 

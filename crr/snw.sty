@@ -1,0 +1,153 @@
+% $Id$
+
+% Purpose: LaTeX commands for snow radiative transfer
+
+% Copyright (c) 2007--2009, Charles S. Zender
+% This program may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License (LPPL), 
+% either version 1.2, or (at your option) any later version.
+% LPPL: http://www.latex-project.org/lppl.txt
+
+% The original author of this software, Charlie Zender, seeks to improve
+% it with your suggestions, contributions, bug-reports, and patches.
+% Charlie Zender <surname@uci.edu>, surname=zender
+% Department of Earth System Science
+% University of California, Irvine
+% Irvine, CA 92697-3100
+
+% Dependencies: abc.sty, dyn.sty
+
+% Usage:
+% \usepackage{snw} % Snow radiative transfer
+
+% Message printed when LaTeX called
+\@ifundefined{ProvidesPackage}{}{
+\ProvidesPackage{snw}[2002/09/22 v1.91 Snow Radiative Transfer]
+} % end ProvidesPackage
+
+% 0. Provided commands
+\providecommand{\rdssph}{\ensuremath{R}}\renewcommand{\rdssph}{\ensuremath{R}} % [m] Integrating sphere radius
+\DeclareMathAlphabet{\mathsfsl}{OT1}{cmss}{m}{sl} % Slanted sans serif math font for matrices c.t.tex 20080515
+\newcommand{\vctcmd}[1]{\boldsymbol{#1}} % [fnc] Vectors boldface italics math font KoD04 p. 145
+\newcommand{\mtxcmd}[1]{\mathsfsl{#1}} % [fnc] Matrices slanted sans serif math font KoD04 p. 145
+\newcommand{\sttcmd}[1]{\mathsf{#1}} % [fnc] States in sans serif math font
+% NB: slanted sans serif text font results seem too-large
+%\newcommand{\mtxcmd}[1]{\textsl{\textsf{#1}}} % Matrices slanted sans serif text font
+
+% 1. Primary commands
+\newcommand{\albcnt}{\ensuremath{\alb}} % [frc] Contribution to albedo
+\newcommand{\FOV}{\ensuremath{\mbox{FOV}}} % [sr] Field of view
+\newcommand{\frcdffdwn}{\ensuremath{f_{\dffsbs}^{\downarrow}}} % [frc] Diffuse downwelling re-illumination
+\newcommand{\frcdffdwndff}{\ensuremath{\tilde{f}_{\dffsbs}^{\downarrow}}} % [frc] Diffuse downwelling re-illumination from initially "stray light"
+\newcommand{\frcmsndff}{\ensuremath{\tilde{f}}} % [frc] Fraction radiation emitted as diffuse "stray light"
+\newcommand{\frcmsndrc}{\ensuremath{\dot{f}}} % [frc] Fraction radiation emitted as direct, collimated light
+\newcommand{\absnbr}{\ensuremath{m}} % [nbr] Number of absorbing states
+\newcommand{\rflnbr}{\ensuremath{l}} % [nbr] Number of reflecting states
+\newcommand{\sttnbr}{\ensuremath{n}} % [nbr] Number of total states
+\newcommand{\fltsbs}{\ensuremath{\prime}} % [sbs] Flat subscript
+\newcommand{\bffsbs}{\ensuremath{\prime\prime}} % [sbs] Baffle subscript
+\newcommand{\cllsbs}{\ensuremath{b}} % [sbs] Collimated subscript
+\newcommand{\dtcsbs}{\ensuremath{d}} % [sbs] Detector subscript
+\newcommand{\aprsbs}{\ensuremath{s}} % [sbs] Aperture subscript
+\newcommand{\smpsbs}{\ensuremath{e}} % [sbs] Sample subscript
+\newcommand{\lsrsbs}{\ensuremath{h}} % [sbs] Laser diode subscript
+\newcommand{\fctmtxnvr}{\ensuremath{\beta}} % [frc] Matrix diagonalization factor
+\newcommand{\fcttmp}{\ensuremath{\gamma}} % [frc] Temporary factor in matrix elements
+\newcommand{\nglaprpln}{\ensuremath{\psi}} % [rdn] Planar angle subtended from point to aperture
+\newcommand{\nglaprsld}{\ensuremath{\Omega}} % [sr] Solid angle subtended from point to aperture
+\newcommand{\ntnvct}{\ensuremath{\vctcmd{\ntn}}} % [W m-2 Hz-1 sr-1] Intensity vector
+\newcommand{\rflmtx}{\ensuremath{\mtxcmd{\rfl}}} % [frc] Reflection matrix
+\newcommand{\trnmtx}{\ensuremath{\mtxcmd{\trn}}} % [frc] Transmission matrix
+\newcommand{\mtxzro}{\ensuremath{\mtxcmd{0}}} % [frc] Zero matrix
+\newcommand{\mtxone}{\ensuremath{\mtxcmd{1}}} % [frc] One matrix
+\newcommand{\mtxtrn}{\ensuremath{\mtxcmd{P}}} % [frc] Transition matrix
+\newcommand{\mtxidn}{\ensuremath{\mtxcmd{I}}} % [frc] Identity matrix
+\newcommand{\mtxfnd}{\ensuremath{\mtxcmd{Q}}} % [frc] Fundamental matrix
+\newcommand{\mtxrflabs}{\ensuremath{\mtxcmd{R}}} % [frc] Reflection->Absorption matrix
+\newcommand{\mtxrflrfl}{\ensuremath{\mtxcmd{T}}} % [frc] Reflection->Reflection matrix
+\newcommand{\rdsR}{\ensuremath{R}} % [m] Generic radius R
+\newcommand{\rflsmp}{\ensuremath{r}} % [frc] Sample reflectance, diffuse incidence
+\newcommand{\rflwll}{\ensuremath{w}} % [frc] Wall reflectance
+\newcommand{\sfcdtcnrm}{\ensuremath{d}} % [frc] Normalized detector area
+\newcommand{\sfcsmpnrm}{\ensuremath{s}} % [frc] Normalized sample area
+\newcommand{\sfcsrcnrm}{\ensuremath{h}} % [frc] Normalized hole (laser source) area
+\newcommand{\sfcwllnrm}{\ensuremath{\alpha}} % [frc] Normalized wall area excluding holes HRL06 p. 5250
+\newcommand{\sgnmsrRSAD}{\ensuremath{\sgn}} % [frc] Measured signal from collimated illumination of sample
+\newcommand{\sgnmsrRWAD}{\ensuremath{\sgn}} % [frc] Measured signal from diffuse    illumination of sample
+\newcommand{\sttRS}{\ensuremath{\sttcmd{RS}}} % [enm] State: Reflected from sample
+\newcommand{\sttRW}{\ensuremath{\sttcmd{RW}}} % [enm] State: Reflected from wall
+\newcommand{\sttAD}{\ensuremath{\sttcmd{AD}}} % [enm] State: Absorbed by detector
+\newcommand{\sttAS}{\ensuremath{\sttcmd{AS}}} % [enm] State: Absorbed by sample
+\newcommand{\sttAH}{\ensuremath{\sttcmd{AH}}} % [enm] State: Absorbed by hole
+\newcommand{\sttAW}{\ensuremath{\sttcmd{AW}}} % [enm] State: Absorbed by wall
+
+% 2. Derived commands
+\newcommand{\frcbckRS}{\ensuremath{f^{\uparrow}_{\sttRS}}} % [frc] Fraction radiation backscattered into state RS
+\newcommand{\frcbckRW}{\ensuremath{f^{\uparrow}_{\sttRW}}} % [frc] Fraction radiation backscattered into state RW
+\newcommand{\FOVidx}{\ensuremath{\FOV_{\lvlidx}}} % [frc] FOV of layer
+\newcommand{\albcntidx}{\ensuremath{\albcnt_{\lvlidx}}} % [frc] Layer contribution to albedo
+\newcommand{\rfllvlmtx}{\ensuremath{\rflmtx_{\lvlidx}}} % [frc] Reflection matrix for layer k
+\newcommand{\rfllvlpmtx}{\ensuremath{\rflmtx_{\lvlidx+1}}} % [frc] Reflection matrix for layer k+1
+\newcommand{\rfllvlmmtx}{\ensuremath{\rflmtx_{\lvlidx-1}}} % [frc] Reflection matrix for layer k-1
+\newcommand{\rflonemtx}{\ensuremath{\rflmtx_{1}}} % frc] Reflection matrix for layer 1
+\newcommand{\rflonetwomtx}{\ensuremath{\rflmtx_{12}}} % frc] Reflection matrix for combined layers 1 and 2
+\newcommand{\rfltwoonemtx}{\ensuremath{\rflmtx_{21}}} % frc] Reflection matrix for combined layers 2 and 1
+\newcommand{\rfltwomtx}{\ensuremath{\rflmtx_{2}}} % frc] Reflection matrix for layer 2
+\newcommand{\trnlvlmtx}{\ensuremath{\trnmtx_{\lvlidx}}} % [frc] Transmission matrix for layer k
+\newcommand{\trnlvlpmtx}{\ensuremath{\trnmtx_{\lvlidx+1}}} % [frc] Transmission matrix for layer k+1
+\newcommand{\trnlvlmmtx}{\ensuremath{\trnmtx_{\lvlidx-1}}} % [frc] Transmission matrix for layer k-1
+\newcommand{\trnonemtx}{\ensuremath{\trnmtx_{1}}} % frc] Transmission matrix for layer 1
+\newcommand{\trnonetwomtx}{\ensuremath{\trnmtx_{12}}} % [frc] Transmission matrix for combined layers 1 and 2 
+\newcommand{\trntwoonemtx}{\ensuremath{\trnmtx_{21}}} % [frc] Transmission matrix for combined layers 2 and 1 
+\newcommand{\trntwomtx}{\ensuremath{\trnmtx_{2}}} % frc] Transmission matrix for layer 2
+\newcommand{\ntnupwvct}{\ensuremath{\ntnvct^{+}}} % [W m-2 Hz-1 sr-1] Upwelling intensity vector
+\newcommand{\ntndwnvct}{\ensuremath{\ntnvct^{-}}} % [W m-2 Hz-1 sr-1] Downwelling intensity vector
+\newcommand{\fctmtxnvrone}{\ensuremath{\fctmtxnvr_{1}}} % [frc] Matrix diagonalization factor
+\newcommand{\fctmtxnvrtwo}{\ensuremath{\fctmtxnvr_{2}}} % [frc] Matrix diagonalization factor
+\newcommand{\fctmtxnvrthr}{\ensuremath{\fctmtxnvr_{3}}} % [frc] Matrix diagonalization factor
+\newcommand{\mtxtrnflt}{\ensuremath{\mtxtrn^{\fltsbs}}} % [frc] Transition matrix, flat sample
+\newcommand{\mtxtrnbff}{\ensuremath{\mtxtrn^{\bffsbs}}} % [frc] Transition matrix, flat sample and baffle
+\newcommand{\prblngRSAD}{\ensuremath{\mtxfnd\mtxrflabs(\sttRS\rightarrow\sttAD)}} % [frc] QR(1,1) = Probability of RS->AD transition: photon reflected first by sample enters detector
+\newcommand{\prblngRWAD}{\ensuremath{\mtxfnd\mtxrflabs(\sttRW\rightarrow\sttAD)}} % [frc] QR(2,1) = Probability of RW->AD transition: photon reflected first by wall   enters detector
+\newcommand{\prblngRWAS}{\ensuremath{\mtxfnd\mtxrflabs(\sttRW\rightarrow\sttAS)}} % [frc] QR(2,2) = Probability of RW->AS transition: photon reflected by wall then absorbed by sample
+\newcommand{\prblngRWRSorRWAS}{\ensuremath{\ppp(\sttRW\rightarrow\sttRS||\sttAS)}} % [frc] QT(2,1)+QR(2,2) = Union of RW->RS and RW->AS: photon reflected by wall incident on sample
+\newcommand{\prbRWRS}{\ensuremath{\mtxtrn(\sttRW\rightarrow\sttRS)}} % [frc] P(6,5) = Probability of RW->RS transition: photon reflected by wall then reflected by sample
+\newcommand{\prbRSRS}{\ensuremath{\mtxtrn(\sttRS\rightarrow\sttRS)}} % [frc] P(5,5) = Probability of RS->RS transition: photon reflected by sample then reflected by sample
+\newcommand{\prbRSAD}{\ensuremath{\mtxtrn(\sttRS\rightarrow\sttAD)}} % [frc] P(5,1) = Probability of RS->AD transition: photon reflected by sample then absorbed by detector
+\newcommand{\prbRSAS}{\ensuremath{\mtxtrn(\sttRS\rightarrow\sttAS)}} % [frc] P(5,2) = Probability of RS->AS transition: photon reflected by sample then absorbed by sample
+\newcommand{\prblngRWRS}{\ensuremath{\mtxfnd\mtxrflrfl(\sttRW\rightarrow\sttRS)}} % [frc] QT(2,1) = Probability of RW->RS transition: photon reflected by wall then reflected by sample
+\newcommand{\prbRSRW}{\ensuremath{\mtxtrn(\sttRS\rightarrow\sttRW)}} % [frc] P(5,6) = Probability of RS->RW transition: photon reflected by surface then reflected by wall
+\newcommand{\rflsmpdrc}{\ensuremath{\dot{\rflsmp}}} % [frc] Sample reflectance, direct beam
+\newcommand{\mtxtrnij}{\ensuremath{\mtxtrn_{i,j}}} % [frc] Transition matrix element at row i, column j
+\newcommand{\rdsllm}{\ensuremath{\rdsR}} % [m] Radius of illumination
+\newcommand{\rdssmp}{\ensuremath{\rdsR_{\mathrm{\smpsbs}}}} % [m] Sample-holder radius
+\newcommand{\rdsapr}{\ensuremath{\rdsR_{\mathrm{\aprsbs}}}} % [m] Sample-aperture radius
+\newcommand{\rdscll}{\ensuremath{\rdsR_{\mathrm{\cllsbs}}}} % [m] Collimated beam radius
+\newcommand{\rdsdtc}{\ensuremath{\rdsR_{\mathrm{\dtcsbs}}}} % [m] Detector radius
+\newcommand{\sgndtc}{\ensuremath{m}} % [frc] Measured signal
+\newcommand{\rdslsr}{\ensuremath{\rdsR_{\mathrm{\lsrsbs}}}} % [m] Laser diode radius
+\newcommand{\rdssphntg}{\ensuremath{\rdsR_{\mathrm{IS}}}} % [cm] Integrating sphere radius
+\newcommand{\nglaprslddffavg}{\ensuremath{\bar{\nglaprsld}^{\dffsbs}}} % [sr] Mean solid angle subtended by diffusely illuminated aperture
+\newcommand{\nglaprslddrcavg}{\ensuremath{\bar{\nglaprsld}^{\slrsbs}}} % [sr] Mean solid angle subtended by directly illuminated aperture
+\newcommand{\dptsmp}{\ensuremath{\dpt_{\smpsbs}}} % [m] Sample-holder depth
+\newcommand{\nglaprplnavg}{\ensuremath{\bar{\nglaprpln}}} % [rdn] Mean planar angle subtended by point
+\newcommand{\nglaprsldavg}{\ensuremath{\bar{\nglaprsld}}} % [sr] Mean solid angle subtended by aperture
+\newcommand{\nglaprone}{\ensuremath{\nglaprpln_{1}}} % [rdn] Supplementary angle one subtended from point to aperture
+\newcommand{\nglaprtwo}{\ensuremath{\nglaprpln_{2}}} % [rdn] Supplementary angle two subtended from point to aperture
+
+% 3. Doubly-derived commands
+\newcommand{\ntnupwlvlvct}{\ensuremath{\ntnupwvct_{\lvlidx}}} % [W m-2 Hz-1 sr-1] Upwelling intensity vector at interface level k
+\newcommand{\ntndwnlvlvct}{\ensuremath{\ntndwnvct_{\lvlidx}}} % [W m-2 Hz-1 sr-1] Downwelling intensity vector at interface level k
+\newcommand{\ntnupwlvlpvct}{\ensuremath{\ntnupwvct_{\lvlidx+1}}} % [W m-2 Hz-1 sr-1] Upwelling intensity vector at interface level k+1
+\newcommand{\ntndwnlvlpvct}{\ensuremath{\ntndwnvct_{\lvlidx+1}}} % [W m-2 Hz-1 sr-1] Downwelling intensity vector at interface level k+1
+\newcommand{\ntnupwlvlmvct}{\ensuremath{\ntnupwvct_{\lvlidx-1}}} % [W m-2 Hz-1 sr-1] Upwelling intensity vector at interface level k-1
+\newcommand{\ntndwnlvlmvct}{\ensuremath{\ntndwnvct_{\lvlidx-1}}} % [W m-2 Hz-1 sr-1] Downwelling intensity vector at interface level k-1
+\newcommand{\ntnupwzrovct}{\ensuremath{\ntnupwvct_{0}}} % [W m-2 Hz-1 sr-1] Upwelling intensity vector at interface level 0
+\newcommand{\ntndwnzrovct}{\ensuremath{\ntndwnvct_{0}}} % [W m-2 Hz-1 sr-1] Downwelling intensity vector at interface level 0
+\newcommand{\ntnupwonevct}{\ensuremath{\ntnupwvct_{1}}} % [W m-2 Hz-1 sr-1] Upwelling intensity vector at interface level 1
+\newcommand{\ntndwnonevct}{\ensuremath{\ntndwnvct_{1}}} % [W m-2 Hz-1 sr-1] Downwelling intensity vector at interface level 1
+\newcommand{\ntnupwtwovct}{\ensuremath{\ntnupwvct_{2}}} % [W m-2 Hz-1 sr-1] Upwelling intensity vector at interface level 2
+\newcommand{\ntndwntwovct}{\ensuremath{\ntndwnvct_{2}}} % [W m-2 Hz-1 sr-1] Downwelling intensity vector at interface level 2
+\newcommand{\nglaprplndblavg}{\ensuremath{\bar{\nglaprplnavg}}} % [rdn] Mean planar angle subtended by entire aperture
+\newcommand{\nglaproneavg}{\ensuremath{\nglaprplnavg_{1}}} % [rdn] Mean supplementary angle one subtended by point
+\newcommand{\nglaprtwoavg}{\ensuremath{\nglaprplnavg_{2}}} % [rdn] Mean supplementary angle two subtended by point

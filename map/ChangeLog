@@ -1,0 +1,755 @@
+2015-07-15  Charlie Zender  <zender@uci.edu>
+
+	* Ensure missing_value and _FillValue are, like variables, NC_FLOAT in output
+
+2010-10-20  Charlie Zender  <zender@uci.edu>
+
+	* Add _FillValue to output file. Note that input files are
+	still searched for missing_value, not _FillValue
+
+2010-02-02  Charlie Zender  <zender@uci.edu>
+
+	* Put netCDF4 handling in Makefile
+
+2009-02-03  Charlie Zender  <zender@uci.edu>
+
+	* Change ncap to ncap2
+
+	* Consider changing default from flg_cst_tpr=T to flg_cst_tpr=F as
+	per discussion with Natalie Mahowald about South American sources.
+
+2007-09-11  Charlie Zender  <zender@uci.edu>
+
+	* Change from GPL2 to GPL3
+
+2006-08-22  Charlie Zender  <zender@uci.edu>
+
+	* Add lat_fv as equivalent to lat array in CAM FV datasets
+	lat_fv contains centered latitudes except at poles, where 
+	latitudes are interface values (+/- 90). 
+	Explained in e-mail message from Phil Rasch on 20060821.
+	Note that: lat_fv is a true FV grid only for GSC grid type.
+	Furthermore, physical quantities are still on lat=lat_ctr
+	grid which is same dimensione as lat_fv.
+	Hence lat_fv is not used as the coordinate for the rest of the
+	variables in the file, which are centered on lat=lat_ctr.
+	In other words, lat_fv is identical to lat=lat_ctr except at the
+	poles, where lat_fv=+/-90. lat_fv can be made the lat coordinate
+	with, e.g., ncrename -d lat,lat_fv in.nc out.nc
+	
+	* Fix slat definition and size to agree with CAM FV conventions
+
+2006-08-11  Charlie Zender  <zender@uci.edu>
+
+	* Clean up EASE ML grid routines
+
+2006-08-05  Charlie Zender  <zender@uci.edu>
+
+	* Implement pathf95 compiler options
+
+2006-06-01  Charlie Zender  <zender@uci.edu>
+
+	* Add CAM3 Gaussian and FV grid generation to bds.sh script
+
+	* Cleanup from Chao's basin modifications
+
+2006-01-11  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-3_2_2
+	Changes since map-3_2_1: EASE-ML grids, geo bugfix
+
+	* Merged Chao Luo's geo_mdl.F90 bug fix and comments
+	bck_itr_nbr and high resolution simulations appear to work
+	
+2005-11-28  Charlie Zender  <zender@uci.edu>
+
+	* Merged Chao Luo's EASE-ML grid type implementation
+
+2005-11-14  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-3_2_1
+	Changes since map-3_2_0: None.
+	Tagged 3_2_1 prior to Chao Luo implementing EASE-ML grid type
+
+2005-09-30  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-3_2_0
+	Changes since map-3_1_2: standardize dataset location
+	This tags code when I asked Dave Newman to look at upstream algorithm
+	
+	* Standardize dataset location and put all boundary data files in
+	bds_ctl.F90 and prefixed them in bds main.F90
+
+	* Print missing values in double precision
+
+	* Verified code builds and runs on ESMF
+
+2005-07-31  Charlie Zender  <zender@uci.edu>
+
+	* Changed all grid parameters to NC_DOUBLE in output file, and now
+	compile program in double precision by default
+
+2005-07-26  Charlie Zender  <zender@uci.edu>
+
+	* Add region mask msk_rgn specified with rectangle list in bds_rgn_msk.txt
+
+2005-06-14  Charlie Zender  <zender@uci.edu>
+
+	* Fix off-by-one dimensioning problem while converting LSM to
+	Olson surface types (never triggered) in
+	sfc_typ_mdl.F90:sfc_typ_xtr_get()  
+	
+	* Fix off-by-180 bug in geo_mdl:lon2i(). 
+	This may have screwed up identification of true internally
+	draining basins
+
+2005-06-14  Charles Zender  <zender@uci.edu>
+
+	* Fix spacing bug in asm_modis flagged by AIX xlf95
+
+	* Fix intent bug in geo_mdl.F90:lon2i() flagged by AIX xlf95
+
+2005-04-04  Charlie Zender  <zender@uci.edu>
+
+	* Fix line length > 132 errors in grid filling extensions by Mark
+
+	* Change internal basin data format to work with g95
+
+2003-08-08  Mark Flanner  <mflanner@biogenic.ps.uci.edu>
+
+	* Implement nearest neighbor "nn" algorithm and flg_soi_nn flag
+	to fill in soil texture, surface type for undefined gridpoints
+
+2003-07-20  Charlie Zender  <zender@uci.edu>
+
+	* bds.F90: Changed erd_ to rdb_ ("erodibility")
+
+	* Change basin to bsn_enm and output to netCDF file
+
+	* geo_mdl.F90 (dst_src_flw): Changed area_acm to sfc_acm
+
+2003-07-17  Charlie Zender  <zender@uci.edu>
+
+	* lak_wtl.F90 (lnd_frc_dry_get): Set dry land fraction to 0.0 when
+	it is negative due to rounding errors in derivation.
+
+	* asm_modis.F90 (bsn_mds_get): Zero MODIS erodibility where lnd_frc=0.0
+
+2003-07-16  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-3_1_2
+	Changes since map-3_1_1: bkf_itr max default, cst_tpr(), rgn_xcl() behavior
+
+	* bds.F90: Change default bkf_itr_max from 5 to 1 so that default
+	reproduces ZBN03 results.
+
+	* Generalize rgn_xcl() and cst_tpr() to correctly handle output
+	map types with [-180, +180] longitude arrays
+
+	* sfc_typ_mdl.F90 (sfc_typ_xtr_get): print WARNING and assumed map
+	type for external surface type dataset
+
+2003-07-15  Charlie Zender  <zender@uci.edu>
+
+	* Assume surface type in external sft_typ.nc files is stored as
+	map_typ 14 used by Crowley in sfc_typ_xtr_get()
+
+2003-07-14  Charlie Zender  <zender@uci.edu>
+
+	* Fail when region exclusion or tapering requested but rectangle
+	files do not open
+
+2003-07-12  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-3_1_1
+	Changes since map-3_1_0: GEOS-CHEM support
+
+	* map_grd.F90: Support GEOS-CHEM latitude grids (regular except
+	higher resolution at Poles)
+
+2003-07-11  Charlie Zender  <zender@uci.edu>
+
+	* sfc_typ_mdl.F90 (sfc_typ_get): Correct subroutine name in
+	sfc_typ_xtr_get() diagnostics
+
+	* Remove time dimension to simplify sfc_typ_xtr_get()
+
+2003-06-01  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-3_1_0
+	Changes since map-3_0_6: Can read in alternative surface type data
+
+	* External surface data reading appears to work, roughly. 
+	Some details need to be worked out like making topography
+	consistent with glaciers.
+
+	* Added sfc_typ_xtr_get() to handle reading in surface types from
+	user-specified netCDF data file with, e.g., 
+
+t	bds -x 96 -y 48 -m 23 --flg_sfc_xtr=T --fl_sfc_xtr="/data/zender/data/dst_T31_adams.nc" -o ${DATA}/data/dst_T31_crowley_foo.nc
+
+2003-05-13  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-3_0_6
+	Changes since map-3_0_5: Regressions to ZBN03 documented
+
+	* Documented procedure to reproduce erodibility factors used in
+	ZBN03 and ZNT03. This still needs to be tested and verified.
+
+	* Added bck_itr_nbr as command line parameter
+
+	* Renamed cst_tpr.txt and lcn_zro.txt to bds_cst_tpr.txt and bds_lcn_zro.txt
+
+2003-05-12  Charlie Zender  <zender@uci.edu>
+
+	* asm_modis.F90: Cleaned up a bit
+
+2003-05-11  Charlie Zender  <zender@uci.edu>
+
+	* Change default output from /usr/tmp/zender to /tmp/zender to
+	accomodate newer RedHat, Debian directory structures
+
+2003-02-18  Alf Grini<alf.grini@geofysikk.uio.no>
+
+	*Actually the fix below was done on feb.18. This update is just to say
+	that explicitly in the ChangeLog.
+	
+2003-02-17  Alf Grini<alf.grini@geofysikk.uio.no>
+
+	*Removed corrupt Python script which was still in main branch
+	Replaced with OK python script (changetext.py)
+
+	*cvs tag -c map-3_0_5 since it is important not to have the
+	corrupt python script (which removes contents of files) lying around 
+	
+2003-02-17  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-3_0_4
+	Changes since map-3_0_3: Includes MODIS assimilation,
+	slight mods with directory prefixes to work on alpha at UIO
+
+	* Merged rel-map-3_0_4 into main trunk and tagged as map-3_0_4
+
+2003-02-17  Alf Grini <alf.grini@geofysikk.uio.no>
+
+	*Version described below tagged
+	cvs tag -c rel-map-3_0_4
+
+2003-02-17  Alf Grini <alf.grini@geofysikk.uio.no>
+
+	*Included MODIS data
+	New module asm_modis.F90 gives two new datasets
+	bsn_mds_sqr and bsn_mds_lnr which are calculated in the new module
+
+	*This included small changes in bds_drv.F90 and Makefile to call and
+	compile the new module and get the datasets to output
+
+	*Changed from degrees east and degrees north
+	to degree_east and degree_north so that GrADS understands what are
+	dimensions during reading.
+
+	*added the new module and a script changetext.py
+	Usage of changetext.py is described in bds.F90
+	
+2003-02-17  Alf Grini <alf.grini@geofysikk.uio.no>
+
+	*Had to make up for committing a lot of empty files on feb 14.
+
+	*Checked out map module with -D 2003-14-02
+	Did three changes
+	1)Makefile : removed -lspecfun and -lrecipes_f (for ALPHA)
+	2)Removed path on fl_grd in bds.F90
+	3)Removed path on fl_pcp in bds_ctl.F90
+	(I get error message from ftn_drcpfx if I don't do the last two)
+
+	*committed and tagged new branch cvs tag -b rel-map-3_0_3
+	
+2002-10-02  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-3_0_3
+	Changes since map-3_0_2: Works with Lahey lf95
+
+	* Add epsilon to 1.0 for comparison in lnd_frc_dry_get()
+	With this change Lahey-compiled version runs to completion
+
+2002-09-28  Charlie Zender  <zender@uci.edu>
+
+	* Fix problems in edit formats found by lf95
+
+	* Change default LINUX compiler to lf95
+
+2002-06-13  Dave Newman  <newman@dust.ps.uci.edu>
+
+	* cvs commit -m "changed DSTODXC to aer_idx_331_360" asm_obs.F90
+
+2002-06-12  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-3_0_2
+	Changes since map-3_0_1: All erodibility factors now default to
+	zeroing at coasts and north of 60 degrees
+
+	* Default is now zeroing north of 60 for all erodibility factors
+
+	* Consolidate cst_tpr() and lcn_zro() calls in bds_prc()
+
+	* bds_ctl.F90: Changed flg_cst_tpr default to true
+
+2002-06-07  Charlie Zender  <zender@uci.edu>
+
+	* Zeroing area_acm_fct and flw_acm_fct at coast now default
+	mbl_bsn_fct already zeroed at coast by default.
+
+2002-06-05  Dave Newman  <newman@dust.ps.uci.edu>
+
+	* cvs commit bds_drv.F90
+	Now passing area to dst_src_flw (to accumulate area, not gridcells)
+	* cvs commit src_prc.F90
+	Added subroutine zero_at_coast.  Will filter any variable,
+	zeroing values at the coast
+	* cvs commit asm_mdl.F90
+	Included code to read QOVER from lsmh_1x1.nc.
+	Still need to do further small mods (e.g. read H2OSOI from lsmh_1x1.nc)
+	* cvs commit geo_mdl.F90
+	Big code cleanup.  Included code to accumulate area, not gridcells.
+	Otherwise no substantive changes
+	
+2002-06-04  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-3_0_1
+	Changes since map-3_0: Coasts, nothing poleward of 60 degrees
+	Synchronize for Dave's area accumulation updates and coastal subroutine
+
+2002-06-03  Charlie Zender  <zender@uci.edu>
+
+	* Must archive areas rather than number of points for area_acm_fct
+
+	* Changed default to remove all points north of 60 degrees
+
+2002-05-20  Charlie Zender  <zender@uci.edu>
+
+	* Change default to elimination of coastal any points with
+	ocean neighbors as sources. This fairly significant change
+	appears necessary with CLM vegetation, which is significantly
+	more bare in northern Canada.
+
+2002-04-23  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-3_0
+	Changes since map-2_2_0: Too many to mention
+
+	* New code now compiles and links
+
+2002-04-22  Charlie Zender  <zender@uci.edu>
+
+	* Re-architected code into libmap, libbds, and bds frontend
+
+2002-04-16  Charlie Zender  <zender@uci.edu>
+
+	* map.F90: Adopted new time stamping convention for input files
+
+2002-04-11  Charlie Zender  <zender@uci.edu>
+
+	* Added sfc_frc_bln for sandblasting work
+
+2002-03-28  Charlie Zender  <zender@uci.edu>
+
+	* dst_bnd.F90: Added grd_mrd_lng, grd_znl_lng, grd_rds_rth
+
+2002-03-10  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-2_2_0
+	Changes since map-2_1_5: fix latitude bug, add geomorphology/hydrology
+
+2002-03-07  Dave Newman  <newman@dust.ps.uci.edu>
+
+	* Fixed lat bug in dst_src_bsn, and increased basin size to 10deg (from 1000km)
+	lat_dlt_m=lat_dlt_dgr*earth_crc/360.0
+	real,parameter::bsn_sz_lon=1111.1e3
+
+2002-02-19  Dave Newman  <newman@dust.ps.uci.edu>
+
+	* cvs add geo_mdl.F90
+	Added geomorphological routine module.
+	Computes flw_acm_fct and area_acm_fct from hgt_sfc and sfc_flw
+
+	* cvs update
+
+	* cvs commit -m "<djn> Added geo_mdl.F90 to compute flw_acm_fct and area_acm_fct"
+
+2002-02-07  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-2_1_5
+	Changes since map-2_1_4: None, really. Ready for merge
+	with flow accumulation mods.
+
+2002-02-05  Charlie Zender  <zender@uci.edu>
+
+	* dst_bnd.sh: Perform high resolution basin factor calculations
+
+2001-12-31  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-2_1_4
+	Changes since map-2_1_3: Cleaned up string module and double 
+	precision usage
+	
+2001-12-29  Charlie Zender  <zender@uci.edu>
+
+	* Replaced double precision with selected_real_kind(p=12) so
+	those routines are independent of precision module
+
+	* Transitioned all routines to use sng_mdl for string manipulation
+
+2001-12-28  Charlie Zender  <zender@uci.edu>
+
+	* dst_bnd.F90 (dst_bnd): Call getarg_err with alterable expression
+
+	* cvs tag -c map-2_1_3
+	Changes since map-2_1_2: Implement bsn_fct_hrz switch to compute
+	basin factor at high resolution then regrid to model resolution
+
+	* dst_bnd.F90 (map_prc): Fixed compilation problems involving
+	command line switch for bsn_fct_hrz
+
+2001-11-08  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-2_1_2
+	map-2_1_2 is the branch point for map_dev branch
+
+2001-10-23  Charlie Zender  <zender@uci.edu>
+
+	* dst_bnd.F90 (map_prc): Program is now modularized and all
+	#include's have been removed in favor of modules. 
+	Still do not use precision module everywhere, however.
+
+	* igbpdis.F90 (soi_chm_IGBP_get): Converted igbpdis to module
+
+	* dstlsm.F90 (main): Replace dstlsm.h with dstlsm module from dust model
+
+2001-09-28  Charlie Zender  <zender@uci.edu>
+
+	* Makefile (FC): Added preliminary ifc support
+
+	* Switched from dbg2 to dbg_mdl
+
+2001-09-24  Charlie Zender  <zender@uci.edu>
+
+	* Version 2.1.1 is BFB with 2.1 in all known respects
+
+	* cvs tag -c map-2_1_1
+	
+	* dst_bnd.F90 (dst_bnd): Converted entire program to netCDF F90
+	interface, added control module dst_bnd_ctl
+
+2001-09-21  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-2_1
+	Version 2.1 switches default bathymetry/elevation to TerrainBase
+	User visible-changes: None
+
+	* map.F90: soil_txt_get() puts ocean whereever lnd_msk_out is 0,
+	not lnd_msk_in of greatest overlap cell.
+
+	* hgt_sfc.F90 (hgt_sfc_get2): wrote hgt_sfc_get2() to parse
+	TerrainBase bathymetry/elevation data. Seems to work great
+	with current sea level. 
+
+2001-08-29  Charlie Zender  <zender@uci.edu>
+
+	* tst.sh: Translated some bash'isms to work with IRIX /bin/sh
+
+	* cvs tag -c map-2_0
+	Version 2.0 appears to be robust on Tru64, Linux, IRIX
+	User visible-changes: Default is to replace crops by forest crops
+	
+	* dst_bnd.F90 (map_out): Write pft as int not real
+
+	* clm_fld.F90 (lai_get): Made /usr/tmp/zender/map the standard
+	directory for file output and for diagnostics output
+
+2001-08-28  Charlie Zender  <zender@uci.edu>
+
+	* dst_bnd.F90 (dst_bnd): Moved all required input datasets
+	that are not already in /fs/* directories to
+	/fs/cgd/data0/zender/map. This includes the lsm_7993*, igbp_*, 
+	and dst25* files.
+
+	* cvs tag -c map-1_8_1
+	Version 1.8.1 finally generates real LAIs and VAIs from new CLM
+	datasets
+
+	* map_grd.F90 (map_edge_mk): Fixed bug in map_edge_mk() where
+	lon_grd was used in place of lon_ctr
+
+2001-08-27  Charlie Zender  <zender@uci.edu>
+
+	* dst_bnd.F90 (dst_bnd): Fixed bug introduced to sfc_typ_get()
+	where mss_val was declared real
+
+	* cvs tag -c map-1_8_0
+	Version 1.8 implements new CLM LAI, VAI and has crop type
+	replacement option
+
+	* Added flg_set_crp_frs to set warm/cool crops to forest crops
+	This surface type change considerably reduces amount of bare
+	ground in northern Europe, midwest US in winter
+
+	* clm_fld.F90 (pft_get): pft_get() and lai_get() run successfully
+
+2001-08-24  Charlie Zender  <zender@uci.edu>
+
+	* clm_fld.F90 (lai_get): Finished time-stepping loop in lai_get()
+	and added diagnostic lai_ttl_clm and vai_ttl_clm variables
+
+	* cvs tag -c map-1_7_6
+	Version 1.7.6 completes pft_get() sucessfully
+
+2001-08-23  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-1_7_5
+
+	* Version compiles and runs but dies since gridpoints where
+	(lnd_msk_out == 1 && lnd_frc_out != 1) allow fields to average to 
+	lnd_frc_out rather than 1. Better if fields average to 1 and then
+	fluxes get normalized by lnd_frc_out
+
+	* tst.sh (err): Added test script suitable for NQS use
+	This is intended to avoid ulimits problems on AIX and SGI
+
+	* map_grd.F90: Added map_edge_mk() to derive interfaces from
+	grid cell centers and domain boundaries
+	(rnk_vec_gnr): Improved rnk_vec_gnr() to handle missing values and
+	return number of valid rankings returned
+
+	* map.F90: Fixed bug where calling routine was sending lnd_frc
+	instead of lnd_msk to soi_chm_igbp_get(), soil_txt_get().
+	Values were not used so no harm done
+
+	* map_grd.F90: Added map_grd_anl() to help discern cause of
+	map_area_get() not converging for earth_area when input grid is
+	from CLM file
+
+	* dst_bnd.F90: Formatting changes:
+	Introduced sbr_nm
+	Treating all dimensions in map_out() identically
+	Replaced " with '
+	
+2001-08-22  Charlie Zender  <zender@uci.edu>
+
+	* clm_fld.F90 (clm_get): Segregated generic map functions into
+	map_grd.F90 and introduced clm_fld.F90 for CLM input
+
+2001-07-26  Charlie Zender  <zender@uci.edu>
+
+	* dst_bnd.F90 (dst_bnd): Upgraded command line parsing to new
+	POSIX compatibility 
+
+2001-07-18  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-1_7_0
+
+	* Current version works at T170 so tag it accordingly!
+
+	* map.F90 (lnd_frc_dry_get): Added fixer for rounding errors for
+	wtl_frc_out and lak_frc_out ~ 1.0+1.0e-8 which showed up at T170.
+
+	* dst_bnd.sh: Revamped script to process most frequently used files
+
+	* map.F90 (hgt_sfc_get): SGIs appear to fail at high resolution
+	unless ulimit -s unlimited is set, which is not possible, at least
+	interactively, on dataproc.
+
+	* dst_bnd.F90 (dst_bnd): Regenerated all dst_TXX.nc files so that
+	diagnostic toms ODXC values will not contain errors.
+
+	* Solaris machines inexplicably exit on error reading mineralogy files
+
+	* Makefile (OMP): Restored default OMP=Y
+
+	* Fixing the Bessel bugs appears to have fixed all the problems
+	in generating high resolution boundary datasets.
+
+	* map.F90: Changed write to unit 5 to unit 6 in soi_chm_IGBP_get()
+
+	* bsl_zro_get: Change loop end from bsl_zro_nbr to
+	bsl_zro_tbl_nbr_max to fix (probably harmless) memory
+	overwrite. Problem caught by running with MALLOC_CHECK_=1.
+	Problem affected only output grids with more than 100 latitudes.
+
+	* toms_get: Fixed bad bug where odxc_prc was defined with input
+	rather 	than output dimensions in toms_get(). 
+	This appears to have been present for quite some time in dst_bnd.
+	It may only have affected processing on grids where output grid
+	was higher resolution than TOMS input grid (288x180), but I'm not
+	sure. The problem would have shown up in diagnostics of optical
+	depth, not in any of the boundary data fields.
+	It did not affect dust boundary data file generation, except
+	to cause it to fail on high resolution grids.
+
+	* dst_bnd.F90: Appears to be dumping core in map_rbn after
+	ingesting /data/zender/toms/toms_80_01.nc
+
+	* Makefile: Updated and turned of OpenMP by default to see if that
+	solved the problem of failing on T126. It did not help so OpenMP
+	should be turned back on at some point.
+
+	* dst_bnd.F90: Added abort on unknown PVM_ARCH. Changed arch SUN4
+	to arch SGIMP64.
+
+2001-02-12  Charlie Zender  <zender@uci.edu>
+
+	* Notice that dataproc version stopped building, but krein version
+	is fine
+
+	* Changed NCAR versions to 1.6.2 for Natalie
+
+2001-02-11  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c map-1_6_2
+
+	* Commented out basin factor call in hgt_sfc_get() so basin factor
+	from map_prc() is what is written to disk
+
+	* Make some modifications to allow compilation with Sun F90 which
+	is not very flexible about single if statements and string formats
+
+	* cvs tag -c map-1_6_1
+
+2001-02-09  Charlie Zender  <zender@uci.edu>
+
+	* Added copyright headers prior to distribution
+
+2000-10-13  Charlie Zender  <zender@uci.edu>
+
+	* Replaced sfc_typ dependence to with oro-dependence in
+	dst_src_bsn() 
+
+	* Moved call for basin factor from map_prc() to hgt_sfc_get()
+
+	* Tagged this as map-1_6, last version prior to moving basin
+	factor definition to high resolution grid.
+
+2000-09-22  Charlie Zender  <zender@uci.edu>
+
+	* Converted to Fortran90
+
+2000-03-28  Charlie Zender  <zender@uci.edu>
+
+	* Tagged this as map-1_5_2
+
+	* Changed missing value for soil chemical constituents to 0.0 so
+	the value will be valid when read in to global models.
+
+	* Fixed new bug in dst_src_bsn introduced by previous fix
+	mbl_bsn_fct produced ridiculous answers due to this bug.
+
+2000-02-23  Charlie Zender  <zender@uci.edu>
+
+	* Tagged this as map-1_5_1
+
+	* Fixed error in dst_src_bsn where basin weight was normalizing by
+	hgt_dlt_bsn which could be 0.0.
+
+1999-11-04  Charlie Zender  <zender@dust.ps.uci.edu>
+
+	* Tagged this as map-1_5_0
+
+	* Implemented Paul Ginoux's topographic based weights
+
+1999-10-28  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Added surface height data parsing for sfc_hgt,sfc_hgt_gpm,sgh,oro
+
+	* Fixed bug where gw was input as scalar to netCDF output routine 
+
+1999-08-10  Charlie Zender  <zender@dust.acd.ucar.edu>
+
+	* Changed default to missing_value outside IGBP world.img region
+
+1999-08-03  Charlie Zender  <zender@dust.acd.ucar.edu>
+
+	* Tagged this as map-1_4_0
+
+	* Added 6 more geochemical tracers: Al, C_org, K, N, Na, P2O5.
+	Revamped routine to work generically for any IBGP tracer.
+	Tested using CaCO3 data for all tracers.
+	
+	* Added first f9X arithmetic syntax. Goodbye f77.
+
+1999-08-01  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Added preliminary IGBP SoilData processing. First field is
+	CaCO3. Not validated yet.
+
+Fri Jun  4 20:41:54 1999  ZENDER CHARLIE 1445 ML CGD  <zender@dataproc.ucar.edu>
+
+	* Added option to print soil texture datasets in CSM/CCM/LSM input
+	format. Verified exact agreement when input is Webb. This allows
+	users to choose to use the IGBP dataset consistently through the
+	LSM and in the dust model. 
+
+Mon May 31 17:00:44 1999  ZENDER CHARLIE 1445 ML CGD  <zender@dataproc.ucar.edu>
+
+	* Tagged this as map-1_3_1
+
+	* Fixed vgt_prc() to remove attempts to define vegetation over ocean
+
+Wed May  5 17:57:40 1999  ZENDER CHARLIE 1445 ML CGD  <zender@dataproc.ucar.edu>
+
+	* Tagged this as map-1_3
+
+	* Adapted code to dataproc, renamed soil texture variables to
+	conform to dust model version 2 nomenclature, set IBIS soil
+	texture to be default, renamed dry_frc to lnd_frc_dry
+
+1999-01-28  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Fixed floating point overflow bug in map_prc() where
+	missing valude odxc_tms data (=1.e36) could be divided
+	by corresponding odxc_ccm data.
+
+1999-01-26  Charlie Zender  <zender@sanitas-e0.cgd.ucar.edu>
+
+	* Tagged this as map-1_2
+
+	* Verified that IBIS data does not change when output grid equals
+	input grid
+
+1999-01-25  Charlie Zender  <zender@sanitas-e0.cgd.ucar.edu>
+
+	* Added ability to read IBIS soil texture files
+
+Tue Dec 15 19:04:36 1998  Charlie Zender  <zender@sanitas-e0.cgd.ucar.edu>
+
+	* Added rlh_lsm (roughness length for heat transfer) and zpd_lsm
+	(zero plane displacement height) and verified their implementation
+
+Mon Nov  2 14:18:47 1998  Charlie Zender  <zender@sanitas-e0.cgd.ucar.edu>
+
+	* Added smp_sat,smp_sfc,vwc_dry,vwc_opt,vwc_rel,vwc_sat 
+
+	* Added vwc_sfc=H2OSOI read from LSM files in routine lsm_get()
+
+Tue Sep 29 13:56:27 1998  Charlie Zender  <zender@odin.cgd.ucar.edu>
+
+	* Tagged this as map-1_1
+
+Mon Sep 28 18:15:51 1998  Charlie Zender  <zender@odin.cgd.ucar.edu>
+
+	* Added lai_lsm to netCDF output file, verified results
+
+	* Changed -lcsz to -lcsz_f77
+
+	* Implemented lsm_prc(). About to hook up output to netCDF.
+	
+1998-09-10  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Tagged this as version map_1_0
+
+	* Verified libmap and dst_bnd both build and execute correctly on
+	Sun and SGI. dst_bnd continues to core dump on GNU/Linux g77.
+
+	* Finished implementation of map module
+
+	* Changed name of surface/satellite data regridding program from
+	psp to dst_bnd.
+

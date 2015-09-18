@@ -1,0 +1,8 @@
+-*-text-*-
+
+This directory, $(HOME)/elisp, contains Emacs Lisp routines in source
+(*.el) and byte-compiled (*.elc) form. These routines are generally
+customized for my Emacs/XEmacs environment.
+
+my_keys.el     Custom key mappings
+my_macros.el   Custom macros always loaded at Emacs startup time

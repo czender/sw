@@ -1,0 +1,9 @@
+/dev/hda1 / reiserfs defaults,noatime,notail 0 0
+/dev/hda2 swap swap sw,pri=1 0 0
+none /proc proc defaults 0 0
+none /proc/bus/usb usbfs devmode=0666 0 0
+none /dev/pts devpts mode=0622 0 0
+none /sys sysfs noauto 0 0
+/dev/hda3 /home reiserfs defaults,noatime,notail 0 0
+/dev/cdrom              /mnt/cdrom              udf,iso9660 noauto,owner,kudzu,ro 0 0
+/dev/floppy             /mnt/floppy             auto    noauto,owner,kudzu 0 0

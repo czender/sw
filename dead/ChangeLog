@@ -1,0 +1,644 @@
+2012-11-02  Charlie Zender  <zender@uci.edu>
+
+	* Built with netCDF-fortran 4.2 and verified netCDF4 works fine
+
+2011-12-31  Charlie Zender  <zender@uci.edu>
+
+	* Change copyright year to 2012
+
+2011-11-16  Charlie Zender  <zender@uci.edu>
+
+	* Change copyright year to 2011. A bit late :)
+
+2010-12-06  Charlie Zender  <zender@uci.edu>
+
+	* Fix broken links on homepage
+
+2010-08-09  Charlie Zender  <zender@uci.edu>
+
+	* Default to NETCDFF=Y and link to libnetcdff.a by default
+
+2009-08-07  Charlie Zender  <zender@uci.edu>
+
+	* Quieted all gfortran implicit r4<->r8 conversion warnings by
+	making them all explicit
+
+	* Compiles completely cleanly with OPTS=X under	ifort,xlf95
+	Still noisy under gfortran due to implicit r4<->r8 conversion
+	Still noisy under g95 due to above and "set but not used" warnings
+
+	* Quiet ifort warnings that comments exceed allowed length
+
+	* Add histout.F90 module so BXM calls outfld() with known interfaces
+
+	* Eliminate most gfortran warnings except r4<->r8 conversion
+
+	* Eliminate all gfortran unused variable warnings by excision or CEWI
+
+2009-08-06  Charlie Zender  <zender@uci.edu>
+
+	* svn copy svn+ssh://zender@dust.ess.uci.edu/home/zender/svn/trunk/dead \
+	svn+ssh://zender@dust.ess.uci.edu/home/zender/svn/tags/dead/1.5.0 \
+	-m "dead-1.5.0: Fix q_dst() zeroing, numerous build improvements, subversion"
+
+	* Preparing version 1.5.0 release
+
+	* Change logic of copying q_cst() to/from q_dst() so arrays update correctly
+
+	* Quiet gfortran warnings by:
+	adding interfaces for tm2nc(), nvr2nc()
+	change numerous type conversions from implicit to explicit
+
+2009-08-04  Charlie Zender  <zender@uci.edu>
+
+	* Code still dies with netCDF4 and runs fine with netCDF3
+	This can now be demonstrated with run-time switches (no	re-compiling):
+	dead -3; dead -4
+
+	* Fully implement netCDF4 choices on command line
+
+	* Move file creation from dstpsd.F90 to main()
+
+	* Add -3 -4 stubs to allow user to specify output filetype (netCDF3/netCDF4)
+
+	* Use wrappers consistently for nf90_redef()
+
+	* Tweaked messages when initializing file
+
+	* Deprecate -fno-second-underscore from gfortran compilation
+
+	* Allow linking to distro- (i.e., Debian-) supplied libnetcdff.a
+	by using new NETCDFF=Y switch
+
+2009-05-11  Charlie Zender  <zender@uci.edu>
+
+	* Make makdep rules makdep-specific in Makefile
+
+	* Update Makefile for netCDF 4.1 dependencies (libcurl)
+
+2007-11-01  Charlie Zender  <zender@uci.edu>
+
+	* Code compiles and runs. Dies with netCDF4. Fine with netCDF3.
+
+	* Enable netCDF4 in dead
+
+	* Enable netCDF4 in Makefile
+
+	* Update Makefile
+
+2007-09-11  Charlie Zender  <zender@uci.edu>
+
+	* Change from GPL2 to GPL3
+
+2007-03-30  Charlie Zender  <zender@uci.edu>
+
+	* All codes use shr_kind_mod.F90 instead of precision.F90
+
+2007-02-19  Charlie Zender  <zender@uci.edu>
+
+	* Initialize flx_mss_hrz_slt_ttl(:)=0.0_r8 in dstmbl()
+
+	* Prevent single precision underflow in dpsdryutl.F90
+
+	* Tweak floating point exception-handling in xlf compilers
+
+2006-11-25  Charlie Zender  <zender@uci.edu>
+
+	* Ported to gfortran
+
+2006-11-19  Charlie Zender  <zender@uci.edu>
+
+	* Allow day-of-year doy to include day 366 for leap years
+	This bug was preventing simulations with ESH boundary data during
+	leap years like 1992.
+
+2006-11-16  Charlie Zender  <zender@uci.edu>
+
+	* Added 8-bin particle size distribution grid from WRF-Chemistry
+
+2006-05-24  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c dead-1_4_3
+	Changes since dead-1_4_2: pmgrid.F90 module, ifort v. 9.0 support
+
+	* Add pmgrid.F90 to repository
+
+	* Remove pmgrid.F and pmgrid.h from repository
+
+	* New version with pmgrid.F90 module appears to compile, link,
+	and run correctly
+
+	* Replace references to tpt_mdp(:,plevp) and q_H2O_vpr(:,plevp)
+	(which are buggy) in xtr_dat_set() calls
+
+	* Change Makefile to eliminate -e95 on dead.o target with ifort
+
+	* Extensive/invasive modifications to convert pmgrid.F to
+	pmgrid.F90 and remove pmgrid.F and pmgrid.h from repository and
+	distribution. This makes code pure F90.
+
+2005-08-24  zender  <zender@uci.edu>
+
+	* Investigated two problems in
+	flx_mss_hrz_slt_ttl_AlG01_get() pointed out by Gregg Lamorey.
+	Gregg notes this routine returns an illegal index value of zero
+	for wind friction speeds less than 0.5 cm s-1.
+	DEAD imposes a minimum wind speed of 1.0 m s-1 (in dstmbl.F90).
+	This crudely accounts for sub-gridscale winds in GCMS, avoids
+	divide-by-zeros, and is consistent with boundary layer studies
+	which show small scale turbulent energy exchange even when mean
+	wind is zero.
+	It is used for dust mobilization routines only, not in momentum
+	dissipation in routines which need to conserve kinetic energy.
+	In any case, DEAD never sends this routine a zero wind speed
+	and so never encounters the dreaded zero index problem.
+	However, other assumptions about minimum wind speeds are fine.
+
+	Second, Gregg points out that some routines add 0.5 to the
+	friction speed before computing the lookup table index, and some
+	do not, so there is a question of whether DEAD rounds to the
+	correct index.
+	I checked and DEAD always uses either int(x+0.5) or nint(x).
+	Both of these are correct and I'm not sure why we stuck with
+	nint() in, e.g., flx_mss_hrz_slt_ttl_AlG01_get().
+	Probably we were trying to reduce floating point arithmetic.
+	So, there is no rounding problem and you can remove the zero-index
+	problem using int(x+0.5) or a minimum wind speed (as DEAD does). 
+	I've changed flx_mss_hrz_slt_ttl_AlG01_get() to use int(x+0.5)
+	so it works for very small wind frictions speeds in DEAD now.
+
+2005-07-25  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c dead-1_4_2
+	Changes since dead-1_4_1: Data from external forcing files,
+	support Intel ifort
+
+	* Add paws2nc.sh to demonstrate constructing DEAD-compatible
+	forcing files from station data
+
+	* Merge recent changes to sng_mdl.F90 made which allow
+	fix strings and memory to work with r8/i8 and r4/i8 compiles
+
+2005-07-10  Charlie Zender  <zender@uci.edu>
+
+	* Makefile and OpenMP compatible with Intel 8.1 ifort compiler
+
+	* Make float print formats compatible with Intel 8.1 ifort compiler
+
+2005-06-27  Charlie Zender  <zender@uci.edu>
+
+	* Looked for bug in dstmblutl.F90 and mnr_dst.cc found by Mark Harrison:
+	Was there an extra ryn_nbr_frc_thr_opt_fnc term when Re*t > 10?
+	No, but the JGR article ZBN03 Equation 1 and aer.tex 17.1 are incorrect.
+	The parenthetical expression (1-0.085exp(...)) should be squared
+	Typo only for Re*t > 10, i.e., for D > 450 um.
+	People who implemented this equation from the paper would only get
+	incorrect results for largest particles which most ignore in
+	climate studies.
+
+2005-06-12  Charlie Zender  <zender@uci.edu>
+
+	* Time-varying values are finally being passed correctly from
+	time-varying input file to physics code.
+	This means physics code receives correct windspeed, etc., from
+	forcing file, if any.
+	Value from file, if any, is over-riddent by command line, if any.
+	The doy variable is correct in the physics code, but the time
+	record variable itself is still bogus, set from prescribed values
+	in tm2nc()
+
+	* Set optional opt_flg in all ftn_arg_get_*() routines
+
+2005-06-06  Charlie Zender  <zender@uci.edu>
+
+	* Using fl_in, fl_out as positional arguments now seems to work
+
+	* Put fl_out to dstctl module rather than separately specifying in
+	call to each output routine
+
+2005-06-05  Charlie Zender  <zender@uci.edu>
+
+	* Change fl_xtr_dat to fl_in
+
+	* Added positional arguments to command line handling of fl_in, fl_out
+	Main caveat is to use ftn_strcpylsc() instead of ftn_strcpy()
+
+2005-06-04  Charlie Zender  <zender@uci.edu>
+
+	* Time-varying output of time-varying boundary data appearsto be
+	mostly working
+
+2005-06-02  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c dead-1_4_1
+	Changes since dead-1_4_0: Reading in data from external forcing
+	files created by paws2nc.sh script appears to work.
+
+	* Quieted debugging messages to support longer runs
+
+	* Successfully ran one year of PAWS 15-minute forcing data in
+	about 1 minute of wallclock time on laptop.
+
+2005-03-21  charlie  <zender@uci.edu>
+
+	* Improved error message diagnostic in nf90_utl.F90 routines
+
+2005-02-20  Charlie Zender  <zender@uci.edu>
+
+	* dead-1_4_0 is first tag of code named dead
+	dst-1_4_0 is exactly synchronized with new dead-1_4_0 tag
+
+	* cvs tag -c dead-1_4_0
+	Changing tag nomenclature from dst-X_Y_Z to dead-X_Y_Z
+
+	* cvs tag -c dst-1_4_0
+	Changes since dst-1_3_5: Name, repository change
+
+	* Move repository from goldhill to ESMF
+
+	* Change name from aer to dead
+
+	* dst-1_3_5 is clean tag of last time code was named aer
+
+	* cvs tag -c dst-1_3_5
+	Changes since dst-1_3_4: external data functionality
+
+2005-01-31  Charlie Zender  <zender@uci.edu>
+
+	* Created module dstxtr in dstxtr.F90 to hold external data
+	functionality. Changed from ext_dat to xtr_dat.
+
+	* Cleaning up external data (ext_dat) interfaces in preparation
+	for Earth System History (ESH) simulations
+
+2004-09-09  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c dst-1_3_4
+	Changes since dst-1_3_3: vwc_sfc command line input
+
+	* Print command line to output
+
+	* Added vwc_sfc as command line variable
+
+2004-07-13  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c dst-1_3_3
+	Changes since dst-1_3_2: Sandblasting diagnostics.
+	Released to Web
+
+	* Synchronize with updates in ~/f
+
+	* Improve Solaris build with -M option
+
+2004-05-05  Charlie Zender  <zender@uci.edu>
+
+	* Makefile (FFLAGS): Update LINUX_FC to allow for pgf90 on LINUXAMD64
+
+2004-01-15  Charlie Zender  <zender@uci.edu>
+
+	* dstmblutl.F90: Cleaned up AlG01 routines
+
+2003-11-04  Charlie Zender  <zender@uci.edu>
+
+	* erf_mdl.F90: Turn constants into parameters.
+	Workaround to xlf90 bug per Phil Rasch.
+
+2003-10-21  Alf Grini <alf.grini@geo.uio.no>
+
+	* Corrected bug in dstmbl.F90 and dstmblutl.F90 for AlG01 formulation.
+ 	Both these used in a wrong way the variable sfc_frc_bln.
+	The horizontal saltation flux should be multiplied with sfc_frc_bln.
+	However, sfc_frc_bln should not be used when weighting the
+	contribution to the VERTICAL fluxes. Then we need to know the
+	FRACTION OF VERTICAL FLUX SANDBLASTED FROM A SOIL MODE. This fraction
+	is now calculated explicitly in the code. This fraction is now
+	stored in flx_mss_vrt_dst_rat_bln. At high wind speeds, coarse soils
+	sandblast fine dust, and fine soils sandblast coarse dust. As coarse
+	dust is heavier per particle than fine dust, the MASS FRACTION
+	of dust sandblasted from fine soils increase with the winds.
+
+2003-09-28  Charlie Zender  <zender@uci.edu>
+
+	* Add Mail List info to Web page
+
+2003-07-19  Charlie Zender  <zender@uci.edu>
+
+	* Makefile (ABI): Change default ABI from 32 to 64
+
+2003-07-08  Charlie Zender  <zender@uci.edu>
+
+	* Change dstpsd.F90 default from
+	dmt_vma(idx)=2.524e-6  ! [m] Mass median diameter analytic She84 p. 75 Table 1
+	to
+	dmt_vma(idx)=3.5e-6  ! [m] Mass median diameter analytic RJM03 Table 1
+	The new 3.5 um size is recommended by Reid et al., 2003 as being
+	most representative of long-range transported dust.
+
+2003-05-09  Charlie Zender  <zender@uci.edu>
+
+	* dstchm.F90 (dst_chm_slv): Correct subscript in debugging statement
+
+2003-04-29  Charlie Zender  <zender@uci.edu>
+
+	* Add timestep # to box model error messages
+
+	* Change ftn_arg_get_int() opt_val to inout so that Lahey does not
+	abort when dbg_lvl itself is passed (it is referenced on LHS of
+	ftn_arg_get_int() and so cannot be output only value)
+
+2003-04-27  Charlie Zender  <zender@uci.edu>
+
+	* Do not barf when wind speed = 0.0 in Weibull distributions.
+	Introduced wnd_min_wbl parameter that prevents shape and scale
+	parameters from being set to zero and eventually causing
+	divide-by-zero errors.
+
+	* Add wind PDF diagnostics block to mobilization code
+
+2003-04-21  Charlie Zender  <zender@uci.edu>
+
+	* Clean up Weibull code
+
+2003-04-16  Charlie Zender  <zender@uci.edu>
+
+	* Makefile: Allow DST_NBR to be passed from environment
+
+2003-04-11  Charlie Zender  <zender@uci.edu>
+
+	* Commit DST_NBR != 4 changes to optDepth.F which have been running
+	for awhile but somehow never got committed
+
+2003-02-19  Charlie Zender  <zender@uci.edu>
+
+	* Cleaned up wbl_mdl.F90, gmm_mdl.F90 some more and added them to libcsz_f90
+
+2003-02-16  Charlie Zender  <zender@uci.edu>
+
+	* Cleaned up wbl_mdl.F90, gmm_mdl.F90
+
+2003-02-12  Charlie Zender  <zender@uci.edu>
+
+	* Fixed bug in drag coefficient interpolation introduced in 1.2.6.
+	Bug only affected particles with 2 < Re < 5, i.e., dust particles larger
+	than 80 microns diameter, so not to worry.
+	I had dylexically reversed the weights. So shoot me!
+	Thanks to Alan Bol for pointing	this out.
+
+2003-01-28  Alf Grini <alf.grini@geofysikk.uio.no>
+
+	* Still working on getting PDF winds in
+
+	* Identified and fixed following bug:
+	We cannot modify ovr_src_snk_mss in dstmbl.F90 because when running
+	on several processors, every processor wrote to same ovr_src_snk_mss
+	in dstaer module. Thus ovr_src_snk_mss in dstaer was random.
+	Same was true for mss_frc_src and other variables in dstaer
+
+	Previous version of AlG01 formulation suffered from this problem
+	because ovr_src_snk_mss was constantly overwritten.
+	Thus ovr_src_snk_mss used in flx_mss_vrt_dst_prt was random
+
+	Fixed problem as follows:
+	Created ovr_src_snk_mss_wbin and ovr_src_snk_mss_add in dstmbl
+	ovr_src_snk_mss_wbin is overlap fraction for given wind speed "bin"
+	ovr_src_snk_mss_add which is mean overlap fraction averaged over PDF
+	Thus ovr_src_snk_mss is never overwritten
+
+	This fix requires sending ovr_src_snk_mss_add (which can change)
+	to flx_mss_vrt_dst_prt() so that flx_mss_vrt_dst_prt() uses overlap fraction
+	computed in dstmbl(), _not_ overlap fraction saved in dstaer().
+	flx_mss_vrt_dst_prt() no longer uses dstaer.
+
+	* Solution (triple set of variables in dstaer) works, but is not elegant
+
+	* Output variables with "_add" (e.g., mss_frc_src_add) to mbl2nc()
+
+2003-01-27  Alf Grini <alf.grini@geofysikk.uio.no>
+
+	* Fixed bug in dstmbl.F90 where previous version set mss_frc_src
+	to zero if vertical flux was zero.
+	Now set mss_frc_src to previous value if fluxes are zero
+	(does not matter in AlG01 formulation).
+
+	* Left write statements in dstmbl to show how the the new formulation works.
+	These should be taken out in a later version
+
+2003-01-23  Alf Grini <alf.grini@geofysikk.uio.no>
+
+	* Added flx_mss_hrz_slt_ttl_lut in dstsltsbl.F90 it is calculated in
+	offline sltsbl program and accesses by
+	dstmblutl.F90:flx_mss_hrz_slt_ttl_AlG01_get()
+
+	* Call new subroutine from dstmbl.F90 within a "ifdef AlG01" test
+
+	* Changed "use dstsltsbl:only..." to "use dstsltsbl" in dstmbl.F90
+
+2003-01-21  Alf Grini <alf.grini@geofysikk.uio.no>
+
+        * Changed dust code to make it run with wind speed PDFs
+	wbl_mdl.F90 Weibull distribution of wind speed
+	gmm_mdl.F90 Gamma function gamma(x) based on libspecfun library
+
+        * Changed dstmbl.F90
+	New parameter wnd_mdp_nbr (Number of wind midpoint bins)
+        New parameter percentile (Fraction of distribution to take into account)
+	New variable wnd_mdp_wgt (Weighting of wind bins)
+        New variable wnd_mdp_min (Minimum wind speed to take into account)
+	New variable wnd_mdp_max (Maximum wind speed to take into account)
+
+        * Call weibull_winds just after we have wnd_rfr to calculate the
+	statistical distribution of winds
+
+	* Call dstblm inside the loop for wnd_wbl_nbr to get wnd_rfr for
+	all wnd_mdp values
+
+	* Introduced new variables which are only valid for a wnd_mdp bin
+
+	* Initialize mss_frc_src ovr_src_snk_mss and so on in a special way
+
+        * Add loop to add up quantities and weight with flx_mss_vrt_dst_ttl_wbin
+
+	* Get global quantities by dividing them with the total flx_mss_vrt_dst_ttl
+
+        * use dstgrd:dst_src_nbr to make tmp version of mss_frc_src and overlap fraction
+	* Changes to dstblm.F90:
+	No longer called with wnd_mdp_mrd and wnd_mdp_znl but simply with wnd_mdp
+
+	* Using old version:
+	New and old version are identical when wnd_mdp_nbr is set to 1
+
+	* Outstanding problems related to AlG01 horizontal flux:
+	I ran into the problem previously described by Charlie with
+	respect to horizontal flux. Each wind will give a horizontal
+	flux. However, using the simple horizontal flux is not OK because
+	we look up the value of (alpha) which is based on a size
+	distributed horizontal flux. When only calculating one wind speed,
+	it is ok to say that all this disappears in the fudge factor, but
+	when we have to weight with respect to flux from different wind
+	speeds, this is not OK.
+
+	I think the AlG01 formulation should be OK too, once there is a
+	subroutine called flx_mss_hrz_slt_ttl_AlG01_get(pick from
+	lookuptable). Then the right relations between the  fluxes from
+	different wind speeds should be OK. The loop which averages the
+	overlap fractions and so on should be OK even for AlG01
+	formulation.
+
+	Actually, this is problem only disappears into the fudge factor
+	when using the box model. Imagine two neighboring grid cells with
+	different wind speeds, they have different size distribution of
+	their horizontal flux, and even though we look up "alpha", the
+	absolute value of the hrz flux is different, and we don't get the
+	right vertical flux.
+
+2003-01-21  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c dst-1_3_2
+	Changes since dst-1_3_1: Sandblasting is optional with -DAlG01
+
+	* Print mobilization parameterization in dst_bnr()
+
+	* Fix Makefile to really work with USR_TKN=-DAlG01
+
+2003-01-16  Charlie Zender  <zender@uci.edu>
+
+	* Discussed with Alf the possible shortcomings of the sandblasting
+	implementation. There are two main possible inconsistencies:
+
+	First, it is unclear whether the AlG01 formulation for kinetic
+	energy (KE) available to release modes should be computed from
+	wnd_frc or wnd_frc_slt.
+	Should increase in wind friction speed due to saltation also
+	increase the kinetic energy available for sandblasting?
+	Answer is non-trivial because as saltation increases, friction
+	speed increases so particles are lofted higher above the surface,
+	giving them more potential energy. At the same time, the mean
+	wind profile near the surface has a steeper gradient, so
+	mean horizontal transport slows down, reducing the amount of
+	kinetic energy in the mean flow. However, obviously the eddy
+	kinetic energy increases with turbulence, and the saltating
+	particles are moving and sandblasting the surface with the eddies,
+	not with the mean flow. Thus it seems appropriate to use
+	wnd_frc_slt to determine the KE available for sandblasting.
+	In this initial implementation, however, Alf uses wnd_frc,
+	not wnd_frc_slt, to determine the KE.
+	Perhaps the sensitivity to this assumption should be analyzed.
+
+	Second: The original DEAD saltation code uses a "simple" saltation
+	mass flux based on Whi79, flx_mss_hrz_slt_ttl_Whi79
+	The new AlG01 saltation/sandblasting code computes a "complex"
+	saltation mass flux based on AlG01, flx_mss_hrz_slt_ttl_AlG01.
+	Thus there are two independent estimates of the same quantity.
+	flx_mss_hrz_slt_ttl_AlG01 is determined by the sum of the
+	individual saltation mass fluxes of each size of saltating soil.
+	The offline lookup table code uses about 10,000 different sizes
+	of saltator to determine the amount of each of the dust modes
+	that are liberated. The offline code integrates the AlG01
+	formulation over the parent soil distribution to determine the
+	sandblasting mass efficiency of each dust mode by the given
+	soil blend for a given friction speed. It does this by knowing
+	the threshold friction speed for each size saltator (computed
+	off-line by mie, recall that the threshold speed does not depend on
+	ambient wind speed, only on particle size). It keeps track
+	of all sandblasted particles and computes the fractions of
+	total sandblasted flux that occur in each of the 3 source modes.
+	It also computes the net mass sandblasting efficiency for all the
+	modes (dst_slt_flx_rat_ttl="alpha"). Given the model
+	flx_mss_hrz_slt_ttl_Whi79 and the dst_slt_flx_rat_ttl returned by
+	the lookup table, the source modes are then mapped into the
+	transport modes using the matrix of overlap factors and
+	mss_frc_src. Thus the reason for using flx_mss_hrz_slt_ttl_Whi79
+	rather than flx_mss_hrz_slt_ttl_AlG01 in the online dust model
+	is that it takes thousands of integrations to obtain
+	flx_mss_hrz_slt_ttl_AlG01. So our philososphy was to use AlG01
+	to provide the size distribution of the sandblasted dust, but
+	not to provide any new information about the total horizontal
+	saltation mass flux. So, it would be more consistent to archive
+	flx_mss_hrz_slt_ttl_AlG01 in the lookup table as well, and to
+	use that instead of flx_mss_hrz_slt_ttl_Whi79 in the online
+	model.
+
+	* Since port appears clean, am removing -DAlG01 from makefile
+	to make sandblasting non-default, and committing this as
+	dst-1_3_2.
+
+	* Verified that new box model running new code (i.e., with
+	sandblasting) gives identical answers to Alf's _sbl branch
+	box model when inputs are identical.
+
+	* Verified that new box model running old code (i.e., no
+	sandblasting) gives same answers as old box model running old code
+
+Tue Jan 14 13:57:12 2003  Charles Sutton Zender  <charlesz@gauss.uio.no>
+
+	* Merged dstmbl.F90, aer.F90, dstsfc.F90, dsttibds.F90, main.F
+
+	* Merged dstaer.F90: Removed lon_idx
+
+	* Merged dstpsd.F90: Modified Alf's code so AlG01 size distribution
+	used when AlG01 token defined, rather than #if 1, and Dal87 used when
+	AlG01 not defined.
+
+	* Added dstsltsbl.F90
+
+	* Began merging Alf's sandblasting code.
+	This code originally based on Alf's match_brnch_dst_sbl from dst-1_1_1.
+	Many of the code change regions are demarcated by alf++ and alf--
+
+	* cvs tag -c dst-1_3_1
+	Changes since dst-1_3_0: Some modifications for web box model
+	Synchronization tag for beginning of sandblasting code
+
+2002-12-11  Dave Newman  <newman@biogenic.ps.uci.edu>
+
+	* cvs tag -c dst-1_3_0
+
+	* added --fl_ext_dat="..." option to read in external forcing data
+	(currently just zonal and meridional wind)
+
+	* added fl_ext_dat.nc to archive to demo above option
+	(e.g. % aer --time_nbr=86 --fl_ext_dat="fl_ext_dat.nc")
+
+2002-11-25  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c dst-1_2_7
+	Changes since dst-1_2_6: Rearranged some dependencies, builds with ifc
+
+2002-11-24  Charlie Zender  <zender@uci.edu>
+
+	* Initialize derived budget variables to 0.0 so they are defined
+	first time they are used. They are always multiplied by 0.0 the
+	first time they are used, so the answers do not change, but now
+	the ifc compiler will not flag the variables as undefined during use.
+
+	* Code compiles and runs with ifc, but chokes in bdg_update() with
+	OPTS=X
+
+	* Moved wnd_rfr_get(), snw_frc_get() from dstmblutl.F90 to
+	blmutl.F90 to improve dependencies
+
+	* Commented out unused labels
+
+	* Removed last statement function
+
+	* Moved all thermodynamic routines from blmutl.F90 to dstblm.F90
+	Removed dependence of dstblm.F90 on blmutl.F90
+
+2002-10-22  Charlie Zender  <zender@uci.edu>
+
+	* Created preliminary FAQ
+
+2002-10-10  Charlie Zender  <zender@uci.edu>
+
+	* Add intent's to many prototypes
+
+	* Modularize dSVPdT functions
+
+	* Add _r8 to some constants where it was forgotten
+
+2002-10-05  Charlie Zender  <zender@uci.edu>
+
+	* Fall speed for ellipsoids implements using method of Gin03
+	Appears to give correct answers for spherical case
+
+	* ds

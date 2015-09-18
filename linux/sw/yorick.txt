@@ -1,0 +1,12 @@
+yorick-1.2 95/11/10:
+
+cd /usr/local/src
+ftp ftp.x.org
+...
+tar -xzvf yorick-1.2.tar.Z
+cd /usr/local/src/yorick-1.2
+./configure -prefix=/usr/local
+make
+make test
+make install
+make clean

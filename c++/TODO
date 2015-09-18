@@ -1,0 +1,60 @@
+$Id$ 
+
+*************
+c++ Wish list
+*************
+
+1. Write broker to supply physical constants from master table in any precision
+2. Create idx_rfr class with file handling like spc_slr class
+3. Have spc_bbd get physical constants from phys_cst or master table
+4. Write overloaded spc_bbd_cls::flx_frc_get() for vector arguments like spc_slr_cls::flx_frc_get()
+5. Test spc_slr_cls::ntp_slr_flx_nmn2() for generic non-monotonic grids
+6. Rename spc_slr_cls::ntp_slr_flx_nmn() to spc_slr_cls::ntp_slr_flx_nmn_CCM_SW() and then rename spc_slr_cls::ntp_slr_flx_nmn2() to spc_slr_cls::ntp_slr_flx_nmn() 
+9. Allow class _tst() routines to self-detect memory leaks in portable way (read /proc?)
+11. Somehow carry nc_out in rt_cls, either as static or member value
+12. Add bisection to Newton-Raphson solver in mth.cc for more robust solutions
+14. Should namespace "using"'s be at top of .hh file or of .cc file or embedded in source in .cc?
+18. Put xtr::ntp_vec_wrn flag in namespace accessible by all routines using xtr
+20. Test functions (e.g., rt_cls::tst(), spc_slr_cls::tst()) should be moved out of class definition but made into friendly functions of class so parameters like rcd do not shadow class elements
+23. Fix quadratic and cubic equation solver templates to work with complex polynomials
+24. make all static translation tables const (opt2abb...)
+25. make var_mtd_map's const
+26. Remove unused variables from functions to reduce/eliminate CEWUs
+29. Allow phys_cst.hh to export float constants rather than doubles 
+31. Replace whenfvlt() with something that works with valarray
+32. C++ valarray containers can initialize directly to scalars without vec_set().
+34. Replace all using phys_cst constants with phc:: resolution
+36. Apparently ISO STL valarray slice and gslice might do the trick
+43. Add iterator accessor functions to a2d, a la Lowrie examples
+45. Read and adopt practical C++ portability guides at http://www.mozilla.org/hacking/portable-cpp.html, especially use #if 0 instead of comments to temporarily disable code
+47. Place dbg_lvl and prg_nm in dbg:: namespace so libraries are freestanding?
+48. Pass 10 m drag coefficient to seasalt routines, validate them
+49. Adding ~/include/*.h : ./*.h rule caused mucho circular dependency errors
+58. Templatize [min/max/sign]_cpv to use same source as [min/max/sign]_lng
+63. Fix ~/ck/htrn.c to generate code with templates or float-->prc_cmp
+64. Warn when fl_slr_spc and flx_slr_frc_fnc_ptr are both non-NULL (i.e., which has precedence?)
+66. Output Legendre expansion of phase function
+68. Add ftn.cc file with ftn_* routines, including routine to break lines @ 132
+69. Change const <T> * foo to const <T> * const foo where appropriate for all <T>
+74. Fix slr_spc to correctly write values
+75. Compute and return s1,s2 from coated spheres routine
+76. Pass writable control module mie_ctl
+77. Output angle grid ngl_grd
+78. Replace POD type dynamic allocation with new by valarrays<> to reduce memory leaks and allow vectors to know their size
+81. Verify nco_var_put(<valarray>) works, perhaps const_cast is bad...
+82. Straighten out units of bck_cff to be consonant with phz_fnc
+83. Use forward declarations in .hh files to reduce # of required #includes (DeD01 p. 500)
+86. Enclose nearly all naked constants in PRC_CMP() to save cycles in single precision
+94. Change printf's to streams for type-safety (and prc_cmp=long double)
+95. Change mie_sln routines to use max(prc_cmp,double) precision
+98. Implement standard C++ i18n from Jos99 book
+99. Implement typename as per Jos99 p. 11
+101. Add Regression testing of nco_c++ interface against most types/arrays in ~/nco/src/nco_c++/tst.cc
+103. debug/validate oblate spheroid functions
+104. implement generic spheroid functions using max min
+107. psd.cc psd_cls::recompute() line 369 uses dst[idx] before defined
+108. Bring gamma distribution up-to-date with lognormal
+109. http://asd-www.larc.nasa.gov/~yhu/paper/thesisall/node8.html has gamma statistics
+110. Implement way to set no_wrn_ntp in all classes which use ntp_vec(), i.e., spc_slr_cls, rather than hardcoding xtr_vrb, e.g., in spc_slr_cls::ntp_slr_flx()
+111. Change prg_nm,prg_nm_get from char to string
+112. 

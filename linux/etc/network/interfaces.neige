@@ -1,0 +1,36 @@
+# $Id$
+# Purpose: Network configuration for Ubuntu on neige
+# /etc/network/interfaces -- configuration file for ifup(8), ifdown(8)
+# Usage:
+# sudo cp ~/linux/etc/network/interfaces.neige /etc/network/interfaces
+# cp /etc/network/interfaces ~/linux/etc/network/interfaces.neige 
+# diff ~/linux/etc/network/interfaces.neige /etc/network/interfaces
+# /etc/init.d/networking restart
+
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+address 127.0.0.1
+netmask 255.0.0.0
+
+# The primary network interface
+
+iface eth0 inet dhcp
+
+#iface wlan0 inet dhcp
+#      wireless-essid mangonet
+
+# Static IP on Harry's wireless network
+iface wlan0 inet static
+	address 192.168.1.77
+	broadcast 192.168.1.255
+	gateway 192.168.1.1
+	netmask 255.255.255.0
+	network 192.168.1.0
+        wireless-essid mangonet
+##        channel 6
+
+auto wlan0

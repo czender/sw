@@ -1,0 +1,270 @@
+% $Id$
+
+% Purpose: Commands specific to high performance computing
+
+% Copyright (c) 1998--2009, Charles S. Zender
+% This program may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License (LPPL), 
+% either version 1.2, or (at your option) any later version.
+% LPPL: http://www.latex-project.org/lppl.txt
+
+% The original author of this software, Charlie Zender, seeks to improve
+% it with your suggestions, contributions, bug-reports, and patches.
+% Charlie Zender <surname@uci.edu>, surname=zender
+% Department of Earth System Science
+% University of California, Irvine
+% Irvine, CA 92697-3100
+
+% Dependencies: 
+
+% Usage:
+% \usepackage{hpc} % High Performance Computing
+
+% Message printed when LaTeX called
+\@ifundefined{ProvidesPackage}{}{
+\ProvidesPackage{hpc}[2002/09/22 v1.14 High Performance Computing]
+} % end ProvidesPackage
+
+% 0. Provided commands
+\providecommand{\flidx}{\ensuremath{m}}\renewcommand{\flidx}{\ensuremath{m}} % [idx] File index
+\providecommand{\nbr}{\#}\renewcommand{\nbr}{\#} % [nbr] Number (ordinal) (defined in psd.sty for number distributions)
+\providecommand{\varidx}{\ensuremath{n}}\renewcommand{\varidx}{\ensuremath{n}} % [idx] Variable index
+
+% 1. Primary commands
+\newcommand{\ALB}{ALB} % [sng] Analytically Load-Balanced
+\newcommand{\CGLB}{CGLB} % [sng] Computational Geometry Load-Balanced
+\newcommand{\CL}{CL} % [sng] Client Library
+\newcommand{\CSTP}{CSTP} % [sng] Client-Server Traffic Protocol
+\newcommand{\CST}{CST} % [sng] Client-Server Traffic
+\newcommand{\DDRA}{DDRA} % [sng] Distributed Data Reduction and Analysis
+\newcommand{\DRA}{DRA} % [sng] Data Reduction and Analysis
+\newcommand{\IPO}{\ensuremath{\mathrm{IPO}}} % [nbr] Instructions per operation
+\newcommand{\LDRA}{LDRA} % [sng] Local Data Reduction and Analysis
+\newcommand{\PTV}{PTV} % [sng] Per-Thread-Variables
+\newcommand{\SSDRA}{SSDRA} % [sng] Server-side Data Reduction and Analysis
+\newcommand{\avgidx}{\ensuremath{j}} % [idx] Average index
+\newcommand{\avgsbs}{\ensuremath{\mathrm{A}}} % [sbs] Average subscript
+\newcommand{\bndwdt}{\ensuremath{b}} % [bit s-1] Bandwidth
+\newcommand{\brdsbs}{\ensuremath{\mathrm{B}}} % [sbs] Broadcast subscript
+\newcommand{\clnsbs}{\ensuremath{\mathrm{c}}} % [sbs] Client subscript
+\newcommand{\cnksbs}{\ensuremath{\mathrm{c}}} % [sbs] Chunk subscript
+\newcommand{\cpuidx}{\ensuremath{l}} % [idx] CPU index
+\newcommand{\cpunbr}{\ensuremath{L}} % [nbr] Number of CPUs per node
+\newcommand{\cpu}{\ensuremath{\mathbf{C}}} % [frc] Generic CPU
+\newcommand{\dmnavgsz}{\ensuremath{A}} % [nbr] Size of averaging dimension
+\newcommand{\dmnidx}{\ensuremath{k}} % [idx] Dimension index
+\newcommand{\dmnnbr}{\ensuremath{N}} % [nbr] Number of dimensions (rank)
+\newcommand{\rnk}{\ensuremath{R}} % [sbs] Rank (number of dimensions)
+\newcommand{\dmnsz}{\ensuremath{D}} % [nbr] Dimension size
+\newcommand{\flnbr}{\ensuremath{M}} % [nbr] Number of files
+\newcommand{\flpnbr}{\ensuremath{F}} % [nbr] Number of floating point operations
+\newcommand{\flpsbs}{\ensuremath{\mathrm{F}}} % [sbs] Floating point subscript
+\newcommand{\fl}{\ensuremath{\mathbf{F}}} % [frc] Generic file
+\newcommand{\idx}{\ensuremath{i}} % [idx] Index
+\newcommand{\iosbs}{\ensuremath{\mathrm{IO}}} % [sbs] I/O subscript
+\newcommand{\lclsbs}{\ensuremath{\mathrm{l}}} % [sbs] Local subscript
+\newcommand{\lmnidx}{\ensuremath{i}} % [idx] Element index
+\newcommand{\lmnnbr}{\ensuremath{N}} % [nbr] Number of elements in input hyperslab
+\newcommand{\cnkidx}{\ensuremath{i}} % [idx] Chunk index
+\newcommand{\cstcnkn}{\ensuremath{n}} % [nbr^{1/4}] Chunking constant
+\newcommand{\cstcnkr}{\ensuremath{r}} % [frc] C2/C1
+\newcommand{\cstcnkk}{\ensuremath{k}} % [frc] Square-root of cross-ratio of dimension-and chunk-sizes
+\newcommand{\cnksz}{\ensuremath{C}} % [idx] Chunk size
+\newcommand{\blksz}{\ensuremath{B}} % [idx] System blocksize
+\newcommand{\lmncnk}{\ensuremath{C}} % [nbr] Number of elements in chunk
+\newcommand{\ltnsrv}{\ensuremath{l}} % [s] Server transaction latency
+\newcommand{\mmrnbr}{\ensuremath{M}} % [nbr] Number of memory operations
+\newcommand{\mmrsbs}{\ensuremath{\mathrm{M}}} % [sbs] Memory subscript
+\newcommand{\mskflg}{\ensuremath{m}} % [flg] Mask flag
+\newcommand{\mssflg}{\ensuremath{\mu}} % [flg] Missing value flag
+\newcommand{\ncapd}{\texttt{ncap2}} % [sng]
+\newcommand{\ncap}{\texttt{ncap}} % [sng]
+\newcommand{\ncatted}{\texttt{ncatted}} % [sng]
+\newcommand{\ncbo}{\texttt{ncbo}} % [sng]
+\newcommand{\ncea}{\texttt{ncea}} % [sng]
+\newcommand{\ncecat}{\texttt{ncecat}} % [sng]
+\newcommand{\ncflint}{\texttt{ncflint}} % [sng]
+\newcommand{\ncks}{\texttt{ncks}} % [sng]
+\newcommand{\ncpdq}{\texttt{ncpdq}} % [sng]
+\newcommand{\ncra}{\texttt{ncra}} % [sng]
+\newcommand{\ncrcat}{\texttt{ncrcat}} % [sng]
+\newcommand{\ncrename}{\texttt{ncrename}} % [sng]
+\newcommand{\ncwa}{\texttt{ncwa}} % [sng]
+\newcommand{\ndlidx}{\ensuremath{h}} % [idx] Node index
+\newcommand{\ndlnbr}{\ensuremath{H}} % [nbr] Number of nodes
+\newcommand{\ndl}{\ensuremath{\mathbf{Q}}} % [frc] Generic node
+\newcommand{\ntgnbr}{\ensuremath{I}} % [nbr] Total number of integer operations
+\newcommand{\ntgsbs}{\ensuremath{\mathrm{I}}} % [sbs] Integer subscript
+\newcommand{\ntwsbs}{\ensuremath{\mathrm{n}}} % [sbs] Network subscript
+\newcommand{\outnbr}{\ensuremath{J}} % [nbr] Number of elements in output hyperslab
+\newcommand{\onedsbs}{\ensuremath{\mathrm{1D}}} % [sbs] One-dimensional subscript
+\newcommand{\twodsbs}{\ensuremath{\mathrm{2D}}} % [sbs] Two-dimensional subscript
+\newcommand{\thrdsbs}{\ensuremath{\mathrm{3D}}} % [sbs] Three-dimensional subscript
+\newcommand{\jjjdsbs}{\ensuremath{j\mathrm{D}}} % [sbs] j-dimensional subscript
+\newcommand{\kkkdsbs}{\ensuremath{k\mathrm{D}}} % [sbs] k-dimensional subscript
+\newcommand{\nmddsbs}{\ensuremath{(N-2)\mathrm{D}}} % [sbs] (N-2)-dimensional subscript
+\newcommand{\nmudsbs}{\ensuremath{(N-1)\mathrm{D}}} % [sbs] (N-1)-dimensional subscript
+\newcommand{\nmqsbs}{\ensuremath{N-4}} % [sbs] N-4 subscript
+\newcommand{\nmtsbs}{\ensuremath{N-3}} % [sbs] N-3 subscript
+\newcommand{\nmdsbs}{\ensuremath{N-2}} % [sbs] N-2 subscript
+\newcommand{\nmusbs}{\ensuremath{N-1}} % [sbs] N-1 subscript
+\newcommand{\nsbs}{\ensuremath{N}} % [sbs] N subscript
+\newcommand{\ndsbs}{\ensuremath{N\mathrm{D}}} % [sbs] N-dimensional subscript
+\newcommand{\outsbs}{\ensuremath{\mathrm{O}}} % [sbs] Output subscript
+\newcommand{\rdsbs}{\ensuremath{\mathrm{R}}} % [sbs] Read subscript
+\newcommand{\rnksbs}{\ensuremath{\mathrm{R}}} % [sbs] Rank subscript
+\newcommand{\rqssrv}{\ensuremath{L}} % [nbr] Server transaction requests
+\newcommand{\rthnbr}{\ensuremath{I_{\mathrm{A}}}} % [nbr] Number of integer arithmetic operations
+\newcommand{\shp}{\ensuremath{\mathbf{S}}} % [vct] Shape vector
+\newcommand{\spdopr}{\ensuremath{v}} % [s-1] Computer speed
+\newcommand{\srvsbs}{\ensuremath{\mathrm{s}}} % [sbs] Server subscript
+\newcommand{\syssbs}{\ensuremath{\mathrm{s}}} % [sbs] System subscript
+\newcommand{\tllnbr}{\ensuremath{M}} % [nbr] Tally (number of valid elements in input hyperslab)
+\newcommand{\tmopr}{\ensuremath{T}} % [s] Operation time
+\newcommand{\usrsbs}{\ensuremath{\mathrm{u}}} % [sbs] User subscript
+\newcommand{\varnbr}{\ensuremath{V}} % [nbr] Number of variables
+\newcommand{\var}{\ensuremath{v}} % [frc] Generic variable
+\newcommand{\wgtsbs}{\ensuremath{\mathrm{w}}} % [frc] Weight subscript
+\newcommand{\wgt}{\ensuremath{w}} % [frc] Weight
+\newcommand{\wrdsz}{\ensuremath{W}} % [b] Word size
+\newcommand{\wrtsbs}{\ensuremath{\mathrm{W}}} % [sbs] Write subscript
+\newcommand{\cmb}{\ensuremath{C}} % [nbr] Combination signifier
+
+% 2. Derived commands
+\newcommand{\cmbnk}[2]{\ensuremath{{}^{#1}\!\cmb_{#2}}} % [nbr] % Distinct combinations of #2 objects from set of size #1
+\newcommand{\dmncmbrnk}{\ensuremath{\cmbnk{\dmnnbr}{\rnk}}} % [nbr] % Distinct combinations of rank-size from set of size dimension-size
+\newcommand{\cnkszzro}{\ensuremath{\cnksz_{0}}} % [idx] % Chunksize of dimension 0
+\newcommand{\cnkszone}{\ensuremath{\cnksz_{1}}} % [idx] % Chunksize of dimension 1
+\newcommand{\cnksztwo}{\ensuremath{\cnksz_{2}}} % [idx] % Chunksize of dimension 2
+\newcommand{\cnkszthr}{\ensuremath{\cnksz_{3}}} % [idx] % Chunksize of dimension 3
+\newcommand{\cnkszfou}{\ensuremath{\cnksz_{4}}} % [idx] % Chunksize of dimension 4
+\newcommand{\cnkszkkk}{\ensuremath{\cnksz_{\kkk}}} % [idx] % Chunksize of dimension k
+\newcommand{\cnksznmq}{\ensuremath{\cnksz_{\!\nmdsbs}}} % [idx] % Chunksize of dimension N-4
+\newcommand{\cnksznmt}{\ensuremath{\cnksz_{\!\nmtsbs}}} % [idx] % Chunksize of dimension N-3
+\newcommand{\cnksznmd}{\ensuremath{\cnksz_{\!\nmdsbs}}} % [idx] % Chunksize of dimension N-2
+\newcommand{\cnksznmu}{\ensuremath{\cnksz_{\!\nmusbs}}} % [idx] % Chunksize of dimension N-1
+\newcommand{\cnknbr}{\ensuremath{\lmnnbr_{\cnksbs}}} % [idx] Number of chunks in variable
+\newcommand{\cnknbroned}{\ensuremath{\lmnnbr_{\onedsbs}}} % [idx] Number of chunks for 1-D access
+\newcommand{\cnknbrtwod}{\ensuremath{\lmnnbr_{\twodsbs}}} % [idx] Number of chunks for 2-D access
+\newcommand{\cnknbrthrd}{\ensuremath{\lmnnbr_{\thrdsbs}}} % [idx] Number of chunks for 3-D access
+\newcommand{\cnknbrjjjd}{\ensuremath{\lmnnbr_{\jjjdsbs}}} % [idx] Number of chunks for j-D access
+\newcommand{\cnknbrkkkd}{\ensuremath{\lmnnbr_{\kkkdsbs}}} % [idx] Number of chunks for k-D access
+\newcommand{\cnknbrnmdd}{\ensuremath{\lmnnbr_{\nmddsbs}}} % [idx] Number of chunks for (N-2)-D access
+\newcommand{\cnknbrnmud}{\ensuremath{\lmnnbr_{\nmudsbs}}} % [idx] Number of chunks for (N-1)-D access
+\newcommand{\cnknbrnd}{\ensuremath{\lmnnbr_{\ndsbs}}} % [idx] Number of chunks for N-D access
+\newcommand{\IPOflp}{\ensuremath{\IPO_{\flpsbs}}} % [nbr] Floating point instructions per operation
+\newcommand{\IPOntg}{\ensuremath{\IPO_{\ntgsbs}}} % [nbr] Integer instructions per operation
+\newcommand{\dmnavgszidx}{\ensuremath{\dmnavgsz_{\dmnidx}}} % [nbr] Dimension size, ith averaged dimension 
+\newcommand{\dmnavgszone}{\ensuremath{\dmnavgsz_{1}}} % [nbr] Dimension size, first averaged dimension 
+\newcommand{\dmnavgszrnkavg}{\ensuremath{\dmnavgsz_{\rnkavg}}} % [nbr] Dimension size, Ath dimension
+\newcommand{\dmnavgsztwo}{\ensuremath{\dmnavgsz_{2}}} % [nbr] Dimension size, second averaged dimension 
+\newcommand{\dmnnbrone}{\ensuremath{\dmnnbr_{1}}} % [nbr] Rank one
+\newcommand{\dmnnbrtwo}{\ensuremath{\dmnnbr_{2}}} % [nbr] Rank two
+\newcommand{\dmnkkk}{\ensuremath{\dmnsz_{\kkk}}} % [nbr] Dimension k
+\newcommand{\dmnzro}{\ensuremath{\dmnsz_{0}}} % [nbr] Dimension zero
+\newcommand{\cnkkkk}{\ensuremath{\cnksz_{\kkk}}} % [nbr] Chunk k
+\newcommand{\cnkzro}{\ensuremath{\cnksz_{0}}} % [nbr] Chunk zero
+\newcommand{\dmnszavg}{\ensuremath{\bar{\dmnsz}}} % [nbr] Mean dimension size
+\newcommand{\dmnszdmnnbr}{\ensuremath{\dmnsz_{\dmnnbr}}} % [nbr] Dimension size, Rth dimension
+\newcommand{\dmnszidx}{\ensuremath{\dmnsz_{\dmnidx}}} % [nbr] Dimension size, ith dimension
+\newcommand{\dmnszzro}{\ensuremath{\dmnsz_{0}}} % [nbr] Size of dimension 0 (first dimension under C-subscript convention)
+\newcommand{\dmnszone}{\ensuremath{\dmnsz_{1}}} % [nbr] Size of dimension 1 (second dimension under C-subscript convention)
+\newcommand{\dmnsztwo}{\ensuremath{\dmnsz_{2}}} % [nbr] Size of dimension 2 (third dimension under C-subscript convention)
+\newcommand{\dmnszthr}{\ensuremath{\dmnsz_{3}}} % [nbr] Size of dimension 3 (fourth dimension under C-subscript convention)
+\newcommand{\dmnszfou}{\ensuremath{\dmnsz_{4}}} % [nbr] Size of dimension 4 (fourth dimension under C-subscript convention)
+\newcommand{\dmnszkkk}{\ensuremath{\dmnsz_{\kkk}}} % [nbr] Size of dimension k (kth dimension under C-subscript convention)
+\newcommand{\dmnsznmu}{\ensuremath{\dmnsz_{\nmusbs}}} % [nbr] Size of dimension N-1 (Nth dimension under C-subscript convention)
+\newcommand{\dmnsznmd}{\ensuremath{\dmnsz_{\nmdsbs}}} % [nbr] Size of dimension N-2 (N-1st dimension under C-subscript convention)
+\newcommand{\dmnsznmt}{\ensuremath{\dmnsz_{\nmtsbs}}} % [nbr] Size of dimension N-3 (N-2nd dimension under C-subscript convention)
+\newcommand{\dmnsznmq}{\ensuremath{\dmnsz_{\nmqsbs}}} % [nbr] Size of dimension N-4 (N-3rd dimension under C-subscript convention)
+\newcommand{\lmnnbravg}{\ensuremath{\lmnnbr_{\avgsbs}}} % [nbr] Number of elements in averaging block
+\newcommand{\lmnnbrnot}{\ensuremath{\lmnnbr_{0}}} % [nbr] Number of elements scaled by
+\newcommand{\lmnnbrout}{\ensuremath{\lmnnbr_{\wrtsbs}}} % [nbr] Number of elements in output variable
+\newcommand{\lmnnbrrd}{\ensuremath{\lmnnbr_{\rdsbs}}} % [nbr] Number of elements to read
+\newcommand{\lmnnbrwgt}{\ensuremath{\lmnnbr_{\wgtsbs}}} % [nbr] Number of elements in weight
+\newcommand{\lmnnbrwrt}{\ensuremath{\lmnnbr_{\wrtsbs}}} % [nbr] Number of elements to write
+\newcommand{\mmrsysnbr}{\ensuremath{\mmrnbr_{\syssbs}}} % [nbr] Number of system memory calls
+\newcommand{\mmrusrnbr}{\ensuremath{\mmrnbr_{\usrsbs}}} % [nbr] Number of user memory operations
+\newcommand{\rnkavg}{\ensuremath{\dmnnbr_{\avgsbs}}} % [nbr] Number of dimensions averaged over
+\newcommand{\rnkbrd}{\ensuremath{\rnk_{\brdsbs}}} % [sbs] Rank of variable to broadcast
+\newcommand{\rnkfnl}{\ensuremath{\rnk_{\mathrm{f}}}} % [sbs] Rank subscript, final
+\newcommand{\rnknbr}{\ensuremath{\rnk}} % [nbr] Rank (number of dimensions)
+\newcommand{\rnkntl}{\ensuremath{\rnk_{\mathrm{i}}}} % [sbs] Rank subscript, initial
+\newcommand{\rnkwgt}{\ensuremath{\rnk_{\wgtsbs}}} % [sbs] Rank of weight
+\newcommand{\shpavg}{\ensuremath{\shp_{\avgsbs}}} % [vct] Shape vector one
+\newcommand{\shpone}{\ensuremath{\shp_{1}}} % [vct] Shape vector one
+\newcommand{\shptwo}{\ensuremath{\shp_{2}}} % [vct] Shape vector two
+\newcommand{\shpthree}{\ensuremath{\shp_{3}}} % [vct] Shape vector three
+\newcommand{\spdflp}{\ensuremath{\spdopr_{\flpsbs}}} % [nbr s-1] Floating point operation speed
+\newcommand{\spdmmr}{\ensuremath{\spdopr_{\mmrsbs}}} % [nbr s-1] Memory operation speed
+\newcommand{\spdntg}{\ensuremath{\spdopr_{\ntgsbs}}} % [nbr s-1] Integer operation speed
+\newcommand{\spdrd}{\ensuremath{\spdopr_{\rdsbs}}} % [nbr s-1] Read speed
+\newcommand{\spdrth}{\ensuremath{\spdopr_{\rthnbr}}} % [nbr s-1] Integer arithmetic speed
+\newcommand{\spdwrt}{\ensuremath{\spdopr_{\wrtsbs}}} % [nbr s-1] Write speed
+\newcommand{\tmcln}{\ensuremath{\tmopr_{\clnsbs}}} % [s] Operation time, client-side DRA
+\newcommand{\tmflp}{\ensuremath{\tmopr_{\flpsbs}}} % [s] Floating point operation time
+\newcommand{\tmio}{\ensuremath{\tmopr_{\iosbs}}} % [s] Write time
+\newcommand{\tmlcl}{\ensuremath{\tmopr_{\lclsbs}}} % [s] Operation time, local DRA
+\newcommand{\tmntg}{\ensuremath{\tmopr_{\ntgsbs}}} % [s] Integer operation time
+\newcommand{\tmoprsrv}{\ensuremath{\tmopr_{\srvsbs}}} % [s] Operation time, server-side DRA
+\newcommand{\tmrd}{\ensuremath{\tmopr_{\rdsbs}}} % [s] Read time
+\newcommand{\tmwrt}{\ensuremath{\tmopr_{\wrtsbs}}} % [s] Write time
+
+\newcommand{\rnkZvar}{\ensuremath{{}^{0}\var}} % [frc] Generic variable, rank zero
+\newcommand{\rnkUvar}{\ensuremath{{}^{1}\var}} % [frc] Generic variable, rank one
+\newcommand{\rnkSvar}{\ensuremath{{}^{2}\var}} % [frc] Generic variable, rank two
+\newcommand{\rnkCvar}{\ensuremath{{}^{3}\var}} % [frc] Generic variable, rank three
+\newcommand{\rnkQvar}{\ensuremath{{}^{4}\var}} % [frc] Generic variable, rank four
+\newcommand{\rnkFvar}{\ensuremath{{}^{5}\var}} % [frc] Generic variable, rank five
+\newcommand{\rnkRvar}{\ensuremath{{}^{\rnksbs}\var}} % [frc] Generic variable, rank R
+\newcommand{\rnkRmonevar}{\ensuremath{{}^{\rnksbs-1}\var}} % [frc] Generic variable, rank R-1
+
+\newcommand{\rnkZtpt}{\ensuremath{{}^{0}\tpt}} % [K] Temperature, rank zero
+\newcommand{\rnkUtpt}{\ensuremath{{}^{1}\tpt}} % [K] Temperature, rank one
+\newcommand{\rnkStpt}{\ensuremath{{}^{2}\tpt}} % [K] Temperature, rank two
+\newcommand{\rnkCtpt}{\ensuremath{{}^{3}\tpt}} % [K] Temperature, rank three
+\newcommand{\rnkQtpt}{\ensuremath{{}^{4}\tpt}} % [K] Temperature, rank four
+\newcommand{\rnkFtpt}{\ensuremath{{}^{5}\tpt}} % [K] Temperature, rank five
+\newcommand{\rnkRtpt}{\ensuremath{{}^{\rnksbs}\tpt}} % [K] Temperature, rank R
+
+\newcommand{\rnkZtptsfc}{\ensuremath{{}^{0}\tptsfc}} % [K] Temperature, rank zero
+\newcommand{\rnkUtptsfc}{\ensuremath{{}^{1}\tptsfc}} % [K] Temperature, rank one
+\newcommand{\rnkStptsfc}{\ensuremath{{}^{2}\tptsfc}} % [K] Temperature, rank two
+\newcommand{\rnkCtptsfc}{\ensuremath{{}^{3}\tptsfc}} % [K] Temperature, rank three
+\newcommand{\rnkQtptsfc}{\ensuremath{{}^{4}\tptsfc}} % [K] Temperature, rank four
+\newcommand{\rnkFtptsfc}{\ensuremath{{}^{5}\tptsfc}} % [K] Temperature, rank five
+\newcommand{\rnkRtptsfc}{\ensuremath{{}^{\rnksbs}\tptsfc}} % [K] Temperature, rank R
+
+\newcommand{\varone}{\ensuremath{\var_{1}}} % [frc] Generic variable, first
+\newcommand{\vartwo}{\ensuremath{\var_{2}}} % [frc] Generic variable, second
+\newcommand{\varnnn}{\ensuremath{\var_{\varidx}}} % [frc] Generic variable, n'th
+\newcommand{\varNNN}{\ensuremath{\var_{\varnbr}}} % [frc] Generic variable, N'th
+\newcommand{\flone}{\ensuremath{\fl_{1}}} % [frc] Generic file, first
+\newcommand{\fltwo}{\ensuremath{\fl_{2}}} % [frc] Generic file, second
+\newcommand{\flmmm}{\ensuremath{\fl_{\flidx}}} % [frc] Generic file, m'th
+\newcommand{\flMMM}{\ensuremath{\fl_{\flnbr}}} % [frc] Generic file, M'th
+\newcommand{\cpuone}{\ensuremath{\cpu_{1}}} % [frc] Generic CPU, first
+\newcommand{\cputwo}{\ensuremath{\cpu_{2}}} % [frc] Generic CPU, second
+\newcommand{\cpulll}{\ensuremath{\cpu_{\cpuidx}}} % [frc] Generic CPU, l'th
+\newcommand{\cpuLLL}{\ensuremath{\cpu_{\cpunbr}}} % [frc] Generic CPU, L'th
+\newcommand{\ndlone}{\ensuremath{\ndl_{1}}} % [frc] Generic node, first
+\newcommand{\ndltwo}{\ensuremath{\ndl_{2}}} % [frc] Generic node, second
+\newcommand{\ndlhhh}{\ensuremath{\ndl_{\ndlidx}}} % [frc] Generic node, h'th
+\newcommand{\ndlHHH}{\ensuremath{\ndl_{\ndlnbr}}} % [frc] Generic node, H'th
+
+% 3. Doubly-derived commands
+\newcommand{\dmnszrnkavg}{\ensuremath{\dmnsz_{\rnkavg}}} % [nbr] Dimension size, Ath dimension
+\newcommand{\rnkfnlvarnnn}{\ensuremath{{}^{\rnkfnl}\var_{\varidx}}} % [frc] Generic variable, n'th, initial rank
+\newcommand{\rnkntlvarnnn}{\ensuremath{{}^{\rnkntl}\var_{\varidx}}} % [frc] Generic variable, n'th, initial rank
+\newcommand{\spdmmrsys}{\ensuremath{\spdopr_{\mmrsysnbr}}} % [nbr s-1] Memory operation speed, system
+\newcommand{\spdmmrusr}{\ensuremath{\spdopr_{\mmrusrnbr}}} % [nbr s-1] Memory operation speed, user
+
+\newcommand{\rnkntlvar}{\ensuremath{{}^{\rnkntl}\var}} % [frc] Generic variable, initial rank
+\newcommand{\rnkfnlvar}{\ensuremath{{}^{\rnkfnl}\var}} % [frc] Generic variable, final rank
+
+\newcommand{\tptsfcbarngl}{\ensuremath{\langle\bar{\tptsfc}\rangle}} % [K] Temperature at surface, time mean, area mean
+\newcommand{\tptsfcnglbar}{\ensuremath{\bar{\langle\tptsfc\rangle}}} % [K] Temperature at surface, area mean, time mean
+\newcommand{\tptbarngl}{\ensuremath{\langle\bar{\tpt}\rangle}} % [K] Temperature, time mean, area mean
+\newcommand{\tptnglbar}{\ensuremath{\bar{\langle\tpt\rangle}}} % [K] Temperature, area mean, time mean
+
+

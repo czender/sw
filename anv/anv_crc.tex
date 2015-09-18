@@ -1,0 +1,157 @@
+% $Id$
+
+% Purpose: Correct figures which appeared in ANV paper in JGR
+
+% Usage:
+% make -W anv_crc.tex anv_crc.ps
+% gzip -f /data/zender/ps/anv_crc.ps
+% /bin/cp /data/zender/ps/anv_crc.ps.gz /web/web-data/cms/zender/papers/anv_crc.ps.gz
+
+\documentclass[twocolumn,final]{article}
+\usepackage{natbib} % \cite commands from aguplus
+\usepackage[figuresright]{rotating} % allows sideways figures and tables
+\usepackage{graphicx} % defines \includegraphics*
+\usepackage{longtable} % multi-page tables, e.g., acronyms and symbols
+\usepackage{ifthen} % Boolean and programming commands
+
+\usepackage{/home/zender/tex/csz} % all my local definitions
+\input{/home/zender/tex/jgr_abb}
+
+\topmargin -48pt   \headheight 12pt \headsep 18pt
+\textheight 723pt \textwidth 470pt
+\oddsidemargin 0pt \evensidemargin 0pt
+\marginparwidth 72pt \marginparsep 7pt
+\footskip 0pt
+\footnotesep=14pt
+
+%\renewcommand\textfraction{0.}
+\setcounter{totalnumber}{10}
+\setcounter{topnumber}{10}
+\setcounter{dbltopnumber}{10}
+\setcounter{bottomnumber}{10}
+\renewcommand\topfraction{1.}
+\renewcommand\dbltopfraction{1.}
+\renewcommand\bottomfraction{1.}
+\renewcommand\floatpagefraction{1.}
+\renewcommand\dblfloatpagefraction{1.}
+
+\begin{document}
+
+% These don't seem to work before \begin{document}
+\setlength\abovecaptionskip{9pt}
+\setlength\belowcaptionskip{9pt}
+
+\setlength\floatsep{0pt}
+\setlength\textfloatsep{0pt}
+\setlength\dblfloatsep{0pt}
+\setlength\dbltextfloatsep{0pt}
+\setlength\intextsep{0pt}
+%\setlength\floatsep{18pt \@plus 2pt \@minus 4pt}
+%\setlength\textfloatsep{18pt \@plus 2pt \@minus 4pt}
+%\setlength\dblfloatsep{18pt \@plus 2pt \@minus 4pt}
+%\setlength\dbltextfloatsep{18pt \@plus 2pt \@minus 4pt}
+%\setlength\intextsep{20pt \@plus 4pt \@minus 4pt}
+
+\pagestyle{myheadings}
+%\thispagestyle{empty}
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\markright{Corrigenda to Figures 5,~6,~7,~9,~10, and~13 of \cite{Zek972}}
+
+\section{Contents}
+Important greyscales were inadvertently omitted from Figures
+5,~6,~7,~9,~10, and~13 of \cite{Zek972}.   
+The omission does not affect the results of the study, but does make 
+interpretation of these figures very difficult.
+These corrigenda show the figures with the greyscales correctly
+rendered.   
+
+\setcounter{figure}{4}
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/spcp_85_8589_amip5_8589_xavg_01_QC.eps}\vfill
+\end{center}
+\caption{
+Change (ANV$-$CCM) in zonal average condensate mixing ratio \qc\
+(\mgxkg) due to prognostic anvil representation.
+Contour interval is 2~\mgxkg.
+Shading indicates values $< 0$.
+Data are from ensemble averages of 5 simulated Januarys from
+1985--1989.
+\label{fig:xavg_8589_QC}}   
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/spcp_85_8589_amip5_8589_xavg_01_RADD.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/spcp_85_8589_amip5_8589_xavg_01_QDIABAT.eps}\vfill
+\end{center}
+\caption{
+As in Figure~\ref{fig:xavg_8589_QC} but for (a) radiative heating \QR\
+only, and (b) total diabatic heating \QT.
+Contour intervals are .1~\kxday.   
+\label{fig:xavg_8589_QDIABAT}}   
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/spcp_85_8589_amip5_8589_xavg_01_T.eps}\vfill
+\end{center}
+\caption{
+As in Figure~\ref{fig:xavg_8589_QC} but for temperature $T$ (\degreee
+K).
+Contour interval is .1~\degreee K. 
+\label{fig:xavg_8589_T}}   
+\end{figure}
+
+\setcounter{figure}{8}
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/spcp_85_8589_amip5_8589_01_LWCF_bw.eps}\vfill
+\end{center}
+\caption{
+As in Figure~\ref{fig:xavg_8589_QC} but for longwave cloud forcing
+LWCF (\wxmS). 
+Contour interval is 10~\wxmS. 
+\label{fig:8589_LWCF}}   
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/spcp_85_8589_amip5_8589_pres_01_CHI.eps}\vfill
+\end{center}
+\caption{
+As in Figure~\ref{fig:xavg_8589_QC} but for 200~mb velocity potential
+$\chi$ (\mSxs). 
+Contour interval is $1 \times 10^6$~\mSxs.  
+Shading indicates less subsidence (more divergence). 
+\label{fig:pres_8589_01_CHI}}   
+\end{figure}
+\clearpage
+
+\setcounter{figure}{12}
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/amip5_yavg_10S10N_87m85_MAM_QC.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/spcp_85_yavg_10S10N_87m85_MAM_QC.eps}\vfill
+\end{center}
+\caption[Longitude-height profile of the $1987-1985$ difference in
+Spring quarter (March, April, and May) mean condensate \qc\ over the
+equatorial Pacific simulated by CCM and ANV]{
+Longitude-height profile of the $1987-1985$ difference in Spring
+quarter (March, April, and May) mean condensate \qc\ (\mgxkg) over the
+equatorial Pacific (averaged 10~\degreee S--10~\degreee N, 
+ocean only) simulated by (a) CCM and (b) ANV.
+Contour interval is 2~\mgxkg.
+Shading indicates \qc\ decrease from 1985 to 1987.
+% NB: IDL gets the shading of the first -'ve contour wrong when land
+% is masked so i included land points in this file, no significant
+% difference from maritime only above 400 mb.
+\label{fig:yavg_10S10N_87m85_MAM_QC}}   
+\end{figure}
+
+\nocite{Zek972}
+\bibliographystyle{agu}
+\bibliography{/home/zender/tex/bib}
+
+\end{document}

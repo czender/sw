@@ -1,0 +1,6 @@
+[NCO]
+fqdn = ppa.launchpad.net
+method = ftp
+incoming = ~zender/nco/ubuntu/
+login = anonymous
+allow_unsigned_uploads = 0

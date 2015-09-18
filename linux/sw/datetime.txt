@@ -1,0 +1,31 @@
+# Datetime package
+cd ${DATA}/tex
+/bin/rm -r datetime
+wget ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/datetime.zip
+unzip datetime.zip
+cd ${DATA}/tex/datetime
+latex datetime.ins
+latex datetime.dtx
+makeindex -s gglo.ist -t datetime.glg -o datetime.gls datetime.glo
+latex datetime.dtx
+latex datetime.dtx
+sudo mkdir /usr/share/texmf/tex/latex/datetime
+sudo cp *.sty *.def /usr/share/texmf/tex/latex/datetime
+sudo texhash
+/bin/rm -r ~/tex/cls/datetime*
+
+# fmtcount package used to bundled with datetime, now distributed separately
+cd ${DATA}/tex
+/bin/rm -r fmtcount
+wget ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/fmtcount.zip
+unzip fmtcount.zip
+cd ${DATA}/tex/fmtcount
+latex fmtcount.ins
+latex fmtcount.dtx
+makeindex -s gglo.ist -t fmtcount.glg -o fmtcount.gls fmtcount.glo
+latex fmtcount.dtx
+latex fmtcount.dtx
+sudo mkdir /usr/share/texmf/tex/latex/fmtcount
+sudo cp *.sty *.def /usr/share/texmf/tex/latex/fmtcount
+sudo texhash
+/bin/rm -r ~/tex/cls/fmtcount*

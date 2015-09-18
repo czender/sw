@@ -1,0 +1,137 @@
+/* $Id$
+ Purpose: X configuration defaults database
+ Well behaved programs look in $XAPPLRESDIR directory for default resource settings
+ Usage:
+ xrdb -merge ${HOME}/.Xdefaults
+*/
+
+/* 20071029: Joel Norris recommends this */
+Netscape*documentFonts.charset*adobe-fontspecific: iso-8859-1
+
+/* 
+ * Default xterm configuration
+ */
+*VT100.JumpScroll:		true
+*VT100.LoginShell:		false
+*VT100.SaveLines:		100
+*VT100.font:			10x20
+*VT100*geometry:		80x30+100+100
+VT100*Foreground:		white
+VT100*Background: 		black
+VT100*Border:			white
+VT100*scrollBar:		true
+VT100*font:			10x20
+XTerm*ScrollBar:		true
+XTerm*cursorColor:		blue
+XTerm*sunFunctionKeys:		on
+/*XTerm*font:			-*-courier-*-r-*-*-20-*-*-*-m-*-*-**/
+/*XTerm*font:			-adobe-courier-medium-r-*-*-20-*-*-*-m-*-*-**/
+XTerm*Foreground:		white
+XTerm*Background:		black
+XTerm*vt100.geometry:		80x34
+XTerm*tekInhibit:		off
+XTerm*titeInhibit:		on
+XTerm*visualBell:		off
+XTerm*VT100.Translations: #override \
+        ~Meta <Btn2Up>: insert-selection(CUT_BUFFER0,PRIMARY)            
+
+/*
+ * xbiff++ configuration
+ */
+xbiff++*geometry:               +805+0
+xbiff++*update:                 120
+xbiff++*volume:                 25
+xbiff++*sound:                  /usr/demo/SOUND/sounds/gong.au
+xbiff++*noMailSound:            /usr/demo/SOUND/sounds/laughter.au
+xbiff++*fullPixmap:             flagup
+xbiff++*emptyPixmap:            flagdown
+/*xbiff++*soundBindings:	To:.*Zender|/home/zender/sounds/charlie.au,\*/
+/*			From:.*Zender|/home/zender/sounds/charlie.au,\*/
+/*			From:.*Karakashian|/home/zender/sounds/todd.au,\*/
+/*			From:.*Morse|/home/zender/sounds/suzanne.au,\*/
+/*			From:.*Stern|/home/zender/sounds/carolyn.au,\*/
+/*			From:.*Johnson|/home/zender/sounds/sue.au,\*/
+/*			From:.*Taylor|/home/zender/sounds/mark.au,\*/
+/*			From:.*Rothenberg|/home/zender/sounds/daver.au*/
+
+xbiff++*soundBindings:		"To:.*Zender|/usr/demo/SOUND/sounds/gong.au,From:.*Zender|/usr/demo/SOUND/sounds/gong.au,From:.*Karakashian|/home/zender/snd/todd.au,From:.*Morse|/home/zender/snd/suzanne.au,From:.*Stern|/home/zender/snd/carolyn.au,From:.*Johnson|/home/zender/snd/sue.au,From:.*Taylor|/home/zender/snd/mark.au,From:.*Rothenberg|/home/zender/snd/daver.au"
+
+/*
+ * idt configuration
+ */
+ctrans*geometry:		600x600+2+0
+idt*geometry:			+0+2
+idt.TopLevelShell*geometry:     +0+536
+idt.messageHeight:              12
+idt.paned*TopLevelShell.geometry:       +15+20
+idt.translatorLmin:             1
+idt.translatorLscale:           0.8
+
+/*
+ * Mosaic configuration
+ * see also /X11/lib/X11/app-defaults/Mosaic 
+ */
+Mosaic*homeDocument:    http://www.cgd.ucar.edu/cms/zender
+Mosaic*simpleInterface: false
+
+/*
+ * IDL configuration: based on /usr/local/lib/idl/notes/Idl
+ */
+Idl*XmText.translations:   #override \n\
+             <Key>osfDelete:    delete-previous-character()\n
+Idl*foreground: black
+Idl*ext*: black
+Idl*threeD:     TRUE
+/* IDL*colors, when negative, tells IDL how many colors not 
+to allocate, i.e., -5 will leave 5 colors available for the
+system and other applications. IDL*colors should come before
+IDL*visual in this file */ 
+/*Idl*colors: 256*/
+/*Idl*colors: 200*/
+/*Idl*colors: -100*/
+/*Idl*background: LightGoldenrod*/
+/*Idl*background: wheat2*/
+/* This is the recommended Motif background widget color */ 
+Idl*background: #7300a100ff00
+/*Idl*scale:      10*/
+/*Idl.gr_visual: PseudoColor*/
+/*Idl.gr_depth: 8*/
+/*Idl.gr_visual: TrueColor*/
+/*Idl.gr_depth: 24*/
+
+/* 
+ * emacs configurations
+ */
+emacs.geometry:         85x44+180+20
+emacs.background:	white
+emacs.bitmapicon:	on
+emacs.borderColor:	blue
+emacs.cursorColor:      blue
+/* Large font useful for LCD projectors */
+/*emacs.font:		-adobe-courier-*-r-*-*-30-*-*-*-m-*-*-**/
+/* emacs.font:		-adobe-courier-*-r-*-*-20-*-*-*-m-*-*-* */
+/*emacs.font:		10x20*/
+emacs.foreground:	black
+emacs.iconName:		Emacs
+emacs.pointerColor:	red
+emacs.title:		Emacs
+
+/* 
+ * xemacs configurations
+ */
+xemacs.geometry:         85x46+180+50
+
+/*
+ * xmeter info
+ */
+xmeter*shortName:               true
+xmeter*geometry:                100x300-0-0
+xmeter*columns:                 1
+
+/* 
+ * These are used in my XToolkit demo programs, like xclouds 
+ */ 
+*pressme*label: 	Press Me
+*quit*label: 		Quit
+*dialog*label: 		Enter Text below:
+*dialog*Command*label: 	Dialog done

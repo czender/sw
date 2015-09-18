@@ -1,0 +1,643 @@
+% $Id$
+
+% Purpose: Assemble one-shot graphics
+
+%\documentclass[onecolumn,final,10pt]{report}
+%\documentclass[final]{article}
+\documentclass[twocolumn,final,11pt]{article}
+\usepackage{natbib} % \cite commands from aguplus
+\usepackage[figuresright]{rotating} % allows sideways figures and tables
+\usepackage{graphicx} % defines \includegraphics*
+\usepackage{longtable} % multi-page tables, e.g., acronyms and symbols
+\usepackage{ifthen} % Boolean and programming commands
+
+\usepackage{/home/zender/tex/csz} % all my local definitions
+\input{/home/zender/tex/jgr_abb}
+
+\topmargin -48pt   \headheight 12pt \headsep 18pt
+\textheight 723pt \textwidth 470pt
+\oddsidemargin 0pt \evensidemargin 0pt
+\marginparwidth 72pt \marginparsep 7pt
+\footskip 0pt
+\footnotesep=14pt
+%\textwidth 330pt
+
+\renewcommand\textfraction{0.}
+\setcounter{totalnumber}{10}
+\setcounter{topnumber}{10}
+\setcounter{dbltopnumber}{10}
+\setcounter{bottomnumber}{10}
+\renewcommand\topfraction{1.}
+\renewcommand\dbltopfraction{1.}
+\renewcommand\bottomfraction{1.}
+\renewcommand\floatpagefraction{1.}
+\renewcommand\dblfloatpagefraction{1.}
+
+\begin{document}
+
+% These don't seem to work before \begin{document}
+\setlength\abovecaptionskip{9pt}
+\setlength\belowcaptionskip{9pt}
+
+\setlength\floatsep{0pt}
+\setlength\textfloatsep{0pt}
+\setlength\dblfloatsep{0pt}
+\setlength\dbltextfloatsep{0pt}
+\setlength\intextsep{0pt}
+%\setlength\floatsep{18pt \@plus 2pt \@minus 4pt}
+%\setlength\textfloatsep{18pt \@plus 2pt \@minus 4pt}
+%\setlength\dblfloatsep{18pt \@plus 2pt \@minus 4pt}
+%\setlength\dbltextfloatsep{18pt \@plus 2pt \@minus 4pt}
+%\setlength\intextsep{20pt \@plus 4pt \@minus 4pt}
+
+\pagenumbering{roman}
+\setcounter{page}{1}
+\pagestyle{myheadings}
+\thispagestyle{empty}
+\onecolumn
+\listoffigures
+\twocolumn
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\markright{Climatologies of Analyses, CCM2, CCM$\mathit{\Omega}_{.5}$, and CCM3}
+
+%***********************************************************************
+% Insert scratch commands below here
+%***********************************************************************
+
+%\onecolumn
+%\thispagestyle{empty}
+%Peer-reviewed publications by Charles S. Zender, grad student and CGD
+%visitor on EOS program:
+%\cite[]{ZeK94,ZeK961,ZeK962}
+%\bibliographystyle{jas} 
+%\bibliography{/home/zender/tex/bib}
+%\twocolumn
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\hsize]{/data/zender/ps/erbe_b_8589_01_SWCF.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/ps/erbe_b_8589_07_SWCF.eps}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/ps/422_8589_01_SWCF.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/ps/422_8589_07_SWCF.eps}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/ps/amip5_8589_01_SWCF.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/ps/amip5_8589_07_SWCF.eps}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/ps/sld012d_8589_01_SWCF.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/ps/sld012d_8589_07_SWCF.eps}%
+\end{center}
+\caption[Geographic distribution of shortwave cloud forcing SWCF
+for 1985--1989 January and July ERBE, CCM2, CCM$\Omega_{.5}$, and CCM3]{
+Geographic distribution of shortwave cloud forcing SWCF (\wxmS) for
+1985--1989 January and July (a,b) ERBE, (c,d) CCM2, (e,f)
+CCM$\Omega_{.5}$, and (g,h) CCM3.   
+\label{fig:8589_SWCF}}   
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\hsize]{/data/zender/ps/erbe_b_8589_01_LWCF.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/ps/erbe_b_8589_07_LWCF.eps}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/ps/422_8589_01_LWCF.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/ps/422_8589_07_LWCF.eps}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/ps/amip5_8589_01_LWCF.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/ps/amip5_8589_07_LWCF.eps}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/ps/sld012d_8589_01_LWCF.eps}%
+\includegraphics*[width=.5\hsize]{/data/zender/ps/sld012d_8589_07_LWCF.eps}%
+\end{center}
+\caption[Geographic distribution of longwave cloud forcing LWCF
+for 1985--1989 January and July ERBE, CCM2, CCM$\Omega_{.5}$, and CCM3]{
+Geographic distribution of longwave cloud forcing LWCF (\wxmS) for
+1985--1989 January and July (a,b) ERBE, (c,d) CCM2, (e,f)
+CCM$\Omega_{.5}$, and (g,h) CCM3.  
+\label{fig:8589_LWCF}}   
+\end{figure*}
+\clearpage
+
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/ps/erbe_b_422_amip5_sld012d_xavg_8589_01_LWCF.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/ps/erbe_b_422_amip5_sld012d_xavg_8589_07_LWCF.eps}\vfill
+\end{center}
+\caption[Zonal average longwave cloud forcing LWCF from ERBE,
+CCM, and ANV for 1985--1989 January and July]{
+Zonal average longwave cloud forcing LWCF (\wxmS) from ERBE
+(solid), CCM2 (dotted), CCM$\Omega_{.5}$ (dashed), and CCM3 (dash-dot)
+for (a) January and (b) July 1985--1989. 
+\label{fig:xavg_8589_LWCF}}   
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/ps/erbe_b_422_amip5_sld012d_xavg_8589_01_SWCF.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/ps/erbe_b_422_amip5_sld012d_xavg_8589_07_SWCF.eps}\vfill
+\end{center}
+\caption[Zonal average shortwave cloud forcing SWCF from ERBE,
+CCM2, CCM$\Omega_{.5}$, and CCM3 for 1985--1989 January and July]{  
+Zonal average shortwave cloud forcing SWCF (\wxmS) from ERBE
+(solid), CCM2 (dotted), CCM$\Omega_{.5}$ (dashed), and CCM3 (dash-dot)
+for (a) January and (b) July 1985--1989. 
+\label{fig:xavg_8589_SWCF}}   
+\end{figure}
+\clearpage
+
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/ps/erbe_b_anom_xavg_8589_0112_SWCF.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/ps/422_anom_xavg_8589_0112_SWCF.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/ps/amip5_anom_xavg_8589_0112_SWCF.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/ps/sld012d_anom_xavg_8589_0112_SWCF.eps}\vfill
+\end{center}
+\caption[Seasonal amplitude of zonal average shortwave cloud forcing
+SWCF for ERBE, CCM2, CCM$\Omega_{.5}$, and CCM3]{
+Seasonal amplitude of zonal average shortwave cloud 
+forcing (\wxmS) for (a) ERBE, (b) CCM2, (c) CCM$\Omega_{.5}$, and (d)
+CCM3.  
+Shading indicates ensemble monthly value is less than the 5~year
+mean. 
+Contour interval is 10~\wxmS.
+Tickmarks represent mid-month values (i.e., N represents
+November~15). 
+\label{fig:anom_xavg_8589_0112_SWCF}}   
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/ps/erbe_b_anom_xavg_8589_0112_LWCF.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/ps/422_anom_xavg_8589_0112_LWCF.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/ps/amip5_anom_xavg_8589_0112_LWCF.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/ps/sld012d_anom_xavg_8589_0112_LWCF.eps}\vfill
+\end{center}
+\caption[Seasonal amplitude of zonal average longwave cloud forcing 
+LWCF for ERBE, CCM2, CCM$\Omega_{.5}$, and CCM3]{
+Seasonal amplitude of zonal average longwave cloud 
+forcing (\wxmS) for (a) ERBE, (b) CCM2, (c) CCM$\Omega_{.5}$, and (d)
+CCM3.  
+Shading indicates ensemble monthly value is less than the 5~year
+mean. 
+Contour interval is 4~\wxmS.
+Tickmarks represent mid-month values (i.e., N represents
+November~15). 
+\label{fig:anom_xavg_8589_0112_LWCF}}   
+\end{figure}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/erbe_b_anom_yavg_10S10N_8589_0160_SWCF.eps}%
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/422_anom_yavg_10S10N_8589_0160_SWCF.eps}%
+
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/amip5_anom_yavg_10S10N_8589_0160_SWCF.eps}%
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/sld012d_anom_yavg_10S10N_8589_0160_SWCF.eps}%
+\end{center}
+\caption[Hovm\"oller diagrams of shortwave cloud forcing 
+anomaly in the equatorial Pacific for 1985--1989 ERBE, CCM2,
+CCM$\Omega_{.5}$, and CCM3]{ 
+Hovm\"oller diagrams of shortwave cloud forcing anomaly (\wxmS) in the
+equatorial Pacific (averaged 10~\degreee S--10~\degreee N) for
+1985--1989 (a) ERBE, (b) CCM2, (c) CCM$\Omega_{.5}$ and (d) 
+CCM3.
+Month 1 is January 1985.  
+Contour interval is 10~\wxmS. 
+\label{fig:anom_yavg_10S10N_8589_0160_SWCF}}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/erbe_b_anom_yavg_10S10N_8589_0160_LWCF.eps}%
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/422_anom_yavg_10S10N_8589_0160_LWCF.eps}%
+
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/amip5_anom_yavg_10S10N_8589_0160_LWCF.eps}%
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/sld012d_anom_yavg_10S10N_8589_0160_LWCF.eps}%
+\end{center}
+\caption[Hovm\"oller diagrams of longwave cloud forcing 
+anomaly in the equatorial Pacific for 1985--1989 ERBE, CCM2,
+CCM$\Omega_{.5}$, and CCM3]{ 
+Hovm\"oller diagrams of longwave cloud forcing anomaly (\wxmS) in the
+equatorial Pacific (averaged 10~\degreee S--10~\degreee N) for
+1985--1989 (a) ERBE, (b) CCM2, (c) CCM$\Omega_{.5}$ and (d) 
+CCM3.
+Month 1 is January 1985.  
+Contour interval is 10~\wxmS. 
+\label{fig:anom_yavg_10S10N_8589_0160_LWCF}}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/erbe_b_yavg_10S10N_8589_0160_SWCF.eps}%
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/422_yavg_10S10N_8589_0160_SWCF.eps}%
+
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/amip5_yavg_10S10N_8589_0160_SWCF.eps}%
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/sld012d_yavg_10S10N_8589_0160_SWCF.eps}%
+\end{center}
+\caption[Hovm\"oller diagrams of shortwave cloud forcing 
+in the equatorial Pacific for 1985--1989 ERBE, CCM2,
+CCM$\Omega_{.5}$, and CCM3]{ 
+Hovm\"oller diagrams of shortwave cloud forcing (\wxmS) in the
+equatorial Pacific (averaged 10~\degreee S--10~\degreee N) for
+1985--1989 (a) ERBE, (b) CCM2, (c) CCM$\Omega_{.5}$ and (d) 
+CCM3.
+Month 1 is January 1985.  
+Contour interval is 10~\wxmS. 
+\label{fig:yavg_10S10N_8589_0160_SWCF}}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/erbe_b_yavg_10S10N_8589_0160_LWCF.eps}%
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/422_yavg_10S10N_8589_0160_LWCF.eps}%
+
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/amip5_yavg_10S10N_8589_0160_LWCF.eps}%
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/sld012d_yavg_10S10N_8589_0160_LWCF.eps}%
+\end{center}
+\caption[Hovm\"oller diagrams of longwave cloud forcing 
+in the equatorial Pacific for 1985--1989 ERBE, CCM2,
+CCM$\Omega_{.5}$, and CCM3]{ 
+Hovm\"oller diagrams of longwave cloud forcing (\wxmS) in the
+equatorial Pacific (averaged 10~\degreee S--10~\degreee N) for
+1985--1989 (a) ERBE, (b) CCM2, (c) CCM$\Omega_{.5}$ and (d) 
+CCM3.
+Month 1 is January 1985.  
+Contour interval is 10~\wxmS. 
+\label{fig:yavg_10S10N_8589_0160_LWCF}}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/erbe_b_anom_yavg_10S10N_8589_0160_FLNT.eps}%
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/422_anom_yavg_10S10N_8589_0160_FLNT.eps}%
+
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/amip5_anom_yavg_10S10N_8589_0160_FLNT.eps}%
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/sld012d_anom_yavg_10S10N_8589_0160_FLNT.eps}%
+\end{center}
+\caption[Hovm\"oller diagrams of outgoing longwave radiation
+anomaly in the equatorial Pacific for 1985--1989 ERBE, CCM2,
+CCM$\Omega_{.5}$, and CCM3]{ 
+Hovm\"oller diagrams of outgoing longwave radiation anomaly (\wxmS) in
+the equatorial Pacific (averaged 10~\degreee S--10~\degreee N) for 
+1985--1989 (a) ERBE, (b) CCM2, (c) CCM$\Omega_{.5}$ and (d) 
+CCM3.
+Month 1 is January 1985.  
+Contour interval is 10~\wxmS. 
+\label{fig:anom_yavg_10S10N_8589_0160_FLNT}}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/noaa_anom_yavg_10S10N_8589_0160_FLNT.eps}%
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/422_anom_yavg_10S10N_8589_0160_FLNT.eps}%
+
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/amip5_anom_yavg_10S10N_8589_0160_FLNT.eps}%
+\includegraphics*[width=.5\textwidth,height=.45\textheight]{/data/zender/ps/sld012d_anom_yavg_10S10N_8589_0160_FLNT.eps}%
+\end{center}
+\caption[Hovm\"oller diagrams of outgoing longwave radiation
+anomaly in the equatorial Pacific for 1985--1989 NOAA, CCM2,
+CCM$\Omega_{.5}$, and CCM3]{ 
+Hovm\"oller diagrams of outgoing longwave radiation anomaly (\wxmS) in
+the equatorial Pacific (averaged 10~\degreee S--10~\degreee N) for 
+1985--1989 (a) NOAA, (b) CCM2, (c) CCM$\Omega_{.5}$ and (d) 
+CCM3.
+Month 1 is January 1985.  
+Contour interval is 10~\wxmS. 
+\label{fig:anom_yavg_10S10N_8589_0160_FLNT}}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/amip5_yavg_10S10N_8589_0160_TS1.eps}%
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/amip5_anom_yavg_10S10N_8589_0160_TS1.eps}%
+\end{center}
+\caption[Hovm\"oller diagrams of sea surface temperature (SST) and SST
+anomaly in the equatorial Pacific for 1985--1989 CCM$\Omega_{.5}$]{  
+Hovm\"oller diagrams of (a) sea surface temperature (SST) and (b) SST
+anomaly (\degreee K) in the equatorial Pacific (averaged 10~\degreee
+S--10~\degreee N) for 1985--1989 CCM$\Omega_{.5}$.
+Month 1 is January 1985.  
+Contour interval is .5~\degreee K. 
+\label{fig:anom_yavg_10S10N_8589_0160_TS1}}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/amip5_anom_yavg_10S10N_8589_0160_CLDTOT.eps}%
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/sld012d_anom_yavg_10S10N_8589_0160_CLDTOT.eps}%
+\end{center}
+\caption[Hovm\"oller diagrams of total cloud anomaly in the equatorial
+Pacific for 1985--1989 CCM$\Omega_{.5}$ and CCM3]{ 
+Hovm\"oller diagrams of total cloud anomaly (\%) in the equatorial
+Pacific (averaged 10~\degreee S--10~\degreee N) for 1985--1989
+(a) CCM$\Omega_{.5}$ and (b) CCM3.
+Month 1 is January 1985.  
+Contour interval is 5~\%. 
+\label{fig:anom_yavg_10S10N_8589_0160_CLDTOT}}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/amip5_anom_yavg_10S10N_8589_0160_CLDHGH.eps}%
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/sld012d_anom_yavg_10S10N_8589_0160_CLDHGH.eps}%
+\end{center}
+\caption[Hovm\"oller diagrams of high cloud anomaly in the equatorial
+Pacific for 1985--1989 CCM$\Omega_{.5}$ and CCM3]{ 
+Hovm\"oller diagrams of high cloud anomaly (\%) in the equatorial
+Pacific (averaged 10~\degreee S--10~\degreee N) for 1985--1989
+(a) CCM$\Omega_{.5}$ and (b) CCM3.
+Month 1 is January 1985.  
+Contour interval is 5~\%. 
+\label{fig:anom_yavg_10S10N_8589_0160_CLDHGH}}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/amip5_anom_yavg_10S10N_8589_0160_CLDMED.eps}%
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/sld012d_anom_yavg_10S10N_8589_0160_CLDMED.eps}%
+\end{center}
+\caption[Hovm\"oller diagrams of middle cloud anomaly in the equatorial
+Pacific for 1985--1989 CCM$\Omega_{.5}$ and CCM3]{ 
+Hovm\"oller diagrams of middle cloud anomaly (\%) in the equatorial
+Pacific (averaged 10~\degreee S--10~\degreee N) for 1985--1989
+(a) CCM$\Omega_{.5}$ and (b) CCM3.
+Month 1 is January 1985.  
+Contour interval is 5~\%. 
+\label{fig:anom_yavg_10S10N_8589_0160_CLDMED}}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/amip5_anom_yavg_10S10N_8589_0160_CLDLOW.eps}%
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/sld012d_anom_yavg_10S10N_8589_0160_CLDLOW.eps}%
+\end{center}
+\caption[Hovm\"oller diagrams of low cloud anomaly in the equatorial
+Pacific for 1985--1989 CCM$\Omega_{.5}$ and CCM3]{ 
+Hovm\"oller diagrams of low cloud anomaly (\%) in the equatorial
+Pacific (averaged 10~\degreee S--10~\degreee N) for 1985--1989
+(a) CCM$\Omega_{.5}$ and (b) CCM3.
+Month 1 is January 1985.  
+Contour interval is 5~\%. 
+\label{fig:anom_yavg_10S10N_8589_0160_CLDLOW}}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/amip5_anom_yavg_10S10N_8589_0160_TOTCWP.eps}%
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/sld012d_anom_yavg_10S10N_8589_0160_TOTCWP.eps}%
+\end{center}
+\caption[Hovm\"oller diagrams of condensed water path anomaly in
+the equatorial Pacific for 1985--1989 CCM$\Omega_{.5}$ and CCM3]{ 
+Hovm\"oller diagrams of condensed water path anomaly (\gxmS) in the
+equatorial Pacific (averaged 10~\degreee S--10~\degreee N) for
+1985--1989 (a) CCM$\Omega_{.5}$ and (b) CCM3.
+Month 1 is January 1985.  
+Contour interval is 5~\gxmS. 
+\label{fig:anom_yavg_10S10N_8589_0160_TOTCWP}}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/amip5_yavg_10S10N_8589_0160_CLDTOT.eps}%
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/sld012d_yavg_10S10N_8589_0160_CLDTOT.eps}%
+\end{center}
+\caption[Hovm\"oller diagrams of total cloud in the equatorial
+Pacific for 1985--1989 CCM$\Omega_{.5}$ and CCM3]{ 
+Hovm\"oller diagrams of total cloud (\%) in the equatorial
+Pacific (averaged 10~\degreee S--10~\degreee N) for 1985--1989
+(a) CCM$\Omega_{.5}$ and (b) CCM3.
+Month 1 is January 1985.  
+Contour interval is 5~\%. 
+\label{fig:yavg_10S10N_8589_0160_CLDTOT}}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/amip5_yavg_10S10N_8589_0160_CLDHGH.eps}%
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/sld012d_yavg_10S10N_8589_0160_CLDHGH.eps}%
+\end{center}
+\caption[Hovm\"oller diagrams of high cloud in the equatorial
+Pacific for 1985--1989 CCM$\Omega_{.5}$ and CCM3]{ 
+Hovm\"oller diagrams of high cloud (\%) in the equatorial
+Pacific (averaged 10~\degreee S--10~\degreee N) for 1985--1989
+(a) CCM$\Omega_{.5}$ and (b) CCM3.
+Month 1 is January 1985.  
+Contour interval is 5~\%. 
+\label{fig:yavg_10S10N_8589_0160_CLDHGH}}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/amip5_yavg_10S10N_8589_0160_CLDMED.eps}%
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/sld012d_yavg_10S10N_8589_0160_CLDMED.eps}%
+\end{center}
+\caption[Hovm\"oller diagrams of middle cloud in the equatorial
+Pacific for 1985--1989 CCM$\Omega_{.5}$ and CCM3]{ 
+Hovm\"oller diagrams of middle cloud (\%) in the equatorial
+Pacific (averaged 10~\degreee S--10~\degreee N) for 1985--1989
+(a) CCM$\Omega_{.5}$ and (b) CCM3.
+Month 1 is January 1985.  
+Contour interval is 5~\%. 
+\label{fig:yavg_10S10N_8589_0160_CLDMED}}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/amip5_yavg_10S10N_8589_0160_CLDLOW.eps}%
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/sld012d_yavg_10S10N_8589_0160_CLDLOW.eps}%
+\end{center}
+\caption[Hovm\"oller diagrams of low cloud in the equatorial
+Pacific for 1985--1989 CCM$\Omega_{.5}$ and CCM3]{ 
+Hovm\"oller diagrams of low cloud (\%) in the equatorial
+Pacific (averaged 10~\degreee S--10~\degreee N) for 1985--1989
+(a) CCM$\Omega_{.5}$ and (b) CCM3.
+Month 1 is January 1985.  
+Contour interval is 5~\%. 
+\label{fig:yavg_10S10N_8589_0160_CLDLOW}}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/amip5_yavg_10S10N_8589_0160_TOTCWP.eps}%
+\includegraphics*[width=.5\textwidth,height=.9\textheight]{/data/zender/ps/sld012d_yavg_10S10N_8589_0160_TOTCWP.eps}%
+\end{center}
+\caption[Hovm\"oller diagrams of condensed water path in
+the equatorial Pacific for 1985--1989 CCM$\Omega_{.5}$ and CCM3]{ 
+Hovm\"oller diagrams of condensed water path (\gxmS) in the
+equatorial Pacific (averaged 10~\degreee S--10~\degreee N) for
+1985--1989 (a) CCM$\Omega_{.5}$ and (b) CCM3.
+Month 1 is January 1985.  
+Contour interval is 5~\gxmS. 
+\label{fig:yavg_10S10N_8589_0160_TOTCWP}}
+\end{figure*}
+\clearpage
+
+\begin{sidewaysfigure*}
+\begin{center}
+\includegraphics*[width=.25\textheight]{/data/zender/ps/erbe_b_reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF.eps}%
+\includegraphics*[width=.25\textheight]{/data/zender/ps/422_reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF.eps}%
+\includegraphics*[width=.25\textheight]{/data/zender/ps/amip5_reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF.eps}%
+\includegraphics*[width=.25\textheight]{/data/zender/ps/sld012d_reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF.eps}%
+
+\includegraphics*[width=.25\textheight]{/data/zender/ps/erbe_b_reg_Pacific_Equatorial_87m85_0305_TS1_LWCF.eps}%
+\includegraphics*[width=.25\textheight]{/data/zender/ps/422_reg_Pacific_Equatorial_87m85_0305_TS1_LWCF.eps}%
+\includegraphics*[width=.25\textheight]{/data/zender/ps/amip5_reg_Pacific_Equatorial_87m85_0305_TS1_LWCF.eps}%
+\includegraphics*[width=.25\textheight]{/data/zender/ps/sld012d_reg_Pacific_Equatorial_87m85_0305_TS1_LWCF.eps}%
+
+\includegraphics*[width=.25\textheight]{/data/zender/ps/erbe_b_reg_Pacific_Equatorial_87m85_0305_TS1_SWCF.eps}%
+\includegraphics*[width=.25\textheight]{/data/zender/ps/422_reg_Pacific_Equatorial_87m85_0305_TS1_SWCF.eps}%
+\includegraphics*[width=.25\textheight]{/data/zender/ps/amip5_reg_Pacific_Equatorial_87m85_0305_TS1_SWCF.eps}%
+\includegraphics*[width=.25\textheight]{/data/zender/ps/sld012d_reg_Pacific_Equatorial_87m85_0305_TS1_SWCF.eps}%
+\end{center}
+\caption[$1987-1985$ differences in Spring quarter (March, April, and
+May) mean maritime LWCF, SWCF, and SST over the equatorial Pacific for
+ERBE, CCM2, CCM$\Omega_{.5}$, and CCM3]{ 
+$1987-1985$ differences in Spring quarter (March, April, and May) 
+mean maritime LWCF, SWCF (\wxmS), and SST (\degreee K) over the
+equatorial Pacific (10~\degreee S--10~\degreee N, 140~\degreee
+E--90~\degreee W) for (a,e,i) ERBE, (b,f,j) CCM2, (c,g,k)
+CCM$\Omega_{.5}$, and (d,h,l) CCM3: (a--d) $\delta$LWCF vs.\
+$\delta$SWCF, (e--h) $\delta$SST vs. $\delta$LWCF, and (i--l)
+$\delta$SST vs. $\delta$SWCF.
+Solid line is least-squares fit.
+\label{fig:reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF}}   
+\end{sidewaysfigure*}
+\clearpage
+
+\begin{sidewaysfigure}
+\begin{center}
+\includegraphics*[width=.25\hsize]{/data/zender/ps/erbe_b_reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF.eps}%
+\includegraphics*[width=.25\hsize]{/data/zender/ps/422_reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF.eps}%
+\includegraphics*[width=.25\hsize]{/data/zender/ps/amip5_reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF.eps}%
+\includegraphics*[width=.25\hsize]{/data/zender/ps/sld012d_reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF.eps}%
+\end{center}
+\caption[$1987-1985$ differences in Spring quarter (March, April, and
+May) mean maritime LWCF and SWCF over the equatorial Pacific for ERBE,
+CCM2, CCM$\Omega_{.5}$, and CCM3]{ 
+$1987-1985$ differences in Spring quarter (March, April, and May) 
+mean maritime LWCF and SWCF (\wxmS) over the equatorial Pacific 
+(10~\degreee S--10~\degreee N, 140~\degreee E--90~\degreee W)
+for (a) ERBE, (b) CCM2, (c) CCM$\Omega_{.5}$, and (d) CCM3.
+Solid line is least-squares fit.
+\label{fig:reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF}}   
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}
+\begin{center}
+\includegraphics*[width=.25\hsize]{/data/zender/ps/erbe_b_reg_Pacific_Equatorial_87m85_0305_TS1_LWCF.eps}%
+\includegraphics*[width=.25\hsize]{/data/zender/ps/422_reg_Pacific_Equatorial_87m85_0305_TS1_LWCF.eps}%
+\includegraphics*[width=.25\hsize]{/data/zender/ps/amip5_reg_Pacific_Equatorial_87m85_0305_TS1_LWCF.eps}%
+\includegraphics*[width=.25\hsize]{/data/zender/ps/sld012d_reg_Pacific_Equatorial_87m85_0305_TS1_LWCF.eps}%
+\end{center}
+\caption[$1987-1985$ differences in Spring quarter (March, April, and May)
+mean maritime SST and LWCF over the equatorial Pacific for ERBE, CCM2, CCM$\Omega_{.5}$,
+and CCM3]{ 
+$1987-1985$ differences in Spring quarter (March, April, and May)
+mean maritime SST (\degreee K) and LWCF (\wxmS) over the equatorial
+Pacific  (10~\degreee S--10~\degreee N, 140~\degreee E--90~\degreee W)
+for (a) ERBE, (b) CCM2, (c) CCM$\Omega_{.5}$, and (d) CCM3.
+Solid line is least-squares fit.
+\label{fig:reg_Pacific_Equatorial_87m85_0305_TS1_LWCF}}   
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}
+\begin{center}
+\includegraphics*[width=.25\hsize]{/data/zender/ps/erbe_b_reg_Pacific_Equatorial_87m85_0305_TS1_SWCF.eps}%
+\includegraphics*[width=.25\hsize]{/data/zender/ps/422_reg_Pacific_Equatorial_87m85_0305_TS1_SWCF.eps}%
+\includegraphics*[width=.25\hsize]{/data/zender/ps/amip5_reg_Pacific_Equatorial_87m85_0305_TS1_SWCF.eps}%
+\includegraphics*[width=.25\hsize]{/data/zender/ps/sld012d_reg_Pacific_Equatorial_87m85_0305_TS1_SWCF.eps}%
+\end{center}
+\caption[$1987-1985$ differences in Spring quarter (March, April, and May)
+mean maritime SST and SWCF over the equatorial Pacific for ERBE, CCM2, CCM$\Omega_{.5}$,
+and CCM3]{ 
+$1987-1985$ differences in Spring quarter (March, April, and May)
+mean maritime SST (\degreee K) and SWCF (\wxmS) over the equatorial
+Pacific  (10~\degreee S--10~\degreee N, 140~\degreee E--90~\degreee W)
+for (a) ERBE, (b) CCM2, (c) CCM$\Omega_{.5}$, and (d) CCM3.
+Solid line is least-squares fit.
+\label{fig:reg_Pacific_Equatorial_87m85_0305_TS1_SWCF}}   
+\end{sidewaysfigure}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\hsize,height=.9\textheight]{/data/zender/ps/noaa_anom_yavg_10S10N_7901_9312_FLNT.eps}
+\end{center}
+\caption[Hovm\"oller diagram of outgoing longwave radiation
+anomaly in the equatorial Pacific for 1979--1993 NOAA satellites]{ 
+Hovm\"oller diagram of outgoing longwave radiation anomaly (\wxmS) in
+the equatorial Pacific (averaged 10~\degreee S--10~\degreee N) for 
+1979--1993 NOAA satellites.
+Month 1 is January 1979.  
+Contour interval is 10~\wxmS. 
+\label{fig:anom_yavg_10S10N_7901_9312_FLNT}}
+\end{figure*}
+\clearpage
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[height=.5\hsize,angle=90]{/data/zender/tmp/SST_01.ps}%
+\includegraphics*[height=.5\hsize,angle=90]{/data/zender/tmp/dLWCF_01.ps}%
+
+\includegraphics*[height=.5\hsize,angle=90]{/data/zender/tmp/SST_04.ps}%
+\includegraphics*[height=.5\hsize,angle=90]{/data/zender/tmp/dLWCF_04.ps}%
+
+\includegraphics*[height=.5\hsize,angle=90]{/data/zender/tmp/SST_07.ps}%
+\includegraphics*[height=.5\hsize,angle=90]{/data/zender/tmp/dLWCF_07.ps}%
+
+\includegraphics*[height=.5\hsize,angle=90]{/data/zender/tmp/SST_10.ps}%
+\includegraphics*[height=.5\hsize,angle=90]{/data/zender/tmp/dLWCF_10.ps}%
+\end{center}
+\caption[SST and difference (ANV$-$CCM) in simulated LWCF for
+1985--1989 January, April, July, and October]{
+(left) SST (\degreee K) and (right) difference (ANV$-$CCM) in
+simulated LWCF (\wxmS) for 1985--1989 (a,b) January, (c,d) April,
+(e,f) July, and (g,h) October 1985--1989.
+\label{fig:SST_dLWCF}}   
+\end{figure*}
+
+\begin{figure*}
+\begin{center}
+\includegraphics*[height=.5\hsize,angle=90]{/data/zender/tmp/SST_01.ps}%
+\includegraphics*[height=.5\hsize,angle=90]{/data/zender/tmp/LWCF_01.ps}%
+
+\includegraphics*[height=.5\hsize,angle=90]{/data/zender/tmp/SST_04.ps}%
+\includegraphics*[height=.5\hsize,angle=90]{/data/zender/tmp/LWCF_04.ps}%
+
+\includegraphics*[height=.5\hsize,angle=90]{/data/zender/tmp/SST_07.ps}%
+\includegraphics*[height=.5\hsize,angle=90]{/data/zender/tmp/LWCF_07.ps}%
+
+\includegraphics*[height=.5\hsize,angle=90]{/data/zender/tmp/SST_10.ps}%
+\includegraphics*[height=.5\hsize,angle=90]{/data/zender/tmp/LWCF_10.ps}%
+\end{center}
+\caption[SST and ERBE LWCF for
+1985--1989 January, April, July, and October]{
+(left) SST (\degreee K) and (right) ERBE LWCF (\wxmS) for 1985--1989
+(a,b) January, (c,d) April, (e,f) July, and (g,h) October 1985--1989. 
+\label{fig:SST_dLWCF}}   
+\end{figure*}
+
+%***********************************************************************
+% Insert scratch commands above here
+%***********************************************************************
+
+\end{document}
+

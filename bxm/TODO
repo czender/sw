@@ -1,0 +1,11 @@
+# $Id$ -*-text-*-
+
+# Purpose: Sh*t list for Box model
+
+2. Have Makefile export installation environment to bxm_nst.sh rather
+   than setting twice
+3. Make configuration static so that last values used are automatically reloaded
+4. Move all output from FTP to HTTP
+5. Get size-dependent graphics script working
+7. Debian uses /usr/lib/cgi-bin, RedHat uses /var/www/cgi-bin
+8. Add linkable usage note to all entries in configure page

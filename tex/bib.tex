@@ -1,0 +1,41 @@
+% Purpose: Test bibliography formats
+
+% cd ~/tex;make -W bib.tex bib.dvi bib.ps bib.pdf bib.txt;cd -
+
+\documentclass[twoside,12pt]{article}
+\usepackage[sort&compress]{natbib}
+\bibpunct{[}{]}{,}{n}{}{;}
+
+\begin{document}
+\title{I'm Dreaming of a White Christmas}
+\author{Me}
+\begin{abstract}
+Santa claus is coming
+\end{abstract}
+
+\section{Introduction}
+
+Test of \verb'\citep{Knu84}': \citep{Knu84}.\\
+Test of \verb'\citet{Knu84}': \citet{Knu84}.\\
+\verb'\citep{}' always works as desired but \verb'\citet{}' produces
+correct citation only with ``nat'' \verb'\bibliographystyle''s e.g.,
+\texttt{plainnat.bst}, \texttt{unsrtnat.bst}.   
+However, the pre-defined ``nat'' styles produce undesired bibliography
+formatting,  e.g., first name or initials appear before surname in
+reference list. 
+Bibliography styles which produce the desired format in the reference
+list do not print the author correct in the citation with the
+\verb'\citet' command.
+I generated my own \verb'\bibliographystyle' with \verb'makebst' and
+it has the same problems (i.e., it fails to produce the author name in
+text with the \verb'\citet' comman).
+What is the trick to getting a \verb'\bibliographystyle' to work with 
+\textsf{natbib} in numbered, unsorted mode?
+
+\bibliographystyle{plainnat} % \citet works, undesired bibliography format
+%\bibliographystyle{unsrtnat} % \citet works, undesired bibliography format
+%\bibliographystyle{elsart-num} % \citet fails, desired bibliography format
+%\bibliographystyle{jqsrtcsz} % \citet fails, desired bibliography format
+\bibliography{bib}
+\end{document}
+

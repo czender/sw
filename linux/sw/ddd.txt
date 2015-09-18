@@ -1,0 +1,12 @@
+ddd-2.0 95/11/10:
+
+cd /usr/local/src
+ftp ftp.x.org
+...
+tar -xzvf ddd-2.0.tar.Z
+cd /usr/local/src/ddd-2.0
+./configure -prefix=/usr/local
+make
+make test
+make install
+make clean

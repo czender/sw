@@ -1,0 +1,38 @@
+# $Header: /home/zender/cvs/linux/etc/network/interfaces.haze,v 1.2 2006-07-12 05:58:50 zender Exp $
+# Purpose: Network configuration for Ubuntu Dapper Haze
+# /etc/network/interfaces -- configuration file for ifup(8), ifdown(8)
+# Usage:
+# sudo cp ~/linux/etc/network/interfaces.haze /etc/network/interfaces
+# cp /etc/network/interfaces ~/linux/etc/network/interfaces.haze 
+
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# This is a list of hotpluggable network interfaces.
+# They will be activated automatically by the hotplug subsystem.
+mapping hotplug
+	script grep
+	map eth0
+
+# The primary network interface
+# Following eth0 dhcp interface works fine on mangonet 20060711
+#iface eth0 inet dhcp
+#	# wireless-* options are implemented by the wireless-tools package
+#	wireless-mode managed
+#	wireless-essid any
+
+# Static IP on Harry's wireless network
+# Use statice IP instead to facilitate remote debugging 20060711
+iface eth0 inet static
+        address 192.168.1.73
+        broadcast 192.168.1.255
+        gateway 192.168.1.1
+        netmask 255.255.255.0
+        network 192.168.1.0
+        wireless-mode managed
+        wireless-essid any
+

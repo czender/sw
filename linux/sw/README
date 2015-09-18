@@ -1,0 +1,21 @@
+-*-text-*-
+
+This directory, $HOME/linux/sw, contains procedures required
+to install custom software packages. Packages which are ordinarily
+installed using RPMs are essentially self-installed and need no
+description here. Most filenames are self-describing as to the
+software package they install, but some are not:
+
+XFree86.txt
+blitz.txt	Blitz C++ interface
+ddd.txt
+fan.txt		File array netCDF utilities
+hdf.txt
+ncview.txt	Dave Pierson's ncview
+netcdf-perl.txt 
+netcdf.txt
+opendx.txt
+pgi.txt		Portland Group International Fortran compiler
+specfun.txt	Special function mathematical library (libspecfun.a)
+udunits.txt
+yorick.txt

@@ -1,0 +1,168 @@
+; $Id$
+
+@~/idl/ibp_fnc.pro
+
+pro xm
+xmanager
+end
+
+pro color_reset
+
+; Enable superior dithering technique for B&W monitors
+if !d.n_colors eq 2 then device,/floyd	
+
+; Load the color table then replace the background/foreground so text is 
+; always black and background is always white
+common colors,r_orig,g_orig,b_orig,r_curr,g_curr,b_curr
+loadct,34
+if !d.name eq 'X' then begin
+	white_color_index=0
+	color_1_value=0
+	black_color_index=n_elements(r_curr)-1
+endif else begin
+	black_color_index=0
+	color_1_value=255
+	white_color_index=n_elements(r_curr)-1
+endelse
+r_curr=r_orig
+g_curr=g_orig
+b_curr=b_orig
+r_curr(white_color_index)=255
+g_curr(white_color_index)=255
+b_curr(white_color_index)=255
+r_curr(black_color_index)=0
+g_curr(black_color_index)=0
+b_curr(black_color_index)=0
+r_curr(1)=color_1_value
+g_curr(1)=color_1_value
+b_curr(1)=color_1_value
+if(!d.n_colors gt 2) then begin
+	r_curr(2)=0.8*256
+	g_curr(2)=0.8*256
+	b_curr(2)=0.8*256
+endif
+
+tvlct,r_curr,g_curr,b_curr
+
+end
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; see page 3-38 of the IDL 3.1 reference manual for this coordinate system
+; bits_per_pixel will default to 4 if not otherwise set
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+pro half
+open_ps,/half,/color
+end
+pro land
+open_ps,/land,/color
+end
+pro port
+open_ps,/port,/color
+end
+pro square
+open_ps,/square,/color
+end
+pro one_clm
+open_ps,/one_clm,/color
+end
+pro two_col
+open_ps,/two_col,/color
+end
+
+pro lpr,new_file
+;script to print the current contents of the idl.ps file and optionally save
+;them in a new file
+device,/close_file
+file='idl.' + strlowcase(!d.name)
+cmd='lpr ' + file
+if n_elements(new_file) gt 0 then cmd = [cmd, 'mv ' + file + ' ' + new_file]
+spawn,cmd
+set_plot,'X'
+spawn,'lpq ' 
+end
+
+pro lpruby, new_file
+;script to print the current contents of the idl.ps file and optionally save
+;them in a new file
+device,/close_file
+file='idl.' + strlowcase(!d.name)
+cmd='lpr -Pruby' + file
+if n_elements(new_file) gt 0 then cmd = [cmd, 'mv ' + file + ' ' + new_file]
+spawn,cmd
+set_plot,'X'
+spawn,'lpq -Pruby' 
+end
+
+pro lpcms, new_file
+;script to print the current contents of the idl.ps file and optionally save
+;them in a new file
+device,/close_file
+file='idl.' + strlowcase(!d.name)
+cmd='lpr -Pcms' + file
+if n_elements(new_file) gt 0 then cmd = [cmd, 'mv ' + file + ' ' + new_file]
+spawn,cmd
+set_plot,'X'
+spawn,'lpq -Pcms' 
+end
+
+pro lptcpr, new_file
+;script to print the current contents of the idl.ps file and optionally save
+;them in a new file
+device,/close_file
+file='idl.' + strlowcase(!d.name)
+cmd='lpr -Ptcpr' + file
+if n_elements(new_file) gt 0 then cmd = [cmd, 'mv ' + file + ' ' + new_file]
+spawn,cmd
+set_plot,'X'
+spawn,'lpq -Ptcpr' 
+end
+
+pro lps, new_file
+;script to close the current contents of the idl.ps file and optionally save
+;them in a new file
+if !d.name ne 'X' then begin
+device,/close_file
+file='idl.' + strlowcase(!d.name)
+if n_elements(new_file) gt 0 then cmd = [cmd, 'mv ' + file + ' ' + new_file]
+if n_elements(cmd) gt 0 then spawn,cmd
+set_plot,'X'
+endif else begin
+print,"Using X device, unable to close"
+endelse
+end
+
+function d2r,angle
+;angle=!pi*angle/180.0
+return,!pi*angle/180.0
+end
+
+function r2d,angle
+;angle=180.0*angle/!pi
+return,angle=180.0*angle/!pi
+end
+
+pro clear_graph
+;!p.font=5
+;!x.charsize=1.0
+;!y.charsize=1.0
+;!p.psym=0
+!p.charsize=0
+!p.linestyle=0
+!x.style=0
+!y.style=0
+!p.thick=1
+!p.multi=0
+!x.range=0
+!y.range=0
+!y.minor=0
+!x.minor=0
+!y.ticks=0
+!x.ticks=0
+!x.margin=[10,3]
+!y.margin=[4,2]
+!p.title=''
+!p.subtitle=''
+!x.title=''
+!y.title=''
+;!p.t3d=0
+end

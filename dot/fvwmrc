@@ -1,0 +1,316 @@
+# $Id$
+
+# Purpose: ~/.fvwmrc  F(?) Virtual Window Manager for X11 config file
+
+DeskTopSize	1x5
+ClickTime	250
+EdgeResistance	500 20
+EdgeScroll	100 100
+HilightColor	Black goldenrod
+IconFont	-adobe-courier-medium-r-normal--10-100-75-75-m-60-iso8859-1
+IconPath	/usr/X11R6/include/X11/bitmaps/
+MenuStyle	Black rgb:b9/b9/b9 rgb:8/8/8 -adobe-courier-medium-r-normal--12-120-75-75-m-70-iso8859-1 mwm
+ModulePath	/data/zender/bin/SUN4SOL2
+PixmapPath	/data/zender/local/lib/pixmaps/
+WindowFont	-adobe-courier-medium-r-normal--10-100-75-75-m-60-iso8859-1
+XORvalue	6
+
+#-----------------------------------------------------------------------
+# Modules
+#-----------------------------------------------------------------------
+
+Module		FvwmPager 0 0
+Module		FvwmWinList
+Module		FvwmAuto 300
+
+#-----------------------------------------------------------------------
+# Styles
+#-----------------------------------------------------------------------
+
+Style "*"		BorderWidth 5, HandleWidth 5
+Style "*"		ActivePlacement, SmartPlacement
+Style "*"		MWMFunctions,MWMDecor,HintOverride
+Style "*"		DecorateTransient,NoIcon
+#Style "*"		CirculateSkip
+Style "CONSOLE"		Sticky
+Style "FvwmPager"	NoTitle,Sticky
+Style "FvwmWinList"	NoTitle,Sticky,StartIconic
+Style "xbiff"		NoTitle,Sticky
+Style "xclock"		NoTitle,Sticky
+Style "xmeter"		NoTitle,Sticky
+Style "xload"		NoTitle,Sticky
+#Style "DQS*"		WindowListSkip
+#Style "Elm"		Icon scroll.xpm,IconBox  000  000  220  150
+#Style "Calendar"	Icon calendar.xpm,IconBox 000 000 220 150
+#Style "Netscape"	Icon xmosiac.xpm,IconBox 000 000 220 150
+#Style "xterm"		Icon 	xterm.xpm,IconBox 000 000 220 150
+#Style "ghostview"	Icon ghostview.xpm,IconBox 000 000 220 150
+#Style "xcalc"		Icon 	abacus.xpm,IconBox 000 000 220 150
+
+#-----------------------------------------------------------------------
+# Buttons definition
+#-----------------------------------------------------------------------
+
+# horizontal button
+ButtonStyle 1 5 20x60@0 80x60@0 80x40@0 20x40@1 20x60@1
+# triangle pointing left
+ButtonStyle 3 4 20x50@0 80x80@0 80x20@0 20x50@1
+# triangle pointing up
+ButtonStyle 5 4 20x80@0 80x80@0 50x20@0 20x80@1
+# triangle pointing down
+ButtonStyle 7 4 20x20@1 50x80@1 80x20@0 20x20@1
+# triangle pointing right
+ButtonStyle 9 4 20x20@1 20x80@1 80x50@0 20x20@1
+
+# max size square button
+ButtonStyle 2 5 20x80@0 80x80@0 80x20@0 20x20@1 20x80@1
+# vertical bar
+ButtonStyle 4 5 40x90@0 60x90@0 60x10@0 40x10@1 40x90@1
+# horizontal bar
+ButtonStyle 6 5 10x60@0 90x60@0 90x40@0 10x40@1 10x60@1
+# min size square button
+ButtonStyle 8 5 45x55@0 55x55@0 55x45@0 45x45@1 45x55@1
+# cross
+ButtonStyle 0 13 20x60@0 40x60@0 40x80@1 60x80@0 60x60@0 80x60@0 80x40@0 60x40@1 60x20@0 40x20@1 40x40@1 20x40@1 20x60@1
+
+#-----------------------------------------------------------------------
+# Buttons and keys mapping definition
+#-----------------------------------------------------------------------
+
+Key Left	A	C	Scroll -100 0
+Key Right	A	C	Scroll +100 +0
+Key Up		A	C	Scroll +0   -100
+Key Down	A	C	Scroll +0   +100
+Key Left	A	M	Scroll -10 +0
+Key Right	A	M	Scroll +10 +0
+Key Up		A	M	Scroll +0   -10
+Key Down	A	M	Scroll +0   +10
+Key Left	A	SC	CursorMove -1 0
+Key Right	A	SC	CursorMove +1 +0
+Key Up		A	SC	CursorMove +0	-1
+Key Down	A	SC	CursorMove +0	+1
+Key Left	A	SM	CursorMove -10 +0
+Key Right	A	SM	CursorMove +10 +0
+Key Up		A	SM	CursorMove +0	-10
+Key Down	A	SM	CursorMove +0	+10
+Key F1		A	N	Raise
+Key F2		A	N	Lower
+Key F3		A	N	Iconify
+Key F1		A	M	FZoom
+Key F2		A	M	VZoom
+Key F3		A	M	HZoom
+Key SunStop	A	A	Raise
+Key SunAgain	A	A	Lower
+Key SunProps	A	A	Iconify
+Key SunFront	A	A	FZoom
+Key SunCopy	A	A	VZoom
+Key SunOpen	A	A	HZoom
+Key SunPaste	A	A	Exec xsetroot -solid black &
+
+Mouse 1		RT	A	Menu Connect Nop
+Mouse 2		RT	A	Menu X11-Menu Nop
+Mouse 3		RT	A	WindowList
+Mouse 0		F	A	Resize-or-Raise
+Mouse 0		S	A	Move-or-Raise
+Mouse 3		SF	A	Lower
+Mouse 1		1	A	Menu WOPS Nop
+Mouse 1		3	A	Move -100 0
+Mouse 1		5	A	Move 0 -100
+Mouse 1		7	A	Move 0 100
+Mouse 1		9	A	Move 100 0
+Mouse 1		2	A	FZoom
+Mouse 1		4	A	VZoom
+Mouse 1		6	A	HZoom
+Mouse 1		8	A	Iconify
+#Mouse 1		0	A	Delete
+
+#-----------------------------------------------------------------------
+# Functions definition
+#-----------------------------------------------------------------------
+
+AddToFunc Move-or-Raise		"I" Raise
++				"M" Move
+
+AddToFunc Resize-or-Raise	"I" Raise
++				"M" Resize
+
+AddToFunc FZoom	"I"	Raise
++		"I"	Maximize
+
+AddToFunc VZoom "I"	Raise
++		"I"	Maximize 0 100
+
+AddToFunc HZoom "I"	Raise
++		"I"	Maximize 100 0
+
+#-----------------------------------------------------------------------
+# Menus definition
+#-----------------------------------------------------------------------
+AddToMenu Connect	"Connect"	Title
++			"-> CGD"	Popup CGD
++			"-> SCD Crays"	Popup SCD
++			"-> Other"	Popup Other
++			"Ftp's"		Popup FTP
++			"XTerm's"	Popup XTERM
+
+AddToMenu X11-Menu	"X11 Menu"	Title
++			"X11 tools"	Popup X11
++			"WM tools"	Popup FVWM
++			"Various"	Popup VARS
++			"Online doc"	Popup ONL
++			"Lock screen"	Popup LOCK
++			"Window Ops"	Popup WOPS
++			"refresh"	Refresh
++			"init defaults" Exec xrdb -nocpp < /dev/null; xrdb -nocpp -merge ~/.Xdefaults &
+
+AddToMenu WOPS	"Window Ops"	Title		
++		"zoom +"	FZoom
++		"zoom |"	VZoom
++		"zoom -"	HZoom
++		"move"		Move-or-Raise
++		"resize"	Resize-or-Raise
++		"lower"		Lower
++		"raise"		Raise
++		"iconify"	Iconify
++		"refresh"	Refresh
++		"--<=+=>--"	Nop
++		"close"		Close
++		"delete"	Delete
++		"destroy"	Destroy
+
+AddToMenu CGD	"amun.cgd.ucar.edu"		Exec rcmd amun xterm -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'amun' -n 'amun' &
++		"biscuit.cgd.ucar.edu"		Exec rcmd biscuit xterm -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'biscuit' -n 'biscuit' &
++		"cycad.cgd.ucar.edu"		Exec rcmd cycad xterm -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'cycad' -n 'cycad' &
++		"isis.cgd.ucar.edu"		Exec rcmd isis xterm -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'isis' -n 'isis' &
++		"kether.cgd.ucar.edu"		Exec rcmd kether xterm -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'kether' -n 'kether' &
++		"neit.cgd.ucar.edu"		Exec rcmd neit xterm -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'neit' -n 'neit' &
++		"odin.cgd.ucar.edu"		Exec rcmd odin xterm -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'odin' -n 'odin' &
++		"pitcairn.cgd.ucar.edu"		Exec rcmd pitcairn xterm -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'pitcairn' -n 'pitcairn' &
++		"ra.cgd.ucar.edu"		Exec rcmd ra xterm -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'ra' -n 'ra' &
++		"sage.cgd.ucar.edu"		Exec rcmd sage xterm -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'sage' -n 'sage' &
++		"starfury.cgd.ucar.edu"		Exec rcmd starfury xterm -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'starfury' -n 'starfury' &
+
+AddToMenu SCD 	"antero.ucar.edu"		Exec xterm -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'antero' -n 'antero' -e telnet antero &
++		"aztec.ucar.edu"		Exec xterm -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'aztec' -n 'aztec' -e telnet aztec &
++		"echo.ucar.edu"			Exec xterm -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'echo' -n 'echo' -e telnet echo &
++		"paiute.ucar.edu"		Exec xterm -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'paiute' -n 'paiute' -e telnet paiute &
++		"shavano.ucar.edu"		Exec xterm -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'shavano' -n 'shavano' -e telnet shavano &
++		"st-elmo.ucar.edu"		Exec xterm -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'st-elmo' -n 'st-elmo' -e telnet 'st-elmo' &
+
+
+AddToMenu Other	"alcor.colorado.edu"		Exec xterm alcor -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'alcor' -n 'alcor' -e rlogin alcor.colorado.edu &
++		"bogart.colorado.edu"		Exec xterm bogart -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'bogart' -n 'bogart' -e rlogin bogart.colorado.edu &
++		"cmns-sun.thiXnk.com"		Exec xterm cmns-sun -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'cmns-sun' -n 'cmns-sun' -e rlogin cmns-sun &
++		"maxim.colorado.edu"		Exec xterm maxim -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'maxim' -n 'maxim' -e rlogin maxim.colorado.edu &
++		"poplar.mmm.ucar.edu"		Exec xterm poplar -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'poplar' -n 'poplar' -e rlogin poplar &
++		"rastro.colorado.edu"		Exec xterm rastro -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'rastro' -n 'rastro' -e rlogin rastro.colorado.edu &
++		"ucsu.colorado.edu"		Exec xterm ucsu -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'ucsu' -n 'ucsu' -e rlogin ucsu.colorado.edu &
++		"weather.rap.ucar.edu"		Exec xterm weather -fn 10x20 -fg white -bg black -bd blue -g 80x24+0+0 -title 'weather' -n 'weather' -e rlogin weather &
+
+AddToMenu FTP	"archive.cis.ohio-state.edu" Exec xterm -cr black -fg purple -bg white -ms Gold -title 'archive.cis.ohio-state.edu' -n 'archive.cis.ohio-state.edu' -e ftp archive.cis.ohio-state.edu &
++		"ftp.ucar.edu"		Exec xterm -cr black -fg purple -bg white -ms Gold -title 'ftp.ucar.edu' -n 'ftp.ucar.edu' -e ftp ftp.ucar.edu &
++		"ftp.uu.net"		Exec xterm -cr black -fg purple -bg white -ms Gold -title 'ftp.uu.net' -n 'ftp.uu.net' -e ftp ftp.uu.net &
++		"ftp.x.org"		Exec xterm -cr black -fg purple -bg white -ms Gold -title 'ftp.x.org' -n 'ftp.x.org' -e ftp ftp.x.org &
++		"prep.ai.mit.edu"	Exec xterm -cr black -fg purple -bg white -ms Gold -title 'prep.ai.mit.edu' -n 'prep.ai.mit.edu' -e ftp prep.ai.mit.edu &
++		"sunsite.unc.edu"	Exec xterm -cr black -fg purple -bg white -ms Gold -title 'sunsite.unc.edu' -n 'sunsite.unc.edu' -e ftp sunsite.unc.edu &
++		"unidata.ucar.edu"	Exec xterm -cr black -fg purple -bg white -ms Gold -title 'unidata.ucar.edu' -n 'unidata.ucar.edu' -e ftp unidata.ucar.edu &
++		"wuarchive.wustl.edu"	Exec xterm -cr black -fg purple -bg white -ms Gold -title 'wuarchive.wustl.edu' -n 'wuarchive.wustl.edu' -e ftp wuarchive.wustl.edu &
+
+AddToMenu X11	"Moon state"	Exec xmoon -update 1 -fg PaleGoldenrod -bg cyan4 -geometry +0-0 -fn 9x15 &
++		"Time Zones"	Exec time_zones &
++		"Xclipboard"	Exec xclipboard &
++		"Xcolors"	Exec rcmd isis xcolors &
++		"Xdump"		Exec xdump.csh &
++		"TI-30"		Exec xcalc &
++		"Hexa-Calc"	Exec rcmd isis hexcalc -name HexaCalc -title HexaCalc &
++		"Xmag 2"	Exec xmag -source 256x256 -mag 2 &
++		"Xmag 5"	Exec xmag -source 128x128 -mag 5 &
++		"Xmag 10"	Exec xmag -source 64x64 -mag 10 &
++		"Xmag 20"	Exec xmag -source 32x32 -mag 20 &
+
+AddToMenu XTERM	"Green/Black"		Exec xterm -cr white -fg green -bg black -n Local_XTerm &
++		"Orange/Black"		Exec xterm -cr white -fg orange -bg black -ms rgb:69/20/ac -n Local_XTerm &
++		"Gold/BlueViolet"	Exec xterm -cr white -fg Gold -bg BlueViolet -ms DarkGoldenRod -n Local_XTerm &
++		"Beige/SeaGreen4"	Exec xterm -cr white -fg beige -bg SeaGreen4 -ms Red -n Local_XTerm &
++		"Purple3/Grey90"	Exec xterm -cr black -fg purple3 -bg grey90 -ms Gold -n Local_XTerm &
++		"Sienna/LightCyan"	Exec xterm -cr black -fg sienna -bg LightCyan -ms VioletRed -n Local_XTerm &
++		"Purple/White"		Exec xterm -cr black -fg purple -bg white -ms Gold -n Local_XTerm &
+
+AddToMenu VARS	"Archie Server"	Exec xarchie -geometry 1128x400+10-10 &
++		"CARL Library"	Exec xterm -cr white -fn 10x20 -fg Gold -bg rgb:69/20/ac -ms DarkGoldenRod -n 'CARL' -e telnet pac.carl.org &
++		"Frame Maker"	Exec maker &
++		"GNU Emacs"	Exec emacs &
++		"Gopher"	Exec rcmd ra xgopher -geometry +0+0 &
++		"Mosaic"	Exec xmosaic &
++		"NOLA Library"	Exec xterm -cr white -fn 10x20 -fg Gold -bg rgb:69/20/ac -ms DarkGoldenRod -n 'NOLA-NCAR' -e telnet library &
++		"NetLib Server"	Exec rcmd ra xnetlib -geometry +0+0 &
++		"NetScape"	Exec netscape -install &
+
+AddToMenu ONL	"CRI (meeker)"	Exec rcmd meeker.ucar.edu craydoc &
++		"CRI (paiute)"	Exec rcmd paiute.ucar.edu docview &
++		"CRI (shavano)"	Exec rcmd shavano.ucar.edu docview &
++		"IBM"		Exec rcmd chief.ucar.edu info &
++		"SGI"		Exec rcmd cycad.cgd.ucar.edu insight &
++		"SUN CRI F90"	Exec cdoc &
++		"SUN"		Exec rcmd neit answerbook &
+
+AddToMenu LOCK	"XGone"		Exec lockX11 &
++		"Hop"		Exec (xset s off ; xlock -mode hop   -nice 19 -allowroot ; xset s default) &
++		"Life"		Exec (xset s off ; xlock -mode life  -nice 19 -allowroot ; xset s default) &
++		"Qix"		Exec (xset s off ; xlock -mode qix   -nice 19 -allowroot ; xset s default) &
++		"Image"		Exec (xset s off ; xlock -mode image -nice 19 -allowroot ; xset s default) &
++		"Swarm"		Exec (xset s off ; xlock -mode swarm -nice 19 -allowroot ; xset s default) &
++		"Blank"		Exec (xset s off ; xlock -mode blank -nice 19 -allowroot ; xset s default) &
+
+AddToMenu MODULE	"Modules"	Title	
++			"Button-Bar"	Module	FvwmButtons
++			"Clean-Up"	Module	FvwmClean
++			"Identify"	Module	FvwmIdent
++			"SaveDesktop"	Module	FvwmSave
++			"Debug"		Module	FvwmDebug
++			"Pager"		Module	FvwmPager 0 0
++			"WinList"	Module	FvwmWinList
++			"Background"	Module	FvwmBacker
++			"IconBox"	Module	FvwmIconBox
++			"Banner"	Module	FvwmBanner
++			"Talk"		Module	FvwmTalk
++			"Prompt"	Module	FvwmPrompt "hello" raise
+
+AddToMenu FVWM	"Quit Fvwm"	Quit	
++		"Restart Fvwm"	Restart fvwm	
++		"Start Twm"	Restart twm
++		"Start dummy"	Restart xterm
+
+#-----------------------------------------------------------------------
+# Modules configuration
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+# Pager
+#-----------------------------------------------------------------------
+
+*FvwmPagerBack		cyan4
+*FvwmPagerFont		none
+*FvwmPagerFore		LightGoldenrodYellow
+*FvwmPagerGeometry	100x350-0+23
+*FvwmPagerHilight	cyan3
+*FvwmPagerSmallFont	5x8
+
+#-----------------------------------------------------------------------
+# Window List
+#-----------------------------------------------------------------------
+
+*FvwmWinListAction Click1 Iconify
+*FvwmWinListAction Click2 Iconify -1, Focus
+*FvwmWinListAction Click3 Module "FvwmIdent" FvwmIdent
+*FvwmWinListBack	rgb:b9/b9/b9
+*FvwmWinListFocusBack	goldenrod
+*FvwmWinListFocusFore	Black
+*FvwmWinListFont	-adobe-courier-medium-r-normal--10-100-75-75-m-60-iso8859-1
+*FvwmWinListFore	Black
+*FvwmWinListGeometry	-0+400
+*FvwmWinListLeftJustify
+*FvwmWinListUseSkipList
+*FvwmWinListMinWidth 70
+*FvwmWinListMaxWidth 70
+

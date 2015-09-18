@@ -1,0 +1,88 @@
+# Purpose: Directions to Croul Hall Offices
+
+# Usage:
+# scp ~/dot/drc_ess.txt home.ps.uci.edu:public_html
+# http://www.ess.uci.edu/~zender/drc_ess.txt
+# Nearby Hotels:
+# http://snap.uci.edu/viewXmlFile.jsp?resourceID=259
+
+My office is 
+
+Croul Hall 3323
+Department of Earth System Science
+University of California, Irvine
+Irvine, CA 92697-3100
+(949) 891-2429
+
+Latitude :   33.643662 N
+Longitude: -117.844613 E
+
+Campus maps and freeway directions are at http://www.uci.edu/campusmap
+ESS offices are in Croul Hall (CH), building 417 in quadrant F6.
+Parking permits may be obtained/picked-up at these five locations:
+
+https://www.parking.uci.edu/reservations
+
+which are the red stars shown on this map:
+
+https://www.parking.uci.edu/maps/structures
+
+Driving from the North (LA) or East (Riverside):
+We are about 45 minutes from LAX airport.
+Take 405S or 55W to 73S and exit 73S at Bison Ave.
+(Bison Ave. is the last toll-free exit on 73S).
+Turn left onto Bison and drive straight into UCI.
+At the third stoplight, turn right onto Peltason Ave.
+You are heading for the School of Physical Sciences.
+Peltason will curve around the campus. Before the first stopsign, 
+turn left onto Reines Hall Way and drive into Parking Lot 12b.
+If you reach the Los Trancos stopsign, then you have missed the 
+entrance (do a U-turn and take the first right into Lot 12b).
+All spaces in Lot 12b require parking permits except for about
+eight metered spaces on the immediate right as you enter 12b.
+If you have a reserved parking permit, you may park in any of the
+faculty/staff spaces (those with red signs requiring an AR permit). 
+Croul Hall is the new, three story beige brick building with the
+glass facade and golden-copper roof. 
+
+Driving from the South (San Diego):
+We are about 80 minutes from San Diego.
+Take 405N and get off on the Culver Ave. exit.
+Turn left onto Culver and follow Culver for about 1.5 miles
+until you reach Campus Ave. Turn right onto Campus Ave.
+and continue through a few lights until you reach Peltason Ave.
+Turn left onto Peltason (Peltason turns into Berkeley Ave., 
+so if you turned to the right here you would be on Berkeley). 
+You may buy a permit at the parking kiosk on your immediate right.
+Follow Peltason as it circles around the main campus. 
+Turn right on Reines Hall Way into parking lot 12b, 
+the first turn following the stop-sign intersection with Los Trancos.
+All spaces in Lot 12b require parking permits except for about
+eight metered-spaces on the immediate right as you enter 12b.
+If you have a red parking permit, you may park in any of the
+faculty/staff spaces (those with red signs requiring an AR permit). 
+Croul Hall is the new, three story beige brick building with the
+glass facade and golden-copper roof. 
+
+Parking Lot 12a (not 12b) actually abuts Croul Hall. 
+However, directions to Lot 12a are more difficult than to Lot 12b.
+The entrance to Lot 12a is on your right as you follow Bison straight 
+through the intersection with Peltason and drive past the dormitories.
+Lot 12a requires reserved parking coupons as well.
+Thus if you know what you're doing 12a is a little closer.
+To play it safe, park in Lot 12b.
+Lot 12b also has about 8 metered visitor spaces, on your right
+immediately after entering the Lot. 
+
+Obtain your reserved parking pass before parking in Lots 12a/b!
+Pick up your reserved parking pass at the Mesa or Engineering Parking 
+structures. These appear as "MPS" and "EPS" on this map:
+
+http://www.parking.uci.edu/wayfinding/structures
+
+After obtaining your permit, proceed as described above and park in
+Lot 12b or Lot 12a which both serve Physical Sciences and Croul Hall:  
+
+http://www.parking.uci.edu/wayfinding
+
+The reserved parking pass will be under your or my name (check both).  

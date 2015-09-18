@@ -1,0 +1,901 @@
+2012-11-02  Charlie Zender  <zender@uci.edu>
+
+	* Built with netCDF-fortran 4.2 and verified netCDF4 works fine
+
+2011-12-31  Charlie Zender  <zender@uci.edu>
+
+	* Change copyright year to 2012
+
+2011-11-22  Charlie Zender  <zender@uci.edu>
+
+	* Test commit with new pbs/dust svn repository
+
+2011-11-16  Charlie Zender  <zender@uci.edu>
+
+	* Change copyright year to 2011. A bit late :)
+
+2011-04-03  Charlie Zender  <zender@uci.edu>
+
+	* Alter Makefile compile and link to use nc-config --fflags, --flibs
+
+2010-08-09  Charlie Zender  <zender@uci.edu>
+
+	* Default to NETCDFF=Y and link to libnetcdff.a by default
+
+2010-07-08  Charlie Zender  <zender@uci.edu>
+
+	* Improve 'make diff' behavior
+
+	* Update copyrights to 2010
+
+2010-01-12  Charlie Zender  <zender@uci.edu>
+
+	* Introduce MPI=Y switch for specifying MPI compiler invocation
+
+2009-08-04  Charlie Zender  <zender@uci.edu>
+
+	* Deprecate -fno-second-underscore from gfortran compilation
+
+	* Allow linking to distro- (i.e., Debian-) supplied libnetcdff.a
+	by using new NETCDFF=Y switch
+
+	* Use reals 1.0, 0.0 instead of integers 1, 0 in floating point
+	math in cape_mdl.F90, dmr_mdl.F90 to suppress gfortran warningsca
+
+	* Type-cast int to real in gamma function
+
+2009-03-26  Charlie Zender  <zender@uci.edu>
+
+	* Allow debugging info in rbn_vec() to print longer band indices
+
+2009-03-20  Charlie Zender  <zender@uci.edu>
+
+	* Release sng-2.0.3
+
+	* Fix bug in ftn_strspc()
+
+2009-03-19  Charlie Zender  <zender@uci.edu>
+
+	* Add ftn_strspc()
+
+	* Describe string library in greater detail in docs
+
+2009-03-18  Charlie Zender  <zender@uci.edu>
+
+	* Release sng-2.0.2
+
+2009-01-30  Charlie Zender  <zender@uci.edu>
+
+	* Remove -us underscore switches from ifort. Go native!
+
+2009-01-21  Charlie Zender  <zender@uci.edu>
+
+	* Remove -fno-second-underscore switches from gfortran, g95, pgf95. Go native!
+
+2008-08-07  Charlie Zender  <zender@uci.edu>
+
+	* Change double quotation marks back to single quaotation marks
+	Single marks are cleaner. Reserve double marks for English and
+	interpolable quoting.
+
+2008-02-05  Charlie Zender  <zender@uci.edu>
+
+	* Add -3 and -4 switches for netCDF output file type
+
+2007-12-30  Charlie Zender  <zender@neige>
+
+	* Fix for cygwin with g95
+
+2007-11-10  Charlie Zender  <zender@uci.edu>
+
+	* cd;cvs tag -c aca-1_5_1 aca f
+	Changes since aca-1_5_0: Vanilla snow and impurities work
+
+2007-11-01  Charlie Zender  <zender@uci.edu>
+
+	* cd;cvs tag -c f-1_5_0 aca f
+	cd;cvs tag -c aca-1_5_0 aca f
+	Changes since aca-1_4_0: Snow, netCDF4, gfortran, GPL3, shr_kind_mod
+
+2007-10-01  Charlie Zender  <zender@uci.edu>
+
+	* Add netCDF Lempel-Ziv compression capability
+
+	* Enable netCDF4 building at Makefile level
+
+2007-03-30  Charlie Zender  <zender@uci.edu>
+
+	* All codes use shr_kind_mod.F90 instead of precision.F90
+
+2007-02-19  Charlie Zender  <zender@uci.edu>
+
+	* Remove "imprecise" qualifier "imp" from AIX floating point trap 
+	-qflttrap arguments
+
+	* Clean up precision, dbg_mdl dependencies for fff, sng
+
+	* Leave dbg_mdl.o in libcsz_f90, remove it from libcsm_f90
+
+	* Put precision.o in libcsz_f90
+
+2006-11-26  Charlie Zender  <zender@uci.edu>
+
+	* Try prototype for ftn_strcmp() in fff.F90 to satisfy PGI pgf95 compiler
+
+2006-11-25  Charlie Zender  <zender@uci.edu>
+
+	* for drc in f aca dead ; do cd ~/${drc};cvs tag -c f-2_0_1;done
+	Changes since f-2_0_0: 
+	gfortran support, fewer warning messages
+
+	* Change "command line" to "command-line"
+
+	* Change F2K token to F2KCLI since GNU compilers are F2K-compliant
+
+	* ashes now uses gfortran by default
+
+	* Completed port to gfortran
+
+	* sng_mdl.F90,fff.F90,htrn_utl.F90,rt_mdl.F90,tdy_mdl.F90: 
+	Remove unused variables caught by gfortran
+
+	* Report gfortran ICE to GCC bugzilla Bug fortran/29982:
+	write (6,"(a,es15.8)") "2.0**(-0.0) = ",2.0**(-0.0)
+
+	* gfortran 4.1.2 does not recognize __GFORTRAN__ so use __GNUC__ instead
+
+	* Support gfortran (which still has ICE on write statement)
+
+	* Fix all g95 'implicit precision' and 'uninitialized' warnings with CEWIs
+
+	* Makefile uses distinct options for g95 and gfortran
+
+	* Move -DF2K from Makefile to sng_mdl.F90
+
+2006-09-28  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c f-2_0_0 ~/aca ~/f
+	cvs tag -c aca-2_0_0 ~/aca ~/f
+	Changes since f-1_3_3, aca-1_3_3: 
+	Support PGI, PathScale, Intel better, improve sng homepage
+	Realized that f already had 1_9 tag in 2003 so I've been re-using
+	already committed f-version numbers since aca and f synchronization.
+	Therefore bumping both aca and f to version 2_0_0
+	
+	* Update sng homepage with VERSION file
+
+2005-08-23  Charlie Zender  <zender@uci.edu>
+
+	* Create homepage for sng
+
+2005-08-02  Charlie Zender  <zender@uci.edu>
+
+	* Add Scott Capps' cape_mdl.F90
+
+2005-07-14  Charlie Zender  <zender@uci.edu>
+
+	* Change amod() to mod() in slr_crd_mdl.F90 to avert g95 error with i*8
+
+	* Remove #ifndef PRC_DBL from surrounding ftn_get_arg_flt()
+
+2005-07-10  Charlie Zender  <zender@uci.edu>
+
+	* Remove default dependencies on libspecfun.a and librecipes_f.a
+
+	* ifort 8.1 seems to work on fff!
+
+	* Updated OpenMP for ifort 8.1 compatibility
+
+	* Cleaned code to quiet ifort compilation
+
+	* Updated ifort switches
+
+2005-06-12  Charlie Zender  <zender@uci.edu>
+
+	* Set optional opt_flg in all ftn_arg_get_*() routines
+
+2005-06-05  Charlie Zender  <zender@uci.edu>
+
+	* Added positional arguments to command line handling of fl_in, fl_out
+	Main caveat is to use ftn_strcpylsc() instead of ftn_strcpy()
+	
+	* Fix formatting bug in ftn_strcpy() debugging output
+
+2005-04-08  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c f-1_3_3 ~/aca ~/f
+	cvs tag -c aca-1_3_3 ~/aca ~/f
+	Changes since f-1_3_2, aca-1_3_2: Remove all libcsz_f77 references
+
+	* Remove all libcsz_f77 files:
+	cvs rm csz_f77.F f.F nc_f77.F sng_f77.F tdy_f77.F utl_f77.F vec_f77.F xtr_f77.F
+	cvs rm CCM.com drv_cst.com ieee_end.com ieee_srt.com parameter.com time_ini.com xtr.com dbg.com fnd_cst.com ieee_ini.com ieee_xcp_hnd.com time_end.com time_srt.com
+	This is intended to simplify maintenance of Fortran module f
+	I hope I don't have any more old code that relies on these files!
+	
+2004-12-23  Charlie Zender  <zender@uci.edu>
+
+	* Changed CVS repository to esmf
+
+2004-09-22  Charlie Zender  <zender@uci.edu>
+
+	* Verified F2K token works with g95, make it default.
+	Historic day! Using first F2K feature, or is it an F2003 feature?
+	Regardless, g95 is first compiler to support this feature
+
+	* sng.F90 (sng): CEWI's to satisfy g95
+
+	* Got NR compiling with g95 last week
+
+2004-09-08  Charlie Zender  <zender@uci.edu>
+
+	* First use of valgrind on Fortran code
+
+	* Commented-out Metcalf's dntv precision until precision module is removed
+
+2004-08-26  Charlie Zender  <zender@uci.edu>
+
+	* Added dntv double native real kind precision determined as per
+	Michael Metcalf's recommendation in comp.lang.fortran 20040824
+
+2004-06-30  Charlie Zender  <zender@uci.edu>
+
+	* Remove f.F dependence on librecipes_f/gammq
+	Porting NR is a PITA
+
+2004-06-15  Charlie Zender  <zender@uci.edu>
+
+	* Makefile: Amplified, simplified g95 switches which now work
+
+2004-06-13  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c f-1_3_0 ~/aca ~/f
+	cvs tag -c aca-1_3_0 ~/aca ~/f
+	Changes since f-1_2, aca-1_2_3: Build changes for new mie
+	resonance studies and ESMF compatibility
+
+	* Build changes for mie resonance/aca studies
+
+	* Fix incorrect dimension for mlc_sng upstream
+
+	* Built all code with xlf95 on ESMF
+
+2004-05-14  Charles Zender  <zender@uci.edu>
+
+	* Failsafe #ifdef PRC_DBL in precision module
+
+2004-05-05  Charlie Zender  <zender@uci.edu>
+
+	* Makefile (FFLAGS): Update LINUX_FC to allow for pgf90 on LINUXAMD64
+
+2004-02-01  Charlie Zender  <zender@uci.edu>
+
+	* Add __FILE__ and __LINE__ macros to failure code
+
+2003-11-07  Charlie Zender  <zender@uci.edu>
+
+	* g95 linking works with fff
+	fff has run-time errors in netCDF interface
+
+	* Removed exit(exit_status) functions (they are non-standard)
+
+2003-10-22  Charlie Zender  <zender@uci.edu>
+
+	* fff.F90 (fff): g95 compiles netcdf.mod, typesizes.mod, and all
+	components of fff. Linking does not yet work.
+
+2003-09-30    <zender@uci.edu>
+
+	* Tried to build netCDF with g95, no luck.
+
+	* Change gcc-g95 to gfortran 
+	Installed gfortran locally but gfortran will compile much!
+
+2003-09-21    <zender@uci.edu>
+
+	* Add OpenMP module for Intel and diagnostics
+
+2003-07-19  Charlie Zender  <zender@uci.edu>
+
+	* Makefile (ABI): Change default ABI from 32 to 64
+
+2003-06-11  Charlie Zender  <zender@uci.edu>
+
+	* Makefile: Adding block for g95 testing
+
+2003-05-19  Charlie Zender  <zender@uci.edu>
+
+	* Added GPL copyright notices to all code prior to distribution
+	with radiation codes
+
+2003-05-12  Charlie Zender  <zender@uci.edu>
+
+	* nf90_utl.F90: Remove all rcd=rcd+... constructs
+
+	* cvs tag -c f-1_9_2
+	* Changes since f-1_9_1: Using ftn_strcpy() more forgiving since
+	sng1 automatically initialized to NUL
+
+	* More prototyping in sng_mdl.F90, various cleanups
+
+	* sng.F90 (sng): CEWI for lf95: Initialize cmd_ln before taking length 
+
+	* sng_mdl.F90 (ftn_strcpy): Initialize sng1 to NUL before using
+	ftn_strlen(sng1) and before copying sng2, rather than using
+	ftn_strnul(sng1) after copying sng2.
+
+2003-05-06  Charlie Zender  <zender@uci.edu>
+
+	* Added GPL license to all fff-related files that were not already
+	explicitly licensed 
+
+	* Change distribution location to http://dust.ess.uci.edu/f
+
+2003-03-08  Charlie Zender  <zender@uci.edu>
+
+	* fff_mdl.F90 (omp_tst): Add use omp_lib for ifc
+
+2003-03-06  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c f-1_9_1
+	* Changes since f-1_9_0: 
+	Synchronization check-in for prg_anl_tst.txt
+
+2003-02-19  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c f-1_9_0
+	* Changes since f-1_8_2: dat_prn_f90 tweaks,
+	Remove dependency of fff on libspecfun, librecipes_f90
+
+	* Makefile: Added erf_mdl.F90 and gmm_mdl.F90 from dust model to
+	libcsz_f90 so that fff is now independent of libspecfun and librecipes_f90
+
+2002-11-24  Charlie Zender  <zender@uci.edu>
+
+	* Changes to remove warning for ifc 7.0 compilation
+
+2002-09-28  Charlie Zender  <zender@uci.edu>
+
+	* fff --tst=omp crashes with Lahey
+
+	* Fix Lahey OpenMP compilation options
+
+	* Clean up thermodynamics routines
+
+2002-09-23  Charlie Zender  <zender@uci.edu>
+
+	* lf95 does not like new dat_prn_f90() format statement
+
+2002-09-21  Charlie Zender  <zender@uci.edu>
+
+	* Fix dat_prn_f90() format statement
+
+2002-09-20  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c f-1_8_2
+	* Changes since f-1_8_1: Builds and runs on all platforms!
+
+	* Remove lcl_date_time_get(), use date_time_get() instead
+
+	* Make dat_prn_f90() accomodate any size array in print statement
+
+	* Refine test for linking to netcdf.mod
+
+	* Split out fff feature and regression tests into fff_mdl.F90
+
+2002-09-19  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c f-1_8_1
+	* Changes since f-1_8_0: lf95 compatibility for PRC=[S,D]
+
+	* Enclose float version of overloaded routines in #ifndef PRC_DBL 
+	to avoid ambiguity in overload resolution on lf95
+
+	* Use r8 on various routines to allow lf95 to compile double
+	precision without using --dbl switch. Using --dbl causes float and
+	double overloaded versions of ftn_arg_get to have same precision
+	and thus conflict. lf95 complains about this conflict. Not passing
+	--dbl fixes this conflict. Now all precision changing is handling
+	via the precision module and the make option PRC=[S,D]
+
+2002-07-02  Charlie Zender  <zender@uci.edu>
+
+	* prn_mdl.F90: Created dat_prn_f90() to replicate dat_prn_f77()
+	functionality but for F90 code. Based on ~/c++/utl.cc:f90_prm_dat_prn()
+	dat_prn_f90() works except for declaration of dimension, which
+	must be manually edited.
+	
+	* Add slr_crd_mdl.F90 from ~/time utilities to libcsm_f90.a
+
+2002-06-12  Charlie Zender  <zender@uci.edu>
+
+	* Added prn_mdl.F90 with dat_prn_f77() to libcsz_f90.a
+
+2002-06-05  Charlie Zender  <zender@uci.edu>
+
+        * Makefile (LDFLAGS): Added flags for 64-bit mode on AIX
+
+2002-04-21  Charlie Zender  <zender@uci.edu>
+
+	* Turned vec_mdl.F90 into true module
+
+2002-04-18  Charlie Zender  <zender@uci.edu>
+
+        * Released new version of sng with f2kcli-compatibility
+
+	* cvs tag -c f-1_8_0
+	Changes since f-1_7_1: sng F2K and f2kcli compatibility
+
+2002-04-17  Charlie Zender  <zender@uci.edu>
+
+	* fff.F90 (fff): Replaced all calls to iargc() with
+	command_argument_count() and all calls to getarg() with
+	get_command_argument() for F2K compatibility. These stubs
+	are defined by default to be equivalent to iargc() and
+	getarg(). Compiling with -DF2K turns off stubs and assumes
+	the F2KCLI module is available to supply these defaults.
+	Alternatively, an F2K-compliant compiler could be used
+	(if one existed).
+	
+2002-04-13  Charlie Zender  <zender@uci.edu>
+
+	* sng-README.txt: Added documentation for sng
+
+	* Added sng.F90 demo program for sng_utl string handling module
+
+2002-04-07  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c f-1_7_1
+	Changes since f-1_7_0: Make prc_tst arguments typesafe,
+	change some makefile defaults
+
+        * Ensure prc_tst is type-safe by passing computational precision
+        variable (cmp_prc_foo) and float variable (flt_foo)
+
+	* Remaining problem is that libspecfun is r8 so gsl_tst crashes
+	when fff compiled as r4
+
+	* OpenMP now works on AIX with default switches!
+
+2002-03-10  Charlie Zender  <zender@uci.edu>
+
+	* Add deallocate_wrp() overload (does not yet work though) and
+	mmr_mdl.F90 module
+
+2002-02-01  Charlie Zender  <zender@uci.edu>
+
+	* Makefile: Support lf95 compiler statically linked executables
+
+2001-12-30  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c f-1_7_0
+	Changes since f-1_6_3: Various rearrangements to make aca happy
+	f-1_7_0 is required to support aca-1_2_0
+
+	* Makefile: Add drv_cst_mdl, htrn_mdl, fnd_cst_mdl to libcsz_f90
+	to simplify using these modules in aca routines
+
+2001-12-29  Charlie Zender  <zender@uci.edu>
+
+	* Add nf90_wrp_create, change names to nf90_wrp_open, nf90_wrp_close
+
+2001-12-28  Charlie Zender  <zender@uci.edu>
+
+	* sng_mdl.F90: Overloaded ftn_arg_get_??? and made overloaded
+	functions private. First intelligent use of fortran overloading so
+	far. 
+
+	* cvs tag -c f-1_6_3
+	Changes since f-1_6_2: sng_mdl ftn_* utilities are all module
+	subroutines now. Works fine on IRIX, AIX, OSF1, but link errors on
+	Linux.
+
+	* Merged in box model changes including specifying precision for
+	all naked constants, extra debugging for xtr_mdl
+
+	* Makefile ($(libcsz_f77).a): Remove nf90_utl from libcsz_f77
+
+	* fff.F90 (omp_tst): Define thr_nbr before using to allocate()
+
+	* sng_mdl.F90 (ftn_strnulc): Remove ftn_strnulc since module
+	functions may not return len=* characters and, moreover,
+	ftn_strnulc() exactly duplicated ftn_strnul(), and, moreover,
+	ftn_strnulc() was never used.
+
+	* f-1_6_2 is last version with string functions as externals
+	Am now switch sng_mdl to be true module with module procedures for
+	all ftn_* functions
+
+	* cvs tag -c f-1_6_2
+	Changes since f-1_6_1: contains function specific wrappers for
+	inq_dimid, inq_varid
+
+	* nf90_utl.F90 (nf90_wrp_inq_dimid): Fix prototypes of wrapped inq
+	functions 
+
+	* fff.F90 (fff): Fix line too long
+
+2001-11-11  Charlie Zender  <zender@uci.edu>
+
+	* nf90_utl.F90 (nf90_wrp_inq_varid): Added first wrapper/handler
+	for nf90_ function. There may be many more of these added soon
+	as I hunt for cause of reshape error.
+
+2001-10-25  Charlie Zender  <zender@uci.edu>
+
+	* precision.F90 (main): Changed in to intv and rn to rntv because
+	Match uses a variable named in and rn is also probably to generic
+	a name to appear in the precision module
+
+2001-10-22  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c f-1_6_1
+	Changes since f-1_6_0: Using nf90_module
+
+	* nf90_utl.F90: Add aer version with module and nf90_wrp() 
+
+2001-09-30  Charlie Zender  <zender@uci.edu>
+
+	* Makefile (F_OBJ): Compiler defaults to f95 where possible
+
+	* cvs tag -c f-1_6_0
+	Changes since f-1_5_5: Coordinated with Makefile so libcsz_f90
+	builds nicely and is now default
+
+	* fff.F90 (fff): provide useful error information
+
+	* cvs tag -c f-1_5_5
+	Changes since f-1_5_4:
+	fff now links to libcsz_f90, all components of which are
+	written in free-form Fortran 95 code
+	f still links to libcsz_f77 which is now fully deprecated 
+	and will be eventually deleted
+	
+	* Sucessfully linked fff to libcsz_f90.a and executed
+
+	* Built F95-compliant libcsz_f90.a to supercede libcsz_f77.a
+
+2001-09-29  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c f-1_5_4
+	Changes since f-1_5_3:
+	All module files which will comprise libcsz_f90 now build
+	but have not been validated
+	
+	* xtr_mdl.F90 (xtr_ini): made first use of F90 public and
+	private statements
+
+	* Translated 
+	xtr_f77.F + xtr.com -> xtr_mdl.F90
+	vec_f77.F -> vec_mdl.F90
+	csz_f77.F -> csz_mdl.F90
+	tdy_f77.F -> tdy_mdl.F90
+	utl_f77.F -> utl_mdl.F90
+	sng_f77.F -> sng_mdl.F90
+
+	* parameter.F90 (main): Added parameter.F90 (still and include
+	file and not yet a module), and new modules dbg_mdl.F90 and
+	ccm_grd.F90 which allow all leafs of libcsz_f90 to be F90
+	sources. 
+
+2001-09-28  Charlie Zender  <zender@uci.edu>
+
+	* Decided that new convention will be to name routines which might
+	possibly one day be modules as sbr_mdl.F90. sbr is the generic
+	subroutine name, e.g., dbg, erf. _mdl is appended for two reasons:
+	First, F90 build system (and some compilers) currently require
+	that modules have same name as source files which contain them, 
+	e.g., erf.F90 contains module erf. However, modules may not be
+	named same thing as a module procedure which they contain. 
+	Since we wish to keep the erf() mathematical function named "erf",
+	we must name the module that might potentially contain it
+	something besides erf, hence erf_mdl. It is unfortunate that
+	module namespaces can conflict with the functions they contain
+	but they seem to, and hey, fortran is not C. This then determines
+	the filename. This logic may change one day but it works for now.
+	Also, another factor that was considered, is that I've given the
+	C/C++ versions of these routines the first naming rights so there
+	exist C routines named xtr.cc, dbg.cc, etc. The object files for
+	these routines will confuse the compilers if they are stored in
+	the same directory. Since I like to store most object files in 
+	one directory, it is important to maintain distinctions between
+	fortran and C filenames. Of course these restrictions need not
+	apply to self-contained entities like the dust model, but many
+	components of the dust model are also used as a stand-alone
+	library where the object files could be confused by C objects.
+	The point about the build system alluded to above should be
+	explained. The makdep tool requires modules that are USE'd to be
+	contained in files with the same stem. I do not think this is a
+	fortran requirement, but it is a makdep requirement.
+	I think these are all the points which should be considered, but I
+	might have forgotten some.
+	
+	* Makefile: moved dbg2.F90 to dbg_mdl.F90, removed dbg.F90
+
+	* hello.f90 (hello): Changed hello.F to hello.f90
+
+	* cvs tag -c f-1_5_3
+
+	* nf90_utl.F90 (nf90_xtype_r8_get): renamed nc_f90.F90 nf90_utl.F90
+
+	* fff.F90 (fff): Moved to nf90_utl and determining external netCDF
+	type from kind(r8) 
+
+2001-09-24  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c f-1_5_2
+
+	* Merged nc_f90.F90 into libcsz_f77 to support global use of
+	netCDF F90 interface. nc_f77.F is now deprecated.
+
+2001-09-21  Charlie Zender  <zender@uci.edu>
+
+	* nc_f90.F90 (nc_err_exit): Removed Fortran90 nc_err_exit until
+	Fortran77 version is deprecated
+
+2001-09-20  Charlie Zender  <zender@uci.edu>
+
+	* fff.F90 (fff): Use nf90_noerr instead of 0
+
+2001-08-22  Charlie Zender  <zender@uci.edu>
+
+	* utl_f77.F (mnt_ncr_chk): Fixed bug in mnt_ncr_chk() and
+	mnt_dcr_chk(). Routines could have returned wrong flag if
+	array contained negative numbers with certain spacing.
+
+2001-08-21  Charlie Zender  <zender@uci.edu>
+
+	* precision.F90 (main): Added new kinds for native real (rn) and
+	native integer (in)
+
+2001-08-10  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c f-1_5_1 Code fully works on all platforms, including
+	Alpha, which means I believe there really are no bugs :)
+
+	* Removed call to bytesizesok() in order to remove explicit
+	dependence on typesizes.mod
+
+	* Makefile: Modified Sun build to dynamically link netcdf.mod
+
+	* fff.F90: Replaced single quote ' with double quote " everywhere
+	except for formatting rules
+
+	* Added lcl_date_time_get() to return 
+	Time formatted as Day Mth DD HH:MM:SS TZ YYYY
+	Fixed additional size kind problem found in date_time_tst
+	
+2001-08-09  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c f-1_5
+	Code works in single and double precision on all Linux, AIX,
+	and SGI platforms. Unable to test Solaris yet. Fails in netCDF
+	write on alpha.
+	
+	* fff.F90 (fff): Added _r8 kind qualifier to naked constants
+	(prc_tst): Ensured prc_tst() kinds are consistent between 
+	precision.F90 module and internal kinds. This is difficult
+	because of the use of the name "precision" for the module.
+	"precision" is also an intrinsic function name. Bummer.
+	Removed calls to ftn_flt_arg_get to obtain reals of different
+	kinds. Polymorphism is required to get ftn_flt_arg_get to handle
+	multiple kinds before this will work.
+	Added reading of one_dmn_var so that all output variables
+	are now formally initialized.
+
+	* fff.F90 (prc_tst): Changed dbl_foo from r8 to DBLKIND
+
+	* cvs tag -c f-1_4_2
+	1.4.2 works fine in default precision with fortran 90 netCDF
+	interface on AIX and Linux. Run time errors on alpha.
+	
+	* Makefile (FFLAGS): 
+
+	* fff.F90 (fff): Made variables which depend on input data
+	allocatable 
+
+2001-07-27  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c f-1_4_1
+	1.4.1 is intended to be last stable version with f77 netCDF interface
+	Working f90 netCDF interface will be 1.5
+	
+	* Still need to recompile numerical recipes library with same
+	double precision switches to get that working with gsl_tst()
+
+	* fff.F90 (gsl_tst): Rearranged numeric tests to be more useful
+	(gsl_tst): Spent some time working on ~/linux/sw/specfun.txt
+	script to get libspecfun.a to automatically build in double
+	precision (but from single precision sources) and to work with  
+	fff. Successful in all cases except SGIMP64.
+
+2001-07-26  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c f-1_4
+
+	* Validated compilation and POSIX argument handling on all
+	platforms---ready for primetime! Oops, apparently not ready
+	for Linux---ftn_strcmp() does not run as expected.
+
+	* fff.F90 (prc_tst): Wrote prc_tst to test precision of variables
+
+2001-07-25  Charlie Zender  <zender@uci.edu>
+
+	* sng_f77.F (ftn_int_arg_get): Implemented POSIX command line
+	switches in ftn_[sng,int,flt]_arg_get(). Appears to work great!
+	(ftn_prg_ID_mk): Fixed problem overwriting CVS_XXX parameters in
+	ftn_prg_ID_mk() 
+
+2001-07-24  Charlie Zender  <zender@uci.edu>
+
+	* fff.F90: Found problem with reading flt_foo from command line
+
+	* fff.F90: Converted all format descriptors from 1p,e,0p to es
+
+	* sng_f77.F: Having difficulty with error messages about I/O
+	recursion. Uncertain what they mean or how to fix. Changed
+	character*(*) to character(*).
+	(ftn_strcmp): Fixed recursive I/O problem by turning off 
+	print statements in functions which may be placed in an I/O
+	list, and by removing functions with print statments (e.g.,
+	ftn_strcmp) from I/O lists. ftn_strcmp() appears to behave
+	well on all systems except Linux now.
+
+2001-07-23  Charlie Zender  <zender@uci.edu>
+
+	* sng_f77.F (ftn_strcmp): Added ftn_strcmp() and began using
+	it in command line test switches. ftn_strcmp() is drop-in
+	replacement for fortran == operator and has syntax identical to C
+	library strcmp()
+	(ftn_strprn): Improved printing on last character
+
+2001-07-20  Charlie Zender  <zender@uci.edu>
+
+	* Makefile (FFF_OBJ): AIX has its own, slightly different,
+	requirements for correctly linking to modules. The requirements on
+	Solaris are described in the 2001-07-19 entry. Linux and IRIX, I
+	believe, do not seem to require any modules which do not contain
+	functions or subroutines to be explicitly specified as .o files to
+	the linker. AIX seems to require all modules to be explicitly
+	specified as .o fils to the linker.
+
+	* cvs tag -c f-1_3
+
+	* cvs tag -c ftn_namespace
+	
+	* Made fortran calls namespace safe by adding ftn_ prefix
+
+2001-07-19  Charlie Zender  <zender@uci.edu>
+
+	* Makefile (FFF_OBJ): Solaris f90 appears to require that modules
+	containing new LVALUE symbols, e.g., dbg2.F90, appear explicitly
+	in the 	object files list, e.g., $MY_OBJ_DIR/dbg2.o, whereas
+	modules which do not contain new LVALUE symbols, e.g.,
+	precision.F90, are automatically found in use statements. 
+	Thus modified $FFF_OBJ to include dbg2.o but not precision.o.
+
+2001-07-17  Charlie Zender  <zender@uci.edu>
+
+	* Merged in improvements to sng_f77 from dust model. Improved
+	command line processing functions. May break on Sun compiler
+	due to restriction on explicitly specified number of formatting
+	characters. 
+
+2001-04-30  Charlie Zender  <zender@uci.edu>
+
+	* Condensed parameter statements in parameter.com et al.
+
+2001-04-18  Charlie Zender  <zender@uci.edu>
+
+	* Tweaked cmd_ln_sng() to restore lost spaces between options
+
+	* drcpfx() now does not prepend directory name when filename looks
+	like it already has a path name. This allows drc_in to change
+	default path while at the same time allowing individual files to
+	be chosen to reside anywhere and override the default path.
+
+	* Fixed strlen() to behave exactly as C-version would by
+	subtracting 1 from strfic(), and returning 0 for uninitialized
+	strings, i.e., sng=''
+
+	* Fixed strstr() argument reversal in drcpfx()
+
+2001-04-17  Charlie Zender  <zender@uci.edu>
+
+	* Added drcpfx() to use instead of strpfx() when purpose is to
+	allow more flexible rules for deciding when user-specified
+	directories should or should not be prefixed to files
+
+	* Replaced str2nul() with strini(), which already existed
+
+2001-04-16  Charlie Zender  <zender@uci.edu>
+
+	* Added str2nul()
+
+	* Redefined strlen() to be min(strfic(sng),len(sng))
+
+2001-04-15  Charlie Zender  <zender@uci.edu>
+
+	* Completed fuller implementation of long option handling and
+	added sng_arg_get() specifically for string options
+
+2001-04-13  Charlie Zender  <zender@uci.edu>
+
+	* Changed default to compile without OpenMP so swnb2 suite runs
+	correctly by default
+
+2001-04-11  Charlie Zender  <zender@uci.edu>
+
+	* Changed nf_open/close_csz to use strlsc() rather than strlen()
+
+	* Added strpfx()
+
+2001-04-10  Charlie Zender  <zender@uci.edu>
+
+	* Added kludge module rule to Makefile
+
+	* Changed all remaining double precisions in fff.F90 to r8
+
+	* Added date_time.c dependency back to fff.F90
+
+	* Added unix2gmt_sng() test inside date_time_tst() section
+
+2000-10-31  Charlie Zender  <zender@uci.edu>
+
+	* Makefile now uses modified CCM makdep dependency generator.
+	Makefile works with all *.F files. Still need to work on modules.
+	
+	* Tagged repository with f-1_2 for pre-CCM makdep builds
+
+	* Modifying Makefile to work with modules and CCM makdep dependency-generator
+
+2000-07-06  Charlie Zender  <zender@uci.edu>
+
+	* Hacked Makefile to generate F90 dependencies and to work with
+	free-format source
+
+	* Converted f.F to fff.F90
+
+2000-05-21  Charlie Zender  <zender@uci.edu>
+
+	* Commented out the six <ieee_xxx.com>, <time_xxx.com> include
+	files to pave the way for standard Fortran90 implementation of all
+	these features
+
+2000-02-23  Charlie Zender  <zender@uci.edu>
+
+	* Added and tested IEEE diagnostics routine ieee_tst()
+
+	* Re-architected getopt routine to be more robust
+	Routine now has a fall through, does not test values against key list
+
+1999-07-20  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Removed __GNUC__ tokens for automatic allocation in vec_f77.F
+	and in csz_f77.F. Now code _must_ be compiled with f90 or with g77.
+
+Wed Apr 28 11:04:40 1999  ZENDER CHARLIE 1445 ML CGD  <zender@dataproc.ucar.edu>
+
+	* Fixed subscript error in rbn_tst(). Noticed that compiling with
+	-X = -trapuv and -check_bounds causes error in ntp_vec() because
+	a while loop tests conditions which cannot ever be reached. 
+
+1999-01-18  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Added -lspecfun and -lrecipes_f to LINUX and SUNMP builds
+
+	* Added gamma and gammq test functions
+
+Thu Dec 17 17:15:43 1998  Charlie Zender  <zender@sanitas-e0.cgd.ucar.edu>
+
+	* Tagged f-1_1
+
+	* Added ntp_vec_one()
+
+1998-08-30  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Tagged module f_1_0
+
+	* Finished initial implementation of f module
+
+	

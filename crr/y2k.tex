@@ -1,0 +1,137 @@
+% $Id$
+
+% Purpose: What to do ...
+
+% Usage: 
+% cd ~/crr;make -W y2k.tex y2k.ps;cd -
+
+\documentclass[final,dvips]{foils}
+
+% Standard packages
+\usepackage[usenames]{color} % usenames allows, e.g., ``ForestGreen''
+\usepackage{graphicx} % Defines \includegraphics*
+\usepackage{natbib} % \cite commands from aguplus
+\usepackage{array} % Table and array extensions, e.g., column formatting
+\usepackage{ifthen} % Boolean and programming commands
+
+% Personal packages
+\usepackage{csz} % Library of personal definitions
+\usepackage{smn} % Seminar commands
+\input{jgr_abb} % JGR-sanctioned journal abbreviations
+
+% Margins
+\topmargin 0in \headheight 0pt \headsep 0pt
+\textheight 9in \textwidth 6.5in
+\oddsidemargin 0in \evensidemargin 0in
+\marginparwidth 0pt \marginparsep 0pt
+\footskip 0pt
+\footnotesep=0pt
+
+% FoilTeX macros
+\MyLogo{} % Appears bottom left corner every page
+\rightfooter{} % Pagenumber is the default
+\leftheader{} % Appears upper left
+\rightheader{} % Appears upper right
+
+\begin{document}
+\raggedright % Default is justified
+
+\foilhead{%\bgl
+\Large\textcolor{blue}{\hfill Opportunities \hfill}}\vspace{-0.5in}\large
+\begin{enumerate}
+\item Future Climate website \& consulting 
+\begin{enumerate}
+\item Website
+\begin{enumerate}
+\item Breaking climate news
+\item Journal highlights
+\item Reader's forum
+\item Political corner
+\item Monthly science feature
+\item Case studies, e.g., 1993 floods
+\end{enumerate}
+
+\clearpage
+\item Consulting
+\begin{enumerate}
+\item Climate analysis and trends
+\begin{enumerate}
+\item Archival precipitation
+\item Changes in precipitation variance 
+\end{enumerate}
+\item Trace gas forcing
+\begin{enumerate}
+\item Optimal emissions reductions
+\item Global Warming Potential
+\end{enumerate}
+\item Montreal/Rio compliance
+\begin{enumerate}
+\item Compared to industry standard
+\item Compared to other nations
+\end{enumerate}
+\item Dust forecasts
+\begin{enumerate}
+\item Insurance/maintenance premiums
+\item Pollution
+\end{enumerate}
+\item Technology recommendations
+\begin{enumerate}
+\item Model recommendations/setup
+\item Hardware recommendations/setup
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill Jobs \hfill}}\vspace{-0.5in}\large
+\begin{table}
+\begin{center}
+\begin{tabular}[c]{ >{}p{5em}<{} || *{3}{>{}p{5em}<{}} } % KoD95 p. 94 describes '*' notation
+%\begin{tabular}[c]{ llll } % KoD95 p. 94 describes '*' notation
+& Associate Scientist & Future Climate & Computer Programmer \\[0.0ex]
+\hline\hline \rule{0.0ex}{\hlntblhdrskp}%
+Salary & Medium & ??? & High \\[1.0ex]
+Retirement & Never & ??? & 20 yrs. \\[1.0ex]
+Location & Boulder & Boulder & SV, Boulder \\[1.0ex]
+Security & High & Low & Medium \\[1.0ex]
+Challenge & Medium & High & High \\[1.0ex]
+Near Family & C\&C & C\&C & Zenders \\[1.0ex]
+Worthwhile & Yes & Temporal & Unlikely \\[1.0ex]
+Academia & Possible & Unlikely & No \\[1.0ex]
+Robynn & Depression & Panic & Money \\[1.0ex]
+Free Time & Lots & Little & Medium \\[1.0ex]
+\end{tabular}
+\end{center}
+\end{table}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill NCAR Associate Scientist \hfill}}\vspace{-0.5in}\large
+\begin{table}
+\begin{center}
+\begin{tabular}[c]{ r l }
+More focused & Less freedom \\[1.0ex]
+Authorship opportunities & Limited subjects \\[1.0ex]
+9--5 & No travel \\[1.0ex]
+Possible route to academia & Unlikely \\[1.0ex]
+Good resources & \\[1.0ex]
+Familiar, plausible & Low challenge \\[1.0ex]
+Boulder & \\[1.0ex]
+\end{tabular}
+\end{center}
+\end{table}
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill Computer industry programmer \hfill}}\vspace{-0.5in}\large
+\begin{table}
+\begin{center}
+\begin{tabular}[c]{ r l }
+High pay & Uninteresting work \\[1.0ex]
+& No travel \\[1.0ex]
+Silicon valley & Hassle \\[1.0ex]
+High challenge & No physics \\[1.0ex]
+\end{tabular}
+\end{center}
+\end{table}
+
+\end{document}

@@ -1,0 +1,49 @@
+$Id$
+
+This directory, ~/map, contains routines to generate and manipulate
+gridded map data. In particular, this module contains a front-end and 
+generates two libraries, libmap and libbds. 
+The front end is bds.F90.
+libmap contains generic mapping routines.
+libbds contains boundary dataset generation routines.
+
+bds.F90		Boundary DataSet (BDS) generator front end
+
+libmap:
+geo_mdl.F90	Geomorphology and flow accumulation
+map_cst.F90	Map constants
+map_grd.F90	Map grid generation and rebinning utilities
+
+libbds:
+bds_ctl.F90	BDS control variables and driver routines
+clm_fld.F90	Community Land Model (CLM) fields
+dstlsm.F90	Land Surface Model (LSM) common blocks from dust model
+hgt_sfc.F90	Surface elevation and bathymetry
+lak_wtl.F90	Lakes, wetlands, and dry land fraction
+mdl_asm.F90	Assimilate output from models (CCM, MATCH)
+obs_asm.F90	Assimilate output from observations (TOMS)
+sfc_typ.F90	Surface type classification and derived variables
+soi_mnr.F90	Soil mineralogy (IGBP-DIS)
+soi_txt.F90	Soil texture
+src_prc.F90	Dust-aerosol source ID, processing, basin factors
+
+BDS program flow:
+
+bds()->	bds_prc()->	lnd_bnd_cnv_rbn()->	hgt_sfc_get()->	[dst_src_bsn(),dst_src_flw()]
+						pft_get()
+						lai_get()
+						sfc_typ_get()
+						soi_txt_get()
+						lnd_frc_dry_get()
+						soi_chm_IGBP_get()
+			dst_src_bsn()*
+			asm_drv()->		mdl_atm_get()
+						toms_get()->	src_id()
+						hyd_get()
+						mdl_lsm_get()
+						lsm_get_sfc_flw()
+			dst_src_flw()*
+			sfc2vgt(),sfc2dps()
+			soi_hyd_prc()
+			aod_nmd_get()
+			bds_out()

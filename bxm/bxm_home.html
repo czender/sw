@@ -1,0 +1,66 @@
+<!-- $Id$
+Purpose: On-line box model home page
+
+Usage:
+http://dust.ess.uci.edu/dead/bxm_home.html
+sudo cp ~/bxm/bxm_home.html /var/www/html/dead/bxm_home.html
+-->
+
+<html>
+
+<head><title>DEAD: On-line Box Model Homepage</title></head>
+<body bgcolor=white>
+<font face="Verdana, Helvetica, Arial">
+
+[<a href="bxm_home.html">Box Model</a>]
+[<a href="bxm_cnf.html">Configure/Run</a>]
+[<a href="bxm_vzn.html">Visualize</a>]
+[<a href="bxm_txt.html">Text Output</a>]
+[<a href="bxm_dwn.html">Download Results</a>]
+[<a href="/dead/">DEAD Home</a>]
+
+<h1>DEAD: Box Model Homepage</h1>
+
+The box model refers to the stand-alone version of the DEAD aerosol
+model.
+The box model is driven by a standalone program which supplies
+all the information normally input from the host GCM or CTM.
+The user interactively specifies the number of timesteps and the
+environmental conditions to the box model.
+
+The script which allow the box model to run interactively in a web
+server environment are also available for downloading and
+modification.
+<li>Box model web-scripts in tarball format: <a href="http://dust.ess.uci.edu/dead/bxm.tar.gz">bxm.tar.gz</a></li>
+We encourage users to examine and to send us improvements to
+the current scripts.
+If there are particular variables or NCL graphics techniques
+that you desire, simply modify our existing scripts and send
+us the results.
+We are happy to incorporate useful new features of general interest.
+
+<!--
+<a href="bxm_cnf.html">Configure</a>
+<p>
+
+<form method=post action="/cgi-bin/bxm_run.py">
+<input type=submit value="Run Box Model">
+</form>
+<p>
+
+<a href="bxm_vzn.html">Visualize</a>
+<p>
+
+<a href="bxm_txt.html">Text Output</a>
+<p>
+
+<a href="bxm_dwn.html">Download Results</a>
+<p>
+
+<a href="/dead/">DEAD Homepage</a>
+<p>
+
+-->
+
+</body>
+</html>

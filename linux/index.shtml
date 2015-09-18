@@ -1,0 +1,134 @@
+<!-- $Id$
+
+Purpose: CheatSheets homepage
+
+Usage:
+http://dust.ess.uci.edu/doc/index.shtml
+file:/home/zender/linux/index.shtml
+scp ~/linux/index.shtml dust.ess.uci.edu:/var/www/html/doc/index.shtml
+-->
+
+<!doctype html public "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+   <title>CheatSheets Homepage</title>
+   <meta name="Generator" content="Old fashioned typing">
+   <meta name="Author" content="Charlie Zender">
+   <meta name="Keywords" content="Documentation">
+</head>
+<body text="#000000" link="#0000EF" vlink="#008080" alink="#FF0000">
+
+<table width="100%"><tr><td align="center" valign="top">
+<a href="http://dust.ess.uci.edu/dead">DEAD</a> /
+<a href="http://dust.ess.uci.edu/doc">Doc</a> /
+<a href="http://dust.ess.uci.edu"><tt>dust</tt></a> /
+<a href="http://www.ess.uci.edu">ESS</a> /
+<a href="http://www.ess.uci.edu/esmf">ESMF</a> /
+<a href="http://dust.ess.uci.edu/facts">FACTs</a> /
+<a href="http://nco.sf.net">NCO</a> /
+<a href="http://dust.ess.uci.edu/poetry">Poetry</a> /
+<a href="http://www.ess.uci.edu/~zender">Zender</a>
+</td></tr></table>
+
+<p><hr width="100%"></p>
+<p><h1 align=center>Zender Group CheatSheets</h1>
+
+<p>Well-crafted notes can put raw technical power on-tap for easy exploitation.
+These CheatSheets help channel and cool our knowledge as it cures into understanding.
+They are technical underground literature, scientific samizdat, and pulp fiction.
+Precise summaries of complex technical incantations&mdash;at best&mdash;with
+heavily indexed and illustrated examples.
+Phone-number-smeared napkins and shopping list-filled Post-Its have no home here.
+We strive for blueprints that foster reproducibility.
+</p>
+
+<p>Notes begin as scattershot collections of unremarkable facts.
+With occasional fertilization and re-potting, they may synthesize knowledge more completely and systematically than any living or artificial brain. 
+Technical fields are so festooned by time-saving details that no one has the time to learn them.
+Too often the details are not at hand when needed.
+Or they are in a form easy to read like the printed page, yet resistant to transplant to your computer.
+Notes are best when they are easy to read, search, use, and change.
+</p>
+
+<p>These &ldquo;Cheat Sheets&rdquo; accrete like software callouses.
+Initially they are fragile, bumpy, and unconnected.
+After several years, they smooth, strengthen, and set into a mixture of useful tips and obsolete reminders. 
+We hope they help you understand our research and software.
+<i>Comments and additions are very welcome!</i>
+
+<!-- Sort by document title -->
+<ul>
+<li>Abbreviation Cheat Sheet (<i>helps pick variable names in scientific programs</i>)</li>
+<a href="http://dust.ess.uci.edu/doc/abb/abb.dvi">DVI</a>, 
+<a href="http://dust.ess.uci.edu/doc/abb/abb.html">HTML</a>, 
+<a href="http://dust.ess.uci.edu/doc/abb/abb.tex">LaTeX</a>,
+<a href="http://dust.ess.uci.edu/doc/abb/abb.pdf">PDF</a>,
+<a href="http://dust.ess.uci.edu/doc/abb/abb.ps">PS</a>,
+<a href="http://dust.ess.uci.edu/doc/abb/abb.txt">TXT</a>,
+<a href="http://dust.ess.uci.edu/doc/abb/abb.xml">XML</a> (last modified <!--#flastmod file="abb/abb.ps"-->)
+
+<li>CVS Cheat Sheet (<i>helps use CVS for software management</i>)</li>
+<a href="http://dust.ess.uci.edu/doc/cvs/cvs.dvi">DVI</a>,
+<a href="http://dust.ess.uci.edu/doc/cvs/cvs.html">HTML</a>,
+<a href="http://dust.ess.uci.edu/doc/cvs/cvs.tex">LaTeX</a>,
+<a href="http://dust.ess.uci.edu/doc/cvs/cvs.pdf">PDF</a>,
+<a href="http://dust.ess.uci.edu/doc/cvs/cvs.ps">PS</a>, 
+<a href="http://dust.ess.uci.edu/doc/cvs/cvs.txt">TXT</a>, 
+<a href="http://dust.ess.uci.edu/doc/cvs/cvs.xml">XML</a> (last modified <!--#flastmod file="cvs/cvs.ps"-->)
+
+<li>ESMF Cheat Sheet (<i>helps getting running on the ESMF</i>)</li>
+<a href="http://dust.ess.uci.edu/doc/esmf/esmf.dvi">DVI</a>,
+<a href="http://dust.ess.uci.edu/doc/esmf/esmf.html">HTML</a>,
+<a href="http://dust.ess.uci.edu/doc/esmf/esmf.tex">LaTeX</a>,
+<a href="http://dust.ess.uci.edu/doc/esmf/esmf.pdf">PDF</a>,
+<a href="http://dust.ess.uci.edu/doc/esmf/esmf.ps">PS</a>, 
+<a href="http://dust.ess.uci.edu/doc/esmf/esmf.txt">TXT</a>, 
+<a href="http://dust.ess.uci.edu/doc/esmf/esmf.xml">XML</a> (last modified <!--#flastmod file="esmf/esmf.ps"-->)
+
+<li>GreenPlanet Cheat Sheet (<i>helps getting running on GreenPlanet</i>)</li>
+<a href="http://dust.ess.uci.edu/doc/greenplanet/greenplanet.dvi">DVI</a>,
+<a href="http://dust.ess.uci.edu/doc/greenplanet/greenplanet.html">HTML</a>,
+<a href="http://dust.ess.uci.edu/doc/greenplanet/greenplanet.tex">LaTeX</a>,
+<a href="http://dust.ess.uci.edu/doc/greenplanet/greenplanet.pdf">PDF</a>,
+<a href="http://dust.ess.uci.edu/doc/greenplanet/greenplanet.ps">PS</a>, 
+<a href="http://dust.ess.uci.edu/doc/greenplanet/greenplanet.txt">TXT</a>, 
+<a href="http://dust.ess.uci.edu/doc/greenplanet/greenplanet.xml">XML</a> (last modified <!--#flastmod file="greenplanet/greenplanet.ps"-->)
+
+<li>LaTeX Cheat Sheet (<i>helps typesetting scientific documents</i>)</li>
+<a href="http://dust.ess.uci.edu/doc/ltx/ltx.dvi">DVI</a>, 
+<a href="http://dust.ess.uci.edu/doc/ltx/ltx.html">HTML</a>,
+<a href="http://dust.ess.uci.edu/doc/ltx/ltx.tex">LaTeX</a>,
+<a href="http://dust.ess.uci.edu/doc/ltx/ltx.pdf">PDF</a>,
+<a href="http://dust.ess.uci.edu/doc/ltx/ltx.ps">PS</a>, 
+<a href="http://dust.ess.uci.edu/doc/ltx/ltx.txt">TXT</a>, 
+<a href="http://dust.ess.uci.edu/doc/ltx/ltx.xml">XML</a> (last modified <!--#flastmod file="ltx/ltx.ps"-->)
+
+<li>Linux Cheat Sheet (<i>helps setting up, running, and debugging Linux</i>)</li> 
+<a href="http://dust.ess.uci.edu/doc/linux/linux.dvi">DVI</a>, 
+<a href="http://dust.ess.uci.edu/doc/linux/linux.html">HTML</a>,
+<a href="http://dust.ess.uci.edu/doc/linux/linux.tex">LaTeX</a>,
+<a href="http://dust.ess.uci.edu/doc/linux/linux.pdf">PDF</a>,
+<a href="http://dust.ess.uci.edu/doc/linux/linux.ps">PS</a>, 
+<a href="http://dust.ess.uci.edu/doc/linux/linux.txt">TXT</a>, 
+<a href="http://dust.ess.uci.edu/doc/linux/linux.xml">XML</a> (last modified <!--#flastmod file="linux/linux.ps"-->)
+</ul>
+
+<p>(<a href="http://dust.ess.uci.edu/doc/tex/index.shtml">This document</a>
+describes how to modify and build all the above documents from the 
+source LaTeX file. 
+Everything you need to build, edit, modify, and re-distribute these
+documents is on the web.
+Please send us your patches and improvements.)
+
+<p>Are these notes obsessive-compulsive? vain? solipsistic?</p>
+Is &ldquo;Being John Malkovich&rdquo; about more than John Malkovich?</p>
+
+Find out <a href="http://dust.ess.uci.edu/facts">what happens when lecture notes metastasize</a>...
+
+<p>
+<hr></p>
+Address questions and comments about CheatSheets to 
+<address>
+<a href="mailto:surname@uci.edu">Charlie &ldquo;my surname is zender&rdquo; Zender</a></address>
+</body>
+</html>

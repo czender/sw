@@ -1,0 +1,128 @@
+2008-11-04  Charlie Zender  <zender@uci.edu>
+
+	* Change from GFDL 1.2 to 1.3
+
+2006-10-30  Charlie Zender  <zender@uci.edu>
+
+	* Add \usepackage[dayofweek]{datetime} to hmw.sty, lct.sty, smn.sty
+
+2006-09-30  Charlie Zender  <zender@uci.edu>
+
+	* Change specific surface area, volume from \underbar to \hat
+
+2006-06-04  Charlie Zender  <zender@uci.edu>
+
+	* Add section on reflectance-based refractive indices
+
+2006-04-19  Charlie Zender  <zender@uci.edu>
+
+	* Added hypenation exceptions for prp_ids.tex
+
+2005-11-11  Charlie Zender  <zender@uci.edu>
+
+	* Added truncated Weibull distribution solution
+
+2005-01-25  Charlie Zender  <zender@uci.edu>
+
+	* Finished derivation of equal-V/S formulae for hexagonal prisms
+
+2005-01-24  Charlie Zender  <zender@uci.edu>
+
+	* Added and verified hexagonal prism geometry formula
+
+2005-01-22  Charlie Zender  <zender@uci.edu>
+
+	* Added derivation of Maxwell Garnet solution to aer.tex
+
+2005-01-21  Charlie Zender  <zender@uci.edu>
+
+	* Changed mssfrcncl to vlmfrcncl in aer.tex
+
+2004-09-17  Charlie Zender  <zender@uci.edu>
+
+	* Described extended effective medium approximation
+
+2004-07-06  Charlie Zender  <zender@uci.edu>
+
+	* Finished implementing \mathrm{} on all non-variable subscripts
+
+2004-07-05  Charlie Zender  <zender@uci.edu>
+
+	* aer.sty: Began using \mathrm{} for subscripts which are not variables.
+	A variable subscript is, e.g., an index which may have any value.
+	Non-variable subscripts denote specific processes,  locations,
+	proper names, e.g., v for vapor, s for surface.
+
+2004-06-26  Charlie Zender  <zender@uci.edu>
+
+	* Began mean effective single scatter optical property section in rt.tex
+
+2004-05-04  Charlie Zender  <zender@uci.edu>
+
+	* Added section on editing CVS repositories to cvs.tex
+
+2004-01-26  Charlie Zender  <zender@uci.edu>
+
+	* Switch documentation to new hyperref settings
+
+2004-01-24  Charlie Zender  <zender@uci.edu>
+
+	* Use tth as default LaTeX-to-HTML translator
+
+	* rt.tex: Enclose \textstyle foo in braces as {\textstyle foo}
+	so tth process file without generating "Exceeding allowed string length"
+	errors.
+	
+2003-09-28  Charlie Zender  <zender@uci.edu>
+
+	* dead.tex: Create dead.tex from psd.tex
+
+	* psd.tex: Add tables of SWNB and CLM fields
+
+	* psd.tex: Index all command line options and archived fields
+
+2003-07-13  Charlie Zender  <zender@uci.edu>
+
+	* rt.tex: Move figure locations to /data/zender/fgr/rt
+
+2003-07-08  Charlie Zender  <zender@uci.edu>
+
+	* dmn.sty: Switch to using \, interdimensional spacing
+
+2003-07-06  Charlie Zender  <zender@uci.edu>
+
+	* Use \upmu from upgreek.sty for upright micro in dimensions
+
+2003-03-07  Charlie Zender  <zender@uci.edu>
+
+	* abb.tex: Merged abbrebiation list from prp_mri.tex
+
+2002-11-12  Charlie Zender  <zender@uci.edu>
+
+	* Split dyn.sty into dyn.sty+tdy.sty
+
+2002-09-23  Charlie Zender  <zender@uci.edu>
+
+	* Added LaTeX version printing and ProvidesPackage{} mechanism
+
+2002-06-07  Charlie Zender  <zender@uci.edu>
+
+	* smn_gcc.tex: Renamed smn_drt.tex as smn_gcc.tex and made mods
+	for ESS 20E
+
+2001-10-22  Charlie Zender  <zender@uci.edu>
+
+	* hmw.sty: Added thumbnails
+
+2001-12-16  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c aer-0_1 aer* *.sty
+
+	* Renamed to Natural aerosols and made sea salt its own chapter
+
+2001-11-11  Charlie Zender  <zender@uci.edu>
+
+	* smn_YZS01.tex: Excised YZS01 seminar into self-contained file
+
+	* Finally Created ChangeLog
+

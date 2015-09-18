@@ -1,0 +1,83 @@
+\ifphdcsz{\thispagestyle{myheadings}}{}
+The ANV prognostic ice scheme \cite[][to which the following
+equation numbers refer]{ZeK961} was implemented in CCM in the
+following manner:
+Closing the heat and moisture budgets self-consistently (without
+having to forecast liquid) required disabling the direct thermodynamic
+feedbacks (2--3).
+Instead, heat and moisture tendencies of ice cloud formation are
+accounted for by CCM stratiform and convective cloud physics.
+This ensures condensational heating is not double-counted.
+Convective ice generation is forecast with~(1).
+Stratiform ice is forecast with an earlier version of (6), namely 
+\begin{eqnarray}
+\label{eqn:qi_stb_old}
+{D\qi \over Dt} & 
+= & 
+A_s \Bigl(
+{\alpha w + \beta {\mathrm H}(T - T_0) \over \rho \Delta z} 
+\Bigr) -
+c_2 \qi - 
+c_3 \qi
+\end{eqnarray}
+where ${\mathrm H}$ is the Heavyside step function and $\alpha$,
+$\beta$, and $T_0$ are empirical constants set to $6.3 \times
+10^{-5}$~\kgxmC, $4 \times 10^{-7}$~\kgxmSsk, and 240~$\dgr$K,  
+respectively. 
+%Table~\ref{tbl:anv_parm_imp} lists the parameters as suggested in 
+%\cite{ZeK961} Table~1 and as implemented in the present study.
+%\begin{planotable}{cll}
+%% See CZPIII p. 89,90,136
+%\tablewidth{\hsize} % works for normal tables
+%\tablecaption{Parameters in ANV\label{tbl:anv_parm_imp}}
+%\tablehead{\colhead{} & \colhead{Suggested Value} & \colhead{Implemented}}
+%\startdata
+%$c_1$ & $2.4 \times 10^{-3}$ & $.75 \times 10^{-3}$ \nl
+%$c_2$ & $.25c_3$ & $.3c_3$~\xs\ \nl
+%$c_3$ & $2.8 \times 10^{-4}$ & $1.85 \times 10^{-4}$~\xs\ \nl
+%$c_4$ & $1 \times 10^{-5}$ & $1 \times 10^{-5}$ m$^{-2}$~kg$^{1/2}$~s$^{-1/2}$ \nl
+%$c_5$ & $7.6 \times 10^{-6}$ & $6.3 \times 10^{-5}$ \kgxmC \nl
+%$c_6$ & $1.75 \times 10^{-5}$ & $4 \times 10^{-7}$ \kgxmSsk \nl
+%\end{planotable}
+%\begin{table*}
+%% See CZPIII p. 89,90,136
+%\caption{Parameters implemented in ANV\label{tbl:anv_parm_imp}} 
+%\begin{center}
+%\vspace{5pt}
+%\begin{tabular}{lll}
+%\tableline
+%& & \\[-5pt]
+%& Suggested Value & Implemented \\[4pt]
+%\tableline
+%& & \\[-6pt]
+%$c_1$ & $2.4 \times 10^{-3}$ & $.75 \times 10^{-3}$ \\
+%$c_2$ & $.25c_3$ & $.3c_3$~\xs\ \\
+%$c_3$ & $2.8 \times 10^{-4}$ & $1.85 \times 10^{-4}$~\xs\ \\
+%$c_4$ & $1 \times 10^{-5}$ & $1 \times 10^{-5}$ m$^{-2}$~kg$^{1/2}$~s$^{-1/2}$ \\
+%%$c_5$ & $7.6 \times 10^{-6}$ & $6.3 \times 10^{-5}$ \kgxmC \\
+%%$c_6$ & $1.75 \times 10^{-5}$ & $4 \times 10^{-7}$ \kgxmSsk \\[4pt]
+%\tableline
+%& & \\[-8pt]
+%\end{tabular}
+%\end{center}
+%\end{table*}
+To produce a more realistic model climate, parameters $c_1$--$c_3$ 
+were ``tuned'' from the values suggested in \cite{ZeK961} Table~1.
+The values of $c_1$--$c_4$ implemented in the present study are: $.75
+\times 10^{-3}$, $.3c_3$~\xs, $1.85 \times 10^{-4}$~\xs, and 
+$1 \times 10^{-5}$~m$^{-2}$~kg$^{1/2}$~s$^{-1/2}$, respectively. 
+
+CCM physics \cite[]{HBB93} are used to diagnose liquid condensate and
+stratiform cloud fraction. 
+We use a potential relative humidity $\RHp \equiv (\qv + \qi)/\qvi$
+rather than $\RH \equiv \qv/\qvi$ to compute cloud fraction.
+We adjusted the extinction optical depth correction for randomly
+overlapped clouds from $\tau' = \tau A^{3/2}$ to $\tau' = \tau
+A^{1/2}$ and used gridbox IWP (rather than in-cloud IWP) to compute
+$\taui$. 
+For longwave radiation we transformed prognostic gridbox IWP to
+in-cloud IWP using diagnosed cloud fraction $A$ (we ignored $A < 1\%$)
+before computing $\epsilon$; then used $A\epsilon$ as the effective
+cloud fraction. 
+
+

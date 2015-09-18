@@ -1,0 +1,110 @@
+2009-01-21  Charlie Zender  <zender@uci.edu>
+
+	* Make fortran function default single underscore except on AIX
+
+2008-01-04  Charlie Zender  <zender@uci.edu>
+
+	* Use CPP macro to implement underscoring convention
+
+2007-03-16  Charlie Zender  <zender@uci.edu>
+
+	* Builds on AIX again
+
+	* Eliminate tgamma() code from AIX (which can't find it).
+
+2005-06-07  Charlie Zender  <zender@uci.edu>
+
+	* Changed gamma() to tgamma() in accord with C99
+
+2004-06-30  Charlie Zender  <zender@uci.edu>
+
+	* c.c (main): Fixed variable "_iob" has undefined data scope
+	compiler warnings by passing stdout/stderr filehandles as local
+	variables scoped shared in OpenMP parallel clauses
+
+	* cvs tag -c c-1_1_2
+	Changes since c-1_1_1: Varargs, builds on AIX
+	
+	* Got c.c building everywhere, even with varargs function
+
+	* Updateed Makefile
+
+2003-09-03  Charlie Zender  <zender@uci.edu>
+
+	* c.c: Fix syntax error in ellipsis function
+
+	* Makefile (ABI): Change default ABI to 64
+
+2003-03-08  Charlie Zender  <zender@uci.edu>
+
+	* makdep.c (main): Explicitly declare optarg, optind
+
+2003-03-07  Charlie Zender  <zender@uci.edu>
+
+	* Makefile: Remove -ansi flag from gcc builds because it is
+	(apparently) equivalent to -std=c89 and thus conflicts with
+	-std=c99. 
+
+2002-09-03  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c c-1_1_1
+
+	* Add C99 tests
+
+2002-06-12  Charlie Zender  <zender@uci.edu>
+
+	* Removed -ansi from default build because Linux/GCC has so many
+	ANSI problems
+
+2001-08-09  Charlie Zender  <zender@uci.edu>
+
+	* date_time.c: Removed altzone from Alpha builds
+
+2001-08-02  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c c-1_1
+
+	* c.c: Made half-hearted attempt to modify to cleanly compile with
+	strict GSL compiler flags.
+
+2001-07-29  Charlie Zender  <zender@uci.edu>
+
+	* c.c (main): Updated to work with gsl-0.9
+
+2001-04-10  Charlie Zender  <zender@uci.edu>
+
+	* Fixed problems on Linux where sending automatically-allocated
+	arrays to putenv() in one function and then using gmtime() (which
+	requires getevn()) in another function causes core dump because
+	system does not allocate its own memory for putenv() arguments
+	As noted in Linux putenv() man page, resulting behavior is subtle
+	and best solution seems to be to allocate new memory each time
+	putenv() is called. The total memory leak is small if a given
+	program does not call putenv() too often.
+
+2001-01-02  Charlie Zender  <zender@uci.edu>
+
+	* Cleaned up some function prototypes
+
+2000-09-13  Charlie Zender  <zender@uci.edu>
+
+	* Fixed bug in date_time.c which could cause SIGSEGV when TZ was
+	not set in environment in unix2gmt_sng_().
+	I believe this caused clm to crash on Linux, where getenv() does
+	not seem to find TZ although it appears to be there. Hmm.
+
+1999-01-31  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Created dbg.h to isolate debugging values
+
+	* Added and tested GSL call to gsl_sf_erf()
+
+	* Restructured getopt_long section to agree with C++ prototypes
+
+1998-08-30  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Tagged module c_1_0
+
+	* Finished initial implementation of c module
+
+	

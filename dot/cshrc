@@ -1,0 +1,795 @@
+#!/bin/csh -f
+# -f = fast start, ignore .cshrc and .login
+# -x = echo commands after substitutions and just before execution
+
+# $Id$
+
+# Purpose: Universal .cshrc file
+
+# Usage: 
+# /bin/cp -f ${HOME}/.cshrc /fs/cgd/home0/zender
+# scp -p ${HOME}/.cshrc esmf.ess.uci.edu:
+# scp -p ${HOME}/.cshrc ipcc.ess.uci.edu:
+# scp -p ${HOME}/.cshrc mpc.uci.edu:
+
+# NB: Never never never place comments (e.g., # foo) on same line as setenv
+# It works in bash, but not in csh
+
+# 20010520: USER is not automatically set on Solaris
+if (! ${?USER} ) then
+    if ( -e /bin/whoami ) then
+	setenv USER `/bin/whoami`
+    else if ( -e /usr/bin/whoami ) then
+	setenv USER `/usr/bin/whoami`
+    endif # endif whoami exists
+endif # endif USER
+
+if ( -e ${HOME}/sh/pvmgetarch ) then
+	setenv PVM_ARCH `${HOME}/sh/pvmgetarch`
+else if ( -e /fs/cgd/home0/${USER}/sh/pvmgetarch ) then
+	setenv PVM_ARCH `/fs/cgd/home0/${USER}/sh/pvmgetarch`
+else
+	setenv PVM_ARCH LINUX
+endif # endif pvmgetarch
+
+# 19991201: Sometimes HOST is not set in qsub batch mode
+if (! ${?HOST} ) then
+    if ( -e /bin/hostname ) then
+	setenv HOST `/bin/hostname`
+    else if ( -e /usr/bin/hostname ) then
+	setenv HOST `/usr/bin/hostname`
+    endif # endif hostname exists
+endif # endif HOST
+
+# Use Tcsh-6.06 REMOTEHOST variable to set DISPLAY
+if( ${?REMOTEHOST} ) then
+    setenv DISPLAY "${REMOTEHOST}:0"
+else
+    if (${PVM_ARCH} =~ SUN*) then
+        setenv DISPLAY "unix:0"
+        # Enables Sun's shared memory transport
+        setenv XSUNTRANSPORT shmem
+        setenv XSUNSMESIZE 256
+    endif # endif Sun
+endif # endif local host
+
+setenv MY_BIN_DIR ${HOME}/bin/${PVM_ARCH}
+setenv MY_LIB_DIR ${HOME}/lib/${PVM_ARCH}
+setenv MY_OBJ_DIR ${HOME}/obj/${PVM_ARCH}
+setenv MY_INC_DIR ${HOME}/include
+
+# *PATH:
+# Do NOT use ~ in setting paths. MANPATH, e.g., does not expand ~ when searching paths
+
+# PATH:
+# Make sure /usr/local/bin comes after all the specialized (/opt)
+# install directories in order to get the latest versions of, e.g., emacs.
+# /usr/ucb/bin should also come after the /opt directories, which
+# contain programs that supercede /usr/ucb/bin, e.g., cc.
+
+# LD_LIBRARY_PATH:
+# Sun linkers search -L libraries first, then LD_LIBRARY_PATH, and
+# finally, the built-in list of standard library directories: /lib,
+# /usr/lib, and /usr/local/lib. 
+# /usr/ucblib causes some GNU installations to fail, 
+# but JMR reports removing /usr/ucblib causes metamail to fail.
+# The Sun linker will not find libraries specified by -L,-l
+# unless they appear after the object file names.
+# The order that libraries are linked in is significant, so load
+# -lsunmath last.
+# The IBM linker searches -L libraries first, and then
+# the built-in standard library directory: /usr/lib. The IBM linker
+# does not recognize the LD_LIBRARY_PATH environment variable.
+
+# MANPATH:
+# Put /usr/local/man last. 
+
+# Initalized all paths to the current directory (insecure, but frequently useful)
+set LD_LIBRARY_PATH='./'
+set MANPATH='./'
+set PATH='./'
+
+# My executables 
+set PATH=${PATH}\:${HOME}/sh
+set PATH=${PATH}\:${HOME}/bin/${PVM_ARCH}
+
+if (${PVM_ARCH} =~ AIX*) then
+# AIX on acd.ucar.edu, AIX46K on blackforest
+    setenv NCARG_ROOT /usr/local/ncarg
+ # AIX-specific hack
+    setenv OBJECT_MODE 64
+    setenv X11 /usr/lib/X11
+
+    if (${HOST} =~ esmf*) then # UCI
+	setenv DATA /ptmp/${USER}
+	setenv NETCDF_INC /usr/local/include
+	setenv NETCDF_LIB /usr/local/lib
+	setenv TEXMFDIR '/fxm'
+	if (${HOST} =~ esmf0[1-7]*) then
+	    setenv OMP_NUM_THREADS 8
+	else if (${HOST} =~ esmf0[8]*) then
+	    setenv OMP_NUM_THREADS 32
+	endif # endif esmf*
+    else if (${HOST} =~ b[bfsv]*en*) then # babyblue, blackforest, bluesky
+	setenv DATA /fs/cgd/data0/${USER}
+	setenv NETCDF_INC /usr/local/include
+	setenv NETCDF_LIB /usr/local/lib64/r4i4
+	setenv OMP_NUM_THREADS 4
+	setenv TEXMFDIR '/usr/local/teTeX/texmf'
+    endif # endif esmf || ncar
+
+    set PATH=${PATH}\:/usr/bin
+    set PATH=${PATH}\:/usr/ucb
+    set PATH=${PATH}\:/usr/local/bin
+    # Five directories specific to IBM SP
+    set PATH=${PATH}\:/usr/lpp/xlf/lib
+    set PATH=${PATH}\:/usr/lpp/xlf/bin
+    set PATH=${PATH}\:/ssg/loadl/bin
+    set PATH=${PATH}\:/usr/vac/bin
+    set PATH=${PATH}\:/usr/vacpp/bin
+    set PATH=${PATH}\:/bin
+    set PATH=${PATH}\:/sbin
+    set PATH=${PATH}\:/usr/sbin
+    set PATH=${PATH}\:/usr/bin/X11
+    set PATH=${PATH}\:/usr/local/ncarg/bin
+    set PATH=${PATH}\:/usr/local/sbin
+    if (${HOST} =~ esmf*) then # UCI
+	set PATH=${PATH}\:/usr/lpp/LoadL/full/bin
+	set MANPATH=${MANPATH}\:/usr/lpp/LoadL/full/man
+    else if (${HOST} =~ b[bfsv]*en*) then # babyblue, blackforest, bluesky
+	set PATH=${PATH}\:/ssg/loadl/bin
+    endif # endif esmf || ncar
+
+    set MANPATH=${MANPATH}\:${HOME}/man
+    set MANPATH=${MANPATH}\:/local/man
+    set MANPATH=${MANPATH}\:/usr/man
+    set MANPATH=${MANPATH}\:/usr/local/man
+
+# endif AIX
+else if (${PVM_ARCH} =~ ALPHA*) then
+
+    setenv DATA /fs/cgd/data0/${USER}
+    setenv INFOPATH ./:${HOME}/nco/doc:/usr/local/info:/usr/info
+    setenv NCARG_ROOT /contrib
+    setenv NETCDF_INC /usr/local/include
+    setenv NETCDF_LIB /usr/local/lib
+    setenv OMP_NUM_THREADS 4
+    setenv X11 /usr/lib/X11
+
+    if ( -d /fs/cgd/home0/${USER}/sh ) set PATH=${PATH}\:/fs/cgd/home0/${USER}/sh
+    set PATH=${PATH}\:/contrib/bin
+    set PATH=${PATH}\:/usr/local/bin
+    set PATH=${PATH}\:/bin 
+    set PATH=${PATH}\:/usr/bin
+    set PATH=${PATH}\:/usr/ucb
+    set PATH=${PATH}\:/usr/bin/X11
+
+    set MANPATH=${MANPATH}\:/contrib/man
+    set MANPATH=${MANPATH}\:/usr/local/man
+    set MANPATH=${MANPATH}\:/usr/man
+
+# endif ALPHA
+else if (${PVM_ARCH} == 'CRAY') then
+
+    setenv DATA /fs/cgd/data0/${USER}
+    setenv NCARG_ROOT /usr/local/lib/ncarg
+    setenv NETCDF_INC /usr/local/include
+    setenv NETCDF_LIB /usr/local/lib
+    setenv OMP_NUM_THREADS 8
+    if ( -d /fs/cgd/home0/${USER}/sh ) set PATH=${PATH}\:/fs/cgd/home0/${USER}/sh
+    set PATH=${PATH}\:/ccm/proc/tools
+    set PATH=${PATH}\:/fs/cgd/home0/jet/craybin
+    set PATH=${PATH}\:/usr/bin/X11
+    set PATH=${PATH}\:/bin
+    set PATH=${PATH}\:/etc
+    set PATH=${PATH}\:/usr/bin
+    set PATH=${PATH}\:/usr/ucb
+    set PATH=${PATH}\:/usr/local/bin
+    set MANPATH=${MANPATH}\:/usr/man
+    set MANPATH=${MANPATH}\:/X/X11/man
+    set MANPATH=${MANPATH}\:/usr/local/man
+    # Only CRAY has PrgEnv module for C++
+    if (-f /opt/modules/modules/init/tcsh ) then
+	source /opt/modules/modules/init/tcsh
+	module load modules PrgEnv nqe mpt
+    endif
+# endif CRAY
+else if (${PVM_ARCH} =~ LINUX*) then
+# LINUX on i386 machines, LINUXALPHA on Alpha CPUs, LINUXAMD64 on Opteron CPUs
+
+    setenv IDL_DIR '/usr/local/rsi/idl'
+    setenv INFOPATH "./:${HOME}/nco/doc:/contrib/info:/usr/local/info:/usr/info"
+# For PGI CCM http://www.pgroup.com/ppro_docs/pgiws_ug/pgi30u02.htm#Heading14
+    setenv MPSTKZ '8M'
+    setenv NCARG_ROOT '/usr/local/ncarg'
+    setenv TEXMFDIR '/usr/share/texmf'
+    setenv X11 '/usr/X11R6'
+    if (${HOST} =~ mpc*) then
+	setenv DATA "/ptmp/${USER}"
+    else 
+	setenv DATA "/data/${USER}"
+    endif # endif HOST
+    if (${HOST} =~ ashes* || ${HOST} =~ elnino* || ${HOST} =~ ess1* || ${HOST} =~ flyash* || ${HOST} =~ haze* || ${HOST} =~ lanina* || ${HOST} =~ seasalt*) then # Uni-processor
+	setenv OMP_NUM_THREADS '1'
+    else if (${HOST} =~ biogenic* || ${HOST} =~ clay* || ${HOST} =~ dirt* || ${HOST} =~ hiperstore* || ${HOST} =~ sand* || ${HOST} =~ silt* || ${HOST} =~ soot* || ${HOST} =~ tephra* || ${HOST} =~ virga*) then # Dual processor
+	setenv OMP_NUM_THREADS '2'
+    else if (${HOST} =~ ipcc* || ${HOST} =~ mpc* || ${HOST} =~ pbs* || ${HOST} =~ tephra*) then # Quad processor
+	setenv OMP_NUM_THREADS '4'
+    endif # endif HOST
+    if (${HOST} =~ ipcc* || ${HOST} =~ pbs*) then
+	set PKG_ROOT='/opt'
+    else if (${HOST} =~ mpc*) then
+	set PKG_ROOT='/software'
+    else 
+	set PKG_ROOT='/usr/local'
+    endif # endif HOST
+    if ( ${HOST} =~ mpc* ) then # Opteron cluster
+	setenv NETCDF_INC "${PKG_ROOT}/netcdf/include"
+	setenv NETCDF_LIB "${PKG_ROOT}/netcdf/lib"
+    else # MPC and default
+	setenv NETCDF_INC "${PKG_ROOT}/include"
+	setenv NETCDF_LIB "${PKG_ROOT}/lib"
+    endif # endif HOST
+    setenv NETCDF4_ROOT "${PKG_ROOT}/netcdf4"
+    setenv PGI "${PKG_ROOT}/pgi"
+    set TORQUE_ROOT="${PKG_ROOT}/torque"
+
+# Default compilers
+	set CC_gcc='gcc -std=c99 -pedantic -D_BSD_SOURCE -D_POSIX_SOURCE'
+	set CC_icc='icc -std=c99 -D_BSD_SOURCE -D_POSIX_SOURCE'
+	set CC_pathcc='pathcc -std=c99 -D_BSD_SOURCE -D_POSIX_SOURCE'
+	set CC_pgcc='pgcc -c9x -D_BSD_SOURCE -D_POSIX_SOURCE'
+	set CXX_gxx='g++'
+	set CXX_icpc='icpc'
+	set CXX_pathCC='pathCC'
+	set CXX_pgCC='pgCC'
+	set FC_g95='g95'
+	set FC_gfortran='gfortran'
+	set FC_ifort='ifort'
+	set FC_pathf95='pathf95'
+	set FC_pgf95='pgf95'
+	# MPICH_CC and MPICH_CXX depend upon MPICH version (MPICH or MPICH2)
+        # and, sometimes, the compiler (icc finds mpi.h automatically, gcc needs help)
+if (0) then
+        # MPICH2 is recommended, but some OSs do not yet include MPICH2 packages
+	if ( ${HOST} =~ clay* || ${HOST} =~ dirt* || ${HOST} =~ elnino* || ${HOST} =~ flyash* || ${HOST} =~ haze* || ${HOST} =~ hiperstore* || ${HOST} =~ lanina* || ${HOST} =~ pbs* || ${HOST} =~ sand* || ${HOST} =~ seasalt* || ${HOST} =~ silt* || ${HOST} =~ tephra* ) then # endif gcc/g++/g95 MPICH2
+		setenv LINUX_CC "${CC_gcc}" && setenv LINUX_CXX "${CXX_gxx}" && setenv LINUX_FC "${FC_g95}" && setenv MPICH_CC "${LINUX_CC} -I/usr/include/mpich2" && setenv MPICH_CXX "${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK -I/usr/include/mpich2" 
+	    else if ( ${HOST} =~ ashes* ) then # endif gcc/g++/gfortran MPICH2
+		setenv LINUX_CC "${CC_gcc}" && setenv LINUX_CXX "${CXX_gxx}" && setenv LINUX_FC "${FC_gfortran}" && setenv MPICH_CC "${LINUX_CC} -I/usr/include/mpich2" && setenv MPICH_CXX "${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK -I/usr/include/mpich2" 
+	    else if ( ${HOST} =~ ipcc* ) then # pathcc/pathCC/pathf95 MPICH2
+		setenv LINUX_CC "${CC_pathcc}" && setenv LINUX_CXX "${CXX_pathCC}" && setenv LINUX_FC "${FC_pathf95}" && setenv MPICH_CC "${LINUX_CC}" && setenv MPICH_CXX "${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK"
+	    else if ( ${HOST} =~ mpc* ) then # pgcc/pgCC/pgf95 MPICH2
+		setenv LINUX_CC "${CC_pgcc}" && setenv LINUX_CXX "${CXX_pgCC}" && setenv LINUX_FC "${FC_pgf95}" && setenv MPICH_CC "${LINUX_CC}" && setenv MPICH_CXX "${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK"
+	    else if ( ${HOST} =~ soot* ) then # icc/icpc/g95 MPICH
+		setenv LINUX_CC "${CC_icc}" && setenv LINUX_CXX "${CXX_icpc}" && setenv MPICH_CC "${LINUX_CC}" && setenv MPICH_CXX "${LINUX_CXX}"
+	    else if ( ${HOST} =~ virga* ) then # icc/icpc/ifort MPICH2
+		setenv LINUX_CC "${CC_icc}" && setenv LINUX_CXX "${CXX_icpc}" && setenv LINUX_FC "${FC_ifort}" && setenv MPICH_CC "${LINUX_CC}" && setenv MPICH_CXX "${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK"
+	    else if ( ${HOST} =~ nothing* ) then # gcc/g++/g95 MPICH
+		setenv LINUX_CC "${CC_gcc}" && setenv LINUX_CXX "${CXX_gxx}" && setenv LINUX_FC "${FC_g95}" && setenv MPICH_CC "${LINUX_CC} -I/usr/lib/mpich/include" && setenv MPICH_CXX "${LINUX_CXX} -I/usr/lib/mpich/include"
+	endif # endif HOST
+endif # endif false
+
+# GCC_RCH_ARG, ICC_RCH_ARG, PGI_RCH_ARG, and PSC_RCH_ARG set CPU architecture only
+# Select ABI flags (i.e., 32 or 64 bit) at make time
+# NB: Pathscale documents extensive set of PSC_* flags on User's Guide p. 149--151
+	if ( ${HOST} =~ ashes* || ${HOST} =~ elnino* ) then # Pentium4-M
+	    setenv GCC_RCH_ARG '-march=pentium4' && setenv ICC_RCH_ARG '-axW -mcpu=pentium4'
+	else if ( ${HOST} =~ biogenic* || ${HOST} =~ dirt* || ${HOST} =~ flyash* || ${HOST} =~ haze* || ${HOST} =~ seasalt* ) then # Pentium3
+	    setenv GCC_RCH_ARG '-march=pentium3' && setenv ICC_RCH_ARG '-axK -mcpu=pentiumpro'
+	else if ( ${HOST} =~ clay* || ${HOST} =~ hiperstore* || ${HOST} =~ ipcc* || ${HOST} =~ pbs* || ${HOST} =~ sand* || ${HOST} =~ silt* || ${HOST} =~ tephra* ) then # Opteron
+	    setenv GCC_RCH_ARG '-march=opteron -mmmx -msse -msse2 -m3dnow -pipe -fexpensive-optimizations -mfpmath=sse,387' && setenv ICC_RCH_ARG '-axW -mcpu=pentium4' && setenv PGI_RCH_ARG '-tp=k8-64 -fast -fastsse -Minfo=all' && setenv PSC_RCH_ARG '-march=opteron -mmmx -msse -msse2 -m3dnow -pipe -fexpensive-optimizations'
+	else if ( ${HOST} =~ esmf* ) then # Power4
+	    setenv GCC_RCH_ARG '-mcpu=power4' && setenv ICC_RCH_ARG ''
+	else if ( ${HOST} =~ esmf* ) then # AMD K6-2
+	    setenv GCC_RCH_ARG '-march=k6-2' && setenv ICC_RCH_ARG ''
+	else if ( ${HOST} =~ esmf* ) then # Pentium4-Xeon
+	    setenv GCC_RCH_ARG '-march=pentium4' && setenv ICC_RCH_ARG '-axW -mcpu=pentium4'
+	else if ( ${HOST} =~ esmf* ) then # Core Duo
+	    setenv GCC_RCH_ARG '-march=pentium4' && setenv ICC_RCH_ARG '-axP -mcpu=pentium4 -msse3'
+	endif # endif HOST
+
+	if ( ${HOST} =~ ipcc* ) then # Opteron cluster
+	    set MPICH_ROOT="${PKG_ROOT}/mpich/pathscale" 
+	else if ( ${HOST} =~ pbs* ) then # Opteron cluster
+	    set MPICH_ROOT="${PKG_ROOT}/mpich/gnu"
+	else # MPC and default
+	    set MPICH_ROOT="${PKG_ROOT}"
+	endif # endif HOST
+
+if (0) then
+	if ( ${HOST} =~ ashes* || ${HOST} =~ biogenic* || ${HOST} =~ dirt* || ${HOST} =~ elnino* || ${HOST} =~ flyash* || ${HOST} =~ haze* || ${HOST} =~ lanina* || ${HOST} =~ seasalt* || ${HOST} =~ soot* || ${HOST} =~ virga* ) then # IA32
+	    setenv ICC_ROOT '/opt/intel/cc/9.0' && setenv IFC_ROOT '/opt/intel/fc/9.0'
+	else if ( ${HOST} =~ clay* || ${HOST} =~ pbs* || ${HOST} =~ sand* || ${HOST} =~ silt* || $HOST =~ tephra* ) then # IA64
+	    setenv ICC_ROOT '/opt/intel/cc/9.0' && setenv IFC_ROOT '/opt/intel/fc/9.0'
+	else if ( ${HOST} =~ ipcc* ) then # IPCC
+	    setenv ICC_ROOT '/opt/intel/cce/9.1.038' && setenv IFC_ROOT '/opt/intel/fce/9.1.032'
+	else if ( ${HOST} =~ mpc* ) then # endif MPC
+	    setenv ICC_ROOT '/software/intel/cc' && setenv IFC_ROOT '/software/intel/fc'
+	endif # endif HOST
+#	setenv WISK /usr/local/lf9562 # Location of LF95 compiler installation
+#	setenv PFDIR ${WISK}/bin # Location of LF95 compiler installation
+endif # endif false
+
+    set PATH=${PATH}\:${X11}/bin
+    set PATH=${PATH}\:/bin
+    set PATH=${PATH}\:/sbin
+    set PATH=${PATH}\:/usr/local/bin
+    set PATH=${PATH}\:/usr/local/sbin
+    set PATH=${PATH}\:/usr/bin
+    set PATH=${PATH}\:/usr/local/ncarg/bin
+    set PATH=${PATH}\:/usr/sbin
+    if ( ${PVM_ARCH} == 'LINUX' ) then # i386 machines
+	set PATH=${PATH}\:${PGI}/linux86/bin
+    else if ( ${PVM_ARCH} =~ *AMD64 ) then # x86-64
+	set PATH=${PATH}\:${PGI}/linux86-64/6.2/bin
+	set PATH=${PATH}\:${PKG_ROOT}/pathscale/bin
+	set PATH=${PATH}\:${TORQUE_ROOT}/bin
+	set PATH=${PATH}\:${PKG_ROOT}/gridengine/bin/lx26-amd64
+	set PATH=${PATH}\:${PKG_ROOT}/rocks/sbin
+	set PATH=${PATH}\:${PKG_ROOT}/ganglia/bin
+	set PATH=${PATH}\:${MPICH_ROOT}/bin
+    endif # endif PVM_ARCH
+    set PATH=${PATH}\:${ICC_ROOT}/bin
+    set PATH=${PATH}\:${IFC_ROOT}/bin
+    set PATH=${PATH}\:${PKG_ROOT}/intel/9.0/idb/bin
+
+    set MANPATH=${MANPATH}\:${HOME}/nco/man
+    set MANPATH=${MANPATH}\:/usr/local/man
+    set MANPATH=${MANPATH}\:/usr/share/man
+    set MANPATH=${MANPATH}\:/usr/man
+    set MANPATH=${MANPATH}\:${X11}/man
+    set MANPATH=${MANPATH}\:/usr/lib/perl5/man
+    set MANPATH=${MANPATH}\:/usr/local/ncarg/man
+    set MANPATH=${MANPATH}\:${NCARG_ROOT}/man
+    set MANPATH=${MANPATH}\:${PKG_ROOT}/man
+
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${X11}/lib
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MY_LIB_DIR}
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${ICC_ROOT}/lib
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${IFC_ROOT}/lib
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${NETCDF4_ROOT}/lib
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/ncarg/lib
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
+    if ( ${HOST} =~ mpc* ) then # Opteron clusters
+	set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/kerberos/lib64
+    endif # endif HOST
+    if ( ${HOST} =~ ipcc* || ${HOST} =~ pbs* ) then # Opteron clusters
+	set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PKG_ROOT}/gridengine/lib/lx26-amd64
+	set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PKG_ROOT}/globus/lib
+	set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PKG_ROOT}/mpich/gnu/lib
+    endif # endif HOST
+
+# endif LINUX
+else if (${PVM_ARCH} =~ SGI*) then
+
+    setenv DATA /ptmp/${USER}
+    setenv INFOPATH ./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/freeware/info:/usr/gnu/info
+    setenv NCARG_ROOT /contrib
+    setenv OMP_NUM_THREADS 4
+    setenv TEXMFDIR /usr/freeware/teTeX/texmf
+    setenv X11 /usr/lib/X11
+# XNLSPATH is required by precompiled ddd binaries
+    setenv XNLSPATH /usr/lib/nls
+    if (${HOST} =~ tempest*) then
+	setenv NETCDF_INC /usr/local/include
+	setenv NETCDF_LIB /usr/local/lib64/r4i4
+    endif # endif tempest
+
+    if ( -d /fs/cgd/home0/${USER}/sh ) set PATH=${PATH}\:/fs/cgd/home0/${USER}/sh
+    if (${PVM_ARCH} == 'SGI64') then
+	set PATH=${PATH}\:${HOME}/bin/SGIMP64
+    else if (${PVM_ARCH} == 'SGIMP64') then
+	set PATH=${PATH}\:${HOME}/bin/SGI64
+    endif # endif SGI
+    set PATH=${PATH}\:/contrib/bin
+    set PATH=${PATH}\:/usr/local/egcs/bin
+    set PATH=${PATH}\:/usr/gnu/bin
+    set PATH=${PATH}\:/usr/freeware/bin
+    set PATH=${PATH}\:/local/bin
+    set PATH=${PATH}\:/bin 
+    set PATH=${PATH}\:/usr/bin/X11
+    set PATH=${PATH}\:/usr/bin
+    set PATH=${PATH}\:/usr/ucb
+    set PATH=${PATH}\:/usr/bsd
+    set PATH=${PATH}\:/sbin
+    set PATH=${PATH}\:/usr/sbin
+    set PATH=${PATH}\:/usr/local/bin
+    set PATH=${PATH}\:/usr/etc
+    set PATH=${PATH}\:/usr/lib
+    set PATH=${PATH}\:/etc
+
+    set MANPATH=${MANPATH}\:/contrib/man
+    set MANPATH=${MANPATH}\:/usr/freeware/man
+    set MANPATH=${MANPATH}\:/usr/share/catman
+    set MANPATH=${MANPATH}\:/usr/share/catman/a_man
+    set MANPATH=${MANPATH}\:/usr/share/catman/g_man
+    set MANPATH=${MANPATH}\:/usr/share/catman/p_man
+    set MANPATH=${MANPATH}\:/usr/share/catman/u_man
+    set MANPATH=${MANPATH}\:/usr/share/catman/local
+    set MANPATH=${MANPATH}\:/usr/share/man
+    set MANPATH=${MANPATH}\:/usr/local/man
+    set MANPATH=${MANPATH}\:/usr/man
+    set MANPATH=${MANPATH}\:/usr/gnu/catman
+
+    if ( -f /opt/modules/modules/init/tcsh ) then
+	source /opt/modules/modules/init/tcsh
+	module purge
+	if ("${HOST}" =~ tempest* ) then
+	    module load MIPSpro mpt scsl nqe modules
+	endif # endif tempest
+    endif # endif
+
+# Setting LD_LIBRARY_PATH on SGI64 is hairy, because there are
+# no fewer than three such environment variables: 
+# LD_LIBRARY_PATH, LD_LIBRARY_PATH64, LD_LIBRARY_PATH32, LD_LIBRARY_PATHn32
+# Fortunately, not setting LD_LIBRARY_PATH seems to work fine.
+#    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MY_LIB_DIR}
+#    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/contrib/lib
+#    unsetenv LD_LIBRARY_PATH
+
+# endif SGI5, SGI64, SGIMP64
+else if (${PVM_ARCH} =~ SUN*) then
+
+    setenv DATA /data/${USER}
+    setenv INFOPATH ./:${HOME}/nco/doc:/contrib/info:/opt/local/info
+    setenv NETCDF_INC /contrib/include
+    setenv NETCDF_LIB /contrib/lib
+    setenv OPENWINHOME /usr/openwin
+    setenv TEXMFDIR /contrib/texmf/lib/texmf
+    setenv X11 /opt/X11R6-11
+
+#    if ( -d /fs/cgd/home0/${USER}/sh ) set PATH=${PATH}\:/fs/cgd/home0/${USER}/sh
+    if (${PVM_ARCH} == "SUNMP") then
+	set PATH=${PATH}\:${HOME}/bin/SUN4SOL2
+    else if (${PVM_ARCH} == "SUN4SOL2") then
+	set PATH=${PATH}\:${HOME}/bin/SUNMP
+    endif # endif SUN
+    set PATH=${PATH}\:/contrib/bin
+    set PATH=${PATH}\:/opt/local/bin
+    set PATH=${PATH}\:${X11}/bin
+    set PATH=${PATH}\:/bin
+    set PATH=${PATH}\:/etc
+    set PATH=${PATH}\:/usr/bin
+    set PATH=${PATH}\:/usr/ccs/bin
+    set PATH=${PATH}\:/usr/ccs/lib
+    set PATH=${PATH}\:/usr/sbin
+    set PATH=${PATH}\:/opt/local/SUNWspro/bin
+    set PATH=${PATH}\:/opt/SUNWspro/bin
+    set PATH=${PATH}\:/usr/local/bin
+    set PATH=${PATH}\:/usr/ucb
+    set PATH=${PATH}\:/opt/local/frame/bin
+    set MANPATH=${MANPATH}\:${HOME}/man
+    set MANPATH=${MANPATH}\:/contrib/man
+    set MANPATH=${MANPATH}\:/opt/local/man
+    set MANPATH=${MANPATH}\:/usr/man
+    set MANPATH=${MANPATH}\:${X11}/man
+    set MANPATH=${MANPATH}\:/usr/openwin/man
+    set MANPATH=${MANPATH}\:/cgdops/man
+    set MANPATH=${MANPATH}\:/opt/SUNWspro/man
+    set MANPATH=${MANPATH}\:/usr/local/man
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/local/SUNWspro/lib
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/SUNWspro/lib
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${X11}/lib
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/X11/lib
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MY_LIB_DIR}
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/contrib/lib
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/local/lib
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/ucblib
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/dt/lib
+    set LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/data/pedretti/qt/lib
+# endif SUN4, SUN4SOL2, SUNMP
+endif
+
+if ( -e /bin/hostname ) then
+    if (`/bin/hostname` =~ meeker*) then
+	setenv PVM_ARCH SUNMP
+# NB: use 'man products' for all SCD product info
+	set PATH=/local/bin:${PATH}
+	set PATH=/fs/local/bin:${PATH}
+	setenv DATA /fs/cgd/data0/${USER}
+	setenv X11 /usr/lib/X11
+    endif # endif meeker
+endif # endif hostname
+
+# Export the big three
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}"
+setenv MANPATH "${MANPATH}"
+setenv PATH "${PATH}"
+
+# Turn on command echoing with time stamps if in batch mode (from `man qsub`) 
+if ($?ENVIRONMENT) then
+    if ("$ENVIRONMENT" == 'BATCH') then
+	set timestamp
+# echo output is distracting, use it only during debugging
+#	set echo
+    endif # endif BATCH
+endif # endif ENVIRONMENT
+
+# It is dangerous to have output in a .cshrc file 
+# $?prompt test did not work on original IBM SP cluster (winterhawk)
+# Use same test as is in .login to bail out here
+if (${?JOB_NAME} && ${?QUEUE}) then
+    if (${QUEUE} !~ *_int_*) then
+	exit 0
+    endif # endif in non-interactive job queue
+endif # endif in job queue
+
+# Bail out of Torque 
+if ( ${?PBS_ENVIRONMENT} ) exit
+
+# Exiting when no prompt is dangerous, may cause scp/ssh failure
+#if (! ${?prompt} ) exit # Bail out if this is a non-interactive shell
+
+if (${?TERM}) then
+    if (${TERM} == 'xterm') then
+	setenv GRAPHCAP X11
+    else
+	setenv GRAPHCAP ${TERM}
+    endif # endelse xterm
+endif # endif
+
+umask 022		# Default file permissions
+set history='300'       # How many history lines to save
+set hostname=${HOST}
+set savehist='30'       # How many history lines to save
+set symlinks='ignore'	# This only works with tcsh
+unset autologout        # Hopefully keeps timeouts from occuring
+
+# Universal environment variables
+# Needed for ssh access to NCAR CGD CVS
+setenv CVS_RSH 'ssh'
+setenv CVSROOT ":ext:${USER}@dust.ess.uci.edu:/data/home/${USER}/cvs"
+# Default file permissions for CVS
+setenv CVSUMASK '002'
+# Default editor
+setenv EDITOR 'emacs'
+# Input data for mie, ccc, swnb2, clm
+setenv DATA_RT "${DATA}/aca" 
+#setenv EMACSLOADPATH
+# Shell to use from emacs (emacs does not like tcsh)
+setenv ESHELL '/bin/csh'
+# Squelch warnings when reading from tapes, see gzip(1)
+setenv GZIP '--quiet'
+# Where metamail learns how to decode multimedia
+setenv MAILCAPS "${HOME}/.mailcap"
+# Where metamail writes temporary files
+setenv METAMAIL_TMPDIR "${DATA}/tmp"
+# Location of files for ncview
+setenv NCVIEWBASE "${HOME}/.ncview"
+# Default pager (usually 'less' or 'more')
+setenv PAGER 'less'
+setenv SVNROOT "svn+ssh://dust.ess.uci.edu/data/home/${USER}/svn/trunk"
+# Yet another default editor
+setenv TEXEDIT 'emacs'
+# Colorado = MST7MDT, California = PST8PDT
+setenv TZ 'PST8PDT'
+# Yet another default editor
+setenv VISUAL 'emacs'
+if (${PVM_ARCH} =~ LINUX*) then
+    setenv win_sys 'fvwm2'
+endif # endif LINUX
+if (${PVM_ARCH} =~ AIX* || ${PVM_ARCH} =~ LINUX*) then
+    setenv PRINTER 'lp'
+else if (${PVM_ARCH} =~ SUN*) then
+    setenv PRINTER 'gemini'
+    setenv LPDEST "${PRINTER}"
+    # lp -d net.acd.ucar.edu:acdps4n cshrc <-- prints from CGD to ACD
+else
+    setenv PRINTER 'lp'
+endif # endif printer is attached
+
+# Key to directory aliases: format is SDD where S is the System 
+# abbreviation, and DD stands for the first two letters of 
+# the directory name. System abbreviations are:
+# D = Data local data directory, /data/${USER} (not backed up)
+# H = Home directory, ${HOME}, /home/${USER} (suns), /u0/${USER} (shavano), /home0/${USER} (ELs), /fs/cgd/home0/${USER} (SGIs) (backed up daily)
+# S = SCD partitions, /fs/cgd/home0/${USER}, /fs/cgd/data0/${USER} (backed up by SCD)
+# T = Auxiliary disk storage, /data/${USER}/_aux0_ (not backed up)
+# U = User temporary storage, /usr/tmp/${USER} (rarely scrubbed)
+# V = Data Volatile storage, $TMPDIR (scrubbed often)
+# Filesystems mounted on /net: (not working yet)
+# ls /net/dust.acd.ucar.edu/gs/${USER}
+# ls /net/shiva.cgd.ucar.edu/home/${USER}
+
+# Directory aliases
+# fxm: What to do when ${TERM} == 'linux'?
+if (${?TERM}) then
+    if (${TERM} =~ xterm && ${1} != 'console') then
+	alias set_prompt 'set prompt=${USER}@${HOST}:${cwd}\$" "'
+	alias set_title 'set title=${HOST}'"':'"'${cwd}:t'
+	alias cd	'cd \!*; set_prompt; set_title'
+    endif
+endif # TERM
+alias cdcp	'cp \!* ${HOME}/\!*'
+
+alias hbi	'cd ${HOME}/bin/${PVM_ARCH}'
+alias hbicp	'cp \!* ${HOME}/bin/${PVM_ARCH}\!*'
+alias hac	'cd ${HOME}/aca'
+alias haccp	'cp \!* ${HOME}/aca/\!*'
+alias hae	'cd ${HOME}/aer'
+alias haecp	'cp \!* ${HOME}/aer/\!*'
+alias hdo	'cd ${HOME}/dot'
+alias hdocp	'cp \!* ${HOME}/dot/\!*'
+alias hid	'cd ${HOME}/idl'
+alias hidcp	'cp \!* ${HOME}/idl/\!*'
+alias hjo	'cd ${HOME}/job'
+alias hjocp	'cp \!* ${HOME}/job/\!*'
+alias hmi	'cd ${HOME}/mie'
+alias hmicp	'cp \!* ${HOME}/mie/\!*'
+alias hnc	'cd ${HOME}/nco'
+alias hnccp	'cp \!* ${HOME}/nco/\!*'
+alias hte	'cd ${HOME}/tex'
+alias htecp	'cp \!* ${HOME}/tex/\!*'
+
+alias sae	'cd /fs/cgd/home0/${USER}/aer'
+alias saecp	'cp \!* /fs/cgd/home0/${USER}/aer/\!*'
+alias stm	'cd /fs/cgd/home0/${USER}/tmp'
+alias stmcp 	'cp \!* /fs/cgd/home0/${USER}/tmp/\!*'
+alias sze	'cd /fs/cgd/home0/${USER}'
+alias szecp 	'cp \!* /fs/cgd/home0/${USER}/\!*'
+
+alias uze	'cd /usr/tmp/${USER}'
+alias uzecp 	'cp \!* /usr/tmp/${USER}/\!*'
+
+if (${?TMPDIR}) then 
+    alias vze	'cd $TMPDIR'
+    alias vzecp	'cp \!* $TMPDIR/\!*'
+endif
+if (${PVM_ARCH} =~ SUN* || ${PVM_ARCH} =~ LINUX* || ${PVM_ARCH} =~ AIX*) then
+    alias dds	'cd ${DATA}/dst'
+    alias ddscp	'cp \!* ${DATA}/dst/\!*'
+    alias tac	'cd ${DATA}/aca'
+    alias taccp	'cp \!* ${DATA}/aca/\!*'
+endif # endif /home and _aux0_ exist
+if (${PVM_ARCH} =~ SUN* || ${PVM_ARCH} =~ LINUX* || ${PVM_ARCH} =~ AIX*) then
+    alias dac	'cd ${DATA}/aca'
+    alias daccp	'cp \!* ${DATA}/aca/\!*'
+    alias dmi	'cd ${DATA}/mie'
+    alias dmicp	'cp \!* ${DATA}/mie/\!*'
+    alias dps	'cd ${DATA}/ps'
+    alias dtm	'cd ${DATA}/tmp'
+    alias dtmcp	'cp \!* ${DATA}/tmp/\!*'
+    alias dze	'cd ${DATA}'
+    alias pze	'cd /ptmp/${USER}'
+endif # endif ${DATA} exists
+if (${PVM_ARCH} =~ SGI* || ${PVM_ARCH} == 'CRAY') then
+    alias dac	'cd /fs/cgd/data0/${USER}/aca'
+    alias daccp	'cp \!* /fs/cgd/data0/${USER}/aca/\!*'
+    alias dmi	'cd /fs/cgd/data0/${USER}/mie'
+    alias dmicp	'cp \!* /fs/cgd/data0/${USER}/mie/\!*'
+    alias dtm	'cd /fs/cgd/data0/${USER}/tmp'
+    alias dtmcp	'cp \!* /fs/cgd/data0/${USER}/tmp/\!*'
+    alias dze	'cd ${DATA}'
+endif # endif SGI or CRAY
+
+# Universal aliases
+alias bin_obj_rm 'rm ${HOME}/bin/*/\!* ${HOME}/obj/*/\!*.o ${HOME}/obj/*/\!*.d'
+alias bsrc	'source ${HOME}/.bashrc'
+alias cln	'rm *~ .[a-zA-Z]~ #*# core core.* *.tmp *foo foo* *.o *.bak *.trace gmeta aaaa* *-t.tex* *.bbl *.blg *.log *.glo *.aux *.dlog *.cp *.cps *.fn *.fns *.ky *.pg *.toc *.tp *.vr *.lof *.lot *.dvi'
+alias corerm    'rm `find . -name core -print`'
+alias cp	'cp -i -p' # -i = inquire, -p = preserve mode and time
+alias csrc	'source ${HOME}/.cshrc'
+alias cvc       'cvs commit -m ""'
+alias cvu       'cvs update -kk'
+alias svc       'svn commit -m ""'
+alias svu       'svn update'
+alias df        'df -k' # -k = units are kb rather than 512 b
+alias dir	'ls -laF | more'
+alias dotgrep   'egrep \!* .[a-zA-Z]*'
+alias du	'du -k' # -k = units are kb rather than 512 b
+alias dust	'setenv DISPLAY dust.ess.uci.edu:0'
+alias egrep     'egrep -i'
+alias flrm      'set tmp = `find . -name \!* -print`;rm ${tmp}'
+alias gaus	'rsh ouray.ucar.edu gaus 03010063'
+alias h		'history'
+alias ksrc	'. ${HOME}/.profile'
+alias ls	'ls -F' # -F = mark directories with /, links with @, etc.
+alias m		${PAGER}
+alias mv	'mv -i' # -i = inquire
+alias nvr	'env | sort | more'
+alias psz	'ps -f -U ${USER}' # -f = Full listing -U username
+alias pslz	'ps -l -U ${USER}' # -f = Full listing -U username
+alias rm	'rm -i' # -i = inquire
+alias rst	'set noglob; eval `resize`; unset noglob'
+alias scp	'scp -p' # -p = preserve mode, time
+alias topz	'top -U${USER}' # -Uusername
+alias uncompress 'gunzip'
+alias xmerge	'xrdb -merge ${HOME}/.Xdefaults'
+
+if (${PVM_ARCH} =~ LINUX*) then
+    alias uls	'cd /usr/local/src'
+    alias ulscp	'cp \!* /usr/local/src/\!*'
+    alias bgrgb 'bggen red green blue | xv -root -quit -'
+    alias bgrainbow 'bggen black red yellow green blue purple black | xv -root -quit -'
+    alias ls 'ls --color=tty' # Taken from RH5 p. 112
+    alias dustdiff 'scp \!* dust.acd.ucar.edu:$PWD/foo; ssh dust.acd.ucar.edu diff -c $PWD/\!* $PWD/foo'
+    alias dustscp 'scp \!* dust.acd.ucar.edu:$PWD/\!*'
+endif # endif LINUX
+
+if (${PVM_ARCH} =~ SUN*) then
+    alias man 'man -F'
+    alias mkdstdir 'mkdir ${DATA}/_aux0_/\!*; ln -s ${DATA}/_aux0_/\!* ${DATA}/\!*'
+    alias rmdstdir '/bin/rm ${DATA}/\!*; /bin/rm -r ${DATA}/_aux0_/\!*'
+    alias geminis 'lp -osimplex -dgemini \!*' # Gemini simplex
+    alias renoir-t 'lp -o tray2 -drenoir \!*' # Renoir transparency
+    alias gemini 'lp -ovd -dgemini \!*' # Gemini duplex
+    alias winds 'lp -osimplex -dwind \!*' # Wind simplex
+    alias wind 'lp -ovd -dwind \!*' # Wind duplex
+endif # endif SUN
+if (${PVM_ARCH} == 'CRAY' || ${PVM_ARCH} =~ SGI*) then
+# NB: 19980413 Having eval mscdsetup in .cshrc prevents timely logins whenever the MSS is down or very busy. This happens frequently so do not uncomment this in .cshrc.
+#        alias mss eval `mscdsetup -csh`
+
+# Keys to stop running programs, back-up over characters typed and erase whole line
+    if (${?prompt}) then
+	stty intr '^c' erase '^?' kill '^u'
+    endif
+endif # endif connected to MSS
+if (${PVM_ARCH} =~ AIX* || ${PVM_ARCH} =~ LINUX* || ${PVM_ARCH} =~ SGI* || ${PVM_ARCH} =~ SUN*) then
+ # // is recursive, :: activates default system search paths
+    setenv TEXINPUTS .:${HOME}/tex//:${HOME}/crr//:${TEXMFDIR}/tex//::
+    setenv BIBINPUTS .:${HOME}/tex//:${TEXMFDIR}/bibtex//::
+endif # endif has TeX installation
+if ("${HOST}" == 'dust' || ${PVM_ARCH} =~ SUN* || ${PVM_ARCH} =~ SGI*) then
+    alias make      'gmake --jobs 3' # Using NCPUS + 1 is better
+endif # endif dust
+if (${PVM_ARCH} == 'CRAY') then
+    alias hcc	'cd ${HOME}/ccm'
+    alias hcccp	'cp \!* ${HOME}/ccm/\!*'
+    alias acidwho   udbsee -a -f create,name,acids -e 'acids~"\!*"'
+    alias make      'gnumake --jobs 8'
+    eval `resize`
+endif # endif Cray
+if (${PVM_ARCH} =~ SUN* || ${PVM_ARCH} =~ AIX*) then
+    alias tar gtar
+endif # endif GNU defaults use g prefix
+if (${PVM_ARCH} =~ SGI*) then
+    alias make gmake
+endif # endif GNU defaults use g prefix
+if ("${HOST}" =~ mpc*) then
+    setenv INTEL_LICENSE_FILE '/software/icc/licenses:/software/ifc/licenses'
+    setenv LM_LICENSE_FILE "7496@mpc.uci.edu"
+endif # endif lmgrd is used
+if (${PVM_ARCH} =~ LINUX*) then
+    setenv IDL_DEVICE X
+# Obsolete directory only necessary for cw_bselector in IBP
+    setenv IDL_PATH ${HOME}/idl:${IDL_DIR}/lib:${IDL_DIR}/lib/obsolete
+    setenv IDL_STARTUP ${HOME}/.idl
+
+    alias lmgrd ${IDL_DIR}/bin/lmgrd # Start license daemon 
+    alias lmstat ${IDL_DIR}/bin/lmstat -a # Status of license daemon
+# IDL -autow option opens GUI if possible, -nw opens CLI
+    alias idl ${IDL_DIR}/bin/idl -autow
+#    alias idl ${IDL_DIR}/bin/idl -nw
+# Environment for Ferret plotting package 
+    setenv FER_DIR /contrib/ferret-5.0
+    setenv FER_GO ". ${FER_DIR}/go $FER_DIR/examples ${FER_DIR}/contrib ${HOME}/ferret/go"
+    setenv FER_PALETTE ". ${FER_DIR}/ppl ${HOME}/ferret/ppl"
+endif # endif machine has IDL
+if (${PVM_ARCH} != 'CRAY') then
+    # Default shell to use is tcsh
+    #set shell=/bin/tcsh			
+    # Output from shjob, ecjob, etc. is saved here
+    setenv CLOG ${HOME}/.log.crayjob
+    setenv NCARG_GKS_OUTPUT gmeta
+    setenv NNTPSERVER news.service.uci.edu
+    setenv XAPPLRESDIR /contrib/lib:${X11}/lib/X11/app-defaults:${DATA}/app-defaults
+
+    alias dstdiff	'diff -c -w /fs/cgd/data0/${USER}/ccm_dst/src/dst/\!* \!* | m'
+    alias print	'enscript -G -fHelvetica10'
+    alias print2	'enscript -2G -fHelvetica10'
+    alias print2r	'enscript -2rG -fHelvetica10'
+    alias print5r	'enscript -2rG -fHelvetica5'
+    alias print7r	'enscript -2rG -fHelvetica7'
+    alias printr	'enscript -rG -fHelvetica10'
+    alias printt	'enscript -G -fCourier9'
+    alias printt2r	'enscript -2rG -fCourier7'
+    alias printtr	'enscript -rG -fCourier9'
+    alias smallfry  'xterm -geometry 95x6+0+0 -sb -sl 80 -sk -n Smallfry -T Smallfry -iconic -fn 6x10 &'
+    alias tar_illiac 'tar cf - . | rsh illiac cd /home/${USER}/\!* \; tar -xvf -'
+endif # endif not CRAY
+
+# Force path to display
+cd .		

@@ -1,0 +1,72 @@
+$Id$ -*-text-*-
+
+This directory contains the source necessary to install the DEAD box
+model (bxm) as a web-accessible executable.
+
+Dependencies:
+Requires dead executable from dst module
+Requires ncks, ncgen netCDF tools
+Requires NCL and NCAR graphics
+Requires convert, perl, ps2pdf, python, sed
+
+Meta-code:
+ChangeLog	Chronological list of changes
+INSTALL		Installation instructions
+MANIFEST	This file
+Makefile	For GNU Make
+README		Model description
+TODO		Tasks which need work
+VERSION		bxm version number
+
+Source code:
+Makefile	Maintain box model web code (fxm)
+bxm.css		Cascading style sheet for box model (fxm)
+bxm.ncl		NCL script to create plot (bxm.ps) from box model run (dead.nc)
+bxm_cnf.html	Form for configuring box model input and calling bxm_run.py
+bxm_dwn.html	Form for downloading box model output
+bxm_home.html	On-line box model home page
+bxm_mch.pl	Filter dangerous input
+bxm_run.py	Time-interpolate user input, create tvbds.cdl, run bxm_run.sh
+bxm_run.sh	Run box model executable with user-specified input file 
+bxm_sz.ncl	NCL script that creates bxm.jpg from box model run dead.nc
+bxm_vzn.html	Display visualization results stored in bxm.jpg
+
+Location of files in this module required to run:
+/tmp/bxm/bxm_run.sh
+/tmp/bxm/bxm_mch.pl
+/var/www/cgi-bin/bxm_run.py
+/var/www/html/dead/bxm.ncl
+/var/www/html/dead/bxm_cnf.html
+/var/www/html/dead/bxm_dwn.html
+/var/www/html/dead/bxm_home.html
+/var/www/html/dead/bxm_vzn.html
+ln -s /tmp/bxm/bxm_txt.html /var/www/html/dead/bxm_txt.html
+ln -s /tmp/bxm/bxm.jpg /var/www/html/dead/bxm.jpg
+
+Location of other files required to run:
+/bin/sed	       # Called by bxm_run.sh, converts bxm.ncl to bxm_usr.ncl
+/usr/bin/convert       # Called by bxm_run.sh, converts bxm.ps to bxm.jpg
+/usr/bin/ps2pdf	       # Called by bxm_run.sh, converts bxm.ps to bxm.pdf
+/usr/bin/python	       # Called by bxm_run.py, generates tvbds.cdl from user input
+/usr/local/bin/ncgen   # Called by bxm_run.sh, converts tvbds.cdl to tvbds.nc
+/usr/local/bin/ncks    # Called by bxm_run.sh, dumps dead.nc to bxm_txt.html
+/usr/local/bin/ncl     # Called by bxm_run.sh, creates bxm.ps
+/usr/local/lf9561/lib (LD_LIBRARY_PATH for bxm_run.py to resolve any dynamically linked lf95 libraries in dead)
+/usr/local/lib/ncarg/nclscripts/csm/include.ncl # Used by bxm.ncl
+/var/www/html/dead/dead # Box model executable
+
+Files automagically produced by scripts:
+/tmp/bxm/bxm_usr.ncl	      # Custom version of bxm.ncl with user-defined strings
+/tmp/bxm/dead.nc		      # Creation location of netCDF output from dead
+/tmp/bxm/bxm.jpg	      # JPEG version of visualization results (symbolically linked to /var/www/html/dead/bxm.jpg)
+/tmp/bxm/bxm.pdf	      # Creation location for bxm.pdf
+/tmp/bxm/bxm.ps		      # Creation location for bxm.ps
+/tmp/bxm/bxm_stdout.txt       # Text run-time output of dead (prepended to bxm_txt.html)
+/tmp/bxm/bxm_txt.html	      # HTML page created from text dump of dead.nc (symbolically linked to /var/www/html/dead/bxm_txt.html)
+/tmp/bxm/dst_mss_bdg.nc	      # Creation location of mass budget diagnostics from dead
+/tmp/bxm/tvbds.cdl	      # CDL file containing time-interpolated input data
+/tmp/bxm/tvbds.nc	      # netCDF file containing time-interpolated input data
+/var/ftp/dead/dead.nc	      # Download location for dead.nc
+/var/ftp/dead/bxm.pdf	      # Download location for bxm.pdf
+/var/ftp/dead/bxm.ps	      # Download location for bxm.ps
+/var/ftp/dead/dst_mss_bdg.nc  # Download location for dst_mss_bdg.nc

@@ -1,0 +1,91 @@
+$Id$ -*-Text-*-
+
+This directory, $HOME/lsm, contains files and scripts for LSM, and
+distinct branches of it, such as lsm_dst.
+
+To learn how the LSM Dust model was created from the individual
+LSM and Dust modules, see the description in cvs.tex
+
+LSM2/CLM gridded input data are stored in 
+/ncar/fs/cgd/csm/inputdata/lnd/clm2/srfdata/offline
+/data/slevis/_aux0_/slevis/lsmv2/new/input
+
+High resolution raw data are in
+/ncar/fs/cgd/csm/inputdata/lnd/clm2/rawdata
+/ncar/fs/cgd/csm/inputdata/lnd/clm2/rawdata/mksrf_lai.nc
+
+mksrf_lai.nc.Z Leaf area index
+mksrf_pft.nc.Z Plant Functional Type
+mksrf_elev.nc Elevation
+
+Sang-Ik Shin created 3 land surface type files:
+f052.01  present day vegetation
+f052.02  Crowley reconstruction
+f052.03  Adams reconstruction
+Original T31 ASCII input files are in /fs/cgd/data0/shin/csm/lnd/
+lsmi files in netCDF format are MSS at
+/SHIN/csm/"case"/lnd/hist/lsmi
+Program to generate LGM datasets are in 
+/fs/cgd/home0/shin/csm/ccm3/
+
+LAI and SAI from Sam Levis' IBIS/Genesis LGM runs are in
+/fs/cgd/data0/slevis/lgmdust
+Sam copied initial data from Shin's LGM runs into
+/fs/cgd/data0/slevis/lgmdust/shindata
+Subdirectories:
+adams	Reconstruction by Jonathan Adams
+crowley	Reconstruction by Pat Crowley
+presday Present day with ice sheets
+
+Christine's present day T31 datasets are in
+/fs/cgd/data0/slevis/lgmdust/presday
+
+The dust time varying boundary dataset builder, bds, processes
+LSM simulation and raw data and makes it available on regular output
+grids.
+
+Esther Brady, Juliana Chow, Bill Large, Sunk-Ik Shin all used
+a 5 minute bathymetry/topography dataset known as etopo5.
+The successor to this dataset is known as TerrainBase and is 
+produced by the NGDC. It is freely available.
+NCAR version is older than NGDC version, which is continuously updated.
+NCAR version appears to be from 1995.
+NGDC version appears to be from 2000.
+NCAR description: http://dss.ucar.edu/datasets/ds759.2/
+NCAR location: /DSS/Y28256 (ASCII format, 56 MB)
+NGDC description: http://www.ngdc.noaa.gov/mgg/global/seltopo.html
+
+Both UCSB and GFDL netCDF datasets need grid (re)-alignment:
+~/c++/ccc.cc commands to generate and add grid to
+TerrainBase grid for 5' bathymetry/elevation dataset
+cd ~/c++;ccc --lat_nm="lat" --lon_nm="lon" --lat_nbr=2160 --lon_nbr=4320;cd -
+Append TerrainBase grid to TerrainBase file using
+ncks -A -v lat,lon ~/c++/foo.nc /fs/cgd/data0/zender/map/ngdc_tbase_gfdl.nc
+
+GFDL netCDF dataset:
+GFDL /archive/hnv/TerrainBase/tbase_32bit.nc 32-bit floating-point values
+GFDL /archive/hnv/TerrainBase/tbase_16bit.nc 16-bit integer values
+GFDL dataset runs south to north, which is convenient for CSM
+mv ~/tbase_32bit.nc /fs/cgd/data0/zender/map/ngdc_tbase_gfdl.nc
+cd ~/tbase_32bit.nc ${DATA}/dst/data
+ncrename -v Z_ELEVATION,hgt_sfc -v latitude,lat -v longitude,lon -d latitude,lat -d longitude,lon /fs/cgd/data0/zender/map/ngdc_tbase_gfdl.nc
+ncatted -O -a units,hgt_sfc,o,c,"meter" /fs/cgd/data0/zender/map/ngdc_tbase_gfdl.nc 
+ncatted -O -a missing_value,hgt_sfc,o,f,1.0e36 /fs/cgd/data0/zender/map/ngdc_tbase_gfdl.nc 
+chmod a-w /fs/cgd/data0/zender/map/ngdc_tbase_gfdl.nc
+cd ~/c++;ccc --lat_nm="lat" --lon_nm="lon" --lat_nbr=2160 --lon_nbr=4320;cd -
+ncks -A EDGEN,EDGEE,EDGES,EDGEW,LATIXY,LONGXY ${HOME}/c++/foo.nc /fs/cgd/data0/zender/map/ngdc_tbase_gfdl.nc
+
+UCSB netCDF dataset:
+UCSB http://www.ncgia.ucsb.edu/Publications/Software/sk/NGDC.DEM.nc.tar.gz
+UCSB dataset runs north to south, which is inconvenient for CSM
+mv NGDC.DEM.nc ngdc_tbase_ucsb.nc
+ncrename -v sk_matrix,hgt_sfc -d dim0,lat -d dim1,lon ${DATA}/dst/data/ngdc_tbase_ucsb.nc 
+ncatted -O -a units,hgt_sfc,a,c,"meter" ${DATA}/dst/data/ngdc_tbase_ucsb.nc 
+chmod a-w /fs/cgd/data0/zender/map/ngdc_tbase_ucsb.nc
+
+Method for performing full CCSM run is in described in:
+http://www.cgd.ucar.edu/csm/working_groups/Paleo/Scripts/FixedSST/fixed.html
+SOL03 has results
+Pre-processing tools for initial condition datasets for paleo CCSM
+runs are described at 
+http://www.cgd.ucar.edu/csm/working_groups/Paleo/Tools/SetupTools/CCM3/ccm3tools.html

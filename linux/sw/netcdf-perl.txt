@@ -1,0 +1,98 @@
+************************************************************************
+19991213: netcdf-perl-1.2 dust.ps.uci.edu
+
+cd /data/zender
+ncks -R -l ./ -p ftp://ftp.unidata.ucar.edu/pub/netcdf-perl netcdf-perl.tar.Z
+tar -xzvf netcdf-perl.tar.Z
+
+export PERL_MANDIR='/usr/man'
+export CPP_NETCDF='-I/usr/local/include'
+export LD_NETCDF='-L/usr/local/lib -lnetcdf'
+
+cd netcdf-perl-1.2/src
+./configure
+make
+make test
+sudo make install
+make realclean
+************************************************************************
+20001009: netcdf-perl-1.2.1 dust.ps.uci.edu
+
+cd /data/zender
+ncks -R -l ./ -p ftp://ftp.unidata.ucar.edu/pub/netcdf-perl netcdf-perl.tar.Z
+tar -xzvf netcdf-perl.tar.Z
+
+export PERL_MANDIR='/usr/man'
+export CPP_NETCDF='-I/usr/local/include'
+export LD_NETCDF='-L/usr/local/lib -lnetcdf'
+
+cd netcdf-perl-1.2.1/src
+./configure
+make
+make test
+sudo make install
+make realclean
+************************************************************************
+20031121: netcdf-perl-1.2.2 dust.ess.uci.edu
+
+cd /data/zender/tmp
+wget ftp://ftp.unidata.ucar.edu/pub/netcdf-perl/netcdf-perl.tar.Z
+tar -xzvf netcdf-perl.tar.Z
+
+export PERL_MANDIR='/usr/man'
+export CPP_NETCDF='-I/usr/local/include'
+export LD_NETCDF='-L/usr/local/lib -lnetcdf'
+
+cd netcdf-perl-1.2.2/src
+./configure
+make
+make test
+sudo make install
+make realclean
+************************************************************************
+20090507: netcdf-perl-1.2.3 on givre Ubuntu 9.04 Jaunty Jackalope x86_64
+cd /data/zender/tmp
+wget ftp://ftp.unidata.ucar.edu/pub/netcdf-perl/netcdf-perl.tar.Z
+tar -xzvf netcdf-perl.tar.Z
+export PERL_MANDIR='/usr/man'
+export CPP_NETCDF='-I/usr/local/include'
+export LD_NETCDF='-L/usr/local/lib -lnetcdf'
+cd netcdf-perl-1.2.3/src
+./configure
+make
+make test
+sudo make install
+make realclean
+************************************************************************
+20090510: netcdf-perl-1.2.4 on givre Ubuntu 9.04 Jaunty Jackalope x86_64
+# NB: libnetcdf must be compiled with -fPIC -m64 (on x86_64) and with netCDF2
+cd ${DATA}/tmp
+/bin/rm -r -f netcdf-perl*
+wget ftp://ftp.unidata.ucar.edu/pub/netcdf-perl/netcdf-perl.tar.gz
+tar xzvf netcdf-perl.tar.gz
+export PERL_MANDIR='/usr/man'
+export CPP_NETCDF='-I/usr/local/include'
+export LD_NETCDF='-L/usr/local/lib -lnetcdf -lhdf5 -lhdf5_hl -lcurl'
+cd ${DATA}/tmp/netcdf-perl-1.2.4/src
+./configure
+make
+make test
+sudo make install
+make realclean
+************************************************************************
+20130611: netcdf-perl-1.2.4 on roulee Fedora Core 18 x86_64
+# NB: libnetcdf must be compiled with -fPIC -m64 (on x86_64) and with netCDF2
+cd ${DATA}/tmp
+/bin/rm -r -f netcdf-perl*
+wget ftp://ftp.unidata.ucar.edu/pub/netcdf-perl/netcdf-perl.tar.gz
+tar xzvf netcdf-perl.tar.gz
+export PERL_MANDIR='/usr/share/man'
+export CPP_NETCDF='-I/usr/local/include'
+export LD_NETCDF='-L/usr/local/lib -lnetcdf'
+cd ${DATA}/tmp/netcdf-perl-1.2.4/src
+./configure
+make
+make test
+sudo make install
+make realclean
+************************************************************************

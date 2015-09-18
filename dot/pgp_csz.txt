@@ -1,0 +1,42 @@
+# scp ~/dot/pgp_csz.txt ess1.ess.uci.edu:public_html
+# http://www.ess.uci.edu/~zender/pgp_csz.txt
+
+Public PGP key for Charlie Zender:
+
+Type  Bits / KeyID   Date       User ID
+pub   1024D/6F635D10 2006-11-20 Charlie Zender <zender@uci.edu>
+sub   2048g/9148C6AF 2006-11-20
+
+Key also available from keyserver pgp.mit.edu:
+gpg --keyserver pgp.mit.edu --search-keys 'Charlie Zender'
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.3 (GNU/Linux)
+
+mQGiBEVh1bcRBADRCbLu37Qlsu2cOjckAlAgzvHBjMYQMtdQjJOe/rv9+p6StXyM
+SNp6GhpwX3b8j6r0NkT6fOqwaUh/uvxdTRR1FQJF7tHVAq0n9uY1stKFqRQC+cu+
+UP74FgfEvqh5pFL8sI05ayOMO7GZ0lh54rQQAQ/l7TK29ttNDIyg2hpyWwCg7tfm
+nQ3gbeqdOhC9N1EikO7jCd0EAMq2ceX8hJv4l701dpb4O5zogKYcto7BHULlUPAY
+v9FYt42MsF1kH6E0XC+HAA/pJ9sfCCrWKzbRtYkZGipJnB8bx19kxUvlRtPHXSdJ
+PHyckPOTSeyCAX0/YbyOWMsZYKMZf2t0VIlEIMLSjTgwpu2OY/zSyi0Lx9kr2K8y
+bUdpBACXoGOSVBZdEX3z/ck5Ogan874UbTbOTxB3yw5Ry58CL52eZXaYP0v9pWL9
+cCe9hAoVlY2sH5fqZnKwQpT0HeNYcCdcY7wBtVnnW/4bjeljv5MsP2tkqsT2ucYg
+S4HDpfshfH0GwpUMHgDgfwXqyOUG4setLd5jfhct9UVptdZ8tLQfQ2hhcmxpZSBa
+ZW5kZXIgPHplbmRlckB1Y2kuZWR1PohgBBMRAgAgBQJFYdW3AhsDBgsJCAcDAgQV
+AggDBBYCAwECHgECF4AACgkQy5FJrW9jXRC60ACgkWtdilBohVmiaxTwGXgstMSF
+JzUAnApKDwlVOOpTlDUw1CxpCqeAYwRmuQINBEVh1b8QCACyZg28taaSucl0vMSC
+7ZB5KOZgr+SDuuEjl9p7Wwu83E6MppsZKQWyhjKJAhmjnAMYAgOexN5xSjgi50Or
+Df+pPrULN49Ec90qu2z/B2O74NZA3237t4ATZnMz8l0saL7R+BjtpEKjh43SDOmd
+lD9Da3aNYP04V2tU78F8Iusq3/k66Ppi+v9XZ+vLsApCgjBt0PJUbOvznt0cUYBS
+M4wvUsMzMB6iffW+CfAo2gaPCsqYEbEvMN1KiM15jOi7wNFCAOtx+s8sWQ6LVIH8
+vpqMNcEPIlUrH95FTuPIklnEC2sk8WFzmCNWqRBTP/iTeXF51zvz58OXg7joVoHp
+oN0rAAMGB/9n/AOrRMLIv9nSzM/R25O5VBAiAU/vka+1lSABpN4H/S2F8B+7ehrK
+OWEo2yuStwcu2Hl/F02OwaaNbMzK0sUGMrbgHDGd/venbIKu/F7mEWfXndP8MbXx
+eT9tTjD0Oirm42JSTIQ7SA6RQg5eX0iPapCGbh+BLemv0itR10E3YBf1t86UElL6
+MzSJUv8xo/lodt8FxFvM8nKSEs/CAxwYFkAUV/8I+Gdmd6ZTgwFcegNSm5V+811K
+BBe2xcNkpokPH2Zfam7W7Teo1dSvF7RUXGDoEMorkXvuKGkb6rjwv4k/j8/krbNu
+V/WGP7GerNFkb1JDu3fcC2CFqlpvsFfqiEkEGBECAAkFAkVh1b8CGwwACgkQy5FJ
+rW9jXRAZnwCdHhbbyY0H5bszcM7cj3kXnYoEIPoAn3DXHYEmnSXBZ//FJJc0LTG8
+WEy6
+=YK0f
+-----END PGP PUBLIC KEY BLOCK-----

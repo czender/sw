@@ -1,0 +1,224 @@
+#!/bin/sh
+
+# $Id$
+
+# Purpose: Initialize X environment, wait, clean up after exiting X
+
+# Some modern GUI desktops like GNOME and KDE do not want users to set up X
+# 20041120: Deprecate file by renaming it xinitrc.old
+# On systems that need xinitrc, simply 
+# /bin/cp ~/.xinitrc.old ~/.xinitrc
+
+# NB: Cygwin-XFree86 xset does not support many options supported by Linux
+# These options are turned off below using PVM_ARCH test
+
+# X errors will be written to xerr file
+err=${HOME}/err			
+				
+# ~/.Xdefaults is read by default, but just in case...
+if [ -f ${HOME}/.Xdefaults ] ; then 
+    xrdb -merge ${HOME}/.Xdefaults	
+fi # endif Xdefaults
+if [ -f ${HOME}/idl/ibp_Xdefaults.txt ] ; then 
+    xrdb -merge ${HOME}/idl/ibp_Xdefaults.txt
+fi # endif ibp_Xdefaults
+
+# 20030319: Joey Hess on debian-users says this may help debconf use gnome
+if [ -z "${XAUTHORITY}" ]; then
+    XAUTHORITY=${HOME}/.Xauthority
+    export XAUTHORITY
+fi # endif
+
+# Ask MT if this breaks
+# eval `ssh-agent -c` 
+# (export SSH_ASKPASS /usr/libexec/openssh/x11-ssh-askpass;ssh-add < /dev/null &)
+
+# Start window manager
+if [ ${xinitrc_active} = 'true' ] ; then
+if [ -z "${win_sys}" -o "${win_sys}" = "fvwm2" ]; then
+    fvwm2 & # FVWM2 window manager (default)
+elif [ "${win_sys}" = "olwm" ]; then        
+    olwm -f -3d -depth 24 & # Openwindows
+elif [ "${win_sys}" = "mwm" ]; then         
+    /X11/bin/mwm & # Motif window manager
+elif [ "${win_sys}" = "twm" ]; then         
+    twm & # Tom's window manager
+elif [ -z "${win_sys}" ]; then         
+    printf "INFO: xinitrc reports unknown window manager = ${win_sys}\n"
+else
+    printf "ERROR: xinitrc window manager variable \${win_sys} is not set\n"
+fi # endif win_sys
+wnd_mgr_pid=$! # PID of window manager determines when to kill X below
+
+if [ "${win_sys}" = "olwm" ]; then # Initialize Openwindows
+    if [ -x ${HOME}/.openwin-init ]; then
+	${HOME}/.openwin-init # Custom OpenWindows tools
+    else
+	${OPENWINHOME}/lib/openwin-init # Default OpenWindows tools
+    fi # endif
+fi # endif Openwindows
+
+# Cursor
+if [ ${xinitrc_active} = 'true' ] ; then
+if [ -f ${HOME}/.lightning ] ; then 
+    if [ -f ${HOME}/.lightningmask ] ; then 
+	case "${HOST}" in 
+	    dakine* | dust* | haze* | lanina* | sand* | seasalt* | soot* )
+# 19991005: Deadhead cursor is 96 x 94 pixels, which causes a problem for XFree86
+# unless Option "swcursor" is in device section of XF86Config
+		xsetroot -cursor ${HOME}/.lightning ${HOME}/.lightningmask &
+	    ;; # endcase ashes, dakine, dust, elnino, haze, lanina, sand, seasalt, soot*
+	esac # endcase ${HOST}
+    fi # endif
+fi # endif
+
+# DPMS
+if [ "${PVM_ARCH}" != 'WIN32' ] ; then
+case "${HOST}" in 
+    ashes* | dakine* | dust* | elnino* | haze* | lanina* | sand* | seasalt* | soot* ) 
+	xset +dpms # Enable DPMS
+	xset dpms 300 600 1200 # Seconds until Standby, Suspend, Off
+    ;; # endcase ashes, dakine, dust, sand, seasalt, lanina, elnino
+esac # endcase ${HOST}
+fi # endif
+
+# Root window
+case "${HOST}" in 
+    ashes* | dust* ) 
+	if [ -f ${DATA}/pix/ovum_1920x1200.xbm ] ; then 
+	    xsetroot -bitmap ${DATA}/pix/ovum_1920x1200.xbm &
+	fi # endif pixmap exists
+    ;; # endcase
+    dakine* | elnino* | haze* | sand* | seasalt* | soot* ) 
+	if [ -f ${DATA}/pix/ovum_1600x1200.xbm ] ; then 
+	    xsetroot -bitmap ${DATA}/pix/ovum_1600x1200.xbm &
+	fi # endif pixmap exists
+    ;; # endcase
+    lanina* ) 
+	if [ -f ${DATA}/pix/ovum_1400x1050.xbm ] ; then 
+	    xsetroot -bitmap ${DATA}/pix/ovum_1400x1050.xbm &
+	fi # endif pixmap exists
+    ;; # endcase lanina
+    localhost* )
+	printf "WARNING: .xinitrc reports \${HOST} = ${HOST}\n"
+    ;; # endcase localhost
+    lonos* )
+	if [ -f ${DATA}/pix/ovum_1280x1024.xbm ] ; then 
+	    xsetroot -bitmap ${DATA}/pix/ovum_1280x1024.xbm &
+	fi # endif pixmap exists
+    ;; # endcase lonos
+    * ) # All other matches
+	case "${PVM_ARCH}" in 
+	    SUN* | AIX* )
+		if [ -f ${DATA}/pix/ovum_1280x1024.xbm ] ; then 
+		    xsetroot -bitmap ${DATA}/pix/ovum_1280x1024.xbm &
+		fi # endif pixmap exists
+	    ;; # endcase SUN* | AIX*
+	    * ) # Could not match anything
+		printf "ERROR: \${HOST} = ${HOST} in .xinitrc\n"
+	    ;; # endcase *
+	esac # endcase ${PVM_ARCH}
+    ;; # endcase *
+esac # endcase ${HOST}
+
+# Set beep parameters: % maximum volume, pitch (Hz), duration (ms)
+(xset b 5 440 50)
+
+# Mouse movement: [acceleration threshold] where acc takes places after thr pixels
+(xset mouse 4 4) # Mouse acceleration and threshold
+fi # endif xinitrc_active
+
+if [ "${PVM_ARCH}" != 'WIN32' ]; then
+# Set keyboard repeat rate: Argument is characters per second, max is 30 cps
+if [ "${HOST}" != 'elnino' ]; then
+# 20030214: elnino does not seem to permit setting kbdrate
+    (kbdrate -r 30)
+fi # endif
+if [ "${HOST}" == 'ashes' ]; then
+# Inspiron 8500 specific hacks http://www.garshol.priv.no/download/i8500/
+    xmodmap -e "keycode 174 = XF86AudioLowerVolume"
+    xmodmap -e "keycode 176 = XF86AudioRaiseVolume"
+    xmodmap -e "keycode 160 = XF86AudioMute"
+fi # endif
+# Invert mouse buttons for using right hand mouse on left hand side
+    xmodmap -e 'pointer = 3 2 1' &
+fi # endif
+
+if [ "${HOST}" != 'lonos' -a "${PVM_ARCH}" != 'LINUX' ]; then     
+# Swap CAPS_LOCK and CTRL keys, make WINDOWS keys duplicate ALT_L and ALT_R
+# 19991001: Use XF86Config-4 to swap CAPS_LOCK and CTRL keys on Linux
+    xmodmap ${HOME}/.xmodmaprc & 
+fi # endif
+
+# Set console (-C) for system error messages, talk prompts, etc.
+(xterm -C -j -rw -s -g 80x37+2-0 -sf -sb -fn 10x20 -bg black -fg goldenrod -n 'Console' -title 'Console' &)
+
+# Window manager should always set up clock and extra xterm
+(xclock -font "-*-helvetica-*-r-*-*-12-*-*-*-*-*-*-*" -padding 0 -digital -geometry 160x15-0+0 &)
+(xterm -j -rw -s -g 80x35+0-2 -sf -sb -fn 10x20 -bg black -fg turquoise -n 'Emack Attack' -title 'Emack Attack' &)
+
+# Performance monitors and gadgets
+#if [ -f /contrib/bin/xbiff++ ] ; then 
+#	(/contrib/bin/xbiff++ -file ${HOME}/mail/in &)
+#fi # endif xbiff++
+#if [ -f /X11/bin/xmeter ] ; then 
+#	(/X11/bin/xmeter -w 80 -load ${HOST} newt &)
+#fi # endif xmeter
+#if [ -f /X11/bin/xload ] ; then 
+#	(/X11/bin/xload -g 100x70+705+0 -scale 3) 2>>$err & 
+#fi # endif xload
+#if [ -f /usr/X11/bin/xbiff ] ; then 
+#	(/usr/X11/bin/xbiff -file ${HOME}/mail/in -geometry +805+0 -update 120 -volume 0 &)
+#fi # endif xbiff
+
+(xhost \
+    acd.ucar.edu \
+    ashes.ess.uci.edu \
+    babyblue.ucar.edu \
+    biogenic.ess.uci.edu \
+    blackforest.ucar.edu \
+    bluesky.ucar.edu \
+    chinookfe.ucar.edu \
+    dakine.zender.org \
+    dave.ucar.edu \
+    dsl.ucar.edu \
+    dust.ess.uci.edu \
+    elnino.ess.uci.edu \
+    esmf.ess.uci.edu \
+    ftp.cgd.ucar.edu \
+    gate.ucar.edu \
+    goldhill.cgd.ucar.edu \
+    greenmtn.cgd.ucar.edu \
+    haze.ess.uci.edu \
+    horizon.npaci.edu \
+    krein.math.uci.edu \
+    lanina.ess.uci.edu \
+    longs.ucar.edu \
+    nco.sourceforge.net \
+    sand.ess.uci.edu \
+    seasalt.ess.uci.edu \
+    soot.ess.uci.edu \
+    tempest.cgd.ucar.edu \
+    tempest.ucar.edu \
+    tl3.compile.sourceforge.net \
+    )
+
+# Wait for window manager to exit 
+wait ${wnd_mgr_pid}
+
+if [ -f /bin/clear_colormap ] ; then 
+	(/bin/clear_colormap)
+fi # endif clear_colormap
+
+xmodmap -e "clear lock"
+
+fi # endif xinitrc_active
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,21 @@
+2000-03-22  Charlie Zender  <zender@uci.edu>
+
+	* Added capability to handle negative increments to yyyymmdd_ncr()
+
+	* Fixed bug with yyyymmdd2doy() where September and October
+	incorrect number of days
+
+2000-01-14  Charlie Zender  <zender@uci.edu>
+
+	* Added yyyymmdd_prs() function
+
+Wed Sep 30 15:16:17 1998  Charlie Zender  <zender@odin.cgd.ucar.edu>
+
+	* Added DBG.pm module
+
+Sun Sep  6 00:08:18 1998  Charlie Zender  <zender@sanitas-e0.cgd.ucar.edu>
+
+	* Finished implementation of Perl module perl
+
+	* Added README and ChangeLog
+

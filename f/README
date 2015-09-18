@@ -1,0 +1,6 @@
+$Id$ -*-text-*-
+
+This directory contains template Fortran programs and libraries.
+
+This module installs many Fortran header files in the include directory.
+

@@ -1,0 +1,508 @@
+% $Id$
+
+% Purpose: Extended abstract for 1997 AMS mtg.
+
+\documentclass[twocolumn,twoside,final,10pt]{article}
+
+%%\ifphd{}{
+%
+%\documentclass[agupp]{aguplus}
+%%\documentclass[agums]{aguplus}
+%%\documentclass[jgrga]{aguplus}
+%
+%%  AGU++ OPTIONS
+%\printfigures        % ADDS FIGURES AT END
+%%\doublecaption{35pc} % CAPTIONS PRINTED TWICE
+%\sectionnumbers      % TURNS ON SECTION NUMBERS
+%%\extraabstract       % ADDS SUPPLEMENTAL ABSTRACT
+%%\afour               % EUROPEAN A4 PAPER SIZE
+%%\figmarkoff          % SUPPRESS MARGINAL MARKINGS
+%
+%%  AGUTeX OPTIONS AND ENTRIES
+%%\tighten             % TURNS OFF DOUBLE SPACING, has no effect with agupp
+%%\singlespace         % RESTORES SINGLE SPACING
+%%\doublespace         % RESTORES DOUBLE SPACING
+
+\usepackage{natbib} % \cite commands from aguplus
+\usepackage{graphicx} % defines \includegraphics*
+\usepackage{ifthen} % Boolean and programming commands
+%\usepackage{longtable} % for long tables, like acronyms and symbols
+
+\usepackage{/home/zender/tex/csz} % all my local definitions
+%\usepackage{jrn_abb} % Define abbreviations used in bib.bib
+\input{/home/zender/tex/jgr_abb}
+
+%% NB: The \lefthead and \righthead will be automatically uppercased by
+%% the jgrga documentstyle 
+%\lefthead{Zender and Kiehl}
+%\righthead{Climate sensitivity to tropical anvil representation}
+%\received{date1}
+%\revised{date2}
+%\accepted{date3}
+%\journalid{JGRD}{Journal date}
+%\articleid{page1}{page2}
+%\paperid{94JZ12345}
+%% The $ in the following line screws up the hilit19 highlighting
+%%\ccc{0000-0000/00/94JZ-12345\$05.00}
+%\ccc{0000-0000/00/94JZ-12345\05.00}
+%% \cpright{PD}{1994}
+%% \cpright{Crown}{1994}
+%% (No \ccc{} for Crown copyrights.)
+%\cpright{AMS}{1996}
+%
+%\authoraddr{J. T. Kiehl and Charles S. Zender, National Center for Atmospheric
+%Research, P.O. Box 3000, Boulder, CO 80307-3000}
+
+%\slugcomment{Submitted to \jas, April~22, 1996. Copyright \copyright 1996 AMS.}
+%\slugcomment{\today}
+
+\oddsidemargin = 0.0in
+\evensidemargin = 0.0in
+\topmargin = 0.0in
+\textheight = 9in
+\textwidth = 6.5in
+\columnsep = 0.25in
+\headheight = 0in
+\headsep = 0in
+\footskip = 0in
+\pagestyle{empty}
+
+\renewcommand\textfraction{0.}
+\setcounter{totalnumber}{10}
+\setcounter{topnumber}{10}
+\setcounter{dbltopnumber}{10}
+\setcounter{bottomnumber}{10}
+\renewcommand\topfraction{1.}
+\renewcommand\dbltopfraction{1.}
+\renewcommand\bottomfraction{1.}
+\renewcommand\floatpagefraction{1.}
+\renewcommand\dblfloatpagefraction{1.}
+
+% latex companion p. 26
+%\renewcommand{\section}{\@startsection {section}{1}{\z@}{-\baselineskip}{0.5\baselineskip}{\normalfont\normalsize}}
+%\renewcommand{\subsection}{\@startsection {subsection}{2}{\z@}{-\baselineskip}{0.5\baselineskip}{\normalfont\normalsize\itshape\underline}}
+% from /contrib/texmf/lib/texmf/tex/latex2e/base/article.cls
+\makeatletter
+%\renewcommand{\section}{\@startsection {section}{1}{\z@}{-3.5ex \@plus -1ex \@minus -.2ex}{2.3ex \@plus.2ex}{\normalfont\normalsize}}
+%\renewcommand{\bibsection}{\@startsection
+%{section}{1}{\z@}{-3.5ex\@plus -1ex \@minus -.2ex}{2.3ex
+%\@plus.2ex}{\normalfont\normalsize References}} 
+\makeatother
+
+\begin{document}
+%} % not phdcsz
+
+% NB: title must be lowercased by hand. The documentstyle does not enforce it.
+%\def\paperchaptertitle{SENSITIVITY OF A CLIMATE SIMULATION TO THE
+%RADIATIVE EFFECTS OF TROPICAL CIRRUS ANVIL CLOUD}
+%\ifphd{\chapter{\paperchaptertitle}\label{chap:anv}}{\title{\paperchaptertitle}}
+%\ifphd{}{\author{Charles S. Zender and J. T. Kiehl}}
+%\ifphd{}{\affil{National Center for Atmospheric Research, Boulder, Colorado}}
+
+%\ifphd{\section{Abstract}}{\begin{abstract}}
+%Rewrite of thesis.
+%\ifphd{}{\end{abstract}}
+
+% These don't seem to work before \begin{document}
+\setlength\abovecaptionskip{0pt}
+\setlength\belowcaptionskip{15pt}
+
+\setlength\floatsep{0pt}
+\setlength\textfloatsep{0pt}
+\setlength\dblfloatsep{0pt}
+\setlength\dbltextfloatsep{0pt}
+\setlength\intextsep{0pt}
+
+\newcommand{\amssection}[1]{\vskip 1.0\baselineskip\normalfont\normalsize\noindent{#1}\vskip 1.0\baselineskip}
+\newcommand{\amssubsection}[2]{\vskip
+1.0\baselineskip\normalfont\normalsize\noindent{#1} \underline{\textsl{#2}}\vskip 1.0\baselineskip}
+\renewcommand{\footnotesize}{\normalsize}
+\makeatletter
+\renewcommand{\refname}{\vskip -1.0\baselineskip\@empty}
+\global\let\@date\@empty
+\makeatother
+
+\def\paperchaptertitle{TROPICAL CLIMATE SENSITIVITY TO REPRESENTATION\\
+OF CIRRUS ANVIL LIFECYCLE}  
+\def\paperauthor{Charles S. Zender\footnote{\textsl{Corresponding author address:}
+Charles S. Zender, National Center for Atmospheric Research,
+P.O.B. 3000, Boulder, CO 80307-3000; zender@ncar.ucar.edu}~~and
+J. T. Kiehl}
+\def\institution{National Center for Atmospheric Research, Boulder, Colorado}
+%\large{\paperchaptertitle}1.0\baselineskip\large{\paperauthor}
+\title{\vskip -.3in\normalsize{\begin{flushleft}\textbf{P1.24}\end{flushleft}}\vskip -1.0\baselineskip\paperchaptertitle}
+\author{\normalsize\paperauthor\\
+\normalsize\institution}
+%{\centering
+%\noindent\textbf{P1.24} \paperchaptertitle\relax\vskip 2.0\baselineskip
+%Charles S. Zender\footnote{\textsl{Corresponding author address:}
+%Charles S. Zender, National Center for Atmospheric Research,
+%P.O.B. 3000, Boulder, CO 80307-3000; zender@ncar.ucar.edu} and
+%J. T. Kiehl\par\relax 
+%\institution\relax
+%\vskip 2.0\baselineskip}
+\maketitle
+\thispagestyle{empty}
+
+\amssection{1. INTRODUCTION}\label{sec:anv_intro}
+
+Radiative forcing from the extended tropical upper tropospheric cloud
+known as cirrus anvil plays a dominant role in determining
+the diabatic heating which drives the general circulation. 
+Tropical cirrus anvil originates in the complex interaction of a
+mesoscale convective system (MCS) with the environment.
+A general circulation model (GCM) does not resolve this interaction
+and must rely on sub-gridscale methods to diagnose or predict anvil
+cloud. 
+This paper presents results from a new, semi-empirical method of
+predicting anvils in GCMs based on observed and modeled behavior of
+tropical MCSs.
+The new method is semi-empirical in that it combines constraints on
+anvil formation deduced from empirical budget studies with physics
+parameterized from a cloud resolving cumulus ensemble model.
+The method emphasizes the following observed and modeled features of
+anvil lifecycle: a strong correlation between anvil growth and
+convective mass flux at anvil base, the excess of ice over supercooled
+liquid for $T < -5$~\degreee C, and the vertical distribution of
+condensate.  
+Five year integrations of the National Center for Atmospheric Research
+Community Climate Model (CCM2) show climate features sensitive to
+anvil representation include tropical upper troposphere temperature
+structure, Hadley cell strength, and warm pool convection.
+%, and the North American flow field in winter.
+
+\amssection{2. ANVIL PARAMETERIZATION}\label{sec:anv_mdl}
+
+%Empirical budget studies suggest the hydrologic cycle of tropical
+%anvil may be conceptually divided into convective and stratiform
+%components \cite[]{LeH80,GaH83}. 
+%Convective formation accounts for ice formed in deep convective 
+%updrafts and detrained into the stratiform anvil.
+%Stratiform formation accounts for ice formed outside convective
+%cores, such as condensate formed or frozen in large-scale ascent. 
+%The above studies indicate roughly 60--75\% of anvil condensate
+%originates in convective cores.
+%The remainder, roughly 25--40\% of anvil mass, is generated by
+%circulations outside the deep convective core. 
+
+Spatio-temporal scale mismatch between convective and stratiform
+processes and GCM resolution makes anvil parameterization difficult.
+GCMs currently employ two common methods to represent these processes:
+(i) diagnosing anvil cloud from column thermodynamic properties (e.g.,
+relative humidity) and (ii) prognosing anvil cloud by assuming an
+anvil detrainment efficiency which acts on the convective mass flux
+predicted by the moist convection scheme.
+Diagnostic methods like (i) have difficulty representing
+convective-radiative hysteresis, such as the radiative influence of 
+detached anvils.
+As \cite{Don93} points out, prognostic methods like (ii) often do not
+explicitly account for the 25--40\% of anvil mass formed by secondary
+circulations outside the deep convective core.
+
+Cloud resolving models and mesoscale budget studies suggest the
+lifecycle of MCS anvils may be simply parameterized in terms of 
+large scale forcing.  
+Our modified version of the \cite{LeH80} conceptual model
+is shown in Figure~\ref{fig:cem}a. 
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/home/zender/anv/anv_concept.eps}\vfill
+\vskip .1in
+\includegraphics*[width=\halfwidth,height=.25\textheight]{/data2/zender/ps/cem_mc_diwpdt_c.eps}\vfill
+\end{center}
+\caption{
+(a) Conceptual model of the ice budget in ANV. 
+$c_1$--$c_5$ and \pc\ are the free parameters of the scheme.
+(b) Linear correlation and least squares fit of \Mc\ to \IWPdot. 
+The ordinate is scaled in units of a typical GCM timestep.
+\label{fig:cem}}
+\end{figure}
+This conceptual anvil model, denoted ANV, is implemented as follows: 
+For a grid cell of density $\rho$ and ice mixing ratio \qi\ located in
+a convecting column with convective mass flux at 500~mb \Mc,
+the ice budget that defines ANV is:
+\begin{equation}
+\label{eqn:qi_cnv}
+{D\qi \over Dt} = {c_1 \Mc \over \rho \Delta Z} - c_2 \qi - c_3 \qi
+\end{equation}
+where $\Delta Z$ is the thickness of the convecting portion of the
+column in which $T < 0~^\circ$C.
+The material derivative on the LHS accounts for advection.
+The first term on the RHS relates the generation of total column ice
+to \Mc.
+Basing the generation of \qi\ throughout the anvil on the mass flux
+near anvil base \Mc\ (rather than local $M$) produces a vertical
+profile of \qi\ which increases or remains constant (rather than
+decreasing) from anvil base up to $\sim 300$~mb, in accord with
+current understanding \cite[e.g.,][]{Hou89,WSS931}.
+The $c_2$ term represents local sublimation of the anvil due to 
+sub-gridscale entrainment and subsaturation.
+The $c_3$ term converts ice to precipitation.
+The determination of $c_1$ is discussed below.
+$c_2$ and $c_3$ are determined from observations \cite[]{LeH80,GaH83}
+and process studies in a microphysical cloud model \cite[]{ZeK94}.
+%We assume detraining anvil completely covers a gridcell, i.e., cloud  
+%fraction is 1. 
+
+\amssubsection{2.1}{Linking Anvil Growth to Anvil-base Mass Flux}
+
+Prior studies indicate convective mass flux $M$ is the best single
+parameter to characterize the formation of tropical anvil. 
+\cite{XuK91} concluded $M$ best predicts tropical convective cloud
+amount and the ice water content of individual anvil layers.   
+Based on satellite observations, \cite{MaR93} suggested convective
+mass flux at the base of cumulonimbus cores determines the mean cloud 
+properties of mesoscale convective systems, including the stratiform
+anvil region.
+
+We use a cloud resolving, cumulus ensemble model (CEM) to provide a
+high spatial and temporal resolution dataset which spans the range of
+MCS activity from the convective to the GCM scale.
+A comprehensive review of our CEM simulation is presented by
+\cite{GMK95}.  
+Figure~\ref{fig:cem}b shows the correlation of \Mc\
+and anvil mass growth rate \IWPdot\ through the first 2.5~hr.\ of the
+CEM simulation.    
+This initial correlation is excellent, but anvil decay processes and
+scattered convection with the CEM domain soon cause the correlation to
+deteriorate.
+The slope of the least squares fit between between \Mc\ and \IWPdot\  
+determines the source parameter $c_1$ in (\ref{eqn:qi_cnv}).
+The results of our GCM simulations with constant $c_1$ (below) show
+numerous improvements in anvil climatology over a more traditional
+method. 
+Parameterizing $c_1$ from an ensemble of CEM integrations, perhaps as
+a function of large scale forcing (e.g., wind shear, SST) is the next
+logical step.
+
+\amssubsection{2.2}{Ice Fraction}\label{sec:fice}
+
+Recent field observations and models \cite[e.g.,][]{SLT94,GMK95,GrM96}
+suggest that, above 500~mb, anvil condensate is dominated by ice.
+In terms of temperature, the complete phase transition may occur over
+only 5~\degreee K.  
+This behavior is imposed on the GCM experiment in the present
+sensitivity study.
+The control model, denoted CCM, partitions diagnostic condensate
+between liquid and ice via   
+\begin{equation}
+\ficeccm = \cases{
+  0 & $T > - 10$~\degreee C \cr
+  -{T+10 \over 20} & $-10 \geq T \geq -30$~\degreee C \cr
+  1 & $T < -30$~\degreee C \cr}
+\label{eqn:ficeccm}
+\end{equation}
+The experiment, denoted ANV, restricts diagnostic liquid condensate
+(and, hence, mixed phase cloud) to a narrower and warmer range than
+CCM (\ref{eqn:ficeccm}) according to
+\begin{equation}
+\ficeanv = \cases{
+  0 & $T > 0$~\degreee C \cr
+  -{T \over 5} & $0 \geq T \geq -5$~\degreee C \cr
+  1 & $T < -5$~\degreee C \cr}
+\label{eqn:ficeanv}
+\end{equation}
+Since CCM classifies some condensate as cold as $-30~\degreee$C as
+liquid (\ref{eqn:ficeccm}), while ANV has no liquid colder than
+$-5$~\degreee C (\ref{eqn:ficeanv}), it is clear the ANV atmosphere
+will contain much more ice than the CCM. 
+Since ice hydrometeors are prescribed to be larger than liquid, classifying
+more condensate as ice (\ref{eqn:ficeanv}) also decreases the
+extinction efficiency per unit mass of anvil in ANV.
+This proves to be an important factor in diagnosing the cause of
+change in climatological cloud radiative properties in this
+sensitivity study.
+
+\amssection{3. SENSITIVITY STUDY RESULTS}\label{sec:dsc}
+
+To assess climate sensitivity to the features of anvil lifecycle
+described above, we employed a version of the National Center for
+Atmospheric Research Community Climate Model (CCM2). 
+Two numerical climate integrations are forced by observed 1985--1989
+SST: the control, denoted CCM, with diagnostic anvil, and the 
+experiment, denoted ANV, with anvil ice forecast from
+(\ref{eqn:qi_cnv}), which incorporates modeled and observed
+characteristics of tropical anvil lifecycle (i.e., explicitly linking
+anvil condensate generation to anvil base convective mass flux,
+strong vertical profiles of condensate up to 300~mb, and increased ice
+fraction).
+Although the results focus on ensemble mean January, the simulations
+show very similar features in July.
+%We stress the control model (CCM) includes diagnostic anvil---the
+%sensitivity experiment (ANV) shows the impact of forecasting anvil
+%based on the physics of tropical anvil.
+
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data2/zender/ps/spcp_85_8589_amip5_8589_xavg_01_QC.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data2/zender/ps/spcp_85_8589_amip5_8589_xavg_01_QDIABAT.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data2/zender/ps/spcp_85_8589_amip5_8589_xavg_01_T.eps}\vfill
+\end{center}
+\caption{
+Change (ANV$-$CCM) in zonal average tropical thermodynamics due to
+improved anvil representation.
+Panels are ensemble averages of 5 simulated Januarys from 1985--1989.
+Shading indicates values $< 0$.
+(a) Condensate mixing ratio \qc\ (\mgxkg), contour interval is
+2~\mgxkg.
+(b) Diabatic heating \QT\ (\kxday). Contour interval is .1~\kxday.  
+(c) Temperature $T$ (\degreee K), contour interval is .1~\degreee K.
+\label{fig:xavg_8589}}   
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data2/zender/ps/spcp_85_8589_amip5_8589_01_LWCF.eps}\vfill
+\includegraphics*[width=\halfwidth]{/data2/zender/ps/spcp_85_8589_amip5_8589_pres_01_CHI.eps}\vfill
+\end{center}
+\caption{
+As in Figure~\ref{fig:xavg_8589} but for:
+(a) Longwave cloud forcing LWCF (\wxmS). Contour interval is 10~\wxmS.
+(b) 200~mb velocity potential $\chi$ (\mSxs). Contour interval is $1
+\times 10^6$~\mSxs.  Shading indicates less subsidence (more
+divergence). 
+\label{fig:8589}}   
+\end{figure}
+
+%We have investigated the sensitivity of the simulated climate to
+%the radiative effects of a representation of ice cloud prognosed from 
+%modeled and observed characteristics of tropical anvil. 
+%In particular, we replaced a representation of tropical cloud which
+%diagnoses cloud mass from column vapor with a prognostic
+%representation which forecasts anvil generation from the vertical
+%profile of convective mass flux and anvil precipitation from mesoscale
+%budget estimates.
+The direct effect of this prognostic anvil representation is to
+sequester more condensate in the upper troposphere, a larger fraction
+of which is ice.
+Figure~\ref{fig:xavg_8589}a contours the ensemble mean January
+vertical profile of change in zonal average condensate \qc\ in 
+the tropics.  
+The largest model differences occur in the ascending branch of
+the Hadley cell.
+These changes in condensate distribution and ice fraction
+(\ref{eqn:ficeccm}--\ref{eqn:ficeanv}) agree with 
+recent observations \cite[]{WSS931,GrM96} and simulations in cumulus 
+ensemble models \cite[]{SLT94,GMK95}. 
+%We stress the control model includes diagnostic ice cloud---the
+%sensitivity experiment shows the impact of forecasting ice cloud based
+%on the physics of tropical anvil.
+
+Figure~\ref{fig:xavg_8589}b shows the change in zonal average total
+diabatic heating \QT\ in the tropics.
+Changes above 200~mb, where condensation is weak, show the radiative
+heating perturbation induced by the enhanced anvil.
+Enhanced anvil perturbs tropical upper troposphere heating more
+strongly in winter, when the column is clearer and anvil radiatively
+heats the troposphere above 200~mb.  
+In the summer tropics, enhanced anvil occurs in a ``deep cloud''
+environment, reducing radiative cooling up to 200~mb, and enhancing
+cooling above that. 
+Reduced optical depth keeps the intrinsically greater solar absorption
+of ice relative to liquid from causing a ubiquitous heating increase
+above 600~mb.
+
+Beneath 200~mb, change in \QT\ is dominated by change in latent
+heating \QL. 
+Convection intensifies from 0--10~\degreee N in ANV in both seasons,
+reflecting an enhanced ITCZ, notably over Micronesia, the east
+Indian Ocean, and northeast of Brazil. 
+Deep convection in the remainder of the ascending branch of the Hadley
+circulation is reduced. 
+Weaker summer hemisphere diabatic heating in ANV reduced Hadley cell
+strength by 13\% in January.
+Change in tropical water vapor (not shown) strongly resembles $\Delta
+\QL$.
+
+Figure~\ref{fig:xavg_8589}c shows ANV warms the 50~mb beneath the
+tropical tropopause by 2--3~$\degreee$K, roughly 5 times the standard
+deviation of  zonal average monthly $T$ from a 10~yr AMIP CCM2
+simulation. 
+The increase in tropical upper tropospheric temperature includes
+anvil-induced increase in radiative equilibrium $T$ and decreased heat
+export by the Hadley cell.
+%The near meridional symmetry of the $T$ increase reflects the
+%inability of the upper troposphere to maintain large temperature
+%gradients \cite[]{LiH88}.
+There is no significant change in tropical atmospheric stability
+beneath 200~mb. 
+
+Longwave cloud forcing (LWCF) is a radiative proxy for tropical anvil.
+Figure~\ref{fig:8589}a shows the change in LWCF due to improved
+representation of anvil lifecycle.
+LWCF generally increased in the winter hemisphere and decreased in the
+summer.
+%The strongest bias of the ANV prognostic anvil scheme is too-strong
+%cloud forcing over wintertime desert, due to weak sublimation in
+%subsidence regimes.
+Usually enhanced ice amount and fraction in the prognostic
+anvil balanced the weaker mass extinction efficiency of large ice
+crystals because anvil vertical location was tied to larger
+hydrometeor size.  
+However, LWCF significantly decreased (and improved) over the central
+Indian Ocean in January despite a ubiquitous increase in anvil mass in
+the tropics (cf.\ Figure~\ref{fig:xavg_8589}a).  
+This was due to improvement in the circulation over the central Indian
+Ocean.
+
+Figure~\ref{fig:8589}b shows the geographic variation of the change in
+January 200~mb velocity potential $\chi$.
+%The prognostic anvil is less strongly coupled to SST.
+%Based on the 1987 El Ni\~no, the prognostic anvil formulation improves
+%longwave cloud radiative response to SST cooling but worsens response
+%to warming $> 2\ \degreee$C. 
+%In conjunction with weaker mass extinction of ice, this weakens the
+%feedback between longwave cloud forcing and convection over SST maxima.
+This change in large scale divergent motion shows the net response of
+convection to the altered diabatic heating is a shift toward the
+winter hemisphere.
+This eliminates a persistent convective bias in January over the
+central Indian Ocean.
+The decreased Indian Ocean convection also decreased subsidence over
+African and Arabian desert, allowing too much high cloud to form there
+(Figure~\ref{fig:8589}a). 
+%Moreover, increased convection and high cloud north of the equator
+%propagate Rossby waves to the extratropics.  
+%This causes significant ridging in the 500~mb height field over the
+%west coasts of North America and Europe (not shown), substantially improving
+%agreement with analysis. 
+
+\amssection{4. CONCLUSIONS}\label{sec:anv_cnc}
+
+We assessed climate sensitivity to tropical anvil prognosed from the
+modeled and observed behavior of tropical cloud systems, emphasizing
+the direct relationship between anvil growth and anvil-base convective
+mass flux, the excess of ice over supercooled liquid, and the vertical
+distribution of condensate. 
+%Five year integrations of the National Center for Atmospheric Research
+%Community Climate Model showed climate statistics from a diagnostic
+%ice cloud representation based on temperature, humidity, and
+%stability, differ significantly from statistics from a prognostic
+%representation which forecasts cloud from modeled and observed
+%characteristics of tropical anvil lifecycle.
+Tropical climate features sensitive to these anvil characteristics
+include upper troposphere temperature structure, Hadley cell strength,
+and warm pool convection. 
+Many of these responses improved the climate simulation.
+Thus our study isolates some fundamental climate statistics in the 
+tropics that are partially controlled by features of tropical anvil 
+lifecycle which are not represented in most current GCM anvil 
+parameterizations. 
+Accounting for these features should be a high priority for future GCM
+cloud parameterizations.
+
+% Balance preprint columns
+%\ifphd{}{\balance}
+
+% Appendices
+%\ifphd{}{\appendix}
+
+% Acknowledgements
+%\ifphd{\subsection{Acknowledgements}\label{sec:anv_ack}}{\acknowledgments}
+%The authors wish to thank 
+
+% Bibliography
+\ifphd{}{\bibliographystyle{jas}}
+\ifphd{}{\bibliography{/home/zender/tex/bib}}
+
+\ifphd{}{\end{document}}

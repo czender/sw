@@ -1,0 +1,271 @@
+; $Id$ -*-f90-*-
+
+; Purpose: Plot line figures, generally vertical figures from swnb2 output
+; Based on ~/anl/mie_xv.ncl
+; NB: Intended for use with defaults set in ~/.hluresfile
+
+; Example usage:
+; cd ~/anl;ncl < mie_vz.ncl
+; cd ~/anl;ncl 'dvc="x11"' mie_vz.ncl
+; cd ~/anl;ncl 'dvc="x11"' 'fld_nm="j_NO2"' mie_vz.ncl
+; cd ~/anl;ncl 'fl_in_nm="/home/zender/foo.nc"' 'fl_out_nm="/data/zender/ps/mie_vz"' 'fld_nm="j_NO2"' 'dvc="x11"' mie_vz.ncl
+; cd ~/anl;ncl abc_max=0.0 flg_log_y=True 'fl_in_nm="/home/zender/foo.nc"' 'fl_out_nm="/data/zender/ps/mie_vz"' 'fld_nm="j_NO2"' 'dvc="x11"' mie_vz.ncl
+; cd ~/anl;ncl 'fl_in_nm="/home/zender/foo.nc"' 'fl_out_nm="/data/zender/ps/mie_vz"' 'fld_nm="lev"' 'dvc="x11"' mie_vz.ncl
+; cd ~/anl;ncl dff=True 'dvc="x11"' mie_vz.ncl
+; cd ~/anl;ncl flg_clr="False" mie_vz.ncl
+
+load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_code.ncl"
+load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl"
+load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/contributed.ncl"
+
+; Initialize some fields
+prg_nm="mie_vz" ; [sng] Program name
+fgr_stb="mie_vz" ; [sng] Figure name stub
+dbg_lvl=0
+mss_val_flt=1.0e36
+mss_val_dbl=1.0d36
+
+if(.not.isvar("dff")) then dff=False end if
+if(.not.isvar("dvc")) then dvc="eps" end if
+if(.not.isvar("fl_in_nm")) then fl_in_flg=False else fl_in_flg=True end if
+if(.not.isvar("fl_out_nm")) then fl_out_flg=False else fl_out_flg=True end if
+if(.not.isvar("flg_log_x")) then flg_log_x=False end if
+if(.not.isvar("flg_clr")) then flg_clr=True end if
+if(.not.isvar("flg_rng")) then flg_rng=False end if
+if(.not.isvar("fld_nm")) then fld_nm="j_NO2" end if
+if(.not.isvar("crd_min")) then crd_min=100.0 end if ; Coordinate minimum
+if(.not.isvar("crd_max")) then crd_max=1.0e5 end if ; Coordinate maximum
+if(.not.isvar("abc_min")) then abc_min=1.0e5 end if ; Abscissa minimum
+if(.not.isvar("abc_max")) then abc_max=100 end if ; Abscissa maximum
+if(.not.isvar("ord_min")) then ord_min=0.0 end if
+if(.not.isvar("ord_max")) then ord_max=1.0e-2 end if
+
+if (.not.isvar("flg_clr")) then ; is flg_clr on command line?
+   flg_clr = True
+end if
+if (.not.isvar("flg_rng")) then ; is flg_rng on command line?
+   flg_rng = False
+end if
+
+if (flg_clr) then
+   fl_sfx_clr="_clr"
+else ; !flg_clr
+   fl_sfx_clr="_bw"
+end if; !flg_clr
+
+; Markers: http://www.ncl.ucar.edu/Document/Graphics/Images/markers.gif
+idx_mrk_ast=03 ; Asterisk
+idx_mrk_crc_crs=15 ; Circle with cross
+idx_mrk_crc_dot=14 ; Circle with dot
+idx_mrk_crc_sld=16 ; Circle solid
+idx_mrk_crc=04 ; Circle 
+idx_mrk_crs=05 ; Cross
+idx_mrk_dmn=09 ; Diamond
+idx_mrk_dot=01 ; Dot
+idx_mrk_pls=02 ; Plus
+idx_mrk_sqr=06 ; Square
+idx_mrk_str=12 ; Star
+idx_mrk_tri_dwn=08 ; Triangle down
+idx_mrk_tri_up=07 ; Triangle up
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Begin Figure mie_vz
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Plot defaults that may be over-ridden for specific variables
+sym_sng=""
+units_sng=""
+load "$HOME/ncl/fld_prp.ncl" ; Set fld_sng, units_sng, and, maybe, cnt_lvl, scl_fct
+if(.not.isvar("fld_sng")) then fld_sng=fld_nm end if
+if(.not.isvar("ttl_sng")) then ttl_sng=fld_sng end if
+if(.not.isvar("y_ttl_sng")) then y_ttl_sng="Height z [m]" end if
+if(.not.isvar("x_ttl_sng")) then x_ttl_sng=fld_sng+" "+sym_sng end if
+x_ttl_sng=x_ttl_sng+" ["+units_sng+"]"
+
+ord_nbr=4 ; Number of files to read
+; Actual number of ordinates to plot: ord_nbr_plt <= ord_nbr
+if(.not.isvar("ord_nbr_plt")) then ord_nbr_plt=ord_nbr end if
+; Legend places lines in reverse order
+idx_obs=3 ; [idx] Obs index
+idx_ctl=2 ; [idx] Ctl index
+idx_xpt1=1 ; [idx] Xpt1 index
+idx_xpt2=0 ; [idx] Xpt2 index (ord_nbr_plt discards ordinates with highest indices)
+xpt_nm=new((/ord_nbr/),string)
+xpt_nm(idx_obs)="aer_h2o_ice_snw"
+xpt_nm(idx_ctl)="aer_h2o_ice_snw"
+xpt_nm(idx_xpt1)="aer_h2o_ice_snw"
+xpt_nm(idx_xpt2)="aer_h2o_ice_snw"
+ctl_nm=new((/ord_nbr/),string)
+ctl_nm(idx_obs)="aer_h2o_ice_snw"
+ctl_nm(idx_ctl)="aer_h2o_ice_snw"
+ctl_nm(idx_xpt1)="aer_h2o_ice_snw"
+ctl_nm(idx_xpt2)="aer_h2o_ice_snw"
+
+dat_sng=new((/ord_nbr/),string)
+dat_sng(idx_obs)="  Observed"
+dat_sng(idx_ctl)="  Control"
+dat_sng(idx_xpt1)="  Experiment1"
+dat_sng(idx_xpt2)="  Experiment2"
+
+clr_sng=new((/ord_nbr/),string)
+clr_sng(:)="black"
+if (flg_clr) then
+   clr_sng(idx_obs)="black"
+   clr_sng(idx_ctl)="blue"
+   clr_sng(idx_xpt1)="green"
+   clr_sng(idx_xpt2)="orange"
+end if; !flg_clr
+
+; Line properties
+; NB: 0*new(nbr,typ) behaves strangely due to _FillValue
+ln_sty=0*new(ord_nbr,integer,"No_FillValue")
+ln_thk=2+0*new(ord_nbr,integer,"No_FillValue")
+
+; Marker properties
+mrk_clr=clr_sng ; Marker color
+mrk_ln_md=new((/ord_nbr/),string)
+mrk_ln_md(:)="Lines" ; Line/marker combinations
+mrk_sz=new(ord_nbr,float)
+mrk_sz(:)=0.01
+mrk_typ=new(ord_nbr,integer)
+mrk_typ(idx_xpt2)=idx_mrk_crc_sld
+mrk_typ(idx_ctl)=idx_mrk_crs
+mrk_typ(idx_obs)=idx_mrk_crc_sld
+mrk_typ(idx_xpt1)=idx_mrk_crs
+
+; Assemble file names
+drc_in=getenv("DATA")+"/mie"
+fl_nbr=ord_nbr
+fl_in=new((/fl_nbr/),string)
+do fl_idx=0,fl_nbr-1
+   if (fl_in_flg) then
+      fl_in(fl_idx)=fl_in_nm
+      dff=False
+   else ; !fl_in_flg
+      if (dff) then fl_in(fl_idx)=drc_in+"/"+xpt_nm(fl_idx)+"_"+ctl_nm(fl_idx)+".nc" else fl_in(fl_idx)=drc_in+"/"+xpt_nm(fl_idx)+".nc" end if
+   end if; !fl_in_flg
+   print("Input data file "+fl_idx+" = "+fl_in(fl_idx))
+end do; end loop over fl
+
+; Begin plot information
+if (fl_out_flg) then
+   fl_out=fl_out_nm
+else 
+   drc_out=getenv("DATA")+"/mie"
+   fl_out=drc_out+"/"+fgr_stb+"_mie_"
+   if(dff) then fl_out=fl_out+"dff_" end if
+   fl_out=fl_out+fld_nm+fl_sfx_clr
+end if
+print("Print output will go to "+fl_out+"."+dvc)
+
+; Determine grid size for data
+fl_inq_ptr=addfile(fl_in(0),"r")
+alt=fl_inq_ptr->alt({abc_min:abc_max}) ; [m] Height
+abc=alt*1.0; [m]->[m] ; Ordinate means dependent variable not vertical axis
+abc_nbr=dimsizes(abc)
+time_nbr=1
+fld_typ=typeof(fl_inq_ptr->$fld_nm$)
+if (fld_typ.eq."float") then
+   data=new((/ord_nbr,abc_nbr/),float,mss_val_flt)
+else
+   data=new((/ord_nbr,abc_nbr/),double,mss_val_dbl)
+end if
+data_avg=new((/ord_nbr/),float,mss_val_flt)
+
+fl_lst_ptr=addfiles(fl_in,"r") ; Note plural "addfiles"
+ListSetType(fl_lst_ptr,"join") ; "join" for ensembles, "cat" for timeseries
+data=fl_lst_ptr[:]->$fld_nm$({abc_min:abc_max}) ; Read fld from all files
+if (fld_typ.eq."double") then
+   data_flt=new((/ord_nbr,abc_nbr/),float,mss_val_flt)
+   data_flt=doubletofloat(data)
+   delete(data)
+   data=data_flt
+   delete(data_flt)
+end if ; endif double
+
+; Scale data
+if(isvar("scl_fct")) then data=scl_fct*data end if
+
+; Average data
+do fl_idx=0,fl_nbr-1
+    data_avg(fl_idx)=dim_avg(data(fl_idx,:)) ; Average over rightmost dimension (alt) (and retain metadata)
+end do; end loop over fl
+;printVarSummary(data_avg)
+;print(data)
+;print(data_avg)
+;print("min(data_avg)="+min(data_avg))
+;print("max(data_avg)="+max(data_avg))
+
+rsr=True 
+;rsr@tiMainFontHeightF=.020
+;rsr@tmXBMode="Explicit"
+;rsr@tmXBValues=ind_xaxis
+rsr@gsnDraw=False
+rsr@gsnFrame=False
+rsr@tiMainString=ttl_sng
+rsr@tiXAxisString=x_ttl_sng
+rsr@tiYAxisFontHeightF=.020
+rsr@tiYAxisOn=True
+rsr@tiYAxisString=y_ttl_sng
+rsr@tmXTOn=False
+rsr@tmYROn=False
+rsr@tmXBMajorOutwardLengthF=0.0 ; Setting to zero turns ticks inwards
+rsr@tmXBMinorOutwardLengthF=0.0 ; Setting to zero turns ticks inwards
+rsr@tmYLMajorOutwardLengthF=0.0 ; Setting to zero turns ticks inwards
+rsr@tmYLMinorOutwardLengthF=0.0 ; Setting to zero turns ticks inwards
+if (flg_log_y) then 
+; Hard to get good labels with logarithmic axis
+;   rsr@tmYLStyle="Log"
+;   rsr@tmYLMode="Manual"
+;   rsr@tmYLTickSpacingF=1.0
+;   rsr@tmYLDataBottomF=min(ord)
+;   rsr@tmYLDataTopF=max(ord)
+end if ; end if flg_log_y
+if (flg_log_y) then rsr@trYLog=True end if; set Y-Axis coordinate system logarithmic
+;rsr@trXMinF=1.0
+rsr@xyDashPatterns=ln_sty(0:ord_nbr_plt-1)
+rsr@xyLineColors=clr_sng(0:ord_nbr_plt-1)
+rsr@xyLineThicknesses=ln_thk(0:ord_nbr_plt-1)
+rsr@xyMarkLineModes=mrk_ln_md(0:ord_nbr_plt-1)
+rsr@xyMarkerColors=clr_sng(0:ord_nbr_plt-1)
+rsr@xyMarkerSizeF=mrk_sz(0:ord_nbr_plt-1)
+rsr@xyMarkers=mrk_typ(0:ord_nbr_plt-1)
+
+; Legend
+rsr@lgLabelFontHeightF=0.020 ; Legend label font height
+rsr@lgPerimOn=False ; Turn off box surrounding legend
+rsr@pmLegendDisplayMode="Always" ; Turn on legend
+rsr@pmLegendHeightF=0.15 ; Change legend height
+rsr@pmLegendOrthogonalPosF=-0.7 ; Move legend down NDC units
+rsr@pmLegendParallelPosF=0.35 ; Move legend right NDC units
+rsr@pmLegendSide="Top" ; Change legend location
+rsr@pmLegendWidthF=0.15 ; Change legend width 
+rsr@xyExplicitLegendLabels=dat_sng(0:ord_nbr_plt-1) ; Legend labels
+
+; Open workstation and plot data
+wks=gsn_open_wks(dvc,fl_out)
+;plot=gsn_csm_xy(wks,abc,data(0:ord_nbr_plt-1,:),rsr)
+plot=gsn_csm_xy(wks,data(0:ord_nbr_plt-1,:),abc,rsr)
+draw(plot)
+frame(wks) 
+
+; Clean up for next plot
+delete(fl_in)
+delete(xpt_nm)
+delete(ctl_nm)
+delete(clr_sng)
+delete(dat_sng)
+delete(data)
+delete(data_avg)
+delete(ln_sty)
+delete(ln_thk)
+delete(mrk_clr)
+delete(mrk_ln_md)
+delete(mrk_sz)
+delete(mrk_typ)
+delete(rsr)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; End Figure mie_vz
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+end
+
+

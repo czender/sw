@@ -1,0 +1,108 @@
+% Name: AMShelv.sty
+% What: Style file to get helvetica fonts in math
+% Author (not really): Arnold Moene (afmoene@hp1.met.wau.nl)
+% Original source: 
+% http://www.tu-harburg.de/rzt/tuinfo/editors/tex/tips/math-fonts.html
+\ProvidesPackage{AMShelv}[2002/04/11]
+% Start quote from original source
+%..............................................................................
+% nach LaTeX-Companion S.209:
+\SetSymbolFont{operators}{normal}{OT1}{phv}{m} {n}
+\SetSymbolFont{operators}{bold}  {OT1}{phv}{bx}{n}
+    % \mathrm{}
+    % für Ziffern und Text von "log"-ähnlichen Operatoren
+    % betrifft auch die griechischen Großbuchstaben, deshalb:
+
+\DeclareSymbolFont{uppergreek}{OT1}{cmr}{m}{n}
+\SetSymbolFont{uppergreek}{bold}{OT1}{cmr}{bx}{n}
+
+\DeclareMathSymbol{\Gamma}{\mathord}{uppergreek}{"00}
+\DeclareMathSymbol{\Delta}{\mathord}{uppergreek}{"01}
+\DeclareMathSymbol{\Theta}{\mathord}{uppergreek}{"02}
+\DeclareMathSymbol{\Lambda}{\mathord}{uppergreek}{"03}
+\DeclareMathSymbol{\Xi}{\mathord}{uppergreek}{"04}
+\DeclareMathSymbol{\Pi}{\mathord}{uppergreek}{"05}
+\DeclareMathSymbol{\Sigma}{\mathord}{uppergreek}{"06}
+\DeclareMathSymbol{\Upsilon}{\mathord}{uppergreek}{"07}
+\DeclareMathSymbol{\Phi}{\mathord}{uppergreek}{"08}
+\DeclareMathSymbol{\Psi}{\mathord}{uppergreek}{"09}
+\DeclareMathSymbol{\Omega}{\mathord}{uppergreek}{"0A}
+
+%\DeclareSymbolFont{letters}{OML}{ptmcm}{m}{it}
+    % (aufrechte) griechische Buchstaben aus
+    % Symbol-Zeichensatz
+
+\DeclareSymbolFont{phvletters}{OT1}{phv}{m}{it}
+\SetSymbolFont{phvletters}{bold}{OT1}{phv}{bx}{it}
+
+\DeclareMathSymbol{a}{\mathalpha}{phvletters}{`a}
+\DeclareMathSymbol{b}{\mathalpha}{phvletters}{`b}
+\DeclareMathSymbol{c}{\mathalpha}{phvletters}{`c}
+\DeclareMathSymbol{d}{\mathalpha}{phvletters}{`d}
+\DeclareMathSymbol{e}{\mathalpha}{phvletters}{`e}
+\DeclareMathSymbol{f}{\mathalpha}{phvletters}{`f}
+\DeclareMathSymbol{g}{\mathalpha}{phvletters}{`g}
+\DeclareMathSymbol{h}{\mathalpha}{phvletters}{`h}
+\DeclareMathSymbol{i}{\mathalpha}{phvletters}{`i}
+\DeclareMathSymbol{j}{\mathalpha}{phvletters}{`j}
+\DeclareMathSymbol{k}{\mathalpha}{phvletters}{`k}
+\DeclareMathSymbol{l}{\mathalpha}{phvletters}{`l}
+\DeclareMathSymbol{m}{\mathalpha}{phvletters}{`m}
+\DeclareMathSymbol{n}{\mathalpha}{phvletters}{`n}
+\DeclareMathSymbol{o}{\mathalpha}{phvletters}{`o}
+\DeclareMathSymbol{p}{\mathalpha}{phvletters}{`p}
+\DeclareMathSymbol{q}{\mathalpha}{phvletters}{`q}
+\DeclareMathSymbol{r}{\mathalpha}{phvletters}{`r}
+\DeclareMathSymbol{s}{\mathalpha}{phvletters}{`s}
+\DeclareMathSymbol{t}{\mathalpha}{phvletters}{`t}
+\DeclareMathSymbol{u}{\mathalpha}{phvletters}{`u}
+\DeclareMathSymbol{v}{\mathalpha}{phvletters}{`v}
+\DeclareMathSymbol{w}{\mathalpha}{phvletters}{`w}
+\DeclareMathSymbol{x}{\mathalpha}{phvletters}{`x}
+\DeclareMathSymbol{y}{\mathalpha}{phvletters}{`y}
+\DeclareMathSymbol{z}{\mathalpha}{phvletters}{`z}
+
+\DeclareMathSymbol{A}{\mathalpha}{phvletters}{`A}
+\DeclareMathSymbol{B}{\mathalpha}{phvletters}{`B}
+\DeclareMathSymbol{C}{\mathalpha}{phvletters}{`C}
+\DeclareMathSymbol{D}{\mathalpha}{phvletters}{`D}
+\DeclareMathSymbol{E}{\mathalpha}{phvletters}{`E}
+\DeclareMathSymbol{F}{\mathalpha}{phvletters}{`F}
+\DeclareMathSymbol{G}{\mathalpha}{phvletters}{`G}
+\DeclareMathSymbol{H}{\mathalpha}{phvletters}{`H}
+\DeclareMathSymbol{I}{\mathalpha}{phvletters}{`I}
+\DeclareMathSymbol{J}{\mathalpha}{phvletters}{`J}
+\DeclareMathSymbol{K}{\mathalpha}{phvletters}{`K}
+\DeclareMathSymbol{L}{\mathalpha}{phvletters}{`L}
+\DeclareMathSymbol{M}{\mathalpha}{phvletters}{`M}
+\DeclareMathSymbol{N}{\mathalpha}{phvletters}{`N}
+\DeclareMathSymbol{O}{\mathalpha}{phvletters}{`O}
+\DeclareMathSymbol{P}{\mathalpha}{phvletters}{`P}
+\DeclareMathSymbol{Q}{\mathalpha}{phvletters}{`Q}
+\DeclareMathSymbol{R}{\mathalpha}{phvletters}{`R}
+\DeclareMathSymbol{S}{\mathalpha}{phvletters}{`S}
+\DeclareMathSymbol{T}{\mathalpha}{phvletters}{`T}
+\DeclareMathSymbol{U}{\mathalpha}{phvletters}{`U}
+\DeclareMathSymbol{V}{\mathalpha}{phvletters}{`V}
+\DeclareMathSymbol{W}{\mathalpha}{phvletters}{`W}
+\DeclareMathSymbol{X}{\mathalpha}{phvletters}{`X}
+\DeclareMathSymbol{Y}{\mathalpha}{phvletters}{`Y}
+\DeclareMathSymbol{Z}{\mathalpha}{phvletters}{`Z}
+
+% Ziffern unverändert
+
+\DeclareMathSymbol{,}{\mathpunct}{phvletters}{`,}
+\DeclareMathSymbol{.}{\mathord}{phvletters}{`.}
+\DeclareMathSymbol{/}{\mathord}{phvletters}{`/}
+
+%\DeclareSymbolFont{symbols}     {OMS}{pzccm}{m}{n}
+    % z.B. Unendlich-Zeichen
+
+\DeclareSymbolFont{largesymbols}{OMX}{psycm}{m}{n}
+    % Integralzeichen
+
+\DeclareSymbolFont{bold}        {OT1}{phv}{bx}{n}
+    % \mathbf{}
+
+\DeclareSymbolFont{italic}      {OT1}{phv}{m}{it}
+    % \mathit{}

@@ -1,0 +1,21 @@
+# Purpose: Default .logout file
+
+# Commands are executed when user logs out of terminal or window
+
+# zender additions to NCAR standard .logout file
+
+# Do some cleanup for interactive shells
+# ENVIRONMENT will always be set in NQS (qsub), but ENVONLY may not be
+if ( (! $?ENVONLY) && $?prompt && ! $?ENVIRONMENT ) then
+
+	if ( -f /bin/click ) /bin/click -n
+	clear # Clear screen
+	if ( -f /usr/ucb/whoami ) echo "User `/usr/ucb/whoami` logged out at `date`" # Print username and time
+	echo ""
+	if ( -f /usr/games/fortune ) /usr/games/fortune	# Run fortune program
+	echo ""
+
+endif # endif interactive shell
+
+
+

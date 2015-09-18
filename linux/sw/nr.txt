@@ -1,0 +1,161 @@
+20020913:
+biogenic.ps.uci.edu LINUX:
+cd ${DATA}/nr/recipes_f-90
+export FC="lf95"
+export FFLAGS="--mod .:/usr/local/include -DHIDE_SHR_MSG --trace --trap -DLinux  -O3 --trace --wide -DPRC_FLT  -DLINUX -I. -I/dhome/zender/include -I/usr/local/include"
+export LDFLAGS=""
+make -f makefile clean
+make -f makefile
+
+20021122:
+lanina.ess.uci.edu LINUX:
+export FC="ifc"
+export FFLAGS="-extend_source -implicitnone -vms -fpp2 -w95 -i4 -O2 -openmp -DPRC_FLT  -DLINUX -I. -I/home/zender/include -I/usr/local/include"
+export LDFLAGS=""
+cd ${DATA}/nr/recipes_f
+make -f Makefile clean
+make -f Makefile
+/bin/cp ${DATA}/nr/recipes_f/recipes/librecipes_f.a ${MY_LIB_DIR}/librecipes_f.a.ifc
+/bin/cp ${MY_LIB_DIR}/librecipes_f.a.ifc ${MY_LIB_DIR}/librecipes_f.a
+cd ${DATA}/nr/recipes_f-90
+make -f makefile clean
+make -f makefile
+/bin/cp ${DATA}/nr/recipes_f-90/librecipes_f90.a ${MY_LIB_DIR}/librecipes_f90.a.ifc
+/bin/cp ${MY_LIB_DIR}/librecipes_f90.a.ifc ${MY_LIB_DIR}/librecipes_f90.a
+cd ~/f;gmake cln lib_cln fff
+fff --drc_in=$HOME/nco/data --tst=gsl
+cd -
+
+20030201:
+elnino.ess.uci.edu LINUX:
+cd ${DATA}/nr/recipes_f-90
+export FC="lf95"
+export FFLAGS="--mod .:/usr/local/include -DHIDE_SHR_MSG --trace --trap -DLinux  -O3 --trace --wide -DPRC_FLT  -DLINUX -I. -I/dhome/zender/include -I/usr/local/include"
+export LDFLAGS=""
+make -f makefile clean
+make -f makefile
+/bin/cp -f librecipes_f90.a ${MY_LIB_DIR}/librecipes_f90.a.lf95
+ln -s -f ${MY_LIB_DIR}/librecipes_f90.a.lf95 ${MY_LIB_DIR}/librecipes_f90.a
+export FFLAGS="--mod .:/usr/local/include -DHIDE_SHR_MSG --trace --trap -DLinux  -O3 --trace --wide -DPRC_FLT  -DLINUX -I. -I/dhome/zender/include -I/usr/local/include"
+export LDFLAGS=""
+cd ${DATA}/nr/recipes_f
+make -f Makefile clean
+make -f Makefile
+/bin/cp -f ${DATA}/nr/recipes_f/recipes/librecipes_f.a ${MY_LIB_DIR}/librecipes_f.a.lf95
+ln -s -f ${MY_LIB_DIR}/librecipes_f.a.lf95 ${MY_LIB_DIR}/librecipes_f.a
+
+20030508:
+ashes.ess.uci.edu Debian sid LINUX lf95:
+scp -r dust.ess.uci.edu:/data/zender/nr /data/zender
+export FC="lf95"
+export FFLAGS="--mod .:/usr/local/include -DHIDE_SHR_MSG --trace --trap -DLinux  -O3 --trace --wide -DPRC_FLT  -DLINUX -I. -I/home/zender/include -I/usr/local/include"
+export LDFLAGS=""
+cd ${DATA}/nr/recipes_f-90
+make -f makefile clean
+make -f makefile
+/bin/cp -f librecipes_f90.a ${MY_LIB_DIR}/librecipes_f90.a.lf95
+ln -s -f ${MY_LIB_DIR}/librecipes_f90.a.lf95 ${MY_LIB_DIR}/librecipes_f90.a
+export FFLAGS="--mod .:/usr/local/include -DHIDE_SHR_MSG --trace --trap -DLinux  -O3 --trace --wide -DPRC_FLT  -DLINUX -I. -I/home/zender/include -I/usr/local/include"
+export LDFLAGS=""
+cd ${DATA}/nr/recipes_f
+make -f Makefile clean
+make -f Makefile
+/bin/cp -f ${DATA}/nr/recipes_f/recipes/librecipes_f.a ${MY_LIB_DIR}/librecipes_f.a.lf95
+ln -s -f ${MY_LIB_DIR}/librecipes_f.a.lf95 ${MY_LIB_DIR}/librecipes_f.a
+
+20040508:
+sand.ess.uci.edu SuSE LINUXAMD64:
+scp -r dust.ess.uci.edu:/data/zender/nr /data/zender
+bash # Use new shell to sandbox environment changes
+export FC="pgf90"
+export FFLAGS="-Mr8 -Mi4 -Mextend -Mnosecond_underscore -byteswapio -Mrecursive -Mdalign -Ktrap=fp"
+export LDFLAGS=""
+cd ${DATA}/nr/recipes_f-90
+make -f makefile clean
+make -f makefile
+exit # Exit new shell
+/bin/cp -f librecipes_f90.a ${MY_LIB_DIR}/librecipes_f90.a.pgf90
+ln -s -f ${MY_LIB_DIR}/librecipes_f90.a.pgf90 ${MY_LIB_DIR}/librecipes_f90.a
+bash # Use new shell to sandbox environment changes
+export FC="pgf90"
+export FFLAGS="-Mr8 -Mi4 -Mextend -Mnosecond_underscore -byteswapio -Mrecursive -Mdalign -Ktrap=fp"
+export LDFLAGS=""
+cd ${DATA}/nr/recipes_f
+make -f Makefile clean
+make -f Makefile
+exit # Exit new shell
+/bin/cp -f ${DATA}/nr/recipes_f/recipes/librecipes_f.a ${MY_LIB_DIR}/librecipes_f.a.pgf90
+ln -s -f ${MY_LIB_DIR}/librecipes_f.a.pgf90 ${MY_LIB_DIR}/librecipes_f.a
+
+20040508:
+esmf.ess.uci.edu AIX:
+bash # Use new shell to sandbox environment changes
+export DATA='/data/zender/zender'
+scp -r dust.ess.uci.edu:/data/zender/nr ${DATA}
+export FC='xlf90'
+export FFLAGS='-O3 -qstrict -Q -qrealsize=8 -qdpc=e -qmaxmem=-1 -qarch=auto -qspillsize=2500 -qsuffix=f=f90:cpp=F90 -qfixed=132'
+export LDFLAGS=''
+cd ${DATA}/nr/recipes_f-90
+make -f makefile clean
+make -f makefile
+exit # Exit new shell
+/bin/cp -f librecipes_f90.a ${MY_LIB_DIR}/librecipes_f90.a
+ln -s -f ${MY_LIB_DIR}/librecipes_f90.a ${MY_LIB_DIR}/librecipes_f90.a
+bash # Use new shell to sandbox environment changes
+export FC='xlf95'
+export FFLAGS='-O3 -qstrict -Q -qrealsize=8 -qdpc=e -qmaxmem=-1 -qarch=auto -qspillsize=2500 -qsuffix=f=f:cpp=F -qfixed=132'
+export LDFLAGS=''
+cd ${DATA}/nr/recipes_f
+make -f Makefile clean
+make -f Makefile
+exit # Exit new shell
+/bin/cp -f ${DATA}/nr/recipes_f/recipes/librecipes_f.a ${MY_LIB_DIR}/librecipes_f.a
+ln -s -f ${MY_LIB_DIR}/librecipes_f.a ${MY_LIB_DIR}/librecipes_f.a
+
+20040824:
+elnino.ess.uci.edu Debian sid LINUX g95:
+scp -r dust.ess.uci.edu:/data/zender/nr /data/zender
+bash # Use new shell to sandbox environment changes
+export FC='g95'
+export FFLAGS='-ffixed-line-length-132 -fno-second-underscore  -Wimplicit-none -Wunused-label -Wall'
+export LDFLAGS=''
+cd ${DATA}/nr/recipes_f-90
+make -f makefile clean
+make -f makefile
+/bin/cp -f librecipes_f90.a ${MY_LIB_DIR}/librecipes_f90.a.g95
+/bin/cp -f nr.mod ${MY_INC_DIR}/nr.mod.g95
+/bin/cp -f nrtype.mod ${MY_INC_DIR}/nrtype.mod.g95
+/bin/cp -f nrutil.mod ${MY_INC_DIR}/nrutil.mod.g95
+ln -s -f ${MY_LIB_DIR}/librecipes_f90.a.g95 ${MY_LIB_DIR}/librecipes_f90.a
+export FFLAGS='-ffixed-line-length-132 -fno-second-underscore -Wimplicit-none -Wunused-label -Wall'
+export LDFLAGS=''
+cd ${DATA}/nr/recipes_f
+make -f Makefile clean
+make -f Makefile
+/bin/cp -f ${DATA}/nr/recipes_f/recipes/librecipes_f.a ${MY_LIB_DIR}/librecipes_f.a.g95
+ln -s -f ${MY_LIB_DIR}/librecipes_f.a.g95 ${MY_LIB_DIR}/librecipes_f.a
+exit # Exit new shell
+
+20040824:
+# sand.ess.uci.edu LINUXAMD64 Debian/Ubuntu Warty Warthog gcc-g95
+scp -r dust.ess.uci.edu:/data/zender/nr /data/zender
+bash # Use new shell to sandbox environment changes
+export FC='g95'
+export FFLAGS='-O -g -fno-second-underscore'
+export LDFLAGS=''
+cd ${DATA}/nr/recipes_f-90
+make -f makefile clean
+make -f makefile
+/bin/cp -f librecipes_f90.a ${MY_LIB_DIR}/librecipes_f90.a.g95
+/bin/cp -f nr.mod ${MY_INC_DIR}/nr.mod.g95
+/bin/cp -f nrtype.mod ${MY_INC_DIR}/nrtype.mod.g95
+/bin/cp -f nrutil.mod ${MY_INC_DIR}/nrutil.mod.g95
+ln -s -f ${MY_LIB_DIR}/librecipes_f90.a.g95 ${MY_LIB_DIR}/librecipes_f90.a
+export FFLAGS='-O -g -fno-second-underscore'
+export LDFLAGS=''
+cd ${DATA}/nr/recipes_f
+make -f Makefile clean
+make -f Makefile
+/bin/cp -f ${DATA}/nr/recipes_f/recipes/librecipes_f.a ${MY_LIB_DIR}/librecipes_f.a.g95
+ln -s -f ${MY_LIB_DIR}/librecipes_f.a.g95 ${MY_LIB_DIR}/librecipes_f.a
+exit # Exit new shell

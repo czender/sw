@@ -1,0 +1,140 @@
+#! /bin/sh
+
+# csz++
+# Usage:
+# sudo cp /home/zender/linux/etc/init.d/pgi-lmgrd /etc/init.d/pgi-lmgrd
+# sudo cp /home/zender/linux/etc/init.d/pgi-lmgrd sand.ess.uci.edu:/etc/init.d/pgi-lmgrd
+# sudo cp sand.ess.uci.edu:/etc/init.d/pgi-lmgrd /home/zender/linux/etc/init.d/pgi-lmgrd 
+# Restart PGI license server on sand with 
+# /etc/init.d/pgi-lmgrd restart
+# csz--
+
+##
+## Copyright 1990-2000, The Portland Group, Incorporated.
+## Copyright 2000-2002, STMicroelectronics, Incorporated.
+## All rights reserved.
+##
+## STMICROELECTRONICS, INCORPORATED PROPRIETARY INFORMATION
+## This software is supplied under the terms of a license agreement
+## or nondisclosure agreement with STMicroelectronics and may not be
+## copied or disclosed except in accordance with the terms of that
+## agreement.
+##
+
+# chkconfig: 2345 90 10
+# description: License manager for PGI compilers
+
+## Where to find the PGI software?
+PGI=${PGI:-/usr/local/pgi}
+
+## Path to master daemon lmgrd
+#LMGRD=$PGI/linux86/5.2/bin/lmgrd
+LMGRD=$PGI/linux86-64/5.2/bin/lmgrd
+
+## Path to license file
+LM_LICENSE_FILE=$PGI/license.dat
+
+## Command to stop lmgrd
+#LMUTIL=$PGI/linux86/5.2/bin/lmutil
+LMUTIL=$PGI/linux86-64/5.2/bin/lmutil
+
+## If messages from lmgrd like this
+##    15:27:45 (lmgrd) lmgrd running as root:
+##    15:27:45 (lmgrd)    This is a potential security problem
+##    15:27:45 (lmgrd)    And is not recommended
+## are worrisome, then see
+##    http://www.cert.org/advisories/CA-97.01.flex_lm.html
+## for details.  Set FLEXLM_USER below to the username that should run
+## lmgrd.  Note: The entry in /etc/passwd for $FLEXLM_USER should not
+## use [t]csh as its login shell.
+#FLEXLM_USER=
+FLEXLM_USER=flexlm
+
+## 
+## Path to lmgrd logfile.
+##
+## If FLEXLM_USER is set, then the userid which runs lmgrd may not have
+## appropriate permissions to write to the installation directory, which
+## is where the logfile is by default.  Instead, change the logfile 
+## location to /var/tmp.  Note that /var/log/flexlm.log would be far better
+## place for the logfile, but the site (not this script) needs to deal 
+## with setting appropriate permissions on that file.
+if test -n "$FLEXLM_USER" ; then
+    LOG=/var/tmp/flexlm.log
+else
+    LOG=$PGI/flexlm.log
+fi
+
+## 
+## Check $LM_LICENSE_FILE to make sure this license file can be used by
+## a FLEXlm license daemon.
+grep SERVER $LM_LICENSE_FILE > /dev/null 2>&1
+if test $? -ne 0 ; then
+    # No SERVER line.  If there's a PGI= hostid, then the user is 
+    # attempting to run lmgrd with a non-server license.
+    grep HOSTID=PGI= $LM_LICENSE_FILE > /dev/null 2>&1
+    if test $? -eq 0 ; then
+	echo "ERROR: $LM_LICENSE_FILE: not a server license."
+	echo "Exiting."
+	exit 1
+    fi
+fi
+
+case "$1" in
+start )
+    if test ! -d /usr/tmp ; then
+        echo "WARNING: /usr/tmp must exist for FLEXlm license daemons to work."
+	echo "         Either create the directory /usr/tmp or make /usr/tmp a"
+        echo "         symlink to /tmp."
+    fi
+    if test -f $LMGRD ; then
+        if test -n "$FLEXLM_USER" ; then
+            su $FLEXLM_USER -c "$LMGRD -c $LM_LICENSE_FILE >> $LOG 2>&1 &"
+        else    
+            $LMGRD -c $LM_LICENSE_FILE >> $LOG 2>&1 &
+        fi
+    else
+        echo $0: $LMGRD: file not found
+        exit 1
+    fi
+    ;;
+stop )
+    if test -f $LMUTIL ; then 
+        $LMUTIL lmdown -q -c $LM_LICENSE_FILE
+    else
+        echo $0: $LMUTIL: file not found
+    exit 1
+    fi
+    ;;
+restart )
+    $0 stop
+    $0 start
+    ;;
+kill )
+    # Try to end things nicely.
+    if test -f $LMUTIL ; then 
+        $LMUTIL lmdown -q -c $LM_LICENSE_FILE
+    fi
+    sleep 3
+    # Send TERM signal.
+    for i in `ps axc | grep pgroupd | awk '{print $1}'` ; do
+	kill -TERM $i
+    done
+    for i in `ps axc | grep lmgrd | awk '{print $1}'` ; do
+	kill -TERM $i
+    done
+    sleep 3
+    # Send KILL signal.
+    for i in `ps axc | grep pgroupd | awk '{print $1}'` ; do
+	kill -KILL $i
+    done
+    for i in `ps axc | grep lmgrd | awk '{print $1}'` ; do
+	kill -KILL $i
+    done
+    ;;
+*)
+    echo "Usage: $0 [-n] { start | stop | restart }"
+    ;;
+esac
+
+exit 0

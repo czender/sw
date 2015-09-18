@@ -1,0 +1,20 @@
+-*-text-*-
+
+This directory, $HOME/bin/sh, contains various scripts used for
+systems maintenance, dialing, startup, and upgrades.
+
+bck.pl		     Backup to MSS
+cmp_tmp.sh	     Old CCM compile script
+cshtobash	     Convert csh scripts to bash scripts
+dxpc.sh		     dxpc notes
+find_files	     BEE's Perl routines for Make
+makdep		     BEE's Perl routines for Make
+pvmgetarch	     Sets PVM_ARCH
+rcp.pl		     Use rcp to copy directories among remote machines
+x.sh		     Old Linux script to pick X server
+msread.sh     Relatively advanced Csh non-NCAR msread emulator
+mswrite.sh    Relatively advanced Csh non-NCAR mswrite emulator
+msrcp.pl      Full featured Perl non-NCAR msread, mswrite, msrcp emulator
+tst_bsh.sh    Script to test Bash functions
+tst_csh.sh    Script to test Csh functions
+

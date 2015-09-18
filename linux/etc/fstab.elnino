@@ -1,0 +1,16 @@
+# /etc/fstab: static file system information.
+#
+# <device> <mount point>   <type>   <options>                    <dump> <pass>
+/dev/hda1  /               ext3     defaults,errors=remount-ro   0      1     
+#/dev/hdc1  /data           ext3     defaults,errors=remount-ro   0      2     
+/dev/hda5  /home           ext3     defaults,errors=remount-ro   0      2     
+/dev/hda2  /usr/local      ext3     defaults,errors=remount-ro   0      2     
+/dev/hda6  /var            ext3     defaults,errors=remount-ro   0      2     
+/dev/hda4  none            swap     sw                           0      0     
+proc       /proc           proc     defaults                     0      0     
+/dev/fd0   /floppy         auto     defaults,user,noauto         0      0     
+usbfs      /proc/bus/usb   usbfs    rw,devmode=0660,devgid=432   0      0     
+/dev/scd0  /cdrom  udf,iso9660  defaults,user,noauto,ro  0  0
+#fileserver-n8.ucar.edu:/fs/cgd/home0    /ncar/fs/cgd/home0   nfs     exec,dev,suid,rw,noauto 0 0
+#fileserver-n8.ucar.edu:/fs/cgd/data0    /ncar/fs/cgd/data0   nfs     exec,dev,suid,rw,noauto 0 0
+#fileserver-n8.ucar.edu:/fs/cgd/csm      /ncar/fs/cgd/csm     nfs     exec,dev,suid,rw,noauto 0 0

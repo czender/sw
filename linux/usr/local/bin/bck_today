@@ -1,0 +1,15 @@
+#!/bin/bash
+# Purpose: Backup all files changed since midnight
+# Usage: 
+# bck_today <user>
+# sudo cp ~/linux/usr/local/bin/bck_today /usr/local/bin
+if [ $# -ne 1 ]; then
+    echo "usage: $0 user"
+    exit 1
+fi
+user=$1
+tar_fl=/tmp/bck_today_${user}.tar.gz
+tar cvzf ${tar_fl} -N `date +%a` /home/${user}
+cp ${tar_fl} /dust/backups
+cp ${tar_fl} /biogenic/backups
+rm -rf ${tar_fl}

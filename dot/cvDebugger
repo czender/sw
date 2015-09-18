@@ -1,0 +1,5 @@
+MainView.groupControl: false
+MainView.groupTrapMode: false
+MainView.stopAllTrapMode: false
+MainView.svHeight: 359
+Cvmain.args: -GeometryStructureBrowser 442x922+85+45 -GeometryMainView 797x865+211+78

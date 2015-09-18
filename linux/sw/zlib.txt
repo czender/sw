@@ -1,0 +1,17 @@
+DODS requires zlib. Default AIX zlib is 32 bits.
+Package: zlib http://www.gzip.org/zlib provides libz.a
+Installed on esmf04m AIX 5.1.1.0 on 20040307 by zender
+Depends on: None
+Required by: DODS
+cd ${DATA}/tmp
+wget "ftp://ftp.unidata.ucar.edu/pub/dods/DODS-3.4/RC6/source/DODS*.tar.gz"
+tar xvzf DODS-dap-3.4.?.tar.gz
+tar xvzf DODS-nc3-dods-3.4.?.tar.gz
+tar xvzf DODS-packages-3.4.?.tar.gz
+# Go to source directory
+cd DODS
+#dods_root=/usr/local # For server (rather than private) installs
+dods_root=`pwd` 
+make distclean
+CC=xlc_r CXX=xlC_r LDFLAGS='-brtl' ./configure --prefix=${dods_root} --enable-shared=no
+make

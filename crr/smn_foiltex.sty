@@ -1,0 +1,141 @@
+% $Id$
+
+% Purpose: Commands specific to seminar presentations and FoilTeX
+
+% Copyright (c) 1998--2009, Charles S. Zender
+% This program may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License (LPPL), 
+% either version 1.2, or (at your option) any later version.
+% LPPL: http://www.latex-project.org/lppl.txt
+
+% The original author of this software, Charlie Zender, seeks to improve
+% it with your suggestions, contributions, bug-reports, and patches.
+% Charlie Zender <zender at uci dot edu>
+% Department of Earth System Science
+% University of California, Irvine
+% Irvine, CA 92697-3100
+
+% Dependencies: none
+
+% Usage:
+% Fix for using rotated foils and hyperref at same time requires this
+% be loaded AFTER \hyperref
+% \usepackage{smn} % Seminar commands: Load AFTER hyperref
+
+% Font sizes:
+%{\tiny tiny}
+%{\scriptsize scriptsize}
+%{\footnotesize footnotesize}
+%{\small small}
+%{\normalsize normalsize}
+%{\large large}
+%{\Large Large}
+%{\LARGE LARGE}
+%{\huge huge}
+%{\Huge Huge}
+
+% Recommended by Patrick Daly to get natbib working with foiltex 
+\renewcommand{\bibsection}{} 
+
+% Color names are defined in $TEXMFDIR/tex/latex2e/graphics/dvipsnam.def
+% \pagecolor{blue} % sets all subsequent pages to color blue
+% \colorbox{blue}{text in a box of solid blue background}
+% \fcolorbox{red}{blue}{red frame around a box of solid blue background}
+
+% needed for \put command
+\setlength{\unitlength}{1in}
+
+% Example for vertical slides
+%\put(-1,-10){\includegraphics[width=8.5in,height=11.5in]{/data/zender/ps/bg.eps}}
+% Example for horizontal slides
+%\put(-1,-7.25){\includegraphics[width=11in,height=8.5in]{/data/zender/ps/bg.eps}}
+
+% Example of defining custom colors
+%\definecolor{bg}{rgb}{0,0,1}
+%\pagecolor{bg}
+
+% 1. Primary commands
+% Macro to install background picture
+% Landscape
+\newcommand{\bgl}{
+\begin{picture}(0,0)(0,0)
+\put(-1,-7.25){\includegraphics[width=11in,height=8.5in]{/data/zender/ps/bg.eps}}
+\end{picture}
+} % end \bgl
+
+% Portrait
+\newcommand{\bgp}{
+\begin{picture}(0,0)(0,0)
+\put(-1,-10){\includegraphics[width=8.5in,height=11in]{/data/zender/ps/bg.eps}}
+\end{picture}
+} % end \bgp
+
+% FoilTeX macros
+%\MyLogo{} % Appears bottom left corner every page
+%\LogoOff % Turns logo off on current page
+%\rightfooter{} % Pagenumber is the default
+%\rightfooter{\textsf{\thepage}} % Pagenumber is the default
+%\rightfooter{June 26, 1996\quad\textsf{\thepage}} % Date and pagenumber
+%\rightfooter{\textcolor{black}{\today\quad\textsf{\thepage}}} % Sets color
+%\rightfooter{\textsf{\normalsize Zender and Kiehl (1996)}}
+%\leftheader{C.~S.~Zender}
+%\leftheader{} % Appears upper left
+%\rightheader{} % Appears upper right
+%\Restriction{Zender and Kiehl (1996)} % Appears at lower left next to logo
+
+% Recommended by David Wilson on comp.text.tex on 20000111 to fix bug
+% where hyperref redefines and breaks the landscape mode in foils.cls
+% ``The problem is that foils (ab)uses \@begindvi to put the
+% page rotation code into each shipped-out page, but
+% hyperref (in its usual heavyhanded way  [;-)] trashes
+% foils' re-definition of \@begindvi for its own ends.
+% Is there a workaround or solution to this problem?
+% Redefine \@begindvi so it does both what foils and hyperref
+% require: something like
+% 20010119: This does not work when hyperref is NOT loaded
+
+\csznote{
+\makeatletter
+\def\@begindvi{%
+  \ifcur@rot@state\foil@rot@start\fi
+\unvbox \@begindvibox
+  \ifHy@pageanchor
+\@hyperfixhead
+    \gdef \@begindvi{\ifcur@rot@state\foil@rot@start\fi \@hyperfixhead}
+  \else
+    \gdef \@begindvi{\ifcur@rot@state\foil@rot@start\fi \HyPL@EveryPage}
+  \fi
+}
+\makeatother
+} % end csznote
+
+% Kludge provided by Heiko Oberdiek 20010329 to restore rotating
+% capability to Foiltex when hyperref is used
+% This attempts to fix the same problem David Wilson's patch above
+% attempted to fix
+% Heiko's kludge appears to work
+% Insert after \usepackage{hyperref}
+\csznote{
+\makeatletter
+\newcommand{\foil@begindvi}{%
+  \ifcur@rot@state\foil@rot@start\fi
+}
+\def\@begindvi{%
+  \foil@begindvi
+\unvbox \@begindvibox
+  \ifHy@pageanchor
+\@hyperfixhead
+    \gdef\@begindvi{%
+      \foil@begindvi
+\@hyperfixhead
+    }%
+  \else
+    \gdef\@begindvi{%
+      \foil@begindvi
+\HyPL@EveryPage
+}%
+  \fi
+}
+\makeatother
+} % end csznote
+

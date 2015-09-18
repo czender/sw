@@ -1,0 +1,1421 @@
+2013-01-19  Charlie Zender  <zender@uci.edu>
+
+	* Fix bug in archived vlm_frc_mtx
+
+2012-03-30  Charlie Zender  <zender@uci.edu>
+
+	* Implement RRTM_SW and RRTM_LW in psd.pl
+
+2011-12-31  Charlie Zender  <zender@uci.edu>
+
+	* Change copyright year to 2012
+
+2011-04-03  Charlie Zender  <zender@uci.edu>
+
+	* Updated to remove g++ 4.5 warning messages
+
+2008-04-10  Charlie Zender  <zender@uci.edu>
+
+	* Finished and validated core normalization for coated spheres
+
+2008-04-07  Charlie Zender  <zender@uci.edu>
+
+	* Prescribe specfic surface area with --spc_sfc_cm2xg input switch
+
+2008-01-23  Charlie Zender  <zender@uci.edu>
+
+	* Implemented Lobatto angular grid by default
+	Integrals seem to be off by factor of pi/2
+
+	* cvs tag -c mie-3_4_9 c++ mie nco/src/nco_c++ idx_rfr
+	Changes since mie-3_4_8: Phase function improvements
+	Last version before attempt to default to Lobatto quadrature
+
+2008-01-18  Charlie Zender  <zender@uci.edu>
+
+	* Strangest thing just happened: BoH83 self-test completed correctly!
+
+	* Add phase function diagnostics from Wis771 p. 1421 Table A2
+
+	* Add stubs for new angular grid that uses efficient quadrature
+
+2008-01-12  Charlie Zender  <zender@uci.edu>
+
+	* Problem is that Legendre expansion coefficients archived by mie
+	are much smaller than they should be.
+
+	* Verified effective phase function is Rayleigh phase function
+	for PSDs in Rayleigh scattering regime.
+
+	* Verified that Legendre expansion coefficients in Rayleigh regime
+	approximate well the Rayleigh phase function, i.e., second moment
+	equals 0.1, zeroth moment = 1.0, all other moments = 0.0. Phew.
+
+	* Change handling of Kelvin (curvature) effect and archive
+	visibility as prc_cmp. These changes allow mie to complete
+	for particle sizes < 1 nm. In turn this should allow 
+	exploration of optics, phase functions, etc. in Rayleigh regime. 
+
+2007-11-02  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_4_8 c++ mie nco/src/nco_c++ idx_rfr
+	Changes since mie-3_4_7: snow reflectance works, GPL3, netCDF4, 
+	OpenMP with g++-4.2
+
+	* Reverse incorrect logic in hgt_rfr > hgr_mdp re-setting
+
+	* Tweak shared() statement to satisfy g++ 4.2
+
+	* Enable OpenMP in Makefile
+
+2007-10-30  Charlie Zender  <zender@uci.edu>
+
+	* Allow small hgt_rfr to accomodate snowpack modeling
+
+2007-09-25  Charlie Zender  <zender@uci.edu>
+
+	* Write all coordinates to output before calling output	modules. 
+	This fixes bogus snow reflectance output to netCDF by rt_snw_rfl()
+	when wvl is record dimension.
+	
+2007-09-11  Charlie Zender  <zender@uci.edu>
+
+	* Change from GPL2 to GPL3
+
+	* Add sz_prm_dbg
+
+2007-09-07  Charlie Zender  <zender@uci.edu>
+
+	* Create netCDF4 output files by default when possible
+
+	* Update Makefile to use netCDF4
+
+2006-11-19  Charlie Zender  <zender@uci.edu>
+
+	* Allow day-of-year doy to include day 366 for leap-year compatibility
+
+2006-09-26  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_4_7 c++ mie nco/src/nco_c++ idx_rfr
+	Changes since mie-3_4_6: Output *_cff_vlm in [m2 air m-3 aer] not [m2 air m-3 air]
+
+	* Prior to 20060926 normalized *_cff_vlm by cnc_nbr_sph_rsl_frc*flx_wgt_frc
+	However, now output *_cff_vlm in [m2 air m-3 aer] not [m2 air m-3 air] 
+        Now require that *_cff_vlm and *_cff_mss are related solely by aerosol density
+        Apply rsl vs. anl normalization factor to *_cff_dst instead
+
+2006-08-23  Charlie Zender  <zender@uci.edu>
+
+	* Take advantage of ncap2 features in manipulating optical properties
+
+2006-08-17  Charlie Zender  <zender@uci.edu>
+
+	* pgCC compiles and runs mie but overflows in rnd_chm (raindrop
+	chemistry) routines which involve lots of complex numbers
+
+	* Kludge bnd_idx from long to int to allow pgCC to compile
+
+2006-06-30  Charlie Zender  <zender@uci.edu>
+
+	* Pathscale pathCC builds mie and executes correctly and passes 
+	self-tests with OMP=N 
+
+2006-06-24  Charlie Zender  <zender@uci.edu>
+
+	* Fix input data for BOH83 self-test for coated-spheres
+	Self-test now gives exactly correct answers
+	
+2006-06-21  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_4_6 c++ mie nco/src/nco_c++ idx_rfr
+	Changes since mie-3_4_5: MCA improvements idx_rfr name changes, limestone_
+
+	* Successfully created dst_bln_20060621 Summer Solstice Dust
+
+2006-06-04  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_4_5 c++ mie nco/src/nco_c++
+	Changes since mie-3_4_4: MCA kludge idx_rfr for lac_ wsoc_ calcite_ gypsum_ 
+
+	* Change "soot_" to "lac_" as per BoB05 recommended nomenclature
+
+2006-05-05  Charlie Zender  <zender@uci.edu>
+
+	* Replaced 'CCM' with 'CAM' in psd.pl
+
+2006-05-03  Charlie Zender  <zender@uci.edu>
+
+	* Finish implementing SNICAR option in psd.pl
+
+2006-05-02  Charlie Zender  <zender@uci.edu>
+
+	* Remove dust optics versions one and two commands from psd.pl
+
+	* cvs tag -c mie-3_4_4 c++ mie nco/src/nco_c++
+	Changes since mie-3_4_3: Bug-fixes to coated spheres
+
+	* Stabilizing multi-component optics development for dust in SNICAR
+
+	* Add psd.pl to mie repository
+
+2006-03-24  Charlie Zender  <zender@uci.edu>
+
+	* Die gracefully when parsing command line options that contain	"--"
+	There are no known reasons for option values to contain "--"
+
+	* Check agreement with BHB06 fgr. 7
+
+	* Fix and output rds_frc_cor, vlm_frc_cor, mss_frc_cor diagnostics
+
+2006-01-31  Charlie Zender  <zender@uci.edu>
+
+	* Output correct density for all components
+
+2006-01-21  Charlie Zender  <zender@uci.edu>
+
+	* Fix major problem with diagnostics: 
+	[abs,ext,sca]_cff_vlm [m2 m-3] refers to volumetric extinction
+	coefficients, i.e., per unit volume of aerosol particle.
+	However, some parts of code, specifically tau_[abs,ext,sca],
+	had been using them as distance extinction coefficients, i.e., 
+	per unit aerosol layer thickness. 
+	Introduce new diagnostic [abs,ext,sca]_cff_dst [m-1] to hold 
+	distance extinction coefficient which, confusingly, many
+	texts call volumetric extinction coefficient.
+
+2005-03-25  Charlie <zender@uci.edu>
+
+	* Pass mtx rather than mdm to mie_sph_abs_fct_MaS99()
+
+2005-03-19  Charlie Zender  <zender@uci.edu>
+
+	* Set up hooks for ncl_nbr = inclusion number > 1
+
+	* Archive more aerosol component information, e.g., dns_cor,
+	cmp-sng_sor, vlm_frc_cor...
+
+2005-03-14  Charlie Zender  <zender@uci.edu>
+
+	* Output flx_sns_atm, flx_sns_soi, 
+
+2005-03-02  Charlie Zender  <zender@uci.edu>
+
+	* Fix OpenMP scoping of abs_ncl_wk_mdm_flg
+
+2005-01-27  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_3_7 c++ mie nco/src/nco_c++
+	Changes since mie-3_3_6: Hexagonal prisms treated as equal-V/S
+	spheres works to first order. Changed MAXTRM to 50000.
+
+	* Last remaining issue with hxg/vts code is correct normalization
+	of optical properties by cnc_nbr_sph_rsl_frc.
+	Assuming same as spherical fraction for now, which is correct to
+	first order for moderate aspect ratios.
+	Correct solution is to discretize a much wider size distribution
+	at higher resolution and compute cnc_nbr_sph_anl with that.
+
+	* Verified hxg code reproduces all aspects of NGW03 p. 2 Fgr. 4
+
+	* Fixed all normalization constants to account for equivlaent
+	sphere approximation
+
+	* Fixed rds_ctr_vts computation
+
+	* Verified hxg code reproduces all aspects of NGW03 p. 2 Fgr. 2
+
+2005-01-25  Charlie Zender  <zender@uci.edu>
+
+	* Initial version of V/S approximation for hexagonal crystals is
+	implemented but untested
+
+2005-01-23  Charlie Zender  <zender@uci.edu>
+
+	* Added hexagonal prism transformations from NGW03
+
+2005-01-21  Charlie Zender  <zender@uci.edu>
+
+	* Added rds_frc_[cor,ncl] options
+
+	* Added slf_tst_typ ViC98 for EMAs
+
+	* Allow user-specified mass fractions of mantle, inclusion
+	This is more friendly than requiring volume fractions, which are
+	harder to measure and not used in EMAs anyway (are they?)
+
+2005-01-16  Charlie Zender  <zender@uci.edu>
+
+	* Re-arranged solar flux logic
+
+2005-01-13  Charlie Zender  <zender@uci.edu>
+
+	* mie.cc (main): Fixed problem where cmp_sng_prt was being used
+	instead of cmp_sng_cor, cmp_sng_mnt, etc.
+
+2005-01-02  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_3_1 c++ mie nco/src/nco_c++
+	Changes since mie-3_3_0: idx_rfr now complex everywhere, support
+	six-component optics: core, medium, mantle, matrix, inclusion,
+	particle
+
+2004-12-27  Charlie Zender  <zender@uci.edu>
+
+	* Put matrix indices of refraction on equal footing with particle
+	and medium
+
+2004-12-26  Charlie Zender  <zender@uci.edu>
+
+	* Archive copy of selected MCA refractive indices
+
+	* Create mie_mca.sh to document constuction of Multi-Component
+	Aerosols (MCAs)
+
+	* Verified that Wis79 gives virtually identical results to
+	B0H83-based optical properties used in CCM/MATCH/CAM dust models
+	since 1997. In other words, the bug in BoH83, was not responsible
+	for relatively low LW dust forcing.
+
+	* Added Fe2O3 and SiO2 to optical property suite
+
+2004-11-05  Charlie Zender  <zender@dust.ps.uci.edu>
+
+	* cvs tag -c mie-3_3_0 c++ mie nco/src/nco_c++
+	Changes since mie-3_2_9: Able to use and rebin swnb2 fluxes for weights
+
+	* Add flx_slr_frc_blr to mie output. This makes it possible to
+	re-bin input spectra (or anything stored in flx_frc, really) to
+	any desired wavelength grid.
+
+2004-09-17  Charlie Zender  <zender@uci.edu>
+
+	* Make wvl default record dimension
+
+	* Use nco_put_vara_crd() to write all coordinates
+
+	* Add dmn_rcd option to specify a record dimension
+
+	* Change default rds_swa from 7.0 to 10.0 um
+
+2004-09-13  Charlie Zender  <zender@uci.edu>
+
+	* Preparing to run size parameter experiments in batch mode
+
+2004-08-30  Charlie Zender  <zender@uci.edu>
+
+	* Output all dimension sizes as variables to facilitate
+	longitudinal studies across output files with different dimensions
+
+2004-07-05  Charlie Zender  <zender@uci.edu>
+
+	* mie.cc: Use valgrind to find, delete[] many un-archived arrays after use
+
+2004-07-02  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_2_8 c++ mie nco/src/nco_c++
+	Changes since mie-3_2_7: Add OpenMP --thr_nbr functionality
+
+2004-06-29  Charlie Zender  <zender@uci.edu>
+
+	* Re-running all cases with new code.
+
+	* mie01: test
+	* mie02: h2o_lqd 7 um wvl = 1, bnd = 10000000, sz=30, OpenMP CL2 
+	* mie03: h2o_lqd 7 um wvl = 100000, bnd = 1, sz=30, OpenMP CL2 
+	* mie04: sulfate 0.08 um wvl = 1, bnd = 100000, sz=30, OpenMP CL2 
+	* mie05: h2o_lqd 5 um wvl = 1, bnd = 100000, sz=30, OpenMP CL2 done
+	* mie07: h2o_lqd 7 um wvl = 1, bnd = 100000, sz=30, OpenMP CL2 done
+	* mie09: h2o_lqd 10 um wvl = 100000, bnd = 1, sz=30, OpenMP CL2 done
+	* mie10: h2o_lqd 10 um wvl = 1, bnd = 1, sz=30, OpenMP CL2 done
+	* mie11: h2o_lqd 10 um wvl = 1, bnd = 10, sz=30, OpenMP CL2 done
+	* mie12: h2o_lqd 10 um wvl = 1, bnd = 100, sz=30, OpenMP CL2 done
+	* mie13: h2o_lqd 10 um wvl = 1, bnd = 1000, sz=30, OpenMP CL2 done
+	* mie14: h2o_lqd 10 um wvl = 1, bnd = 10000, sz=30, OpenMP CL2 done
+	* mie15: h2o_lqd 10 um wvl = 1, bnd = 100000, sz=30, OpenMP CL2 done
+	* mie16: h2o_lqd 10 um wvl = 1, bnd = 1000000, sz=30, OpenMP CL2 done
+	* mie20: h2o_lqd 10 um wvl = 100000, bnd = 1, sz=1, n='1.33+1.0e-6i' done
+	* mie21: h2o_lqd 10 um wvl = 100000, bnd = 1, sz=1, n='1.33+1.0e-6i' done
+	* mie22: h2o_lqd 10 um wvl = 100000, bnd = 1, sz=1, wvl=rma, n varies
+
+	* cvs tag -c mie-3_2_7 c++ mie nco/src/nco_c++
+	Changes since mie-3_2_6: Protected shared variable updates in
+	critical regions
+
+	* Found (I think) and fixed (I think) the threading problem
+	Multiple integrands which should have been protected in critical
+	regions or with atomic updates were not
+
+2004-06-28  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-post_csz_thr_Mie79
+	Tag for code after Charlie threads (removes statics from) Mie79
+
+	* AIX completely fails the psd_ntg_dgn test for thr_nbr=1
+	This is surprising since Linux passes with flying colors when thr_nbr=1
+	Hence the AIX threading problem is probably not in the mie_Wis79 code
+	Apparently the fundamental size integration breaks somewhere with AIX
+	The AIX answers are completely un-reproducible when sz_nbr > 1
+	
+	* Reduce sz_mxm to 50.0 for psd_ntg_dgn test so that size
+	parameter never exceeds 1000. When sz_prm > 1000, must bump up
+	MAXTRM limit in mie_Wis79.cc.
+
+2004-06-27  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-pre_csz_thr_Mie79
+	Tag for code before Charlie tries to thread Mie79
+
+	* Apparently all my old convergence tests were bad
+	Both threading models produce unreproducible answers
+	PARALLELIZE_OVER_CL2 and PARALLELIZE_OVER_CL3 both seem bad
+	Either I did not notice this before, or I introduced a new bug
+	Investigation shows unreliable diagnostics for verifying threading
+	PARALLELIZE_OVER_CL2 does appear to work when sz_nbr=1, but does
+	not work with all other values of sz_nbr, so diagnostics should
+	never have assumed sz_nbr=1
+	Perhaps problem is with statics in mie_Wis79.cc
+	
+	* Change to #define PARALLELIZE_OVER_CL2 1
+
+2004-06-26  Charlie Zender  <zender@uci.edu>
+
+	* Fixed psd_ntg_dgn. flx_wgt_frc in the diagnostic was indeed a
+	factor of bnd_nbr too small, but it was fine in the production version.
+
+2004-06-25  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_2_6 c++ mie nco/src/nco_c++
+	Changes since mie-3_2_5: psd_ntg_dgn works. Problem still exists
+	with normalization and not with single scatter albedo, but getting closer...
+
+	* psd_ntg_dgn appears to work. 
+	For all bnd_nbr, size distribution moments are approximately equal
+	degenerate optical properties.
+
+2004-06-24  Charlie Zender  <zender@uci.edu>
+
+	* Added option --tst_sng="psd_ntg_dgn" to test size distribution integration
+	psd_ntg_dgn stands for "integration diagnostic"
+	Test works by treating all optical efficiencies and fluxes as unity
+	Result is that optical efficiency aggregation algorithm just
+	computes size distribution moments.
+	Compare these computed optical properties (size distribution
+	moments) to analytic size distribution moments.
+
+2004-06-21  Charlie Zender  <zender@uci.edu>
+
+	* Add diagnostic sz_prm_swa
+
+	* Implemented precision argument in calls to nbr2sng()
+
+	* mie15 job dumped core on these two files, why?:
+	aer_h2o_lqd_rds_swa_10_mie15_00.2800000_00.2900000.nc
+	aer_h2o_lqd_rds_swa_10_mie15_00.6800000_00.6900000.nc
+	Is it reproducible?: Yes. The failures result from bad mie solutions.
+
+	mie: WARNING main(): Numerical roundoff error caused sca_cff_vlm > ext_cff_vlm so that ss_alb > 1.0 for wvl_idx = 0. Exact numbers are sca_cff_vlm = 7.6396e-13, ext_cff_vlm = 7.63676e-13, and ss_alb = 1.00037.
+	Assertion failed: sca_cff_vlm[wvl_idx] <= ext_cff_vlm[wvl_idx], file  mie.cc, line 3229
+	IOT/Abort trap (core dumped)
+
+	mie: WARNING main(): Numerical roundoff error caused sca_cff_vlm > ext_cff_vlm so that ss_alb > 1.0 for wvl_idx = 0. Exact numbers are sca_cff_vlm = 3.73343e-12, ext_cff_vlm = 3.73233e-12, and ss_alb = 1.00029.
+	Assertion failed: sca_cff_vlm[wvl_idx] <= ext_cff_vlm[wvl_idx], file  mie.cc, line 3229
+	IOT/Abort trap (core dumped)
+
+	Out of the 480 runs, these two were the only for which 
+	sca_cff_vlm/ext_cff_vlm >= 1.0+1.0e-6
+	There was also one (and only one) case where 
+	1.0 < sca_cff_vlm/ext_cff_vlm < 1.0+1.0e-6
+	This occurred in
+	aer_h2o_lqd_rds_swa_10_mie15_00.6400000_00.6500000.nc
+	mie handled the problem as intended by setting ss_alb=1.0 and
+	continuing, since the error was beneath the user-specified
+	precision threshold of 1.0e-6. The exact warnings were
+
+	mie: WARNING main(): Numerical roundoff error caused sca_cff_vlm > ext_cff_vlm so that ss_alb > 1.0 for wvl_idx = 0. Exact numbers are sca_cff_vlm = 3.91896e-12, ext_cff_vlm = 3.91896e-12, and ss_alb = 1.
+	mie: WARNING main(): Error is beneath roundoff precision threshhold mie_cnv_eps = 1e-06. Re-setting sca_cff_vlm=ext_cff_vlm so ss_alb=1.0.
+
+	Remaining 477 jobs ran perfectly.
+	What to do in cases like these when errors exceed machine precision?
+	Will overload nbr2sng() so that it takes an optional precision
+	argument for starters. 
+
+2004-06-20  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-3_2_4 c++ mie nco/src/nco_c++
+	Changes since mie-3_2_3: CL2 threading finally works
+
+	* Verified that both threading models give same answers so
+	threading is indeed fixed. 
+	Default model to threads over CL2 again, and threading over CL1 is
+	possible with #define PARALLELIZE_OVER_CL3 
+	Technique to verify threading works is
+
+	for thr_nbr in 1 8 ; do
+	export OMP_NUM_THREADS=${thr_nbr}
+	mie --dbg=1 --bnd_nbr=2 --sz_nbr=2 ${DATA}/aca/foo_${OMP_NUM_THREADS}.nc
+	done
+	ncdiff -O ${DATA}/aca/foo_8.nc ${DATA}/aca/foo_1.nc ${DATA}/aca/foo_8m1.nc
+	ncks -H -C -v abs_cff_mss ${DATA}/aca/foo_8m1.nc | m
+	
+	* Replace complex, non-working size parameter diagnostics with
+	three simple diagnostics (max, min, mean resolution)
+	For some reason known only to an erudite few, fixing this
+	diagnostic problem repaired the threading. 
+	My conclusion is that any reference from one thread to private
+	values in another thread screws up everything, even if such
+	references are purely diagnostic.
+	
+	* cvs tag -c mie-3_2_3 c++ mie nco/src/nco_c++
+	Changes since mie-3_2_2: CL3 threading verified to work
+
+	* Backport to original CL3 threading, which does still work
+
+	* Make rcd firstprivate() to retain initial value
+
+	* cvs tag -c mie-3_2_2 c++ mie nco/src/nco_c++
+	Changes since mie-3_2_1: broke mie threading last week
+
+2004-06-19  Charlie Zender  <zender@uci.edu>
+
+	* Make rcd private not shared
+
+2004-06-18  Charlie Zender  <zender@uci.edu>
+
+	* mie.cc: Fix completion counter for OpenMP runs
+
+	* Reason for aphysical results mentioned previously appears to
+	be that I broke the solver when I re-threaded it to parallelize
+	over bands a week ago.
+
+2004-06-16  Charlie Zender  <zender@uci.edu>
+
+	* Also noted that single scatter co-albedo is not uniformly
+	greater in high-resolution resonance computations than in low
+	resolution, (presumably) non-resonant computations. 
+	This is very unexpected and again requires graphical analysis
+	to verify if I am doing something stupid.
+
+	* Initial results with swnb2 show resonant absorption somehow
+	increases cloud reflectivity more than it increases atmospheric
+	absorptance. This seems like it must be wrong. I will need to
+	perform some graphical analysis to figure out what is happening.
+
+2004-06-15  Charlie Zender  <zender@uci.edu>
+
+	* mie.sh: Finish xpt_dsc implementation
+
+2004-06-14  Charlie Zender  <zender@uci.edu>
+
+	* mie_rsn.sh includes post-processing analysis of resonance
+	effects on column radiative transfer
+
+2004-06-13  Charlie Zender  <zender@uci.edu>
+
+	* Write restart before commencing computational execution
+
+	* mie.pl: Add sz_typ and size in microns to output file name
+
+2004-06-11  Charlie Zender  <zender@uci.edu>
+
+	* Added optional experiment_description attribute to toolchain
+
+2004-06-07  Charlie Zender  <zender@uci.edu>
+
+	* Look for ncks in /usr/local/bin if it is not on $PATH
+
+2004-06-06  Charlie Zender  <zender@uci.edu>
+
+	* mie.sh works on trivial interactive jobs on AIX and Linux
+
+2004-06-03  Charlie Zender  <zender@uci.edu>
+
+	* Add -g to OPTS=O
+
+2004-05-28  Charlie Zender  <zender@uci.edu>
+
+	* Running BoH83 self-test input through Wis79 Mie algorithm yields
+	exact results, whereas BoH83 algorithm yields inexact results in
+	fourth decimal point!
+
+	* User-defined slv_sng was not set correctly, fixed
+
+2004-05-07  Charlie Zender  <zender@uci.edu>
+
+	* Turn on OpenMP by default OMP=Y 
+
+2004-03-11  Charlie Zender  <zender@uci.edu>
+
+	* mie.cc (main): Note that flx_mss_vrt_dst is not yet defined,
+	although flx_mss_vrt_dst_ttl is. Attempting to write un-defined
+	data, at least when compiled with debugging enabled, generates
+	nco_err_exit(): ERROR netCDF library returned error code -60
+	nco_err_exit(): ERROR nco_put_var<double *>
+
+2003-09-26  Charlie Zender  <zender@uci.edu>
+
+	* AIX OpenMP version works!
+
+	* mie.cc (main): Make plz, phz_fnc, and phz_fnc_mdl thread-safe
+
+2003-09-23  Charlie Zender  <zender@uci.edu>
+
+	* Move invocation counter and size parameter resolution from mie_sln.cc to mie.cc
+
+	* Update OpenMP threading pragma over sizes
+
+	* mie.cc (main): Clean up Fortran writes
+
+2003-09-03  Charlie Zender  <zender@uci.edu>
+
+	* mie executes successfully on AIX with mie --drc_dat=/fs/cgd/data0/zender/aca
+
+	* Fix drc_dat initialization
+
+	* Changes in c++ libraries allow compiling and linking on AIX!
+
+2003-06-23  Charlie Zender  <zender@uci.edu>
+
+	* Allow free-format output of all micorphysical optical properties
+
+	* Merge console output routines of Fortran block data
+
+2003-06-22  Charlie Zender  <zender@uci.edu>
+
+	* Added _flg to option strings for flags so that option is same as
+	variable name.
+
+	* Added --bch (batch) flag to suppress progress meter printing
+
+2003-04-06  Charlie Zender  <zender@uci.edu>
+
+	* mie.cc (main): output wnd_frc_thr_slt_dry_flt
+
+2002-11-01  Charlie Zender  <zender@uci.edu>
+
+	* Fix factor of 2 error in diagnostic dmt_mnr/dmt_mjr
+	
+2002-10-28  Charlie Zender  <zender@uci.edu>
+
+	* Compute dmt_stk and dmt_aer the right way for ellipsoids (untested)
+
+	* Add dmt_eqv_sfc, dmt_eqv_vlm diagnostics
+
+2002-09-24  Charlie Zender  <zender@uci.edu>
+
+	* Write optical properties, call phz_fnc_dgn(), aer_htg(), iff
+	mie_flg == true 
+
+2002-09-02  Charlie Zender  <zender@uci.edu>
+
+	* Code now compiles with Comeau 
+	However, mie does not link with Comeau
+
+	* Small tweaks for Comeau compatibility
+
+2002-08-21  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_9_3 c++ mie
+	Changes since mie-2_9_2: Synchronization check-in for Stephen
+	Bamattre. NB: GCC linker does not find vlc_grv_get_Gin03().
+	Some problems compiling with GCC 3.1.1 meant I had to upgrade
+	binutils, but there are still weird problems on lanina.
+
+2002-08-11  Charlie Zender  <zender@uci.edu>
+
+	* mie.cc (main): Added I/O for ellipsoidal aspect ratio
+
+2002-03-09  Charlie Zender  <zender@uci.edu>
+
+	* Created mie_dev branch for Stephen Bamattre.
+	Branch point is mie-2_8_0
+
+2002-02-11  Charlie Zender  <zender@uci.edu>
+
+	* Added GPL copyright statements to all files
+
+2002-01-17  Charlie Zender  <zender@uci.edu>
+
+	* mie.cc (main): Fix out of range problem with ang_xpn
+
+2002-01-03  Charlie Zender  <zender@uci.edu>
+
+	* mie.cc (main): Improved counters, limited size parameter warnings
+
+	* To save memory, omit rt_op, Fresnel when tst=nsz
+
+	* mie.cc: Commented out unused #include strstream, added iomanip
+
+	* Makefile (${MY_BIN_DIR}/mie): Changed library order so
+	compilation works on SGI
+
+2002-01-02  Charlie Zender  <zender@uci.edu>
+
+	* mie has a memory leak that adds ~1 Mb per 1000 wavelength bins computed
+	Peak memory usage for one million wavelengths is ~ 800 MB RAM, and
+	output file is ~350 MB. Should verify that using one million bands
+	and one wavelength gives same result, since memory and disk space
+	will drop dramatically with that method.
+	
+	* mie.cc (main): Archive all coordinates as nco_xtyp
+
+2002-01-01  Charlie Zender  <zender@uci.edu>
+
+	* mie.cc (main): Archiving some radiative properties as nco_xtyp
+
+	* Makefile (tst): Merged in latest C++ Makefile stuff.
+	Makefile now supports multiple precisions, OpenMP, ...
+
+2001-12-30  Charlie Zender  <zender@uci.edu>
+
+	* Makefile (dbg): Commented out LDFLAGS options required
+	to link C++ to fortran for all architectures
+
+	* Assuming mie is now building with pure C/C++ code and
+	c++-2_7_2 or later
+
+2001-11-04  Charlie Zender  <zender@uci.edu>
+
+	* Version compiles, links, but dies at run-time due to
+	a2d_cls/nco_c++/valarray issues triggered in phz_fnc_dgn()
+
+	* mie.cc (main): Added new CPP date/version info
+
+2001-10-22  Charlie Zender  <zender@uci.edu>
+
+	* Added hook for user-specified sz_prm_rsn, still not used
+
+	* Added backscatter coefficient for LIDAR assimilation
+
+	* mie.cc (main): Moved Mie block into mie_prc() driver
+
+2001-10-13  Charlie Zender  <zender@uci.edu>
+
+	* mie.cc (main): compiles and links cleanly with libnco_c++.a, 
+	but fails in execution
+
+2001-10-12  Charlie Zender  <zender@uci.edu>
+
+	* Finished translating to libnco_c++.a
+
+2001-09-05  Charlie Zender  <zender@uci.edu>
+
+	* mie.hh: Removed unused FORTRAN_gamma and associated ifdefs
+	for calling Fortran from C++. The template for doing this still 
+	exists in the reflqd() and refice() functions in idx_rfr.cc
+
+2001-08-14  Charlie Zender  <zender@uci.edu>
+
+	* mie.cc: Changed float to prc_cmp so that generic computational
+	precision may be set to float or double
+
+2001-07-12  Charlie Zender  <zender@uci.edu>
+
+	* Added STC=Y option to Makefile to enable static linking
+
+2001-07-06  Charlie Zender  <zender@uci.edu>
+
+ 	* cvs tag -c mie-2_4_6 c++ mie ck/Makefile ck/htrn.c
+
+	* mie.cc (main): changed default aer_sng from dust_like to
+	saharan_dust (so that default density is ~ 2500.0)
+	Started diagnosing/using gwc_sfc in addition to/instead of
+	vwc_sfc. Made exercise of rt_cls routines dependent on status of
+	mie_flg.
+
+2001-06-19  Charlie Zender  <zender@uci.edu>
+
+	* Added photon flux and photon energy diagnostics 
+
+2001-06-15  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_3_6 c++ mie
+
+	* This appeared to fix all errors on Linux and Solaris but IRIX
+	still produces a compiler error when building mie.
+
+	* Used MALLOC_CHECK_=1 to find memory overflow in writing to
+	tau_[ext,abs,sct]. Fixed bug and now....there may still be a
+	problem in rt_cls memory management, but all else seems to
+	work...problem in rt_cls() is duplicable in ccc so will solve
+	there. 
+
+2001-05-29  Charlie Zender  <zender@uci.edu>
+
+	* Sent this version to Dave Marsden
+
+	* cvs tag -c mie-2_3_4 c++ mie
+
+	* Temporarily removed rt_cls instantiation from mie
+	This seems to allow mie to work again for wvl_nbr > 47
+
+2001-05-25  Charlie Zender  <zender@uci.edu>
+
+	* There appears to be a GCC compiler error on latest version of 
+	mie. 
+
+2001-05-21  Charlie Zender  <zender@uci.edu>
+
+	* Changed default output filename from out.nc to mie.nc
+
+2001-05-20  Charlie Zender  <zender@uci.edu>
+
+	* Allowing dmt_nma, dmt_swa, dmt_vma specifications for monomodal
+	distributions 
+
+	* cvs tag -c mie-2_3_3 c++ mie
+
+	* Added swa2nma() and vma2nma() to pdf.hh. 
+	These are lognormal psd transformation functions. 
+	Now user may input rds_swa or rds_vma and mie()
+	will automatically translate to rds_nma for monomodal
+	distributions only.
+
+	* Replaced --distribution= with --psd_typ= and renamed sz_dst_sng
+	to psd_typ
+
+2001-03-11  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_3_1 c++ mie
+
+2001-03-09  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_3 c++ mie
+
+	* Computing and using index of refraction of air at STP.
+	This is a backward incompatible step which changes optical
+	properties by a factor of ~1.00029. Recover old behavior by
+	using --idx_rfr_mdm=1.0+0.0i. Index of refraction of air should be
+	computed at local air density but program assumes STP conditions.
+
+	* Changed mntl_idx_rfr to idx_rfr_mntl in order to give mantles
+	the deluxe treatment as was just done for media
+
+	* Generalized so that index of refraction of medium is
+	user-configurable and fully spectrally resolved
+
+2001-02-08  Charlie Zender  <zender@uci.edu>
+
+	* Renamed distance [extinction,scattering,absorption] coefficient
+	to volume [extinction,scattering,absorption] coefficient and
+	changed units from [m-1] to [m2 m-3] to highlight similarity to
+	mass [extinction,scattering,absorption] coefficients and conform
+	to standard terminology.
+
+2000-11-25  Charlie Zender  <zender@uci.edu>
+
+	* Moved computation of abs_spc, sca_spc, ext_spc, and ang_xpn so  
+	they now account include any user specified adjustments, e.g.,
+	ss_alb_cmd_ln and fdg_fct. 
+
+2000-11-20  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c mie-2_2_2 c++ mie
+
+	* Added preliminary aerosol heating and specific heat information
+
+	* Verified that results with new spc_slr class are BFB with
+	old fortan routine results
+
+	* cvs tag -c mie-2_2_1
+
+	* Replaced fortran calls to solar spectrum routines with new
+	spc_slr class.
+
+2000-11-15  Charlie Zender  <zender@uci.edu>
+
+	* Tagged this as mie-2_2
+
+	* Mie compiles but does not quite link
+
+	* Finished great class/function rearrangement.
+	Nearly all functions and classes formerly in mie_utl() and
+	mie_cls() have been disaggregated into individual files and placed
+	in libcsm_c++ or libcsz_c++.
+
+2000-11-13  Charlie Zender  <zender@uci.edu>
+
+	* Moved most mie_cls() classes into individual files
+
+2000-10-16  Charlie Zender  <zender@uci.edu>
+
+	* Finished Bruggeman approximation. Effective medium
+	approximations are now complete but need testing. 
+
+2000-10-01  Charlie Zender  <zender@uci.edu>
+
+	* Tagged this as mie-2_1_4
+
+	* Moved water refractive indices into idx_rfr_get()
+
+2000-09-28  Charlie Zender  <zender@uci.edu>
+
+	* Added hooks for multi-component solid aerosols
+
+2000-09-19  Charlie Zender  <zender@uci.edu>
+
+	* Tagged this as mie-2_1_3
+
+2000-09-18  Charlie Zender  <zender@uci.edu>
+
+	* Started receiving troubling compile-time limitation 
+	"mie.cc:4069: virtual memory exhausted"
+	Program no longer compiles with -O optimization
+	Need to check if compiler actually uses 500 MB when compiling
+	or if I can up the virtual memory limit somehow
+
+	* Set flx_wgt_frc=bnd_nbr and flx_wgt_frc_bnd[0..bnd_nbr-1]=1.0
+	internally when entire band is bluer than solar spectral input
+	data. If flx_wgt_frc is left to be 0.0 then optical properties 
+	become NaN's because flx_wgt_frc is used to normalize properties.
+
+	* Wrote OpenMP shared() and private() lists
+
+	* Tagged this as mie-2_1_2
+
+	* Added --wvl_grd=WVL_DBG option to simplify debugging
+
+	* Fixed bug which caused idx_rfr_rl and idx_rfr_img to be
+	undefined on first call to idx_rfr_get() (usually), and to be
+	undefined on output. 
+	This did not affect answers since idx_rfr_rl_bnd and
+	idx_rfr_img_bnd (actually used in mie solver) are constructed in
+	subsequent calls.
+
+2000-09-15  Charlie Zender  <zender@uci.edu>
+
+	* Finished algebraic implementation of SeH78 resistance integral,
+	still need to turn it into a deposition velocity and validate it
+
+2000-09-08  Charlie Zender  <zender@uci.edu>
+
+	* Implemented surface-type dependence in quasi-laminar layer
+	resistance to aerosol dry deposition to account for free slip
+	surfaces.
+
+	* Tagged this as mie-2_1_1
+
+	* Verified aerodynamic diameter is correct
+
+2000-09-07  Charlie Zender  <zender@uci.edu>
+
+	* Added Stokes diameter and aerodynamic diameter for eventual
+	generalization to aspherical particles 
+
+2000-08-30  Charlie Zender  <zender@uci.edu>
+
+	* Added diagnostic mass-weighted raindrop diameter from Mason
+	(1971) parameterization: dmt_pcp_vwr_Mas71. This is essentially 
+	what Sli84 recommends for interactive wet deposition. Seems 
+	reasonable.
+
+	* Torture tests:
+	gsd_anl=1.0 generates NaNs (exactly why? where?)
+	gsd_anl=1.01 converges nicely with monodisperse distribution
+	
+2000-08-26  Charlie Zender  <zender@uci.edu>
+
+	* Changing sz to rds where appropriate in code, e.g.,
+	xsa=pi*rds_ctr*rds_ctr instead of pi*sz_ctr*sz_ctr. 
+	Goal is to make sz being diameter or radius a run-time option 
+
+2000-08-25  Charlie Zender  <zender@uci.edu>
+
+	* Tagged mie-2_1
+
+	* New scavenging coefficients with continuous raindrop size
+	distribution are believable, no known problems with
+	implementation. 
+
+	* Verified spectral and total precipitation fluxes are correct,
+	and that specification of volume flux on command line works
+
+	* Verified that precipitation size distribution is identical to
+	multimodal particle size distribution in concentration and fall
+	speed. Distribution differ by a factor of 2=dD/dr, as they should.
+	Thus both diameter- and radius-based distributions are handled
+	correctly by all classes. Distributions are now radius-based for 
+	aerosol, and diameter-based for precipitation. It is now
+	straightforward to change on or both between per unit radius and
+	per unit diameter by using LognormalFunction::abc_typ_set().
+
+	* Added lots of psd-style functionality to LogNormalFunction
+
+	* Added abc_typ = rds_typ or dmt_typ to LogNormalFunction class
+	The distribution function now returns both radius distributions
+	and diameter distributions, depending on what abc_typ is.
+
+2000-08-22  Charlie Zender  <zender@uci.edu>
+
+	* Changed SzDst to psd_cls and szdst to psd for "Particle size
+	distribution". Verified multimode behavior is unbroken.
+
+2000-08-19  Charlie Zender  <zender@uci.edu>
+
+	* Tagged mie-2_0_3
+
+	* Fixed problems with vec_ntp(), rbn_vec() in libcsz_c++.a which
+	caused core dumps with mie() in certain situations.
+
+2000-08-18  Charlie Zender  <zender@uci.edu>
+
+	* Fixed bug in computation of relative Stokes number for
+	raindrop-aerosol scavenging
+
+2000-07-10  Charlie Zender  <zender@uci.edu>
+
+	* Fixed scv_cff_mss_avg by multiplying by missing factor of cnc
+
+	* Tagged mie-2_0_2
+
+	* Verified mie-2_0_1 yields same optical efficiencies as mie-1_X
+	for dust distributions using szdst.pl
+
+2000-07-07  Charlie Zender  <zender@uci.edu>
+
+	* Tagged mie-2_0_1
+
+	* Implemented automatic generation of mass fractions
+
+2000-07-05  Charlie Zender  <zender@uci.edu>
+
+	* Added capability to specify mass concentration instead of number
+	concentration for each aerosol mode. This involved substantial
+	rewrites of SzDst class so that density information is available
+	to it.
+
+2000-06-25  Charlie Zender  <zender@uci.edu>
+
+	* Implemented multimodally-correct methods for rds_nma, rds_nwa, 
+	rds_swa, rds_vwa
+
+	* Methods for rds_sma, rds_vma are not yet correct
+	
+2000-06-23  Charlie Zender  <zender@uci.edu>
+
+	* Finished initial implementation of multimodal capability
+	Verified that one mode yields same answers as two modes with half
+	the concentration.
+
+2000-06-18  Charlie Zender  <zender@uci.edu>
+
+        * Note that many if not most diagnostics for gamma distributions
+	are broken in mie-2_0
+
+	* Tagged mie-2_0 as first version to begin adding multimodal capability
+
+	* Tagged mie-1_9_2 as last version before adding multimodal capability
+
+2000-06-17  Charlie Zender  <zender@uci.edu>
+
+	* Added scavenging coefficient, and mass and number mean
+	scavenging coefficients. Validated scavenging coefficient against
+	SeP97 p. 1021 Figure 20.11 for some monodisperse cases.
+	Unable to obtain agreement for normalized mass mean scavenging
+	coefficient with Figure 20.12. Not sure why.
+
+2000-06-15  Charlie Zender  <zender@uci.edu>
+
+	* Adding SWNB wavelength grid 
+
+2000-05-30  Charlie Zender  <zender@uci.edu>
+
+	* Segregated mineral dust aerosol physics routines into separate
+	file, mnr_dst.cc. Subroutine-ized and validated wnd_frc_thr_get()
+	from mie. 
+
+2000-05-29  Charlie Zender  <zender@uci.edu>
+
+	* Subroutine-ized and validated drg_cff_get() and vlc_grv_get() in
+	new aerosol physics routine aer.cc 
+
+2000-05-21  Charlie Zender  <zender@uci.edu>
+
+	* Added specific optical properties for each size at diagnostic
+	wavelength: ext_spc, sca_spc, abs_spc. Now mie() can output size
+	vs. specfic optical properties for high resolution size grids.
+	These arrays can be interpolated to obtain, e.g., satellite
+	optical depth arrays, for all sizes at a given wavelength.
+	This feature simplifies generating high resolution lookup tables
+	which are being added to dust model. Note that [ext,sca,abs]_spc 
+	contain no size distribution information at all, and so should 
+	only be used when size-integrated optical properties are
+	unavailable. 
+
+2000-05-19  Charlie Zender  <zender@uci.edu>
+
+	* Added full rds_grd and dmt_grd arrays to simplify postprocessing
+
+2000-04-13  Charlie Zender  <zender@uci.edu>
+
+	* Added ability to specify multiple sets mode parameters, though
+	nothing is done with the parameters yet
+
+2000-02-22  Charlie Zender  <zender@uci.edu>
+
+	* Tagged mie-1_9_1
+
+	* Added computation of hms_bck and asm_prm for coated spheres
+
+	* Cleaned up and renamed mie routines
+
+	* Fixed bug where ang_xpn was writing past end of array
+
+2000-02-14  Charlie Zender  <zender@uci.edu>
+
+	* Fixed bug in mie_bhcoat.cc where norm() was being used instead
+	of complex modulus = sqrt(norm()). Validated answers for coated
+	sphere against BoH83 p. 489.
+
+2000-01-14  Charlie Zender  <zender@uci.edu>
+
+	* Found the C++ translation of bhcoat() used in mie() gets correct
+	q_ext, but wrong q_sca and q_bsc. Must find bug in translation.
+
+	* Compiled and validated bhcoat.f against BoH83 p. 489
+
+1999-12-02  Charlie Zender  <zender@dust.ps.uci.edu>
+
+	* Fixed roundoff error checking for ss_alb > 1.0
+
+	* Fixed initialization bug with core and mantle indices
+
+1999-11-15  Charlie Zender  <zender@dust.ps.uci.edu>
+
+	* Tagged this as mie-1_9_0
+
+	* Implemented BHcoat routine for coated spheres. Attempted to
+	validate by setting core and mantle each to 1/2 the radius of test
+	sphere and indices of refraction equal to eachother. Validation
+	failed to reproduce BHmie result. Not sure why.
+
+1999-08-12  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Tagged this as mie-1_8_4
+
+	* Validated HNO3 diffusion and pseudo first order reactions
+	against ZhC99, agreement is within factor of 3. A portion, and
+	perhaps all, of the discrepancy is due to different (better)
+	binary diffusivity of HNO3 on my part. This may explain all
+	because binary diffusivity affects mean free path and thus Knudsen
+	number as well.
+
+	* Verified Fuchs and Sutugin (1970) agrees with ZhC99 formulation
+	for reasonable (D 20 um) aerosol sizes
+
+	* Implemented most timescales for HNO3 aqueous phase chemistry
+
+	* Implemented temperature dependence in Henry's Law coefficient
+
+1999-08-12  Charlie Zender  <zender@dust.acd.ucar.edu>
+
+	* Added ventilation correction to gaseous diffusion to particles
+
+	* Changed ryn_nbr to be Reynold's number at layer midpoint rather
+	than reference height
+
+	* Fixed many problems with HNO3 chemistry and diagnostics
+
+1999-07-30  Charlie Zender  <zender@dust.acd.ucar.edu>
+
+	* Tagged this as mie-1_8_3
+
+	* Implemented blm_glb(), a driver which calls blm_lnd(),
+	blm_ice(), or blm_ocn() as appropriate (depending on orography)
+
+1999-07-23  Charlie Zender  <zender@dust.acd.ucar.edu>
+
+	* Changes to LW spectral structure: 
+	Lower bound of CCM_LW band 1 and GSFC_LW band 1 changed from 250
+	cm-1 to 200 cm-1 so that idx_rfr data now used up to 50 microns
+	rather than 40 microns. This causes warnings with dust but is
+	useful for H2SO4.  
+	Upper bound of CCM_LW band 1 changed from 500 to 800 cm-1. Band used to
+	end at 500 cm-1 even though it represented line absorption from
+	0-800 cm-1. This was because it is overlapped by the 500--800 cm-1
+	H2O-CO2 overlap region.
+
+1999-07-15  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Verified blm_ocn() is BFB between aer() and mie()
+	Technique for this is to add blm_ocn() call just after
+	blm_mbl() in dstmbl.F. Then compare with, e.g., 
+	mie -tpt_sst=311. Also validated diagnostic computations
+	of xch_cff_mmn and of wnd_rfr at end of blm_ocn() are BFB.
+	
+1999-07-07  Charlie Zender  <zender@dust.acd.ucar.edu>
+
+	* Added vlc_dry, vlc_trb, and rss_trb output. Attempted to
+	validate deposition results against SeP97 p. 971 Fig 19.4 using
+	mie -dbg -no_mie --aer_typ=h2o_lqd --sz_grd=log --sz_mnm=0.025
+	--sz_mxm=100.0 --sz_nbr=200 --rgh_mmn_mbl=0.001 --wnd_znl_mdp=1.0
+	--flx_SW_net_gnd=0.0 
+	Settling velocities look good, but total vlc_dry, and therefore
+	vlc_trb, looks too small in accumulation mode
+	
+	* Added GSFC_LW option to compute properties in 10 bands used by
+	GSFC LW code
+
+1999-06-20  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Tagged this as mie-1_8_1
+
+	* Eliminated warnings when small particles fall outside IvW82 Re*t domain
+
+	* Attempted to validate implementation of blm_ocn() against LaP81
+	and LaP82. Simulated LaP81 p. 333 Fig 7 using
+	--tpt_sst=277 --tpt_mdp=281 --hgt_mdp=12.5 --wnd_znl_mdp=7.5
+
+	* Added blm_ice_ocn() for sea ice boundary layer physics
+
+1999-06-19  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Fixed density bug in blm_ocn()
+
+1999-06-18  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Added abs_cff_mss_bb_LW = CCM:physics/cldems()/kabsl
+
+1999-06-17  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Tagged this as mie-1_8_0
+
+	* Implemented liquid H2O properties in reflqd()
+	mie() with reflqd() gives results close to BPB's liq_10.dat
+
+	* Added maritime boundary layer solver blm_ocn() based on LaP82
+
+1999-06-08  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Added dmt_nma, dmt_vma, rds_nma, rds_vma diagnostics
+
+1999-06-02  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Added H2SO4_210K_61_NNM98 and H2SO4_220K_72_NNM98 aerosols per
+	C. Ammann's request
+
+1999-05-31  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Added orographic constraints to values of lnd_frc_dry,
+	mss_frc_snd, mss_frc_cly, and vwc_sfc for consistency with LSM
+
+1999-05-30  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Fixed Owen's effect using D. Gillette's clarification of GMB98 (12)
+
+1999-05-24  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Tagged this as mie-1_7_1
+
+	* Verified dust flux, boundary layer agreement between mie and aer
+
+	* Limited Owen's effect to 20%
+
+1999-05-23  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Added beginnings of blm_ocn() routine for iterative solution of
+	boundary layer properties over ocean surfaces
+
+	* Validated wnd_frc_mbl and wnd_frc_thr against GMB98 p. 6207
+	Tbl. 1--2. Realized that GMB98 correction for Owen's effect
+	leads to unrealistically high values of delta u* when 
+	U10-U10t >~ 1.5 m s-1, therefore I have temporarily disabled it.
+
+	* Validated flx_mss_hrz_slt_ttl against Whi79 p. 4650 Fig. 9
+	Good agreement.
+	
+1999-05-21  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Tagged this as mie-1_7_0
+
+	* Verified dust fluxes agree between aer and mie with 
+	new mobilization scheme in place
+
+1999-05-20  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Tagged this as mie-1_6_5
+
+	* Fully hooked up stress partition and Owen's effect and "tuned"
+	default roughness lengths
+
+1999-05-19  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Segregated boundary layer properties used for mobilization from
+	properties used for deposition
+
+1999-05-17  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Tagged this as mie-1_6_4
+
+	* Added blm_mbl() which is optimized to solve for surface
+	transfer over surfaces suitable for dust mobilization: dry, no
+	snow cover, smooth, no vegetation. Verified that blm_mbl() and
+	full-blown flx_sfc() give identical answers for same input
+
+	* Tagged this as mie-1_6_3
+
+	* Added preliminary drag partition effects
+
+1999-05-16  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Added soi_typ to flx_sfc call so that at least bare ground
+	emissivity and roughness lengths may be correctly evaluated
+
+	* Added mmn_dlt_evl() to interpolate momentum-based quantities
+	between two levels in the vertical. Verified that using
+	mmn_dlt_evl() to interpolate to 10 m wind speed yields identical
+	results whether applied to midlayer windspeed and interpolating
+	downwards, or applied to apparent sink for momentum and
+	interpolating upwards. Of course this is only true when wnd_frc is
+	correctly balanced with mno_lng, i.e., both are computed from
+	flx_sfc() rather than arbitrarily specified on command line.
+
+1999-05-03  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Noted that egcs-2.91.66 on sanitas does not like automatic local
+	arrays. Unless flx_sfc.cc dimensions local arrays with a local
+	const, mie spits out garbage. Automatic local arrays work as
+	advertised on Linux, however, using egcs-2.91.57
+
+1999-04-13  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Tagged this as mie-1_6_2
+
+	* Changed to using less-ambiguous "xsa" rather than "area" to
+	denote surface area
+
+1999-04-07  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Tagged this as mie-1_6_1
+
+	* Added wnd_thr_slt_get(), validated against aer.
+	mie and aer now produce answers identical to within machine precision.
+
+1999-04-06  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Revalidated vsc_dyn_atm and vsc_knm_atm between aer and mie
+
+	* Tagged this as mie-1_6_0
+
+	* Fixed bug in oro_is_lnd,ocn,ice inline functions
+
+	* Validated rgh_zpd_get(), snw_frc_get(), wnd_mbl_get() against LSM and aer
+
+1999-04-05  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Bundled sfc_typ_sng and pnt_typ_sng functions into sfc_typ_dsc_sng
+
+1999-04-04  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Replaced outmoded references to libc++.hh with libcsz_c++.hh
+
+	* Implemented rgh_zpd_get(), wnd_mbl_get() and snw_frc_get()
+
+1999-03-31  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Tagged this as mie-1_5
+
+	* Implemented FMB99 soil moisture threshold factor.
+	Validations consistent with FMB99 p. 156 Fgr. 8 and aer()
+
+1999-03-26  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Added H2SO4_300K_PaW75 aerosol from Caspar Ammann
+
+1999-03-25  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Added sfc = surface area metrics in parallel to area =
+	cross sectional area metrics
+
+1999-03-07  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Fixed factor of pi bug in mean free path of binary mixtures
+
+1999-02-14  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Added preliminary gas kinetics and heterogeneous chemistry
+	calculations for HNO3 and aerosol. Infrastructure is finished but
+	still need data for HNO3 collision diameter of binary diffusivity
+	in air. Results for kinetic and uptake correction factor do not
+	seem to agree with SeP97 p. 607 Figure 11.4. 
+
+1999-02-01  Charlie Zender  <zender@flagstaff.cgd.ucar.edu>
+
+	* Added error exit with hint when idx_rfr_img < 0.0
+
+1999-01-31  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Tagged this as mie-1_4
+
+	* Fixed terminal velocity computation to account for large
+	Reynolds numbers. New iterative technique agrees with SeP97 p. 468
+	Example 8.2. Still archiving Stokes velocity, but now as v_stk.
+
+1999-01-19  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Added fl_in as command line option
+
+	* Added aer_dns as command line option 
+
+1999-01-17  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Added explicity friction velocity threshold computation by
+	methods of IvW82 and the parameterized version of this, by MaB95. 
+	Verified results precisely against IvW82 Fgr. 8 for D = 10, 75 um.
+	Good conditions to mimic IvW82 are --prs_mdp=101300.0 --tpt_mdp=288.0.
+	Also verified against IvW82 Table 1 for D=38, 586 um.
+	Results at 1.0 um are ~ 20% larger than MaB95 Fgr. 1, but are 
+	consistent (within 10%) with my implementation of MaB95 pzn.
+	Since MaB95 attempts to parameterize IvW82, probably their Fgr. 1
+	is in error.
+
+1998-12-20  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Added statistics per unit mass and verified exact agreement with aer()
+
+1998-12-19  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Tagged this as mie-1_3
+
+	* Verified agreement with aer()
+
+	* Added all environmental parameters to output. 
+
+Tue Dec 15 13:03:23 1998  Charlie Zender  <zender@sanitas-e0.cgd.ucar.edu>
+
+	* Added Stokes and Schmidt number computations and output and
+	verified exact agreement with aer.F
+
+Tue Nov  3 16:47:08 1998  Charlie Zender  <zender@sanitas-e0.cgd.ucar.edu>
+
+	* Added oceanic aerosol from David Fillmore
+
+Wed Oct 28 15:41:22 1998  Charlie Zender  <zender@sanitas-e0.cgd.ucar.edu>
+
+	* Tagged mie-1_2, gave this version to Bill Collins
+
+Wed Sep 23 14:36:00 1998  Charlie Zender  <zender@odin.cgd.ucar.edu>
+
+	* Added number-weighted gravitational settling velocity. Renamed
+	v_dps as v_grv
+
+Wed Sep  2 14:38:59 1998  Charlie Zender  <zender@odin.cgd.ucar.edu>
+
+	* Tagged mie_1_1
+
+	* Adopted ntp_vec() in idx_rfr_get(). Using new, simplified header
+	structure. Appears to work well. 
+
+Mon Aug 31 12:53:55 1998  Charlie Zender  <zender@odin.cgd.ucar.edu>
+
+	* Planck class still has errors
+
+	* Minor problems arise when wvl_nbr == bnd_nbr == 1
+
+	* Tagged mie_1_0
+
+1998-08-31  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Finished initial implementation of module mie
+
+
+	

@@ -1,0 +1,40 @@
+60. 90. 0. 360.
+0.  0.  0.   0.
+Above: ZBN03, ZNT03 eliminate all sources North of 60N
+
+README:
+Above data describe four corners of lat x lon rectangles
+(degrees N, degrees N, degrees E, degrees E) where
+erodibility factors (area_acm_fct and flw_acm_fct) are zeroed.
+1. Each line is one rectangle
+2. Input rectangle list is terminated by null rectangle entry "0.  0.  0.  0."
+3. Data comes before any comments
+
+55. 80. 230. 280.
+32. 34.5  7.  12.
+28. 33.  23.  30.
+55. 80. 230. 280.
+50. 65. 280. 300.
+65. 75. 100. 120.
+60. 70. 130. 180.
+0.  0.  0.   0.
+Above: Dave Newman excluded these regions to improve simulations
+near mouths of major rivers with fully back-filled geomorphologic/
+hydrologic erodibility factors
+
+50. 65. 280. 300.
+65. 75. 100. 120.
+60. 70. 130. 180.
+0.  0.  0.   0.
+# Above: alternative region list tested by Newman
+
+55. 80. 230. 280.
+50. 65. 280. 300.
+65. 75. 100. 120.
+60. 70. 130. 180.
+38. 46. 268. 278.
+48. 60. 348. 360.
+48. 60. 0.   16.
+0.  0.  0.   0.
+# Above: alternative region list tested by Newman
+

@@ -1,0 +1,97 @@
+-----------------------------------------------------------------
+ Tropical profile (35 levels) for CCM3 Column Radiation Model 
+-----------------------------------------------------------------
+   83.416784    day of year (1=jan 1; from 1 to 365)
+   0.           latitude    (from +90 to -90)
+  level   p(mb)    t(k)   h2ommr (g/g) o3mmr (g/g) cldcvr    cldlwp
+   35    0.0929   228.10  3.250E-06  1.909E-06  0.000E+00 0.000E+00 
+   34    0.1472   237.05  3.250E-06  2.581E-06  0.000E+00 0.000E+00 
+   33    0.2720   249.53  3.250E-06  3.210E-06  0.000E+00 0.000E+00 
+   32    0.3698   256.00  3.250E-06  3.451E-06  0.000E+00 0.000E+00 
+   31    0.5027   262.64  3.250E-06  3.659E-06  0.000E+00 0.000E+00 
+   30    0.7967   270.06  3.250E-06  3.890E-06  0.000E+00 0.000E+00 
+   29    1.0830   268.20  3.250E-06  4.973E-06  0.000E+00 0.000E+00 
+   28    1.4721   265.57  3.250E-06  6.004E-06  0.000E+00 0.000E+00 
+   27    2.0011   261.10  3.250E-06  7.809E-06  0.000E+00 0.000E+00 
+   26    3.1716   253.39  3.250E-06  9.875E-06  0.000E+00 0.000E+00 
+   25    4.3113   248.37  3.250E-06  1.038E-05  0.000E+00 0.000E+00 
+   24    5.8606   243.46  3.250E-06  1.072E-05  0.000E+00 0.000E+00 
+   23    7.9667   238.64  3.250E-06  1.194E-05  0.000E+00 0.000E+00 
+   22   12.6260   231.60  3.250E-06  1.276E-05  0.000E+00 0.000E+00 
+   21   17.1640   227.03  3.250E-06  1.052E-05  0.000E+00 0.000E+00 
+   20   23.3320   222.55  3.250E-06  8.838E-06  0.000E+00 0.000E+00 
+   19   36.9780   215.99  3.250E-06  5.156E-06  0.000E+00 0.000E+00 
+   18   50.2660   210.25  3.250E-06  2.735E-06  0.000E+00 0.000E+00 
+   17   68.3300   202.81  3.250E-06  1.145E-06  0.000E+00 0.000E+00 
+   16   92.8850   195.75  3.250E-06  4.283E-07  0.000E+00 0.000E+00 
+   15  130.0000   203.20  3.342E-06  2.106E-07  0.000E+00 0.000E+00 
+   14  190.0000   218.99  8.498E-06  1.473E-07  0.000E+00 0.000E+00 
+   13  210.0000   223.35  1.691E-05  1.320E-07  0.000E+00 0.000E+00 
+   12  230.0000   227.39  3.081E-05  1.193E-07  0.000E+00 0.000E+00 
+   11  250.0000   231.15  5.227E-05  1.085E-07  0.000E+00 0.000E+00 
+   10  310.0000   241.14  1.858E-04  8.711E-08  0.000E+00 0.000E+00 
+    9  410.0000   254.78  6.569E-04  7.169E-08  0.000E+00 0.000E+00 
+    8  510.0000   265.94  1.518E-03  6.517E-08  0.000E+00 0.000E+00 
+    7  610.0000   275.46  2.930E-03  6.012E-08  0.000E+00 0.000E+00 
+    6  710.0000   283.37  5.141E-03  5.814E-08  0.000E+00 0.000E+00 
+    5  790.0000   287.66  8.841E-03  5.592E-08  0.000E+00 0.000E+00 
+    4  870.0000   292.12  1.115E-02  5.331E-08  0.000E+00 0.000E+00 
+    3  950.0000   296.64  1.367E-02  5.020E-08  0.000E+00 0.000E+00 
+    2  990.0000   298.79  1.519E-02  4.852E-08  0.000E+00 0.000E+00 
+    1 1006.5000   299.66  1.587E-02  4.786E-08  0.000E+00 0.000E+00 
+       1013.25 
+                   300.00   surface air temperature
+                   300.00   ground (skin) temperature
+                      0     surface type flag (0=ocn, 1=lnd, 2=sea-ice)
+                    0.010   surface aerodynamic roughness (m)
+                    0.000   snow cover (m) in liquid water equivalent
+                    0.100   visible surface albedo for strng zen ang srfcs
+                    0.100   visible surface albedo for weak  zen ang srfcs
+                    0.100   near-ir surface albedo for strng zen ang srfcs
+                    0.100   near-ir surface albedo for weak zen ang srfcs
+                    0.000   fraction strng zen ang srf
+                    3.55e-4 co2 volume mixing ratio
+    0.311e-6  N2O volume mixing ratio
+    1.714e-6  CH4 volume mixing ratio
+    0.280e-9  CFC11 volume mixing ratio
+    0.503e-9  CFC12 volume mixing ratio
+    0.14      Aerosol visible extinction optical depth
+ 1367.0       Solar constant [W m-2]
+ 1995         Year AD (integer)
+    0.0       Longitude (degrees East, from 0.0 to 360.0)
+
+Notes on the input:
+
+1) Day of year includes the fraction that determines the solar elevation
+angle; for example, if day 15.0 was used, the local time of calculation
+would be midnight; if day 15.5, conditions would be local noon.  Day of 
+year also includes the change in earth/sun distance, as is done in ccm3.
+The solar constant is set by a data statement in routine 'radcsw'.
+
+2) Latitude runs from +90 to -90 degrees.
+
+3) Total number of levels must be the same as the 'plev = ' parameter.
+ 
+4) Pressure data is at the same levels as temperature and other fields;
+for the radiation, the interface pressures between layers are required;
+these are computed as simple averages of adjacent level pressures.
+Pressure data is in milli-bars.
+
+5) Temperatures are in K, h2o and o3 are mass mixing ratios, cloud cover
+as fraction, and cloud liquid water path in g/m2. Note that cloud cover
+of 1 is reset internally to .99999, since exactly 1.0  will cause the 
+longwave code to fail.
+
+6) The last pressure is the surface pressure.
+
+7) The surface temperatures are given as the air temperature in contact
+with the surface, and the actual skin temperature of the surface.
+
+8) Surface type determines how the surface albedos are computed; if ocean
+or sea-ice, albedos are set internally; otherwise, the spectral/zenith
+angle type albedos read in are used.
+
+9) Surface aerodynamic roughness and snow cover are used over land and
+sea-ice to help set surface albedos.
+
+10) CO2 volume mixing ratio is in fraction.

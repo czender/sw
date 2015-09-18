@@ -1,0 +1,133 @@
+2013-06-12  Charlie Zender  <zender@uci.edu>
+
+	* Add new isotopologues for HITRAN 2012
+
+2013-06-11  Charlie Zender  <zender@uci.edu>
+
+	* Update for HITRAN2012
+
+2009-08-04  Charlie Zender  <zender@uci.edu>
+
+	* Hardcode new maxima for htrn_c++.hh:
+	const int mlc_nbr_max_htrn(42); // [nbr] Number of gases in HITRAN database
+	const int iso_nbr_max_htrn(100); // [nbr] Number of isotopomers in HITRAN database
+	const int iso_per_mlc_nbr_max_htrn(10); // [nbr] Maximum number of isotopes of a molecule in HITRAN database
+
+2009-05-14  Charlie Zender  <zender@uci.edu>
+
+	* Still need to assign molecular groups to new molecules in order
+	to assign correct temperature exponents. Now we just assume these
+	new molecules are nonlinear with exponent 1.5.
+
+	* Verified new program works with old (2000) molparam.txt
+
+	* htrn.c: Include new molecules and isotopes
+
+2009-05-12  Charlie Zender  <zender@uci.edu>
+
+	* htrn.c: Updating for HITRAN2008
+
+2006-11-25  Charlie Zender  <zender@uci.edu>
+
+	* Remove unused variables from F90 Hitran programs
+
+2002-11-23  Charlie Zender  <zender@uci.edu>
+
+	* htrn.c: Expanded fortran character string size to correctly hold
+	all isotope labels. Labels can be up to 17 characters but only 10
+	characters were allocated. Changed new default to 20 characters
+	allocated.
+
+2002-04-21  Charlie Zender  <zender@uci.edu>
+
+	* htrn.c (main): Changed default to place htrn_mdl.F90 in ~/f
+
+2002-02-11  Charlie Zender  <zender@uci.edu>
+
+	* Added GPL copyright statements to C++ files
+
+2001-09-30  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c htrn-1_4
+	* Changes since htrn-1_2_1:
+	* htrn.c (main): Added Fortran 90 module output
+
+	* cvs tag -c htrn-1_2_1
+	* Changes since htrn-1_2:
+	Code now uses getopd_bsd
+	Synchronization tag for code prior to implementing Fortran90 module
+
+2001-08-04  Charlie Zender  <zender@uci.edu>
+
+	* htrn.c: Added using std::string to htrn_c++.hh for AIX/GCC 3.0
+	compliance
+
+2001-07-21  Charlie Zender  <zender@uci.edu>
+
+	* htrn.c (main): Changed location of hitran.F and hitran.com to
+	aca directory so aca module can be made self-contained
+
+2001-07-02  Charlie Zender  <zender@uci.edu>
+
+	* About to convert to C++ program
+
+2001-06-26  Charlie Zender  <zender@uci.edu>
+
+	* htrn.c (main): Added iso_map_idx_get() to C++ functions
+
+2001-06-25  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c htrn-1_2 ck
+
+	* htrn.c (main): Added rtl_fnc_tpt_xpn_get() to C++ functions
+	That name is ridiculous isn't it?
+
+2001-06-23  Charlie Zender  <zender@uci.edu>
+
+	* Correct spelling is isotopomer not isopotomer
+
+2001-06-19  Charlie Zender  <zender@uci.edu>
+
+	* Added bogus zeroth element to C++ arrays written to htrn_c++.cc
+	so that C++ may use Fortran/HITRAN indexing convention
+
+2001-06-18  Charlie Zender  <zender@uci.edu>
+
+	* cvs tag -c htrn-1_1
+
+	* htrn.c now autogenerates quite useful C++ routines and headers,
+	htrn_c++.cc and htrn_c++.hh
+
+	* Made path specification slightly more tolerable in htrn.c
+
+2001-06-17  Charlie Zender  <zender@uci.edu>
+
+	* General tidying and adherence to abbreviation standards
+
+	* Changed Fortran index definitions to "mlc_sng[idx_foo]=idx_foo"
+
+	* Added C++ functions for string parsing and initial index database
+
+	* Added hitran.cc, and upgraded hitran.hh to libcsz_c++ standards
+
+2001-04-12  Charlie Zender  <zender@uci.edu>
+
+	* Fixed bug where htrn.c was trying to realloc() an environment
+	variable 
+
+2001-02-12  Charlie Zender  <zender@uci.edu>
+
+	* Filled in Q and gj for H2O Isotopes 5 and 6 to allow parsing of
+	HITRAN 2000 MOLPARAM.TXT 
+
+	* Altered to work with HITRAN 2000 database
+
+1998-11-28  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Fixed htrn.c to output a working Perl module HITRAN.pm rather
+	than subroutine library hitran.pl
+
+Mon Aug 31 19:22:45 1998  Charlie Zender  <zender@odin.cgd.ucar.edu>
+
+	* Created module ck
+

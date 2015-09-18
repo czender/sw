@@ -1,0 +1,10 @@
+URL: http://www.oonumerics.org/blitz/
+
+Blitz++ on lanina.ps.uci.edu RedHat GNU/Linux 7.0 20010807
+
+cd ~
+cvs -d :pserver:anonymous@oonumerics.org:/cvsroot login
+cvs -d :pserver:anonymous@oonumerics.org:/cvsroot co -d blitz Blitz++
+cd ~/blitz
+./configure --prefix=/usr/local --with-cxx=gcc
+make

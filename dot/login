@@ -1,0 +1,69 @@
+# $Id$ -*-shell-script-*-
+
+# Purpose: Commands executed at login to a [t]csh shell
+
+# See also 
+# System /etc/login
+# CGD template /usr/local/etc/skel/system/.login
+
+# Uncomment the following lines if you add terminal stuff
+# (like prompts for terminal type) to this .login file! Otherwise,
+# batch jobs, which execute .login commands, will die right away.
+if ( ${?ENVIRONMENT} ) then
+    if ( "${ENVIRONMENT}" == 'BATCH' ) exit
+endif # endif NQS batch job
+
+# Another way of exiting from PBS/Torque environments
+if ( ${?PBS_ENVIRONMENT} ) exit
+
+# Bail out of non-interactive shells 
+# Interactive shells are connected to a terminal (i.e., keyboard)
+# Such shells return EXIT_SUCCESS (0) to the silent prompt of tty -s
+# Non-interactive shells have no keyboard and return EXIT_FAILURE (1) to tty -s
+tty -s
+if ( ${status} == 1 ) exit
+
+# This following part tries to figure out what the terminal type is
+# If the `tty` command returns '/dev/console', it assumes that the
+# terminal is a sun.  Otherwise, it examines the TERM environment variable
+# and the origination of the login to try and determine the terminal type.
+# Failing all that, it will prompt the user for a terminal type.
+set tty_val = `tty`
+# NB: In AIX, switch (`tty`) tries to execute the result of `tty` and fails
+switch (tty_val)
+    case /dev/console:				
+	set a = 'sun' ;
+	breaksw
+    default:
+	if ( ${?TERM} ) then
+	    if ( ${TERM} == 'network' ) then
+		setenv TERM vt100
+	    endif # endif network
+	set a = "${TERM}"
+	endif # endif TERM exists
+endsw
+
+# ENVIRONMENT, ENVONLY, and prompt:
+# ENVIRONMENT will always be set to BATCH in NQS (qsub)
+# ENVONLY may not be set in NQS
+# prompt seems to be set by first 'cd' command
+if ( (! ${?ENVONLY}) ) then
+    if ( -e /usr/ucb/biff ) then 
+	/usr/ucb/biff y	# Inform user of new mail
+    endif
+    if ( -e /usr/local/bin/msgs ) then 
+	/usr/local/bin/msgs # Check for new messages
+    endif
+    if ( -e /bin/uptime ) then 
+	uptime # Print uptime
+    endif
+    set noglob # Turn off filename subsitution in this shell
+# 20041228 Generates problems with Ubuntu
+#    eval `tset -e -k -s -Q ${a}` # Set Terminal type
+    echo "Terminal = ${TERM}"
+    set noclobber # Prompt when overwriting existing files
+    set filec # Turn on file completion in csh (set by default in tcsh)
+    set nobeep # Turn off warning bell
+    cd . # Kludge to set prompt 
+endif # endif interactive shell
+

@@ -1,0 +1,21 @@
+# $Id$
+# Purpose: Network configuration for Ubuntu
+# /etc/network/interfaces -- configuration file for ifup(8), ifdown(8)
+# Usage:
+# diff ~/linux/etc/network/interfaces.minimal /etc/network/interfaces
+# sudo cp ~/linux/etc/network/interfaces.minimal /etc/network/interfaces
+# cp /etc/network/interfaces ~/linux/etc/network/interfaces.minimal 
+# /etc/init.d/networking restart
+
+# Define minimal configuration so that knetworkmanager will do all the work
+
+# Automatically configured interfaces 
+auto lo
+
+# Interface: lo
+# The loopback interface
+iface lo inet loopback
+address 127.0.0.1
+netmask 255.0.0.0
+
+

@@ -1,0 +1,35 @@
+/bin/rm ${DATA}/tmp/pgi
+mkdir ${DATA}/tmp/pgi
+scp dust.ess.uci.edu:/data/zender/tmp/pgilinux86-64-616.tar.gz ${DATA}/tmp/pgi
+mv ${DATA}/tmp/linux86-64.tar.gz ${DATA}/tmp/pgi
+cd ${DATA}/tmp/pgi
+tar xvzf pgilinux86-64-616.tar.gz
+scp dust.ess.uci.edu:/usr/local/pgi/license.dat /usr/local/pgi
+
+su
+mkdir /usr/local/pgi-5.2
+ln -s /usr/local/pgi-5.2 /usr/local/pgi
+export PGI='/usr/local/pgi'
+./install
+accept
+accept
+3
+y
+/usr/local/pgi
+y
+y
+accept
+Charlie Zender
+zender
+zender@uci.edu
+no
+y
+
+
+
+
+
+
+
+
+

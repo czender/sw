@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# Purpose: Dial script for PPP access
+
+# Usage: 
+# sudo cp ${HOME}/linux/usr/local/bin/ppp-go /usr/local/bin/ppp-go
+# scp /usr/local/bin/ppp-go dust.ess.uci.edu:/home/zender/linux/usr/local/bin/ppp-go
+# Dial UCI RAS from home as user zender:
+# ppp-go
+# Dial UCI RAS from home as user rzender:
+# ppp-go -rzender
+# Dial NCAR RAS from Boulder home as user zender:
+# ppp-go -NCAR
+
+if [ "$1" = "" ]; then
+killall -INT pppd 2>/dev/null
+rm -f /var/lock/LCK* /var/run/ppp*.pid
+(/usr/sbin/pppd connect "/usr/sbin/chat -V -s -f /etc/ppp/chatscript.UCI") || exit 1
+exit 0
+fi
+
+if [ "$1" = "-s" ]; then
+killall -INT pppd 2>/dev/null
+rm -f /var/lock/LCK* /var/run/ppp*.pid
+echo
+(/usr/sbin/pppd -detach connect "/usr/sbin/chat -V -s -f /etc/ppp/chatscript.UCI" &) || exit 1
+# read is a bash builtin command
+read
+exit 0
+fi
+
+# csz++
+# 19990903: Changed NCAR to command line option
+if [ "$1" = "-NCAR" ]; then
+killall -INT pppd 2>/dev/null
+rm -f /var/lock/LCK* /var/run/ppp*.pid
+(/usr/sbin/pppd connect "/usr/sbin/chat -V -s -f /etc/ppp/chatscript.NCAR") || exit 1
+exit 0
+fi
+
+if [ "$1" = "-rzender" ]; then
+killall -INT pppd 2>/dev/null
+rm -f /var/lock/LCK* /var/run/ppp*.pid
+(/usr/sbin/pppd connect "/usr/sbin/chat -v -f /etc/ppp/chatscript.UCI" name "rzender") || exit 1
+exit 0
+fi
+# csz--
+
+if [ "$1" = "-h" ]; then
+echo "Usage: "
+echo "ppp-go          Connect to UCI as zender"
+echo "ppp-go -s       Connect to UCI as zender, print extensive debugging information"
+echo "ppp-go -h       Help"
+echo "ppp-go -NCAR    Connect to NCAR as zender"
+echo "ppp-go -rzender Connect to UCI as rzender"
+exit 0
+fi
+
+echo "USAGE: ppp-go -h Help"
+exit 1

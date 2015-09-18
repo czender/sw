@@ -1,0 +1,2166 @@
+% $Id$ -*-LaTeX-*-
+
+% Purpose: Template for LaTeX files
+
+% Copyright (c) 1998--2014, Charles S. Zender
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License (GFDL), Version 1.3
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+% GFDL: http://www.gnu.org/copyleft/fdl.html
+
+% The original author of this software, Charlie Zender, seeks to improve
+% it with your suggestions, contributions, bug-reports, and patches.
+% Charlie Zender <zender at uci dot edu>
+% Department of Earth System Science
+% University of California, Irvine
+% Irvine, CA 92697-3100
+
+% URL: http://dust.ess.uci.edu/doc/ltx/ltx.pdf
+
+% Usage (see also end of file):
+% cd ~/tex;make ltx.pdf;cd -
+
+\documentclass[12pt]{article}
+
+% Standard packages
+\usepackage{ifpdf} % Define \ifpdf
+\ifpdf % PDFLaTeX
+\usepackage[pdftex]{graphicx} % Defines \includegraphics*
+\pdfcompresslevel=9
+\usepackage{thumbpdf} % Generate thumbnails
+\usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
+\graphicspath{/data/zender/ps} % Help epstopdf find .eps figures to convert
+\else % !PDFLaTeX
+\usepackage{graphicx} % Defines \includegraphics*
+\fi % !PDFLaTeX
+\usepackage{amsbsy} % \boldsymbol, \pmb
+\usepackage{amsmath} % \subequations, \eqref, \align
+\usepackage{amstext} % \text, \intertext
+\usepackage{array} % Table and array extensions, e.g., column formatting
+\usepackage{bm} % Boldface Greek letters
+\usepackage{color} % Colors
+\usepackage[dayofweek]{datetime} % \xxivtime, \ordinal
+\usepackage[first]{draftcopy} % Blaze ``Draft'' across [none,first,all,etc.] pages
+%\usepackage{dropcaps} % Drop first letter of paragraph, \bigdrop
+\usepackage{epigraph} % Pithy quotes at section starts, \epigraph
+\usepackage{etoolbox} % \newbool, \setbool, \ifxxx
+\usepackage{fancyhdr} % Headers and footers
+%\usepackage[T1]{fontenc} % Used fxm
+\usepackage{lettrine} % Drop first letter of paragraph, \lettrine
+\usepackage{lineno} % Line numbering \linenumbers, \nolinenumbers, \pagewiselinenumbers
+\usepackage{listings} % Source code printing, \lstinline, \lstset
+\usepackage{longtable} % Multi-page tables, e.g., acronyms and symbols
+\usepackage{lscape} % Landscape environment
+\usepackage{makeidx} % Index keyword processor: \printindex and \see
+\usepackage{mdwlist} % Compact list formats \itemize*, \enumerate*
+\usepackage{mflogo} % METAFONT logo
+\usepackage{natbib} % \cite commands from aguplus
+%\usepackage{pslatex} % Use Times, Helvetica and Courier fonts wherever possible
+\usepackage[inactive]{srcltx} % Enable dvi <-> tex searches fxm: not working
+\usepackage{subfigure} % \subfigure for panel labeling within figure environment
+\usepackage{texnames} % Typeset AMSTeX, METAFONT, BiBTeX (poorly coded)
+\usepackage[safe]{tipa} % International Phonetic Alphabet
+\usepackage{tocbibind} % Add Bibliography and Index to Table of Contents
+\usepackage{type1cm} % Type 1 fonts are scalable
+%\usepackage[Euler]{upgreek} % Upright Greek letters [Euler,Symbol,Symbolsmallscale]
+\usepackage[Symbol]{upgreek} % Upright Greek letters [Euler,Symbol,Symbolsmallscale]
+%\usepackage[Symbolsmallscale]{upgreek} % Upright Greek letters [Euler,Symbol,Symbolsmallscale]
+\usepackage{ulem} % Strikeout text
+\usepackage{url} % Typeset URLs and e-mail addresses
+% \usepackage{yfonts,color} % Causes \gothfamily already defined errors
+% fxm: 20001028 ${TEXMFDIR}/tex/latex/base/showidx.sty breaks hyperref
+%\usepackage{showidx} % Print index entries as marginal notes
+
+% HTML, XML discussed on KoD04 p. 457--459
+% cd ~/tex;latex ltx.tex;tex4ht ltx.dvi;cd -
+% NB: htlatex does better job and does not require enabling any packages
+%\usepackage[html]{tex4ht} % HTML output
+%\usepackage[xhtml,docbook]{tex4ht} % XML, DocBook output
+%\usepackage[xhtml,tei]{tex4ht} % XML, TEI output
+%\usepackage[xhtml,mathml]{tex4ht} % XML, MathML output
+
+% Fonts
+\usepackage[weather]{ifsym} % Various symbols: Weather
+\usepackage{amssymb} % amsfonts \mathbb KoD99 p. 434
+\usepackage{dsfont} % Doublestroke \mathds font
+\usepackage{eufrak} % \mathfrak KoD99 p. 434
+%\usepackage{marvosym} % Martin Vogel's Science symbols: \Aries, \Radioactivity, \Sun # 20071021: \Sun conflicts with texlive on gutsy gibbon
+\usepackage{mathrsfs} % \mathscr Ralph Smith's Formal Script
+\usepackage{oldgerm} % Old German: \textgoth, \textfrak, \textswab
+%\usepackage{wasysym} % Science symbols: \photon, \neptune...
+%\usepackage[mathscr]{eucal} % \mathscr KoD99 p. 434
+%\usepackage{avant} % Postscript AvantGarde font KoD99 p. 375
+%\usepackage{bookman} % Postscript Bookman font KoD99 p. 375
+%\usepackage{eso-pic} % Required for Draft (\AddToShipoutPicture)
+%\usepackage{helvet} % Postscript Helvetica font KoD99 p. 375
+%\usepackage{latexsym} % Extra LaTeX symbols (\leadsto, \Box...)
+%\usepackage{newcent} % Postscript Palatino font KoD99 p. 375
+%\usepackage{palatino} % Postscript Palatino font KoD99 p. 375
+%\usepackage{pxfonts} % \varmathbb font
+\usepackage{textcomp} % Text companion symbols (nicer \texttrademark, \textregistered, \textonehalf)
+%\usepackage{times} % Postscript Times-Roman font KoD99 p. 375
+%\usepackage{txfonts} % Math symbols: \piup...
+
+% hyperref is last package since it redefines other packages' commands
+% hyperref options, assumed true unless =false is specified:
+% backref       List citing sections after bibliography entries
+% baseurl       Make all URLs in document relative to this
+% bookmarksopen Unknown
+% breaklinks    Wrap links onto newlines
+% colorlinks    Use colored text for links, not boxes
+% hyperindex    Link index to text
+% plainpages=false Suppress warnings caused by duplicate page numbers
+% pdftex        Conform to pdftex conventions
+% Colors used when colorlinks=true:
+% linkcolor     Color for normal internal links
+% anchorcolor   Color for anchor text
+% citecolor     Color for bibliographic citations in text
+% filecolor     Color for URLs which open local files
+% menucolor     Color for Acrobat menu items
+% pagecolor     Color for links to other pages
+% urlcolor      Color for linked URLs
+\ifpdf % PDFLaTeX
+%\usepackage[colorlinks,linkcolor=blue,urlcolor=blue,pdftex]{hyperref}
+\usepackage[backref,breaklinks,colorlinks,hyperindex,citecolor=blue,linkcolor=blue,urlcolor=blue,plainpages=false,pdftex]{hyperref} % Hyper-references
+\pdfcompresslevel=9
+\else % !PDFLaTeX
+%\usepackage[colorlinks,linkcolor=blue,urlcolor=blue]{hyperref}
+\usepackage[backref,breaklinks,colorlinks=false,plainpages=false]{hyperref} % Hyper-references
+\fi % !PDFLaTeX
+
+% preview-latex recommends it be last-activated package
+%\usepackage[inactive,displaymath]{preview} % preview-latex equation extraction
+\usepackage[showlabels,sections,floats,textmath,displaymath]{preview} % preview-latex equation extraction
+
+% Personal packages
+\usepackage{csz} % Library of personal definitions
+\usepackage{abc} % Alphabet as three letter macros
+\usepackage{dmn} % Dimensional units
+\usepackage{chm} % Commands generic to chemistry
+\usepackage{dyn} % Commands generic to fluid dynamics
+\usepackage{aer} % Commands specific to aerosol physics
+\usepackage{rt} % Commands specific to radiative transfer
+\usepackage{psd} % Particle size distributions
+\usepackage{hyp} % Hyphenation exception list
+\usepackage{jrn_agu} % AGU-sanctioned journal abbreviations
+
+% Commands which must be executed in preamble
+\DeclareGraphicsRule{.gif}{eps}{}{`gif2eps #1 -} % Convert GIF files to eps
+\allowdisplaybreaks[1] % AMSTeX permits eqnarray to wrap pages [1--4]
+\listfiles % Print required files, versions
+\makeglossary % Glossary described on KoD95 p. 221
+\makeindex % Index described on KoD95 p. 220
+
+% Commands specific to this file
+% 1. Fundamental commands
+% TeX-definition of CVS macros, e.g., \CVSRevision, \CVSDate
+\def\CVS$#1: #2 ${\expandafter\def\csname CVS#1\endcsname{#2}} % CVS macros
+\newcommand{\vrbcmdfmt}[2]{\texttt{\\#1\{}\textit{#2}\texttt{\}}} % Format verbatim commands with arguments in italics
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it} % Adobe Zapf Chancery font \mathpzc (TeX FAQ #102)
+\DeclareMathAlphabet{\mathsfsl}{OT1}{cmss}{m}{sl} % Slanted sans serif math font for matrices c.t.tex 20080515
+
+\newcommand{\tensorb}[1]{\textsl{\textsf{\bfseries{#1}}}} % Tensors bold sans serif italic
+\newcommand{\tensor}[1]{\textsl{\textsf{#1}}} % Tensors sans serif italic
+
+% 2. Derived commands
+% 3. Doubly-derived commands
+
+% Margins
+\topmargin -24pt \headheight 12pt \headsep 12pt
+\textheight 9in \textwidth 6.5in
+\oddsidemargin 0in \evensidemargin 0in
+%\marginparwidth 0pt \marginparsep 0pt
+\setlength{\marginparwidth}{1.5in} % Width of callouts of index terms and page numbers KoD95 p. 220
+\setlength{\marginparsep}{12pt} % Add separation for index terms KoD95 p. 220
+\footskip 24pt
+\footnotesep=0pt
+
+\begin{document} % End preamble
+
+\ifpdf % PDFLaTeX
+\pdfinfo{ % A command provided by PDFLaTeX
+/Title (Template for LaTeX files)
+/Subject (Template for LaTeX files)
+/Author (Charlie Zender)
+/Keywords (ltx)
+} % end \pdfinfo
+% \pdfcatalog{ % A command provided by PDFLaTeX
+% /URI (http://www.ess.uci.edu/zender/ltx) % Base URL of document
+% } % end \pdfcatalog
+\fi % !PDFLaTeX
+\hypersetup{ % A command provided by \hyperref
+pdftitle={Template for LaTeX files},
+pdfsubject={Template for LaTeX files},
+pdfauthor={Charlie Zender},
+pdfkeywords={ltx}
+} % end \hypersetup
+
+\begin{center}
+Online: \url{http://dust.ess.uci.edu/doc} \hfill Built: \shortdate\today, \xxivtime\\
+\bigskip
+{\Large \textbf{\LaTeX\ Cheat Sheet}}\\
+\bigskip
+by Charlie Zender\\
+University of California, Irvine\\
+\end{center}
+Department of Earth System Science \hfill \url{zender@uci.edu}\\
+University of California \hfill Voice: (949)\thinspace 824-2987\\
+Irvine, CA~~92697-3100 \hfill Fax: (949)\thinspace 824-3256
+
+% GFDL legalities: http://www.gnu.ai.mit.edu/copyleft/fdl.html
+\bigskip\noindent
+Copyright \copyright\ 2000--2013, Charles S. Zender\\
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version~1.2
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+Texts.
+The license is available online at
+\url{http://www.gnu.org/copyleft/fdl.html}.
+
+\pagenumbering{roman}
+\setcounter{page}{1}
+\pagestyle{headings}
+\thispagestyle{empty}
+%\onecolumn
+\tableofcontents
+\listoffigures
+\listoftables
+\pagenumbering{arabic}
+\setcounter{page}{1}
+%\markleft{Radiative Transfer}
+%\markright{}
+\thispagestyle{empty}
+
+\section{Introduction}\label{sxn:ntr}
+\cszepigraph{Just a box of rain---\\Wind and water---\\Believe it if you need it,\\if you don't just pass it on}{http://arts.ucsc.edu/gdead/agdl/box.html}{Box of Rain}{Robert Hunter}
+
+\lettrine[lines=3]{\color{red}S}{omeone}
+%\lettrine[lines=3]{S}{omeone}
+%\bigdrop{0pt}{3}{cmr10}{S}omeone
+once said that the best way to learn a language was to speak it.
+This is my attempt to learn \LaTeX, one of the most challenging
+and useful languages ever devised.
+This section is devoted to introductory material and matters 
+generic to typography.
+Section~\ref{sxn:nst} describes \LaTeX\ installation and maintenance,
+Section~\ref{sxn:ltx} contains hints on using \LaTeX,
+Section~\ref{sxn:txt} is devoted to text typography,
+Section~\ref{sxn:mth} covers formatting mathematics.
+
+\cmdltxidx{\foo} is undefined
+Incidentally, the first letter of the preceding paragraph was
+``dropped'' by calling the \cmdltxidx{\lettrine} macro defined by the
+\flidx{lettrine.sty} package:
+\cmdltxprn{\lettrine[lines=3]{S}{omeone}}\ldots. 
+%\cmdltxprn{\bigdrop{0pt}{3}{cmr10}{S}omeone}\ldots. 
+A newer package capable of handling large first letters of paragraphs
+is the \flidx{lettrine.sty} package.
+Most of the documentation for \textsf{lettrine} appears to be in
+French, however. 
+
+\section[\LaTeX\ Installation]{\LaTeX\ Installation}\label{sxn:nst}
+This section describes \LaTeX\ installation, maintenance, and
+upgrades. 
+Thanks to Thomas Esser for producing \cmdprn{tetex}, the \TeX\
+distribution that I use.
+
+Many Olympian \TeX\ and \LaTeX\ gurus do not like/use the RedHat
+GNU/Linux installation.  
+Apparently RedHat does not change the \verb'tetex' defaults from their  
+European settings. 
+This may cause vertical margins to change in weird ways, e.g., in
+printouts but not in \cmdprn{ghostview}, or in \cmdprn{acroread} but
+not in \cmdprn{xdvi}. 
+When this occurs one solution is to reconfigure \TeX\ by running
+\cmdprn{texconfig} as root:
+\begin{verbatim}
+sudo texconfig dvips paper letter
+sudo texconfig xdvi us
+\end{verbatim}
+Also, beause of their European heritage, most Ubuntu \LaTeX\
+distributions default to European papersizes.
+Use \cmdidx{texconfig} to change the paper format:
+\begin{verbatim}
+sudo texconfig # Try this first
+sudo texconfig-sys # Some report that this is necessary, too
+\end{verbatim}
+It has also been reported that 
+It may also be necessary to change the value of \flidx{/ete/papersize} 
+from ``A4'' to ``letter''.
+
+\subsection[Personal packages]{Personal Packages}\label{sxn:prs}
+The \cmdprn{TEXINPUTS} and \cmdprn{BIBINPUTS} environmental variables
+determine the \TeX\ search path.
+These should be set in startup files, e.g., \flidx{.bashrc}:
+\begin{verbatim}
+export TEXINPUTS=".:${HOME}/tex//:${HOME}/crr//:${DATA}/ps//: \
+        ${TEXMFDIR}/pdftex//:${TEXMFDIR}/tex//::" 
+export BIBINPUTS=".:${HOME}/tex//:${TEXMFDIR}/bibtex//::"
+\end{verbatim}
+% $: re-balance syntax highlighting
+If these variables are not set then packages must be in the current
+directory or the default system search paths.
+The \verb'::' activates the default system search paths.
+The \verb'//' indicates that directories beneath the specified
+directory should be searched recursively. 
+These symbolic links should not be necessary when \verb'TEXINPUTS'
+contains \verb'${HOME}/tex//':
+% $: re-balance syntax highlighting
+\begin{verbatim}
+sudo ln -s ${HOME}/tex/ncarletter.cls ${HOME}/tex/cls/ncarletter.cls
+sudo ln -s ${HOME}/tex/zenletter.cls ${HOME}/tex/cls/zenletter.cls
+sudo ln -s ${HOME}/tex/bib.bib ${HOME}/tex/cls/bib.bib
+sudo ln -s ${HOME}/tex/csz.sty ${HOME}/tex/cls/csz.sty
+sudo ln -s ${HOME}/tex/jgr_abb.tex ${HOME}/tex/cls/jgr_abb.tex
+sudo ln -s ${HOME}/tex/cls ${TEXMFDIR}/tex/latex/csz
+sudo ln -s ${HOME}/tex/bst ${TEXMFDIR}/bibtex/bst/csz
+sudo texhash
+\end{verbatim}
+
+\subsection[Ubuntu]{Ubuntu}\label{sxn:bnt}
+The command \cmdidx{kpsewhich} identifies which version of a
+given file \LaTeX\ will use: 
+\begin{verbatim}
+% kpsewhich agu04.bst
+/home/zender/texmf/bibtex/bst/csz/agu04.bst
+\end{verbatim}
+Personal \TeX\ updates placed in \flidx{~/texmf} will override all
+other versions installed in the system.
+For example, place \flprn{agu04.bst} below \flprn{~/texmf/bibtex/bst}.
+On Mac OS~X, this directory is \flidx{~/Library/texmf}.
+There I follow the below (Linux) prescription then do
+\begin{verbatim}
+cd ~/Library/
+ln -s /Users/zender/texmf texmf
+\end{verbatim}
+Mac OS~X also has problems finding ifsym.sty, dsfont.sty, yinit.
+
+Commands to copy/link an ``old-style'' environment to leverage this
+functionality are: 
+\begin{verbatim}
+# Copy 3rd party packages below ~/texmf/tex/latex
+mkdir -p ~/texmf/tex/latex/revnum
+scp 'dust.ess.uci.edu:${DATA}/tex/revnum/revnum.sty' ~/texmf/tex/latex/revnum
+mkdir -p ~/texmf/tex/latex/dchem
+scp 'dust.ess.uci.edu:tex/cls/dchem.sty' ~/texmf/tex/latex/dchem
+
+# Place links to personal packages in ~/texmf/tex/latex/csz
+mkdir -p ~/texmf/tex/latex/csz
+for fl in csz uci_ltr ; do
+    /bin/ln -s ~/tex/${fl}.sty ~/texmf/tex/latex/csz/${fl}.sty
+done
+cd ~/crr
+for fl in `ls *.sty` ; do
+    /bin/ln -s ~/crr/${fl} ~/texmf/tex/latex/csz/${fl}
+done
+
+# Place links to bibliography and styles in ~/texmf/bibtex/bst/csz
+mkdir -p ~/texmf/bibtex/bst/csz
+for fl in agu agu04 jas jqsrtcsz unsrtnat ; do
+    /bin/cp ~/tex/bst/${fl}.bst ~/texmf/bibtex/bst/csz/${fl}.bst
+done
+/bin/ln -s ~/tex/bib.bib ~/texmf/bibtex/bst/csz/bib.bib
+\end{verbatim}
+
+\subsection[Hyphenation]{Hyphenation}\label{sxn:hyp}
+Check to be sure \trmidx{hyphenation} works when documents look poorly hyphenated 
+\trmidx{Ubuntu} teTeX upgrades have a habit of breaking hyphenation.
+The other symptom (besides bad hyphenation) is the header line
+``Babel <v3.8d> and hyphenation patterns for loaded''.
+A list of languages should be between ``for loaded''.
+Somehow this file gets corrupted:
+\href{http://www.mail-archive.com/desktop-bugs@lists.ubuntu.com/msg29134.html}
+These commands may help:
+\begin{verbatim}
+sudo mv /etc/texmf/language.d/00tetex.cnf /etc/texmf/language.d/10tetex.cnf
+sudo update-language
+sudo fmtutil-sys --all
+\end{verbatim}
+
+\section[Output Formats]{Output Formats}\label{sxn:out}
+Using \LaTeX\ to produce PDF files is lots of fun.
+There is an entire \trmidx{NSF} website devoted to this topic.
+
+\subsection[ps2pdf]{ps2pdf}\label{sxn:ps2pdf}
+The \cmdidx{ps2pdf} program converts complex \trmidx{Postscript} files
+into \trmidx{PDF} files.
+\cmdprn{ps2pdf} is the \trmidx{Ghostscript} replacement for
+\trmidx{Adobe Distiller}.
+A distiller killer, you might say.
+It is highly configurable; full details are available 
+\href{http://www.cs.wisc.edu/~ghost/doc/AFPL/7.04/Ps2pdf.htm}{here}.
+\begin{verbatim}
+ps2pdf -dMaxSubsetPct=100 -dCompatibilityLevel=1.2 -dSubsetFonts=true \
+-dEmbedAllFonts=true -sAutoRotatePages=PageByPage \
+-sColorConversionStrategy=LeaveColorUnchanged in.ps out.pdf
+\end{verbatim}
+The \cmdidx{AutoRotatePages} and \cmdidx{ColorConversionStrategy}
+switches are important when converting slide presentations.
+The \cmdidx{EmbedAllFonts} option tells \cmdprn{ps2pdf} to embed all 
+fonts in the output file.
+This makes the output file more portable.
+
+The \trmidx{ghostscript} command to convert \trmprn{Postscript} into  
+\trmprn{PDF} was posted to \texttt{comp.text.tex} on 20040825:
+\begin{verbatim}
+gs -dSAFER -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sPAPERSIZE=letter \
+-dPDFSETTINGS=/printer -dCompatibilityLevel=1.3 -dMaxSubsetPct=100 \
+-dSubsetFonts=true -dEmbedAllFonts=true -sOutputFile=foo.pdf \
+foo.ps 
+\end{verbatim}
+
+With \cmdidx{teTeX}, one can tell all \cmdidx{DVI} manipulators
+(including \cmdidx{pdftex}, \cmdidx{xdvi}, \cmdidx{dvips}) to 
+embed fonts by using one command.
+The \cmdidx{updmap} command alters the font configuration files 
+of all these programs under \cmdprn{teTeX}:
+\begin{verbatim}
+sudo updmap --setoption pdftexDownloadBase14 true
+\end{verbatim}
+
+\subsection[a2ps]{a2ps}\label{sxn:a2ps}
+The \cmdidx{a2ps} program converts text files to \trmidx{Postscript}
+\begin{verbatim}
+a2ps --no-header fl.txt
+a2ps --no-header fl.txt -o fl.ps
+a2ps --columns=80 --font-size=12 --lines-per-page=52 --no-header fl.txt -o fl.ps
+\end{verbatim}
+
+\subsection{mpage}\label{sxn:mpage}
+The \cmdidx{mpage} program combines multiple pages onto one page:
+\begin{verbatim}
+mpage -R -8 -Phplj5l ${DATA}/ps/ess_atm_lct_01.ps
+mpage -R -8 ${DATA}/ps/ess_atm_lct_03.ps > ${DATA}/tmp/lct.ps
+mpage -R -4 ${DATA}/ps/ess_atm_lct_01.ps > ${DATA}/tmp/lct.ps
+gv ${DATA}/tmp/lct.ps &
+\end{verbatim}
+
+\subsection[ps2epsi]{ps2epsi}\label{sxn:ps2epsi}
+The \cmdidx{ps2epsi} program recomputes the minimal possible bounding
+box of \trmidx{Postscript} and \trmidx{Enscapsulated postscript} files.
+\begin{verbatim}
+ps2epsi foo.ps foo.eps
+\end{verbatim}
+
+\subsection[epsffit]{epsffit}\label{sxn:epsffit}
+The \cmdidx{epsffit} program permits rescaling bounding boxes
+\trmidx{Enscapsulated postscript} files, as well as rotating them.
+The following doubles the natural size of an image with original
+\trmidx{bounding box} = $[0,0,141,510]$, and rotates the image
+by~90\dgr\ counter-clockwise:
+\begin{verbatim}
+% cat foo.eps | epsffit -r 0 0 282 1020 > foo_90.eps
+\end{verbatim}
+\trmprn{epsffit} coordinate arguments are: [llx,lly,urx,ury] in 
+Postscript units (points), i.e., 
+[lower-left~$x$, lower-left~$y$, upper-right~$x$, upper-right~$y$].
+
+\subsection[Posters]{Posters}\label{sxn:pst}
+Creating conference \trmidx{posters} using \LaTeX\ is not well documented.
+The \flidx{a0poster} package is designed to hold conference posters.
+\cmdidx{epssplit} can break up a poster into letter (or A4) sized
+pieces, which you can then put back together like a big jigsaw puzzle.
+First, though, you may need to turn your poster into an \cmdidx{EPS}
+file using \trmidx{ghostscript}, \cmdidx{gs}:
+\begin{verbatim}
+gs -q -sDEVICE=epswrite -sOutputFile=${DATA}/ps/pst_ZNT03.eps -r600 -q - < ${DATA}/ps/pst_ZNT03.ps
+epssplit -o ${DATA}/ps/pst_ZNT03_mlt.ps -mar 2.5mm ${DATA}/ps/pst_ZNT03.eps
+\end{verbatim}
+Use \cmdidx{psresize} to resize the poster to fit onto a single page.
+Default units are points, but either \verb'cm' or \verb'in' may be
+specified for centimeters or inches, respectively.
+\begin{verbatim}
+psresize -W1106 -H905 -w2728.575 -h3334.59 ${DATA}/ps/pst_ZNT03.ps ${DATA}/ps/pst_ZNT03_ltr.ps
+psresize -Wwdt_in -Hhgt_in -wwdt_out -hhgt_out ${DATA}/ps/pst_ZNT03.ps ${DATA}/ps/pst_ZNT03_ltr.ps
+psresize -W60.0in -H40.0in -w11.00in -h8.5in ${DATA}/ps/pst_ZNT03.ps ${DATA}/ps/pst_ZNT03_ltr.ps
+\end{verbatim}
+Poster sizes should take advantage of common large format printer
+sizes. 
+The most common printer widths are 36 and 42~inches.
+The UCI ImageWorks print shop ((949)\,824-6414, Natural Sciences~I, 
+Room~2112) charges about 
+$\$10 + \$12$~\xft\ for 36~inch-wide posters, and 
+$\$15 + \$15$~\xft\ for 42~inch-wide posters.
+
+\subsection[dvips]{dvips}\label{sxn:dvips}
+The \cmdidx{dvips} program converts \trmidx{DVI} files to
+\trmidx{Postscript} files.
+It also helps generate other formats such as PDF.
+\begin{verbatim}
+dvips -o nco.ps nco.dvi # Convert DVI to Postscript
+\end{verbatim}
+One very important feature of \cmdprn{dvips} is that it may be used to
+generate beautiful PDF files without having to invoke
+\cmdidx{pdflatex}.
+This is accomplished by setting the \cmdprn{dvips} output pipe to PDF
+\begin{verbatim}
+dvips -Ppdf -G0 -o nco.ps nco.dvi # Convert to Postscript intermediate, then PDF
+ps2pdf -Ppdf -G0 nco.ps nco.pdf # Convert Postscript to PDF
+\end{verbatim}
+The resulting PDF file does not preserve the helpful PDF features,
+such as hyperlinks, but it does appear as intended in PDF readers such
+as \cmdidx{acroread}.
+This procedure is very useful when \cmdprn{pdflatex} does not work,
+e.g., for complicated files, or when the source is in some other
+format, e.g., \TeXInfo\index{TeXInfo@\TeXInfo}.
+
+Unfortunately, the \verb'-Ppdf' switch may typeset ligatures such as
+``fi'' or ``ff'' incorrectly.
+The solution is to add the \verb'-G0' switch, or to upgrade to more
+recent versions of \cmdprn{dvips}.
+It is also recommend to add \verb'-Pcmz' and \verb'-amz' switches.
+This is explained in the 
+\href{http://www.tex.ac.uk/cgi-bin/texfaq2html?label=charshift}{\TeX~FAQ}.  
+
+Another feature of \cmdprn{dvips} is its ability to produce
+\trmidx{EPS} (Encapsulated Postscript) files from all or parts of a
+document.
+\begin{verbatim}
+dvips -Ppdf -G0 -E -i -o rt.ps rt.dvi # Convert to Postscript intermediate, then PDF
+\end{verbatim}
+
+\subsection[PDF\TeX]{PDF\TeX}\label{sxn:pdftex}
+\href{http://www.tug.org/applications/pdftex}{PDF\TeX}, by
+\nmidx{H\`{a}n Th\'{\^{e}} Th\`{a}nh}, is a micro-typographic
+extensions to the \TeX\ typesetting system.
+PDF\TeX\ produces \trmidx{PDF} output directly, rather than using a
+\trmidx{PostScript} converter such as \cmdidx{ghostscript}.
+\nmidx{Prof.\ Dr.\ Hans Hagen} contributed much to the development of
+PDF\TeX. 
+% \href{http://davinci.informatik.uni-kl.de}{University of Kaiserslautern}
+Hagen runs a private company,
+\href{http://www.pragma-ade.com}{Pragma Advanced Document Engineering}, 
+that supports a macro package for \TeX\ called \trmidx{Con\TeX{}t}.
+
+PDF\TeX\ tends to give inscrutable error messages.
+For more informative diagnostics, invoke with \verb'pdflatex -k 255 foo.tex'.
+
+There are two distinct commands that de-\LaTeX\ files, \cmdidx{detex}
+and \cmdidx{untex}. 
+These converters are really \LaTeX-strippers---they only do a good
+job of preserving unformatted text. 
+A good alternative for formatted text is to convert the PDF file
+(rather than the \LaTeX\ file), to text.
+\cmdidx{pdftotext} accomplishes this.
+
+Foiltex requires the \verb'dvips' option in order to produce landscape
+mode foils. 
+The \verb'hyperref' package interferes with Foiltex and breaks the 
+rotating capability.
+
+\subsubsection[Viewing]{Viewing}\label{sxn:pdf_vw}
+Free readers like \cmdidx{acroread}, \cmdidx{ghostview}, 
+\cmdidx{kpdf}, and \cmdidx{xpdf} all display PDF\TeX\ files.
+The
+\href{http://www.adobe.com/products/acrobat/alternate.html}{Adobe-supplied}
+\cmdprn{acroread} was intentiaionally crippled to not refresh  
+documents on the fly. 
+To circumvent this, keep another document open, then use \verb'C-w'
+to close the document and \verb'C-o' to open the file again.
+However, \cmdidx{acroread} does have the nice ability to convert PDF to
+\trmidx{Postscript} using, e.g., 
+\begin{verbatim}
+acroread -help # Print acroread options
+acroread -toPostScript -level2 -size letter -pairs -shrink fl_nm.pdf fl_nm.ps
+for fl in `ls *.pdf` ; do
+acroread -toPostScript -level2 -size letter -pairs -shrink ${fl} ${fl/pdf/ps}
+done
+for fl in `ls *.ps` ; do kprinter ${fl}; done
+\end{verbatim}
+
+\subsubsection[Forms]{Forms}\label{sxn:pdf_frm}
+The problem of filling out PDF document forms has no free solutions.
+\trmidx{PDFescape}, a commercial site at
+\url{http://www.pdfescape.com/pdf/open}, lets on
+upload, edit, and download PDF files.
+
+\subsubsection[hyperref]{hyperref}\label{sxn:hyperref}
+The \cmdprn{hyperref} package provides most of the \LaTeX's interface
+to the Web-aware features of PDF files supported by \cmdprn{pdflatex}.
+PDF files support links within documents, and between the document 
+and the \trmidx{World Wide Web} (WWW).
+\cmdprn{pdflatex} automatically converts most syntactically useful
+document entry points to internal links.
+For example, the first section of an \trmidx{article format} document 
+will be linked to the internal name \verb'section.1'.
+Hence the first section of a document \flidx{foo.pdf} stored at
+\url{http://foo.com/doc.pdf} has the global \trmidx{URL}
+\url{http://foo.com//doc.pdf#section.1}.
+
+\LaTeX\ documents create active links to such URLs with the
+\cmdltxidx{\href} command.
+For example, the following links should actively point to this 
+particular section of this document 
+as an \href{subsubsection.2.5.2}{internal link} and as an
+\href{http://dust.ess.uci.edu/doc/ltx/ltx.pdf#subsubsection.2.5.2}{external link},
+respectively.
+\begin{verbatim}
+as an \href{subsubsection.2.5.2}{internal link} and as an
+\href{http://dust.ess.uci.edu/doc/ltx/ltx.pdf#subsubsection.2.5.2}{external link},
+\end{verbatim}
+
+The \cmdidx{\href} macro can access ``local'' URLs.
+This \href{file:///data/zender/ps/ltx.pdf#section.4}{local file link}
+accesses the \cmdprn{hyperref}-generated link to Section~\ref{sxn:txt}
+through the HTTP \cmdidx{file://} protocol:  
+\begin{verbatim}
+This \href{file:///data/zender/ps/ltx.pdf#section.4}{active link} ...
+\end{verbatim}
+When a local file link points to the file being viewed, the viewer
+(e.g., \cmdidx{xpdf}) jumps to the link without spawning a new
+viewer. 
+Local file links are better accomplished with the standard \LaTeX\
+\cmdltxidx{\label} and \cmdltxidx{\ref} macros.
+Nonetheless, \cmdprn{hyperref} automatically generates labels at
+standardized locations in many document types.
+
+The \cmdidx{\href} macro is more useful for accessing remote URLs.
+This 
+\href{http://dust.ess.uci.edu/doc/ltx/ltx.pdf#section.4}{remote URL link}
+should access the \cmdprn{hyperref}-generated link to
+Section~\ref{sxn:txt} through the HTTP \cmdidx{http://} protocol: 
+\begin{verbatim}
+\href{http://dust.ess.uci.edu/doc/ltx/ltx.pdf#section.4}{remote URL link} 
+\end{verbatim}
+To resolve remote URLs, the current viewer spawns a new viewer process
+(probably based on the default handler for the \trmidx{mime-type}, in
+this case PDF) to download and display the remote document.
+Unfortunately, no viewers seem intelligent enough to open the remote
+document to the specified section.
+In other words, the viewer downloads the remote document correctly,
+and then the new viewer opens the document to Page~1, rather than to
+the specified section (Section~\ref{sxn:txt} in this case).
+
+\cmdprn{hyperref} provides the following macros for fine-grained control:
+\begin{verbatim}
+\hyperdef{category}{name}txt % Mark text with category.name
+\hyperref{URL}{category}{name}{text} % Link text to URL#category.name
+\hyperbaseurl{URL} % Prepend URL to following URLs
+\hypertarget{sxn:abb}{} % fxm
+\end{verbatim}
+Samples of these macros for generic situations are
+\begin{verbatim}
+\hyperref{sxn}{}{} % fxm
+\hyperref{}{sxn}{abb}{fxm} % Link text to URL#category.name
+\hypertarget{sxn:abb}{} % fxm
+\end{verbatim}
+Actual targets that work in typical situations are
+\begin{verbatim}
+\hyperbaseurl{file:///data/zender/ps/abb.pdf}
+\hypertarget{sxn:abb}{}
+\end{verbatim}
+The \cmdltxidx{\hypertarget} command sets fxm.
+
+\subsubsection[Manipulating]{Manipulating}\label{sxn:pdf_mnp}
+It is often helpful to manipulate a PDF document using native PDF
+tools so that no lossy conversions to other formats (e.g., Postscript)
+need be done.
+The \trmidx{PDF toolkit} \href{http://www.accesspdf.com/pdftk}{pdftk}
+is useful for this.
+From the \cmdidx{pdftk} homepage:
+\begin{quote}
+If PDF is electronic paper, then pdftk is an electronic
+staple-remover, hole-punch, binder, secret-decoder-ring, and
+X-Ray-glasses 
+\end{quote}
+\trmidx{PDFtk} may be used to merge, split, decrypt, encrypt, burst,
+uncompress, and repair PDF files.
+To extract subsets of pages from a PDF document,
+\begin{verbatim}
+pdftk A=${DATA}/ps/prp_itr.pdf cat A2 output ~/prp_itr_smr.pdf
+\end{verbatim}
+
+When adding publication quality graphics output (from, e.g., NCL)
+in an unnumbered, multi-page file (\flprn{foo\_gph.pdf}) to a 
+manuscript PDF (from, e.g., \flprn{foo\_mns.pdf} from Google Docs) to
+produce a submittable manuscript (\flprn{ppr\_ZKT12.pdf} for, e.g.,
+ACP), one may need to manually number the pages containing the figures.
+There is a great FAQ on this at
+\url{http://forums.debian.net/viewtopic.php?t=30598}. 
+To number an input (unnumbered) 10-page graphics file
+\flprn{foo\_gph.pdf} and append it to a 44-page manuscript, do this:
+\begin{verbatim}
+/bin/cp ~/Téléchargements/figures_09212011.pdf ~/foo_gph.pdf
+/bin/cp ~/Téléchargements/ppr_ZKT12_mns.pdf ~/foo_mns.pdf
+# Create LaTeX file containing only page numbers
+cd;cat > ~/foo_pg.tex << EOF
+\documentclass[12pt,letter]{article}
+\usepackage{multido}
+\usepackage[hmargin=.8cm,vmargin=1.5cm,nohead,nofoot]{geometry}
+\begin{document}
+\setcounter{page}{45}
+%\multido{}{10}{\vphantom{x}\newpage}
+\multido{}{10}{\vphantom{x} \addtocounter{figure}{1} Figure~\thefigure \newpage}
+\end{document}
+EOF
+# Produce PDF file containing only page numbers
+pdflatex foo_pg.tex 
+pdftk foo_gph.pdf burst output foo_gph_%03d.pdf
+pdftk foo_pg.pdf  burst output foo_pg_%03d.pdf
+# Unite manuscript pages with page numbers
+time for i in $(seq -f %03g 1 10) ; do \
+pdftk foo_gph_$i.pdf background foo_pg_$i.pdf output foo_mrg_$i.pdf ; done
+# Merge one-page files into one multipage file
+pdftk foo_mrg_???.pdf output foo_mrg.pdf
+# Shrink resulting file by removing font redefitions
+gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE \
+   -dQUIET -dBATCH -sOutputFile=foo_gph_fnl.pdf foo_mrg.pdf
+pdftk A=~/foo_mns.pdf B=~/foo_gph_fnl.pdf cat A B output ${DATA}/ppr/ppr_ZKT12.pdf
+scp ${DATA}/ppr/ppr_ZKT12.pdf dust.ess.uci.edu:/var/www/html/ppr
+\end{verbatim}
+
+\subsubsection[pdfscreen]{pdfscreen}\label{sxn:pdfscreen}
+Another useful package is \verb'pdfscreen'.
+\verb'pdfscreen' relies heavily on \verb'hyperref' and a number of
+other packages.
+I have installed the entirety of \verb'pdfscreen' in
+\verb'${TEXMFDIR}/tex/latex/pdfscreen'.
+% $: re-balance syntax highlighting
+However, only \flidx{pdfscreen.sty} and a few other files in the
+directory are strictly required for the installation to work.
+This should be fixed so the \TeX\ directory does not cruft up.
+Printing \verb'pdfscreen' presentations is sometimes useful.
+To do this, set 
+\begin{verbatim}
+pdfpagemode={FullScreen}, % Starts in full screen mode, hit 'Esc' to escape
+pdfmenubar=true % Allow access to reader's menubar
+\end{verbatim}
+in the \verb'\hypersetup' portion of the preamble. 
+This will start the presentation in full screen mode and make the
+reader (e.g., \cmdidx{acroread}) menubar available once the
+presentation is ``escaped'' using, e.g., \verb'Esc'.
+
+\subsubsection[thumbpdf]{thumbpdf}\label{sxn:thumbpdf}
+PDF files have the capability to show \trmidx{thumbnails},
+reduced-size images of each page.
+The various \TeX\ engines do not generate thumbnails automatically
+(since they are), so that some intervention is required to insert them
+in the final PDF document.
+The two freely available methods are the \cmdprn{thumbpdf} package, by
+\trmidx[Oberdiek, Heiko]{Heiko Oberdiek}, and \cmdidx{pdfthumb}, a
+part of the \cmdidx{PPower4} (P$^{4}$) 
+\href{http://www-sp.iti.informatik.tu-darmstadt.de/software/ppower4}{project}. 
+The typical usage of \cmdprn{thumbpdf} is
+\begin{verbatim}
+pdflatex ltx.tex;thumbpdf ltx;pdflatex ltx.tex
+\end{verbatim}
+The \cmdprn{thumbpdf} package may also be used in Postscript processing
+This is accomplished by setting the \cmdprn{dvips} output pipe to PDF
+\begin{verbatim}
+dvips -Ppdf -G0 -o ${DATA}/ps/ltx.ps ltx.dvi
+thumbpdf --modes=dvips --level2 --useps ${DATA}/ps/ltx.ps
+dvips -Ppdf -G0 -o ${DATA}/ps/ltx.ps ltx.dvi
+ps2pdf ${DATA}/ps/ltx.ps ${DATA}/ps/ltx.pdf
+pdf2ps ${DATA}/ps/ltx.pdf ${DATA}/ps/ltx.ps 
+\end{verbatim}
+% $: re-balance syntax highlighting
+
+\subsubsection[pdfthumb]{pdfthumb}\label{sxn:pdfthumb}
+The P$^{4}$
+\url{http://www-sp.iti.informatik.tu-darmstadt.de/software/ppower4}{project}  
+created the PDF Presentation Post Processor.
+Install this package in generic directories then create thumbnail
+additions to any PDF file.
+\begin{verbatim}
+sudo mkdir ${TEXMFDIR}/tex/generic/ppower4
+sudo mv *.sty ${TEXMFDIR}/tex/generic/ppower4
+sudo mv ppower4 pdfthumb /usr/local/bin
+pdfthumb in.pdf out.pdf
+pdfthumb nco.pdf nco.pdf2;/bin/mv nco.pdf2 nco.pdf
+\end{verbatim}
+
+\subsection[Tables]{Tables}\label{sxn:tbl}
+Tables are perhaps the most difficult-to-master aspect of \LaTeX.
+Use the \flidx{rotating.sty} package to \trmidx{rotate}
+\trmidx{tables}. 
+\begin{verbatim}
+\begin{sidewaystable}
+
+\end{sidewaystable}
+\end{verbatim}
+When large portions of text (many pages) are to be printed sideways,
+then \trmidx{landscape} mode is called for.
+Footnotes in tables are also tricky.
+
+\subsubsection[epstopdf]{epstopdf}\label{sxn:epstopdf}
+PDF\TeX\ does not recognize \flprn{*.eps} files directly.
+Instead these must be converted to PDF-format with \cmdidx{epstopdf}.
+The \cmdprn{epstopdf} package by Heiko Oberdiek is very useful when
+using PDF\LaTeX. 
+\begin{verbatim}
+for fl in `ls *.eps` ; do
+epstopdf ${fl}
+done
+\end{verbatim}
+% $: re-balance syntax highlighting
+The package \flidx{epstopdf.sty} does this automatically.
+It converts Postscript (\flprn{*.ps}) and encapsulated Postscript
+(\flprn{*.eps}) files to \PDFacr\ files (\flprn{*.pdf}) automatically 
+(using \cmdidx{epstopdf}) if the \PDFacr\ files do not already exist.
+However, this capability is intrinsically somewhat insecure since it
+involves allowing \LaTeX\ to run shell commands.
+Hence, \cmdprn{epstopdf} is not installed by default and special
+permissions must be set to activate it.
+To enable this feature at run-time use, e.g., 
+\verb'pdflatex -shell-escape test.tex'.
+To permanently enable this feature for the whole distribution set
+\verb'shell_escape = 1' in configuration file \flidx{texmf.cnf}.
+
+\subsubsection[Upgrading]{Upgrading}\label{sxn:pdf_upg}
+Upgrading PDF\TeX:
+\begin{verbatim}
+cd ${DATA}/tmp;mkdir pdftex;cd pdftex
+ftp://ftp.muni.cz/pub/tex/local/cstug/thanh/pdftex/snapshots
+gunzip pdftex-20010806-linux.zip
+./configure --prefix=/usr --datadir=/usr/share
+make
+sudo mv /usr/bin/pdfetex /usr/bin/pdftex /usr/bin/ttf2afm /data/zender/bck
+sudo mv ${TEXMFDIR}/web2c/pdftex.pool ${TEXMFDIR}/web2c/pdfetex.pool /data/zender/bck
+sudo cp pdfetex pdftex ttf2afm pdftosrc /usr/bin
+sudo cp pdfetex.pool pdftex.pool ${TEXMFDIR}/web2c
+sudo texhash
+
+cd ${DATA}/tmp;mkdir pdftex;cd pdftex
+sudo mv pdftex-20010806.tgz ${DATA}/tmp/pdftex
+tar xvzf pdftex-20010806.tgz
+cd src
+./configure --prefix=/usr/share
+cd texk/web2c
+make pdftexbin
+cd ${DATA}/tmp/pdftex/src/texk/web2c
+sudo cp pdfetex pdftex ttf2afm pdftosrc /usr/bin
+sudo cp pdfetex.pool pdftex.pool ${TEXMFDIR}/web2c
+\end{verbatim}
+Binaries and pool files are located in the directory
+\verb'${DATA}/tmp/pdftex/src/texk/web2c'.
+% $: re-balance syntax highlighting
+You must regenerate \verb'.fmt' files \verb'pdftex.fmt' and
+\verb'pdflatex.fmt' after installing a new version
+of the PDF\TeX\ binary and \verb'pdftex.pool' files. 
+\begin{verbatim}
+pdftex -ini -fmt=pdftex plain \\dump
+pdftex -ini -fmt=pdflatex latex.ltx
+\end{verbatim}
+or
+\begin{verbatim}
+sudo fmtutil --byfmt pdftex
+sudo fmtutil --byfmt pdflatex
+\end{verbatim}
+Apparently, \verb'texconfig init' may do both in one fell swoop.
+
+Then update the graphics \verb'.def' file to the newest version at
+\url{http://www.ctan.org/tex-archive/macros/pdftex/graphics/pdftex.def} 
+\begin{verbatim}
+find /usr/share/ -name pdftex.def
+cd ${TEXMFDIR}/tex/latex/graphics/
+sudo mv pdftex.def pdftex.def.orig
+sudo cp ~/pdftex.def .
+\end{verbatim}
+% $: re-balance syntax highlighting
+
+\section[Using \LaTeX]{Using \LaTeX}\label{sxn:ltx}
+
+\subsection[NFSS]{NFSS}\label{sxn:nfss}
+The font scheme used in \LaTeX\ is known as the 
+\trmdfn{New Font Selection Scheme} (\acr{nfss}). 
+\acr{nfss} recognizes five distinct font attributes: \trmdfn{encoding},
+\trmdfn{family}, \trmdfn{series}, \trmdfn{shape}, and \trmdfn{size}
+that may be set individually with the commands
+\vrbcmdfmt{fontencoding}{encode}, \vrbcmdfmt{fontfamily}{fam},
+\vrbcmdfmt{fontseries}{wt\_wth}, \vrbcmdfmt{fontshape}{form}, and 
+\vrbcmdfmt{fontsize}{line\_sp}.
+The font \textit{series} consists of two values, weight and width,
+concatenated sequentially into one argument, \textit{wt\_wth} of
+between one and four characters, e.g., \textsf{ebsc}.  
+The font \textit{size} takes two separate arguments, the point size of
+the font and the value of \cmdltxidx{\baselineskip}.
+Table~\ref{tbl:att} shows sample values for each font attribute.
+\begin{table}
+\begin{minipage}{\hsize} % Minipage necessary for footnotes KoD95 p. 110 (4.10.4)
+\renewcommand{\footnoterule}{\rule{\hsize}{0.0cm}\vspace{-0.0cm}} % KoD95 p. 111
+\begin{center}
+\caption[Font Attributes]{\textbf{Font Attributes}%
+\footnote{\emph{Sources:} \cite{KoD99,KoD04}}%
+\label{tbl:att}}
+\vspace{\cpthdrhlnskp}
+% fxm:\raggedright does not work here, must be between two other columns?
+%\begin{tabular}{ r >{\raggedright}p{14.0em}<{} }
+\begin{tabular}{ r l }
+\hline \rule{0.0ex}{\hlntblhdrskp}% 
+Attribute & Value \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+Encoding & \textsf{OT1 OT2 T1 OML OMS OMX U} \\[0.5ex]
+Family & \textsf{cmr cmss cmtt} \\[0.5ex]
+& Computer modern roman, Computer modern sans serif, Computer modern 
+typewriter \\[0.5ex]
+Series (weight) & \textsf{ul el l sl m sb b eb ub} \\[0.5ex]
+& Ultralight, Extralight, Light, Semilight, Medium, Semibold, Bold,
+Extrabold, Ultrabold \\[0.5ex]
+Series (width) & \textsf{uc ec c sc m sx x ex ux} \\[0.5ex]
+& Ultracondensed, Extracondensed, Condensed, Semicondensed, Medium,
+Semiexpanded, Expanded, Extraexpanded, Ultraexpanded \\[0.5ex]
+Shape & \textsf{n it sl sc u} \\[0.5ex]
+& Normal, Italic, Slanted, Small caps \\[0.5ex]
+Size & \\[0.5ex]
+\hline
+\end{tabular}
+\end{center}
+\end{minipage}
+\end{table}
+\LaTeX\ comes with an interactive document which prints font tables
+on demand.
+\begin{verbatim}
+latex ${TEXMFDIR}/tex/latex/base/nfssfont.tex
+Name of the font to test = ygoth
+\help
+\sample
+\bye
+\end{verbatim}
+% $: re-balance syntax highlighting
+
+\subsubsection[\textsf{fontchart}]{\textsf{fontchart}}\label{sxn:fontchart} 
+The preferred method for examining \TeX\ fonts is to use the built-in 
+\cmdidx{fontchart} program.
+The following examples demonstrates the \textsf{cmr12} font
+\begin{verbatim}
+% tex fontchart
+> Name of the font to chart = cmr12
+kdvi fontchart &
+\end{verbatim}
+
+% fxm: finish this
+\subsubsection[\textsf{usefont}]{\textsf{usefont}}\label{sxn:usefont} 
+Fonts may be swiftly changed with the \cmdltxidx{\usefont} macro.
+This macro takes four arguments: \cmdltxprn{\usefont{}{}{}{}}.
+
+\subsubsection[\textsf{suffixes}]{\textsf{suffixes}}\label{sxn:suffixes}  
+Table~\ref{tbl:sfx} shows the conventional meaning of some of the
+filename suffixes in the \LaTeX\ universe.
+\begin{table}
+\begin{minipage}{\hsize} % Minipage necessary for footnotes KoD95 p. 110 (4.10.4)
+\renewcommand{\footnoterule}{\rule{\hsize}{0.0cm}\vspace{-0.0cm}} % KoD95 p. 111
+\begin{center}
+\caption[Filename Suffixes]{\textbf{Filename Suffixes}%
+\footnote{\emph{Sources:} \cite{KoD99,KoD04}}%
+\label{tbl:sfx}}
+\vspace{\cpthdrhlnskp}
+% fxm:\raggedright does not work here, must be between two other columns?
+%\begin{tabular}{ r >{\raggedright}p{14.0em}<{} }
+\begin{tabular}{ r l l}
+\hline \rule{0.0ex}{\hlntblhdrskp}% 
+Suffix & Example & Meaning \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+.tfm & pplr.tfm & \\[0.5ex]
+\hline
+\end{tabular}
+\end{center}
+\end{minipage}
+\end{table}
+Some characters such as are hard to access. 
+For this purpose, use the \cmdltxidx{\symbol} command \cite[][p.~63]{KoD99}.
+For example, \verb'\symbol{126}' produces \symbol{126}, the tilde symbol.
+
+\subsection[Dependencies]{Dependencies}\label{sxn:dpn}
+Building and maintaining complex \LaTeX\ files is non-trivial and
+requires effort similar to maintaining a complex model.
+There are two ways to keep track of the dependencies of a source
+file. 
+The first is to add the command \cmdltxidx{\listfiles} somewhere in the
+document preamble.
+This causes \LaTeX\ to print the file dependencies to screen during
+processing. 
+The second is to add the command \verb'\RequirePackage{snapshot}'
+\textit{before} the \cmdltxidx{\documentclass} command.
+This will generate a dependency file (\verb'*.dep') file.
+
+\subsection[Citations]{Citations}\label{sxn:ctt}
+Here we try some typical \LaTeX\ bibliographic citations
+\begin{enumerate}
+\item Recommended format for citing \trmidx{URLs} is demonstrated by
+  invoking 
+\verb'\cite{Zen01b}': \cite{Zen01b}
+\verb'\cite{WZJ073}': \cite{WZJ073}
+\end{enumerate}
+
+\subsection[Dates and Times]{Dates and Times}\label{sxn:tm}
+The \flidx{datetime.sty} package provides fine control for printing
+\trmidx{dates} and \trmidx{times}.
+It provides the \cmdltxidx{\xxivtime} and \cmdltxidx{\ordinal}
+commands. 
+
+\subsection[Indicating Definitions, Commands, Files]{Indicating Definitions, Commands, Files}\label{sxn:ind}
+It is helpful to indicate what type of object text refers to.
+For example, the \TeX{}Info documentation system discriminates between
+15 types of text object.
+Not all those types are relevent here since, e.g., \LaTeX\ has superb 
+citation handling ability already.
+Table~\ref{tbl:txi} list the types of text objects that appear in
+this documentation, and the commands necessary to indicate that type
+of text.
+\begin{table}
+\begin{minipage}{\hsize} % Minipage necessary for footnotes KoD95 p. 110 (4.10.4)
+\renewcommand{\footnoterule}{\rule{\hsize}{0.0cm}\vspace{-0.0cm}} % KoD95 p. 111
+\begin{center}
+\caption[Text Object Types]{\textbf{Text Object Types}%
+\footnote{\emph{Sources:} \TeX{}Info manual}%
+\label{tbl:txi}}
+\vspace{\cpthdrhlnskp}
+% fxm:\raggedright does not work here, must be between two other columns?
+%\begin{tabular}{ r >{\raggedright}p{14.0em}<{} } 
+\begin{tabular}{ r l l l l }
+\hline \rule{0.0ex}{\hlntblhdrskp}% 
+Command & Alternate & Example & Result & Meaning \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\cmdprn{\acronym} & \cmdprn{\acr} & & Acronym \\[0.5ex]
+\cmdprn{\cite} & & & Reference \\[0.5ex]
+\cmdprn{\code} & & & Program code \\[0.5ex]
+\cmdprn{\command} & \cmdprn{\cmdprn} & & Command name \\[0.5ex]
+& \cmdprn{\cmdltxprn} & & \LaTeX\ Command name \\[0.5ex]
+\cmdprn{\dfn} & \cmdprn{\trmdfn} & & Definition \\[0.5ex]
+\cmdprn{\email} & & & Electronic mail address \\[0.5ex]
+\cmdprn{\env} & & & Environment variable \\[0.5ex]
+\cmdprn{\file} & \cmdprn{\flprn} & & File name \\[0.5ex]
+\cmdprn{\kbd} & & & Keyboard input \\[0.5ex]
+\cmdprn{\key} & & & Specifying keys \\[0.5ex]
+& \cmdprn{\mchprn} & & Machine name \\[0.5ex]
+& \cmdprn{\nmprn} & & Proper name \\[0.5ex]
+\cmdprn{\option} & & & Option name \\[0.5ex]
+\cmdprn{\samp} & \cmdprn{\smpprn} & & Literal character sequence \\[0.5ex]
+\cmdprn{\url} & & & World Wide Web location \\[0.5ex]
+\cmdprn{\var} & & & Metasyntactic variable \\[0.5ex]
+\hline
+\end{tabular}
+\end{center}
+\end{minipage}
+\end{table}
+For consistency, most object types are defined exactly as in
+\TeX{}Info. 
+
+\subsection[\TeXInfo]{\TeXInfo}\label{sxn:texinfo}
+A large suite of tools is available for manipulating \LaTeX\ and
+\TeXInfo\index{TeXInfo@\TeXInfo} documents.
+\subsubsection[Inserting \TeX\ into \TeXInfo]{Inserting \TeX\ into \TeXInfo}\label{sxn:texintexinfo}
+\begin{verbatim}
+@tex
+% Define TeX macros to roughly correspond to LaTeX style files
+\def\dfr{d} % [frc] Math differential
+@end tex
+\end{verbatim}
+
+\subsubsection[Texi2html]{Texi2html}\label{sxn:texi2html}
+The \cmdidx{texi2html} command converts \TeXInfo-format manuals into
+\trmidx{HTML} format.
+The sources are available from the \trmidx{CVS} server
+\begin{verbatim}
+cvs -d :pserver:t2h-anon@urmel.mathematik.uni-kl.de:/usr/local/Singular/cvsroot login
+cvs -d :pserver:t2h-anon@urmel.mathematik.uni-kl.de:/usr/local/Singular/cvsroot co Texi2html
+\end{verbatim}
+with the password \verb'texi2html'.
+
+\subsubsection[Texi2latex]{Texi2latex}\label{sxn:texi2latex}
+The \cmdidx{texi2latex} command converts \TeXInfo-format manuals into 
+\LaTeX\ format.
+The sources are available from the \trmidx{GNU} project server
+\url{http://www.nongnu.org/texi2latex}.
+\cmdprn{texi2latex} requires an \trmidx{XSLT} processor such as
+\trmidx{Saxon}. 
+\begin{verbatim}
+sudo apt-get install libsaxon-java
+cd ${DATA}/tmp/texi2latex-0.9.4
+export CXX=g++-3.4
+make
+sudo make install
+texi2latex ~/nco/doc/nco.texi
+# First, install saxon version 6.5.3
+cd ${DATA}/tmp
+mkdir saxon-6.5.3
+cp saxon6_5_3.zip saxon-6.5.3
+cd saxon-6.5.3
+unzip saxon6_5_3.zip
+\end{verbatim}
+
+\subsubsection[Tth]{Tth}\label{sxn:tth}
+The \cmdidx{tth} (\TeX-to-HTML) command converts \LaTeX-format
+documents into \trmidx{HTML} format.
+\begin{verbatim}
+tth -a -Lltx -p${TEXINPUTS}:${BIBINPUTS} < ltx.tex > ltx.html
+\end{verbatim}
+The \verb'-a' switch tells \cmdprn{tth} to \textit{automatically} run
+commands like \cmdprn{latex}, \cmdprn{bibtex}, etc., to generate any
+necessary auxiliary files.
+Tell \cmdprn{tth} the root word for the auxiliary files with the \verb'-L' switch.
+\cmdprn{tth} searches for files on the path specified by the \verb'-p' switch.
+Full documentation is available at
+\flprn{file:///usr/share/doc/tth/tth\_manual.html}. 
+According to the manual,
+\begin{quote}
+TTH does not recognize the \cmdltxidx{\usepackage} command by default
+because the \LaTeX\ macros that are input by this command almost
+always contain catcode changes or other usages incompatible with TTH. 
+oTTH requires that personal packages use \cmdltxidx{\input} instead of
+\cmdltxidx{\usepackage}.
+This usually imposes non-generic, and thus unacceptable, constraints
+on the source \LaTeX\ document.
+\end{quote}
+
+\subsubsection[Tex4ht]{Tex4ht}\label{sxn:tex4ht}
+\cmdidx{tex4ht} is both a package and a program that converts
+\LaTeX-format documents into \trmidx{HTML}.
+It is best to invoke the \cmdprn{tex4ht} suite of programs using the 
+\cmdidx{htlatex} script.
+\begin{verbatim}
+htlatex ltx.tex
+\end{verbatim}
+This produces HTML files of the form \flprn{ltx.css},
+\flprn{ltx[0-9].html}, \flprn{ltx.xref},  \flprn{ltx.lg},
+\flprn{ltx.idv},  \flprn{ltx.4ct},  \flprn{ltx.tc},
+
+If interested in displaying pages with \cmdidx{mozilla}, in
+particular, use the \cmdidx{mzlatex} script:
+\begin{verbatim}
+mzlatex ltx.tex
+\end{verbatim}
+This produces XML files of the form \flprn{ltx[0-9].xml}.
+
+\subsection{HTML/SGML}\label{sxn:html}
+\trmidx{Hypertext Markup Language} (\trmidx{HTML}) is used to encode
+documents displayed by most Web browsers.
+Table~\ref{tbl:html} summarizes the most common ways to implement of
+\trmidx{special characters} in HTML, and their \LaTeX\ equivalents.
+\begin{landscape}
+\begin{longtable}{ >{\ttfamily}l<{} >{\ttfamily}l<{} >{\ttfamily}l<{} l }
+& & & \kill % NB: longtable requires caption as table entry
+\caption[HTML/SGML Special Characters]{\textbf{HTML/SGML Special Characters}% 
+\footnote{\textit{Source}: \url{http://www.w3.org/TR/html401/sgml/entities.html}}%  
+\label{tbl:html2}} \\
+\hline\hline \rule{0.0ex}{\hlntblhdrskp}% 
+\textrm{Mnemonic HTML} & \textrm{Numeric HTML} & {\sffamily\LaTeX} & Result \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endfirsthead % Lines between and \endfirsthead appear at top of table
+\caption[]{(continued)} \\ % Set label for following pages
+\textrm{Mnemonic HTML} & \textrm{Numeric HTML} & {\sffamily\LaTeX} & Result \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endhead % Previous block appears at top of every page
+\endlastfoot % Previous block appears at end of table
+\verb'&lt;foo@bar&gt;' & \verb'&#60;foo@bar&#62;' & \verb'$<$foo@bar$>$' & $<$\texttt{foo@bar}$>$ \\[0.1ex]
+\verb'&ccedil;' & \verb'&#231;' & \verb'\,{c}' & \texttt{\,{c}} \\[0.5ex]
+\verb'&egrave;' & \verb'&#232;' & \verb'\`{e}' & \texttt{\`{e}} \\[0.5ex]
+\verb'&eacute;' & \verb'&#233;' & \verb|\'{e}| & \texttt{\'{e}} \\[0.5ex]
+\verb'&ograve' & \verb'&#242;' & \verb'\`{o}' & \texttt{\`{o}} \\[0.5ex]
+\verb'&oacute' & \verb'&#243;' & \verb|\'{o}| & \texttt{\'{o}} \\[0.5ex]
+\verb'&ocirc' & \verb'&#244;' & \verb'\^{o}' & \texttt{\^{o}} \\[0.5ex]
+\verb'&otilde' & \verb'&#245;' & \verb'\~{o}' & \texttt{\~{o}} \\[0.5ex]
+\verb'&ouml' & \verb'&#246' & \verb'\"{o}' & \texttt{\"{o}} \\[0.5ex]
+\verb'NONE' & \verb'&#333;' & \verb'\={o}' & \texttt{\={o}} \\[0.5ex]
+\verb'NONE' & \verb'NONE' & \verb'\.{o}' & \texttt{\.{o}} \\[0.5ex]
+\verb'NONE' & \verb'NONE' & \verb'\u{o}' & \texttt{\u{o}} \\[0.5ex]
+\verb'NONE' & \verb'NONE' & \verb'\v{o}' & \texttt{\v{o}} \\[0.5ex]
+\verb'NONE' & \verb'NONE' & \verb'\H{o}' & \texttt{\H{o}} \\[0.5ex]
+\verb'NONE' & \verb'NONE' & \verb'\t{oo}' & \texttt{\t{oo}} \\[0.5ex]
+\verb'NONE' & \verb'NONE' & \verb'\c{o}' & \texttt{\c{o}} \\[0.5ex]
+\verb'NONE' & \verb'NONE' & \verb'\d{o}' & \texttt{\d{o}} \\[0.5ex]
+\verb'NONE' & \verb'NONE' & \verb'\b{o}' & \texttt{\b{o}} \\[0.5ex]
+\verb'NONE' & \verb'NONE' & \verb'\r{o}' & \texttt{\r{o}} \\[0.5ex]
+\verb'FXM' & \verb'FXM' & \verb'\oe' & \texttt{\oe} \\[0.5ex]
+\verb'FXM' & \verb'FXM' & \verb'\OE' & \texttt{\OE} \\[0.5ex]
+\verb'FXM' & \verb'FXM' & \verb'\ae' & \texttt{\ae} \\[0.5ex]
+\verb'FXM' & \verb'FXM' & \verb'\AE' & \texttt{\AE} \\[0.5ex]
+\verb'FXM' & \verb'FXM' & \verb'\aa' & \texttt{\aa} \\[0.5ex]
+\verb'FXM' & \verb'FXM' & \verb'\AA' & \texttt{\AA} \\[0.5ex]
+\verb'&oslash;' & \verb'&#248;' & \verb'\o' & \texttt{\o} \\[0.5ex]
+\verb'&Oslash;' & \verb'&#248;' & \verb'\O' & \texttt{\O} \\[0.5ex]
+\verb'FXM' & \verb'FXM' & \verb'\l' & \texttt{\l} \\[0.5ex]
+\verb'FXM' & \verb'FXM' & \verb'\L' & \texttt{\L} \\[0.5ex]
+\verb'FXM' & \verb'FXM' & \verb'\ss' & \texttt{\ss} \\[0.5ex]
+\verb'FXM' & \verb'FXM' & \verb'\SS' & \texttt{\SS} \\[0.5ex]
+\verb'FXM' & \verb'FXM' & \verb'!`' & \texttt{!`} \\[0.5ex]
+\verb'FXM' & \verb'FXM' & \verb'?`' & \texttt{?`} \\[0.5ex]
+\verb'&yacute;' & \verb'&#253;' & \verb|\'{y}| & \texttt{\'{y}} \\[0.5ex]
+\verb'&nbsp;' & \verb'&#160;' & \verb'non-breakable space' & non-breakable space \\[0.5ex]
+\verb'C.&nbsp;S. Zender' & \verb'C.&#160;S. Zender' & \verb'C.~S. Zender' & \texttt{C.~S. Zender} \\[0.5ex]
+\verb'&Alpha;' & \&\#913; & \verb'NONE' & (Greek capital letter alpha) \\[0.5ex]
+\verb'&alpha;' & \&\#945; & \verb'$\alpha$' & $\mathtt{\alpha}$ (Greek small letter alpha) \\[0.5ex]
+\verb'&#176;' & \&\#176; & \verb'\circ' & $\mathtt{\circ}$ (ring accent) \\[0.5ex]
+\verb'&#186;' & \&\#186; & \verb'^{\circ}' & $\mathtt{^{\circ}}$ (degree symbol) \\[0.5ex]
+\verb'&minus;' & \&\#8722; & \verb'$-$' & $\mathtt{-}$ (Minus sign) \\[0.5ex]
+\verb'&times;' & \&\#215; & \verb'$\times$' & $\mathtt{\times}$ (Multiplication sign) \\[0.5ex]
+\verb'&divide;' & \&\#247; & \verb'$/$' & $\mathtt{/}$ (Division sign) \\[0.5ex]
+\verb'&plusmn;' & \&\#177; & \verb'$\pm$' & $\mathtt{\pm}$ (Plus-minus sign) \\[0.5ex]
+\verb'&part;' & \&\#8706; & \verb'$\partial$' & $\mathtt{\partial}$ (Partial differential) \\[0.5ex]
+\verb'&micro;' & \&\#181; & \verb'$\mu$' & $\mathtt{\mu}$ (Micro sign) \\[0.5ex]
+
+\verb'&euro;' & \&\#8364; & \verb'\texteuro' & \texttt{\texteuro} (euro sign) \\[0.5ex] % KoD99 p. 452
+
+\verb'&copy;' & \verb'&#169;' & \verb|\copyright| & \texttt{\copyright} \\[0.5ex]
+\verb'&emsp;' & \verb'&#8195;' & \verb'foo\;bar' & foo\;bar (em space) \\[0.5ex]
+\verb'&ensp;' & \verb'&#8194;' & \verb'foo\:bar' & foo\:bar (en space) \\[0.5ex]
+\verb'&thinsp;' & \verb'&#8201;' & \verb'foo\,bar' & foo\,bar (thin space) \\[0.5ex]
+\verb'&mdash;' & \verb'&#8212;' & \verb'---' & --- (em dash) \\[0.5ex]
+\verb'&ndash;' & \verb'&#8211;' & \verb'--' & -- (en dash) \\[0.5ex]
+\verb'&lsquo;' & \verb'&#8216;' & \verb|`foo`| & `foo` (left single quotation mark) \\[0.5ex]
+\verb'&rsquo;' & \verb'&#8217;' & \verb|'foo'| & 'foo' (right single quotation mark) \\[0.5ex]
+\verb'&ldquo;' & \verb'&#8220;' & \verb|``foo``| & ``foo`` (left double quotation mark) \\[0.5ex]
+\verb'&rdquo;' & \verb'&#8221;' & \verb|''foo''| & ''foo'' (right double quotation mark) \\[0.5ex]
+\verb'&hellip;' & \verb'&#133;' & \verb'\ldots' & \ldots (low horizontal ellipsis) \\[0.5ex]
+\verb'&harr;' & \verb'&#8590;' & \verb'\leftarrow' & $\leftrightarrow$ (horizontal left-right arrow) \\[0.5ex]
+\verb'&larr;' & \verb'&#8592;' & \verb'\leftarrow' & $\leftarrow$ (left arrow) \\[0.5ex]
+\verb'&rarr;' & \verb'&#8594;' & \verb'\rightarrow' & $\rightarrow$ (right arrow) \\[0.5ex]
+%\verb'&foo;' & \verb'&#;' & \verb'foo' & foo \\[0.5ex]
+% & & \\[0.5ex]
+\hline
+\end{longtable} % end tbl:html2
+\end{landscape}
+
+\subsection[Indexing]{Indexing}\label{sxn:idx}
+Here we show some typical \LaTeX\ indexing and cross-indexing
+which make use of the \cmdltxidx{\index} command and derivations
+thereof.  
+\begin{enumerate}
+\item The following instance of the word ``quark'' is indexed using
+\verb'\trmdfn{quark}': \trmdfn{quark}. 
+When processed with the \verb'\usepackage[hyperindex]{hyperref}' 
+package, the index should point back to this instance (as long as
+\verb'backref=true').
+\item The following instance of the word ``quark'' is indexed using
+\verb'\trmidx{quark}': \trmidx{quark}.
+\begin{enumerate}
+\item The following index of the author ``Homer Simpson'' uses\\
+\verb'\trmdfn[Simpson, Homer]{Homer Simpson}' so that ``Homer
+Simpson'' appears verbatim in the text but is indexed by the optional 
+argument ``Simpson, Homer'': \trmdfn[Simpson, Homer]{Homer Simpson}.
+Compare this to \verb'\trmidx[Simpson, Homer]{Homer Simpson}': 
+\trmidx[Simpson, Homer]{Homer Simpson} and to
+\verb'\trmidx{Homer Simpson}': \trmidx{Homer Simpson}.
+\end{enumerate}
+\item Related concepts may be cross-indexed and sub-sorted as well.
+For example
+\verb'\index{Frodo|see{Baggins}}'\index{Frodo|see{Baggins}} places
+'Frodo, \textit{see} Baggins' in the index.
+Nesting related item is accomplished by, e.g.,
+\verb'\index{Baggins!Frodo}'\index{Baggins!Frodo},
+\verb'\index{Baggins!Bilbo}'\index{Baggins!Bilbo},
+\verb'\index{Baggins!Bilbo!adventures}'\index{Baggins!Bilbo!adventures},
+\verb'\index{Baggins!Bilbo!rings}'\index{Baggins!Bilbo!rings}.
+\item The index requires some help to determine where to place
+non-standard symbols.
+For example, \MF\index{Metafont@\MF} should be indexed alphbetically
+as ``Metafont'', not as ``\\Metafont'', while \cmdltxidx{\MF} should be
+indexed alphabetically as ``MF''. 
+This is accomplished by the command \verb'\index{Metafont@\MF}'. 
+The argument before the \verb'@' is the lexicographical value of the
+entry used for alphabetization, and the argument after the \verb'@'
+is the value actually written to the index. 
+By the same token, the command \verb'\index{index@\verb+\index+}'
+places the word \verb'\index'\index{index@\verb+\index+} under the 
+letter ``i''. 
+Note that this method is tedious and prone to error since it involves
+typing the word ``index'' three times.
+Heiko Oberdiek has provided me with the command, \cmdltxidx{\cmdltxidx}
+which prints \verb'\cmdltxidx' in the text and in the index at the
+correct alphabetical location.
+\end{enumerate}
+
+\subsection[Line Numbering]{Line Numbering}\label{sxn:nbr}
+\linenumbers % Turn on linenumbers
+To number each line in a document, use the package
+\flidx{lineno.sty}. 
+The \cmdltxidx{\linenumbers} command turns on line-numbering,
+and the \cmdltxidx{\nolinenumbers} turns it off.
+To demonstrate, the next few sections have line-numbering turned~on.
+The package is very flexible and supports options like
+\cmdltxidx{\pagewiselinenumbering}, \cmdltxidx{\rightlinenumbers},
+etc. 
+\flidx{lineno.sty} even supports labeling lines and refering to
+specific lines with the standard reference commands, e.g.,
+\cmdltxidx{\ref}. 
+Unfortunately, line-numbering is expensive in terms of processing time
+and contents of the auxiliary file, so expect \LaTeX\ to slow down
+when large amounts of material are numbered.
+
+When printing source code, it may be desirable to nicely format
+certain keywords in the language.
+The \LaTeX\ command \cmdltxidx{\cxx} prints ``\cxx'' instead of the
+unformatted ``\trmidx{C++}''.
+
+\subsection[Vertical Spacing]{Vertical Spacing}\label{sxn:spc_vrt}
+To change the vertical spacing in a document, use the package
+\flidx{setspace.sty}.
+%\usepackage{setspace} % \singlespacing, \onehalfspacing, \doublespacing
+
+\subsection[Horizontal Spacing]{Horizontal Spacing}\label{sxn:spc_hrz}
+Spacing between numbers and dimensions is a complicated issue.
+The issue is most often ignored by novices, and, for those who care,
+there are no universal solutions.
+A~related question is the spacing between multiple physical dimensions
+in a single unit, so-called \trmdfn{interdimensional spacing}.
+% comp.text.tex thread 20030709 
+The \textit{J.~Fluid.\ Mech.} convention appears to be a
+\cmdltxidx{\;} space between the value and dimension, and then a 
+\cmdltxidx{\,} space for interdimensional spacing, e.g.,
+\verb'5\;cm\,s$^{-1}$' produces 5\;cm\,s$^{-1}$.
+\trmidx{AGU} journals appear to use \verb'\,' in both positions, e.g.,
+\verb'5\,cm\,s$^{-1}$' produces 5\,cm\,s$^{-1}$.
+
+\subsection[Verbatim]{Verbatim}\label{sxn:vrb}
+The package \flidx{listings.sty} contains extensive options to nicely
+format input code.
+First one must define the current language environment with the
+\cmdltxidx{\lstset} command, e.g.,
+\lstset{% Set up listings.sty environment
+language=[LaTeX]TeX, % Language for listings.sty \lstinline
+stringstyle=\ttfamily,
+keywordstyle=\ttfamily}
+\begin{lstlisting}{}
+\lstset{% Set up listings.sty environment
+language=[LaTeX]TeX, % Language for listings.sty \lstinline
+stringstyle=\ttfamily,
+keywordstyle=\ttfamily}
+\end{lstlisting}
+Once \verb'\lstset' has been initialized, the \cmdltxidx{\lstinline}
+command is used to format code inline, and the \cmdidx{lstlisting}
+environment is available to place longer code fragments in display
+style. 
+
+The \verb'srcltx' package enables \cmdidx{xdvi} to display \LaTeX\ code 
+synchronized with the display:
+Also consider the \flidx{fancyvrb.sty} package by 
+\trmidx[van~Zandt, Timothy]{Timothy van Zandt}.
+
+\nolinenumbers % Turn off linenumbers
+\subsection[CVS]{CVS}\label{sxn:cvs}
+Using CVS in \LaTeX\ documents is not straightforward.
+Norman Gray recommended the following on \verb'comp.text.tex'
+\begin{verbatim}
+\def\CVS$#1: #2 ${\expandafter\def\csname CVS#1\endcsname{#2}}
+\CVS$Revision$
+\CVS$Date$
+\end{verbatim}
+and use it like \verb'\date{\CVSDate, version \CVSRevision}'.
+This recipe only works when CVS versioning is turned on, i.e.,
+when the \verb'-kk' option is not specified.
+The above definition must appear in the document being
+tracked, i.e., the \verb'.tex' file, rather than a style file.
+Otherwise the version information will reflect the evolution of the 
+style file and not the document being tracked.
+Unfortunately this contributes to preamble bloat.
+\csznote{
+Following this procedure in the present document leads to
+\CVS$Revision$
+\CVS$Date$
+The date and CVS info are \cmdltxidx{\CVSDate} = \CVSDate and
+\cmdltxidx{\CVSRevision} = \CVSRevision.
+} % end \csznote
+
+\subsection[Strikeout]{Strikeout}\label{sxn:strikeout}
+Collaboratively revising text documents is prone to be difficult.
+\LaTeX\ is text-based and, in conjunction with revision control
+software like \trmidx{CVS}, this makes it easy to allow multiple
+authors to work on one source document without mutual interference.
+However, indicating the revisions one has made to a shared document
+is probably more difficult with \LaTeX\ than with \trmidx{WYSIWYG}
+editors. 
+
+One way to indicate revisions with \LaTeX\ is to \trmidx{strikeout} 
+text using the \cmdltxidx{\sout} command provided by the \verb'ulem'
+package. 
+For example,
+\begin{verbatim}
+This text \sout{has been} is striked out.
+\end{verbatim}
+produces ``This text \sout{has been} is striked out.''
+
+\subsection[Watermarks]{Watermarks}\label{sxn:wtr}
+Printing a message on each page is useful to watermark draft work,
+so it is a \acr{FAQ}.
+To do this in \LaTeX, use the \cmdltxidx{\draftcopy} package by Juergen
+Vollmer. 
+The word ``DRAFT'' (assuming an English document) will be blazed
+across the specified pages. 
+\verb'ghostview' has troubles showing \textsl{DRAFT}
+watermark in the on-screen window.
+Ghostscript (\verb'gs') works fine with watermarks.
+
+Watermarking \PDFTeX-generated files requires a more sophisticated
+package called \verb'eso-pic' which is contained in Martin
+Schro\"eder's \verb'ms' bundle.
+For \acr{pdf}, try the following:
+\begin{verbatim}
+\usepackage[pdftex]{graphics,color} % 
+\usepackage{eso-pic} % Required for Draft (\AddToShipoutPicture)
+\AddToShipoutPicture{\resizebox{0.9\pdfpagewidth}{0.9\pdfpageheight}%           
+{\rotatebox{60}{\color[gray]{0.8}\hspace*{5mm}\textsc{Sample Paper}}}}
+\end{verbatim}
+
+\subsection[Symbols]{Symbols}\label{sxn:sym}
+The variety of symbols \LaTeX\ can produce is astounding.
+The definitive source of these symbols is the Symbols document by
+M. Scott Pakin, available from
+\url{ftp://cam.ctan.org/tex-archive/info/symbols/comprehensive/}.
+Some of the more frequently used \TeX-related symbols are listed
+in Table~\ref{tbl:sym}.
+The \verb'\usepackage{texnames}' makes the proper logos available,
+but, according to Robin Fairbairns, it is an out-of-date, poorly coded
+package which should be avoided if possible (i.e., use \verb'mflogo'
+instead for \MF).
+\begin{table}
+\begin{minipage}{\hsize} % Minipage necessary for footnotes KoD95 p. 110 (4.10.4)
+\renewcommand{\footnoterule}{\rule{\hsize}{0.0cm}\vspace{-0.0cm}} % KoD95 p. 111
+\begin{center}
+\caption[\TeX\ Family Symbols]{\textbf{\TeX\ Family Symbols}%
+\footnote{\emph{Sources:} \cite{KoD99,KoD04}}%
+\label{tbl:sym}}
+\vspace{\cpthdrhlnskp}
+\begin{tabular}{ r l l }
+\hline \rule{0.0ex}{\hlntblhdrskp}% 
+Symbol & Command & Package \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\TeX & \cmdltxidx{\TeX} & none\\[0.5ex]
+\TeXInfo & \verb'\TeX{}Info', \cmdltxidx{\TeXInfo} & \textsf{csz} \\[0.5ex]
+\LaTeX & \cmdltxidx{\LaTeX}, \verb'\LATEX' & none, \textsf{texnames} \\[0.5ex]
+\LaTeXe & \cmdltxidx{\LaTeXe} & none \\[0.5ex]
+\MF\index{Metafont@\verb'\MF'} & \cmdltxidx{\MF} & \textsf{mflogo} \\[0.5ex]
+\METAFONT & \verb'\METAFONT' & \textsf{texnames} \\[0.5ex]
+\AMSTEX & \verb'\AMSTEX', \verb'\AmSTeX', \cmdltxidx{\AMSTeX} & \textsf{texnames} \\[0.5ex]
+\BIBTEX & \verb'\BIBTEX', \verb'\BIBTeX', \cmdltxidx{\BibTeX} & \textsf{texnames} \\[0.5ex]
+% texnames.sty defines \AMSTEX, \AMSTeX, \AmSTeX, \BIBTEX, \BIBTeX, \BibTeX, \LAMSTeX, \LAmSTeX, \LaTeX, \LATEX, \METAFONT, \MF, \SLITEX, \SLITeX, \SLiTeX, \SliTeX
+\hline
+\end{tabular}
+\end{center}
+\end{minipage}
+\end{table}
+According to the UK \TeX\ FAQ, ``For those who don't wish to acquire
+the 'proper' logos, the canonical thing to do is to say \verb'AMS-\TeX' for
+AMS-\TeX, \verb'Pic\TeX' for Pic\TeX, \verb'Bib\TeX' for Bib\TeX, and
+so on.''
+Extending this advice to 
+More recent packages have their own styles.
+A few of the more useful are \verb'\textsc{pdf}\TeX'
+for \textsc{pdf}\TeX, and \verb'\textsc{pdf}\LaTeX' for
+\textsc{pdf}\LaTeX. 
+
+%Other symbols of interest are shown in Table~\ref{tbl:sym2}
+% fxm: Must install txfonts and remove symbolname clashes between
+% wasysym and dchem packages, e.g., \saturn
+\csznote{ 
+\begin{table}
+\begin{minipage}{\hsize} % Minipage necessary for footnotes KoD95 p. 110 (4.10.4)
+\renewcommand{\footnoterule}{\rule{\hsize}{0.0cm}\vspace{-0.0cm}} % KoD95 p. 111
+\begin{center}
+\caption[Miscellaneous Symbols]{\textbf{Miscellaneous Symbols}%
+\footnote{\emph{Sources:} \cite{KoD99,KoD04}}%
+\label{tbl:sym2}}
+\vspace{\cpthdrhlnskp}
+\begin{tabular}{ r l l }
+\hline \rule{0.0ex}{\hlntblhdrskp}% 
+Symbol & Command & Package \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\Blitz & \cmdltxidx{\Blitz} & \textsf{ifsym} \\[0.5ex]
+\Sun & \cmdltxidx{\Sun} & \textsf{ifsym} \\[0.5ex]
+\FilledRainCloud & \cmdltxidx{\FilledRainCloud} & \textsf{ifsym} \\[0.5ex]
+\SunCloud & \cmdltxidx{\SunCloud} & \textsf{ifsym} \\[0.5ex]
+\Thermo{1} & \verb'\Thermo{1}' & \textsf{ifsym} \\[0.5ex]
+\Snow & \cmdltxidx{\Snow} & \textsf{ifsym} \\[0.5ex]
+\piup & \cmdltxidx{\piup} & \textsf{txfonts} \\[0.5ex]
+\tauup & \cmdltxidx{\tauup} & \textsf{txfonts} \\[0.5ex]
+\neptune & \cmdltxidx{\neptune} & \textsf{wasysym} \\[0.5ex]
+\FemaleMale & \cmdltxidx{\FemaleMale} & \textsf{marvosym} \\[0.5ex]
+\Aries & \cmdltxidx{\Aries} & \textsf{marvosym} \\[0.5ex]
+\Radioactivity & \cmdltxidx{\Radioactivity} & \textsf{marvosym} \\[0.5ex]
+\photon & \cmdltxidx{\photon} & \textsf{wasysym} \\[0.5ex]
+\vernal & \cmdltxidx{\vernal} & \textsf{wasysym} \\[0.5ex]
+%\foo & \verb'\foo' & \textsf{ifsym} \\[0.5ex]
+\hline
+\end{tabular}
+\end{center}
+\end{minipage}
+\end{table}
+} % csznote
+Often a font is named after its creator, whether a person or a
+company.
+Thus learning the names of font creators is a good mnemonic for the
+package names.
+The \textsf{marvosym} fonts are named for ``Martin Vogel's Symbols''.
+
+\subsection[Graphics]{Graphics}\label{sxn:gph}
+Inclusion of graphics images is controlled by the \textsf{graphix}
+package.
+The \cmdltxidx{\includegraphics} macro imports Postscript (\verb'*.ps') and
+encapsulated Postscript (\verb'*.eps') files automatically.
+
+Normally graphics \trmdfn{float} in documents, i.e., their
+position varies so as to flow well with the surrounding text.
+These floats are usually placed within the \verb'figure' environment,
+so that a caption may be easily added.
+With sizing and caption, the skeleton code to include a graphical
+figure looks like
+\begin{verbatim}
+\begin{figure*}
+\centering
+\includegraphics[width=0.5\hsize]{SWCF_x_01}\vfill
+\includegraphics[width=0.5\hsize]{SWCF_x_07}%
+\caption[Shortwave Cloud Forcing]{SWCF for (a) January and (b) July.  
+\label{fgr:SWCF_x1}}
+\end{figure*}
+\end{verbatim}
+\begin{figure*}
+\centering
+\includegraphics[width=0.5\hsize]{/data/zender/ps/erbe_b_sld012d_8589_01_x_SWCF}\vfill
+\includegraphics[width=0.5\hsize]{/data/zender/ps/erbe_b_sld012d_8589_07_x_SWCF}%
+\caption[Shortwave Cloud Forcing]{SWCF for (a) January and (b) July. 
+\label{fgr:SWCF_x2}}
+\end{figure*}
+Similar commands produced Figure~\ref{fgr:SWCF_x3}.
+The \verb'figure' environment only spans a single text column.
+The \verb'figure*' environment spans all columns in a multi-column
+document. 
+The location of the float is an optional argument to the \verb'figure'
+environment, e.g., \verb'\begin{figure*}[b]' to place the float at the
+bottom of the current or the next page.
+
+\csznote{
+Subfigures may be explicitly accounted for when using the
+\verb'subfigure' package.
+\begin{figure}
+\centering
+\caption[Shortwave Cloud Forcing]{SWCF for (a) January and (b) July. 
+\label{fgr:SWCF_x3}}
+%\addtocounter{figure}{-1}% Decrement figure counter when caption is above figure
+\subfigure[January]{\includegraphics[width=0.5\hsize]{/data/zender/ps/erbe_b_sld012d_8589_01_x_SWCF}\label{fgr:SWCF_x_01}}
+\subfigure[July]{\includegraphics[width=0.5\hsize]{/data/zender/ps/erbe_b_sld012d_8589_07_x_SWCF}\label{fgr:SWCF_x_07}}
+\end{figure}
+} % subfigure breaks htlatex
+
+It is not straightforward to import other graphics types.
+Raster graphics such as \GIFacr\ and \JPEGacr\ must first be converted 
+to Postscript.
+\LaTeX\ will do this automatically if it knows the conversion rules.
+This may be accomplished with the \cmdltxidx{\DeclareGraphicsRule} command.
+The prerequisite is that a shell-executable exist which can produce 
+Postscript.
+The command \verb'gif2eps' used to exist and could handle \GIFacr\
+images. 
+Here is how a \GIFacr\ figure might be indicated
+\begin{verbatim}
+\DeclareGraphicsRule{.gif}{eps}{}{`gif2eps #1 -} % Convert GIF files to eps
+\begin{figure*}
+\centering
+\includegraphics[width=0.5in,height=0.5in]{/data/zender/fgr/dmr/r2d2.gif}
+\caption[R2D2]{R2D2.\label{fgr:r2d2}}
+\end{figure*}
+\end{verbatim}
+\begin{figure*}
+\centering
+\includegraphics[width=0.5in,height=0.5in]{/data/zender/fgr/dmr/r2d2.eps}
+\caption[R2D2]{R2D2.\label{fgr:r2d2}}
+\end{figure*}
+These commands produced Figure~\ref{fgr:r2d2}.
+Note the use of the \verb'width' and \verb'height' options to size the
+figure. 
+If only one dimension were given, then \textsf{graphicx} would
+automatically maintain the natural aspect ratio of the figure.
+
+\subsubsection[Clipping and Rotation]{Clipping and Rotation}\label{sxn:clp}
+To trim images, use the \cmdidx{trim} and \cmdidx{clip} options to
+\cmdltxidx{includegraphics}.
+Specify the viewport margins in the order Left, Bottom, Right, Top.
+``Liberty'' is a good mnenomonic for the \cmdprn{lbrt} ordering.
+\begin{verbatim}
+\includegraphics[width=1.0\hsize,clip=true,trim=0.75in 4.1in 0.1in 4.9in]{/data/zender/fgr/ess_atm/ppr_Rud05_fgr1}%
+\end{verbatim}
+ 
+\subsection[Trademarks]{Trademarks}\label{sxn:trd}
+Identifying intellectual property correctly requires some knowledge of 
+copyrights and trademarks.
+What distinguishes a trademark from a registered trademark or a
+service mark is not clear.
+\LaTeX\ automatically makes available the symbols \cmdltxidx{\copyright}, 
+\cmdltxidx{\texttrademark}, and \cmdltxidx{\textregistered} to denote these
+marks \cite[][p.~239]{KoD99}.
+For example, this work is Copyright \copyright\ 2000--2003 by me.
+\verb'Linux\textregistered' produces Linux\textregistered.
+\verb'Linux\texttrademark' produces Linux\texttrademark\ (where the
+superscript is automatic).
+However, the text companion package \textsf{textcomp} provides nicer
+versions of \verb'\texttrademark' and \verb'\textregistered' than the
+defaults, so remember to load it for important documents.
+\textsf{textcomp} also provides some symbols that are unique, such as 
+\cmdltxidx{\textservicemark} (e.g., Linux\textservicemark),
+\cmdltxidx{\textonehalf} (\textonehalf), \cmdltxidx{\textonequarter}
+(\textonequarter), and \cmdltxidx{\textthreequarters} (\textthreequarters).
+
+\subsection[Phonetic Alphabet]{Phonetic Alphabet}\label{sxn:phn}
+Linguists use the \trmidx{International Phonetic Alphabet} (\trmidx{IPA}) 
+to indicate the correct pronunciation of words.
+Many consanants are relatively straightforward in the IPA---they are 
+pronounced as an English-speaker expects.
+More interesting typographically and phonetically are vowels, elisions,
+and aspirations that require special symbols.
+
+The \trmidx{TIPA} package provides \LaTeX\ support for IPA text.
+Table~\ref{tbl:ipa} show the results of various typesetting various
+IPA strings.
+% fxm:\raggedright does not work in long tables, must be between two other columns?
+% Begin Table~\ref{tbl:ipa}
+\begin{longtable}{ >{\raggedright}p{25.0em}<{} l l } % KoD95 p. 94 describes '*' notation
+& \kill % NB: longtable requires caption as table entry
+% longtables seem to choke htlatex
+\caption[Typesetting Phonetics]{\textbf{Typesetting Phonetics (IPA)}%
+\footnote{\emph{Source:} \href{http://en.wikipedia.org/wiki/TIPA}{Wikipedia}}%
+\label{tbl:ipa}} \\
+\hline\hline \rule{0.0ex}{\hlntblhdrskp}% 
+\LaTeX\ Command & Result & \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endfirsthead % Lines between and \endfirsthead appear at top of table
+\caption[]{(continued)} \\ % Set label for following pages
+\LaTeX\ Command & Result & \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endhead % Previous block appears at top of every page
+\endlastfoot % Previous block appears at end of table
+\verb'\textipa{[""Ekspl@"neIS@n]}' & \textipa{[""Ekspl@"neIS@n]} & \\[0.5ex]
+\verb'[\textsecstress\textepsilon kspl\textschwa'  
+\verb'\textprimstress ne\textsci\textesh\textschwa n]' & [\textsecstress\textepsilon kspl\textschwa \textprimstress ne\textsci\textesh\textschwa n] & \\[0.5ex]
+\verb'\textipa{/f@"nEtIks/}' & \textipa{/f@"nEtIks/} & \\[0.5ex]
+% \verb'' & & \\[0.5ex]
+\hline
+\end{longtable}
+% End Table~\ref{tbl:ipa}
+
+\subsection[Currencies]{Currencies}\label{sxn:crr}
+The \trmidx{euro}, the official currency of the European Union,
+may be typeset with \cmdltxidx{\texteuro} (\texteuro).
+Other currency symbols include\ldots
+
+\subsection[Acronyms and Abbreviation]{Acronyms and Abbreviation}\label{sxn:acr}
+Abbreviations are contractions of phrases into a sequence of letters
+each usually representing the first letter of a word.
+Abbreviations are not intended to be pronounced as a single word.
+For example, USA is an abbreviation.
+Acronyms are abbreviations which are pronounceable without spelling
+the abbreviation letter-by-letter.
+Thus IBM is not an acronym, and NATO is.
+
+Typographical conventions set acronyms in a ``smallcaps'' font, i.e.,
+a font where capital letters are smaller than the regular text font.
+In \TeX, smallcaps is one of the font shapes (\S\ref{sxn:nfss}).
+Periodicals which follow this convention include \textsl{The
+Economist}. 
+Thus acronyms may be correctly typeset ``on the fly'' using the
+\cmdltxidx{\textsc} macro.
+For example, \verb'\textsc{nco}' produces \textsc{nco},
+while \verb'\textsc{Unix}' produces \textsc{Unix}.
+There is also a homebrew macro, \cmdltxidx{\acr}, which is currently
+just a wrapper for \verb'\textsc'.
+For example, \verb'\acr{nco}' produces \acr{nco}.
+
+After raising the question ``When to use smallcaps for acronyms?''
+on the \verb'comp.text.tex' \textsc{usenet} list, a variety of 
+answers and rationales were proposed.
+Robin Fairbairns noted that Barbara Beeton specified a not-quite-small
+caps variant for use in Tugboat.
+His code for that is
+\begin{verbatim}
+\usepackage{relsize}
+\def\acro#1{\textsmaller{#1}\@}
+\acro{TUG} conferences aren't much like \acro{SOSP}s.
+\end{verbatim}
+Others simply use a small text font
+\begin{verbatim}
+\newcommand{\cap}[1]{{\small{#1}}}
+\newcommand{\capRB}[1]{\raisebox{1pt}{\small{(}}\small{#1}\raisebox{1pt}{\small{)}}} 
+\TeX\ User Group \capRB{TUG} conferences aren't much like \cap{SOSP}s.
+\end{verbatim}
+
+% PDF bookmarks disallow math formatting so use \texorpdfstring instead
+\subsection[Text Samples \texorpdfstring{with math $\alpha$}{}]{Text Samples}\label{sxn:txt_xmp}
+Here we try some typical \LaTeX\ text formatting.
+\begin{enumerate}
+\item Here we use the custom \cmdltxidx{\dgr} (degree) macro, first in text
+mode, then in math mode. 
+\verb'\dgr' uses \cmdltxidx{\ensuremath} so there should be no discernible
+difference: 
+\verb'10\dgr S--10\dgr N' gives ``10\dgr S--10\dgr N''.
+\verb'10$\dgr$S--10$\dgr$N' gives ``10$\dgr$S--10$\dgr$N''.
+\item \cmdltxidx{\includegraphics} will automatically scale a graphic to
+fit within a given box while maintaining aspect ratio with this
+argument \verb'width=xxx,height=yyy,keepaspectratio'
+\end{enumerate}
+
+Two commands useful for typesetting \trmidx{URLs} and 
+\trmidx{e-mail addresses} are \cmdidx{\url} and \cmdidx{\href}. 
+Table~\ref{tbl:txt} show the results of various typesetting techniques
+on URLs, including problematic long URLs.
+% fxm:\raggedright does not work in long tables, must be between two other columns?
+\begin{longtable}{ *{2}{>{\raggedright}p{15.0em}<{}} l } % KoD95 p. 94 describes '*' notation
+& \kill % NB: longtable requires caption as table entry
+% longtables seem to choke htlatex
+\caption[Typesetting Text]{\textbf{Typesetting Text}%
+\footnote{\emph{Source:} \cite{KoD95,KoD99,KoD04}}%  
+\label{tbl:txt}} \\
+\hline\hline \rule{0.0ex}{\hlntblhdrskp}% 
+\LaTeX\ Command & Result & \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endfirsthead % Lines between and \endfirsthead appear at top of table
+\caption[]{(continued)} \\ % Set label for following pages
+\LaTeX\ Command & Result & \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endhead % Previous block appears at top of every page
+\endlastfoot % Previous block appears at end of table
+\verb'\url{nco.sourceforge.net}' & \url{nco.sourceforge.net} & \\[0.5ex]
+\verb'\href{http://nco.sourceforge.net}{NCO Homepage}' &
+\href{http://nco.sourceforge.net}{NCO Homepage} & \\[0.5ex]
+\verb'\url{zender@uci.edu}' & \url{zender@uci.edu} & \\[0.5ex]
+\verb'\url{http://some/really/long/URL/that/wants/to/wrap}' & \url{http://some/really/long/URL/that/wants/to/wrap} & \\[0.5ex]
+\verb'\href{http://some/really/long/URL/that/wants/to/wrap}{Short Name}' &
+\href{http://some/really/long/URL/that/wants/to/wrap}{Short Name} & \\[0.5ex]
+% \verb'' & & \\[0.5ex]
+\hline
+\end{longtable}
+Unfortunately, the \cmdidx{dvips} driver is unable to automatically
+break URLs across lines.
+On the other hand, \cmdidx{pdflatex} intelligently breaks URLs
+whenever necessary. 
+A~\cmdidx{comp.text.tex} thread initiated on Oct.~24, 2001 by Olive
+Moeller discusses the reasons for this.
+Thus, as demonstrated in Table~\ref{tbl:txt}, documents may be
+formatted differently depending on whether they are produced with
+\cmdprn{dvips} or \cmdidx{pdflatex}. 
+
+\section[Text Typography]{Text Typography}\label{sxn:txt}
+
+\subsection[Gothic]{Gothic}\label{sxn:gth}
+%\bigdrop{0pt}{3}{yinit}{G}othic 
+%\lettrine[lines=3]{G}{othic}
+\dropletter{G}{othic}
+fonts occupy a special place in the history of typography since they
+appear in the oldest typeset texts in Western civilization.
+Yannis Haralambous used \MF\ to design four interesting Old German
+fonts. 
+The Gothic letter initiating this paragraph if from the 
+``Yannis initial'' font called \textsf{yinit}.
+As mentioned above, the initial letter of paragraphs is ``dropped''
+with the \textsf{lettrine} package, in this case
+%\verb'\bigdrop{0pt}{3}{yinit}{G}othic'\ldots. 
+\verb'\lettrine[lines=3]{G}{othic}'\ldots. 
+Unfortunately, accessing non-default fonts in \LaTeX\ generally
+involves manipulating a very detailed and complex specification
+scheme, \acr{nfss} (\S\ref{sxn:nfss}). 
+\begin{itemize}
+\item Yannis Fraktur: \verb'\usefont{U}{yfrak}{m}{n}'
+\usefont{U}{yfrak}{m}{n} Hello, World. \normalfont
+\item Yannis Gothic: \verb'\usefont{U}{ygoth}{m}{n}'
+\usefont{U}{ygoth}{m}{n} Hello, World. \normalfont
+\item Yannis Schwabacher: \verb'\usefont{U}{yswab}{m}{n}'
+\usefont{U}{yswab}{m}{n} Hello, World. \normalfont
+\item Yannis Initial: \verb'\usefont{U}{yinit}{m}{n}'
+\usefont{U}{yinit}{m}{n} Hello, World. \normalfont
+\end{itemize}
+\csznote{ % Lettrine options:
+lines: Number of lines the drop cap spans
+findent: Controls the horizontal gap between the drop cap and the text
+nindent: Shifts indented lines starting with the second
+slope: Adapts the slope of the text lines to match letters like A, V, etc.
+ante: Produces text before the drop cap
+image=true: Loads an image (requires graphicx) as drop cap
+} % end Lettrine
+% 20140531 Absolute path /home/zender incompatible with Mac OS X directory structure
+% Need working relative pathnames
+\lettrine[image=true,lines=3,findent=3pt,nindent=0pt]{/home/zender/texmf/fonts/csz/saints_initial_O.jpg}{nce} 
+we assemble a complete alphabet of initial letters from illuminated
+manuscripts, it will be a pleasure to typeset manuscripts.
+Imagine the beautiful cadences of paragraphs illustrated with initials.
+
+\subsection[Text Fonts]{Text Fonts}\label{sxn:txt_fnt}
+Table~\ref{tbl:txt_sty} shows different series and styles of the
+default text font.
+\begin{longtable}{ l l }
+& \kill % NB: longtable requires caption as table entry
+\caption[Text Series and Styles]{\textbf{Text Series and Styles}%
+\footnote{\emph{Source:} \cite{KoD99,KoD04}}%  
+\label{tbl:txt_sty}} \\
+\hline\hline \rule{0.0ex}{\hlntblhdrskp}% 
+\LaTeX\ Font & Result \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endfirsthead % Lines between and \endfirsthead appear at top of table
+\caption[]{(continued)} \\ % Set label for following pages
+\LaTeX\ Font & Result \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endhead % Previous block appears at top of every page
+\endlastfoot % Previous block appears at end of table
+\cmdltxidx{\textrm} & \textrm{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\textsf} & \textsf{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\texttt} & \texttt{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\textup} & \textup{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\textit} & \textit{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\textsl} & \textsl{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\textsc} & \textsc{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\textmd} & \textmd{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\textbf} & \textbf{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\tiny} & \tiny{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\scriptsize} & \scriptsize{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\footnotesize} & \footnotesize{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\small} & \small{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\normalsize} & \normalsize{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\large} & \large{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\Large} & \Large{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\LARGE} & \LARGE{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\huge} & \huge{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\Huge} & \Huge{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+% \verb'\foo' & \foo{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789} \\[0.5ex]
+\hline
+\end{longtable}
+
+Table~\ref{tbl:txt_fml} shows different families of text fonts.
+\begin{longtable}{ l l }
+& \kill % NB: longtable requires caption as table entry
+\caption[Text Fonts]{\textbf{Text Fonts}%
+\footnote{\emph{Source:} \cite{KoD99,KoD04}}%  
+\label{tbl:txt_fml}} \\
+\hline\hline \rule{0.0ex}{\hlntblhdrskp}% 
+\LaTeX\ Font & Result \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endfirsthead % Lines between and \endfirsthead appear at top of table
+\caption[]{(continued)} \\ % Set label for following pages
+\LaTeX\ Font & Result \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endhead % Previous block appears at top of every page
+\endlastfoot % Previous block appears at end of table
+\cmdltxidx{\textgoth} & \textgoth{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\textfrak} & \textfrak{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+\cmdltxidx{\textswab} & \textswab{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}\\[0.5ex]
+% \verb'\foo' & \foo{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789} \\[0.5ex]
+\hline
+\end{longtable}
+
+\section[Math]{Math Typography}\label{sxn:mth}
+
+\subsection[Math Conventions]{Math Conventions}\label{sxn:mth_cnv}
+The ISO has established conventions regarding symbols appearing in
+mathematical documents \cite[][p.~142]{KoD99}. 
+The most often violated convention, which is also easy avoided with
+\LaTeX, concerns the use of upright fonts for symbols denoting fixed,
+constant values.
+So, for example, the base of the \trmidx{natural logarithm} should be
+denoted $\me$ rather than simply $e$. 
+This is accomplished by using \verb'$\me$' rather than \verb'$e$'.
+Likewise the imaginary number is $\mi$ (\cmdltxidx{\mi}) rather than
+$i$ (\verb'$i$'); \trmidx{pi} is $\mpi$ (\cmdltxidx{\mpi}) rather than
+$\pi$ (\cmdltxidx{\pi}), and the symbol for a \trmidx{differential}
+element is, e.g., $\dfr x$ (\verb'$\dfr x$'), rather than $dx$
+(\verb'$dx$'). 
+Uppercase upright Greek symbols may be obtained from the
+\textsf{symbols} font or from the \textsf{txfonts} package. 
+\cmdidx{\mathbf} is a bold upright mathematical font, and contains
+only Latin and uppercase Greek letters.
+The package \flidx{upgreek.sty} supplies upright Greek letters when
+the normal letter command is prefixed with ``up'', e.g., \verb'\uppi'
+produces $\uppi$ whereas \verb'\pi' produces $\pi$.
+Unfortunately, the letters produced by \flprn{upgreek.sty} appear to
+be boldface.
+The package \flidx{bm.sty} boldfaces Greek letters (as does the
+\cmdltxidx{\pmb} or ``Poor man's bold'' from \flidx{amsbsy.sty}).
+The packages \flidx{mathptmx.sty} and \flidx{mathpazo.sty} create
+full, bold-italic, alphabets in the \trmidx{Times} and
+\trmidx{Palatino} fonts, respectively. 
+Whether this convention applies to Greek numerical prefixes is
+unclear.
+For example, a \trmdfn{micron}, $10^{-6}$\,\m, is often written 
+``$\mu$m'' (\verb'$\mu$m').
+The~$\mu$ in~$\mu$m, however, has a fixed value~($10^{-6}$).
+It is, in essence, a universal constant much like $\mpi$.
+Therefore microns should be written with an upright mu,
+i.e.,~$\upmu$m.
+Most journals, including \trmidx{AGU} journals, adhere to this
+format. 
+
+According to \cite{KoD99}, p.~142 and to \cite{KoD04}, p.~145:
+\begin{quote}
+\begin{enumerate}
+\item Simple variables are represented by italic letters, $a b c x y z$.
+\item Vectors are written in bold face italic, as $\boldsymbol{B v
+    \omega}$.
+\item Tensors of 2nd order and matrices may appear in a sans serif
+  font, as $\mathsf{M D I}$
+\item The special numbers $\me$, $\mi$, $\mpi$, as well as the
+  differential operator $\dfr$, are to be \textit{written in an
+  upright font} to emphasize that they are not variables.
+\item A measurement consisting of a number plus a dimension is an
+indivisible unit, with a smaller than normal space between them, as 
+5.3\,\km\ and 62\,\um. 
+The dimension is set in an upright font.
+\end{enumerate}
+\end{quote}
+\cite{KoD04} recommend using fxm.
+
+\subsection[Math Equations]{Math Equations}\label{sxn:mth_eqn}
+Lengthy derivations may require breaking the derivation across a page
+boundary. 
+It is generally considered smarter to diallow page breaks between
+equation lines by default, and to require the author to specifically
+enable them where necessary.
+Thus normal display environments, e.g., the \verb'eqnarray'
+environment, do not, by default, allow breaking across pages.
+The \cmdltxidx{\displaybreak} command causes a break in a particular
+equation on a particular page.
+The optimal position for the \verb'\displaybreak' is just before the
+\verb'\\' where it should take effect.
+\verb'\displaybreak' takes an optional integer argument valued 0
+to~4 to indicate the degree of penalty associated with breaking a
+display environment, with 0 merely allowing a break to take place,
+and~4 requiring that the page break, e.g., \verb'\displaybreak[4]'.
+
+\AMSTeX\ also supplies the \cmdltxidx{\allowdisplaybreaks} macro which
+changes the default to permit displayed equations to flow smoothly
+from one page to the next. 
+This macro should be placed in the document preamble.
+\verb'\allowdisplaybreaks' takes an optional integer argument valued 1
+to 4 to indicate the degree of penalty associated with breaking a
+display environment, with 4 being the most permissive, e.g.,
+\verb'\allowdisplaybreaks[4]'.  
+
+\subsection[Math Fonts]{Math Fonts}\label{sxn:mth_fnt}
+Table~\ref{tbl:mth_fnt} shows the different mathematical fonts.
+The \cmdltxidx{\mathscr} command is defined by multiple packages.
+When \verb'\usepackage[mathscr]{eucal}' is employed, \verb'\mathscr'
+prints a vertical script font, but when \verb'\usepackage{mathrsfs}'
+is in effect \verb'\mathscr' prints an ornate and very curvy script
+font reminiscent of wedding invitations. 
+\begin{longtable}{ l >{$}l<{$} }
+& \kill % NB: longtable requires caption as table entry
+\caption[Math Fonts]{\textbf{Math Fonts}%
+\footnote{\emph{Source:} \cite{KoD99,KoD04}}%  
+\label{tbl:mth_fnt}} \\
+\hline\hline \rule{0.0ex}{\hlntblhdrskp}% 
+\LaTeX\ Command & \mbox{Result} \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endfirsthead % Lines between and \endfirsthead appear at top of table
+\caption[]{(continued)} \\ % Set label for following pages
+\LaTeX\ Command & \mbox{Result} \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endhead % Previous block appears at top of every page
+\endlastfoot % Previous block appears at end of table
+\trmidx{Greek} & \Gamma \Delta \Theta \Lambda \Xi \Pi \Sigma \Upsilon \Phi \Psi
+\Omega \alpha \beta \gamma \delta \epsilon \varepsilon \zeta \eta
+\theta \vartheta \iota \kappa \lambda \mu \nu \xi o \pi \varpi \rho
+\varrho \sigma \varsigma \tau \upsilon \phi \varphi \chi \psi \omega \\[0.5ex]
+\cmdltxidx{\bm} & \bm{\Gamma \Delta \Theta \Lambda \Xi \Pi \Sigma \Upsilon \Phi \Psi
+\Omega \alpha \beta \gamma \delta \epsilon \varepsilon \zeta \eta
+\theta \vartheta \iota \kappa \lambda \mu \nu \xi o \pi \varpi \rho
+\varrho \sigma \varsigma \tau \upsilon \phi \varphi \chi \psi \omega} \\[0.5ex]
+\flidx{upgreek.sty} & \Upgamma \Updelta \Uptheta \Uplambda \Upxi \Uppi \Upsigma \Upupsilon \Upphi \Uppsi
+\Upomega \upalpha \upbeta \upgamma \updelta \upepsilon \upvarepsilon \upzeta \upeta
+\uptheta \upvartheta \upiota \upkappa \uplambda \upmu \upnu \upxi o \uppi \upvarpi \uprho
+\upvarrho \upsigma \upvarsigma \uptau \upupsilon \upphi \upvarphi \upchi \uppsi \upomega \\[0.5ex]
+\cmdltxidx{\mathnormal} & \mathnormal{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789} \\[0.5ex]
+\cmdltxidx{\mathrm} & \mathrm{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789} \\[0.5ex]
+\cmdltxidx{\mathsf} & \mathsf{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789} \\[0.5ex]
+\cmdltxidx{\mathtt} & \mathtt{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789} \\[0.5ex]
+\cmdltxidx{\mathit} & \mathit{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789} \\[0.5ex]
+\cmdltxidx{\mathbf} & \mathbf{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789} \\[0.5ex]
+\cmdltxidx{\mathcal} & \mathcal{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789} \\[0.5ex]
+\cmdltxidx{\mathbb} & \mathbb{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789} \\[0.5ex]
+\cmdltxidx{\mathscr} & \mathscr{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789} \\[0.5ex]
+\cmdltxidx{\mathfrak} & \mathfrak{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789} \\[0.5ex]
+%\cmdltxidx{\pmb} & \pmb{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789} \\[0.5ex]
+& \mbox{fxm 20030224, 20050827: Produces ``Too many math alphabets used in ``version normal'' error here after upgreek added, thus some fonts are not being printed} \\[0.5ex]
+%\cmdltxidx{\mathpzc} & \mathpzc{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789} \\[0.5ex]
+%\cmdltxidx{\mathds} & \mathds{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789} \\[0.5ex]
+%\cmdltxidx{\varmathbb} & \varmathbb{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789} \\[0.5ex]
+\hline
+\end{longtable}
+
+\subsection[Math Samples]{Math Samples}\label{sxn:mth_smp}
+
+\LaTeX\ contains many useful, but hard-to-remember, commands and
+symbols for formatting mathematics.
+It is easy to forget when to use uncommon symbols like
+\cmdidx{\lesssim}, \cmdidx{\gtrapprox}, and \cmdidx{\,}.
+Table~\ref{tbl:mth} shows results of different mathematical
+typesetting techniques.
+\begin{longtable}{ l >{$}l<{$} }
+& \kill % NB: longtable requires caption as table entry
+\caption[Typesetting Math]{\textbf{Typesetting Math}%
+\footnote{\emph{Source:} \cite{KoD95}}%  
+\label{tbl:mth}} \\
+\hline\hline \rule{0.0ex}{\hlntblhdrskp}% 
+\LaTeX\ Command & \mbox{Result} \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endfirsthead % Lines between and \endfirsthead appear at top of table
+\caption[]{(continued)} \\ % Set label for following pages
+\LaTeX\ Command & \mbox{Result} \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endhead % Previous block appears at top of every page
+\endlastfoot % Previous block appears at end of table
+\verb'\frac{\partial \prs}{\partial \tpt}|_{\vlm}' &
+\dpysty \frac{\partial \prs}{\partial \tpt}|_{\vlm} \\[2.0ex]
+\verb'\frac{\partial \prs}{\partial \tpt}\big|_{\vlm}' &
+\dpysty \frac{\partial \prs}{\partial \tpt}\big|_{\vlm} \\[2.0ex]
+\verb'\frac{\partial \prs}{\partial \tpt}\Big|_{\vlm}' &
+\dpysty \frac{\partial \prs}{\partial \tpt}\Big|_{\vlm} \\[2.0ex]
+\verb'\frac{\partial \prs}{\partial \tpt}\bigg|_{\vlm}' &
+\dpysty \frac{\partial \prs}{\partial \tpt}\bigg|_{\vlm} \\[2.0ex]
+\verb'\frac{\partial \prs}{\partial \tpt}\Bigg|_{\vlm}' &
+\dpysty \frac{\partial \prs}{\partial \tpt}\Bigg|_{\vlm} \\[2.0ex]
+\verb'10\dgr \times 10\dgr' & 10\dgr \times 10\dgr \\[0.5ex]
+\verb'\tilde{\dmt}_{\nbrsbs}' & \tilde{\dmt}_{\nbrsbs} \\[0.5ex]
+\verb'\tilde{\dmt_{\nbrsbs}}' & \tilde{\dmt_{\nbrsbs}} \\[0.5ex]
+\verb'\tilde{\dmt}_{\nbrsbs}^{2}' & \tilde{\dmt}_{\nbrsbs}^{2} \\[0.5ex]
+\verb'\tilde{\dmt_{\nbrsbs}^{2}}' & \tilde{\dmt_{\nbrsbs}^{2}} \\[0.5ex]
+\verb'\bar{\bar{\dmt}}_{\nbrsbs}' & \bar{\bar{\dmt}}_{\nbrsbs} \\[0.5ex]
+\verb'\bar{\dmt}_{\nbrsbs}' & \bar{\dmt}_{\nbrsbs} \\[0.5ex]
+\verb'\bar{\dmt_{\nbrsbs}}' & \bar{\dmt_{\nbrsbs}} \\[0.5ex]
+\verb'\bar{\dmt}_{\nbrsbs}^{2}' & \bar{\dmt}_{\nbrsbs}^{2} \\[0.5ex]
+\verb'\bar{\dmt_{\nbrsbs}^{2}}' & \bar{\dmt_{\nbrsbs}^{2}} \\[0.5ex]
+\verb'\hat{\dmt}_{\nbrsbs}' & \hat{\dmt}_{\nbrsbs} \\[0.5ex]
+\verb'\hat{\dmt_{\nbrsbs}}' & \hat{\dmt_{\nbrsbs}} \\[0.5ex]
+\verb'\hat{\dmt}_{\nbrsbs}^{2}' & \hat{\dmt}_{\nbrsbs}^{2} \\[0.5ex]
+\verb'\hat{\dmt_{\nbrsbs}^{2}}' & \hat{\dmt_{\nbrsbs}^{2}} \\[0.5ex]
+\verb'\overline{\dmt}_{\nbrsbs}' & \overline{\dmt}_{\nbrsbs} \\[0.5ex]
+\verb'\overline{\dmt_{\nbrsbs}}' & \overline{\dmt_{\nbrsbs}} \\[0.5ex]
+\verb'\overline{\dmt}_{\nbrsbs}^{2}' & \overline{\dmt}_{\nbrsbs}^{2} \\[0.5ex]
+\verb'\overline{\dmt_{\nbrsbs}^{2}}' & \overline{\dmt_{\nbrsbs}^{2}} \\[0.5ex]
+\verb'\underline{\dmt}_{\nbrsbs}' & \underline{\dmt}_{\nbrsbs} \\[0.5ex]
+\verb'\underline{\dmt_{\nbrsbs}}' & \underline{\dmt_{\nbrsbs}} \\[0.5ex]
+\verb'\underline{\dmt}_{\nbrsbs}^{2}' & \underline{\dmt}_{\nbrsbs}^{2} \\[0.5ex]
+\verb'\underline{\dmt_{\nbrsbs}^{2}}' & \underline{\dmt_{\nbrsbs}^{2}} \\[0.5ex]
+\verb'\dot{\dmt}_{\nbrsbs}' & \dot{\dmt}_{\nbrsbs} \\[0.5ex]
+\verb'\dot{\dmt_{\nbrsbs}}' & \dot{\dmt_{\nbrsbs}} \\[0.5ex]
+\verb'\dot{\dmt}_{\nbrsbs}^{2}' & \dot{\dmt}_{\nbrsbs}^{2} \\[0.5ex]
+\verb'\dot{\dmt_{\nbrsbs}^{2}}' & \dot{\dmt_{\nbrsbs}^{2}} \\[0.5ex]
+\verb'\ddot{\dmt}_{\nbrsbs}' & \ddot{\dmt}_{\nbrsbs} \\[0.5ex]
+\verb'\ddot{\dmt_{\nbrsbs}}' & \ddot{\dmt_{\nbrsbs}} \\[0.5ex]
+\verb'\ddot{\dmt}_{\nbrsbs}^{2}' & \ddot{\dmt}_{\nbrsbs}^{2} \\[0.5ex]
+\verb'\ddot{\dmt_{\nbrsbs}^{2}}' & \ddot{\dmt_{\nbrsbs}^{2}} \\[0.5ex]
+\verb'\vec{\dmt}_{\nbrsbs}' & \vec{\dmt}_{\nbrsbs} \\[0.5ex]
+\verb'\vec{\dmt_{\nbrsbs}}' & \vec{\dmt_{\nbrsbs}} \\[0.5ex]
+\verb'\vec{\dmt}_{\nbrsbs}^{2}' & \vec{\dmt}_{\nbrsbs}^{2} \\[0.5ex]
+\verb'\vec{\dmt_{\nbrsbs}^{2}}' & \vec{\dmt_{\nbrsbs}^{2}} \\[0.5ex]
+\verb'\imath' & \imath \\[0.5ex]
+\verb'\vec{\imath}' & \vec{\imath} \\[0.5ex]
+\verb'\hat{\imath}' & \hat{\imath} \\[0.5ex]
+\verb'\mathbf{\vec{\iii}}' & \mathbf{\vec{\iii}}\\[0.5ex]
+\verb'\mathbf{\iii}' & \mathbf{\iii}\\[0.5ex]
+\verb'\mathbf{\hat{i}}' & \mathbf{\hat{i}}\\[0.5ex]
+\verb'\mbox{\boldmath$\hat{\imath}$}' & \mbox{\boldmath$\hat{\imath}$} \\[0.5ex]
+\verb'\mbox{\boldmath$\hat{\iii}$}' & \mbox{\boldmath$\hat{\iii}$} \\[0.5ex]
+\verb'\jmath' & \jmath \\[0.5ex]
+\verb'\vec{\jmath}' & \vec{\jmath} \\[0.5ex]
+\verb'\hat{\jmath}' & \hat{\jmath} \\[0.5ex]
+\verb'\mathbf{\hat{j}}' & \mathbf{\hat{j}}\\[0.5ex]
+\verb'\mbox{\boldmath$\hat{\jmath}$}' & \mbox{\boldmath$\hat{\jmath}$} \\[0.5ex]
+\verb'\vec{k}' & \vec{k} \\[0.5ex]
+\verb'\hat{k}' & \hat{k} \\[0.5ex]
+\verb'\mathbf{\hat{k}}' & \mathbf{\hat{k}}\\[0.5ex]
+\verb'\mbox{\boldmath$\hat{k}$}' & \mbox{\boldmath$\hat{k}$} \\[0.5ex]
+\verb'\int_{0}^{\infty} \dstnbrrds \; \dfr\rds' & \int_{0}^{\infty} \dstnbrrds \; \dfr\rds \\[0.5ex]
+\verb'\int_{0}^{\infty} \dstnbrrds \: \dfr\rds' & \int_{0}^{\infty} \dstnbrrds \: \dfr\rds \\[0.5ex]
+\verb'\int_{0}^{\infty} \dstnbrrds \, \dfr\rds' & \int_{0}^{\infty} \dstnbrrds \, \dfr\rds \\[0.5ex]
+\verb'\int_{0}^{\infty} \dstnbrrds \dfr\rds' & \int_{0}^{\infty} \dstnbrrds \dfr\rds \\[0.5ex]
+\verb'\int_{0}^{\infty} \dstnbrrds \! \dfr\rds' & \int_{0}^{\infty} \dstnbrrds \! \dfr\rds \\[0.5ex]
+\verb'\dstfnc_{\nbrsbs}(\dmt)' & \dstfnc_{\nbrsbs}(\dmt) \\[0.5ex]
+\verb'\dstfnc^{\mathrm{o}}_{\nbrsbs}(\dmt)' & \dstfnc^{\mathrm{o}}_{\nbrsbs}(\dmt) \\[0.5ex]
+\verb'\dstfnc^{o}_{\nbrsbs}(\dmt)' & \dstfnc^{o}_{\nbrsbs}(\dmt) \\[0.5ex]
+\verb'\dstfnc^{\mathrm{e}}_{\nbrsbs}(\dmt)' & \dstfnc^{\mathrm{e}}_{\nbrsbs}(\dmt) \\[0.5ex]
+\verb'\dstfnc^{e}_{\nbrsbs}(\dmt)' & \dstfnc^{e}_{\nbrsbs}(\dmt) \\[0.5ex]
+\verb'\tilde{\gsd}^{2}' & \tilde{\gsd}^{2} \\[0.5ex]
+\verb'\tilde{\gsd}^{\!\!2}' & \tilde{\gsd}^{\!\!2}\\[0.5ex]
+\verb'\tilde{\gsd^{2}}' & \tilde{\gsd^{2}}\\[0.5ex]
+\verb'\tilde{\gsd^{\!\!2}}' & \tilde{\gsd^{\!\!2}}\\[0.5ex]
+\verb'\widetilde{\gsd}^{\!\!2}' & \widetilde{\gsd}^{\!\!2}\\[0.5ex]
+\verb'\dmtnaa' & \dmtnaa \\[0.5ex]
+\verb'\dmtnar' & \dmtnar \\[0.5ex]
+\verb'\dmtnma' & \dmtnma \\[0.5ex]
+\verb'\dmtnmr' & \dmtnmr \\[0.5ex]
+\verb'\dmtnwa' & \dmtnwa \\[0.5ex]
+\verb'\dmtnwr' & \dmtnwr \\[0.5ex]
+\verb'\mbox{\textonehalf}', \verb'\mbox{\textonequarter}' & \mbox{\textonehalf} \mbox{\textonequarter} \\[0.5ex]
+\verb'\frac{1}{2} \frac{2}{3}' & \frac{1}{2} \frac{2}{3} \\[0.5ex]
+\verb'\dfrac{1}{2} \dfrac{2}{3}' & \dfrac{1}{2} \dfrac{2}{3} \\[0.5ex]
+\verb'\tfrac{1}{2} \tfrac{2}{3}' & \tfrac{1}{2} \tfrac{2}{3} \\[0.5ex]
+\verb'\sfrac{1}{2} \sfrac{2}{3}' & \sfrac{1}{2} \sfrac{2}{3} \\[0.5ex]
+\verb'1 / 2 \ 2 / 3' & 1 / 2 \ 2 / 3 \\[0.5ex]
+\verb'1 / 2 \ 2 / 3' & 1 / 2 \ 2 / 3 \\[0.5ex]
+\verb'x^{1/2}' & x^{1/2} \\[0.5ex]
+\verb'x^{1\!/2}' & x^{1\!/2} \\[0.5ex]
+\verb'x^{1\negthinspace/2}' & x^{1\negthinspace/2} \\[0.5ex]
+\verb'x^{1\!/\!2}' & x^{1\!/\!2} \\[0.5ex]
+\verb'x^{1\!/\mspace{-2mu}2}' & x^{1\!/\mspace{-2mu}2} \\[0.5ex]
+\verb'x^{\frac{1}{2}}' & x^{\frac{1}{2}} \\[0.5ex]
+\verb'x^{\sfrac{1}{2}}' & x^{\sfrac{1}{2}} \\[0.5ex]
+\verb'x^{\tfrac{1}{2}}' & x^{\tfrac{1}{2}} \\[0.5ex]
+\verb'a \lesssim b' & a \lesssim b \\[0.5ex]
+\verb'a \lessapprox b' & a \lessapprox b \\[0.5ex]
+\verb'a \cong b' & a \cong b \\[0.5ex]
+\verb'a \approxeq b' & a \approxeq b \\[0.5ex]
+\verb'a \gtrsim b' & a \gtrsim b \\[0.5ex]
+\verb'a \gtrapprox b' & a \gtrapprox b \\[0.5ex]
+\verb'\pi \Pi \prod' & \pi \Pi \prod \\[0.5ex]
+\verb'\sigma \Sigma \sum' & \sigma \Sigma \sum \\[0.5ex]
+\verb'\mpi' & \mpi \\[0.5ex]
+\verb'\mathbf{\pi \Pi}' & \mathbf{\pi \Pi} \\[0.5ex]
+\verb'\bm{\pi \Pi}' & \bm{\pi \Pi} \\[0.5ex]
+\verb'\hm{\pi \Pi}' & \hm{\pi \Pi} \\[0.5ex]
+\verb'\uppi' & \uppi \\[0.5ex]
+\verb'\mbox{\boldmath$\pi \uppi \Pi$}' & \mbox{\boldmath$\pi \uppi \Pi$} \\[0.5ex]
+\verb'\pmb{\pi}' & \pmb{\pi} \\[0.5ex]
+\verb'\partial' & \partial \\[0.5ex]
+\verb'\nabla \times \cccbld' & \nabla \times \cccbld \\[0.5ex]
+\verb'\nabla \cross \cccbld' & \nabla \cross \cccbld \\[0.5ex]
+\verb'\nabla_{\iii\iii}' & \nabla_{\iii\iii} \\[0.5ex]
+\verb'\nabla_{\!\iii\iii}' & \nabla_{\!\iii\iii} \\[0.5ex]
+\verb'\textsl{\textsf{\bfseries{M}}}' & \textsl{\textsf{\bfseries{M}}} \\[0.5ex]
+\verb'\textsl{\textsf{M}}' & \textsl{\textsf{M}} \\[0.5ex]
+\verb'\mathsf{M}' & \mathsf{M} \\[0.5ex]
+\verb'\mathbf{M}' & \mathbf{M} \\[0.5ex]
+\verb'\mathsfsl{M}' & \mathsfsl{M} \\[0.5ex]
+\verb'\mathit{\mathsf{M}}' & \mathit{\mathsf{M}} \\[0.5ex]
+% \verb'' & \\[0.5ex]
+\hline
+\end{longtable}
+
+% Bibliography
+%\renewcommand\refname{\normalsize Publications}
+\nocite{KoD95,KoD99,KoD04}
+\bibliographystyle{agu04}
+\bibliography{bib}
+\printindex % Requires makeidx KoD95 p. 221
+\addcontentsline{toc}{section}{Index}
+
+\csznote{
+% Transfer required figures to local machine
+for fl_stb in \
+erbe_b_sld012d_8589_01_x_SWCF \
+erbe_b_sld012d_8589_07_x_SWCF \
+sld012d_8589_01_x_SWCF \
+sld012d_8589_07_x_SWCF \
+; do 
+scp 'dust.ess.uci.edu:${DATA}/ps/'${fl_stb}'.eps' ${DATA}/ps
+epstopdf ${DATA}/ps/${fl_stb}.eps
+done
+} % end csznote
+% $: rebalance syntax highlighting
+
+\csznote{ 
+% Usage: Place usage here at end of file so comment character % not needed
+cd ~/tex;make -W ltx.tex ltx.dvi ltx.ps ltx.pdf ltx.txt;cd -
+
+# cd ~/tex;pdflatex ltx.tex;thumbpdf ltx;pdflatex ltx.tex;cd -
+# cd ~/tex;texcln ltx;make ltx.pdf;bibtex ltx;makeindex ltx;make ltx.pdf;bibtex ltx;makeindex ltx;make ltx.pdf;cd -
+# cd ~/tex;texcln ltx;latex ltx;bibtex ltx;makeindex ltx;latex ltx;bibtex ltx;makeindex ltx;dvips -Ppdf -G0 -o ${DATA}/ps/ltx.ps ~/tex/ltx.dvi;ps2pdf ${DATA}/ps/ltx.ps ${DATA}/ps/ltx.pdf;cd -
+scp ${HOME}/tex/ltx.tex ${HOME}/tex/ltx.txt ${DATA}/ps/ltx.ps ${DATA}/ps/ltx.pdf ${HOME}/tex/ltx.dvi dust.ess.uci.edu:/var/www/html/doc/ltx
+
+# NB: latex2html chokes on math in tables in \csznote{}s
+latex2html -dir /var/www/html/doc/ltx ltx.tex
+# NB: tth works OK on ltx.tex: does no math, ignores epigraphs
+cd ${HOME}/tex;tth -a -Lltx -p./:${TEXINPUTS}:${BIBINPUTS} < ${HOME}/tex/ltx.tex > ltx.html
+scp ltx.html dust.ess.uci.edu:/var/www/html/doc/ltx
+# NB: tex4ht chokes on ltx.tex (longtable problem?)
+cd ${HOME}/tex;htlatex ltx.tex
+scp ltx*.css ltx*.html dust.ess.uci.edu:/var/www/html/doc/ltx
+# NB: tex4moz chokes on ltx.tex
+cd ${HOME}/tex;/usr/share/tex4ht/mzlatex ltx.tex
+scp ltx*.css ltx*.html ltx*.xml dust.ess.uci.edu:/var/www/html/doc/ltx
+} % end csznote on usage
+
+\end{document}

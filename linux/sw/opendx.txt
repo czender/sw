@@ -1,0 +1,25 @@
+OpenDX on lanina.ps.uci.edu 20010328:
+cvs -d :pserver:anoncvs@opendx.watson.ibm.com:/src/master login
+password = anoncvs
+cvs -d :pserver:anoncvs@opendx.watson.ibm.com:/src/master checkout dx
+cvs -d :pserver:anoncvs@opendx.watson.ibm.com:/src/master logout
+cd dx
+aclocal
+autoheader
+autoconf
+automake
+./configure --prefix=/usr/local/dx
+make
+make install
+cvs -d :pserver:anoncvs@opendx.watson.ibm.com:/src/master logout
+
+Requires openmotif-devel
+
+tar xvzf dxsamples-4.0.8.tar.gz
+cd dxsamples-4.0.8
+aclocal
+autoheader
+autoconf
+automake
+./configure --prefix=/usr/local/dx
+make

@@ -1,0 +1,15 @@
+ncbrowse NOAA PMEL
+URL: http://www.epic.noaa.gov/java/ncBrowse/
+
+20020730 Install java 1.4 on lanina RH Linux 7.2:
+sh ./install_rel1_3_3Beta5.bin
+# Install in /usr/local/ncBrowse  
+# Put Java script in ~/linu/usr/local/bin/ncbrowse.sh 
+sudo cp /home/zender/linux/usr/local/bin /usr/local/bin/ncbrowse.sh 
+
+20041127 Install ncbrowse 1.4 on elnino Libranet Debian Sid:
+# First install java using, e.g., java.txt or kaffe
+dtm
+chmod a+x ncBrowse_1_4_0.bin
+sudo sh ./ncBrowse_1_4_0.bin
+

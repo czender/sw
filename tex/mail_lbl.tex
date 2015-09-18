@@ -1,0 +1,40 @@
+% $Id$ -*-LaTeX-*-
+
+% Purpose: Mailing Labels in LaTeX 
+
+% Usage: 
+% cd ~/tex;make -W mail_lbl.tex mail_lbl.dvi mail_lbl.ps mail_lbl.pdf;cd -
+
+\documentclass[12pt]{article}
+
+\usepackage{url} % Typeset URLs and e-mail addresses
+\usepackage{csz} % Library of personal definitions
+
+\newfont{\tofont}{cmdunh10 at 30pt}
+
+\begin{document}
+\pagestyle{plain}
+\thispagestyle{empty}
+\Large
+\noindent
+From:\\
+Dr.~Charlie Zender\\
+Department of Earth System Science\\
+3228 Croul Hall\\
+1 Physical Sciences Road\\
+University of California Irvine\\
+Irvine, CA 92697-3100\\
+
+\bigskip
+\hspace{2.0in}%
+\begin{minipage}{3.0in} % Minipage KoD95 p. 110 (4.10.4)
+\noindent
+To:\\
+\Huge
+ATTN:~RMA\#~R02738\\
+Western Scientific\\
+9445 Farnham St.\\
+San Diego, CA 92123\\
+\end{minipage}
+
+\end{document}

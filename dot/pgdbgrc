@@ -1,0 +1,14 @@
+# $Id$
+
+# Purpose: Startup commands to pgdbg
+# pgdbg documentation:
+# file:/usr/local/pgi/doc/pgiws_ug/pgi31u16.htm#Heading219
+
+# Startup commands to dbx are set in .dbxrc
+# Startup commands to gdb are set in .gdbinit
+# Startup commands to pgdbg are set in .pgdbgrc
+# Startup commands to cvd are set in .cvDebugger
+
+# Catch signals (very helpful)
+# Signal 8 is fpe, signal 11 is segv
+catch 8,11

@@ -1,0 +1,19 @@
+20050601: tarball
+mv ~/subversion-r909.tar.gz ${DATA}/tmp
+cd ${DATA}/tmp
+tar xvzf subversion-r909.tar.gz
+cd subversion-r909
+mv ~/db-4.0.14.tar.gz ${DATA}/tmp/subversion-r909
+tar xvzf db-4.0.14.tar.gz
+mv db-4.0.14 db
+./configure --prefix=/usr/local
+
+20050707: SVN main trunk 
+cd ${DATA}/tmp/valgrind
+svn up
+cd ${DATA}/tmp/vex
+svn up
+cd ${DATA}/tmp/valgrind
+./configure --prefix=/usr/local --with-vex=${DATA}/tmp/vex
+make
+

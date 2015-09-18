@@ -1,0 +1,79 @@
+20040825 elnino.ess.uci.edu:
+/bin/rm -r ${DATA}/g95;mkdir -p ${DATA}/g95;cd ${DATA}/g95
+wget http://ftp.g95.org/g95-x86-linux.tgz
+tar xvzf g95-x86-linux.tgz
+ln -s -f ${DATA}/g95/g95-install /tmp/g95
+sudo ln -s -f ${DATA}/g95/g95-install/bin/i686-pc-linux-gnu-g95 /usr/local/bin/g95
+g95 --version
+
+20041025 sand.ess.uci.edu: Default integer is 64-bit (CSZ default)
+/bin/rm -r ${DATA}/g95;mkdir -p ${DATA}/g95;cd ${DATA}/g95
+wget http://ftp.g95.org/g95-x86_64-64-linux.tgz
+tar xvzf g95-x86_64-64-linux.tgz
+ln -s -f ${DATA}/g95/g95-install /tmp/g95
+sudo ln -s -f ${DATA}/g95/g95-install/bin/x86_64-unknown-linux-gnu-g95 /usr/local/bin/g95
+g95 --version
+
+20041104 sand.ess.uci.edu: Default integer is 32-bit 
+/bin/rm -r ${DATA}/g95;mkdir -p ${DATA}/g95;cd ${DATA}/g95
+wget http://ftp.g95.org/g95-x86_64-32-linux.tgz
+tar xvzf g95-x86_64-32-linux.tgz
+ln -s -f ${DATA}/g95/g95-install /tmp/g95
+sudo ln -s -f ${DATA}/g95/g95-install/bin/x86_64-unknown-linux-gnu-g95 /usr/local/bin/g95
+g95 --version
+
+20080504 virga.ess.uci.edu:
+/bin/rm -r ${DATA}/g95;mkdir -p ${DATA}/g95;cd ${DATA}/g95
+wget http://ftp.g95.org/g95-x86-linux.tgz
+tar xvzf g95-x86-linux.tgz
+ln -s -f ${DATA}/g95/g95-install /tmp/g95
+sudo ln -s -f ${DATA}/g95/g95-install/bin/i686-suse-linux-gnu-g95 /usr/local/bin/g95
+g95 --version
+
+20080902 glace.ess.uci.edu: x86_64/EMT64 Default integer is 64-bit (CSZ default)
+/bin/rm -r ${DATA}/g95;mkdir -p ${DATA}/g95;cd ${DATA}/g95
+wget http://ftp.g95.org/g95-x86_64-64-linux.tgz
+tar xvzf g95-x86_64-64-linux.tgz
+ln -s -f ${DATA}/g95/g95-install /tmp/g95
+sudo ln -s -f ${DATA}/g95/g95-install/bin/x86_64-suse-linux-gnu-g95 /usr/local/bin/g95
+g95 --version
+
+************************************************************************
+20081228 neige.ess.uci.edu: x86_64/EMT64 Default integer is 64-bit (CSZ default)
+NB: failed, never worked
+************************************************************************
+mkdir ${DATA}/g95
+cd ${DATA}/g95
+cvs -z3 -d:pserver:anonymous@cvs.sf.net:/cvsroot/g95 co -kk g95
+cvs -z3 -d:pserver:anonymous@cvs.sf.net:/cvsroot/g95 co -kk doc
+cvs -z3 -d:pserver:anonymous@cvs.sf.net:/cvsroot/g95 co -kk runtime
+cvs -z3 -d:pserver:anonymous@cvs.sf.net:/cvsroot/g95 co -kk test
+
+./configure 
+./configure CPPFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib --with-gmp-dir=/usr
+************************************************************************
+20081228 neige.ess.uci.edu: x86_64/EMT64 Default integer is 64-bit (CSZ default)
+************************************************************************
+
+************************************************************************
+20090121 virga.ess.uci.edu: i386
+************************************************************************
+# i386 only!
+# http://www.gfd-dennou.org/library/cc-env/g95/index.htm.en
+sudo aptitude remove g95
+/bin/rm -r ${DATA}/g95
+sudo /bin/rm /usr/local/bin/g95
+mkdir ${DATA}/tmp/g95
+cd ${DATA}/tmp/g95
+wget http://www.gfd-dennou.org/library/cc-env/g95/g95/sid/g95_20090116.dsc
+wget http://www.gfd-dennou.org/library/cc-env/g95/g95/sid/g95_20090116_i386.changes
+#wget http://www.gfd-dennou.org/library/cc-env/g95/g95/sid/g95_20090116_i386.deb
+wget http://www.gfd-dennou.org/library/cc-env/g95/g95/sid/g95_20090116.tar.gz
+dpkg-source -x g95_20090116.dsc
+cd ${DATA}/tmp/g95/g95-20090116;dpkg-buildpackage -rfakeroot -uc -us > ~/foo.g95 2>&1
+sudo dpkg -i ${DATA}/tmp/g95/g95_20090116_i386.deb
+hash -r
+************************************************************************
+20090121 virga.ess.uci.edu: i386
+************************************************************************
+

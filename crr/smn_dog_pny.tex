@@ -1,0 +1,440 @@
+% $Id$ -*-LaTeX-*-
+
+% Purpose: Dog and Pony show
+
+% Subject: 
+
+% URL: http://dust.ess.uci.edu/crr/smn_dog_pny.pdf
+
+% Create (see also end of file):
+% cd ~/crr;make -W smn_dog_pny.tex smn_dog_pny.pdf;cd -
+
+% Distribute:
+% scp ${DATA}/ps/smn_dog_pny.pdf dust.ess.uci.edu:/var/www/html/smn
+
+\documentclass[12pt]{article}
+
+% Standard packages
+\usepackage{ifpdf} % Define \ifpdf
+\ifpdf % PDFLaTeX
+\usepackage[pdftex]{graphicx} % Defines \includegraphics*
+\pdfcompresslevel=9
+%\usepackage{thumbpdf} % Generate thumbnails
+\usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
+\graphicspath{/data/zender/fgr/ess_phz} % Help epstopdf find .eps figures to convert
+\else % !PDFLaTeX
+\usepackage{graphicx} % Defines \includegraphics*
+\fi % !PDFLaTeX
+\usepackage{array} % Table and array extensions, e.g., column formatting
+%\usepackage[usenames]{color} % usenames allows, e.g., ``ForestGreen''
+\usepackage{colortbl} % Colored columns in tables, required by pdfscreen
+\usepackage{makeidx} % Index keyword processor: \printindex and \see
+\usepackage{mdwlist} % Compact list formats \itemize*, \enumerate*
+%\usepackage[numbers,sort]{natbib} % \cite commands from aguplus
+\usepackage[sort]{natbib} % \cite commands from aguplus
+\usepackage{times} % Postscript Times-Roman font KoD99 p. 375
+%\usepackage{tocbibind} % Add Bibliography and Index to Table of Contents
+\usepackage{xspace} % Unknown
+
+% pdfscreen uses hyperref to set margins for screen mode
+% pdfscreen calls hyperref internally if hyperref is not already invoked
+% pdfscreen also loads packages graphicx, color, calc, and comment
+% print         Print version
+% screen        Screen version
+% panelright    Navigation panel on RHS
+% paneltoc      Table of Contents in panel
+% sectionbreak  Introduces pagebreak before section
+% code          Commands producing fancy verbatim-like effects
+%\usepackage[screen,code,panelright,sectionbreak]{pdfscreen}
+%\usepackage[screen,code]{pdfscreen}
+\usepackage[screen,code]{pdfscreen}
+%\usepackage[print]{pdfscreen}
+
+% Personal packages
+\usepackage{csz} % Library of personal definitions (\ifpdf...)
+\usepackage{abc} % Alphabet as three letter macros
+\usepackage{dmn} % Dimensional units
+\usepackage{chm} % Chemistry
+\usepackage{dyn} % Fluid dynamics
+\usepackage{aer} % Aerosol physics
+\usepackage{rt} % Commands specific to radiative transfer
+\usepackage{psd} % Particle size distributions
+
+% Commands which must be executed in preamble
+
+% Commands specific to this file
+% 1. Primary commands
+\newcommand{\pdfscreen}{\texttt{\small\color{section1}pdfscreen}\xspace} % Pretty format for pdfscreen string
+\newcommand{\scq}{SC$^{4}$} % [sng] Southern California Climate Change Consortium
+
+% Float placement
+% NB: Placement of figures is very sensitive to \textfraction
+\renewcommand\textfraction{0.0} % Minimum fraction of page that is text
+\setcounter{totalnumber}{73} % Maximum number of floats per page
+\setcounter{topnumber}{73} % Maximum number of floats at top of page
+\setcounter{dbltopnumber}{73} % Maximum number of floats at top of two-column page
+\setcounter{bottomnumber}{73} % Maximum number of floats at bottom of page
+\renewcommand\topfraction{1.0} % Maximum fraction of top of page occupied by floats
+\renewcommand\dbltopfraction{1.0} % Maximum fraction of top of two-column page occupied by floats
+\renewcommand\bottomfraction{1.0} % Maximum fraction of bottom of page occupied by floats
+\renewcommand\floatpagefraction{1.0} % Fraction of float page filled with floats
+\renewcommand\dblfloatpagefraction{1.0} % Fraction of double column float page filled with floats
+
+% Screen geometry
+\begin{screen}
+% These commands are all defined by pdfscreen
+%\margins{0.65in}{0.65in}{0.65in}{0.65in} % Left, right, top, bottom margins
+\margins{0.40in}{0.40in}{0.40in}{0.40in} % Left, right, top, bottom margins
+%\emblema{logoLUC.png} % Location of graphic file for pdfscreen navigation panel
+\screensize{6.25in}{8in} % Screen dimensions of PDF output
+\urlid{http://www.ess.uci.edu/~zender} % Homepage button in navigation panel points here
+\changeoverlay % Cycle through default overlays, repeating every tenth section
+\paneloverlay{but.pdf} % Overlay for navigation panel
+%\overlay{ipcc_ar3_rad_frc} % Overlay for screen area
+\def\pfill{\vskip6pt}
+\end{screen}
+
+% Commands performed only in print section
+\begin{print}
+\notesname{Notes:} % String appearing in notes ovals adjacent to slides
+% Redefine section formatting in print mode
+\makeatletter
+\def\@seccntformat#1{\llap{\scshape\color{section\thesection@level}\csname the#1\endcsname.\hspace*{6pt}}}
+\makeatother
+\end{print}
+
+\hypersetup{ % A command provided by \hyperref
+pdftitle={Zender Group Research}, % Title given to acroread window displaying this file
+pdfsubject={Zender Group Research},
+pdfauthor={Charlie Zender},
+pdfkeywords={snw dst aer crr Zender Group Research},
+pdfpagemode={FullScreen}, % Starts in full screen mode, hit 'Esc' to escape
+pdfmenubar=true % Allow access to reader's menubar
+} % end \hypersetup
+
+\begin{document} % End preamble
+
+% Title for screen mode
+\begin{screen}
+\title{\color{section0}\Huge Zender Group Research}
+\end{screen}
+
+% Title for print mode
+\begin{print}
+\title{\Huge\texttt{Zender Group Research}}
+\end{print}
+
+\author{
+\color{section1}
+\href{http://www.ess.uci.edu/~zender}{Charlie~Zender}
+{\href{mailto:zender@uci.edu}{\color{section1}\texttt{<zender@uci.edu>}}}\\ 
+\href{http://www.ess.uci.edu}{Department of Earth System Science}\\
+\href{http://www.uci.edu}{University of California, Irvine}\\
+Presented to:\\
+\href{http://eee.uci.edu/05f/42132}{ESS 191: Introduction to Research in Earth System Science}\\
+Built: \today\\
+\\
+Presentation PDF on the Web at:\\
+\url{http://dust.ess.uci.edu/smn/smn_dog_pny.pdf}
+} % end author
+
+\pagedissolve{Split /D 2 /Dm /H /M /O} % pagedissolve options in pdfscreen manual p. 9
+
+\date{} % Empty braces turns off date
+\maketitle
+\begin{screen}
+\vfill
+\end{screen}
+\clearpage
+
+\begin{abstract}
+\Large
+\setlength{\baselineskip}{12.0pt} % 1.234 X 11pt
+\noindent Zender Group Research
+\end{abstract}
+\clearpage
+
+% Do not use \tableofcontents command in document when paneltoc is option
+\begin{print}
+\tableofcontents
+\end{print}
+\begin{screen}
+\vfill
+\end{screen}
+
+\Large
+\section[Outline]{Outline}
+\begin{enumerate*}
+\item Mineral dust aerosol---its distribution, source and sink
+  mechanisms, direct and indirect radiative forcing, and impact on
+  tropospheric processes (Q.~Han, C.~Luo)
+
+\item Radiation and climate---closing the surface shortwave energy
+  budget, the effect of aerosols and clouds on climate (J.~Talamantes) 
+
+\item Surface energy exchange---understanding non-linear energy
+  transfer and constituent fluxes between the surface and lower
+  atmosphere, and its effect on convection and climate (S.~Capps) 
+
+\item Snow-albedo feedback---representing complex interactions
+  between snow-covered surfaces and climate, including snowpack aging,
+  reflectivity, absorptance, and melt (M.~Flanner, C.~Luo)
+
+\item Distributed Data Reduction and Analysis---efficient processing
+  of TB-scale datasets (e.g., from GCMs) stored within and among high
+  performance computing clusters (M.~Brown, D.~Wang, H.~Mangalam)
+\end{enumerate*}
+\clearpage
+
+\Large
+\section[Mineral Dust Aerosol]{Mineral Dust Aerosol}
+\begin{enumerate*}
+\item Mobilization, Transport, and Deposition
+\begin{enumerate*}
+\item Where, when, what sizes, and what composition of dust is mobilized?
+\item Constraining dust emission using ocean deposition measurements
+\end{enumerate*}
+\item Erodibility: Susceptibility to wind erosion
+\begin{enumerate*}
+\item How do soil characteristics, geomorphology, and hydrology affect erodibility?
+\item How do Drought and Inundatation affect erodibility?
+\end{enumerate*}
+\item Health
+\begin{enumerate*}
+\item Predicting onset of human/ecosystem epidemics due to dust-borne
+  disease vectors 
+\end{enumerate*}
+\end{enumerate*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering % \centering uses less vertical space than center-environment
+% ${HOME}/idl/gcm.pro:gcm_xy_bch,pll=4,img=0,fld_top=1,lbl_typ='auto',prn=0
+\includegraphics[width=0.5\hsize]{/data/zender/fgr/ppr_ZBN03/dstmch90_clm_DSTSFMBL}%
+\includegraphics[width=0.5\hsize]{/data/zender/fgr/ppr_ZBN03/dstmch90_clm_DSTSFDPS}%
+
+\includegraphics[width=0.5\hsize]{/data/zender/fgr/ppr_ZBN03/dstmch90_clm_DSTSFDRY}%
+\includegraphics[width=0.5\hsize]{/data/zender/fgr/ppr_ZBN03/dstmch90_clm_DSTSFPCP}%
+\caption{
+Predicted annual mean dust source and sink fluxes in \ugxmSs\ for
+(a)~mobilization, (b)~total deposition, (c)~dry deposition, 
+(d)~wet deposition \cite[][]{ZBN03}.
+\label{fgr:sf}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure}
+\includegraphics*[height=6.5in,angle=90]{/data/zender/fgr/ppr_ZNT03/lubbock_mbl_bsn_fct}\vfill
+\caption{
+Soil spatial erodibility constraints $\rdbfct$ for four hypotheses: 
+(a)~Uniform, (b)~Topographic, 
+(c)~Geomorphic, (d)~Hydrologic \cite[][]{ZNT03}.
+\label{fgr:mbl_bsn_fct}}
+\end{figure}
+\clearpage
+
+\Large
+\begin{figure}
+\includegraphics[width=\hsize,clip=true,trim=1.45in 7.25in 1.5in 1.0in]{/data/zender/fgr/ppr_ZeK05/rdb_csn_AOD_pcp_NDVI_wnd_rgn}%
+\caption{
+Normalized seasonal cycle of atmospheric dust (black),
+precipitation (blue), \NDVI\ (green), and surface wind speed (red)
+over (a)~Eastern Sahel, (b)~Tarim Basin \cite[][]{ZeK05}.
+%, (c)~Saudi Arabia, and (d)~China's Loess Plateau.   
+\label{fgr:csn}}
+\end{figure}
+\clearpage
+
+\Large
+\begin{figure}
+\centering % \centering uses less vertical space than center-environment
+\includegraphics[width=0.9\hsize]{/data/zender/fgr/ppr_ZeT04/ccd_1960_2002_ncd_BFL}%
+\caption{
+Annual incidence $\NNN$\,[\nbrxyrfz] (solid line) 
+and total number of reported cases $\NNN_{0}$\,[\nbrxyr] (dashed line)
+of valley fever in Kern County from 1960--2002.
+Bars show two standard deviations of each year's monthly incidence
+statistics projected to annual rates \cite[][]{ZeT04}.
+\label{fgr:ncd}}
+\end{figure}
+\clearpage
+
+\section[Radiation And Climate]{Radiation And Climate}
+\Large
+\begin{enumerate*}
+\item Radiative Forcing
+\begin{enumerate*}
+\item How do natural natural (dust, volcanic, biomass burning)
+  aerosols affect climate?
+\item How much solar radiation do clouds, aerosols, and trace gases absorb?
+\end{enumerate*}
+\item Microphysical Radiative Interactions
+\begin{enumerate*}
+\item What effects do particle composition, shape, and size have on scattering?
+\item Do absorbing inclusions (soot, dust) significantly alter cloud properties?
+\end{enumerate*}
+\end{enumerate*}
+\clearpage
+
+\Large
+\begin{figure*}
+\centering
+\csznote{
+pdftk A=/data/zender/ppr/ppr_AMW03.pdf cat A3 output ${DATA}/fgr/ess_atm/ppr_AMW03_fgr3.pdf
+pdf2ps ${DATA}/fgr/ess_atm/ppr_AMW03_fgr3.pdf ${DATA}/fgr/ess_atm/ppr_AMW03_fgr3.ps
+ps2epsi ${DATA}/fgr/ess_atm/ppr_AMW03_fgr3.ps ${DATA}/fgr/ess_atm/ppr_AMW03_fgr3.eps
+} % end csznote
+\includegraphics[height=0.9\vsize,clip=true,trim=4.5in 2.0in 0.5in 6.0in]{/data/zender/fgr/ess_atm/ppr_AMW03_fgr3}%
+\caption{
+Observed and simulated 20th century temperature anomaly attributed to natural and
+anthropogenic forcing \cite[][Figure~3]{AMW03}. 
+\textbf{Solar forcing exceeded anthropogenic forcing until $\sim$1970!}
+\label{fgr:AMW03_fgr3}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure*}
+% /bin/cp ${DATA}/ps/swnb2_abs_spc_atm.eps ${DATA}/fgr/ess_atm/swnb2_abs_spc_atm.eps
+\includegraphics[width=1.0\hsize]{/data/zender/fgr/ess_atm/swnb2_abs_spc_atm}%
+\caption{
+(a)~Atmospheric absorptance of sunlight in clear and cloudy sky conditions
+\cite[][]{ZBP97}. 
+\label{fgr:abs_spc_atm}}
+\end{figure*}
+\clearpage
+
+\section[Surface Energy Exchange]{Surface Energy Exchange}
+\Large
+\begin{enumerate*}
+\item Turbulent Energy Transport
+\begin{enumerate*}
+\item Do unresolved wind speed fluctuations alter mean climate?
+\item How much dust do (sub-gridscale) dust devils entrain?
+\end{enumerate*}
+\item Drag Partitioning
+\begin{enumerate*}
+\item Does vegetation significantly alter heat exchange over adjacent bare ground?
+\item Are models too dry because they do not account for this?
+\end{enumerate*}
+\end{enumerate*}
+\clearpage
+
+\Large
+\begin{figure}
+\centering
+\includegraphics[height=0.9\vsize,clip=true,trim=2.0in 1.5in 2.0in 2.15in]{/data/zender/fgr/scapps/sh_bareground}
+\caption{
+Bareground sensible heat flux [\wxmS] dependence on sub-gridscale (SGS) winds.
+(a)~Mean winds, (b)~Including SGS winds, (c)~Difference.
+\label{fgr:shflx}}
+\end{figure}
+\clearpage
+
+\section[Snow-Albedo Feedback]{Snow-Albedo Feedback}
+\Large
+\begin{enumerate*}
+\item Snowpack Optical Properties
+\begin{enumerate*}
+\item How far does solar energy penetrate in snowpacks?
+\item How do temperature, temperature-gradient, and
+  time-since-snowfall alter snowpack brightness/absorption?
+\end{enumerate*}
+\item Dirty Snow
+\begin{enumerate*}
+\item What impact does ``dirty'' (e.g., sooty, dusty) snow have on climate?
+\item Does dirty snow influence sea-ice extent?
+\end{enumerate*}
+\end{enumerate*}
+\clearpage
+
+\Large
+\begin{figure*}
+\includegraphics[clip=true,trim=0.5in 3.0in 0.0in 3.75in]{/data/zender/fgr/ppr_FlZ05/flx_abs_col_clr}%
+\caption{
+Solar absorption profiles prescribed by CLM and predicted by SNICAR \cite[][]{FlZ05}.
+\label{fgr:rfl_snw_snicar}}
+\end{figure*}
+\clearpage
+
+\Large
+\begin{figure}
+\includegraphics[width=0.5\hsize]{/data/zender/fgr/ppr_FlZ05/snowdp_1}%
+\includegraphics[width=0.5\hsize]{/data/zender/fgr/ppr_FlZ05/snowdp_2}
+\caption{Annual cycle of observed and simulated snow depth over the
+  Tibetan Plateau: (Left) Coupled experiments. (Right) Off-line,
+  land-only experiments \cite[][]{FlZ05}.}
+\label{fgr:snowdp}
+\end{figure}
+\clearpage
+
+\Large
+\begin{figure}
+\centering
+\includegraphics[height=0.90\vsize,clip=true,trim=1.0in 0.25in 1.0in 0.25in]{/data/zender/fgr/snicar/snicar_soot_cnc_alb}
+\caption{Dependence of broadband solar snowpack albedo on (upper panel)
+  snow effective radius [\um] and (lower panel) soot concentration
+  [\ngxg] \cite[][]{FlZ05,FlZ06}.}
+\label{fgr:rfl_snw_soot}
+\end{figure}
+\clearpage
+
+\section[Distributed Data Reduction And Analysis]{Distributed Data Reduction And Analysis}
+\Large
+\clearpage
+
+\Large
+\begin{figure}
+\includegraphics[width=0.5\hsize,clip=true,trim=1.0in 2.5in 1.55in 3.5in]{/data/zender/fgr/ddra/IPCC_multiple_mdls_tempchange_fin}%
+\includegraphics[width=0.5\hsize,clip=true,trim=1.0in 2.5in 1.55in 3.5in]{/data/zender/fgr/ddra/IPCC_multiple_mdls_tempchange_Cal_fin}%
+\caption{
+Predicted Global (left) and California (right) annual-mean temperature
+from 2000--2099 under SRESA1B 720\,\ppm\ \COd\ stabilization scenario. 
+Temperature scales differ.
+\label{fgr:ccsm_tm_tas}}
+\end{figure}
+\clearpage
+
+\Large
+\begin{figure}
+\includegraphics[width=\hsize,clip=true,trim=0.0in 3.0in 0.0in 3.0in]{/data/zender/ddra/hiperwall_ipcc.jpg}%
+\caption{
+HIPerWall displaying ensemble of IPCC AR4 Model results (Photo: Chris Knox)
+\label{fgr:hiperwall_ipcc}}
+\end{figure}
+\clearpage
+
+\section[References]{References}
+% Bibliography
+%\renewcommand\refname{\normalsize Publications}
+\bibliographystyle{jas}
+\bibliography{bib}
+\vfill
+
+\csznote{
+% Transfer required figures to local machine
+mkdir -p ${DATA}/fgr/ess_phz
+for fl in \
+/data/zender/pix/ipcc_ccsm_ddra.pdf \
+; do 
+scp ashes.ess.uci.edu:${fl} ${DATA}/fgr/ess_phz
+printf "Copying ${fl}...\n"
+done
+} % end csznote
+
+\csznote{
+% Usage: Place usage here at end of file so comment character % not needed
+cd ~/ess_phz;pdflatex smn_dog_pny.tex;cd -
+cd ~/ess_phz;make -W smn_dog_pny.tex smn_dog_pny.dvi smn_dog_pny.ps smn_dog_pny.pdf;cd -
+cd ~/ess_phz;pdflatex smn_dog_pny.tex;thumbpdf smn_dog_pny;pdflatex smn_dog_pny.tex;cd -
+cd ~/ess_phz;texcln smn_dog_pny;make smn_dog_pny.pdf;bibtex smn_dog_pny;makeindex smn_dog_pny;make smn_dog_pny.pdf;bibtex smn_dog_pny;makeindex smn_dog_pny;make smn_dog_pny.pdf;cd -
+cd ~/ess_phz;make -W smn_dog_pny.tex smn_dog_pny.pdf;cd -
+
+scp ${DATA}/ps/smn_dog_pny.pdf dust.ess.uci.edu:/var/www/html/smn/smn_dog_pny.pdf
+} % end csznote
+
+% $: rebalance syntax highlighting
+
+\end{document}

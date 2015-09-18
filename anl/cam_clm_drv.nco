@@ -1,0 +1,131 @@
+// $Id$ -*-C-*-
+
+// Purpose: Derive fields from climate mean statistics
+
+// NB: All non-linear fields should be derived here
+
+// ALBEDO, FROM CLM
+// Comment following when CAM radiation fields are available:
+/*
+ALBS=FSR/(FSDS+1E-10);
+
+ALBDS=(FSRVD+FSRND)/(FSDSVD+FSDSND+1E-10);
+ALBIS=(FSRVI+FSRNI)/(FSDSVI+FSDSNI+1E-10);
+
+ALBVS=(FSRVD+FSRVI)/(FSDSVD+FSDSVI+1E-10);
+ALBNS=(FSRND+FSRNI)/(FSDSND+FSDSNI+1E-10);
+
+ALBVDS=FSRVD/(FSDSVD+1E-10);
+ALBVIS=FSRVI/(FSDSVI+1E-10);
+ALBNDS=FSRND/(FSDSND+1E-10);
+ALBNIS=FSRNI/(FSDSNI+1E-10);
+*/
+
+// ALBEDO, CLM/VANILLA: Albedo visible direct local noon
+ALBVDLNS=FSRVDLN/(FSDSVDLN+1E-10);
+ALBNDLNS=FSRNDLN/(FSDSNDLN+1E-10);
+
+// ALBEDO, CAM/VANILLA:
+ALBT=(SOLIN-FSNTOA)/(SOLIN+1E-10);
+ALBTC=(SOLIN-FSNTOAC)/(SOLIN+1E-10);
+ALBS=(FSDS-FSNS)/(FSDS+1E-10);
+
+FTNS=FSNS-FLNS;
+FTNT=FSNT-FLNT;
+FTNT2=FSNT-FLUT;
+TOARAD=FSNTOA-FLNT;
+
+// ALBEDO, CLM/SNICAR
+//ALBS_SNO=(FSDS_SNO-SABG_SNO)/FSDS_SNO;
+//ALBVS_SNO=(FSDSV_SNO-SABGV_SNO)/FSDSV_SNO;
+//ALBNS_SNO=(FSDSN_SNO-SABGN_SNO)/FSDSN_SNO;
+
+// ALBEDO, CAM/SNICAR: ALBD is direct ALBI is diffuse (indirect)
+ALBDS=(SOLL+SOLS-(FSNSND+FSNSVD))/(SOLL+SOLS+1E-10));
+ALBIS=(SOLLD+SOLSD-(FSNSNI+FSNSVI))/(SOLLD+SOLSD+1E-10);
+
+ALBVS=(SOLS+SOLSD-(FSNSVD+FSNSVI))/(SOLS+SOLSD+1E-10);
+ALBNS=(SOLL+SOLLD-(FSNSND+FSNSNI))/(SOLL+SOLLD+1E-10);
+
+ALBVDS=(SOLS-FSNSVD)/(SOLS+1E-10);
+ALBVIS=(SOLSD-FSNSVI)/(SOLSD+1E-10);
+ALBNDS=(SOLL-FSNSND)/(SOLL+1E-10);
+ALBNIS=(SOLLD-FSNSNI)/(SOLLD+1E-10);
+
+// HYDROLOGY, CLM/VANILLA: 
+RUNOFF=QOVER+QDRAI+QRGWL;
+SNOFLIQL=SNOWLIQ/(SNOWLIQ+SNOWICE+1E-10);
+PRECS=PRECSL+PRECSC; //total snow, CAM
+PREC=RAIN+SNOW; // total precip, CLM
+PRECT=PRECC+PRECL; // total precip, CAM
+
+//MLTFRC = QMELT/PREC;
+//MLTFRC2 = QMELT/SNOW;
+//QMELT2 = QMELT*86400;
+
+// HYDROLOGY, CSIM/SNICAR:
+//SNOFLIQI=SNOLIQI/(SNOLIQI+SNOWHICE+1E-10);
+
+// SNICAR ONLY
+
+//ABS_FRC_4=SABG_SNO4/(SABG_SNO4+SABG_SNO3+SABG_SNO2+SABG_SNO1+SABG_SNO0);
+//ABS_FRC_3=SABG_SNO3/(SABG_SNO4+SABG_SNO3+SABG_SNO2+SABG_SNO1+SABG_SNO0);
+//ABS_FRC_2=SABG_SNO2/(SABG_SNO4+SABG_SNO3+SABG_SNO2+SABG_SNO1+SABG_SNO0);
+//ABS_FRC_1=SABG_SNO1/(SABG_SNO4+SABG_SNO3+SABG_SNO2+SABG_SNO1+SABG_SNO0);
+//ABS_FRC_0=SABG_SNO0/(SABG_SNO4+SABG_SNO3+SABG_SNO2+SABG_SNO1+SABG_SNO0);
+
+// SOT_FRC OR SOT_FDB:
+SOTDEP = -(BCDEPDRY+BCDEPWET)*86400000; // convert from kg*m-2*s-1 to g*m-2*day-1
+SOTCL = 1E9*SNOBCMCL/(H2OSNO_TOP+1E-10);      // convert to ng g-1
+SOTCI = 1E9*SNOBCMCI/(SNOWHICE*1000+1E-10); // convert to ng g-1
+
+// DST_FRC OR DST_FDB:
+DSTSFDPS = DSTSFDRY+DSTSFWET; // 
+DSTCL = 1E6*SNODSTMCL/(H2OSNO_TOP+1E-10);      // convert to ug g-1
+DSTCI = 1E6*SNODSTMCI/(SNOWHICE*1000+1E-10); // convert to ug g-1
+
+// AER_FRC ONLY (either dust or soot): 
+AERAFRC_TOP = FSNT-FSNT_RF;
+AERAFRC_TOPC = FSNTC-FSNTC_RF;
+
+AERAFRC_SFC = FSNS-FSNS_RF;
+AERAFRC_SFCC = FSNSC-FSNSC_RF;
+
+// _DRV indicates derived by adding separately computed forcings
+// Model now computes integrated forcing directly 
+// Mark thinks the _DRV forcing will be smaller than the non-_DRV forcing
+SNOAERFRC_DRV = SNODSTFRC+SNOBCFRC; // [W m-2] Snowpack aerosol snowpack forcing 
+
+// Albedo perturbation from soot:
+ALBSOTL = SNOBCFRCL/FSDS; // Change in surface albedo
+ALBSOTVL = (0.89*SNOBCFRCL)/(SOLS+SOLSD); // Visible albedo perturbation, assumes 89% of forcing is in visible
+ALBSOTV2L = ALBSOTVL / (FSNO+1E-10); // Change in surface albedo over snow only
+
+// Albedo perturbation from dust:
+ALBDSTL = SNODSTFRCL/FSDS; // Change in surface albedo
+ALBDSTVL = (0.89*SNODSTFRCL)/(SOLS+SOLSD); // Visible albedo perturbation, assumes 89% of forcing is in visible
+ALBDSTV2L = ALBDSTVL / (FSNO+1E-10); // Change in surface albedo over snow only
+
+// Albedo perturbation from aerosols:
+ALBAERL = SNOAERFRCL/FSDS; // Change in surface albedo
+ALBAERVL = (0.89*SNOAERFRCL)/(SOLS+SOLSD); // Visible albedo perturbation, assumes 89% of forcing is in visible
+ALBAERV2L = ALBAERVL / (FSNO+1E-10); // Change in surface albedo over snow only
+
+//ALBSOTI = SNOBCFRCI/FSDS;
+//ALBSOTVI = (0.89*SNOBCFRCI)/(SOLS+SOLSD);
+//ALBSOTV2I = ALBSOTVI / (FSNOI+1E-10);
+
+// Fire-forcing fields:
+/*
+SOTAFRC_SFC2 = (SOTAFRC_SFC*area*1E6) / 7.5E7; // total_gridcell_forcing/fire_area
+SOTAFRC_SFCC2 = (SOTAFRC_SFCC*area*1E6) / 7.5E7; // total_gridcell_forcing/fire_area
+
+SOTAFRC_TOP2 = (SOTAFRC_TOP*area*1E6) / 7.5E7; // total_gridcell_forcing/fire_area
+SOTAFRC_TOPC2 = (SOTAFRC_TOPC*area*1E6) / 7.5E7; // total_gridcell_forcing/fire_area
+
+SNOBCFRCI2 = (SNOBCFRCI*area*ICEFRAC*1E6) / 7.5E7; // total_gridcell_forcing/fire_area
+SNOBCFRCL2 = (SNOBCFRCL*area*landfrac*1E6) / 7.5E7; // total_gridcell_forcing/fire_area
+
+SNOBCFRC_TOPI2 = (SNOBCFRC_TOPI*area*ICEFRAC*1E6) / 7.5E7; // total_gridcell_forcing/fire_area
+SNOBCFRC_TOPL2 = (SNOBCFRC_TOPL*area*landfrac*1E6) / 7.5E7; // total_gridcell_forcing/fire_area
+*/

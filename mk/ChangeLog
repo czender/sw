@@ -1,0 +1,5 @@
+2001-06-07  Charlie Zender  <zender@uci.edu>
+
+	* Changed all Makefiles to use ${FOO} instead of $(FOO) so that
+	mousing make commands into shell windows will work
+

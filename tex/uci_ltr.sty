@@ -1,0 +1,65 @@
+% $Id$
+
+% Purpose: Text header for UCI letterhead
+
+% Usage: 
+% \usepackage{uci_ltr} % Defines \uciltr for postscript letterhead inclusion
+
+%\topmargin -20mm
+%\textheight 220 mm
+\usepackage{epsf} % 
+\newfont{\sevenrm}{pplr at 7 pt}
+\newfont{\seventt}{pplr7t at 7 pt}
+% you have a choice of two letterheads, mine:
+\def\uciltr{
+% Drawing vbox will position Tex's pointer at the bottom of the picture
+\vsize=8.50truein
+\vbox to 0.43in {\hrule width 7in height 0pt depth 0pt}
+% Read embedded postscript
+\epsfxsize 8.5in
+\epsfbox{uci_hdr.ps} % UC letterhead graphic
+\vskip -3.25in
+\sevenrm\baselineskip=10pt
+
+% \begin{tabular*}{\hsize}{@{\extracolsep{\fill}}lr@{}}
+% CHARLES S.\ ZENDER & \\[-1.5ex]
+% DEPARTMENT OF EARTH SYSTEM SCIENCE & zender@uci.edu\\[-1.5ex]
+% UNIVERSITY OF CALIFORNIA & TEL: (949)\thinspace 824-2987\\[-1.5ex]
+% IRVINE, CA~~92697-3100 & FAX: (949)\thinspace 824-3874
+% \end{tabular*}
+
+\noindent DR. CHARLES S. ZENDER \hfill zender@uci.edu\\
+DEPARTMENTS OF EARTH SYSTEM SCIENCE AND COMPUTER SCIENCE \hfill {\seventt http://www.ess.uci.edu/\symbol{126}zender}\\ % KoD99 p. 63
+UNIVERSITY OF CALIFORNIA \hfill TEL: (949)\thinspace 891-2429\\
+IRVINE, CA 92697-3100 \hfill FAX: (949)\thinspace 824-3874
+
+% TeX table
+% \halign to \hsize{
+% \hfil ## \hfil & \hskip2.10in \hfil ## \hfil \cr
+% % ## \hfil & \hskip2.00in ## \hfil \cr
+% CHARLES S.\ ZENDER & TEL: (949) 824-2987 \cr
+% DEPARTMENT OF EARTH SYSTEM SCIENCE & FAX: (949) 824-3874 \cr
+% IRVINE, CALIFORNIA 92697-3100 &  e-mail: zender@uci.edu \cr
+% } % end table
+
+% Select a ten point font and set a nice line spacing
+\rm\baselineskip=13pt
+% Close up both sides of text body
+% \leftskip = 0.5in \rightskip = 0.5in
+\vskip 0.25in % Vertical space between my address header and the date
+% Stamp the date
+% {\leftskip=\longindentation  \today\par}
+} % end uciltr
+
+
+
+
+
+
+
+
+
+
+
+
+

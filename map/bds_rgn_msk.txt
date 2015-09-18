@@ -1,0 +1,48 @@
+41. 42. -124.2 -120.
+40. 41. -124.5 -120.
+39. 40. -123.7 -120.
+38.5 39. -123.7 -123.
+38. 39. -123. -120.
+38.5 39. -120. -119.5
+38. 38.5 -120. -119.
+37. 38. -122.5 -119.
+37.5 38. -119. -118.3
+37.5 37. -119. -117.5
+36. 37. -122. -117.
+36.5 37. -117. -116.6 
+36. 36.5 -117. -116.
+35.5 36. -121.4 -121.
+35. 36. -121. -116.
+35.7 36. -116. -115.7
+35.4 35.7 -116. -115.4
+35. 35.4 -116. -114.7
+34.5 35. -120.6 -120.
+34.4 35. -120. -119.3
+34.1 35. -119.3 -119.
+34. 35. -119. -114.7
+34.2 34.5 -114.7 -114.2
+33.7 34. -118.5 -118.
+33.6 34. -118. -117.
+33.3 33.6 -117.7 -117.
+33. 33.3 -117.3 -117.
+33. 34. -117. -114.6
+32.4 33. -117.3 -117.
+32.4 33. -117. -116.
+32.3 33. -116. -115.
+32.3 33. -115. -114.5
+0.  0.  0.   0.
+Above: California
+
+README:
+Above data describe four corners of lat x lon rectangles
+ordered [S,N,W,E] (lower-left to upper right) with units
+[degrees N, degrees N, degrees E, degrees E] where mask
+is true (unity), elsewhere mask is false (zero)
+1. Each line is one rectangle
+2. Input rectangle list is terminated by null rectangle entry "0.  0.  0.  0."
+3. Data comes before any comments
+
+60. 90. 0. 360.
+0.  0.  0.   0.
+Above: Mask all globe North of 60N
+

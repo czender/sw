@@ -1,0 +1,37 @@
+netcdf saharan_dust_ior {
+dimensions:
+	bnd = 33 ;
+variables:
+	double bnd(bnd) ;
+		bnd:units = "microns" ;
+		bnd:longname = "band center wavelength" ;
+		bnd:C_format = "%.5g" ;
+	float idx_rfr_saharan_dust_rl(bnd) ;
+		idx_rfr_saharan_dust_rl:units = "" ;
+		idx_rfr_saharan_dust_rl:longname = "saharan_dust refractive index, real part " ;
+		idx_rfr_saharan_dust_rl:C_format = "%.4g" ;
+	float idx_rfr_saharan_dust_img(bnd) ;
+		idx_rfr_saharan_dust_img:units = "" ;
+		idx_rfr_saharan_dust_img:longname = "saharan_dust refractive index, imag part " ;
+		idx_rfr_saharan_dust_img:C_format = "%.3g" ;
+
+// global attributes:
+		:description = "Saharan_dust refractive indices (F. Volz, Appl. Opt. V.12, 1973 ) - T. Roush" ;
+		:RCS_Header = "$Id$" ;
+		:history = "" ;
+		:author = "T. Roush(NASA Ames)" ;
+		:date = "netCDF file created 01 October, 2005" ;
+data:
+
+ bnd = 2.5, 2.9, 3.1, 4, 5, 6, 6.3, 7, 7.5, 8, 8.5, 8.6, 8.8, 9, 9.2, 9.4, 
+    9.6, 9.9, 10, 10.2, 10.4, 10.6, 10.8, 11, 12, 13, 14, 15, 19, 20, 24, 30, 40 ;
+
+ idx_rfr_saharan_dust_rl = 1.45, 1.47, 1.48, 1.47, 1.5, 1.43, 1.42, 1.45, 
+    1.37, 1.18, 1.07, 1.07, 1.65, 1.87, 2.17, 2.8, 3.07, 2.75, 2.59, 2.77, 
+    1.82, 1.7, 1.79, 1.84, 1.8, 1.74, 1.64, 1.52, 2.37, 2.2, 3.16, 2.4, 2.4 ;
+
+ idx_rfr_saharan_dust_img = 0.01, 0.04, 0.024, 0.045, 0.013, 0.045, 0.05, 
+    0.11, 0.071, 0.085, 0.19, 0.23, 0.33, 0.44, 0.52, 0.61, 0.7, 0.8, 0.92, 
+    0.88, 0.7, 0.6, 0.37, 0.31, 0.18, 0.18, 0.2, 0.25, 0.9, 0.8, 0.85, 0.65, 
+    0.65 ;
+}

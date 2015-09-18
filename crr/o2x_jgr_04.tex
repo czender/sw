@@ -1,0 +1,72 @@
+% $Id$
+
+% Purpose: Letter submitting revisions of Zen99 to JGR
+
+% Usage:
+% make -W o2x_jgr_04.tex o2x_jgr_04.ps
+% cd ~/crr;make -W o2x_jgr_04.tex o2x_jgr_02.ps o2x_jgr_03.ps o2x_jgr_04.ps;cd -
+% latex o2x_jgr_04; dvips -o /data/zender/ps/o2x_jgr_04.ps o2x_jgr_04.dvi
+
+\documentclass[12pt,twoside]{ncarletter}
+
+% Required in both letter and ncarletter classes:
+\name{Charles S. Zender}
+% Optional in both letter and ncarletter classes:
+%\pagestyle{headings} % Either plain,empty, or headings KoD95 p. 296
+\date{July~11, 1999} % Only necessary for fixed dates
+\signature{Charles S. Zender}
+\telephone{497-1445} % Printed at bottom iff \address not specified
+
+% Required in ncarletter class:
+
+% Optional in ncarletter class:
+\fax{497-1400} 
+\email{zender@ncar.ucar.edu}
+%\myref{CSZ/rlz}
+%\yref{JTK/pdf}
+%\ymail{March 12, 1964}
+%\subject{Job application} 
+
+% Required in letter class:
+% Optional in letter class:
+%\address{%
+%717 9th St.
+%Boulder CO}
+
+\begin{document}
+
+\begin{letter}{%
+Dr.~Roni Avissar\\
+Department of Environmental Sciences\\
+Cook College\\
+Rutgers University\\
+14 College Farm Road\\
+New Brunswick, NJ 08901-8551 USA}
+
+\opening{Dear Dr.~Avissar,}
+\enlargethispage*{0.25in} 
+
+Enclosed please find three copies of the revised manuscript
+JGRd-1999R036 ``Global climatology of abundance and solar absorption
+of oxygen collision complexes''.
+The manuscript has been revised to respond to the suggestions
+of both reviewers.  
+Their criticisms and suggestions are addressed item-by-item in the
+attached responses. 
+
+Thank you for your editorial assistance.
+
+\closing{Sincerely,}
+
+%\cc{Santa Claus\\Easter Bunny}
+\encl{Revisions of Manuscript JGRd-1999R036}
+
+%\ps % Postscript text is everything after \ps and before \end{letter}
+\end{letter}
+\end{document}
+
+
+
+
+
+

@@ -1,0 +1,733 @@
+Installing Intel Fortran and C++ compilers
+mkdir -p /data/zender/tmp/intel
+mv ~/fc010821rh71.tar /data/zender/tmp/intel/intel_f.tar
+mv ~/cc010911rh71.tar /data/zender/tmp/intel/intel_c.tar
+cd /data/zender/tmp/intel
+tar xvf intel_f.tar
+tar xvf intel_c.tar
+sudo ./install
+1
+accept
+
+rpm -qa | grep intel
+rpm -e `rpm -qa | grep intel`
+sudo cp ~/l_cpp.lic /opt/intel/licenses
+sudo cp ~/l_ftn.lic /opt/intel/licenses
+
+/opt/intel/licenses
+
+Package:
+ifc = Intel Fortran Compiler
+ldb = Linux debugger
+
+/opt/intel/
+
+20020505: Installing Intel Fortran and C++ compilers v. 6.0 on lanina
+mkdir -p /data/zender/tmp/intel
+mv ~/l_fc_p_6.0.140.tar /data/zender/tmp/intel/intel_f.tar
+mv ~/l_cc_p_6.0.139.tar /data/zender/tmp/intel/intel_c.tar
+cd /data/zender/tmp/intel
+tar xvf intel_f.tar
+tar xvf intel_c.tar
+sudo ./install
+1
+accept
+sudo cp l_cpp_19809410.lic l_for_70846464.lic /opt/intel/licenses
+sudo chmod a+r /opt/intel/licenses/*.lic
+
+20021122: Installing Intel Fortran and C++ compilers v. 7.0 on lanina
+Thank you for registering Intel(R) Fortran Compiler for Linux*.  For future reference, your serial number for this non-commercial registration is 1136-54831751.
+Thank you for registering Intel(R) C++ Compiler for Linux*.  For future reference, your serial number for this non-commercial registration is 1116-65629217.
+mkdir -p /data/zender/tmp/intel
+mv ~/l_fc_p_7.0.064.tar /data/zender/tmp/intel/intel_f.tar
+mv ~/l_cc_p_7.0.065.tar /data/zender/tmp/intel/intel_c.tar
+cd /data/zender/tmp/intel
+tar xvf intel_f.tar
+tar xvf intel_c.tar
+sudo ./install
+1
+accept
+sudo cp l_cpp_65629217.lic l_for_54831751.lic /opt/intel/licenses
+sudo chmod a+r /opt/intel/licenses/*.lic
+
+20021122: Installing Intel Fortran and C++ compilers v. 7.0 on elnino
+for fl in `ls 
+cd ${DATA}/tmp/intel
+sudo alien --to-deb intel-icc7-7.0-65.i386.rpm
+sudo alien --to-deb intel-ifc7-7.0-64.i386.rpm
+sudo apt-get install ./intel-icc7_7.0-66_i386.deb
+dpkg --remove intel-icc7
+dpkg --install intel-icc7_7.0-66_i386.deb
+dpkg --install --force-overwrite intel-ifc7_7.0-65_i386.deb
+dpkg --remove intel-icc7
+dpkg --remove intel-ifc7
+
+************************************************************************
+Begin ifc7 on elnino debian
+************************************************************************
+20030918: http://earth.leeds.ac.uk/~ash/aco/freesoftware.html
+
+http://www.intel.com/software/products/compilers/downloads/clin.htm
+http://www.intel.com/software/products/compilers/downloads/forlin.htm
+
+mkdir /data/zender/tmp/intel
+mv /data/zender/tmp/l_cc_p_7.1.006.tar /data/zender/tmp/intel/intel_c.tar
+mv /data/zender/tmp/l_fc_p_7.1.008.tar /data/zender/tmp/intel/intel_f.tar
+cd /data/zender/tmp/intel
+tar xvf intel_c.tar
+tar xvf intel_f.tar
+sudo alien -t intel-icc7-7.1-6.i386.rpm
+sudo alien -t intel-ifc7-7.1-8.i386.rpm
+sudo tar -xvzf intel-icc7-7.1.tgz
+sudo tar -xvzf intel-ifc7-7.1.tgz
+sudo mkdir /usr/local/intel
+sudo ln -s /usr/local /opt
+sudo mv ./opt/intel/compiler70 /usr/local/intel
+sudo mv ./opt/intel/licenses /usr/local/intel
+
+tags-query-replace scripts in /usr/local/intel/compiler70/ia32/bin
+Replace <INSTALLDIR> with /usr/local/intel
+Edit ifc.cfg which contains default compile options. 
+Add -w90 to suppress the copious warnings about non-standard Fortran
+
+sudo cp -f /usr/local/intel/compiler70/ia32/bin/ifc /usr/local/bin
+sudo cp -f /usr/local/intel/compiler70/ia32/bin/icc /usr/local/bin
+sudo chmod a+r *.lic
+sudo cp *.lic /usr/local/intel/licenses
+************************************************************************
+End ifc on debian
+************************************************************************
+
+************************************************************************
+Begin ifc8 on elnino debian
+************************************************************************
+20031216: http://earth.leeds.ac.uk/~ash/aco/freesoftware.html
+
+http://www.intel.com/software/products/compilers/downloads/clin.htm
+http://www.intel.com/software/products/compilers/downloads/forlin.htm
+
+mkdir /data/zender/tmp/intel
+mv /data/zender/tmp/l_cc_p_8.0.055.tar.gz /data/zender/tmp/intel/intel_c.tar.gz
+mv /data/zender/tmp/l_fc_p_8.0.034.tar.gz /data/zender/tmp/intel/intel_f.tar.gz
+cd /data/zender/tmp/intel
+tar xvzf intel_c.tar.gz
+tar xvzf intel_f.tar.gz
+cd /data/zender/tmp/intel/l_cc_p_8.0.055
+sudo alien -t intel-icc8-8.0-44.i386.rpm
+sudo tar xvzf intel-icc8-8.0.tgz
+cd /data/zender/tmp/intel/l_fc_p_8.0.034 
+sudo alien -t intel-ifort8-8.0-40.i386.rpm
+sudo tar xvzf intel-ifort8-8.0.tgz
+sudo mkdir /usr/local/intel
+sudo ln -s /usr/local /opt
+sudo mkdir -p /usr/local/intel/compiler80/ia32
+cd /data/zender/tmp/intel/l_cc_p_8.0.055/opt/intel_cc_80
+sudo cp -r . /usr/local/intel/compiler80/ia32
+cd /data/zender/tmp/intel/l_fc_p_8.0.034/opt/intel_fc_80
+sudo cp -r . /usr/local/intel/compiler80/ia32
+
+cd /usr/local/intel/compiler80/ia32/bin
+etags *.cfg *sh icpc ifort icc ifc
+tags-query-replace scripts in /usr/local/intel/compiler80/ia32/bin
+Replace <INSTALLDIR> with /usr/local/intel/compiler80/ia32
+Edit ifc.cfg which contains default compile options. 
+Add -w90 to suppress the copious warnings about non-standard Fortran
+
+cd /data/zender/tmp
+sudo chmod a+r *.lic
+sudo cp *.lic /usr/local/intel/compiler80/ia32/licenses
+************************************************************************
+End ifc on debian
+************************************************************************
+
+# 20050608 icc 8.1 on elnino.ess.uci.edu Debian Mepis 
+scp 'ashes.ess.uci.edu:/data/zender/tmp/intel-icc8*' ${DATA}/tmp
+scp 'ashes.ess.uci.edu:/data/zender/tmp/intel-iidb8*' ${DATA}/tmp
+scp 'ashes.ess.uci.edu:/data/zender/tmp/noncomm*' ${DATA}/tmp
+
+sudo dpkg --install ${DATA}/tmp/intel-icc8_8.1-29_i386.deb
+sudo cp ${DATA}/tmp/noncomm* /opt/intel_cc_80/licenses
+
+cd /opt/intel_cc_80/bin
+sudo etags *.cfg *sh icpc ifort icc ifc
+tags-query-replace scripts in /opt/intel_cc_80/bin
+Replace <INSTALLDIR> with /opt/intel_cc_80
+# end 20050608 icc 8.1 on elnino.ess.uci.edu Debian Mepis 
+
+************************************************************************
+Begin ifc8 on elnino debian
+# 20050608 icc 8.1 on elnino.ess.uci.edu Debian Mepis 
+# Intel compilers take some messin' with to install correctly
+# Paradigm:
+# 1. Do work below once on elnino---only change when new compilers come
+# 2. Copy distributable results to dust
+# 3. Copy from dust to other machines
+************************************************************************
+Recipe taken from this website:
+http://www.theochem.uwa.edu.au/fortran/intel_on_debian
+This works for the ifc/ifort, icc and iidb packages. 
+NB: alien increments package version number unless you give it the -k argument 
+
+# Remove pre-existing compilers, if any
+cd ${DATA}/tmp
+sudo apt-get remove intel-icc8
+sudo apt-get remove intel-iidb8
+sudo apt-get remove intel-ifort8
+rm *.lic
+
+# Get software and licenses
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/noncommercial_cpp_l_N4R8-SV7W4SJW.lic . 
+scp dust.ess.uci.edu:/data/zender/tmp/noncommercial_for_l_N9WP-MWBSKR4L.lic . 
+scp dust.ess.uci.edu:/data/zender/tmp/l_cc_pc_8.1.028.tar.gz .
+scp dust.ess.uci.edu:/data/zender/tmp/l_fc_pc_8.1.024.tar.gz .
+wget ftp://download.intel.com/software/products/compilers/downloads/l_cc_pc_8.1.028.tar.gz
+wget ftp://download.intel.com/software/products/compilers/downloads/l_fc_pc_8.1.024.tar.gz
+
+# Untar into C/Fortran subdirectories containing RPMs
+tar xvzf l_cc_pc_8.1.028.tar.gz
+tar xvzf l_fc_pc_8.1.024.tar.gz
+
+# Download make_deb_8 script
+wget http://www.theochem.uwa.edu.au/__data/page/47767/make_deb_8
+chmod a+x make_deb_8
+/bin/cp -f make_deb_8 ${DATA}/tmp/l_cc_pc_8.1.028
+/bin/cp -f make_deb_8 ${DATA}/tmp/l_fc_pc_8.1.024
+
+# Next three steps on each package:
+# 1. Convert Intel-supplied compiler RPMs to debs
+# 2. Run make_deb_8 script to apply Debian patches (e.g., replace INSTALL_DIR)
+# 3. Install package
+
+cd ${DATA}/tmp/l_cc_pc_8.1.028
+sudo alien --to-deb --keep-version intel-icc8-8.1-028.i386.rpm
+sudo ./make_deb_8 intel-icc8_8.1-028_i386.deb
+sudo dpkg -i intel-icc8_8.1-028_i386.deb
+
+sudo alien --to-deb --keep-version intel-iidb8-8.1-045.i386.rpm
+sudo ./make_deb_8 intel-iidb8_8.1-045_i386.deb
+sudo dpkg -i intel-iidb8_8.1-045_i386.deb
+
+cd ${DATA}/tmp/l_fc_pc_8.1.024
+sudo alien --to-deb --keep-version intel-ifort8-8.1-024.i386.rpm
+sudo ./make_deb_8 intel-ifort8_8.1-024_i386.deb
+sudo dpkg -i intel-ifort8_8.1-024_i386.deb
+
+# Install licenses
+cd ${DATA}/tmp
+sudo cp noncommercial_cpp_l_N4R8-SV7W4SJW.lic /opt/intel_cc_80/licenses
+sudo cp noncommercial_for_l_N9WP-MWBSKR4L.lic /opt/intel_fc_80/licenses
+
+# Make symbolic links to avoid PATH proliferation
+sudo ln -s -f /opt/intel_cc_80/bin/icc /usr/local/bin/icc
+sudo ln -s -f /opt/intel_cc_80/bin/icpc /usr/local/bin/icpc
+sudo ln -s -f /opt/intel_fc_80/bin/ifort /usr/local/bin/ifort
+sudo ln -s -f /opt/intel_idb_80/bin/idb /usr/local/bin/idb
+
+# Copy RPMs and debs to server for easier distribution
+scp ${DATA}/tmp/noncommercial_*.lic \
+${DATA}/tmp/l_cc_pc_8.1.028/intel-icc8-8.1-028.i386.rpm \
+${DATA}/tmp/l_cc_pc_8.1.028/intel-icc8_8.1-028_i386.deb \
+${DATA}/tmp/l_cc_pc_8.1.028/intel-iidb8-8.1-045.i386.rpm \
+${DATA}/tmp/l_cc_pc_8.1.028/intel-iidb8_8.1-045_i386.deb \
+${DATA}/tmp/l_fc_pc_8.1.024/intel-ifort8-8.1-024.i386.rpm \
+${DATA}/tmp/l_fc_pc_8.1.024/intel-ifort8_8.1-024_i386.deb \
+dust.ess.uci.edu:/data/zender/tmp
+************************************************************************
+# end 20050708: elnino.ess.uci.edu LINUX Debian/Ubuntu Hoary Hedgehog 5.04 icc-ifort 8.1 compilers
+************************************************************************
+
+************************************************************************
+# 20050709: seasalt.ess.uci.edu LINUX Debian/Ubuntu Hoary Hedgehog 5.04 icc-ifort 8.1 compilers
+************************************************************************
+# Remove pre-existing compilers, if any
+cd ${DATA}/tmp
+sudo apt-get remove intel-icc8
+sudo apt-get remove intel-iidb8
+sudo apt-get remove intel-ifort8
+rm *.lic
+
+# Copy debs from server for easier installation
+cd ${DATA}/tmp
+scp 'dust.ess.uci.edu:${DATA}/tmp/noncommercial_*.lic' \
+'dust.ess.uci.edu:${DATA}/tmp/intel-icc8_8.1-028_i386.deb' \
+'dust.ess.uci.edu:${DATA}/tmp/intel-iidb8_8.1-045_i386.deb' \
+'dust.ess.uci.edu:${DATA}/tmp/intel-ifort8_8.1-024_i386.deb' \
+${DATA}/tmp
+
+# Install debs
+sudo dpkg -i intel-icc8_8.1-028_i386.deb
+sudo dpkg -i intel-iidb8_8.1-045_i386.deb
+sudo dpkg -i intel-ifort8_8.1-024_i386.deb
+
+# Make symbolic links to avoid PATH proliferation
+sudo ln -s -f /opt/intel_cc_80/bin/icc /usr/local/bin/icc
+sudo ln -s -f /opt/intel_cc_80/bin/icpc /usr/local/bin/icpc
+sudo ln -s -f /opt/intel_fc_80/bin/ifort /usr/local/bin/ifort
+sudo ln -s -f /opt/intel_idb_80/bin/idb /usr/local/bin/idb
+
+# Install licenses
+cd ${DATA}/tmp
+sudo cp noncommercial_cpp_l_N4R8-SV7W4SJW.lic /opt/intel_cc_80/licenses
+sudo cp noncommercial_for_l_N9WP-MWBSKR4L.lic /opt/intel_fc_80/licenses
+************************************************************************
+# end 20050709: seasalt.ess.uci.edu LINUX Debian/Ubuntu Hoary Hedgehog 5.04 icc-ifort 8.1 compilers
+************************************************************************
+
+************************************************************************
+# 20050608 icc 8.1 on soot.ess.uci.edu Fedora Core 3
+************************************************************************
+# Un-install existing packages, if any
+sudo rpm -e intel-icc8
+sudo rpm -e intel-iidb8
+sudo rpm -e intel-ifort8
+
+# Copy RPMs from server for easier installation
+cd ${DATA}/tmp
+scp 'dust.ess.uci.edu:${DATA}/tmp/noncommercial_*.lic' \
+'dust.ess.uci.edu:${DATA}/tmp/intel-icc8-8.1-028.i386.rpm' \
+'dust.ess.uci.edu:${DATA}/tmp/intel-iidb8-8.1-045.i386.rpm' \
+'dust.ess.uci.edu:${DATA}/tmp/intel-ifort8-8.1-024.i386.rpm' \
+${DATA}/tmp
+
+# Install RPMs
+sudo rpm -i intel-icc8-8.1-028.i386.rpm
+sudo rpm -i intel-iidb8-8.1-045.i386.rpm
+sudo rpm -i intel-ifort8-8.1-024.i386.rpm
+
+# Patch RPMs
+cd /opt/intel_cc_80/bin
+sudo perl -pi -e 's/<INSTALLDIR>/\/opt\/intel_cc_80/g;' icc icpc iccvars.*sh
+cd /opt/intel_fc_80/bin
+sudo perl -pi -e 's/<INSTALLDIR>/\/opt\/intel_fc_80/g;' ifc ifort ifortvars.*sh  
+cd /opt/intel_idb_80/bin
+sudo perl -pi -e 's/<INSTALLDIR>/\/opt\/intel_idb_80/g;' idbvars.*sh
+
+# Make symbolic links to avoid PATH proliferation
+sudo ln -s -f /opt/intel_cc_80/bin/icc /usr/local/bin/icc
+sudo ln -s -f /opt/intel_cc_80/bin/icpc /usr/local/bin/icpc
+sudo ln -s -f /opt/intel_fc_80/bin/ifort /usr/local/bin/ifort
+sudo ln -s -f /opt/intel_idb_80/bin/idb /usr/local/bin/idb
+
+# Install licenses
+cd ${DATA}/tmp
+sudo cp noncommercial_cpp_l_N4R8-SV7W4SJW.lic /opt/intel_cc_80/licenses
+sudo cp noncommercial_for_l_N9WP-MWBSKR4L.lic /opt/intel_fc_80/licenses
+************************************************************************
+# end 20050608 icc 8.1 on soot.ess.uci.edu Fedora Core 3
+************************************************************************
+
+************************************************************************
+# 20050827 icc 9.0 on sand.ess.uci.edu LINUX Debian/Ubuntu Hoary Hedgehog 5.04
+************************************************************************
+# Patch RPMs
+************************************************************************
+# end 20050827 icc 9.0 on sand.ess.uci.edu LINUX Debian/Ubuntu Hoary Hedgehog 5.04
+************************************************************************
+
+************************************************************************
+# 20050916 icc 9.0 on elnino.ess.uci.edu LINUX Debian/Ubuntu Hoary Hedgehog 5.04
+************************************************************************
+# Intel compilers take some messin' with to install correctly
+# Paradigm:
+# 1. Do work below once on elnino---only change when new compilers come
+# 2. Copy distributable results to dust
+# 3. Copy from dust to other machines
+************************************************************************
+Recipe taken from this website:
+http://www.theochem.uwa.edu.au/fortran/intel_on_debian
+This works for the ifc/ifort, icc and iidb packages. 
+NB: alien increments package version number unless you give it the -k argument 
+
+# Remove pre-existing compilers, if any
+cd ${DATA}/tmp
+sudo apt-get remove intel-icc9
+sudo apt-get remove intel-iidb9
+sudo apt-get remove intel-ifort9
+rm *.lic
+
+# Ultimate source at Intel
+
+# Get software and licenses
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/noncommercial_cpp_l_NJ6Z-K6LG8CJ9.lic . 
+scp dust.ess.uci.edu:/data/zender/tmp/noncommercial_for_l_NJ24-PWRGBRWC.lic . 
+scp dust.ess.uci.edu:/data/zender/tmp/l_cc_p_9.0.021.tar.gz .
+scp dust.ess.uci.edu:/data/zender/tmp/l_fc_p_9.0.021.tar.gz .
+wget ftp://download.intel.com/software/products/compilers/downloads/eval/preview/l_cc_p_9.0.021.tar.gz
+wget ftp://download.intel.com/software/products/compilers/downloads/eval/preview/l_fc_p_9.0.021.tar.gz
+
+# Untar into C/Fortran subdirectories containing RPMs
+tar xvzf l_cc_p_9.0.021.tar.gz
+tar xvzf l_fc_p_9.0.021.tar.gz
+
+# Use custom make_deb_9 script from author of make_deb_8 script
+# wget http://www.theochem.uwa.edu.au/__data/page/47767/make_deb_9
+scp make_deb_9 dust.ess.uci.edu:/data/zender/tmp
+chmod a+x make_deb_9
+/bin/cp -f make_deb_9 ${DATA}/tmp/l_cc_p_9.0.021
+/bin/cp -f make_deb_9 ${DATA}/tmp/l_fc_p_9.0.021
+
+# Next three steps on each package:
+# 1. Convert Intel-supplied compiler RPMs to debs
+# 2. Run make_deb_9 script to apply Debian patches (e.g., replace INSTALL_DIR)
+# 3. Install package
+
+cd ${DATA}/tmp/l_cc_p_9.0.021
+sudo alien --to-deb --keep-version intel-icc9-9.0-021.i386.rpm
+sudo ./make_deb_9 intel-icc9_9.0-021_i386.deb
+sudo dpkg -i intel-icc9_9.0-021_i386.deb
+
+sudo alien --to-deb --keep-version intel-iidb9-9.0-026.i386.rpm
+sudo ./make_deb_9 intel-iidb9_9.0-026_i386.deb
+sudo dpkg -i intel-iidb9_9.0-026_i386.deb
+
+cd ${DATA}/tmp/l_fc_p_9.0.021
+sudo alien --to-deb --keep-version intel-ifort9-9.0-021.i386.rpm
+sudo ./make_deb_9 intel-ifort9_9.0-021_i386.deb
+sudo dpkg -i intel-ifort9_9.0-021_i386.deb
+
+# Install licenses
+cd ${DATA}/tmp
+sudo cp noncommercial_cpp_l_NJ6Z-K6LG8CJ9.lic /opt/intel/cc/9.0/licenses
+sudo cp noncommercial_for_l_NJ24-PWRGBRWC.lic /opt/intel/fc/9.0/licenses
+
+# Make symbolic links to avoid PATH proliferation
+sudo ln -s -f /opt/intel/cc/9.0/bin/icc /usr/local/bin/icc
+sudo ln -s -f /opt/intel/cc/9.0/bin/icpc /usr/local/bin/icpc
+sudo ln -s -f /opt/intel/fc/9.0/bin/ifort /usr/local/bin/ifort
+sudo ln -s -f /opt/intel/idb/9.0/bin/idb /usr/local/bin/idb
+
+# Copy RPMs and debs to server for easier distribution
+scp ${DATA}/tmp/noncommercial_*.lic \
+${DATA}/tmp/l_cc_p_9.0.021/intel-icc9-9.0-021.i386.rpm \
+${DATA}/tmp/l_cc_p_9.0.021/intel-icc9_9.0-021_i386.deb \
+${DATA}/tmp/l_cc_p_9.0.021/intel-iidb9-9.0-026.i386.rpm \
+${DATA}/tmp/l_cc_p_9.0.021/intel-iidb9_9.0-026_i386.deb \
+${DATA}/tmp/l_fc_p_9.0.021/intel-ifort9-9.0-021.i386.rpm \
+${DATA}/tmp/l_fc_p_9.0.021/intel-ifort9_9.0-021_i386.deb \
+dust.ess.uci.edu:/data/zender/tmp
+************************************************************************
+# end 20050916 icc 9.0 on elnino.ess.uci.edu LINUX Debian/Ubuntu Hoary Hedgehog 5.04
+************************************************************************
+
+************************************************************************
+# 20050916: ashes.ess.uci.edu LINUX Debian/Ubuntu Hoary Hedgehog 5.04 icc-ifort 9.0 compilers
+************************************************************************
+# Remove pre-existing compilers, if any
+cd ${DATA}/tmp
+sudo apt-get remove intel-icc9
+sudo apt-get remove intel-iidb9
+sudo apt-get remove intel-ifort9
+rm *.lic
+
+# Copy debs from server for easier installation
+cd ${DATA}/tmp
+scp 'dust.ess.uci.edu:${DATA}/tmp/noncommercial_*.lic' \
+'dust.ess.uci.edu:${DATA}/tmp/intel-icc9_9.0-021_i386.deb' \
+'dust.ess.uci.edu:${DATA}/tmp/intel-iidb9_9.0-026_i386.deb' \
+'dust.ess.uci.edu:${DATA}/tmp/intel-ifort9_9.0-021_i386.deb' \
+${DATA}/tmp
+
+# Install debs
+sudo dpkg -i intel-icc9_9.0-021_i386.deb
+sudo dpkg -i intel-iidb9_9.0-026_i386.deb
+sudo dpkg -i intel-ifort9_9.0-021_i386.deb
+
+# Make symbolic links to avoid PATH proliferation
+sudo ln -s -f /opt/intel/cc/9.0/bin/icc /usr/local/bin/icc
+sudo ln -s -f /opt/intel/cc/9.0/bin/icpc /usr/local/bin/icpc
+sudo ln -s -f /opt/intel/fc/9.0/bin/ifort /usr/local/bin/ifort
+sudo ln -s -f /opt/intel/idb/9.0/bin/idb /usr/local/bin/idb
+
+# Install licenses
+cd ${DATA}/tmp
+sudo cp noncommercial_cpp_l_NJ6Z-K6LG8CJ9.lic /opt/intel/cc/9.0/licenses
+sudo cp noncommercial_for_l_NJ24-PWRGBRWC.lic /opt/intel/fc/9.0/licenses
+************************************************************************
+# end 20050916: ashes.ess.uci.edu LINUX Debian/Ubuntu Hoary Hedgehog 5.04 icc-ifort 9.0 compilers
+************************************************************************
+
+************************************************************************
+# 20050916 icc 9.0 on soot.ess.uci.edu Fedora Core 3
+************************************************************************
+# Un-install existing packages, if any
+sudo rpm -e intel-icc9
+sudo rpm -e intel-iidb9
+sudo rpm -e intel-ifort9
+
+# Copy RPMs from server for easier installation
+cd ${DATA}/tmp
+scp 'dust.ess.uci.edu:${DATA}/tmp/noncommercial_*.lic' \
+'dust.ess.uci.edu:${DATA}/tmp/intel-icc9-9.0-021.i386.rpm' \
+'dust.ess.uci.edu:${DATA}/tmp/intel-iidb9-9.0-026.i386.rpm' \
+'dust.ess.uci.edu:${DATA}/tmp/intel-ifort9-9.0-021.i386.rpm' \
+${DATA}/tmp
+
+# Install RPMs
+sudo rpm -i intel-icc9-9.0-021.i386.rpm
+sudo rpm -i intel-iidb9-9.0-026.i386.rpm
+sudo rpm -i intel-ifort9-9.0-021.i386.rpm
+
+# Patch RPMs
+cd /opt/intel_cc_80/bin
+sudo perl -pi -e 's/<INSTALLDIR>/\/opt\/intel_cc_80/g;' icc icpc iccvars.*sh
+cd /opt/intel_fc_80/bin
+sudo perl -pi -e 's/<INSTALLDIR>/\/opt\/intel_fc_80/g;' ifc ifort ifortvars.*sh  
+cd /opt/intel_idb_80/bin
+sudo perl -pi -e 's/<INSTALLDIR>/\/opt\/intel_idb_80/g;' idbvars.*sh
+
+# Make symbolic links to avoid PATH proliferation
+sudo ln -s -f /opt/intel/cc/9.0/bin/icc /usr/local/bin/icc
+sudo ln -s -f /opt/intel/cc/9.0/bin/icpc /usr/local/bin/icpc
+sudo ln -s -f /opt/intel/fc/9.0/bin/ifort /usr/local/bin/ifort
+sudo ln -s -f /opt/intel/idb/9.0/bin/idb /usr/local/bin/idb
+
+# Install licenses
+cd ${DATA}/tmp
+sudo cp noncommercial_cpp_l_NJ6Z-K6LG8CJ9.lic /opt/intel/cc/9.0/licenses
+sudo cp noncommercial_for_l_NJ24-PWRGBRWC.lic /opt/intel/fc/9.0/licenses
+************************************************************************
+# end 20050916 icc 9.0 on soot.ess.uci.edu Fedora Core 3
+************************************************************************
+
+************************************************************************
+# 20060225 icc 9.0 on virga.ess.uci.edu Debian Ubuntu Dapper Drake
+************************************************************************
+# Intel compilers take some messin' with to install correctly
+# Paradigm:
+# 1. Do work below once on virga---only change when new compilers come
+# 2. Copy distributable results to dust
+# 3. Copy from dust to other machines
+************************************************************************
+Recipe taken from this website:
+http://www.theochem.uwa.edu.au/fortran/intel_on_debian
+This works for the ifc/ifort, icc and iidb packages. 
+NB: alien increments package version number unless you give it the -k argument 
+
+# Remove pre-existing compilers, if any
+cd ${DATA}/tmp
+sudo apt-get remove intel-icc9
+sudo apt-get remove intel-iidb9
+sudo apt-get remove intel-ifort9
+rm *.lic
+
+# Ultimate source at Intel
+
+# Get software and licenses
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/noncommercial_cpp_l_NJ6Z-K6LG8CJ9.lic . 
+scp dust.ess.uci.edu:/data/zender/tmp/noncommercial_for_l_NJ24-PWRGBRWC.lic . 
+scp dust.ess.uci.edu:/data/zender/tmp/noncommercial_mkl_l_N7CX-MW6J2D8G.lic .
+scp dust.ess.uci.edu:/data/zender/tmp/l_cc_c_9.0.030.tar.gz .
+scp dust.ess.uci.edu:/data/zender/tmp/l_fc_c_9.0.031.tar.gz .
+scp dust.ess.uci.edu:/data/zender/tmp/l_mkl_p_8.0.1.006.tgz .
+wget ftp://download.intel.com/software/products/compilers/downloads/eval/preview/l_cc_c_9.0.030.tar.gz
+wget ftp://download.intel.com/software/products/compilers/downloads/eval/preview/l_fc_c_9.0.031.tar.gz
+wget ftp://download.intel.com/software/products/mkl/downloads/l_mkl_p_8.0.1.006.tgz
+
+# Untar into C/Fortran subdirectories containing RPMs
+tar xvzf l_cc_c_9.0.030.tar.gz
+tar xvzf l_fc_c_9.0.031.tar.gz
+tar xvzf l_mkl_p_8.0.1.006.tgz
+
+# Use custom make_deb_9 script from author of make_deb_8 script
+# wget http://www.theochem.uwa.edu.au/__data/page/47767/make_deb_9
+scp make_deb_9 dust.ess.uci.edu:/data/zender/tmp
+chmod a+x make_deb_9
+/bin/cp -f make_deb_9 ${DATA}/tmp/l_cc_c_9.0.030
+/bin/cp -f make_deb_9 ${DATA}/tmp/l_fc_c_9.0.031
+/bin/cp -f make_deb_9 ${DATA}/tmp/l_mkl_p_8.0.1.006
+
+# Next three steps on each package:
+# 1. Convert Intel-supplied compiler RPMs to debs
+# 2. Run make_deb_9 script to apply Debian patches (e.g., replace INSTALL_DIR)
+# 3. Install package
+
+cd ${DATA}/tmp/l_cc_c_9.0.030
+sudo alien --to-deb --keep-version intel-icc9-9.0-030.i386.rpm
+sudo ./make_deb_9 intel-icc9_9.0-030_i386.deb
+sudo dpkg -i intel-icc9_9.0-030_i386.deb
+
+sudo alien --to-deb --keep-version intel-iidb9-9.0-035.i386.rpm
+sudo ./make_deb_9 intel-iidb9_9.0-035_i386.deb
+sudo dpkg -i intel-iidb9_9.0-035_i386.deb
+
+cd ${DATA}/tmp/l_fc_c_9.0.031
+sudo alien --to-deb --keep-version intel-ifort9-9.0-031.i386.rpm
+sudo ./make_deb_9 intel-ifort9_9.0-031_i386.deb
+sudo dpkg -i intel-ifort9_9.0-031_i386.deb
+
+cd ${DATA}/tmp/l_mkl_p_8.0.1.006
+# MKL not debian-ready yet run 'install.sh' as non-root puts RPMs in /tmp/mkl
+./install.sh
+mv /tmp/mkl/intel-mkl-8.0.1p-6.i386.rpm ${DATA}/tmp/l_mkl_p_8.0.1.006
+sudo alien --to-deb --keep-version intel-mkl-8.0.1p-6.i386.rpm 
+sudo ./make_deb_9 intel-mkl_8.0.1p-6_all.deb
+sudo dpkg -i intel-mkl_8.0.1p-6_all.deb
+
+# Install licenses
+cd ${DATA}/tmp
+sudo cp noncommercial_cpp_l_NJ6Z-K6LG8CJ9.lic /opt/intel/cc/9.0/licenses
+sudo cp noncommercial_for_l_NJ24-PWRGBRWC.lic /opt/intel/fc/9.0/licenses
+
+# Make symbolic links to avoid PATH proliferation
+sudo ln -s -f /opt/intel/cc/9.0/bin/icc /usr/local/bin/icc
+sudo ln -s -f /opt/intel/cc/9.0/bin/icpc /usr/local/bin/icpc
+sudo ln -s -f /opt/intel/fc/9.0/bin/ifort /usr/local/bin/ifort
+sudo ln -s -f /opt/intel/idb/9.0/bin/idb /usr/local/bin/idb
+
+# Copy RPMs and debs to server for easier distribution
+scp ${DATA}/tmp/noncommercial_*.lic \
+${DATA}/tmp/l_cc_c_9.0.030/intel-icc9-9.0-030.i386.rpm \
+${DATA}/tmp/l_cc_c_9.0.030/intel-icc9_9.0-030_i386.deb \
+${DATA}/tmp/l_cc_c_9.0.030/intel-iidb9-9.0-035.i386.rpm \
+${DATA}/tmp/l_cc_c_9.0.030/intel-iidb9_9.0-035_i386.deb \
+${DATA}/tmp/l_fc_c_9.0.031/intel-ifort9-9.0-031.i386.rpm \
+${DATA}/tmp/l_fc_c_9.0.031/intel-ifort9_9.0-031_i386.deb \
+dust.ess.uci.edu:/data/zender/tmp
+************************************************************************
+# end 20060225 icc 9.0 on virga.ess.uci.edu Debian Ubuntu Dapper Drake
+************************************************************************
+
+************************************************************************
+# 20050916: elnino.ess.uci.edu LINUX Debian/Ubuntu Dapper Drake icc-ifort 9.0 compilers
+************************************************************************
+# Remove pre-existing compilers, if any
+cd ${DATA}/tmp
+sudo apt-get remove intel-icc9
+sudo apt-get remove intel-iidb9
+sudo apt-get remove intel-ifort9
+rm *.lic
+
+# Copy debs from server for easier installation
+cd ${DATA}/tmp
+scp 'dust.ess.uci.edu:${DATA}/tmp/noncommercial_*.lic' \
+'dust.ess.uci.edu:${DATA}/tmp/intel-icc9_9.0-030_i386.deb' \
+'dust.ess.uci.edu:${DATA}/tmp/intel-iidb9_9.0-035_i386.deb' \
+'dust.ess.uci.edu:${DATA}/tmp/intel-ifort9_9.0-031_i386.deb' \
+${DATA}/tmp
+
+# Install debs
+sudo dpkg -i intel-icc9_9.0-030_i386.deb
+sudo dpkg -i intel-iidb9_9.0-035_i386.deb
+sudo dpkg -i intel-ifort9_9.0-031_i386.deb
+
+# Make symbolic links to avoid PATH proliferation
+sudo ln -s -f /opt/intel/cc/9.0/bin/icc /usr/local/bin/icc
+sudo ln -s -f /opt/intel/cc/9.0/bin/icpc /usr/local/bin/icpc
+sudo ln -s -f /opt/intel/fc/9.0/bin/ifort /usr/local/bin/ifort
+sudo ln -s -f /opt/intel/idb/9.0/bin/idb /usr/local/bin/idb
+
+# Install licenses
+cd ${DATA}/tmp
+sudo cp noncommercial_cpp_l_NJ6Z-K6LG8CJ9.lic /opt/intel/cc/9.0/licenses
+sudo cp noncommercial_for_l_NJ24-PWRGBRWC.lic /opt/intel/fc/9.0/licenses
+************************************************************************
+# end 20050916: elnino.ess.uci.edu LINUX Debian/Ubuntu Dapper Drake icc-ifort 9.0 compilers
+************************************************************************
+
+************************************************************************
+# 20060516 icc 9.1 on virga.ess.uci.edu Debian Ubuntu Dapper Drake
+************************************************************************
+# Intel compilers take some messin' with to install correctly
+# Paradigm:
+# 1. Do work below once on virga---only change when new compilers come
+# 2. Copy distributable results to dust
+# 3. Copy from dust to other machines
+************************************************************************
+Recipe taken from this website:
+http://www.theochem.uwa.edu.au/fortran/intel_on_debian
+This works for the ifc/ifort, icc and iidb packages. 
+NB: alien increments package version number unless you give it the -k argument 
+
+# Remove pre-existing compilers, if any
+cd ${DATA}/tmp
+sudo apt-get remove intel-icc9
+sudo apt-get remove intel-iidb9
+sudo apt-get remove intel-ifort9
+rm *.lic
+
+# Ultimate source at Intel
+
+# Get software and licenses
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/noncommercial_cpp_l_NJ6Z-K6LG8CJ9.lic . 
+scp dust.ess.uci.edu:/data/zender/tmp/noncommercial_for_l_NJ24-PWRGBRWC.lic . 
+scp dust.ess.uci.edu:/data/zender/tmp/noncommercial_mkl_l_N7CX-MW6J2D8G.lic .
+scp dust.ess.uci.edu:/data/zender/tmp/l_cc_c_9.0.030.tar.gz .
+scp dust.ess.uci.edu:/data/zender/tmp/l_fc_c_9.0.031.tar.gz .
+scp dust.ess.uci.edu:/data/zender/tmp/l_mkl_p_8.0.1.006.tgz .
+wget ftp://download.intel.com/software/products/compilers/downloads/eval/preview/l_cc_c_9.0.030.tar.gz
+wget ftp://download.intel.com/software/products/compilers/downloads/eval/preview/l_fc_c_9.0.031.tar.gz
+wget ftp://download.intel.com/software/products/mkl/downloads/l_mkl_p_8.0.1.006.tgz
+
+# Untar into C/Fortran subdirectories containing RPMs
+tar xvzf l_cc_c_9.0.030.tar.gz
+tar xvzf l_fc_c_9.0.031.tar.gz
+tar xvzf l_mkl_p_8.0.1.006.tgz
+
+# Use custom make_deb_9 script from author of make_deb_8 script
+# wget http://www.theochem.uwa.edu.au/__data/page/47767/make_deb_9
+scp make_deb_9 dust.ess.uci.edu:/data/zender/tmp
+chmod a+x make_deb_9
+/bin/cp -f make_deb_9 ${DATA}/tmp/l_cc_c_9.0.030
+/bin/cp -f make_deb_9 ${DATA}/tmp/l_fc_c_9.0.031
+/bin/cp -f make_deb_9 ${DATA}/tmp/l_mkl_p_8.0.1.006
+
+# Next three steps on each package:
+# 1. Convert Intel-supplied compiler RPMs to debs
+# 2. Run make_deb_9 script to apply Debian patches (e.g., replace INSTALL_DIR)
+# 3. Install package
+
+cd ${DATA}/tmp/l_cc_c_9.0.030
+sudo alien --to-deb --keep-version intel-icc9-9.0-030.i386.rpm
+sudo ./make_deb_9 intel-icc9_9.0-030_i386.deb
+sudo dpkg -i intel-icc9_9.0-030_i386.deb
+
+sudo alien --to-deb --keep-version intel-iidb9-9.0-035.i386.rpm
+sudo ./make_deb_9 intel-iidb9_9.0-035_i386.deb
+sudo dpkg -i intel-iidb9_9.0-035_i386.deb
+
+cd ${DATA}/tmp/l_fc_c_9.0.031
+sudo alien --to-deb --keep-version intel-ifort9-9.0-031.i386.rpm
+sudo ./make_deb_9 intel-ifort9_9.0-031_i386.deb
+sudo dpkg -i intel-ifort9_9.0-031_i386.deb
+
+cd ${DATA}/tmp/l_mkl_p_8.0.1.006
+# MKL not debian-ready yet run 'install.sh' as non-root puts RPMs in /tmp/mkl
+./install.sh
+mv /tmp/mkl/intel-mkl-8.0.1p-6.i386.rpm ${DATA}/tmp/l_mkl_p_8.0.1.006
+sudo alien --to-deb --keep-version intel-mkl-8.0.1p-6.i386.rpm 
+sudo ./make_deb_9 intel-mkl_8.0.1p-6_all.deb
+sudo dpkg -i intel-mkl_8.0.1p-6_all.deb
+
+# Install licenses
+cd ${DATA}/tmp
+sudo cp noncommercial_cpp_l_NJ6Z-K6LG8CJ9.lic /opt/intel/cc/9.0/licenses
+sudo cp noncommercial_for_l_NJ24-PWRGBRWC.lic /opt/intel/fc/9.0/licenses
+
+# Make symbolic links to avoid PATH proliferation
+sudo ln -s -f /opt/intel/cc/9.0/bin/icc /usr/local/bin/icc
+sudo ln -s -f /opt/intel/cc/9.0/bin/icpc /usr/local/bin/icpc
+sudo ln -s -f /opt/intel/fc/9.0/bin/ifort /usr/local/bin/ifort
+sudo ln -s -f /opt/intel/idb/9.0/bin/idb /usr/local/bin/idb
+
+# Copy RPMs and debs to server for easier distribution
+scp ${DATA}/tmp/noncommercial_*.lic \
+${DATA}/tmp/l_cc_c_9.0.030/intel-icc9-9.0-030.i386.rpm \
+${DATA}/tmp/l_cc_c_9.0.030/intel-icc9_9.0-030_i386.deb \
+${DATA}/tmp/l_cc_c_9.0.030/intel-iidb9-9.0-035.i386.rpm \
+${DATA}/tmp/l_cc_c_9.0.030/intel-iidb9_9.0-035_i386.deb \
+${DATA}/tmp/l_fc_c_9.0.031/intel-ifort9-9.0-031.i386.rpm \
+${DATA}/tmp/l_fc_c_9.0.031/intel-ifort9_9.0-031_i386.deb \
+dust.ess.uci.edu:/data/zender/tmp
+************************************************************************
+# end 20060516 icc 9.1 on virga.ess.uci.edu Debian Ubuntu Dapper Drake
+************************************************************************
+
+20070605:
+Save this serial number, you will need it to install your product:
+Serial number : NB96-8CGSBHMV 
+Save this serial number, you will need it to install your product:
+Serial number : NDXX-X975GM5S 

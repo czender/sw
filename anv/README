@@ -1,0 +1,27 @@
+96/01/11
+cover.tex is the covering letter for the thesis
+dar_slides.tex are the slides from dave a. randall's measurement workshop
+
+96/01/12
+what i've done wrong:
+should have parameterized the stratiform condensation completely in terms
+of mixing ratios rather than IWP. 
+i didn't because i was using IWP for the convective portion (which was
+necessary, given that i was looking for relationship between a local Mc
+and a total IWP)
+however, parcel theory shows that the mixing ratio relationship avoids
+introducing an unnecessary factor of density into the relationship.
+Most of all, i shouldn't have decoupled the updraft and temperature
+components of stable ice generation, because the physical mechanism
+of vapor flux through updraft should appear in both.
+My excuse is that if the temperature component depended on updraft,
+then you couldn't get cloud formation for w=0 when there through
+cooling alone. 
+This is a lame excuse.
+Should have made the temperature dependence based on the saturation mixing
+ratio deficit, because i calculate that quantity in spcp.f anyway, so it's
+available and qsat,i is what actually appears in the parcel model equations
+anyway.
+A major blown opportunity.
+
+96/01/14 started thank you note to jtk in jtk.txt

@@ -1,0 +1,52 @@
+-*-Fundamental-*-
+
+gcc-3.0.2 lanina.ps.uci.edu 20011103
+bunzip2 gcc-3.0.2.tar.bz2
+tar xvf gcc-3.0.2.tar
+./configure --prefix=/usr/local
+make CFLAGS='-O' LIBCFLAGS='-g -O2' LIBCXXFLAGS='-g -O2 -fno-implicit-templates' bootstrap
+
+gcc-3.0.2 dust.ps.uci.edu 20011103
+bunzip2 gcc-3.0.2.tar.bz2
+tar xvf gcc-3.0.2.tar
+./configure --prefix=/usr/local
+gmake --jobs 4 CFLAGS='-O' LIBCFLAGS='-g -O2' LIBCXXFLAGS='-g -O2 -fno-implicit-templates' bootstrap
+
+See http://www.gnu.org/software/gcc/cvs.html for GCC CVS instructions
+
+gcc-3.1 lanina.ps.uci.edu 20020622
+cd ${DATA}
+cvs -z 9 -d :pserver:anoncvs@subversions.gnu.org:/cvsroot/gcc login
+cvs -z 9 -d :pserver:anoncvs@subversions.gnu.org:/cvsroot/gcc co -kk gcc
+cd /data/zender/gcc
+./configure --prefix=/usr/local/gcc --enable-languages=c,c++,f77
+make CFLAGS='-O' LIBCFLAGS='-g -O2' LIBCXXFLAGS='-g -O2 -fno-implicit-templates' bootstrap
+sudo make install
+
+gcc-3.? lanina.ps.uci.edu 20020820
+cvs -z 9 -d :pserver:anoncvs@subversions.gnu.org:/cvsroot/gcc co -kk -r gcc_3_1_1_release gcc
+cvs -z 9 -d :pserver:anoncvs@subversions.gnu.org:/cvsroot/gcc co -kk -r gcc_latest_snapshot gcc
+
+Removing gcc is not straightforward as there does not seem to be a 
+'make uninstall' command.
+Thus:
+cd /usr/local/bin
+sudo rm g+* gc* c++* i686* jar j* cpp
+cd /usr/local/include
+sudo rm -r gcj gnu g++-v3 java jni.h jvmpi.hcd 
+cd /usr/local/lib
+sudo rm -r gcc-lib *gcc* *gcj* libiberty.a *stdc++* *supc*
+cd /usr/local/share
+sudo rm libgcj.jar
+cd /usr/local/info
+sudo rm *cpp* *g77* *gcc* *gcj*
+
+gcc-3.X.Y esmf.ess.uci.edu 20050621 AIX 5.1L powerpc-ibm-aix5.1.0.0
+cp ~avaught/gcc.tgz ${DATA}
+cd ${DATA}
+tar xvzf gcc.tgz
+cd gcc
+/bin/rm -r fastjar
+export OBJECT_MODE='64' # AIX-specific hack
+CC='gcc -maix64' ./configure --prefix=/usr/local/gcc --enable-languages=c
+

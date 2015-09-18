@@ -1,0 +1,30 @@
+; $Id$ -*-Emacs-Lisp-*-
+
+; Purpose: Gnus initialization file
+
+; Usage:
+; cd ~/dot;make dot;cd -
+
+(setq gnus-always-read-dribble-file t) ; Read ~/.news-dribble without asking
+
+(setq gnus-group-line-format "%M%S%5y(%4i): %(%-40,40g%)    (%I)\n") ; Gnus Manual 2.1.1
+(setq gnus-group-list-all-groups t) ; 
+
+(setq gnus-group-sort-function ; Order in which groups appear in group mode
+      '(gnus-group-sort-by-alphabet
+        gnus-thread-sort-by-rank))
+
+(setq gnus-posting-styles
+      '((".*"
+         (signature-file "~/.signature")
+         (address "zender@uci.edu")
+         (reply-to "Charlie Zender <zender@uci.edu>")
+        )))
+
+
+
+
+
+
+
+

@@ -1,0 +1,177 @@
+<!-- $Id$
+
+Purpose: Homepage for Zender Group Webserver
+
+Usage:
+http://dust.ess.uci.edu
+file:/var/www/html/index.shtml
+file:/home/zender/linux/var/www/html/index.shtml
+
+diff ~/linux/var/www/html/index.shtml /var/www/html/index.shtml
+sudo cp -p ~/linux/var/www/html/index.shtml /var/www/html/index.shtml
+scp -p ~/linux/var/www/html/index.shtml dust.ess.uci.edu:/var/www/html/index.shtml
+-->
+
+<!doctype html public "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+   <title>Zender Group Homepage</title>
+   <meta name="Generator" content="Old fashioned typing">
+   <meta name="Author" content="Charles S. Zender">
+   <meta name="Keywords" content="Zender Group Homepage, mineral dust, entrainment, mobilization, deposition, scavenging, microphysics">
+</head>
+<body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#008080" alink="#FF0000">
+
+<table width="100%"><tr><td align="center" valign="top">
+<a href="http://dust.ess.uci.edu/dead/bxm_home.html">Box Model</a> /
+<a href="http://dust.ess.uci.edu/crm">CRM</a> /
+<a href="http://dust.ess.uci.edu/dead">DEAD</a> /
+<a href="http://dust.ess.uci.edu/diwg">DIWG</a> /
+<a href="http://dust.ess.uci.edu/doc">Doc</a> /
+<a href="http://dust.ess.uci.edu"><tt>dust</tt></a> /
+<a href="http://www.ess.uci.edu">ESS</a> /
+<a href="http://dust.ess.uci.edu/facts">FACTs</a> /
+<a href="http://ipcc.ess.uci.edu">IPCC</a> /
+<a href="http://nco.sf.net">NCO</a> /
+<a href="http://localhost:2026">PBS</a> /
+<a href="http://sourceforge.net/projects/nco">NCO Project</a> /
+<a href="http://www.ess.uci.edu/~zender">Zender</a>
+</td></tr></table>
+
+<p><hr width="100%"></p>
+<p><h1 align=center>Welcome to <tt>dust.ess.uci.edu</tt>, the Zender Group Webserver</h1>
+
+<p>You may be lost, looking for a different page...
+<p><ul>
+<li><a href="http://dust.ess.uci.edu/crm">Column Radiation Model</a></li>
+<li><a href="http://dust.ess.uci.edu/dead">Dust Entrainment and Deposition Model</a></li>
+<li><a href="http://dust.ess.uci.edu/diwg">Dataset Interoperability Working Group (DIWG)</a></li>
+<li><a href="http://dust.ess.uci.edu/facts">Freely Available Community Texts (FACTs)</a></li>
+<li><a href="http://dust.ess.uci.edu/doc">Group Documentation</a></li>
+<li><a href="http://www.ess.uci.edu/~zender">Group Homepage</a></li>
+<li><a href="http://dust.ess.uci.edu/poetry">Group Poetry</a></li>
+<li><a href="http://hp4050.ess.uci.edu">Group Printer HP4050 (Croul 1101)</a></li>
+<li><a href="http://hp4600.ess.uci.edu">Group Printer HP4600 (Croul 3228)</a></li>
+<li><a href="http://hp6840.ess.uci.edu">Group Printer HP6840 (Rowland 240U)</a></li>
+<li><a href="http://dust.ess.uci.edu/allenr">Group Webspace: Allen, Bob</a></li>
+<li><a href="http://dust.ess.uci.edu/scapps">Group Webspace: Capps, Scott</a></li>
+<li><a href="http://dust.ess.uci.edu/mflanner">Group Webspace: Flanner, Mark</a></li>
+<li><a href="http://dust.ess.uci.edu/qhan">Group Webspace: Han, Qin</a></li>
+<li><a href="http://dust.ess.uci.edu/mtosca">Group Webspace: Tosca, Mike</a></li>
+<li><a href="http://dust.ess.uci.edu/pvicente">Group Webspace: Vicente, Pedro</a></li>
+<li><a href="http://dust.ess.uci.edu/~wangd">Group Webspace: Wang, Daniel</a></li>
+<li><a href="http://dust.ess.uci.edu/wenshanw">Group Webspace: Wang, Wenshan</a></li>
+<li><a href="http://dust.ess.uci.edu/xianweiw">Group Webspace: Wang, Xianwei</a></li>
+<li><a href="http://nco.sf.net">netCDF Operators (NCO) Homepage</a></li>
+<li><a href="http://dust.ess.uci.edu/20120917">Temporary files</a></li>
+</ul>
+<hr>
+
+<p><h2 align=center>History of <tt>dust.ess.uci.edu</tt></h2>
+
+<p>The original Zender group server, <tt>dust.ess.uci.edu</tt>, was born in September, 1999, for about $10k. 
+Dell provided a Precision&nbsp;610 dual Intel Pentium 500&nbsp;MHz,
+1&nbsp;GB RAM, with 2&times;36&nbsp;GB SCSI disks.
+One shot disk, one fried video card, and almost five years later,
+her 1920&times;1200 resolution monitor still weighs about
+ninety-pounds and is as good as it gets. 
+<tt>dust</tt>'s disks whined like spoiled babies, yet they never
+failed until one week when I was really busy, but that's another story.
+She originally ran Apache&nbsp;1.x on factory RedHat Linux&nbsp;6.0.
+Now she runs Apache&nbsp;2.0.40 on RedHat Linux&nbsp;9.
+The physical machine <tt>dust</tt> was retired from active server duty 
+20041228, when it was replaced by <tt>sand</tt> which was
+renamed <tt>dust</tt>. 
+The original <tt>dust</tt> continued to run for many years under the
+alias <tt>dirt</tt>. 
+</p>
+
+<p>From 20041228&mdash;20090206 the group
+  server <tt>dust.ess.uci.edu</tt> was the physical
+  machine <tt>sand.ess.uci.edu</tt>. 
+The hostname <tt>dust.ess.uci.edu</tt> became a &ldquo;virtual&rdquo;
+name (via a designated IP pointer) on 20050105. 
+Requests to <tt>dust</tt> are automatically routed to <tt>sand</tt>.
+Using the <tt>dust</tt> address for URLs and web services provides 
+continuity with sites that link to <tt>dust</tt> and eliminates the need 
+to edit web pages everytime we changes physical web servers.
+</p>
+
+<tt>sand</tt> is a 64-bit AMD GNU/Linux system&mdash;complete independence from the  
+Wintel monopolies at last! 
+Western Scientific sold me a dual AMD Opteron Processor 244
+(1.8&nbsp;MHz); 2&nbsp;GB RAM, with 2&times;250&nbsp;GB IDE disks
+for about $4000.
+The disks are mirrored to provide robust data storage.
+Her original fans were noisy, like small jet engines under my desk.
+Western Scientific replaced those with quiet fans and now I'm happy.
+She originally ran Apache&nbsp;1.x on factory SuSE Linux Professional version&nbsp;9.0.  
+Now she runs Apache&nbsp;2.0.50 under Ubuntu's 64-bit Debian-based GNU/Linux distribution.  
+Harry Mangalam installed a very fast eight disk RAID5 with 2&nbsp;TB capacity.
+In February, 2009, <tt>sand</tt> returned to private life and the
+group server became <tt>pbs</tt>.
+</p>
+
+<tt>pbs.ess.uci.edu</tt> became the group server on the afternoon of
+Friday, February&nbsp;6, 2009. 
+By that evening she had crashed and all data was completely
+inaccessible for about a week.
+This after weeks and months planning and crafting her as our first
+rack-mounted, uninterruptible, access-controlled server.
+Sometimes less planning is better.
+</p>
+
+<tt>pbs</tt> is a 64-bit AMD GNU/Linux system running Ubuntu&nbsp;8.10,
+Intrepid Ibex.
+It is the head node of the former cluster named <tt>pbs</tt>, and
+sits in CalIT2's server room. 
+<tt>pbs</tt> began life as the development cluster for the NCO/SDO
+project.
+Daniel Wang used <tt>pbs</tt> extensively while he wrote his thesis
+and developed SWAMP.
+</p>
+
+Western Scientific sold us the four-node <tt>pbs</tt> cluster for 
+about $40000 in 2006.
+Each node had 16&nbsp;GB RAM, inifiniband fabric, and about 1&nbsp;TB of disk.
+When we reconfigured the cluster into a server, we combined 
+into 2.5&nbsp;TB of RAID level&nbsp;fxm for <tt>pbs</tt>.
+The other three nodes <tt>pbs1</tt>, <tt>pbs2</tt>, and <tt>pbs3</tt>, 
+are now used as a standalone servers and backup destinations.
+A daily <tt>cron</tt> job uses <tt>rsync</tt> to
+back-up <tt>/home</tt> and <tt>/data/www</tt> from <tt>pbs</tt>  
+to <tt>pbs1</tt>.
+</p>
+
+On November&nbsp;22, 2011, <tt>dust</tt> was pointed to another
+machine reconfigured as <tt>pbs</tt>.
+This is a pure Apache2 web server based on a 2U&nbsp;Broadcom retiree
+with dual Opterons and a 1.5&nbsp;TB <tt>mdadm</tt> RAID5. 
+It runs Ubuntu Lucid 10.04.3 LTS. 
+<tt>/home</tt>, currently on a single OS disk, is mirrored nightly to
+the RAID5. 
+The previous <tt>pbs</tt> became <tt>pbs4</tt>, a storage server for
+the BDUC cluster running gluster over RDMA/Infiniband.
+</p>
+
+<hr>
+<p>
+<p>Here are the 
+<a href="http://dust.ess.uci.edu/usage">usage statistics for
+<tt>dust.ess.uci.edu</tt></a>, courtesy of the
+<a href="http://www.mrunix.net/webalizer">webalizer</a>.
+
+<p>
+</p>
+Address questions and comments about this website to 
+<address>
+<a href="mailto:surname@uci.edu">Charlie &ldquo;my surname is zender&rdquo; Zender</a></address>
+
+<p align="center">
+<a href="http://www.apache.org/"><img src="/icons/apache_pb.gif" alt="[ Powered by Apache ]"></a></p>
+
+<p align="center">
+<a href="http://www.redhat.com/"><img src="/icons/powered_by.gif" alt="[ Powered by Red Hat Linux ]"></a></p>
+
+</body>
+</html>

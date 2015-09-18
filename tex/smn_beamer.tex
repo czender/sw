@@ -1,0 +1,636 @@
+% $Id$ -*-LaTeX-*-
+
+% Purpose: Example file for LaTeX-based PDF seminar using Beamer class
+
+% Contributed by Tyler Sutterley 20110428
+% Used to produce ${DATA}/ess_hyd/smn_hyd_BDT08.pdf
+
+% URL:
+% http://eee.uci.edu/11s/42550/dsc/smn_hyd_BDT08.pdf
+
+ \documentclass{beamer}
+\mode<presentation>
+{
+  \usetheme{JuanLesPins}%Montpellier}
+ %\usecolortheme{dolphin}
+%   \usecolortheme[rgb={0.2,0.2,0.7}]{structure} %~Color Structure of Default Dolphin Theme
+  \usecolortheme[rgb={0,0.4,0.9}]{structure}
+%  \usecolortheme[rgb={0,0,0}]{structure}
+%  \setbeamercolor{normal text}{fg=white,bg=white}
+  \setbeamercovered{transparent}
+  \setbeameroption{hide notes}
+}
+
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usefonttheme{serif}
+\usepackage{palatino}
+%arev, avant, bookman, chancery, charter, euler, helvet, lmodern, mathtime, mathptm, mathptmx, newcent, palatino, pifont, utopia.
+\usepackage[T1]{fontenc}
+\usepackage[version=3]{mhchem}
+
+\title[Bala et al, {\it Proceedings of the National Academy of Sciences}, Vol. 105, No. 22 (2008)]
+{Impact of geoengineering schemes on the global hydrological cycle}
+\subtitle{A Paper by G. Bala, P. Duffy, and K. Taylor, 2008}
+\author[Tyler Sutterley]{Presented by Gergana Mouteva and Tyler Sutterley\\\vspace{0.3cm}ESS231: Hydrology
+\\Professor C. Zender}	
+\date[April 28, 2011]{April 28, 2011}
+
+
+\begin{document}
+\definecolor{steelblue}{RGB}{10,60,140}
+\definecolor{bluer}{RGB}{80,80,180}
+\definecolor{darkerred}{RGB}{220,0,0}
+\definecolor{bgblue}{rgb}{0,0.4,0.9}
+\definecolor{greenish}{RGB}{20,190,100}
+
+%\colorlet{mystruct}{structure}
+%\beamersetaveragebackground{black}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+	\tableofcontents
+\end{frame}
+
+\section{Introduction}
+\subsection{Geoengineering and Climate Change}
+\begin{frame}
+\frametitle{GEOENGINEERING}
+\framesubtitle{Are we geoengineering the planet?}
+\begin{columns}
+\begin{column}{6.25cm}
+	\begin{itemize}
+		\item Changing the Chemical Composition of the Atmosphere
+		\item Increasing Burden of Atmospheric Aerosols
+		\item Changing the Relative Size of the Earth's Carbon Pools
+		\item Changing the Distribution of the Earth's Water
+		\item Changing the Reflectivity of the Earth
+	\end{itemize}
+\end{column}
+\begin{column}{6.25cm}
+\begin{center}
+\only<1>{\includegraphics[trim = 33mm 81mm 34mm 81mm, clip, width = 6.125cm]{CO2_concs1}}
+\only<2>{\includegraphics[trim = 33mm 81mm 34mm 81mm, clip, width = 6.125cm]{CO2_concs2}}
+\only<3>{\includegraphics[trim = 33mm 81mm 34mm 81mm, clip, width = 6.125cm]{CO2_concs3}}
+\end{center}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{We are geoengineering the planet}
+\begin{columns}
+\begin{column}{7.5cm}
+``Through his worldwide industrial civilization, Man is unwittingly conducting a vast geophysical experiment. [\dots] The climatic changes that may be produced by the increased \ce{CO2} content could be deleterious from the point of view of human beings.  The possibilities of deliberately bringing about countervailing climatic changes therefore need to be thoroughly explored.'' 
+\end{column}
+\begin{column}{4cm}
+\includegraphics[trim = 145mm 80mm 23mm 22mm, clip, width = 4.125cm]{RTQOOE}
+\end{column}
+\end{columns}
+
+\begin{center} \bf\large
+Report to President Lyndon B. Johnson, November 1965
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{2 Ways of Thinking About Geoengineering}
+\begin{columns}
+\begin{column}{7.5cm}
+\centering
+\begin{block}{1)\quad Instead of \ce{CO2} Mitigation}
+\begin{itemize}
+	\item Very cheap for climate impact potential
+	\item Greenhouse gas forcings balanced by Geoengineered forcings
+	\item \bf{Major Problems}
+\end{itemize}
+\end{block}
+\begin{block}{2)\quad To Dampen Climate Change}
+\begin{itemize}
+	\item Major emissions mitigation
+	\item Dangerous climate changes imminent (sea level, weather anomalies, etc) 
+\end{itemize}
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+\subsection{Currently Proposed Geoengineering Methods}
+\begin{frame}
+\frametitle{Types of Geoengineering}
+\framesubtitle{Carbon Dioxide Removal and Storage (CDR)}
+\begin{center}
+\scriptsize%\footnotesize
+\begin{tabular}{| l | c | c |}
+\hline
+		& Land & Ocean\\
+\hline
+Biological & Afforestation and land use & Iron fertilization \\ 
+		& Biomass/fuels with carbon   & Phosphorus/Nitrogen Fertilization\\
+		& sequestration		       & Enhanced upwelling\\
+\hline
+Physical   & Atmospheric \ce{CO2} scrubbers & Changing overturning circulation\\ 
+		&  (\ce{CO2} capture) 			& \\
+\hline
+Chemical & Silicate weathering		& Alkalinity enhancement\\
+		& enhancement			& \\\hline
+ \end{tabular}
+ \end{center}
+
+\begin{columns}
+\begin{column}{3.625cm}
+\centering Afforestation
+\end{column}
+\begin{column}{3.625cm}
+\centering Ocean Fertilization
+\end{column}
+\begin{column}{3.625cm}
+\centering Sequestration
+\end{column}
+\end{columns}
+
+\begin{columns}
+\begin{column}{3.625cm}
+\includegraphics[trim = 142mm 8mm 8mm 218mm, clip, width = 3.5cm]{methods}
+\end{column}
+\begin{column}{3.625cm}
+\includegraphics[trim = 98mm 90mm 47mm 132mm, clip, width = 3.5cm]{methods}
+\end{column}
+\begin{column}{3.625cm}
+\includegraphics[trim = 70mm 34mm 64mm 179mm, clip, width = 3.5cm]{methods2}
+\end{column}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Types of Geoengineering}
+\framesubtitle{Solar Radiation Management (SRM)}
+\begin{columns}
+\begin{column}{6cm}
+\begin{itemize}
+	\item Surface or Aerial Albedo Enhancement
+		\begin{itemize}
+		\item Reflective Roofs
+		\item Desert Reflectors
+		\item Floating Reflectors
+		\end{itemize}
+	\item Cloud Albedo Enhancement
+		\begin{itemize}
+		\item CCN Seeding
+		\end{itemize}
+	\item Stratospheric Aerosol Seeding
+	\item Space-Based Methods
+		\begin{itemize}
+		\item Space Shields at the L1 Lagrangian point
+		\item Space Dust
+		\end{itemize}
+\end{itemize}
+\end{column}
+\begin{column}{2.625cm}
+\centering\scriptsize Solar Reflectors\\
+\includegraphics[trim = 4mm 204mm 138mm 11mm, clip, width = 2.625cm]{methods4}\\
+\centering\scriptsize Stratospheric Aerosols\\
+\includegraphics[trim = 45mm 143mm 100mm 63mm, clip, width = 2.625cm]{methods3}
+\end{column}
+\begin{column}{2.625cm}
+\centering\scriptsize Reflective Roofs\\
+\includegraphics[trim = 6mm 4mm 139mm 215mm, clip, width = 2.625cm]{methods4}\\
+\centering\scriptsize Cloud Seeding\\
+\includegraphics[trim = 7mm 80mm 150mm 127mm, clip, width = 2.625cm]{methods}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Effectiveness of Geoengineering Schemes}
+\includegraphics[trim = 28mm 178mm 20mm 23mm, clip, width = 11cm]{evaluation}
+\end{frame}
+
+\subsection{Politics of Geoengineering}
+\begin{frame}
+\frametitle{Assessments of Geoengineering}
+\begin{itemize}
+\item Upcoming IPCC Fifth Assessment Report (AR5)
+\begin{itemize}
+	\item Risks
+	\item Feasibility
+	\item Mitigation potential
+	\item Costs 
+	\item Governance requirements
+\end{itemize}
+\item Royal Society: \emph{Geoengineering the climate: science, governance and uncertainty} (2009)
+%%		The safest and most predictable method of moderating climate change is to take early and effective action to reduce emissions of greenhouse gases. No geoengineering method can provide an easy or readily acceptable alternative solution to the problem of climate change.
+%%		Geoengineering methods could however potentially be useful in future to augment continuing efforts to mitigate climate change by reducing emissions, and so should be subject to more detailed research and analysis.
+%%		Methods that act rapidly by reflecting sunlight may prove to be ineffective in offsetting changes in rainfall patterns and storms, but current climate models are not sufficiently accurate to provide a reliable assessment of these at the regional level.
+\item Moratorium on geoengineering placed on October 2010
+\begin{itemize}
+	\item Tenth Meeting of the Conference of the Parties to the Convention on Biological Diversity in Nagoya, Japan
+\end{itemize}
+%%		``no climate-related geo-engineering activities that may affect biodiversity take place, until there is an adequate scientific basis on which to justify such activities and appropriate consideration of the associated risks for the environment and biodiversity and associated social, economic and cultural impacts''
+\end{itemize}
+\end{frame}
+
+\section{Experimental Methods}
+\begin{frame}
+\frametitle{How do we study the climate response to geoengineering?}
+
+\hspace{3cm} \color{bgblue} \fbox {\huge  Modeling!}
+\vspace{0.5cm}
+\begin{itemize}
+	\item Study climatological effects of schemes
+		\begin{itemize}
+			\item Global vs. Regional
+			\item Response rate
+		\end{itemize}
+	\item Investigate impacts of schemes 
+		\begin{itemize}
+			\item Terrestrial biosphere
+			\item Ocean
+			\item But {\color{red}\bf NOT} on the Global Hydrological Cycle
+		\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\subsection{Motivation}
+\begin{frame}
+\frametitle{Motivation:}
+\begin{itemize}
+	\item \underline {Observational studies:} decrease in precipitation and runoff \& discharge after Mount Pinatubo
+\vspace{1cm}
+	\item \underline {Modeling studies:} decline in precipitation in the geoengineered climate
+\end{itemize}
+
+\begin {center}
+\vspace{1cm}
+	{\color{bgblue}\it \Huge Why?}
+\end {center}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Geoengineering \& The Hydrological Cycle}
+\vspace {0.4cm}
+\color{bgblue} \fbox{{\color{bgblue}
+	\begin{columns}
+		\begin{column}{2.7cm} 
+			\centering\Large Insolation Reductions
+		\end{column}
+		\begin{column}{0.7cm}
+			{\Huge$\Rightarrow$}
+		\end{column}
+		\begin{column}{3.0cm}
+		\centering\Large
+			Decrease in Global Mean Precipitation
+		\end{column}
+	\end{columns}}}\\\vspace{1cm}
+\begin {block}{}\centering Solar forcing is more effective in driving changes in Global Mean Evaporation than \ce{CO2} forcing of a similar magnitude
+\end{block}
+\end{frame}
+
+\subsection{Model Utilized}
+\begin{frame}
+\frametitle{The Model}
+\begin{center}
+	{\large National Center for Atmospheric Research (NCAR)\\Community Climate Model version 3 (CCM 3)}
+\end{center}\vspace{0.5cm}
+\begin{columns}
+\begin{column}{6cm}
+	Coupled to:
+	\begin{itemize}
+		\item Integrated Biosphere Simulator (IBIS)
+		\item Slab ocean-thermodynamic sea ice model
+	\end{itemize}
+	Resolution:
+	\begin{itemize}
+		\item 2.8\textdegree~latitude~$\times$~longitude
+	\end{itemize}
+\end{column}
+\begin{column}{4cm}
+	\includegraphics[trim = 39mm 0mm 35mm 0mm, clip, width = 4cm]{CCM3}
+\end{column}
+\end{columns}
+\end{frame}
+
+\subsection{Methodology}
+\begin{frame}
+\frametitle{Model Scenarios}
+\begin{center}
+	\begin{tabular}{| l | c | c |}
+		\hline
+		  & \ce{CO2} Concentration & Solar Insolation\\
+		Simulation & [ppm] & [W$\cdot$m$^{-2}$] \\ \hline\hline
+		Control & 355 & 1367 \\ 
+		$2\times\ce{CO2}$ & 710 & 1367 \\ 
+		Solar & 355 & 1342.4$^*$ \\ 
+		Stabilized & 710 & 1342.4$^*$ \\ \hline
+	\end{tabular}
+\\\vspace{0.5cm}
+$^*$~1.8\% Reduction in Solar Insolation chosen to Approximate \ce{CO2} Offset in Forcing\\\vspace{0.3cm}
+In reality, an exact and well distributed reduction would be hard to achieve
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Experiments}
+\begin{itemize}
+	\item Initialization: present day conditions
+	\vspace{0.5cm}
+	\item Simulation length: $\sim$75 years
+	\vspace{0.5cm}
+	\item Statistics presented: over the last 25 years of the model simulation
+	\vspace{0.5cm}
+	\item Equilibrium: global average net flux of energy at TOA \textless 0.1 W$\cdot$m$^{-2}$
+	\vspace{0.5cm}
+	\item Decrease in precipitation consistent with earlier modeling experiments
+\end{itemize}
+\end{frame}
+
+\section{Model Results}
+\begin{frame}
+\frametitle{Model Results}
+	\begin{center}
+%	{\tiny
+%	\begin{tabular}{| l  c  c  c  c  c  c |}
+%	\hline
+%		& Surface & Water & & Net LW Flux & Net SW Flux & Net Flux\\
+%		Experiment & Temp., K & Vapor, \% & Precip., \% & TOA, W$\cdot$m$^{-2}$ & TOA, W$\cdot$m$^{-2}$ & TOA, W$\cdot$m$^{-2}$ \\ \hline\hline
+%		$2\times\ce{CO2}$ & 2.42 & 15.2 & 3.7 & -0.54 & 0.46 & -0.08 \\ 
+%		Solar & -2.40 & -15.2 & -5.8 & 4.86 & -4.79 & 0.07 \\ 
+%		Stabilized & 0.14 & -2.0 & -1.7 & 3.62 & -3.63 & -0.01 \\ 
+%		$2\times\ce{CO2}+$~Solar & 0.02 & 0.0 & -2.1 & 4.32 & -4.33 & -0.01 \\\hline
+%	\end{tabular}}
+%	\\\vspace{0.2cm}{\scriptsize Differences in global- and annual-means of key climate variables in the $2\times\ce{CO2}$, solar, and stabilized cases relative to control}
+
+	\footnotesize
+	\begin{tabular}{ | l | c | c | c | c |}
+	\hline
+		&  &  &  & $2\times\ce{CO2}$ \\ 
+		Parameter & $2\times\ce{CO2}$ & Solar & Stabilized & $+ $ Solar \\ \hline\hline
+		Surface Temp. [K] & 2.42 & -2.4 & 0.14 & 0.02 \\ 
+		Water Vapor [\%] & 15.2 & -15.2 & -2.0 & 0.0 \\ 
+		Precipitation [\%] & 3.7 & -5.8 & -1.7 & -2.1 \\ 
+		Net LW Flux TOA [W$\cdot$m$^{-2}$] & -0.54 & 4.86 & 3.62 & 4.32 \\ 
+		Net SW Flux TOA [W$\cdot$m$^{-2}$] & 0.46 & -4.79 & -3.63 & -4.33 \\ 
+		Net Flux TOA [W$\cdot$m$^{-2}$] & -0.08 & 0.07 & -0.01 & -0.01 \\ \hline
+	\end{tabular}
+	\\\vspace{0.2cm}\scriptsize Differences in global- and annual-means of key climate variables in the $2\times\ce{CO2}$, solar, and stabilized cases relative to control
+	\end{center}
+\end{frame}
+
+%\begin{frame}
+%\frametitle{Model Results}
+%\begin{itemize}
+%	\item Temperature:
+%		\begin{itemize}
+%			\item 1\% significance for $2\times\ce{CO2}$ and solar cases globally
+%			\item Significance over oceans and northern land areas
+%		\end{itemize}
+%	\item Lapse Rate: Dominated by changes in tropics
+%	\item Stratospheric Cooling: Not mitigated by geoengineering
+%	\item Water Vapor:
+%		\begin{itemize}
+%			\item Specific Humidity: Response to temperature change
+%			\item Relative Humidity: Good approximation that will not change significantly with climate change
+%		\end{itemize}
+%	\item Precipitation in Stabilized Scenario:
+%		\begin{itemize}
+%			\item Shift in ITCZ
+%			\item Do not scale with Clausius-Clapeyron Relation
+%		\end{itemize}
+%\end{itemize}
+%\end{frame}
+
+\subsection{$2\times\ce{CO2}$ Results}
+\begin{frame}
+\begin{columns}
+\begin{column}{4cm}\centering
+	\includegraphics[trim = 40.8mm 215mm 126.2mm 18mm, clip, width = 4cm]{surfacetemp}
+\end{column}
+\begin{column}{4cm}\centering
+	\includegraphics[trim = 40.8mm 171mm 126.2mm 62mm, clip, width = 4cm]{surfacetemp}
+\end{column}
+\end{columns}
+\begin{columns}
+\begin{column}{4cm}\centering
+	\includegraphics[trim = 45.6mm 215mm 124.4mm 18mm, clip, width = 4cm]{precip}
+\end{column}
+\begin{column}{4cm}\centering
+	\includegraphics[trim = 45.6mm 172mm 124.4mm 61mm, clip, width = 4cm]{precip}
+\end{column}
+\end{columns}
+\end{frame}
+
+\subsection{Solar Results}
+\begin{frame}
+\begin{columns}
+\begin{column}{4cm}\centering
+	\includegraphics[trim = 84mm 215mm 83mm 18mm, clip, width = 4cm]{surfacetemp}
+\end{column}
+\begin{column}{4cm}\centering
+	\includegraphics[trim = 84mm 171mm 83mm 62mm, clip, width = 4cm]{surfacetemp}
+\end{column}
+\end{columns}
+\begin{columns}
+\begin{column}{4cm}\centering
+	\includegraphics[trim = 85.3mm 215mm 84.7mm 18mm, clip, width = 4cm]{precip}
+\end{column}
+\begin{column}{4cm}\centering
+	\includegraphics[trim = 85.3mm 172mm 84.7mm 61mm, clip, width = 4cm]{precip}
+\end{column}
+\end{columns}
+\end{frame}
+
+\subsection{Stabilized Results}
+\begin{frame}
+\begin{columns}
+\begin{column}{4cm}\centering
+	\includegraphics[trim = 127mm 215mm 40mm 18mm, clip, width = 4cm]{surfacetemp}
+\end{column}
+\begin{column}{4cm}\centering
+	\includegraphics[trim = 127mm 171mm 40mm 62mm, clip, width = 4cm]{surfacetemp}
+\end{column}
+\end{columns}
+\begin{columns}
+\begin{column}{4cm}\centering
+	\includegraphics[trim = 125mm 215mm 45mm 18mm, clip, width = 4cm]{precip}
+\end{column}
+\begin{column}{4cm}\centering
+	\includegraphics[trim = 125mm 172mm 45mm 61mm, clip, width = 4cm]{precip}
+\end{column}
+\end{columns}
+\end{frame}
+
+%\begin{frame}
+%\frametitle{Effects of Geoengineering}
+%\begin{columns}
+%\begin{column}{5.5cm}
+%	\includegraphics[trim = 21mm 207mm 112mm 18mm, clip, width = 5.375cm]{energy_profiles}
+%\end{column}
+%\begin{column}{5.5cm}
+%	\includegraphics[trim = 21mm 154mm 112mm 71mm, clip, width = 5.375cm]{energy_profiles}
+%\end{column}
+%\end{columns}
+%\end{frame}
+
+\section{Explanation of Results}
+\begin{frame}
+\frametitle{Why the Hydrological Differences?}
+\begin{equation*}
+	\text{Hydrological Sensitivity} = \frac{\%\text{ Change Precipitation}}{\text{Degree Warming}}
+\end{equation*}
+\begin{columns}
+\begin{column}{6cm}
+	\centering Solar: 2.4\% K$^{-1}$
+\end{column}
+\begin{column}{6cm}
+	\centering \ce{CO2}: 1.5\% K$^{-1}$
+\end{column}
+\end{columns}
+\vspace{0.5cm}
+	\begin{itemize}
+		\item Differences in the vertical distribution of radiative forcing
+		\begin{itemize}
+		\item \ce{CO2}: Mainly heats the troposphere
+		\item Solar: Mainly heats the surface
+		\end{itemize}
+		\item Solar forcing has more leverage on latent and sensible heat fluxes at the surface\\
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Energy Fluxes at the Surface}
+	\begin{center}
+		Time-Mean Globally Averaged Surface Energy Flux Differences
+	\end{center}
+	\begin{equation*}
+	\Delta R + \Delta S - \Delta L - \Delta H = 0
+	\end{equation*}
+	{\footnotesize
+	\begin{tabular}{l l}
+		$\Delta R$ : & Longwave Radiation\\
+		$\Delta S$ : & Shortwave Radiation\\
+		$\Delta L$ : & Latent Heat\\
+		$\Delta H$ : & Sensible Heat
+	\end{tabular}}
+	\begin{center}
+		Separated into ``Forcing'' and ``Response'' Components
+	\end{center}
+	\begin{equation*}
+	F + \Delta R_r + \Delta S_r - \Delta L - \Delta H = 0
+	\end{equation*}
+	{\footnotesize
+	\begin{tabular}{l l}
+		$F$ : & Sum of the Shortwave and Longwave Radiative Forcings\\
+		$r$ : & Response Components of the Change in Radiation
+	\end{tabular}}
+	\begin{center}
+	{\bf\color{bgblue} For Stabilized Case: $\Delta$~radiative response terms~$\sim0$}
+	\end{center}
+	\begin{equation*}
+	{\color{bgblue}\Delta L + \Delta H = F}
+	\end{equation*}
+\end{frame}
+
+%\begin{frame}
+%\begin{center}\footnotesize
+%	\includegraphics[trim = 108mm 199mm 15mm 18mm, clip, width = 8.25cm]{energy_profiles}\\
+%	Differences in Surface Energy Fluxes\\
+%	Averaged globally and annually\\
+%	In the $2\times\ce{CO2}$, solar, and stabilized cases, relative to control
+%\end{center}
+%\end{frame}
+
+
+\section{Discussion}
+\begin{frame}
+\frametitle{Summary and Discussion}
+\begin{itemize}
+\item \underline{Temperature sensitivity:} Approximately the same for the two different forcing mechanisms
+\vspace{0.3cm}
+\item \underline{Hydrological sensitivity:} {\bf\color{bgblue}Different!} 1.5\% vs 2.4\% per K for increased \ce{CO2} and reduced solar insolation respectively
+\end{itemize}
+\vspace{1cm}
+\begin{block}{\centering On The Surface}
+\centering INSOLATION Increase $\rightarrow$ Increase in SW + increase in LW\\
+                  \ce{CO2} Increase $\rightarrow$ Increase in LW\\\vspace{0.2cm}\vspace{0.1cm}
+{\bf\color{red} Surface impact  $\rightarrow$  Evaporation $\rightarrow$ Precipitation}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{NOT analyzed in this study:}
+\begin{itemize}
+	\item Regional Scale
+		\begin{itemize}
+		\vspace{0.2cm}
+		\item Doubling of \ce {CO2 leads} to significant precipitation changes only over 46\% of the globe
+		\vspace{0.2cm}
+		\item $P-E \rightarrow$ a measure of water availability and drought : only significant over 25\% of the globe in the stabilized case
+		\vspace{0.2cm}
+		\item Longer integrations \& high resolution modeling $\rightarrow$ needed! 
+	\end{itemize}
+	\vspace {0.5cm}
+	\item Daily and Hourly Rates
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Potential Harmful Effects \& Disadvantages}
+	\begin{columns}
+	\begin{column}{5.5cm}
+		\begin{itemize}
+				\item Oceanic Acidification
+		\vspace{0.8cm} 
+				\item Ozone Layer
+		\vspace{0.8cm} 
+				\item Long-term Commitment 
+		\vspace{0.8cm}  
+				\item Technological Difficulties
+		\vspace{0.8cm} 
+				\item International Agreements
+			\end{itemize}
+	\end{column}
+	\begin{column}{5.5cm}
+		\includegraphics[width = 5.375cm]{geoengineering_polar_bears}
+	\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Future of Geoengineering}
+\framesubtitle{Dr. Strangelove saves the earth? (Economist 2007)}
+\begin{columns}
+\begin{column}{6.75cm}
+	\includegraphics[width = 6.75cm]{dr_strangelove}
+\end{column}
+\begin{column}{5.75cm}
+%	\hspace{0.75cm}\includegraphics[trim = 0mm 10mm 0mm 0mm, clip, width = 4cm]{economist} 
+\begin{itemize}
+	\item Should We Look Into Geoengineering?
+		\begin{itemize}
+%			\item Breadth of Knowledge is Quite Small
+			\item Better Methods
+			\item Better Risk Assessment
+		\end{itemize}
+	\vspace{0.3cm}
+	\item The Moral Hazard Problem
+	\vspace{0.3cm}
+	\item Who Can Enact Geoengineering Solutions?
+	\begin{itemize}
+		\item Impacts would not confide within borders
+	\end{itemize}
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\end{document}

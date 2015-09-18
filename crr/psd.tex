@@ -1,0 +1,2618 @@
+% $Id$ -*-LaTeX-*-
+
+% Purpose: Theory and observations of particle size distributions (PSDs)
+
+% Copyright (c) 1998--2015, Charles S. Zender
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License (GFDL), Version 1.3
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+% GFDL: http://www.gnu.org/copyleft/fdl.html
+
+% The original author of this software, Charlie Zender, seeks to improve
+% it with your suggestions, contributions, bug-reports, and patches.
+% Charlie Zender <zender at uci dot edu>
+% Department of Earth System Science
+% University of California, Irvine
+% Irvine, CA 92697-3100
+
+% URL: http://dust.ess.uci.edu/facts/psd/psd.pdf
+
+% Usage (see also end of file):
+% cd ~/crr;make -W psd.tex psd.pdf;cd -
+
+\documentclass[12pt,twoside]{article}
+
+% Standard packages
+\usepackage{ifpdf} % Define \ifpdf
+\ifpdf % PDFLaTeX
+\usepackage[pdftex]{graphicx} % Defines \includegraphics*
+\pdfcompresslevel=9
+\usepackage{thumbpdf} % Generate thumbnails
+\usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
+\else % !PDFLaTeX
+\usepackage{graphicx} % Defines \includegraphics*
+\fi % !PDFLaTeX
+\usepackage{amsmath} % \subequations, \eqref, \align
+\usepackage{array} % Table and array extensions, e.g., column formatting
+\usepackage[dayofweek]{datetime} % \xxivtime, \ordinal
+\usepackage{etoolbox} % \newbool, \setbool, \ifxxx
+\usepackage{longtable} % Multi-page tables, e.g., acronyms and symbols
+\usepackage{lscape} % Landscape environment
+\usepackage{makeidx} % Index keyword processor: \printindex and \see
+\usepackage{natbib} % \cite commands from aguplus
+\usepackage{times} % Postscript Times-Roman font KoD99 p. 375
+\usepackage{tocbibind} % Add Bibliography and Index to Table of Contents
+\usepackage{url} % Typeset URLs and e-mail addresses
+% fxm: 20001028 /usr/share/texmf/tex/latex/base/showidx.sty breaks hyperref
+%\usepackage{showidx} % Print index entries as marginal notes
+
+% hyperref is last package since it redefines other packages' commands
+% hyperref options, assumed true unless =false is specified:
+% backref       List citing sections after bibliography entries
+% baseurl       Make all URLs in document relative to this
+% bookmarksopen Unknown
+% breaklinks    Wrap links onto newlines
+% colorlinks    Use colored text for links, not boxes
+% hyperindex    Link index to text
+% plainpages=false Suppress warnings caused by duplicate page numbers
+% pdftex        Conform to pdftex conventions
+% Colors used when colorlinks=true:
+% linkcolor     Color for normal internal links
+% anchorcolor   Color for anchor text
+% citecolor     Color for bibliographic citations in text
+% filecolor     Color for URLs which open local files
+% menucolor     Color for Acrobat menu items
+% pagecolor     Color for links to other pages
+% urlcolor      Color for linked URLs
+\ifpdf % PDFLaTeX
+\usepackage[backref,breaklinks,colorlinks,citecolor=blue,linkcolor=blue,urlcolor=blue,hyperindex,plainpages=false,pdftex]{hyperref} % Hyper-references
+\pdfcompresslevel=9
+\else % !PDFLaTeX
+\usepackage[backref,breaklinks,colorlinks=false,hyperindex,plainpages=false]{hyperref} % Hyper-references
+\fi % !PDFLaTeX
+
+% preview-latex recommends it be last-activated package
+\usepackage[showlabels,sections,floats,textmath,displaymath]{preview} % preview-latex equation extraction
+
+\usepackage{csz} % Library of personal definitions
+\usepackage{dmn} % Dimensional units
+\usepackage{chm} % Commands generic to chemistry
+\usepackage{dyn} % Commands generic to fluid dynamics
+\usepackage{abc} % Alphabet as three letter macros
+\usepackage{aer} % Commands specific to aerosol physics
+\usepackage{psd} % Particle size distributions
+\usepackage{jrn_agu} % JGR-sanctioned journal abbreviations
+
+% Commands which must be executed in preamble
+\makeglossary % Glossary described on KoD95 p. 221
+\makeindex % Index described on KoD95 p. 220
+
+% Commands specific to this file
+
+% 1. Primary commands
+
+% 2. Derived commands
+\newcommand{\expgsd}{\me^{\gsd}} 
+\newcommand{\gggavg}{\overline{\ggg}}
+\newcommand{\pdfdmt}{\pdffnc(\dmt)} % Probability density function of diameter
+\newcommand{\pdfrds}{\pdffnc(\rds)}
+\newcommand{\rdsdst}{\dstfnc(\rds)}
+\newcommand{\sdndmt}{\sdn_{\dmt}} % [m] Standard deviation of diameter
+\newcommand{\vrndmt}{\sdn_{\dmt}^{2}} % [m2] Variance of diameter
+\newcommand{\vrnrds}{\sdn_{\rds}^{2}} % [m2] Variance of radius
+\newcommand{\vrnffcxxx}{\sdn_{\xxx,\mathrm{eff}}^{2}}
+\newcommand{\vrnxxx}{\sdn_{\xxx}^{2}}
+\newcommand{\xxxeff}{\xxx_\mathrm{eff}}
+
+% 3. Doubly-derived commands
+
+\topmargin -24pt \headheight 12pt \headsep 12pt
+\textheight 9in \textwidth 6.5in
+\oddsidemargin 0in \evensidemargin 0in
+%\marginparwidth 0pt \marginparsep 0pt
+\setlength{\marginparwidth}{1.5in} % Width of callouts of index terms and page numbers KoD95 p. 220
+\setlength{\marginparsep}{12pt} % Add separation for index terms KoD95 p. 220
+\footskip 24pt
+\footnotesep=0pt
+
+\begin{document} % End preamble
+
+\begin{center}
+Online: \url{http://dust.ess.uci.edu/facts} \hfill Built: \shortdate\today, \xxivtime\\
+\bigskip
+{\Large \textbf{Particle Size Distributions:\\ 
+Theory and Application to Aerosols, Clouds, and Soils}}\\
+\bigskip
+by Charlie Zender\\
+University of California, Irvine\\
+\end{center}
+Department of Earth System Science \hfill zender@uci.edu\\
+University of California \hfill Voice: (949)\thinspace 891-2429\\
+Irvine, CA~~92697-3100 \hfill Fax: (949)\thinspace 824-3256
+
+% GFDL legalities: http://www.gnu.org/copyleft/fdl.html
+\bigskip\noindent
+Copyright \copyright\ 1998--2015,  Charles S. Zender\\
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version~1.3
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+Texts.
+The license is available online at
+\url{http://www.gnu.org/copyleft/fdl.html}.
+
+\pagenumbering{roman}
+\setcounter{page}{1}
+\pagestyle{headings}
+\thispagestyle{empty}
+%\onecolumn
+\tableofcontents
+\listoftables
+\pagenumbering{arabic}
+\setcounter{page}{1}
+%\markleft{Size Distribution Monograph}
+%\markright{}
+\thispagestyle{empty}
+
+\section{Introduction}\label{sxn:ntr}
+
+This document describes mathematical and computational considerations 
+pertaining to size distributions.
+The application of statistical theory to define meaningful and
+measurable parameters for defining generic size distributions is
+presented in \S\ref{sxn:stt}.
+The remaining sections apply these definitions to the size
+distributions most commonly used to describe clouds and aerosol size
+distributions in the meteorological literature.
+Currently, only the lognormal distribution is presented.
+
+\subsection[Modal vs.\ Sectional Represenatation]{Modal vs.\ Sectional Represenatation}\trmidx{mdlsxn}
+\cite{LuB04} designed and optimal non-linear least squares-based
+procedure for converting from sectional to modal representations.
+
+\subsection[Nomenclature]{Nomenclature}\trmidx{nomenclature}
+There is a bewildering variety of nomenclature associated with size
+distributions, probability density functions, and statistics thereof.
+The nomenclature in this article generally follows the standard
+references, \cite[see, e.g.,][]{HaT74,PaG77,PFT88,FTV89,SeP97}, at
+least where those references are in agreement. 
+Quantities whose nomenclature is often confusing, unclear, or simply
+not standardized are discussed in the text.
+
+\subsection[Distribution Function]{Distribution Function}\index{distribution function}
+This section follows the carefully presented discussion of
+\cite{FTV89}.
+The \trmdfn{size distribution} function $\dstnbrofrds$ is defined such that
+$\dstnbrofrds\,\dfr\rds$ is the total concentration (number per unit volume
+of air, or \nbrxmC) of particles with sizes in the domain
+$[\rds,\rds+\dfr\rds]$. 
+The total number concentration of particles $\cncttl$ is obtained by
+integrating $\dstnbrofrds$ over all sizes
+\begin{equation}
+\cncttl = \int_{0}^{\infty} \dstnbrofrds \,\dfr\rds
+\label{eqn:cnc_ttl_dfn}
+\end{equation}
+The size distribution function is also called the \trmdfn{spectral
+density function}.
+The dimensions of $\dstnbrofrds$ and $\cncttl$ are \nbrxmCm\ and
+\nbrxmC, respectively.
+Note that $\dstnbrofrds$ is only normalized if $\cncttl = 1.0$ 
+(cf.\ Section~\ref{sxn:nrm}). 
+
+Often $\cncttl$ is not an observable quantity.
+A variety of functional forms, some of which are overloaded for
+clarity, describe the number concentrations actually measured by
+instruments. 
+Typically an instrument has a lower detection limit $\rdsmin$ and an
+upper detection limit $\rdsmax$ of particle sizes which it can
+measure.  
+\begin{eqnarray}
+\cncfnc(\rds < \rdsmax) & = & \int_{0}^{\rdsmax} \dstnbrofrds \,\dfr\rds
+\label{eqn:cnc_cml} \\ 
+\cncfnc(\rds > \rdsmax) & = & \int_{\rdsmax}^{\infty} \dstnbrofrds \,\dfr\rds
+\label{eqn:cnc_gt} \\ 
+\cncfnc(\rdsmin, \rdsmax) & = & \cncfnc(\rdsmin < \rds < \rdsmax) = \int_{\rdsmin}^{\rdsmax} \dstnbrofrds \,\dfr\rds
+\label{eqn:cnc_ntv}
+\end{eqnarray}
+Equations (\ref{eqn:cnc_cml})--(\ref{eqn:cnc_ntv}) define the
+\trmdfn{cumulative concentration}, \trmdfn{lower bound concentration},
+and \trmdfn{truncated concentration}, respectively.
+The cumulative concentration is used to define the 
+\trmdfn{median radius}~$\rdsnma$.
+Half the particles are larger and half smaller than $\rdsnma$
+\begin{equation}
+\cncfnc(\rds < \rdsnma) = \cncfnc(\rds > \rdsnma) = \frac{\cncttl}{2}
+\label{eqn:mdn_dfn}
+\end{equation}
+These functions are often used to define $\dstnbrofrds$ via 
+\begin{equation}
+\dstnbrofrds = \frac{\dfr\cnc}{\dfr\rds}
+\label{eqn:dst_dfn}
+\end{equation}
+Note that the concentration nomenclature in (\ref{eqn:dst_dfn}) is
+$\cnc$ not $\cncofrds$.
+Using $\cncofrds$ would indicate that the concentration has not been
+completely integrated over all sizes. 
+By definition, the total concentration $\cncttl$ is integrated over
+all sizes, as defined by (\ref{eqn:cnc_ttl_dfn}).
+A concentration denoted $\cncofrds$ makes no sense without an
+associated size bin width $\Delta \rds$, or truncation convention,
+as in (\ref{eqn:cnc_cml})--(\ref{eqn:cnc_ntv}).
+We try to use $\cnc$ and $\cncttl$ for normalized ($\cnc = 1$) and
+non-normalized ($\cncttl \ne 1$, i.e., absolute concentrations).
+However this convention is not absolute and (\ref{eqn:cnc_ttl_dfn})
+defines both $\cnc$ and~$\cncttl$.
+
+\subsection[Probability Density Function]{Probability Density Function}
+Describing size distributions is easier when they are
+normalized into \trmdfn{probability density functions}, or \trmidx{PDF}s.
+In this context, a PDF is a size distribution function normalized to
+unity over the domain of interest, i.e.,  $\pdfrds = \cstnrm \dstnbrofrds$
+where the normalization constant $\cstnrm$ is defined such that
+\begin{equation}
+\int_{0}^{\infty} \pdfrds \,\dfr\rds = 1
+\label{eqn:pdf_nrm}
+\end{equation}
+In the following sections we usually work with PDFs because this
+normalization property is very convenient mathematically.
+Comparing (\ref{eqn:pdf_nrm}) and (\ref{eqn:cnc_ttl_dfn}), it is clear
+that the normalization constant $\cstnrm$ which transforms a size
+distribution  function (\ref{eqn:cnc_ttl_dfn}) into a PDF $\pdfrds$ is
+$\cncttl^{-1}$  
+\begin{equation}
+\pdfrds = \frac{1}{\cncttl} \, \dstnbrofrds
+\label{eqn:pdf_dfn}
+\end{equation}
+
+\subsubsection[Independent Variable]{Choice of Independent Variable}
+The merits of using radius $\rds$, diameter $\dmt$, or some other
+dimension $\LLL$, as the \trmidx{independent variable} of a size
+distribution depend on the application. 
+In \trmidx{radiative transfer} applications, $\rds$ prevails in the
+literature probably because it is favored in electromagnetic and 
+\trmidx{Mie theory}. 
+There is, however, a growing recognition of the importance of
+aspherical particles in planetary atmospheres. 
+Defining an \trmdfn{equivalent radius} or \trmdfn{equivalent diameter}
+for these complex shapes is not straighforward (consider, e.g., a
+bullet rosette ice crystal).
+Important differences exist among the competing definitions, such as
+\trmdfn{equivalent area spherical radius}, \trmdfn{equivalent volume
+spherical radius}, \cite[e.g.,][]{EbC92,McH972}. 
+
+A direct property of aspherical particles which can often be measured
+is its maximum dimension, i.e., the greatest distance between any two
+surface points of the particle.
+This maximum dimension, usually called $\LLL$, has proven to be
+useful for characterizing size distributions of 
+\trmidx{aspherical particles}. 
+For a sphere, $\LLL$ is also the diameter.
+Analyses of \trmidx{mineral dust} sediments in ice core deposits or sediment
+traps, for example, are usually presented in terms of $\LLL$.
+The surface area and volume of ice crystals have been computed in terms
+of power laws of $\LLL$ \cite[e.g.,][]{HeP84,TaL95}.
+Since models usually lack information regarding the shape of
+particles \cite[early exceptions include][]{Zek941,ChL941}, most modelers
+assume \trmidx{spherical particles}, especially for aerosols.
+Thus, the advantages of using the diameter $\dmt$ as the independent 
+variable in size distribution studies include: $\dmt$ is the
+dimension often reported in measurements; $\dmt$ is more analogous
+than $\rds$ to $\LLL$.
+
+The remainder of this manuscript assumes spherical particles where
+$\rds$ and $\dmt$ are equally useful independent variables.
+Unless explicitly noted, our \trmidx{convention} will be to use $\dmt$
+as the independent variable.
+Thus, it is useful to understand the rules governing conversion of PDFs
+from $\dmt$ to $\rds$ and the reverse.
+
+Consider two distinct analytic representations of the same underlying
+size distribution.
+The first, $\dstnbrdmtofdmt$, expresses the \trmidx{differential number
+concentration} per unit diameter.
+The second, $\dstnbrrdsofrds$, expresses the differential number
+concentration per unit radius.
+Both $\dstnbrdmtofdmt$ and $\dstnbrrdsofrds$ share the same dimensions, 
+\nbrxmCm. 
+\begin{eqnarray}
+\dmt & = & 2\rds \\
+\dfr\dmt & = & 2 \,\dfr\rds \\
+\dstnbrdmtofdmt \,\dfr\dmt & = & \dstnbrrdsofrds \,\dfr\rds \\
+\dstnbrdmtofdmt & = & \frac{1}{2} \dstnbrrdsofrds
+\label{eqn:dmt_rds}
+\end{eqnarray}
+
+\section{Statistics of Size Distributions}\label{sxn:stt}
+
+\subsection[Generic]{Generic}
+Consider an arbitrary function $\ggg(\xxx)$ which applies over the
+domain of the size distribution $\pdffnc(\xxx)$.
+For now the exact definition of $\ggg$ is irrelevant, but imagine that
+$\ggg(\xxx)$ describes the variation of some physically meaningful
+quantity (e.g., area) with size.
+The \trmdfn{mean value} of $\ggg$ is the integral of $\ggg$ over the
+domain of the size distribution, weighted at each point by the
+concentration of particles
+\begin{equation}
+\gggavg = \int_{0}^{\infty} \ggg(\xxx) \, \pdffnc(\xxx) \,\dfr\xxx
+\label{eqn:stt_gnr}
+\end{equation}
+Once $\pdffnc(\xxx)$ is known, it is always possible to compute
+$\gggavg$ for any desired quantity $\ggg$.
+Typical quantities represented by $\ggg(\xxx)$ are size,
+$\ggg(\xxx) = \xxx$; area, $\ggg(\xxx) = A(\xxx) \propto \xxx^{2}$; and
+volume $\ggg(\xxx) = V(\xxx) \propto \xxx^{3}$.
+More complicated statistics represented by $\ggg(\xxx)$ include
+variance, $\ggg(\xxx) = (\xxx - \xxxavg)^{2}$. 
+The remainder of this section considers some of these examples in more
+detail.
+
+\subsection[Mean Size]{Mean Size}
+The \trmdfn{number mean size} $\xxxavg$ of a size distribution
+$\pdffnc(\xxx)$ is defined as 
+\begin{equation}
+\xxxavg = \int_{0}^{\infty} \pdffnc(\xxx) \, \xxx \,\dfr\xxx
+\label{eqn:szavg_gnr}
+\end{equation}
+Synonyms for number mean size include \trmdfn{mean size},
+\trmdfn{average size}, \trmdfn{arithmetic mean size}, and
+\trmdfn{number-weighted mean size} \cite[][]{HaT74}.  
+\cite{FTV89} define $\dmtnaa \equiv \dmtavg$, a convention we adopt
+in the following.
+
+\subsection[Variance]{Variance}\label{sxn:vrn}
+The \trmdfn{variance} $\vrnxxx$ of a size distribution $\pdffnc(\xxx)$
+is defined in accord with the statistical variance of a continuous
+mathematical distribution.
+\begin{equation}
+\vrnxxx = 
+\int_{0}^{\infty} \pdffnc(\xxx) (\xxx - \xxxavg)^{2} \,\dfr\xxx
+\label{eqn:vrn_gnr}
+\end{equation}
+The variance measures the mean squared-deviation of the distribution
+from its mean value.
+The units of $\vrnxxx$ are [\mS].
+Because $\vrnxxx$ is a complicated function for standard aerosol and
+cloud size distributions, many prefer to work with an alternate
+definition of variance, called the \trmdfn{effective variance}. 
+
+The \trmdfn{effective variance} $\vrnffcxxx$ of a size distribution 
+$\pdffnc(\xxx)$ is the variance about the \trmidx{effective size} of
+the distribution, normalized by $\xxxeff$ \cite[e.g.,][]{HaT74}  
+\begin{equation}
+\vrnffcxxx = \frac{1}{\xxxeff^{2}} 
+\int_{0}^{\infty} \pdffnc(\xxx) (\xxx - \xxxeff)^{2} \, \xxx^{2} \,\dfr\xxx
+\label{eqn:vrnffc_gnr}
+\end{equation}
+Because of the $\xxxeff^{-2}$ normalization, $\vrnffcxxx$ is
+non-dimensional in contrast to typical variances, e.g.,
+(\ref{eqn:vrn_gnr}). 
+In the terminology of \cite{HaT74}, $\vrnffcxxx = v$.
+
+\subsection[Standard Deviation]{Standard Deviation}
+The \trmdfn{standard deviation} $\sdnxxx$ of a size distribution
+$\pdffnc(\xxx)$ is the square root of the variance (\ref{eqn:vrn_gnr}),  
+\begin{equation}
+\sdnxxx = \sqrt{\vrnxxx}
+\label{eqn:sdn_gnr}
+\end{equation}
+$\sdnxxx$ has units of~[\m].
+For standard aerosol and cloud size distributions, $\sdnxxx$ is an
+ugly expression.
+Therefore many authors prefer to work with alternate definitions of
+standard deviation.
+Unfortunately, nomenclature for these alternate definitions is not
+standardized. 
+
+\section{Cloud and Aerosol Size Distributions}\label{sxn:psd}
+
+\subsection{\normalsize Gamma Distribution}\label{sxn:psd_gmm}
+Statistics of the \trmdfn{gamma distribution} are presented in
+\url{http://asd-www.larc.nasa.gov/~yhu/paper/thesisall/node8.html}.
+Currently, the aerosol property program \cmdidx{mie} implements gamma
+distributions in a limited sense.
+
+\subsection{\normalsize Normal Distribution}\label{sxn:psd_nrm}
+The \trmdfn{normal distribution} is the most common statistical
+distribution. 
+The normal distribution $\dst(\xxx)$ is expressed in terms of
+its mean $\xxxavg$ (\ref{eqn:szavg_gnr}) and standard deviation
+$\sdnxxx$ (\ref{eqn:sdn_gnr}) 
+\begin{equation}
+\dst(\xxx) = 
+\frac{1}{\sqrt{2\mpi} \, \sdnxxx} \exp\! 
+\left[-\frac{1}{2}\left( \frac{\xxx - \xxxavg}{\sdnxxx} \right)^{2} \right] 
+\label{eqn:dst_nrm}
+\end{equation}
+With our standard nomenclature for number distribution $\dstnbr$ and
+particles diameter~$\dmt$, (\ref{eqn:dst_nrm}) appears as
+\begin{equation}
+\dstnbr(\dmt) \equiv 
+\frac{\dfr\cnc}{\dfr\dmt} = 
+\frac{1}{\sqrt{2\mpi} \, \sdndmt} \exp\! 
+\left[-\frac{1}{2}\left( \frac{\dmt - \dmtnaa}{\sdndmt} \right)^{2} \right] 
+\label{eqn:dst_nrm_dmt}
+\end{equation}
+
+The cumulative normal distribution is called the \trmidx{error function} 
+and is discussed in Section~(\ref{sxn:gss}). 
+Integration of the error function shows that 
+68.3\% of the values of (\ref{eqn:dst_nrm_dmt}) are in $\dmtnaa \pm \sdndmt$, 
+95.4\% are in $\dmtnaa \pm 2\sdndmt$, and
+99.7\% are in $\dmtnaa \pm 3\sdndmt$.
+
+\subsection{\normalsize Lognormal Distribution}\label{sxn:psd_lgn}
+The \trmdfn{lognormal distribution} is perhaps the most commonly used
+analytic expression in aerosol studies.
+\subsubsection[Distribution Function]{Distribution Function}
+In a lognormal distribution, the logarithm of abscissa is normally
+distributed (Section~\ref{sxn:psd_nrm}).
+Substituting $\xxx = \ln\dmt$ into (\ref{eqn:dst_nrm}) yields
+\begin{equation}
+\dstnbr(\ln\dmt) \equiv 
+\frac{\dfr\cnc}{\dfr\ln\dmt} = 
+\frac{1}{\sqrt{2\mpi} \, \lngsd} \exp\! 
+\left[-\frac{1}{2}\left( \frac{\ln\dmt - \ln\dmtnma}{\lngsd} \right)^{2} \right] 
+\label{eqn:dst_lgn_ntm}
+\end{equation}
+where $\gsd$ and $\dmtnma$ are parameters whose physical
+significance is to be defined.
+In particular, there is no closed-form algebraic relationship between
+$\sdndmt$ (\ref{eqn:dst_nrm_dmt}) and $\gsd$ (\ref{eqn:dst_lgn_ntm}).
+The former is a true standard deviation and the properties of the
+latter are as yet unknown.
+
+Substituting $\dfr\ln\dmt = \dmt^{-1}\,\dfr\dmt$ in
+(\ref{eqn:dst_lgn_ntm}) leads to the most commonly used form the 
+\trmdfn{lognormal distribution function} 
+\begin{equation}
+\dstnbr(\dmt) \equiv 
+\frac{\dfr\cnc}{\dfr\dmt} = 
+\frac{1}{\sqrt{2\mpi} \, \dmt \lngsd} \exp\! 
+\left[-\frac{1}{2}\left( \frac{ \ln(\dmt/\dmtnma)}{\lngsd} \right)^{2} \right] 
+\label{eqn:dst_lgn}
+\end{equation}
+
+One of the most confusing aspects of size distributions in the
+meteorological literature is in the usage of $\gsd$, the 
+\trmdfn{geometric standard deviation}.
+Some researchers \cite[e.g.,][]{FTV89} prefer a different formulation
+(\ref{eqn:dst_lgn}) which is equivalent to 
+\begin{equation}
+\dstnbrofdmt = \frac{1}{\sqrt{2\mpi} \, \gsdtld \dmt} \exp\! 
+\left[-\frac{1}{2}\left( \frac{ \ln(\dmt/\dmtnma)}{\gsdtld} \right)^{2} \right]
+\label{eqn:dst_lgn_alt}
+\end{equation}
+where
+\begin{equation}
+\gsdtld \equiv \lngsd
+\label{eqn:gsd_tld_dfn}
+\end{equation}
+In practice, (\ref{eqn:dst_lgn}) is used more widely than
+(\ref{eqn:dst_lgn_alt}) and we adopt (\ref{eqn:dst_lgn}) in the 
+following.
+
+The definition of $\gsdtld$ in (\ref{eqn:dst_lgn_alt}) may be more
+satisfactory from a mathematical point of view \cite[]{FTV89}, and it
+subsumes an ``$\ln$'' which reduces typing.  
+This is seen by transforming $\xxx$ in (\ref{eqn:dst_nrm}) with
+\begin{eqnarray}
+% FTV89 p. 17
+\xxx & = & \frac{1}{\gsdtld} \ln \left( \frac{\dmt}{\dmtnma} \right) \nonumber \\
+\dmt & = & \dmtnma \exp (\gsdtld\xxx) \nonumber \\
+\dfr\dmt & = & \gsdtld \dmtnma \exp (\gsdtld\xxx) \,\dfr\xxx \nonumber \\
+\dfr\xxx & = & (\gsdtld \dmtnma)^{-1} \,\dfr\dmt \nonumber
+\label{eqn:cov_xxx}
+\end{eqnarray}
+This maps $\xxx \in (-\infty, +\infty)$ into $\dmt \in [0,\infty)$.
+
+One is occasionally given a ``standard deviation'' or ``geometric
+standard deviation'' parameter without clear specification whether it
+represents $\gsd$ (or $\lngsd$, or $\exp \gsd$, or $\sdnxxx$) in
+(\ref{eqn:sdn_gnr}), (\ref{eqn:dst_lgn}), or (\ref{eqn:dst_lgn_alt}).
+As a true standard deviation, $\sdnxxx$ has dimensions of $\xxx$,
+whereas both $\gsd$ and $\gsdtld$ are dimensionless so units cannot 
+disambiguate them.
+A useful rule of thumb is that $\gsd$ in (\ref{eqn:dst_lgn}) and 
+$\me^{\gsdtld}$ in (\ref{eqn:dst_lgn_alt}) are usually between
+1.5--2.5 for realistic aerosol populations.   
+Since we adopted (\ref{eqn:dst_lgn}), physically realistic values
+are $\gsd \in (1.5, 2.5)$.
+
+\cite{SeP97} p.~423 describe the physical meaning of the geometric
+standard deviation~$\gsd$.
+Define the special particle sizes
+\begin{subequations} % Equation~(\ref{eqn:dst_gsd})
+\label{eqn:dst_gsd}
+\begin{align} 
+\dmtgsdpls &\equiv \dmtnma \gsd \\
+\dmtgsdmns &\equiv \dmtnma / \gsd
+\end{align} 
+\end{subequations} % end Equation~(\ref{eqn:dst_gsd})
+The \trmidx{cumulative concentration} smaller than $\dmtgsdpls$,
+simplifies from (\ref{eqn:lgn_erf}) to 
+\begin{eqnarray}
+% http://mathworld.wolfram.com/Erf.html
+% ncap2 -O -v -s 'gsdnbr=1.0' -s 'cncfncmns=0.5*(1.0+erf(-gsdnbr/sqrt(2.0)))' -s 'cncfncpls=0.5*(1.0+erf(gsdnbr/sqrt(2.0)))' -s 'cncfncspread=cncfncpls-cncfncmns' ~/nco/data/in.nc ~/foo.nc;ncks ~/foo.nc
+\cncfnc(\dmt < \dmtgsdpls)
+& = & \frac{\cncttl}{2} + 
+\frac{\cncttl}{2} \, \erffnc\! \left( \frac{1}{\sqrt{2}} \right)
+= 0.841344746069 \cncttl
+% fxm: is erf(1/sqrt(2)) analytic?
+\label{eqn:cnc_bnd_gsd_pls}
+\end{eqnarray}
+Numerical integration must be used to obtain the final result, 
+$0.841 \cncttl$, as $\erffnc$() has no closed-form solution here.
+Using (\ref{eqn:cnc_bnd_gsd_pls}) to invert (\ref{eqn:dst_gsd}), 
+we may define $\gsd$ as the ratio of the diameter~$\dmtgsdpls$ (larger
+than 84.1\% of all particles) to the median diameter~$\dmtnma$.
+Monodisperse populations have $\gsd \equiv 1$.
+
+Similarly the cumulative concentration smaller than $\dmtgsdmns$,
+simplifies from (\ref{eqn:lgn_erf}) to 
+\begin{eqnarray}
+% http://mathworld.wolfram.com/Erf.html
+\cncfnc(\dmt < \dmtgsdmns)
+& = & \frac{\cncttl}{2} + 
+\frac{\cncttl}{2} \, \erffnc\! \left(- \frac{1}{\sqrt{2}} \right)
+= 0.158655253931 \cncttl
+\label{eqn:cnc_bnd_gsd_mns}
+\end{eqnarray}
+where we have used the numerical result in (\ref{eqn:cnc_bnd_gsd_mns})
+with the error function's anti-symmetric property,
+$\erffnc(-\xxx) = -\erffnc(\xxx)$.
+Subtracting (\ref{eqn:cnc_bnd_gsd_mns}) from (\ref{eqn:cnc_bnd_gsd_pls})
+shows that 68.3\% of all particles in a lognormal distribution lie in 
+$\dmt \in [\dmtgsdmns,\dmtgsdpls]$. 
+
+By raising $\gsd$ to any power $\xxx$ in (\ref{eqn:dst_gsd}), it is 
+straightforward to verify that the number of particles within
+$\dmt \in [\dmtnma\gsd^{-\xxx}, \dmtnma\gsd^{\xxx}]$ is
+\begin{eqnarray}
+% http://mathworld.wolfram.com/Erf.html
+\cncfnc(\dmtnma\gsd^{-\xxx} < \dmt < \dmtnma\gsd^{\xxx}) & = & 
+\cncttl \,\erffnc(\xxx/\sqrt{2})
+\label{eqn:cnc_bnd_gsd_xxx}
+\end{eqnarray}
+Application of (\ref{eqn:cnc_bnd_gsd_xxx}) for small integer $\xxx$
+shows 
+that 68.3\% of all particles lie within 
+$\dmtnma/\gsd < \dmt < \dmtnma\gsd$, 
+that 95.4\% of all particles\footnote{%
+\cite{SeP97} p.~423 has a typo on this point. 
+That page erroneously states that the bounds bracketing 95\% of a
+lognormal distribution are $\dmtnma/(2\gsd) < \dmt < 2\dmtnma\gsd$.}
+lie within $\dmtnma\gsd^{-2} < \dmt < \dmtnma\gsd^{2}$, and 
+that 99.7\% of all particles lie within 
+$\dmtnma\gsd^{-3} < \dmt < \dmtnma\gsd^{3}$.
+These bounds are identical to the fraction of particles enclosed
+within one, two, and three standard deviations of the mean of a normal  
+distribution (Section~\ref{sxn:psd_nrm}). 
+
+\subsubsection[Lognormal Relations]{Lognormal Relations}
+Table~\ref{tbl:lgn} summarizes the standard lognormal distribution
+parameters. 
+Note that $\gsdtld \equiv \ln \gsd$.
+The statistics in Table~\ref{tbl:lgn} are easy to misunderstand
+because of the plethora of subtly different definitions.
+A common mistake is to assume that patterns which seems to apply to
+one distribution, e.g., the number distribution $\dstnbrofdmt$, apply
+to distributions of all other moments. 
+For example, the number distribution $\dstnbrofdmt$ is the
+\textit{only} distribution for which the moment mean size (i.e.,
+number mean size~$\dmtnaa$) equals the moment-weighted size (i.e.,
+number-weighted size~$\dmtnwa$).  
+Also, the number mean size $\dmtnaa$ differs from the number median
+size $\dmtnma$ by a factor $\exp(\gsdtldsqr/2)$.
+But this factor is not constant and depends on the moment of the
+distribution.
+For instance, $\dmtsaa$ differs from $\dmtsma$ by $\exp(\gsdtldsqr)$,
+while $\dmtsaa$ differs from $\dmtsma$ by $\exp(3\gsdtldsqr/2)$.
+Thus converting from mean diameter to median diameter is not the
+same for number as for mass distributions.
+% Begin tbl:lgn
+\begin{landscape}
+\begin{longtable}{ >{\raggedright}p{3em}<{} >{$}l<{$} l >{\raggedright}p{14em}<{} >{$\displaystyle}r<{$} }
+& & & & \kill % NB: longtable requires caption as table entry
+\caption[Lognormal Distribution Relations]{\textbf{Lognormal Distribution
+Relations}%
+\footnote{\emph{Source:} }%  
+% fxm: 20010114 latex2html appears to choke when math mode is used in footnotes
+\footnote{For convenience, we have used $\gsdtld \equiv \lngsd$.}%  
+\footnote{The total diameter $\dmtttl$ is intended as an example of a
+statistic which is first order in $\dmt$.}%
+\label{tbl:lgn}} \\
+\hline\hline \rule{0.0ex}{\hlntblhdrskp}% 
+Symbol & \mbox{Value} & Units & Description & \mbox{Defining Relation} \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endfirsthead % Lines between and \endfirsthead appear at top of table
+\caption[]{(continued)} \\ % Set label for following pages
+Symbol & \mbox{Value} & Units & Description & \mbox{Defining Relation} \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endhead % Previous block appears at top of every page
+\endlastfoot % Previous block appears at end of table
+$\cncttl$ & \cncttl & \nbrxmC & Total number concentration &
+\cncttl = \int_{0}^{\infty} \dstnbrofdmt \,\dfr\dmt \\[1.25ex]
+$\dmtttl$ &  \cncttl \dmtnma \exp(\gsdtldsqr) & \mxmC & Total diameter &
+\dmtttl = \int_{0}^{\infty} \dmt \dstnbrofdmt \,\dfr\dmt \\[1.25ex]
+$\xsattl$ & \frac{\mpi}{4} \cncttl \dmtnma^{2} \exp(\gsdtldsqr/2) & \mSxmC & Total cross-sectional area &
+\xsattl = \int_{0}^{\infty} \frac{\mpi}{4} \dmt^{2} \dstnbrofdmt \,\dfr\dmt \\[1.25ex]
+$\sfcttl$ & \mpi \cncttl \dmtnma^{2} \exp(2\gsdtldsqr) & \mSxmC & Total surface area &
+\sfcttl = \int_{0}^{\infty} \mpi \dmt^{2} \dstnbrofdmt \,\dfr\dmt \\[1.25ex]
+$\vlmttl$ & \frac{\mpi}{6} \cncttl \dmtnma^{3} \exp(9\gsdtldsqr/2) & \mCxmC & Total volume & 
+\vlmttl = \int_{0}^{\infty} \frac{\mpi}{6} \dmt^{3} \dstnbrofdmt \,\dfr\dmt \\[1.25ex]
+$\mssttl$ & \frac{\mpi}{6} \cncttl \dns \dmtnma^{3} \exp(9\gsdtldsqr/2) & \kgxmC & Total mass &
+\mssttl = \int_{0}^{\infty} \frac{\mpi}{6} \dns \dmt^{3} \dstnbrofdmt \,\dfr\dmt \\[1.25ex]
+\hline\hline \rule{0.0ex}{\hlntblhdrskp}% 
+$\dmtavg$ & \dmtnma \exp(\gsdtldsqr/2) & \mxnbr & Mean diameter & \cncttl \dmtavg = \cncttl \dmtnaa = \dmtttl \\[0.5ex]
+$\xsaavg$ & \frac{\mpi}{4} \dmtnma^{2} \exp(2\gsdtldsqr) & \mSxnbr & Mean
+cross-sectional area & \textstyle \cncttl \xsaavg = \cncttl \frac{\mpi}{4} \dmtsaa^{2} = \xsattl \\[0.5ex]
+$\sfcavg$ & \mpi \dmtnma^{2} \exp(2\gsdtldsqr) & \mSxnbr & Mean surface area & \cncttl \sfcavg = \cncttl \mpi \dmtsaa^{2} = \sfcttl \\[0.5ex]
+$\vlmavg$ & \frac{\mpi}{6} \dmtnma^{3} \exp(9\gsdtldsqr/2) & \mCxnbr & Mean volume & \textstyle \cncttl \vlmavg = \cncttl \frac{\mpi}{6} \dmtvaa^{3} = \vlmttl \\[0.5ex]
+$\mssavg$ & \frac{\mpi}{6} \dns \dmtnma^{3} \exp(9\gsdtldsqr/2) & \kgxnbr & Mean mass & \textstyle \cncttl \mssavg = \cncttl \frac{\mpi}{6} \dns \dmtvaa^{3} = \mssttl \\[0.5ex]
+\hline\hline \rule{0.0ex}{\hlntblhdrskp}% 
+$\cncttl$ & \frac{6}{\mpi \dns} \mssttl \dmtnma^{-3} \exp(-9\gsdtldsqr/2) & \nbrxmC & Number concentration & \cncttl = \int_{0}^{\infty} \dstnbrofdmt \,\dfr\dmt \\[0.5ex]
+$\dmtnma$ & \left(\frac{6 \mssttl}{\mpi \cncttl \dns} \right)^{1/3}
+\exp(-3\gsdtldsqr/2) & \m & Median diameter & \int_{0}^{\dmtnma} \dstnbrofdmt \,\dfr\dmt = \frac{\cncttl}{2} \\[0.5ex]
+$\dmtffc$ & \frac{6\mssttl}{\dns \sfcttl} & \m & Effective diameter & \dmtffc = \frac{1}{\xsattl} \int_{0}^{\infty} \dmt \frac{\mpi}{4} \dmt^{2} \dstnbrofdmt \,\dfr\dmt \\[0.5ex]
+$\sfcspc$ & \frac{6}{\dns \dmtffc} & \mSxkg & Specific surface area & \sfcspc = \sfcttl/\mssttl \\[0.5ex]
+\hline\hline \rule{0.0ex}{\hlntblhdrskp}% 
+$\dmtnma$ & \dmtnaa \exp(-\gsdtldsqr/2) & \m & Median diameter, Scaling diameter, Number median diameter. Half of particles are larger than, and half smaller than, $\dmtnma$ & \int_{0}^{\dmtnma} \dstnbrofdmt \,\dfr\dmt = \frac{\cncttl}{2} \\[0.5ex] 
+% SeP97 p. 423 (7.44)
+$\dmtnaa$, $\dmtavg$, $\dmtnwa$ & \dmtnma \exp(\gsdtldsqr/2) & \m & Mean diameter, Average diameter, Number-weighted mean diameter & \dmtnaa = \frac{1}{\cncttl} \int_{0}^{\infty} \dmt \dstnbrofdmt \,\dfr\dmt \\[0.5ex]
+$\dmtsaa$ & \dmtnma \exp(\gsdtldsqr) & \m & Surface mean diameter & \cncttl \mpi \dmtsaa^{2} = \cncttl \sfcavg = \sfcttl \\[0.5ex]
+$\dmtvaa$ & \dmtnma \exp(3\gsdtldsqr/2) & \m & Volume mean diameter, Mass mean diameter & \cncttl \frac{\mpi}{6} \dmtvaa^{3} = \cncttl \vlmavg = \vlmttl \\[0.5ex]
+% SeP97 p. 425 (7.50)
+$\dmtsma$ & \dmtnma \exp(2\gsdtldsqr) & \m & Surface median diameter & \int_{0}^{\dmtsma} \mpi \dmt^{2} \dstnbrofdmt \,\dfr\dmt = \frac{\sfcttl}{2} \\[0.5ex]
+$\dmtswa$, $\dmtffc$ & \dmtnma \exp(5\gsdtldsqr/2) & \m & Area-weighted mean diameter, effective diameter & \dmtswa = \frac{1}{\xsattl} \int_{0}^{\infty} \dmt \frac{\mpi}{4} \dmt^{2} \dstnbrofdmt \,\dfr\dmt \\[0.5ex]
+% SeP97 p. 425 (7.52)
+$\dmtvma$ & \dmtnma \exp(3\gsdtldsqr) & \m & Volume median diameter \newline Mass median diameter & \int_{0}^{\dmtvma} \frac{\mpi}{6} \dmt^{3} \dstnbrofdmt \,\dfr\dmt = \frac{\vlmttl}{2} \\[0.5ex]
+$\dmtvwa$ & \dmtnma \exp(7\gsdtldsqr/2) & \m & Mass-weighted mean diameter, Volume-weighted mean diameter & \dmtvwa = \frac{1}{\vlmttl} \int_{0}^{\infty} \dmt \frac{\mpi}{6} \dmt^{3} \dstnbrofdmt \,\dfr\dmt \\[0.5ex]
+\end{longtable}
+\end{landscape}
+% End tbl:lgn
+
+% fxm: need better segue here
+For brevity Table~\ref{tbl:lgn} presents the lognormal relations in
+terms of diamter~$\dmt$.
+Change the relations to befunctions of radius~$\rds$ is
+straightforward. 
+For example, direct substitution of $\dmt = 2 \rds$ into
+(\ref{eqn:dst_lgn}) yields
+\begin{eqnarray}
+\dstnbrofdmt & = & \frac{1}{\sqrt{2\mpi} \, 2 \rds \lngsd} \exp\! 
+\left[-\frac{1}{2}\left( \frac{ \ln(2 \rds/2 \rdsnma)}{\lngsd}
+\right)^{2} \right] \nonumber \\ 
+& = & \frac{1}{2} \frac{1}{\sqrt{2\mpi} \, \rds \lngsd} \exp\! 
+\left[-\frac{1}{2}\left( \frac{ \ln(\rds/\rdsnma)}{\lngsd}
+\right)^{2} \right] \nonumber \\ 
+& = & \frac{1}{2} \dstnbrrdsofrds
+\label{eqn:dst_lgn_rds}
+\end{eqnarray}
+in agreement with (\ref{eqn:dmt_rds}).
+
+Table~\ref{tbl:lgn_stt_obs} lists applies the relations in Table~\ref{tbl:lgn}
+to specific size distributions typical of tropospheric aerosols.
+\begin{longtable}{ >{$}r<{$} >{$}r<{$} >{$}r<{$} >{$}l<{$} r }
+& & & & \kill % NB: longtable requires caption as table entry
+\caption[Measured Lognormal Dust Size Distributions]{\textbf{Measured Lognormal Dust Size Distributions}% 
+\footnote{\emph{References:} 
+% fxm: This footnote does not appear in printed matter
+\setcounter{enmrfr}{0} % Reset reference counter for this table
+\enmrfrstpprn, \citep{PaG77}\label{idx_lgn_stt_obs_PaG77};
+\enmrfrstpprn, \citep{She84}\label{idx_lgn_stt_obs_She84};
+\enmrfrstpprn, \citep{BSM96}\label{idx_lgn_stt_obs_BSM96};
+\enmrfrstpprn, \citep{SBG98}\label{idx_lgn_stt_obs_SBG98};
+\enmrfrstpprn, \citep{AGG98}\label{idx_lgn_stt_obs_AGG98};
+\enmrfrstpprn, \citep{DHE02}\label{idx_lgn_stt_obs_DHE02};
+\enmrfrstpprn, \citep{MSI03}\label{idx_lgn_stt_obs_MSI03};
+\enmrfrstpprn, \citep{AKK06}\label{idx_lgn_stt_obs_AKK06};
+\enmrfrstpprn, \citep{MGT12}\label{idx_lgn_stt_obs_MGT12};
+% fxm uncomment when WGL07 published
+%\enmrfrstpprn, \cite{WGL07}\label{idx_lgn_stt_obs_WGL07}.
+Values reported in literature were converted to values shown in table
+using the analytic expressions summarized in Table~\ref{tbl:lgn}. 
+Usually this entailed deriving $\dmtnma$ given $\dmtvma$,
+$\rdsvma$, or $\dmtsma$.}% end footnote
+\label{tbl:lgn_stt_obs}} \\ % end caption
+\hline \rule{0.0ex}{\hlntblhdrskp}% 
+\dmtnma & \dmtvma & \gsd & \mssfrc & \setcounter{mltctt}{\value{footnote}} Ref. \\[0.0ex]
+\mbox{\um} & \mbox{\um} & & \\[0.0ex]
+\hline\hline \rule{0.0ex}{\hlntblntrskp}%
+\endfirsthead % Lines between and \endfirsthead appear at top of table
+\caption[]{(continued)} \\ % Set label for following pages
+\dmtnma & \dmtvma & \gsd & \mssfrc & \setcounter{mltctt}{\value{footnote}} Ref. \\[0.0ex]
+\mbox{\um} & \mbox{\um} & & \\[0.0ex]
+\hline\hline \rule{0.0ex}{\hlntblntrskp}%
+\endhead % Previous block appears at top of every page
+\endlastfoot % Previous block appears at end of table
+\multicolumn{5}{l}{\citet{PaG77}
+\footnote{Detailed fits to dust sampled over Colorado and Texas in \citet{PaG77}, p.~2080 Table~1. 
+Original values have been converted from radius to diameter. 
+$\mssfrc$ was not given.
+\citet{PaG77} showed soil aerosol could be represented with three modes
+which they dubbed, in order of increasing size, modes C, A, and~B.
+Mode~A is the mineral dust transport mode, seen in source regions and downwind.
+Mode~B is seen in the source soil itself, and in the atmosphere during dust events.
+Mode~C is seen most everywhere, but does not usually correlate with local dust amount.
+Mode~C is usually a global, aged, background, anthropogenic aerosol, typically rich in sulfate and black carbon.
+Sometimes, however, Mode~C has a mineral dust component.
+Modes~C and~B are averages from \citet{PaG77} Table~1 p.~2080.
+Mode~B is based on the summary recommendation that $\rdssma = 1.5$
+and $\gsd = 2.2$.}% end footnote
+} \\[0.0ex]
+0.08169 & 0.27 & 1.88 & & \ref{idx_lgn_stt_obs_PaG77} \\[0.5ex]
+0.8674 & 5.6 & 2.2 & & \ref{idx_lgn_stt_obs_PaG77} \\[0.5ex]
+28.65 & 57.6 & 1.62 & & \ref{idx_lgn_stt_obs_PaG77} \\[0.5ex]
+\multicolumn{5}{l}{\citet{She84}\footnote{Background Desert Model from \citet{She84}, p.~75 Table~1.}} \\[0.0ex]
+0.003291 & 0.0111 & 1.89 & 2.6 \times 10^{-4} & \ref{idx_lgn_stt_obs_She84} \\[0.5ex]
+0.5972 & 2.524 & 2.0\mbox{\footnote{$\gsd = 2.0$ for transport mode follows \citet{SBG98}, p.~10581, Table~1.}} & 0.781 & \ref{idx_lgn_stt_obs_She84}, \ref{idx_lgn_stt_obs_SBG98} \\[0.5ex]
+7.575 & 42.1 & 2.13 & 0.219 & \ref{idx_lgn_stt_obs_She84} \\[0.5ex]
+\multicolumn{5}{l}{\citet{BSM96}\footnote{\citet{BSM96}, p.~73 Table~2. 
+These are the ``background'' modes of D'Almeida (1987).}} \\[0.0ex]
+0.1600 & 0.832 & 2.1 & 0.036 & \ref{idx_lgn_stt_obs_BSM96} \\[0.5ex]
+1.401 & 4.82 & 1.90 & 0.957 & \ref{idx_lgn_stt_obs_BSM96} \\[0.5ex]
+9.989 & 19.38 & 1.60 & 0.007 & \ref{idx_lgn_stt_obs_BSM96} \\[0.5ex]
+\multicolumn{5}{l}{\citet{AGG98}
+\footnote{Mass fractions are reported as (\aaa,\bbb) for measurements
+ and model, respectively, of Spanish soil sample at 
+$\wndfrc = 66$\,\cmxs}% end footnote 
+} \\[0.0ex]
+0.6445 & 1.5 & 1.7 & (0.22,0.15) & \ref{idx_lgn_stt_obs_AGG98} \\[0.5ex]
+3.454 & 6.7 & 1.6 & (0.69,0.76) & \ref{idx_lgn_stt_obs_AGG98} \\[0.5ex]
+8.671 & 14.2 & 1.5 & (0.09,0.09) & \ref{idx_lgn_stt_obs_AGG98} \\[0.5ex]
+\multicolumn{5}{l}{\citet{DHE02}, Bahrain (1998--2000)
+\footnote{All \citet{DHE02} measurements follow certain conventions. 
+Standard deviation of measurements follows $\pm$ sign.
+Reported $\gsd$ is \textit{not} the geometric standard deviation.
+Their $\gsd$ is defined as the standard deviation of the logarithm of
+the size distribution  
+\cite[][p.~606, Equation~A2]{DHE02}.}% end footnote
+\footnote{Bahrain is an island in the Red Sea.}
+} \\[0.0ex]
+0.1768 & 0.30 \pm 0.08 & 0.42 \pm 0.04 & & \ref{idx_lgn_stt_obs_DHE02} \\[0.5ex]
+1.664 & 5.08 \pm 0.08 & 0.61 \pm 0.02 & & \ref{idx_lgn_stt_obs_DHE02} \\[0.5ex]
+\multicolumn{5}{l}{\citet{DHE02}, Solar Village Saudi Arabia (1998--2000)
+\footnote{The Solar Village AERONET station is located in empty land a few kilometers west of Riyadh's international airport.}
+} \\[0.0ex]
+0.1485 & 0.24 \pm 0.10 & 0.40 \pm 0.05 & & \ref{idx_lgn_stt_obs_DHE02} \\[0.5ex]
+1.576 & 4.64 \pm 0.06 & 0.60 \pm 0.03 & & \ref{idx_lgn_stt_obs_DHE02} \\[0.5ex]
+\multicolumn{5}{l}{\citet{DHE02}, Cape Verde (1993--2000)
+\footnote{Values of $\dmtnma$ were computed using $\gsd$ based on $\tau = 0.1$.}
+} \\[0.0ex]
+0.1134 & 0.24 \pm 0.06 & 0.49 + 0.10\tau \pm 0.04 & & \ref{idx_lgn_stt_obs_DHE02} \\[0.5ex]
+1.199 & 3.80 \pm 0.06 & 0.63 - 0.10\tau \pm 0.03 & & \ref{idx_lgn_stt_obs_DHE02} \\[0.5ex]
+\multicolumn{5}{l}{\citet{MSI03}
+\footnote{Measurements during PRIDE, July 2000, from Iza\~{n}a and
+  Puerto Rico. 
+  Only $\dmtvma$ reported as measurements did not fit lognormal
+  distributions.}% end footnote  
+} \\[0.0ex]
+ & 3.6 \pm 0.3 & \mbox{none} & & \ref{idx_lgn_stt_obs_MSI03} \\[0.5ex]
+ & 4.1 & \mbox{none} & & \ref{idx_lgn_stt_obs_MSI03} \\[0.5ex]
+\multicolumn{5}{l}{\citet{AKK06}
+\footnote{Original manuscript does not contain $\gsd$.}% end footnote 
+} \\[0.0ex]
+% ncap2 -O -v -s 'dmt_vma_crs=14.2;gsd_anl_crs=1.5;ln_gsd_crs=ln(gsd_anl_crs);dmt_nma_crs=dmt_vma_crs*exp(-3.0*(ln_gsd_crs^2));' ~/nco/data/in.nc ~/foo.nc;ncks -H ~/foo.nc
+0.0 & 1.1 & 0.0 & & \ref{idx_lgn_stt_obs_AKK06} \\[0.5ex]
+0.0 & 5.5 & 0.0 & & \ref{idx_lgn_stt_obs_AKK06} \\[0.5ex]
+0.0 & 14 & 0.0 & & \ref{idx_lgn_stt_obs_AKK06} \\[0.5ex]
+\multicolumn{5}{l}{\citet{MGT12}
+\footnote{AMMA size distribution used in DEAD coupled with SURFEX.}% end footnote 
+} \\[0.0ex]
+0.0 &  0.2  & 1.75 & 0.0008 & \ref{idx_lgn_stt_obs_MGT12} \\[0.5ex]
+0.0 &  1.67 & 1.76 & 0.0092 & \ref{idx_lgn_stt_obs_MGT12} \\[0.5ex]
+0.0 & 11.6  & 1.70 & 0.99 & \ref{idx_lgn_stt_obs_MGT12} \\[0.5ex]
+\csznote{ % fxm: Uncomment after WGL07 published
+\multicolumn{5}{l}{\citet{WGL07}
+\footnote{Measurements reported for 
+  SEPS (20041024--20041211, 150--75\,\dgrw, 8--36\,\dgrs) and 
+  SOKS (20050110--20050220, 68--78\,\dgre, 49--54\,\dgrs), respectively.}% end footnote 
+} \\[0.0ex]
+% ncap2 -O -v -s 'dmt_vma_SEPS=2.20;gsd_anl_SEPS=1.36;ln_gsd_SEPS=ln(gsd_anl_SEPS);dmt_nma_SEPS=dmt_vma_SEPS*exp(-3.0*(ln_gsd_SEPS^2));' ~/nco/data/in.nc ~/foo.nc;ncks -H ~/foo.nc
+% ncap2 -O -v -s 'dmt_vma_SOKS=2.27;gsd_anl_SOKS=1.54;ln_gsd_SOKS=ln(gsd_anl_SOKS);dmt_nma_SOKS=dmt_vma_SOKS*exp(-3.0*(ln_gsd_SOKS^2));' ~/nco/data/in.nc ~/foo.nc;ncks -H ~/foo.nc
+1.66 & 2.20 & 1.36 & & \ref{idx_lgn_stt_obs_WGL07} \\[0.5ex]
+1.30 & 2.27 & 1.54 & & \ref{idx_lgn_stt_obs_WGL07} \\[0.5ex]
+} % end csznote
+\hline
+\end{longtable} % end tbl:lgn_stt_obs
+\cite{PCE97} and \cite{PeC99} describe measurements and transport of
+dust across the Atlantic and Pacific, respectively.
+\cite{RJM03} summarize historical measurements of dust size
+distributions, and analyze the influence of measurement technique on
+the derived size distribution.
+They show the derived size distribution is strongly sensitive
+to the measurment technique.
+During \trmidx{PRIDE}, measured $\dmtvma$ varied from 2.5--9\,\um\ 
+depending on the instrument employed.
+\cite{MSI03} show that the change in mineral dust size distribution
+across the sub-tropical Atlantic is consistent with a slight updraft
+of $\sim 0.33$\,\cmxs\ during transport.
+\cite{Gin03} and \cite{CTH03} show that the effects of asphericity on
+particle settling velocity play an important role in maintaining the
+large particle tail of the size distribution during long range
+transport. 
+
+Table~\ref{tbl:lgn_stt_anl} applies the relations in Table~\ref{tbl:lgn}
+to specific size distributions typical of tropospheric aerosols.
+\begin{table}
+\begin{minipage}{\hsize} % Minipage necessary for footnotes KoD95 p. 110 (4.10.4)
+\renewcommand{\footnoterule}{\rule{\hsize}{0.0cm}\vspace{-0.0cm}} % KoD95 p. 111
+\begin{center}
+\caption[Analytic Lognormal Statistics]{\textbf{Analytic Lognormal Size Distribution Statistics
+\footnote{Shown are statistics for each moment equalling 1\,\um, and
+for $\dmtvma = 0.1, 2.5, 3.5, 5.0, 10.0$\,\um.}%
+\footnote{
+$\dmtnaa$, $\dmtsaa$, and $\dmtvaa$ are number, surface, and
+volume-mean diameters, respectively.
+$\dmtnma$, $\dmtsma$, and $\dmtvma$ are number, surface, and
+volume median diameters, respectively.
+$\dmtnwa$, $\dmtswa$, and $\dmtvwa$ are number, surface, and
+volume-weighted diameters, respectively.}}% 
+\label{tbl:lgn_stt_anl}}   
+\vspace{\cpthdrhlnskp}
+\begin{tabular}{ *{9}{>{$}r<{$}} } % KoD95 p. 94 describes '*' notation
+\hline \rule{0.0ex}{\hlntblhdrskp}% 
+\dmtnma & \dmtnaa, \dmtnwa & \dmtsaa & \dmtvaa & \dmtsma & \dmtswa & \dmtvma & \dmtvwa & \gsd \\[0.0ex]
+\rdsnma & \rdsnaa, \rdsnwa & \rdssaa & \rdsvaa & \rdssma & \rdsswa & \rdsvma & \rdsvwa & \\[0.0ex]
+\mbox{\um} & \mbox{\um} & \mbox{\um} & \mbox{\um} & \mbox{\um} & \mbox{\um} & \mbox{\um} & \mbox{\um} & \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+% NB: Table produced by ~/nco/data/psd.nco
+0.1    & 0.1272 & 0.1619 & 0.2056 & 0.2614 & 0.3323 & 0.4227 & 0.5373 & 2.0 \\[0.5ex]
+0.1861 & 0.2366 & 0.3009 & 0.3825 & 0.4864 & 0.6185 & 0.7864 & 1.0    & 2.0 \\[0.5ex]
+0.2366 & 0.3008 & 0.3825 & 0.4864 & 0.6185 & 0.7864 & 1.0    & 1.272  & 2.0 \\[0.5ex]
+0.3009 & 0.3825 & 0.4864 & 0.6185 & 0.7864 & 1.0    & 1.272  & 1.617  & 2.0 \\[0.5ex]
+0.3825 & 0.4864 & 0.6185 & 0.7864 & 1.0    & 1.272  & 1.617  & 2.056  & 2.0 \\[0.5ex]
+0.4864 & 0.6185 & 0.7864 & 1.0    & 1.272  & 1.617  & 2.056  & 2.614  & 2.0 \\[0.5ex]
+0.5915 & 0.7521 & 0.9563 & 1.216  & 1.546  & 1.966  & 2.5    & 3.179  & 2.0 \\[0.5ex]
+0.6185 & 0.7864 & 1.0    & 1.272  & 1.617  & 2.056  & 2.614  & 3.324  & 2.0 \\[0.5ex]
+0.7864 & 1.0    & 1.272  & 1.617  & 2.056  & 2.614  & 3.324  & 4.225  & 2.0 \\[0.5ex]
+0.8281 & 1.053  & 1.339  & 1.702  & 2.165  & 2.753  & 3.5    & 4.450  & 2.0 \\[0.5ex]
+1.0    & 1.272  & 1.617  & 2.056  & 2.614  & 3.324  & 4.227  & 5.373  & 2.0 \\[0.5ex]
+1.183  & 1.504  & 1.913  & 2.432  & 3.092  & 3.932  & 5.0    & 6.356  & 2.0 \\[0.5ex]
+2.366  & 3.008  & 3.825  & 4.864  & 6.184  & 7.864  & 10.0   & 12.72  & 2.0 \\[0.5ex]
+\hline
+\end{tabular}
+\end{center}
+\end{minipage}
+\end{table} % end tbl:lgn_stt_anl
+Values in Table~\ref{tbl:lgn_stt_anl} are valid for radius and
+diameter distributions.
+Table~\ref{tbl:lgn} shows that all moments of the size distribution
+depend linearly on $\dmtnma$ (or $\rdsnma$). 
+Therefore all rows in Table~\ref{tbl:lgn_stt_anl} scale linearly
+(for a constant geometric standard deviation).
+For example, values in the row with $\dmtnma = 1.0$\,\um\ are ten
+times the corresponding values for the row $\dmtnma = 0.1$\,\um.
+Hence it suffices for Table~\ref{tbl:lgn_stt_anl} to show a decade
+range in~$\dmtnma$.
+
+\subsubsection[Related Forms]{Related Forms}
+Many important applications make available size distribution
+information in a form similar to, but hard to recognize as,
+the analytic lognormal PDF (\ref{eqn:dst_lgn}). 
+The Aerosol Robotic Network, \trmdfn{AERONET}, for example,  
+retrieves size distributions from solar \trmidx{almucantar} 
+radiances\footnote{
+The almucantar radiances are radiance measurements in a circle of
+equal scattering angle centered in a plane about the Sun, i.e.,
+radiance measurements at known forward scattering phase function
+angles.} \cite[][]{DuK00,DSH00,DHL02}.
+AERONET labels the retrieved size distribution
+$\dfr\vlmofrds/\dfr\ln\rds$ and reports the values in [\umCxumS]
+units. 
+The correspondence between the AERONET retrievals and 
+$\dfr\cnc/\dfr\ln\rds$ (\ref{eqn:dst_lgn}) in [\nbrxmCm] units
+is not exactly clear.
+Unfortunately, Table~\ref{tbl:lgn} does not help much here.
+Let us now show how to bridge the gap between theory and measurement.
+
+First, total distributions contain $\cncttl$ particles per unit volume
+and thus $\cncttl$ applies as a multiplicative factor to
+(\ref{eqn:dst_lgn})  
+\begin{equation}
+\dstnbrofdmt = \frac{\cncttl}{\sqrt{2\mpi} \, \dmt \lngsd} \exp\! 
+\left[-\frac{1}{2}\left( \frac{ \ln(\dmt/\dmtnma)}{\lngsd} \right)^{2} \right] 
+\label{eqn:dst_lgn_ttl}
+\end{equation}
+Note that (\ref{eqn:dst_lgn_ttl}) is only normalized if 
+$\cncttl = 1.0$ (cf.\ Section~\ref{sxn:nrm}).
+
+Applying (\ref{eqn:dst_dfn}) to (\ref{eqn:dst_lgn_ttl}) yields
+% fxm: Add formulae for dV/dlnD, dS/dlnD, dN/dlnD
+\begin{equation}
+\frac{\dfr\cnc}{\dfr\dmt} = 
+\frac{\cncttl}{\sqrt{2\mpi} \, \dmt \lngsd} \exp\! 
+\left[-\frac{1}{2}\left( \frac{ \ln(\dmt/\dmtnma)}{\lngsd} \right)^{2} \right] 
+\label{eqn:dst_lgn_dNdD}
+\end{equation}
+Multiplying each side of (\ref{eqn:dst_lgn_dNdD}) by $\dmt$ and
+substituting $\dfr\ln\dmt = \dmt^{-1}\,\dfr\dmt$ leads to
+\begin{equation}
+\frac{\dfr\cnc}{\dfr\ln\dmt} = 
+\frac{\cncttl}{\sqrt{2\mpi}\,\lngsd} \exp\! 
+\left[-\frac{1}{2}\left( \frac{ \ln(\dmt/\dmtnma)}{\lngsd} \right)^{2} \right] 
+\label{eqn:dst_lgn_dNdlnD}
+\end{equation}
+The derivative in (\ref{eqn:dst_lgn_dNdlnD}) is with respect to the
+logarithm of the diameter. 
+The change in the independent variable of differentiation defines a
+new distribution which could be written $\dstnbr(\ln\dmt)$ to
+distinguish it from the normal linear distribution $\dstnbr(\dmt)$
+(\ref{eqn:dst_dfn}). 
+However, the nomenclature $\dstnbr(\ln\dmt)$ could be misinterpreted. 
+We follow \cite{SeP97} and denote logarithmically-defined
+distributions with a superscript~$\me$ on the distribution
+that re-inforces the use of $\ln\dmt$ as the independent variable
+\begin{equation}
+\dstlnnbroflndmt \equiv \dstnbr(\ln\dmt) \equiv \frac{\dfr\cnc}{\dfr\ln\dmt}
+\label{eqn:dstln_dfn}
+\end{equation}
+The SI units of $\dstnbrofdmt$ (\ref{eqn:dst_dfn}) and
+$\dstlnnbroflndmt$ (\ref{eqn:dstln_dfn}) are [\nbrxmCm] and [\nbrxmC], 
+respectively. 
+
+Remote sensing applications often retrieve columnar distributions rather
+than volumetric distributions.
+The columnar number distribution $\dstnbrpth(\dmt)$, for example, is
+simply the vertical integral of the particle number distribution
+$\dstnbr(\dmt)$,  
+\begin{subequations} 
+\label{eqn:dst_pth_all_dfn}
+\begin{alignat}{3}
+\label{eqn:nbr_pth_dfn}
+\dstnbrpth(\dmt) &\equiv \frac{\dfr\cncttlpth}{\dfr\dmt} &&=
+\int_{\hgt=0}^{\hgt=\infty} \dstnbr(\dmt,\hgt) \,\dfr\hgt &&=
+\mbox{same} \\
+\label{eqn:xsa_pth_dfn}
+\dstxsapth(\dmt) &\equiv \frac{\dfr\xsattlpth}{\dfr\dmt} &&=
+\int_{\hgt=0}^{\hgt=\infty} \dstxsa(\dmt,\hgt) \,\dfr\hgt &&=
+\int_{\hgt=0}^{\hgt=\infty} \frac{\mpi}{4} \dmt^{2} \dstnbr(\dmt,\hgt) \,\dfr\hgt \\
+\label{eqn:sfc_pth_dfn}
+\dstsfcpth(\dmt) &\equiv \frac{\dfr\sfcttlpth}{\dfr\dmt} &&=
+\int_{\hgt=0}^{\hgt=\infty} \dstsfc(\dmt,\hgt) \,\dfr\hgt &&=
+\int_{\hgt=0}^{\hgt=\infty}       \mpi     \dmt^{2} \dstnbr(\dmt,\hgt) \,\dfr\hgt \\
+\label{eqn:vlm_pth_dfn}
+\dstvlmpth(\dmt) &\equiv \frac{\dfr\vlmttlpth}{\dfr\dmt} &&=
+\int_{\hgt=0}^{\hgt=\infty} \dstvlm(\dmt,\hgt) \,\dfr\hgt &&=
+\int_{\hgt=0}^{\hgt=\infty} \frac{\mpi}{6} \dmt^{3} \dstnbr(\dmt,\hgt) \,\dfr\hgt \\
+\label{eqn:mss_pth_dfn}
+\dstmsspth(\dmt) &\equiv \frac{\dfr\mssttlpth}{\dfr\dmt} &&=
+\int_{\hgt=0}^{\hgt=\infty} \dstmss(\dmt,\hgt) \,\dfr\hgt &&=
+\int_{\hgt=0}^{\hgt=\infty} \frac{\mpi}{6} \dns \dmt^{3} \dstnbr(\dmt,\hgt) \,\dfr\hgt
+\end{alignat}
+\end{subequations} 
+SI~units of the columnar distributions $\dstxxxpth$ for 
+$\xxx = \nbrsbs, \xsasbs, \sfcsbs, \vlmsbs, \msssbs$
+(\ref{eqn:dst_pth_all_dfn}) are one less ``per meter'' than the
+corresponding volumetric distributions, e.g., $\dstvlm$ and
+$\dstvlmpth$ are in [\mCxmCm] and [\mCxmSm], respectively.
+This is because of integration over the vertical coordinate.
+
+Combining (\ref{eqn:dst_pth_all_dfn}) with (\ref{eqn:dst_lgn_dNdlnD}) 
+leads to 
+\begin{subequations} 
+% Similar to SeP97 p. 428 7.51
+% Variation of DHE02 p. 626 (A3)
+\label{eqn:dst_lgn_dNcdlnD}
+\begin{alignat}{4}
+\label{eqn:dst_nbr_pth_dNcdlnD}
+\dstlnnbrpth(\ln\dmt) &\equiv
+\frac{\dfr\cncttlpth}{\dfr\ln\dmt} &&=
+\frac{\cncttlpth}{\sqrt{2\mpi}\,\lngsd} \exp\! 
+\left[-\frac{1}{2}\left( \frac{ \ln(\dmt/\dmtnma)}{\lngsd} \right)^{2} \right] \\
+\label{eqn:dst_xsa_pth_dAcdlnD}
+\dstlnxsapth(\ln\dmt) &\equiv
+\frac{\dfr\xsattlpth}{\dfr\ln\dmt} &&=
+\sqrt{\frac{\mpi}{2}} \frac{\cncttlpth\dmt^{2}}{4\lngsd} \exp\! 
+\left[-\frac{1}{2}\left( \frac{ \ln(\dmt/\dmtnma)}{\lngsd} \right)^{2} \right] \\
+\label{eqn:dst_sfc_pth_dScdlnD}
+\dstlnsfcpth(\ln\dmt) &\equiv
+\frac{\dfr\sfcttlpth}{\dfr\ln\dmt} &&=
+\sqrt{\frac{\mpi}{2}} \frac{\cncttlpth\dmt^{2}}{\lngsd} \exp\! 
+\left[-\frac{1}{2}\left( \frac{ \ln(\dmt/\dmtnma)}{\lngsd} \right)^{2} \right] \\
+\label{eqn:dst_vlm_pth_dVcdlnD}
+\dstlnvlmpth(\ln\dmt) &\equiv
+\frac{\dfr\vlmttlpth}{\dfr\ln\dmt} &&=
+\sqrt{\frac{\mpi}{2}} \frac{\cncttlpth\dmt^{3}}{6\lngsd} \exp\! 
+\left[-\frac{1}{2}\left( \frac{ \ln(\dmt/\dmtnma)}{\lngsd} \right)^{2} \right] \\
+\label{eqn:dst_mss_pth_dMcdlnD}
+\dstlnmsspth(\ln\dmt) &\equiv
+\frac{\dfr\mssttlpth}{\dfr\ln\dmt} &&=
+\sqrt{\frac{\mpi}{2}} \frac{\dns\cncttlpth\dmt^{3}}{6\lngsd} \exp\!
+\left[-\frac{1}{2}\left( \frac{ \ln(\dmt/\dmtnma)}{\lngsd} \right)^{2} \right]
+\end{alignat}
+\end{subequations} 
+These logarithmic columnar (vertically integrated) distributions 
+(\ref{eqn:dst_lgn_dNcdlnD}) are one less ``per meter'' than the
+corresponding linear columnar distributions
+(\ref{eqn:dst_pth_all_dfn}), e.g., $\dstvlmpth$ and $\dstlnvlmpth$ are in
+[\mCxmSm] and [\mCxmS], respectively. 
+In order for the area under the curve to be proportional to the
+integrated distributions, logarithmic distributions should be plotted
+on semi-log axes, e.g., horizontal axis with logarithmic size $\dmt$
+and vertical axis with linearly spaced values of $\dstlnvlm(\ln\dmt)$
+\cite[][p.~415]{SeP97}.
+
+Measurements (or retrievals such as AERONET) are usually reported in
+historical units that can be counted rather than in pure~\trmidx{SI}. 
+SI~units for $\dstvlm(\dmt) = \dfr\vlmofdmt/\dfr\dmt$ are
+[\mCxmCm], i.e., particle volume per unit air volume per unit particle 
+diameter. 
+% 20130522: Is the following sentence true? Wouldn't units exponents  
+% multiply yielding [m3 m-4]?
+These units condense to [\mCxmS], or, multiplying by $10^{6}$,
+[\umCxumS].
+These condensed units may be confused with particle volume per unit
+particle surface area ($\vlmofdmt/\sfcofdmt$), or with columnar
+particle volume per unit horizontal surface (e.g., ground or ocean)
+area ($\int\vlm(\hgt)\,\dfr\hgt$).
+AERONET most definitely does \textit{not} report any of these three 
+quantities $\dfr\vlm/\dfr\rds$, $\vlmofdmt/\sfcofdmt$, or 
+$\int\vlm(\hgt)\,\dfr\hgt$.
+AERONET reports $\dstlnvlmpth(\ln\dmt)$
+the vertically integrated logarithmic volume
+distribution (\ref{eqn:dst_vlm_pth_dVcdlnD}), the logarithmic
+derivative of the \trmidx{columnar volume} $\vlmttlpth$.
+
+\subsubsection[Variance]{Variance}\label{sxn:lgn_vrn}
+According to (\ref{eqn:vrn_gnr}), the \trmidx{variance} $\vrndmt$ of the
+lognormal distribution (\ref{eqn:dst_lgn}) is
+\begin{equation}
+\vrndmt = \frac{1}{\sqrt{2 \mpi} \lngsd} 
+\int_{0}^{\infty}\frac{1}{\dmt} \exp\!
+\left[-\frac{1}{2}\left( \frac{ \ln(\dmt/\dmtnma)}{\lngsd} \right)^{2} \right]
+(\dmt - \dmtavg)^{2} \,\dfr\dmt
+\label{eqn:vrn_lgn}
+\end{equation}
+
+\subsubsection[Non-standard terminology]{Non-standard terminology}\label{sxn:mst}\label{sxn:trm}
+% fxm TODO 2884 move to standalone location and submit as comment/note?
+Non-standard terminology leads to much confusion in the literature.
+For example, \cite{DHE02} provide precise analytic definitions
+of their supposedly lognormal size distribution parameters.
+However, their terminology is inconsistent with their definitions.
+Distributions computed according to their definitions are not
+lognormal distributions. 
+\cite{DHE02} Equation~A1 (their p.~606) defines the \textit{mean}
+logarithmic radius $\rdsvaa$ of the volume distribution which they
+confusingly name the volume \textit{median} radius~$\rdsvma$.
+\cite{DHE02} Equation~A2 (their p.~606) defines the standard deviation 
+of the logarithm of the volume distribution.
+This differs from the \trmidx{geometric standard deviation}~$\gsd$
+of a lognormal distribution.
+The correct parameters of a lognormal distribution (\ref{eqn:dst_lgn})  
+are $\rdsnma$ and $\gsd$ (or $\gsdtld \equiv \ln \gsd$)
+For a lognormal volume path distribution $\dstlnvlmpth(\ln\dmt)$
+(\ref{eqn:dst_vlm_pth_dVcdlnD}) the appropriate parameters are 
+$\rdsvma$ and $\gsd$ (or $\gsdtld \equiv \ln \gsd$), not 
+$\rdsvaa$ and $\sqrt{\vrnrds}$ (\ref{eqn:vrn_lgn}).
+\cite{DHE02} Equation~1 (their p.~593) is the correct form for 
+$\dstlnvlmpth(\ln\dmt)$ (\ref{eqn:dst_vlm_pth_dVcdlnD}).
+
+\subsubsection[Bounded Distribution]{Bounded Distribution}\index{bounded distribution}\label{sxn:lgn_bnd}
+The statistical properties of a bounded lognormal distribution
+are expressed in terms of the \trmidx{error function}
+(\S\ref{sxn:erf}).   
+The \trmidx{cumulative concentration} bounded by $\dmtmax$ is given by
+applying (\ref{eqn:cnc_cml}) to (\ref{eqn:dst_lgn})
+\begin{equation}
+\cncfnc(\dmt < \dmtmax) = \frac{\cncttl}{\sqrt{2\mpi}\,\lngsd}
+\int_{0}^{\dmtmax} \frac{1}{\dmt} \exp\! 
+\left[-\frac{1}{2}\left( \frac{ \ln(\dmt/\dmtnma)}{\lngsd} \right)^{2} \right] \,\dfr\dmt
+\label{eqn:lgn_bnd}
+\end{equation}
+We make the change of variable $\zzz = (\ln \dmt - \ln \dmtnma)/\sqrt{2}
+\, \lngsd$
+\begin{eqnarray}
+\zzz & = & (\ln \dmt - \ln \dmtnma)/\sqrt{2}\,\lngsd \nonumber \\ 
+\dmt & = & \dmtnma \me^{\sqrt{2} \, \zzz \lngsd} \nonumber \\
+& = & \dmtnma \gsd^{\sqrt{2} \, \zzz} \nonumber \\
+\dfr\zzz & = & (\sqrt{2} \, \dmt \lngsd)^{-1} \,\dfr\dmt \nonumber \\ 
+\dfr\dmt & = & \sqrt{2}\,\lngsd \dmtnma \me^{\sqrt{2} \, \zzz \lngsd} \,
+\dfr\zzz \nonumber \\
+& = & \sqrt{2}\,\lngsd \dmtnma \gsd^{\sqrt{2} \, \zzz} \,\dfr\zzz
+\label{eqn:cov_z}
+\end{eqnarray}
+which maps $\dmt \in (0, \dmtmax)$ into $\zzz \in (-\infty, \ln \dmtmax -
+\ln \dmtnma)/\sqrt{2}\,\lngsd)$. 
+In terms of $\zzz$ we obtain
+\begin{eqnarray}
+\cncfnc(\dmt < \dmtmax) & = & \frac{\cncttl}{\sqrt{2\mpi}\,\lngsd}
+\int_{-\infty}^{(\ln \dmtmax - \ln \dmtnma)/\sqrt{2}\,\lngsd} 
+\frac{1}{\dmtnma \me^{\sqrt{2} \, \zzz \lngsd} } \,
+\me^{-\zzz^{2}} \, 
+\sqrt{2}\,\lngsd \dmtnma \me^{\sqrt{2} \, \zzz \lngsd} \,\dfr\zzz \nonumber \\
+& = & \frac{\cncttl}{\sqrt{\mpi} }
+\int_{-\infty}^{(\ln \dmtmax - \ln \dmtnma)/\sqrt{2}\,\lngsd} 
+\me^{-\zzz^{2}} \,\dfr\zzz \nonumber \\
+& = & \frac{\cncttl}{\sqrt{\mpi} } \left(
+\int_{-\infty}^{0} \me^{-\zzz^{2}} \,\dfr\zzz +
+\int_{0}^{(\ln \dmtmax - \ln \dmtnma)/\sqrt{2}\,\lngsd} 
+\me^{-\zzz^{2}} \,\dfr\zzz \right) \nonumber \\
+& = & \frac{\cncttl}{2} \left(
+\frac{2}{\sqrt{\mpi} } \int_{0}^{+\infty} \me^{-\zzz^{2}} \,\dfr\zzz +
+\frac{2}{\sqrt{\mpi} } \int_{0}^{(\ln \dmtmax - \ln \dmtnma)/\sqrt{2}\,\lngsd} 
+\me^{-\zzz^{2}} \,\dfr\zzz \right) \nonumber \\
+& = & \frac{\cncttl}{2} \left[ 
+\erffnc(\infty) + 
+\erffnc\! \left( \frac{\ln (\dmtmax / \dmtnma)}{\sqrt{2}\,\lngsd} \right)
+\right]
+\nonumber \\
+& = & \frac{\cncttl}{2} + 
+\frac{\cncttl}{2} \, \erffnc\! \left( \frac{\ln (\dmtmax / \dmtnma)}{\sqrt{2}\,\lngsd} \right)
+\label{eqn:lgn_erf}
+\end{eqnarray}
+where we have used the properties of the \trmidx{error function}
+(\S\ref{sxn:erf}).  
+The same procedure can be performed to compute the cumulative
+concentration of particles smaller than $\dmtmin$.
+When $\cncfnc(\dmt < \dmtmin)$ is subtracted from (\ref{eqn:lgn_erf})
+we obtain the truncated concentration (\ref{eqn:cnc_ntv})
+\begin{equation}
+\cncfnc(\dmtmin, \dmtmax) = \frac{\cncttl}{2}
+\left[
+\erffnc\! \left( \frac{\ln (\dmtmax / \dmtnma)}{\sqrt{2}\,\lngsd} \right) -
+\erffnc\! \left( \frac{\ln (\dmtmin / \dmtnma)}{\sqrt{2}\,\lngsd} \right)
+\right]
+\label{eqn:lgn_nbr_ntv}
+\end{equation}
+
+We are also interested in the bounded distributions of higher moments,
+e.g., the mass of particles lying between $\dmtmin$ and $\dmtmax$.
+The cross-sectional area, surface area, volume, and mass distributions
+of spherical particles are related to their number distribution by 
+\begin{subequations} 
+\label{eqn:dst_all_dfn}
+\begin{align}
+\label{eqn:xsa_dfn}
+\dstxsa(\dmt) &= \frac{\mpi}{4} \dmt^{2} \dstnbrofdmt \\
+\label{eqn:sfc_dfn}
+\dstsfc(\dmt) &=       \mpi     \dmt^{2} \dstnbrofdmt \\
+\label{eqn:vlm_dfn}
+\dstvlm(\dmt) &= \frac{\mpi}{6} \dmt^{3} \dstnbrofdmt \\
+\label{eqn:mss_dfn}
+\dstmss(\dmt) &= \frac{\mpi}{6} \dns \dmt^{3} \dstnbrofdmt
+\end{align}
+\end{subequations} 
+so that we may simply substitute $\dmtnma = \dmtvma$, for example, in 
+(\ref{eqn:lgn_nbr_ntv}) and we obtain
+\begin{equation}
+\vlmfnc(\dmtmin, \dmtmax) = \frac{\cncttl}{2}
+\left[
+\erffnc\! \left( \frac{\ln (\dmtmax / \dmtvma)}{\sqrt{2}\,\lngsd} \right) -
+\erffnc\! \left( \frac{\ln (\dmtmin / \dmtvma)}{\sqrt{2}\,\lngsd} \right)
+\right]
+\label{eqn:lgn_mss_ntv}
+\end{equation}
+
+\subsubsection[Statistics of Bounded Distributions]{Statistics of Bounded Distributions}\label{sxn:lgn_bnd_stt}
+All of the relations given in Table~\ref{tbl:lgn} may be
+re-expressed in terms of truncated lognormal distributions, but doing
+so is tedious, and requires new terminology.
+Instead we derive the expression for a typical size distribution
+statistic, and allow the reader to generalize.
+We generalize (\ref{eqn:stt_gnr}) to consider
+\begin{equation}
+\gggavg^* = \int_{\dmtmin}^{\dmtmax}  \dmt \, \pdffnc^*(\dmt) \,
+\dfr\dmt
+\end{equation}
+Note the domain of integration, $\dmt \in (\dmtmin, \dmtmax)$,
+reflects the fact that we are considering a bounded distribution.
+The superscript $^{*}$ indicates that the average statistic refers
+to a truncated distribution and reminds us that $\gggavg^{*} \ne
+\gggavg$. 
+Defining a closed form expression for $\pdffnc^{*} (\dmt)$ requires some
+consideration.  
+This truncated distribution has $\cncttlstr$ defined by
+(\ref{eqn:lgn_nbr_ntv}), and is completely specified on $\dmt \in
+(0,\infty)$ by
+\begin{equation}
+\pdffnc^{*} (\dmt) = \left\{
+\begin{array}
+{r@{\quad,\quad}l}
+0 & 0 < \dmt < \dmtmin \\
+\cncfnc(\dmtmin, \dmtmax) \, \pdfdmt / \cncttl & \dmtmin \le \dmt \le \dmtmax \\
+0 & \dmtmax < \dmt < \infty
+\end{array}
+\right.
+\end{equation}
+The difficulty is that the three parameters of the lognormal
+distribution, $\dmtnma$, $\gsd$, and $\cncttl$ are defined in terms of 
+an untruncated distribution.
+Using (\ref{eqn:lgn_nbr_ntv}) we can write
+\begin{equation}
+\pdffnc^{*} (\dmt) = \frac{1}{\cncttlstr} \, \dstnbrofdmt
+\cncttlstr = \cncfnc(\dmtmin, \dmtmax)
+\end{equation}
+
+If we think of $\pdffnc^{*}$ order to be properly normalized to unity,
+note that  (fxm) % fxm
+Thus when we speak of truncated distributions it is important to keep
+in mind that the parameters $\dmtnma$, $\gsd$, and $\cncttl$ refer to
+the untruncated distribution. 
+
+The properties of the truncated distribution will be expressed in
+terms of $\dmtnmastr$, $\gsdstr$, and $\cncttlstr$, respectively.
+
+Consider the mean size, $\dmt$.
+In terms of (\ref{eqn:stt_gnr}) we have $\ggg(\dmt) = \dmt$ so that
+\begin{equation}
+\dmtavg = \int_{\dmtmin}^{\dmtmax}  \dmt \, \pdffnc(\dmt) \,\dfr\xxx
+\end{equation}
+
+\subsubsection[Overlapping Distributions]{Overlapping Distributions}
+Consider the problem of distributing $\srcnbr$ independent and possibly
+\trmdfn{overlapping distributions} of particles into $\snknbr$ independent and
+possibly overlapping distributions of particles.
+To reify the problem we call the $\srcnbr$ bins the \trmidx{source
+bins} (these bins represent the parent size distributions in
+\trmidx{mineral dust} source areas) and the $\snknbr$ bins as 
+\trmidx{sink bins} (which represent sizes transported in the
+atmosphere). 
+Typically we know the total mass $\mssttl$ or number $\cncttl$ of 
+source particles to distribute into the sink bins and we know the
+fraction of the total mass to distribute which resides in each source
+distribution, $\mssfrcsrc$. 
+The problem is to determine matrices of \trmidx{overlap factors}
+$\nbrovrsrcsnk$ and $\mssovrsrcsnk$ which determine what number and
+mass fraction, respectively, of each source bin $\srcidx$ is blown
+into each sink bin $\snkidx$. 
+
+The mass and number fractions contained by the \trmidx{source
+distributions} are normalized such that
+\begin{equation}
+\sum_{\srcidx = 1}^{\srcnbr} \mssfrcsrc = \sum_{\srcidx = 1}^{\srcnbr} \nbrfrcsrc = 1
+\label{eqn:frc_nrm}
+\end{equation}
+In the case of \trmidx{dust emissions}, $\mssfrcsrc$ and $\nbrfrcsrc$
+may vary with spatial location.
+
+The overlap factors $\nbrovrsrcsnk$ and $\mssovrsrcsnk$ are defined by the
+relations 
+\begin{eqnarray}
+\label{eqn:ovr_nbr_dfn}
+\nbr_\snkidx & = & \sum_{\srcidx = 1}^{\srcnbr} \nbrovrsrcsnk \nbr_\srcidx \nonumber \\
+& = & \nbrttl \sum_{\srcidx = 1}^{\srcnbr} \nbrovrsrcsnk \nbrfrcsrc \\
+\label{eqn:ovr_mss_dfn}
+\mss_\snkidx & = & \sum_{\srcidx = 1}^{\srcnbr} \mssovrsrcsnk \mss_\srcidx \nonumber \\
+& = & \mssttl \sum_{\srcidx = 1}^{\srcnbr} \mssovrsrcsnk \mssfrcsrc
+\end{eqnarray}
+
+Using (\ref{eqn:lgn_nbr_ntv}) and (\ref{eqn:frc_nrm}) we find
+\begin{eqnarray}
+\label{eqn:ovr_nbr}
+\nbrovrsrcsnk & = & 
+\frac{1}{2}
+\left[
+\erffnc\! \left( \frac{\ln (\dmtmaxj / \dmtnmai)}{\sqrt{2}\,\lngsdi } \right) -
+\erffnc\! \left( \frac{\ln (\dmtminj / \dmtnmai)}{\sqrt{2}\,\lngsdi } \right)
+\right] \\
+\label{eqn:ovr_mss}
+\mssovrsrcsnk & = &
+\frac{1}{2}
+\left[
+\erffnc\! \left( \frac{\ln (\dmtmaxj / \dmtvmai)}{\sqrt{2}\,\lngsdi } \right) -
+\erffnc\! \left( \frac{\ln (\dmtminj / \dmtvmai)}{\sqrt{2}\,\lngsdi } \right)
+\right]
+\end{eqnarray}
+fxm: The mathematical derivation appears correct but the overlap
+factor appears to asymptote to 0.5 rather than to 1.0 for $\dmtmax \gg
+\dmtnma \gg \dmtmin$.
+
+A \trmidx{mass distribution} has the same form as a lognormal 
+\trmidx{number distribution} but has a different \trmidx{median diameter}. 
+Thus the overlap matrix elements apply equally to mass and number
+distributions depending on the median diameter used in the following
+formulae. 
+For the case where both source and sink distributions are complete
+lognormal distributions, 
+\begin{eqnarray}
+\mss(\dmt) & = & \sum_{\srcidx = 1}^{\srcidx=\srcnbr} \mss_\srcidx(\dmt) \nonumber
+\label{eqn:mlt_mdl_lgn}
+\end{eqnarray}
+
+\subsubsection[Median Diameter]{Median Diameter}\index{median diameter}\label{sxn:mdn}
+Substituting $\dmt = \dmtnma$ into (\ref{eqn:lgn_erf}) we obtain
+\begin{equation}
+\cncfnc(\dmt < \dmtnma) = \frac{\cncttl}{2}
+\label{eqn:lgn_mdn}
+\end{equation}
+This proves that $\dmtnma$ is the median diameter (\ref{eqn:mdn_dfn}). 
+The lognormal distribution is the only distribution known (to us)
+which is most naturally expressed in terms of its median diameter.
+
+\subsubsection[Mode Diameter]{Mode Diameter}\index{mode diameter}\label{sxn:mod}
+The \trmdfn{mode} is the most frequently occuring value of a
+distribution. 
+The \trmdfn{mode diameter} or \trmdfn{modal diameter} of the 
+number distribution $\dstnbrofdmt$ is the diameter $\dmtnda$ that
+satisfies 
+\begin{equation}
+\frac{\dfr\dstnbrofdmt}{\dfr\dmt}\bigg|_{\dmt=\dmtnda} = 0
+\label{eqn:lgn_mdl_dfn}
+\end{equation}
+Applying condition (\ref{eqn:lgn_mdl_dfn}) to (\ref{eqn:dst_lgn})
+proves that the median and modal diameters are identical for lognormal 
+distributions 
+\begin{equation}
+\dmtnda = \dmtnma
+\label{eqn:lgn_dmt_mdl_mdn}
+\end{equation}
+The number, surface, volume, and mass distributions are all lognormal 
+if any one is.
+Therefore (\ref{eqn:lgn_dmt_mdl_mdn}) implies $\dmtsda = \dmtsma$,
+and $\dmtvda = \dmtvma$.
+
+\subsubsection[Multimodal Distributions]{Multimodal Distributions}\label{sxn:mlt}
+Realistic particle size distributions may be expressed as an
+appropriately weighted sum of individual modes. 
+\begin{equation}
+\dstnbrofdmt = \sum_{\psdidx = 1}^{\psdnbr} \dstnbridxofdmt
+\label{eqn:dst_nbr_mlt_dfn}
+\end{equation}
+where $\dstnbridxofdmt$ is the number distribution of the $\psdidx$th 
+component mode\footnote{Throughout this section the $\psdidx$
+superscript represents an index of the component mode, not an
+exponent.}. 
+Such particle size distributions are called \trmdfn{multimodal
+istributions} because they contain one maximum for each component
+distribution. 
+Generalizing (\ref{eqn:cnc_ttl_dfn}), the total number concentration 
+becomes
+\begin{eqnarray}
+\cncttl & = & \sum_{\psdidx = 1}^{\psdnbr} \int_{0}^{\infty} 
+\dstnbridxofdmt \,\dfr\dmt \nonumber \\
+& = & \sum_{\psdidx = 1}^{\psdnbr} \cncttlidx
+\label{eqn:cnc_ttl_dfn_mlt}
+\end{eqnarray}
+where $\cncttlidx$ is the total number concentration of the
+$\psdidx$th component mode. 
+
+The \trmidx{median diameter} of a \trmidx{multimodal distribution} is
+obtained by following the logic of
+(\ref{eqn:lgn_bnd})--(\ref{eqn:lgn_nbr_ntv}). 
+The number of particles smaller than a given size is
+\begin{equation}
+\cncfnc(\dmt < \dmtmax) = \sum_{\psdidx = 1}^{\psdnbr} 
+\frac{\cncttlidx}{2} + 
+\frac{\cncttlidx}{2} \, \erffnc\! \left( \frac{\ln (\dmtmax / \dmtnmaidx)}{\sqrt{2}\,\lngsdidx } \right)
+\label{eqn:lgn_mdn_mlt}
+\end{equation}
+For the median particle size, $\dmtmax \equiv \dmtnma$, and we can
+move the unknown $\dmtnma$ to the LHS yielding
+\begin{eqnarray}
+\sum_{\psdidx = 1}^{\psdnbr} \frac{\cncttlidx}{2} + 
+\frac{\cncttlidx}{2} \, \erffnc\! \left( \frac{\ln (\dmtnma / \dmtnmaidx)
+}{ \sqrt{2}\,\lngsdidx } \right) 
+& = & \frac{\cncttl}{2} \nonumber \\ 
+\sum_{\psdidx = 1}^{\psdnbr} 
+\cncttlidx \, \erffnc\! \left( \frac{\ln (\dmtnma / \dmtnmaidx) }{
+\sqrt{2}\,\lngsdidx } \right) & = & 0
+\label{eqn:lgn_mdn_mlt2}
+\end{eqnarray}
+where we have used $\cncttl = \sum_\psdidx^\psdnbr \cncttlidx$.
+Obtaining $\dmtnma$ for a multimodal distribution requires 
+numerically solving (\ref{eqn:lgn_mdn_mlt2}) given the $\cncttlidx$,
+$\dmtnmaidx$, and $\gsdidx$.
+
+% fxm:
+%The mean diameter of a multimodal distribution is obtained by
+%following the logic of (\ref{eqn:})--(\ref{eqn:}).
+
+\subsection[Higher Moments]{Higher Moments}\label{sxn:mmt}
+It is often useful to compute higher moments of the number distribution.  
+Each factor of the independent variable weighting the number
+distribution function $\dstnbrofdmt$ in the integrand of
+(\ref{eqn:szavg_gnr}) counts as a \trmdfn{moment}. 
+The $\mmtidx$th moment of $\dstnbrofdmt$ is 
+\begin{equation}
+\mmtfnc(\mmtidx) = \int_{0}^{\infty} \dstnbrofdmt \dmt^\mmtidx \,\dfr\dmt
+\label{eqn:dst_mmt_dfn}
+\end{equation}
+
+The statistical properties of higher moments of the lognormal size
+distribution may be obtained by direct integration of
+(\ref{eqn:dst_mmt_dfn}). 
+\begin{eqnarray}
+\mmtfnc(\mmtidx) & = & \frac{\cncttl}{\sqrt{2\mpi}\,\lngsd}
+\int_{0}^{\infty} \frac{1}{\dmt} \exp\! 
+\left[-\frac{1}{2}\left( \frac{ \ln(\dmt/\dmtnma)}{\lngsd} \right)^{2} \right] 
+\dmt^{\mmtidx} \,\dfr\dmt \nonumber \\
+& = & \frac{\cncttl}{\sqrt{2\mpi}\,\lngsd}
+\int_{0}^{\infty} \dmt^{\mmtidx - 1} \exp\! 
+\left[-\frac{1}{2}\left( \frac{ \ln(\dmt/\dmtnma)}{\lngsd} \right)^{2} \right] \,\dfr\dmt
+\label{eqn:dst_mmt_ntg}
+\end{eqnarray}
+We make the same change of variable 
+$z = (\ln \dmt - \ln \dmtnma)/\sqrt{2}\,\lngsd$ as in
+(\ref{eqn:cov_z}).
+This maps $\dmt \in (0, +\infty)$ into $\zzz \in (-\infty, +\infty)$.
+In terms of $\zzz$ we obtain
+\begin{eqnarray}
+\mmtfnc(\mmtidx) & = & \frac{\cncttl}{\sqrt{2\mpi}\,\lngsd}
+\int_{-\infty}^{+\infty} ( \dmtnma \me^{\sqrt{2} \, \zzz \lngsd} )^{\mmtidx - 1} 
+\me^{-\zzz^{2}}
+\sqrt{2}\,\lngsd \dmtnma \me^{\sqrt{2} \, \zzz \lngsd} \,\dfr\zzz \nonumber \\
+& = & \frac{\cncttl}{\sqrt{\mpi} }
+\int_{-\infty}^{+\infty} ( \dmtnma \me^{\sqrt{2} \, \zzz \lngsd} )^{\mmtidx} 
+\me^{-\zzz^{2}} \,\dfr\zzz \nonumber \\
+& = & \frac{\cncttl \dmtnma^{\mmtidx}}{\sqrt{\mpi} }
+\int_{-\infty}^{+\infty} \me^{\sqrt{2} \mmtidx \zzz \lngsd}
+\me^{-\zzz^{2}} \,\dfr\zzz \nonumber \\
+& = & \frac{\cncttl \dmtnma^{\mmtidx}}{\sqrt{\mpi} }
+\int_{-\infty}^{+\infty} \me^{-\zzz^{2} + \sqrt{2} \mmtidx \zzz \lngsd}
+\,\dfr\zzz \nonumber \\
+& = & \frac{\cncttl \dmtnma^{\mmtidx}}{\sqrt{\mpi} }
+\sqrt{ \mpi } \exp\! \left( \frac{ 2 \mmtidx^{2} \lngsdsqr}{4} \right) \nonumber \\
+& = & \cncttl \dmtnma^{\mmtidx} 
+%\exp\! \left( \frac{ \mmtidx^{2} \lngsdsqr}{2} \right)
+\exp ( \mbox{$\frac{1}{2}$} \mmtidx^{2} \lngsdsqr )
+\label{eqn:dst_mmt_nsw}
+\end{eqnarray}
+where we have used (\ref{eqn:nrm_gss_gnr}) with $\alpha = 1$ and
+$\beta = \sqrt{2} \mmtidx \lngsd$.
+
+Applying the formula (\ref{eqn:dst_mmt_nsw}) to the first five moments
+of the lognormal distribution function we obtain
+\begin{equation}
+\begin{array}{ r l >{\displaystyle}l<{} r >{\displaystyle}l<{} r
+>{\displaystyle}l<{} r >{\displaystyle}l<{} }
+\mmtfnc(0) & = & \int_{0}^{\infty} \dstnbrofdmt        \,\dfr\dmt 
+& = & \cncttl & = & \cncttl & = & \cncttl \\[1.5ex]
+\mmtfnc(1) & = & \int_{0}^{\infty} \dstnbrofdmt \dmt   \,\dfr\dmt
+& = & \cncttl \dmtnma     \exp ( \mbox{$\frac{1}{2}$} \lngsdsqr ) 
+& = & \dmtttl
+& = & \cncttl \dmtnaa \\[1.5ex]
+\mmtfnc(2) & = & \int_{0}^{\infty} \dstnbrofdmt \dmt^{2} \,\dfr\dmt
+& = & \cncttl \dmtnma^{2} \exp ( 2 \lngsdsqr ) 
+& = & \frac{\sfcttl}{\mpi}
+& = & \cncttl \dmtsaa^2 \\[1.5ex]
+\mmtfnc(3) & = & \int_{0}^{\infty} \dstnbrofdmt \dmt^{3} \,\dfr\dmt
+& = & \cncttl \dmtnma^{3} \exp ( \mbox{$\frac{9}{2}$} \lngsdsqr ) 
+& = & \frac{6 \vlmttl}{\mpi}
+& = & \cncttl \dmtvaa^3 \\[1.5ex]
+\mmtfnc(4) & = & \int_{0}^{\infty} \dstnbrofdmt \dmt^{4} \,\dfr\dmt
+& = & \cncttl \dmtnma^{4} \exp ( 8 \lngsdsqr )
+\end{array}
+\label{eqn:dst_mmt_nsw_2}
+\end{equation}
+Table~\ref{tbl:lgn} includes these relations in slightly different forms.
+
+The first few moments of the number distribution are
+related to measurable properties of the size distribution.
+In particular, $\mmtfnc(\mmtidx = 0)$ is the 
+\trmidx{number concentration}.
+Other quantities of merit are ratios of consecutive moments.
+For example, the \trmidx{volume-weighted diameter} $\dmtvwa$ is
+computed by weighted each diameter by the volume of particles at that  
+diameter and then normalizing by the total volume of all particles.
+\begin{eqnarray}
+\dmtvwa & = &  
+\int_{0}^{\infty} \dmt \frac{\mpi}{6} \dmt^{3} \dstnbrofdmt \,\dfr\dmt 
+\bigg/ \int_{0}^{\infty} \frac{\mpi}{6} \dmt^{3} \dstnbrofdmt \,\dfr\dmt \nonumber \\
+& = & \int_{0}^{\infty} \dmt^{4} \dstnbrofdmt \,\dfr\dmt \bigg/
+\int_{0}^{\infty} \dmt^{3} \dstnbrofdmt \,\dfr\dmt \nonumber \\
+& = & \mmtfnc(4) / \mmtfnc(3) \nonumber \\
+& = & \frac{\cncttl \dmtnma^{4} \exp ( 8 \lngsdsqr )}
+{\cncttl \dmtnma^{3} \exp ( \mbox{$\frac{9}{2}$} \lngsdsqr )} \nonumber \\
+& = & \dmtnma \exp ( \mbox{$\frac{7}{2}$} \lngsdsqr )
+\label{eqn:dmt_vwa_dfn}
+\end{eqnarray}
+
+The \trmdfn{surface-weighted diameter} $\dmtswa$ is defined
+analogously to $\dmtvwa$.
+$\dmtswa$ is more often known by its other name, the \trmidx{effective 
+diameter} (twice the \trmidx{effective radius}).
+The term ``effective'' refers to the light extinction properties of
+the distribution.
+Light impinging on a particle distribution is, in the limit of
+\trmidx{geometric optics}, extinguished in proportion to the
+cross-sectional area of the particles.
+Hence the effective diameter (or radius) characterizes the extinction
+properties of the distribution. 
+Following (\ref{eqn:dmt_vwa_dfn}), the effective diameter of a
+lognormal distribution is
+\begin{eqnarray}
+\dmtswa & = & \mmtfnc(3) / \mmtfnc(2) \nonumber \\
+& = & \frac{\cncttl \dmtnma^{3} \exp ( \mbox{$\frac{9}{2}$} \lngsdsqr )} 
+{\cncttl \dmtnma^{2} \exp (2 \lngsdsqr) } \nonumber \\
+& = & \dmtnma \exp ( \mbox{$\frac{5}{2}$} \lngsdsqr )
+\label{eqn:dmt_swa_dfn}
+\end{eqnarray}
+
+Moment-weighted diameters, such as the volume-weighted
+diameter~$\dmtvwa$ (\ref{eqn:dmt_vwa_dfn}), characterize disperse
+distributions.   
+A disperse mass distribution $\dstmssofdmt$ behaves most like a
+\trmidx{monodisperse distribution} with all mass residing at 
+$\dmt = \dmtvwa$.  
+Due to approximations, physical operators may be constrained to
+act on a single, representative diameter rather than an entire 
+distribution. 
+The ``least-wrong'' diameter to pick is the moment-weighted diameter
+most relevant to the process being modeled.
+For example, $\dmtvwa$ best represents the 
+\trmidx{gravitational sedimentation} of a distribution of particles.
+On the other hand, $\dmtswa$ (\ref{eqn:dmt_swa_dfn}) best represents
+the \trmidx{scattering cross-section} of a distribution of particles.
+
+\subsubsection[Aspherical Particles]{Aspherical  Particles}\label{sxn:asp}
+The useful relation (\ref{eqn:dst_mmt_nsw}) is a property of the
+lognormal distribution itself, rather than the particle shape.
+A lognormal distribution of aspherical particles also obeys
+(\ref{eqn:dst_mmt_nsw}). 
+Important measurable properties of most convex aspherical habits 
+may be represented by a constant times the $\mmtidx^{\mathrm{th}}$
+moment $\mmtfnc(\mmtidx)$ of the distribution. 
+For example, the surface area $\sfchxg$\,[\mS] and volume
+$\vlmhxg$\,[\mC] of hexagonal prisms are given by
+(\ref{eqn:sfc_hxg_dfn})--(\ref{eqn:vlm_hxg_asp_dfn})\footnote{
+My \LaTeX\ skills are too poor to reference equations in other
+documents. 
+All ``undefined'' analytic formula below are in the aerosol FACT, 
+\flprn{aer.pdf}, and that's why their equation numbers appear as
+question marks in this FACT. 
+20150303: Some equations are now in a new appendix of this 
+document.
+Look in \flprn{aer.pdf} to see the other equations.}. 
+ 
+To be consistent with the diameter-centric expressions in
+Table~\ref{tbl:lgn}, we introduce $\dmt_{\hxgsbs}$, the 
+hexagonal prism diameter.
+Adopting the convention that $\dmt_{\hxgsbs} \equiv 2\rdshxg$, the
+full-width of the basal face, we obtain
+\begin{eqnarray}
+\label{eqn:sfc_hxg_dmt_dfn}
+\sfchxg & = & \left( \frac{3\sqrt{3}}{4} + 3\asphxg \right) \dmt_{\hxgsbs}^{2} \\
+\label{eqn:vlm_hxg_dmt_dfn}
+\vlmhxg & = & \frac{3\sqrt{3}}{8} \asphxg \dmt_{\hxgsbs}^{3}
+\end{eqnarray}
+
+The functional forms for $\sfchxg$ and $\vlmhxg$ consist of constants
+multiplying the diameter's second and third moments, respectively. 
+The surface area ($\mpi\dmt^{2}$) and volume ($\mpi\dmt^{3}/6$) of
+spheres have the same form.  
+Therefore the higher moments of aspherical particle distributions
+must be the same as spherical particle distributions modulo the
+leading constant expressions.
+Inserting $\sfchxg$ and $\vlmhxg$ into (\ref{eqn:sfc_hxg_dmt_dfn}),
+(\ref{eqn:vlm_hxg_dmt_dfn}), and (\ref{eqn:dst_mmt_nsw}) leads
+to analytic expressions for the total surface area
+$\sfcttlhxg$\,[\mSxmC] and volume $\vlmttlhxg$\,[\mCxmC] of a 
+lognormal distribution of hexagonal prisms: 
+\begin{eqnarray}
+\label{eqn:sfc_ttl_hxg_asp_dfn}
+\sfcttlhxg & = & \left( 3\asphxg+\frac{3\sqrt{3}}{4} \right) \dmtnmahxg^{2} \exp(2\gsdtldsqr) \\
+\label{eqn:vlm_ttl_hxg_asp_dfn}
+\vlmttlhxg & = & \frac{3\sqrt{3}}{8} \asphxg\dmtnmahxg^{3} \exp(9\gsdtldsqr/2)
+\end{eqnarray}
+
+The total concentration $\nbrttlvts$ of equivalent V/S-spheres
+corresponding to a known distribution of hexagonal prisms must be
+computed numerically unless the size dependence of the aspect ratio
+$\asphxg(\dmt)$ takes an analytic form.
+In the simplest case, one can imagine or assume distributions of
+hexagonal prisms with constant aspect ratio, i.e, 
+$\asphxg \ne \asphxg(\dmt)$. 
+In this idealized case, the ratio $\cncvts/\cnchxg$
+(\ref{eqn:cnc_vts_hxg_dfn}) is constant throughout the distribution.
+Then the analytic number concentration of equivalent V/S-spheres
+is simply $\cncvts/\cnchxg$ times the analytic number concentration of 
+hexagonal prisms which is presumably known directly from the lognormal
+size distribution parameters (cf.\ Table~\ref{tbl:lgn}).
+
+\subsubsection[Normalization]{Normalization}\label{sxn:nrm}
+We show that (\ref{eqn:dst_lgn}) is normalized by considering
+\begin{equation}
+\dstnbrofdmt = \frac{\cstnrm}{\dmt} \exp\! 
+\left[-\frac{1}{2}\left( \frac{ \ln(\dmt/\dmtnma)}{\lngsd} \right)^{2} \right]
+%\label{eqn:dst_lgn_unn}
+\end{equation}
+where $\cstnrm$ is the \trmidx{normalization constant} determined by 
+(\ref{eqn:pdf_nrm}).
+First we change variables to $\yyy = \ln(\dmt/\dmtnma)$
+\begin{eqnarray}
+\yyy & = & \ln \dmt - \ln \dmtnma \nonumber \\ 
+\dmt & = & \dmtnma \me^\yyy \nonumber \\
+\dfr\yyy & = & \dmt^{-1} \,\dfr\dmt \nonumber \\ 
+\dfr\dmt & = & \dmtnma \me^\yyy \,\dfr\yyy
+\label{eqn:cov_y}
+\end{eqnarray}
+This transformation maps $\dmt \in (0, +\infty)$ into $\yyy \in (-\infty,
++\infty)$.
+In terms of $\yyy$, the normalization condition (\ref{eqn:pdf_nrm}) 
+becomes
+\begin{eqnarray*}
+\int_{-\infty}^{+\infty}\frac{\cstnrm}{\dmtnma \exp \yyy} \exp\! 
+\left[-\frac{1}{2}\left( \frac{\yyy}{\lngsd} \right)^{2} \right]
+\dmtnma \exp^\yyy \,\dfr \yyy & = & 1 \\
+\int_{-\infty}^{+\infty} \cstnrm \exp\! 
+\left[-\frac{1}{2}\left( \frac{\yyy}{\lngsd} \right)^{2} \right]
+\,\dfr\yyy & = & 1 \\
+\end{eqnarray*}
+Next we change variables to $\zzz = \yyy/\lngsd$
+\begin{eqnarray}
+\zzz & = & \yyy/\lngsd \nonumber \\ 
+\yyy & = & \zzz \lngsd \nonumber \\
+\dfr\zzz & = & (\lngsd)^{-1} \,\dfr\yyy \nonumber \\ 
+\dfr\yyy & = & \lngsd \,\dfr\zzz
+\end{eqnarray}
+This transformation does not change the limits of integration and we
+obtain 
+\begin{eqnarray}
+\int_{-\infty}^{+\infty} \cstnrm \exp\! \left( \frac{-\zzz^{2}}{2} \right) 
+\lngsd \,\dfr\zzz & = & 1 \nonumber \\
+\cstnrm \, \sqrt{2 \mpi} \lngsd & = & 1 \nonumber \\
+\cstnrm & = & \frac{1}{\sqrt{2 \mpi} \lngsd}
+%\label{eqn:}
+\end{eqnarray}
+In the above we used the well-known normalization property of the
+Gaussian distribution function, 
+$\int_{-\infty}^{+\infty} \me^{-\xxx^{2}/2} \,\dfr\xxx =
+\sqrt{2 \mpi}$ (\ref{eqn:nrm_gss}). 
+
+\section{Implementation in NCAR models}
+
+The discussion thus far has centered on the theoretical considerations
+of size distributions.
+In practice, these ideas must be implemented in computer codes which
+model, e.g., Mie scattering parameters or thermodynamic growth of
+aerosol populations.
+This section describes how these ideas have been implemented in the 
+NCAR-Dust and Mie models.
+
+\subsection[NCAR-Dust Model]{NCAR-Dust Model}
+The NCAR-Dust model uses as input a time invariant dataset of surface
+soil size distribution.
+The two such datasets currently used are from \cite{WRL93} and from
+IBIS \cite[]{Fol98}.
+The \citeauthor{WRL93} dataset provides global information for three
+soil texture types: sand, clay and silt.
+At each gridpoint, the mass flux of dust is partitioned into mass
+contributions from each of these soil types.
+To accomplish this, the partitioning scheme assumes a size
+distribution for the source soil of the deflated particles.
+\begin{table}
+\begin{center}
+\begin{tabular}{lllp{10em}}
+\hline
+Soil Texture & $\dmtnma$ & $\gsd$ & Description \\[0.0ex]
+\hline
+& & & \\[0.0ex]
+Sand & & & Sand \\[0.5ex]
+Silt & & & Silt \\[0.5ex]
+Clay & & & Clay \\[0.5ex]
+\hline
+Soil Texture & $\dmtnma$ & $\gsd$ & Description \\[0.0ex]
+\hline
+Sand & & & Sand \\[0.5ex]
+Silt & & & Silt \\[0.5ex]
+Clay & & & Clay \\[0.5ex]
+\hline
+\end{tabular}
+\caption[Source Size Distribution]{Source size distribution associated
+with surface soil texture data of \cite{WRL93} and of \cite{Fol98}.
+\label{tbl:WRL93}}   
+\end{center}
+\end{table}
+Table~\ref{tbl:WRL93} lists the lognormal distribution parameters
+associated with the surface soil texture data of \cite{WRL93} and of
+\cite{Fol98}. 
+The dust model is a size resolving aerosol model. 
+Thus, overlap factors are computed to determine the fraction of each
+parent size type which is mobilized into each atmospheric dust size
+bin during a deflation event.
+
+\clearpage
+\subsection[Mie Scattering Model]{Mie Scattering Model}\label{sxn:mie}
+This section documents the Mie scattering code \cmdidx{mie}. 
+\cmdprn{mie} is box model intended to provide exact simulations of
+microphysical processes for the purpose of parameterization into
+larger scale models.
+\cmdprn{mie} provides instantaneous and equilibrium decriptions of
+many processes ranging from surface flux exchange, dust production,
+reflection of polarized radiation, and, as its name suggests, the
+interaction of particles and radiation.
+Thus the inputs to \cmdprn{mie} are the instantaneous state (boundary
+and initial conditions) of the environment.
+Given these, the program solves for the associated rates of change and
+unknown variables.
+
+There is no time-stepping loop primarily because \cmdprn{mie}
+generates an extraordinary amount of information about the
+instantaneous state.
+Time-stepping this environment in a box-model-like format would be
+prohibitive if all quantities were allowed to evolve.
+
+\subsubsection[Input switches]{Input switches}\label{sxn:cmd_ln_mie}
+The flexibility and power of \cmdprn{mie} can only be exercised by
+actively using the hundreds of \trmidx{input switches} which control
+its behavior.
+This section describes how some of these switches are commonly used
+to control fundamental properties of the microphysical environment. 
+A complete reference table for these switches, there default values,
+and dimensional units, is presented in Appendix~\ref{sxn:apn_cmd_ln_mie}.  
+
+The heart of \cmdprn{mie} is an aerosol size distribution.
+Most users will wish to initialize this size distribution to a
+particular type of aerosol, and to a particular shape.
+This is accomplished with the \cmdidx{cmp\_aer} and \cmdidx{psd\_typ}
+keywords. 
+The linearity, range, and resolution of the grid on which the analytic
+size distribution is discretized are controlled by the
+\cmdidx{sz\_grd}, \cmdidx{sz\_mnm}, \cmdidx{sz\_mxm}, \cmdidx{sz\_nbr}
+switches, respectively.
+Compute size distribution characteristics of a lognormal distribution
+\begin{verbatim}
+mie -dbg -no_mie --psd_typ=lognormal --sz_grd=log --sz_mnm=0.01 \
+--sz_mxm=10.0 --sz_nbr=300 --rds_nma=0.4 --gsd_anl=2.2
+mie -dbg -no_mie --psd_typ=lognormal --sz_grd=log --sz_mnm=1.0 \
+--sz_mxm=10.0 --sz_nbr=25 --rds_nma=2.0 --gsd_anl=2.2
+\end{verbatim}
+
+\subsubsection[Moments of Size Distribution]{Moments of Size Distribution}\label{sxn:mie_mmn}
+Determine the analytic (or resolved) moments of an arbitrary size
+distribution.
+\begin{enumerate}
+\item Generate the size distribution. (It may have more than one moment)
+\item Select the statistics of interest
+\end{enumerate}
+\begin{verbatim}
+# 1. Lognormal distribution with mass median diameter 3.5 um, GSD = 2.0
+mie -no_mie --psd_typ=lognormal --sz_grd=log --sz_nbr=1000 \
+--sz_mnm=0.005 --sz_mxm=50.0 --dmt_vma=3.5 --gsd_anl=2.0
+# 2. Extract median and weighted analytic moments of diameter
+ncks -H -v dmt_vwa,dmt_vma,dmt_swa,dmt_sma,dmt_nwa,dmt_nma ${DATA}/mie/mie.nc
+# 3. Extract median and weighted resolved moments of diameter
+ncks -H -v dmt_vwr,dmt_vmr,dmt_swr,dmt_smr,dmt_nwr,dmt_nmr ${DATA}/mie/mie.nc
+# 4. Extract median and weighted analytic moments of diameter
+ncks -H -v rds_vwa,rds_vma,rds_swa,rds_sma,rds_nwa,rds_nma ${DATA}/mie/mie.nc
+# 5. Extract median and weighted resolved moments of diameter
+ncks -H -v rds_vwr,rds_vmr,rds_swr,rds_smr,rds_nwr,rds_nmr ${DATA}/mie/mie.nc
+# 6. Extract number, surface area, and volume distributions at specific sizes
+ncks -H -C -F -u -v dst,dst_rds,dst_sfc,dst_vlm -d sz,1.0e-6 ${DATA}/mie/mie.nc
+\end{verbatim}
+
+\subsubsection[Generating Properties for Multi-Bin Distributions]{Generating Properties for Multi-Bin}\label{sxn:mie_bin}
+On occasion, a seriouly masochistic scientist will decide to create
+the ultimate hybrid bin-spectral aerosol method by discretizing the
+size distribution into a finite number of bins each with an
+independently configurable analytic sub-bin distribution.
+Generating properties for all the bins in such a scheme requires
+enormous amounts of bookkeeping, or, if a computer is available,
+a relatively simple \trmidx{Perl} batch script named \cmdidx{psd.pl}. 
+
+The \cmdprn{psd.pl} batch script calls \cmdprn{mie} repeatedly in a
+loop over particle bin.
+As input, \cmdprn{psd.pl} accepts concise array representations of
+each property of a bin.
+For example, \verb'--sz_nbr={200,25,25,25}' specifies that bin~1 is
+discretized into 200~sub-bins, and the remaining three bins are each
+discretized into only 25~sub-bins.
+\begin{verbatim}
+~/dst/psd.pl --dbg=1 --CCM_SW --ftn_fxd --psd_nbr=4 --spc_idx_sng={01,02,03,04} \
+--sz_mnm={0.05,0.5,1.25,2.5} --sz_mxm={0.5,1.25,2.5,5.0} --sz_nbr={200,25,25,25} \
+--dmt_vma_dfl=3.5 > ${DATA}/dst/mie/psd_CCM_SW.txt.v3 2>&1 &
+\end{verbatim}
+
+\section{Appendix}\label{sxn:apn}
+
+\subsection[Properties of Gaussians]{Properties of Gaussians}\label{sxn:gss}
+The area under a Gaussian distribution may be expressed in closed 
+form for infinite domains.
+This result can be obtained (IIRC) by transforming to polar
+coordinates in the complex plane 
+$\xxx = \rds (\cos \theta + \mi \sin \theta)$. 
+\begin{equation}
+\int_{-\infty}^{+\infty} \me^{-\xxx^{2}/2} \,\dfr\xxx =
+\sqrt{2 \mpi}
+\label{eqn:nrm_gss}
+\end{equation}
+This is a special case of a more general result 
+\begin{equation}
+\int_{-\infty}^{+\infty} \exp (-\alpha \xxx^{2} -\beta \xxx) \,\dfr\xxx = 
+\sqrt{\frac{\mpi}{\alpha}} \exp\! \left( \frac{\beta^{2}}{4\alpha} \right) 
+\qquad \mathrm{where}\ \alpha > 0
+\label{eqn:nrm_gss_gnr}
+\end{equation}
+To obtain this result, complete the square under the integrand, 
+change variables to $\yyy = \xxx + \beta/2\alpha$, 
+and then apply (\ref{eqn:nrm_gss}).
+Substituting $\alpha = 1/2$ and $\beta = 0$ into
+(\ref{eqn:nrm_gss_gnr}) yields (\ref{eqn:nrm_gss}).
+
+\subsection[Error Function]{Error Function}\label{sxn:erf}
+The \trmdfn{error function} $\erfxxx$ may be defined as the partial
+integral of a Gaussian curve
+\begin{equation}
+% http://mathworld.wolfram.com/Erf.html
+\erfzzz = \frac{2}{\sqrt{\mpi}} \int_{0}^{\zzz} \me^{-\xxx^{2}} \,\dfr\xxx
+\label{eqn:erf}
+\end{equation}
+Using (\ref{eqn:nrm_gss}) and the symmetry of a Gaussian curve, it is
+simple to show that the error function is bounded by the limits
+$\erffnc(0) = 0$ and $\erffnc(\infty) = 1$.
+Thus $\erfzzz$ is the cumulative probability function for a
+normally distributed variable $\zzz$ (fxm: True??).
+Most compilers implement $\erfxxx$ as an intrinsic function.
+Thus $\erfxxx$ is used to compute areas bounded by finite lognormal
+distributions (\S\ref{sxn:lgn_bnd}). 
+
+\subsection[Properties of Binomials]{Properties of Binomials}\label{sxn:bnm}
+The number $\nbrmlt$ of trials that result in a given outcome 
+$\tcmnbr$ times in $\trlnbr$ total trials is
+\begin{equation}
+% https://en.wikipedia.org/wiki/Bernoulli_process
+\nbrmlt(\tcmnbr,\trlnbr) = 
+{{\trlnbr}\choose{\tcmnbr}} =
+\frac{\trlnbr!}{\tcmnbr! (\trlnbr - \tcmnbr)!}
+\label{eqn:bnm_cff_dfn}
+\end{equation}
+$\nbrmlt(\tcmnbr,\trlnbr)$ is known as the \trmdfn{binomial coefficient}.
+
+If the probability of the outcome of a single independent trial
+(e.g., flipping a coin) is~$\prbone$, then the probability $\prbmlt$
+of that outcome occurring $\tcmnbr$~times in $\trlnbr$~trials is 
+\begin{eqnarray}
+% https://en.wikipedia.org/wiki/Bernoulli_process
+\prbmlt(\tcmnbr,\trlnbr) & = & 
+\nbrmlt(\tcmnbr,\trlnbr) \prbone^{\tcmnbr} (1 - \tcmnbr)^{(\trlnbr-\tcmnbr)} \nonumber \\
+& = & 
+{{\trlnbr}\choose{\tcmnbr}} \prbone^{\tcmnbr} (1 - \tcmnbr)^{(\trlnbr-\tcmnbr)} \nonumber \\
+& = & 
+\frac{\trlnbr!}{\tcmnbr! (\trlnbr - \tcmnbr)!} \, \prbone^{\tcmnbr} (1 - \tcmnbr)^{(\trlnbr-\tcmnbr)}
+\label{eqn:bnm_dst_dfn}
+\end{eqnarray}
+$\prbmlt(\tcmnbr,\trlnbr)$ is known as the \trmdfn{binomial distribution}.
+
+The outcome of the binomial distribution is difficult to compute
+exactly for large~$\trlnbr$ because evaulating the factorial function 
+for large numbers is numerically unwieldy.
+Instead we make use of \trmdfn{Stirling's Approximation}:
+\begin{equation}
+% https://en.wikipedia.org/wiki/Bernoulli_process
+\nnn! = \sqrt{2\mpi\nnn} \, \nnn^{\nnn} \me^{-\nnn} 
+\left( 1 + \mathcal{O} \left( \frac{1}{\nnn} \right) \right)
+\label{eqn:str_apx_dfn}
+\end{equation}
+
+Substituting (\ref{eqn:str_apx_dfn}) in (\ref{eqn:bnm_dst_dfn}) we
+obtain 
+\begin{eqnarray}
+% https://en.wikipedia.org/wiki/Bernoulli_process
+\prbmlt(\tcmnbr,\trlnbr) & = & 
+\frac{ \sqrt{2\mpi\nnn} \, \nnn^{\nnn} \me^{-\nnn} }
+     { \sqrt{2\mpi\kkk} \, \kkk^{\kkk} \me^{-\kkk} 
+       \sqrt{2\mpi(\nnn-\kkk)} \, (\nnn-\kkk)^{(\nnn-\kkk)} \me^{-(\nnn-\kkk)} }
+       \, \prbone^{\tcmnbr} (1 - \tcmnbr)^{(\trlnbr-\tcmnbr)} \nonumber \\
+ & = & 
+\sqrt{ \frac{\nnn}{2\mpi\kkk(\nnn-\kkk)} } \,
+\frac{ \nnn^{\nnn} \me^{-\nnn} }
+     { \kkk^{\kkk} \me^{-\kkk} \, (\nnn-\kkk)^{(\nnn-\kkk)} \me^{-(\nnn-\kkk)} }
+       \, \prbone^{\tcmnbr} (1 - \tcmnbr)^{(\trlnbr-\tcmnbr)} \\
+\label{eqn:bnm_dst_apx}
+\end{eqnarray}
+
+\subsection[Formulae from other FACTs]{Formulae from other FACTs}\label{sxn:fct}
+% This paragraph stolen from master text in aer.tex:
+The surface area $\sfchxg$\,[\mS] and volume $\vlmhxg$\,[\mC] of a 
+hexagonal prism are
+\begin{eqnarray}
+% GrW99 p. 31699 (3)
+\sfchxg & = & 6\rdshxg\dmthxg+3\sqrt{3}\rdshxg^{2} = 
+              3\rdshxg(2\dmthxg+\sqrt{3}\rdshxg) \\
+\label{eqn:sfc_hxg_dfn}
+% GrW99 p. 31699 (3) NGW03 p. 3 (4)
+\vlmhxg & = & \frac{3\sqrt{3}\rdshxg^{2}\dmthxg}{2}
+\label{eqn:vlm_hxg_dfn}
+\end{eqnarray}
+These definitions may be re-cast in terms of $\rdshxg$ and $\asphxg$
+by using $\dmthxg = 2\rdshxg\asphxg$ from (\ref{eqn:asp_hxg_dfn})  
+\begin{eqnarray}
+\sfchxg & = & 12\rdshxg^{2}\asphxg+3\sqrt{3}\rdshxg^{2} = 
+              3\rdshxg^{2}(4\asphxg+\sqrt{3}) \\
+\label{eqn:sfc_hxg_asp_dfn}
+% NGW03 p. 3 (6c)
+\vlmhxg & = & 3\sqrt{3}\rdshxg^{3}\asphxg
+\label{eqn:vlm_hxg_asp_dfn}
+\end{eqnarray}
+It is more convenient to describe hexagons in terms
+of ($\rdshxg$,$\asphxg$) than ($\rdshxg$,$\dmthxg$).
+This is because natural hexagonal prisms may share similar aspect
+ratios over a large range of sizes.
+
+\subsection[Command Line Switches for \texttt{mie} Code]{Command Line Switches for \texttt{mie} Code}\label{sxn:apn_cmd_ln_mie}
+Table~\ref{tbl:cmd_ln_mie} summarizes all of the \trmdfn{command line arguments} 
+available to control the behavior of the \cmdidx{mie} program. 
+This is a summary only---it is impractical to think that written 
+documentation could ever convey the exact meaning of all the
+switches\footnote{Perhaps the most useful way to begin to contribute
+to this \href{http://dust.ess.uci.edu/facts}{FACT} would be to
+systematize and extend the documentation of command line switches}.
+The most frequently used switches are described in
+Section~\ref{sxn:cmd_ln_mie}. 
+The only way to learn the full meaning of the more obscure switches is
+to read the source code itself.
+\begin{landscape} % Begin tbl:cmd_ln_mie
+\begin{longtable}{ >{\ttfamily}l<{} >{\raggedright}p{20.0em}<{} r l}
+& & & \kill % NB: longtable requires caption as table entry
+\caption[Command Line Switches]{\textbf{Command Line Switches for \texttt{mie} code}%
+\footnote{\emph{Source:} \cite{ZBP97}}%
+\footnote{\cmdprn{cmd\_ln\_dfl} is a standard large value, e.g., 
+$1.0 \times 10^{36}$. 
+\cmdprn{mie} checks for this value for particular variables
+whose treatment depends on whether or not the variable was
+user-initialized.}%
+\label{tbl:cmd_ln_mie}} \\
+\hline\hline \rule{0.0ex}{\hlntblhdrskp}% 
+\textrm{Switch} & Purpose & Default & Units \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endfirsthead % Lines between and \endfirsthead appear at top of table
+\caption[]{(continued)} \\ % Set label for following pages
+\textrm{Switch} & Purpose & Default & Units \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endhead % Previous block appears at top of every page
+\endlastfoot % Previous block appears at end of table
+\multicolumn{4}{c}{Boolean flags\rule[-0.5ex]{0ex}{1.5ex}} \\[0.0ex]
+--\cmdidx{abc\_flg} & Alphabetize output with \cmdidx{ncks} & true & Flag \\[0.5ex]
+--\cmdidx{abs\_ncl\_wk\_mdm\_flg} & Absorbing inclusion in weakly-absorbing sphere & false & Flag \\[0.5ex]
+--\cmdidx{bch\_flg} & Batch behavior & false & Flag \\[0.5ex]
+--\cmdidx{coat\_flg} & Assume coated spheres & false & Flag \\[0.5ex]
+--\cmdidx{drv\_rds\_nma\_flg} & Derive rds\_nma from bin boundaries & false & Flag \\[0.5ex]
+--\cmdidx{fdg\_flg} & Tune the extinction of a particular band & false & Flag \\[0.5ex]
+--\cmdidx{hxg\_flg} & Aspherical particles are hexagonal prisms & true & Flag \\[0.5ex]
+--\cmdidx{vts\_flg} & Apply equal-V/S approximation for aspherical optical properties & false & Flag \\[0.5ex]
+--\cmdidx{ftn\_fxd\_flg} & Fortran fixed format & false & Flag \\[0.5ex]
+--\cmdidx{hrz\_flg} & Print size-resolved optical properties at debug wavelength & false & Flag \\[0.5ex]
+--\cmdidx{mca\_flg} & Multi-component aerosol with effective medium approximation & false & Flag \\[0.5ex]
+--\cmdidx{mie\_flg} & Perform Mie scattering calculation & true & Flag \\[0.5ex]
+--\cmdidx{no\_abc\_flg} & Set \texttt{abc\_flg} to \texttt{false} & & Flag \\[0.5ex]
+--\cmdidx{no\_bch\_flg} & Set \texttt{bch\_flg} to \texttt{false} & & Flag \\[0.5ex]
+--\cmdidx{no\_hrz\_flg} & Set \texttt{hrz\_flg} to \texttt{false} & & Flag \\[0.5ex]
+--\cmdidx{no\_mie\_flg} & Set \texttt{mie\_flg} to \texttt{false} & & Flag \\[0.5ex]
+--\cmdidx{no\_wrn\_ntp\_flg} & Set \texttt{wrn\_ntp\_flg} to \texttt{false} & & Flag \\[0.5ex]
+--\cmdidx{wrn\_ntp\_flg} & Print WARNINGs from \texttt{ntp\_vec()} & true & Flag \\[0.5ex]
+
+\multicolumn{4}{c}{Variables\rule[-0.5ex]{0ex}{1.5ex}} \\[0.0ex]
+--\cmdidx{RH\_lqd} & Relative humidity w/r/t liquid water & 0.8 & Fraction \\[0.5ex]
+--\cmdidx{asp\_rat\_hxg\_dfl} & Hexagonal prism aspect ratio & 1.0 & Fraction \\[0.5ex]
+--\cmdidx{asp\_rat\_lps\_dfl} & Ellipsoidal aspect ratio & 1.0 & Fraction \\[0.5ex]
+--\cmdidx{bnd\_SW\_LW} & Boundary between SW and LW weighting & $5.0 \times 10^{-6}$ & \m \\[0.5ex]
+--\cmdidx{bnd\_nbr} & Number of sub-bands per output band & 1 & Number \\[0.5ex]
+--\cmdidx{cmp\_cor} & Composition of core & ``air'' & String \\[0.5ex]
+--\cmdidx{cmp\_mdm} & Composition of medium & ``air'' & String \\[0.5ex]
+--\cmdidx{cmp\_mnt} & Composition of mantle & ``air'' & String \\[0.5ex]
+--\cmdidx{cmp\_mtx} & Composition of matrix & ``air'' & String \\[0.5ex]
+--\cmdidx{cmp\_ncl} & Composition of inclusion & ``air'' & String \\[0.5ex]
+--\cmdidx{cmp\_prt} & Composition of particle & ``saharan\_dust'' & String \\[0.5ex]
+--\cmdidx{cnc\_nbr\_anl\_dfl} & Number concentration analytic, default & 1.0 & \nbrxmC \\[0.5ex]
+--\cmdidx{cnc\_nbr\_pcp\_anl} & Number concentration analytic, raindrop & 1.0 & \nbrxmC \\[0.5ex]
+--\cmdidx{cpv\_foo} & Intrinsic computational precision temporary variable & 0.0 & Fraction \\[0.5ex]
+--\cmdidx{dbg\_lvl} & Debugging level & 0 & Index \\[0.5ex]
+--\cmdidx{dmn\_nbr\_max} & Maximum number of dimensions allowed in single variable in output file & 2 & Number \\[0.5ex]
+--\cmdidx{dmn\_frc} & Fractal dimensionality of inclusions & 3.0 & Fraction \\[0.5ex]
+--\cmdidx{dmn\_rcd} & Record dimension name & ``'' & String \\[0.5ex]
+--\cmdidx{dmt\_dtc} & Diameter of detector & 0.001 & \m \\[0.5ex]
+--\cmdidx{dmt\_nma\_mcr} & Number median analytic diameter & \texttt{cmd\_ln\_dfl} & \um \\[0.5ex]
+--\cmdidx{dmt\_pcp\_nma\_mcr} & Diameter number median analytic, raindrop, microns & 1000.0 & \um \\[0.5ex]
+--\cmdidx{dmt\_swa\_mcr} & Surface area weighted mean diameter analytic & \texttt{cmd\_ln\_dfl} & \um \\[0.5ex]
+--\cmdidx{dmt\_vma\_mcr} & Volume median diameter analytic & \texttt{cmd\_ln\_dfl} & \um \\[0.5ex]
+--\cmdidx{dns\_cor} & Density of core & 0.0 & \kgxmC \\[0.5ex]
+--\cmdidx{dns\_mdm} & Density of medium & 0.0 & \kgxmC \\[0.5ex]
+--\cmdidx{dns\_mnt} & Density of mantle & 0.0 & \kgxmC \\[0.5ex]
+--\cmdidx{dns\_mtx} & Density of matrix & 0.0 & \kgxmC \\[0.5ex]
+--\cmdidx{dns\_ncl} & Density of inclusion & 0.0 & \kgxmC \\[0.5ex]
+--\cmdidx{dns\_prt} & Density of particle & 0.0 & \kgxmC \\[0.5ex]
+--\cmdidx{doy} & Day of year [1.0..367.0) & 135.0 & day \\[0.5ex]
+--\cmdidx{drc\_dat} & Data directory & \texttt{/data/zender/aca} & String \\[0.5ex]
+--\cmdidx{drc\_in} & Input directory & \texttt{\$\{HOME\}/nco/data} & String \\[0.5ex]
+--\cmdidx{drc\_out} & Output directory & \texttt{\$\{HOME\}/c++} & String \\[0.5ex]
+--\cmdidx{dsd\_dbg\_mcr} & Debugging size for raindrops & 1000.0 & \um \\[0.5ex]
+--\cmdidx{dsd\_mnm\_mcr} & Minimum diameter in raindrop distribution & 999.0 & \um \\[0.5ex]
+--\cmdidx{dsd\_mxm\_mcr} & Maximum diameter in raindrop distribution & 1001.0 & \um \\[0.5ex]
+--\cmdidx{dsd\_nbr} & Number of raindrop size bins & 1 & Number \\[0.5ex]
+--\cmdidx{fdg\_idx} & Band to tune by fdg\_val & 0 & Index \\[0.5ex]
+--\cmdidx{fdg\_val} & Tuning factor for all bands & 1.0 & Fraction \\[0.5ex]
+--\cmdidx{fl\_err} & File for error messages & ``cerr'' & String \\[0.5ex]
+--\cmdidx{fl\_idx\_rfr\_cor} & File or function for refractive indices of core & ``'' & String \\[0.5ex]
+--\cmdidx{fl\_idx\_rfr\_mdm} & File or function for refractive indices of medium & ``'' & String \\[0.5ex]
+--\cmdidx{fl\_idx\_rfr\_mnt} & File or function for refractive indices of mantle & ``'' & String \\[0.5ex]
+--\cmdidx{fl\_idx\_rfr\_mtx} & File or function for refractive indices of matrix & ``'' & String \\[0.5ex]
+--\cmdidx{fl\_idx\_rfr\_ncl} & File or function for refractive indices of inclusion & ``'' & String \\[0.5ex]
+--\cmdidx{fl\_idx\_rfr\_prt} & File or function for refractive indices of particle & ``'' & String \\[0.5ex]
+--\cmdidx{fl\_slr\_spc} & File or function for solar spectrum & ``'' & String \\[0.5ex]
+--\cmdidx{flt\_foo} & Intrinsic float temporary variable & 0.0 & Fraction \\[0.5ex]
+--\cmdidx{flx\_LW\_dwn\_sfc} & Longwave downwelling flux at surface & 0.0 & \wxmS \\[0.5ex]
+--\cmdidx{flx\_SW\_net\_gnd} & Solar flux absorbed by ground & 450.0 & \wxmS \\[0.5ex]
+--\cmdidx{flx\_SW\_net\_vgt} & Solar flux absorbed by vegetation & 0.0 & \wxmS \\[0.5ex]
+--\cmdidx{flx\_frc\_drc\_sfc\_cmd\_ln} & Surface insolation fraction in direct beam & 0.85 & Fraction \\[0.5ex]
+--\cmdidx{flx\_vlm\_pcp\_rsl} & Precipitation volume flux, resolved & $-1.0$ & \mCxmSs \\[0.5ex]
+--\cmdidx{gsd\_anl\_dfl} & Geometric standard deviation, default & 2.0 & Fraction \\[0.5ex]
+--\cmdidx{gsd\_pcp\_anl} & Geometric standard deviation, raindrop & 1.86 & Fraction \\[0.5ex]
+--\cmdidx{hgt\_mdp} & Midlayer height above surface & 95.0 & \m \\[0.5ex]
+--\cmdidx{hgt\_rfr} & Reference height (i.e., 10 m) at which surface winds are evaluated for dust mobilization & 10.0 & \m \\[0.5ex]
+--\cmdidx{hgt\_zpd\_dps\_cmd\_ln} & Zero plane displacement height & \texttt{cmd\_ln\_dfl} & \m \\[0.5ex]
+--\cmdidx{hgt\_zpd\_mbl} & Zero plane displacement height for erodible surfaces & 0.0 & \m \\[0.5ex]
+--\cmdidx{idx\_rfr\_cor\_usr} & Refractive index of core & $1.0+0.0\mi$ & Complex \\[0.5ex]
+--\cmdidx{idx\_rfr\_mdm\_usr} & Refractive index of medium & $1.0+0.0\mi$ & Complex \\[0.5ex]
+--\cmdidx{idx\_rfr\_mnt\_usr} & Refractive index of mantle & $1.33+0.0\mi$ & Complex \\[0.5ex]
+--\cmdidx{idx\_rfr\_mtx\_usr} & Refractive index of matrix & $1.0+0.0\mi$ & Complex \\[0.5ex]
+--\cmdidx{idx\_rfr\_ncl\_usr} & Refractive index of inclusion & $1.0+0.0\mi$ & Complex \\[0.5ex]
+--\cmdidx{idx\_rfr\_prt\_usr} & Refractive index of particle & $1.33+0.0\mi$ & Complex \\[0.5ex]
+--\cmdidx{lat\_dgr} & Latitude & 40.0 & \dgr \\[0.5ex]
+--\cmdidx{lbl\_sng} & Line-by-line test & ``CO2'' & String \\[0.5ex]
+--\cmdidx{lgn\_nbr} & Number of terms in \trmidx{Legendre expansion} of phase function & 8 & Number \\[0.5ex]
+--\cmdidx{lnd\_frc\_dry} & Dry land fraction & 1.0 & Fraction \\[0.5ex]
+--\cmdidx{mmw\_prt} & Mean molecular weight & 0.0 & \kgxmol \\[0.5ex]
+--\cmdidx{mno\_lng\_dps\_cmd\_ln} & Monin-Obukhov length & \texttt{cmd\_ln\_dfl} & \m \\[0.5ex]
+--\cmdidx{mss\_frc\_cly} & Mass fraction clay  & 0.19 & Fraction \\[0.5ex]
+--\cmdidx{mss\_frc\_snd} & Mass fraction sand & 0.777 & Fraction \\[0.5ex]
+--\cmdidx{ngl\_nbr} & Number of angles in Mie computation & 11 & Number \\[0.5ex]
+--\cmdidx{oro} & Orography: ocean=0.0, land=1.0, sea ice=2.0 & 1.0 & Fraction \\[0.5ex]
+--\cmdidx{pnt\_typ\_idx} & Plant type index & 14 & Index \\[0.5ex]
+--\cmdidx{prs\_mdp} & Environmental pressure & 100825.0 & Pa \\[0.5ex]
+--\cmdidx{prs\_ntf} & Environmental surface pressure & \texttt{prs\_STP} & Pa \\[0.5ex]
+--\cmdidx{psd\_typ} & Particle size distribution type & ``lognormal'' & String \\[0.5ex]
+--\cmdidx{q\_H2O\_vpr} & Specific humidity & \texttt{cmd\_ln\_dfl} & \kgxkg \\[0.5ex]
+--\cmdidx{rds\_ffc\_gmm\_mcr} & Effective radius of Gamma distribution & 50.0 & \um \\[0.5ex]
+--\cmdidx{rds\_nma\_mcr} & Number median analytic radius & 0.2986 & \um \\[0.5ex]
+--\cmdidx{rds\_swa\_mcr} & Surface area weighted mean radius analytic & \texttt{cmd\_ln\_dfl} & \um \\[0.5ex]
+--\cmdidx{rds\_vma\_mcr} & Volume median radius analytic & \texttt{cmd\_ln\_dfl} & \um \\[0.5ex]
+--\cmdidx{rgh\_mmn\_dps\_cmd\_ln} & Roughness length momentum & \texttt{cmd\_ln\_dfl} & \m \\[0.5ex]
+--\cmdidx{rgh\_mmn\_ice\_std} & Roughness length over sea ice & 0.0005 & \m \\[0.5ex]
+--\cmdidx{rgh\_mmn\_mbl} & Roughness length momentum for erodible surfaces & $100.0 \times 10^{-6}$ & \m \\[0.5ex]
+--\cmdidx{rgh\_mmn\_smt} & Smooth roughness length & $10.0 \times 10^{-6}$ & \m \\[0.5ex]
+--\cmdidx{rfl\_gnd\_dff} & Diffuse reflectance of ground (beneath snow) & 0.20 & Fraction \\[0.5ex]
+--\cmdidx{sfc\_typ} & LSM surface type [0..28] & 2 & Index \\[0.5ex]
+--\cmdidx{slf\_tst\_typ} & Self-test type & ``BoH83'' & String \\[0.5ex]
+--\cmdidx{slr\_cst} & Solar constant & 1367.0 & \wxmS \\[0.5ex]
+--\cmdidx{slr\_spc\_key} & Solar spectrum string & ``LaN68'' & String \\[0.5ex]
+--\cmdidx{slr\_zen\_ngl\_cos} & Cosine solar zenith angle & 1.0 & Fraction \\[0.5ex]
+--\cmdidx{slv\_sng} & Mie solver to use & ``Wis79'' & String \\[0.5ex]
+--\cmdidx{snw\_hgt\_lqd} & Equivalent liquid water snow depth & 0.0 & \m \\[0.5ex]
+--\cmdidx{soi\_typ} & LSM soil type [1..5] & 1 & Index \\[0.5ex]
+--\cmdidx{spc\_heat\_prt} & Specific heat capacity & 0.0 & \jxkgK \\[0.5ex]
+--\cmdidx{spc\_abb\_sng} & Species abbreviation for Fortran data & ``foo'' & String \\[0.5ex]
+--\cmdidx{spc\_idx\_sng} & Species index for Fortran data & ``foo'' & String \\[0.5ex]
+--\cmdidx{ss\_alb\_cmd\_ln} & Single scattering albedo & 1.0 & Fraction \\[0.5ex]
+--\cmdidx{sz\_dbg\_mcr} & Debugging size & 1.0 & \um \\[0.5ex]
+--\cmdidx{sz\_grd\_sng} & Type of size grid & ``logarithmic'' & String \\[0.5ex]
+--\cmdidx{sz\_mnm\_mcr} & Minimum size in distribution & 0.9 & \um \\[0.5ex]
+--\cmdidx{sz\_mxm\_mcr} & Maximum size in distribution & 1.1 & \um \\[0.5ex]
+--\cmdidx{sz\_nbr} & Number of particle size bins & 1 & Number \\[0.5ex]
+--\cmdidx{sz\_prm\_rsn} & Size parameter resolution & 0.1 & Fraction \\[0.5ex]
+--\cmdidx{thr\_nbr} & Thread number & 0 & Number \\[0.5ex]
+--\cmdidx{tm\_dlt} & Timestep & 1200.0 & s \\[0.5ex]
+--\cmdidx{tpt\_bbd\_wgt} & Blackbody temperature of radiation & 273.15 & K \\[0.5ex]
+--\cmdidx{tpt\_gnd} & Ground temperature & 300.0 & K \\[0.5ex]
+--\cmdidx{tpt\_ice} & Ice temperature & \texttt{tpt\_frz\_pnt} & K \\[0.5ex]
+--\cmdidx{tpt\_mdp} & Environmental temperature & 300.0 & K \\[0.5ex]
+--\cmdidx{tpt\_prt} & Particle temperature & 273.15 & K \\[0.5ex]
+--\cmdidx{tpt\_soi} & Soil temperature & 297.0 & K \\[0.5ex]
+--\cmdidx{tpt\_sst} & Sea surface temperature & 300.0 & K \\[0.5ex]
+--\cmdidx{tpt\_vgt} & Vegetation temperature & 300.0 & K \\[0.5ex]
+--\cmdidx{tst\_sng} & Name of test to perform (\cmdidx{htg}, \cmdidx{lbl}, \cmdidx{nc}, \cmdidx{nsz}, \cmdidx{psd\_ntg\_dgn}) & ``'' & String \\[0.5ex]
+--\cmdidx{var\_ffc\_gmm} & Effective variance of Gamma distribution & 1.0 & Fraction \\[0.5ex]
+--\cmdidx{vlm\_frc\_mntl} & Fraction of volume in mantle & 0.5 & Fraction \\[0.5ex]
+--\cmdidx{vmr\_CO2} & Volume mixing ratio of \COd & $355.0 \times 10^{-6}$ & \mlcxmlc \\[0.5ex]
+--\cmdidx{vmr\_HNO3\_gas} & Volume mixing ratio of gaseous \HNOt & $0.05 \times 10^{-9}$ & \mlcxmlc \\[0.5ex]
+--\cmdidx{vwc\_sfc} & Volumetric water content & 0.03 & \mCxmC \\[0.5ex]
+--\cmdidx{wbl\_shp} & Weibull distribution shape parameter & 2.4 & Fraction \\[0.5ex]
+--\cmdidx{wnd\_frc\_dps\_cmd\_ln} & Friction speed & \texttt{cmd\_ln\_dfl} & \mxs \\[0.5ex]
+--\cmdidx{wnd\_mrd\_mdp} & Surface layer meridional wind speed & 0.0 & \mxs \\[0.5ex]
+--\cmdidx{wnd\_znl\_mdp} & Surface layer zonal wind speed & 10.0 & \mxs \\[0.5ex]
+--\cmdidx{wvl\_dbg\_mcr} & Debugging wavelength & 0.50 & \um \\[0.5ex]
+--\cmdidx{wvl\_grd\_sng} & Type of wavelength grid & ``regular'' & String \\[0.5ex]
+--\cmdidx{wvl\_dlt\_mcr} & Bandwidth & 0.1 & \um \\[0.5ex]
+--\cmdidx{wvl\_mdp\_mcr} & Midpoint wavelength & \texttt{cmd\_ln\_dfl} & \um \\[0.5ex]
+--\cmdidx{wvl\_mnm\_mcr} & Minimum wavelength & 0.45 & \um \\[0.5ex]
+--\cmdidx{wvl\_mxm\_mcr} & Maximum wavelength & 0.55 & \um \\[0.5ex]
+--\cmdidx{wvl\_nbr} & Number of output wavelength bands & 1 & Number \\[0.5ex]
+--\cmdidx{wvn\_dlt\_xcm} & Bandwidth & 1.0 & \xcm \\[0.5ex]
+--\cmdidx{wvn\_mdp\_xcm} & Midpoint wavenumber & \texttt{cmd\_ln\_dfl} & \xcm \\[0.5ex]
+--\cmdidx{wvn\_mnm\_xcm} & Minimum wavenumber & 18182 & \xcm \\[0.5ex]
+--\cmdidx{wvn\_mxm\_xcm} & Maximum wavenumber & 22222 & \xcm \\[0.5ex]
+--\cmdidx{wvn\_nbr} & Number of output wavenumber bands & 1 & Number \\[0.5ex]
+--\cmdidx{xpt\_dsc} & Experiment description & ``'' & String \\[0.5ex]
+\hline
+\end{longtable}
+\end{landscape} % End tbl:cmd_ln_mie
+
+Table~\ref{tbl:fld_nm_swnb} summarizes the \trmdfn{fields} output by SWNB.
+\begin{landscape} % Begin tbl:fld_nm_swnb
+\begin{longtable}{ >{\ttfamily}l<{} >{\raggedright}p{20.0em}<{} l}
+& & \kill % NB: longtable requires caption as table entry
+\caption[SWNB Output Fields]{\textbf{SWNB Output Fields}%
+\footnote{\emph{Source:} \cite{ZBP97,Zen99}}%
+\label{tbl:fld_nm_swnb}} \\
+\hline\hline \rule{0.0ex}{\hlntblhdrskp}% 
+\textrm{Name(s)} & Purpose & Units \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endfirsthead % Lines between and \endfirsthead appear at top of table
+\caption[]{(continued)} \\ % Set label for following pages
+\textrm{Name(s)} & Purpose & Units \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endhead % Previous block appears at top of every page
+\endlastfoot % Previous block appears at end of table
+\cmdidx{abs\_bb\_SAS} & Broadband absorptance of surface-atmosphere system & fraction \\[0.5ex]
+\cmdidx{abs\_bb\_atm} & Broadband absorptance of surface & fraction \\[0.5ex]
+\cmdidx{abs\_bb\_sfc} & Broadband absorptance of atmosphere & fraction \\[0.5ex]
+\cmdidx{abs\_nst\_SAS} & FSBR absorptance of surface-atmosphere system & fraction \\[0.5ex]
+\cmdidx{abs\_nst\_atm} & FSBR absorptance of surface & fraction \\[0.5ex]
+\cmdidx{abs\_nst\_sfc} & FSBR absorptance of atmosphere & fraction \\[0.5ex]
+\cmdidx{abs\_spc\_SAS} & Spectral absorptance of surface-atmosphere system & fraction \\[0.5ex]
+\cmdidx{abs\_spc\_atm} & Spectral absorptance of atmosphere & fraction \\[0.5ex]
+\cmdidx{abs\_spc\_sfc} & Spectral absorptance of surface & fraction \\[0.5ex]
+\cmdidx{alb\_sfc} & Specified Lambertian surface albedo & fraction \\[0.5ex]
+\cmdidx{alt\_cld\_btm} & Highest interface beneath all clouds in column & meter \\[0.5ex]
+\cmdidx{alt\_cld\_thick} & Thickness of region containing all clouds & meter \\[0.5ex]
+\cmdidx{alt\_ntf} & Interface altitude & meter \\[0.5ex]
+\cmdidx{alt} & Altitude & meter \\[0.5ex]
+\cmdidx{azi\_dgr} & Azimuthal angle (degrees) & degree \\[0.5ex]
+\cmdidx{azi} & Azimuthal angle (radians) & radian \\[0.5ex]
+\cmdidx{bnd} & Midpoint wavelength & meter \\[0.5ex]
+\cmdidx{flx\_abs\_atm\_rdr} & Flux absorbed in atmosphere at longer wavelengths & \wxmS \\[0.5ex]
+\cmdidx{flx\_bb\_abs\_atm} & Broadband flux absorbed by atmospheric column only & \wxmS \\[0.5ex]
+\cmdidx{flx\_bb\_abs\_sfc} & Broadband flux absorbed by surface only & \wxmS \\[0.5ex]
+\cmdidx{flx\_bb\_abs\_ttl} & Broadband flux absorbed by surface-atmosphere system & \wxmS \\[0.5ex]
+\cmdidx{flx\_bb\_abs} & Broadband flux absorbed by layer & \wxmS \\[0.5ex]
+\cmdidx{flx\_bb\_dwn\_TOA} & Broadband incoming flux at TOA (total insolation) & \wxmS \\[0.5ex]
+\cmdidx{flx\_bb\_dwn\_dff} & Diffuse downwelling broadband flux & \wxmS \\[0.5ex]
+\cmdidx{flx\_bb\_dwn\_drc} & Direct downwelling broadband flux & \wxmS \\[0.5ex]
+\cmdidx{flx\_bb\_dwn\_sfc} & Broadband downwelling flux at surface & \wxmS \\[0.5ex]
+\cmdidx{flx\_bb\_dwn} & Total downwelling broadband flux (direct$+$diffuse) & \wxmS \\[0.5ex]
+\cmdidx{flx\_bb\_net} & Net broadband flux (downwelling$-$upwelling) & \wxmS \\[0.5ex]
+\cmdidx{flx\_bb\_up} & Upwelling broadband flux & \wxmS \\[0.5ex]
+\cmdidx{flx\_nst\_abs\_atm} & FSBR flux absorbed by atmospheric column only & \wxmS \\[0.5ex]
+\cmdidx{flx\_nst\_abs\_sfc} & FSBR flux absorbed by surface only & \wxmS \\[0.5ex]
+\cmdidx{flx\_nst\_abs\_ttl} & FSBR flux absorbed by surface-atmosphere system & \wxmS \\[0.5ex]
+\cmdidx{flx\_nst\_abs} & FSBR flux absorbed by layer & \wxmS \\[0.5ex]
+\cmdidx{flx\_nst\_dwn\_TOA} & FSBR incoming flux at TOA (total insolation) & \wxmS \\[0.5ex]
+\cmdidx{flx\_nst\_dwn\_sfc} & FSBR downwelling flux at surface & \wxmS \\[0.5ex]
+\cmdidx{flx\_nst\_dwn} & Total downwelling FSBR flux (direct$+$diffuse) & \wxmS \\[0.5ex]
+\cmdidx{flx\_nst\_net} & Net FSBR flux (downwelling$-$upwelling) & \wxmS \\[0.5ex]
+\cmdidx{flx\_nst\_up} & Upwelling FSBR flux & \wxmS \\[0.5ex]
+\cmdidx{flx\_slr\_frc} & Fraction of solar flux & fraction \\[0.5ex]
+\cmdidx{flx\_spc\_abs\_SAS} & Spectral flux absorbed by surface-atmosphere system & \wxmSm \\[0.5ex]
+\cmdidx{flx\_spc\_abs\_atm} & Spectral flux absorbed by atmospheric column only & \wxmSm \\[0.5ex]
+\cmdidx{flx\_spc\_abs\_sfc} & Spectral flux absorbed by surface only & \wxmSm \\[0.5ex]
+\cmdidx{flx\_spc\_abs} & Spectral flux absorbed by layer & \wxmSm \\[0.5ex]
+\cmdidx{flx\_spc\_act\_pht\_TOA} & Spectral actinic photon flux at TOA & \nbrxmSsm \\[0.5ex]
+\cmdidx{flx\_spc\_act\_pht\_sfc} & Spectral actinic photon flux at surface & \nbrxmSsm \\[0.5ex]
+\cmdidx{flx\_spc\_dwn\_TOA} & Spectral solar insolation at TOA & \wxmSm \\[0.5ex]
+\cmdidx{flx\_spc\_dwn\_dff} & Spectral diffuse downwelling flux & \wxmSm \\[0.5ex]
+\cmdidx{flx\_spc\_dwn\_drc} & Spectral direct downwelling flux & \wxmSm \\[0.5ex]
+\cmdidx{flx\_spc\_dwn\_sfc} & Spectral solar insolation at surface & \wxmSm \\[0.5ex]
+\cmdidx{flx\_spc\_dwn} & Spectral downwelling flux & \wxmSm \\[0.5ex]
+\cmdidx{flx\_spc\_pht\_dwn\_sfc} & Spectral photon flux downwelling at surface & \nbrxmSsm \\[0.5ex]
+\cmdidx{flx\_spc\_up} & Spectral upwelling flux & \wxmSm \\[0.5ex]
+\cmdidx{frc\_ice\_ttl} & Fraction of column condensate that is ice & fraction \\[0.5ex]
+\cmdidx{htg\_rate\_bb} & Broadband heating rate & \kxs \\[0.5ex]
+\cmdidx{j\_NO2} & Photolysis rate for $\ch\NOd + \cstplk\frq \yields \OtP + \NO$ & \xs \\[0.5ex]
+\cmdidx{j\_spc\_NO2\_sfc} & Spectral photolysis rate at sfc for $\ch\NOd + \cstplk\frq \yields \OtP + \NO$ & \xsm \\[0.5ex]
+\cmdidx{lat\_dgr} & Latitude (degrees) & degree \\[0.5ex]
+\cmdidx{lcl\_time\_hr} & Local day hour & hour \\[0.5ex]
+\cmdidx{lcl\_yr\_day} & Day of year in local time & day \\[0.5ex]
+\cmdidx{levp} & Interface pressure & pascal \\[0.5ex]
+\cmdidx{lev} & Layer pressure & pascal \\[0.5ex]
+\cmdidx{mpc\_CWP} & Total column Condensed Water Path & \kgxmS \\[0.5ex]
+\cmdidx{nrg\_pht} & Energy of photon at band center & joule photon-1 \\[0.5ex]
+\cmdidx{ntn\_bb\_aa} & Broadband azimuthally averaged intensity & \wxmSsr \\[0.5ex]
+\cmdidx{ntn\_bb\_mean} & Broadband mean intensity & \wxmSsr \\[0.5ex]
+\cmdidx{ntn\_spc\_aa\_ndr\_sfc} & Spectral intensity of nadir radiation at surface & \wxmSmsr \\[0.5ex]
+\cmdidx{ntn\_spc\_aa\_ndr} & Spectral intensity of nadir radiation & \wxmSmsr \\[0.5ex]
+\cmdidx{ntn\_spc\_aa\_sfc} & Spectral intensity of radiation at surface & \wxmSmsr \\[0.5ex]
+\cmdidx{ntn\_spc\_aa\_zen\_sfc} & Spectral intensity of zenith radiation at surface & \wxmSmsr \\[0.5ex]
+\cmdidx{ntn\_spc\_aa\_zen} & Spectral intensity of zenith radiation & \wxmSmsr \\[0.5ex]
+\cmdidx{ntn\_spc\_chn} & Full spectral intensity of particular band & \wxmSmsr \\[0.5ex]
+\cmdidx{ntn\_spc\_mean} & Spectral mean intensity & \wxmSmsr \\[0.5ex]
+\cmdidx{odac\_spc\_aer} & Aerosol absorption optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odac\_spc\_bga} & Background aerosol absorption optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odac\_spc\_ice} & Liquid water absorption optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odac\_spc\_lqd} & Ice water absorption optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odal\_obs\_aer} & Layer aerosol absorption optical depth & fraction \\[0.5ex]
+\cmdidx{odal\_obs\_bga} & Layer background aerosol absorption optical depth & fraction \\[0.5ex]
+\cmdidx{odsl\_obs\_aer} & Layer aerosol scattering optical depth & fraction \\[0.5ex]
+\cmdidx{odsl\_obs\_bga} & Layer background aerosol scattering optical depth & fraction \\[0.5ex]
+\cmdidx{odxc\_obs\_aer} & Column aerosol extinction optical depth & fraction \\[0.5ex]
+\cmdidx{odxc\_obs\_bga} & Column background aerosol extinction optical depth & fraction \\[0.5ex]
+\cmdidx{odxc\_spc\_CO2} & CO2 optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odxc\_spc\_H2OH2O} & H2O dimer optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odxc\_spc\_H2O} & H2O optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odxc\_spc\_NO2} & \NOd optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odxc\_spc\_O2N2} & O2N2 optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odxc\_spc\_O2O2} & O2O2 optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odxc\_spc\_O2} & O2 optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odxc\_spc\_O3} & O3 optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odxc\_spc\_OH} & OH optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odxc\_spc\_Ray} & Rayleigh scattering optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odxc\_spc\_aer} & Aerosol extinction optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odxc\_spc\_bga} & Background aerosol extinction optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odxc\_spc\_ice} & Ice water extinction optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odxc\_spc\_lqd} & Liquid water extinction optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odxc\_spc\_ttl} & Total extinction optical depth to surface & fraction \\[0.5ex]
+\cmdidx{odxl\_obs\_aer} & Layer aerosol extinction optical depth & fraction \\[0.5ex]
+\cmdidx{odxl\_obs\_bga} & Layer background aerosol extinction optical depth & fraction \\[0.5ex]
+\cmdidx{plr\_cos} & Cosine polar angle (degrees) & fraction \\[0.5ex]
+\cmdidx{plr\_dgr} & Polar angle (degrees) & degree \\[0.5ex]
+\cmdidx{plr} & Polar angle (radians) & radian \\[0.5ex]
+\cmdidx{rfl\_bb\_SAS} & Broadband albedo of entire surface-atmosphere system & fraction \\[0.5ex]
+\cmdidx{rfl\_bb\_sfc} & Broadband albedo of surface & fraction \\[0.5ex]
+\cmdidx{rfl\_nst\_SAS} & FSBR albedo of entire surface-atmosphere system & fraction \\[0.5ex]
+\cmdidx{rfl\_nst\_sfc} & FSBR albedo of surface & fraction \\[0.5ex]
+\cmdidx{rfl\_spc\_SAS} & Spectral planetary flux reflectance & fraction \\[0.5ex]
+\cmdidx{slr\_zen\_ngl\_cos} & Cosine solar zenith angle & fraction \\[0.5ex]
+\cmdidx{tau\_prs} & Optical level (pressure) & pascal \\[0.5ex]
+\cmdidx{tau} & Optical level (optical depth) & fraction \\[0.5ex]
+\cmdidx{tpt\_ntf} & Interface temperature & kelvin \\[0.5ex]
+\cmdidx{tpt} & Layer Temperature & kelvin \\[0.5ex]
+\cmdidx{trn\_bb\_atm} & Broadband transmission of atmospheric column & fraction \\[0.5ex]
+\cmdidx{trn\_nst\_atm} & FSBR transmission of atmospheric column & fraction \\[0.5ex]
+\cmdidx{trn\_spc\_atm\_CO2} & Column transmission due to CO2 absorption & fraction \\[0.5ex]
+\cmdidx{trn\_spc\_atm\_H2OH2O} & Column transmission due to H2O dimer absorption & fraction \\[0.5ex]
+\cmdidx{trn\_spc\_atm\_H2O} & Column transmission due to H2O absorption & fraction \\[0.5ex]
+\cmdidx{trn\_spc\_atm\_NO2} & Column transmission due to \NOd absorption & fraction \\[0.5ex]
+\cmdidx{trn\_spc\_atm\_O2N2} & Column transmission due to O2-N2 absorption & fraction \\[0.5ex]
+\cmdidx{trn\_spc\_atm\_O2O2} & Column transmission due to O2-O2 absorption & fraction \\[0.5ex]
+\cmdidx{trn\_spc\_atm\_O2} & Column transmission due to O2 absorption & fraction \\[0.5ex]
+\cmdidx{trn\_spc\_atm\_O3} & Column transmission due to O3 absorption & fraction \\[0.5ex]
+\cmdidx{trn\_spc\_atm\_OH} & Column transmission due to OH absorption & fraction \\[0.5ex]
+\cmdidx{trn\_spc\_atm\_Ray} & Column transmission due to Rayleigh scattering & fraction \\[0.5ex]
+\cmdidx{trn\_spc\_atm\_aer} & Column transmission due to aerosol extinction & fraction \\[0.5ex]
+\cmdidx{trn\_spc\_atm\_bga} & Column transmission due to background aerosol extinction & fraction \\[0.5ex]
+\cmdidx{trn\_spc\_atm\_ice} & Column transmission due to ice extinction & fraction \\[0.5ex]
+\cmdidx{trn\_spc\_atm\_lqd} & Column transmission due to liquid extinction & fraction \\[0.5ex]
+\cmdidx{trn\_spc\_atm\_ttl} & Spectral flux transmission of entire column & fraction \\[0.5ex]
+\cmdidx{wvl\_ctr} & Midpoint wavelength in band & meter \\[0.5ex]
+\cmdidx{wvl\_dlt} & Width of band & meter \\[0.5ex]
+\cmdidx{wvl\_grd} & Wavelength grid & meter \\[0.5ex]
+\cmdidx{wvl\_max} & Maximum wavelength in band & meter \\[0.5ex]
+\cmdidx{wvl\_min} & Minimum wavelength in band & meter \\[0.5ex]
+\cmdidx{wvl\_obs\_aer} & Wavelength of aerosol optical depth specification & meter \\[0.5ex]
+\cmdidx{wvl\_obs\_bga} & Wavelength of background aerosol optical depth specification & meter \\[0.5ex]
+\cmdidx{wvn\_ctr} & Midpoint wavenumber in band & centimeter-1 \\[0.5ex]
+\cmdidx{wvn\_dlt} & Bandwidth in wavenumbers & centimeter-1 \\[0.5ex]
+\cmdidx{wvn\_max} & Maximum wavenumber in band & centimeter-1 \\[0.5ex]
+\cmdidx{wvn\_min} & Minimum wavenumber in band & centimeter-1 \\[0.5ex]
+\hline
+\end{longtable}
+\end{landscape} % End tbl:fld_nm_swnb
+
+Table~\ref{tbl:fld_nm_clm} summarizes the \trmdfn{fields} output by CLM.
+\begin{landscape} % Begin tbl:fld_nm_clm
+\begin{longtable}{ >{\ttfamily}l<{} >{\raggedright}p{20.0em}<{} l}
+& & \kill % NB: longtable requires caption as table entry
+\caption[CLM Output Fields]{\textbf{CLM Output Fields}%
+\footnote{\emph{Source:} \cite{ZBP97,Zen99}}%
+\label{tbl:fld_nm_clm}} \\
+\hline\hline \rule{0.0ex}{\hlntblhdrskp}% 
+\textrm{Name(s)} & Purpose & Units \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endfirsthead % Lines between and \endfirsthead appear at top of table
+\caption[]{(continued)} \\ % Set label for following pages
+\textrm{Name(s)} & Purpose & Units \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+\endhead % Previous block appears at top of every page
+\endlastfoot % Previous block appears at end of table
+\cmdidx{CO2\_vmr\_clm} & Carbon Dioxide volume mixing ratio & fraction \\[0.5ex]
+\cmdidx{N2O\_vmr\_clm} & Nitrous Oxide volume mixing ratio & fraction \\[0.5ex]
+\cmdidx{CH4\_vmr\_clm} & Methane volume mixing ratio & fraction \\[0.5ex]
+\cmdidx{CFC11\_vmr\_clm} & CFC11 volume mixing ratio & fraction \\[0.5ex]
+\cmdidx{CFC12\_vmr\_clm} & CFC12 volume mixing ratio & fraction \\[0.5ex]
+\cmdidx{RH\_ice} & Relative humidity w/r/t ice & fraction \\[0.5ex]
+\cmdidx{RH} & Relative humidity & fraction \\[0.5ex]
+\cmdidx{RH\_lqd} & Relative humidity w/r/t liquid & fraction \\[0.5ex]
+\cmdidx{alb\_sfc\_NIR\_drc} & Albedo for NIR radiation at strong zenith angles & fraction \\[0.5ex]
+\cmdidx{alb\_sfc\_NIR\_dff} & Albedo for NIR radiation at weak zenith angles & fraction \\[0.5ex]
+\cmdidx{alb\_sfc} & Prescribed surface albedo & fraction \\[0.5ex]
+\cmdidx{alb\_sfc\_vsb\_drc} & Albedo for visible radiation at strong zenith angles & fraction \\[0.5ex]
+\cmdidx{alb\_sfc\_vsb\_dff} & Albedo for visible radiation at weak zenith angles & fraction \\[0.5ex]
+\cmdidx{alt\_cld\_btm} & Highest interface beneath all clouds in column & meter \\[0.5ex]
+\cmdidx{alt\_cld\_mid} & Altitude at midpoint of all clouds in column & meter \\[0.5ex]
+\cmdidx{alt\_cld\_thick} & Thickness of region containing all clouds & meter \\[0.5ex]
+\cmdidx{alt\_cld\_top} & Lowest interface above all clouds in column & meter \\[0.5ex]
+\cmdidx{alt\_dlt} & Layer altitude thickness & meter \\[0.5ex]
+\cmdidx{alt} & Altitude & meter \\[0.5ex]
+\cmdidx{alt\_ntf} & Interface altitude & meter \\[0.5ex]
+\cmdidx{cld\_frc} & Cloud fraction & fraction \\[0.5ex]
+\cmdidx{cnc\_CO2} & CO2 concentration & \mlcxmC \\[0.5ex]
+\cmdidx{cnc\_CH4} & CH4 concentration & \mlcxmC \\[0.5ex]
+\cmdidx{cnc\_N2O} & N2O concentration & \mlcxmC \\[0.5ex]
+\cmdidx{cnc\_CFC11} & CFC11 concentration & \mlcxmC \\[0.5ex]
+\cmdidx{cnc\_CFC12} & CFC12 concentration & \mlcxmC \\[0.5ex]
+\cmdidx{cnc\_H2OH2O} & H2O dimer concentration & \mlcxmC \\[0.5ex]
+\cmdidx{cnc\_H2O} & H2O concentration & \mlcxmC \\[0.5ex]
+\cmdidx{cnc\_N2} & N2 concentration & \mlcxmC \\[0.5ex]
+\cmdidx{cnc\_NO2} & \NOd concentration & \mlcxmC \\[0.5ex]
+\cmdidx{cnc\_O2O2} & O2O2 concentration & \mlcxmC \\[0.5ex]
+\cmdidx{cnc\_O2\_cnc\_N2} & O2 number concentration times N2 number concentration & \mlcSxmSix \\[0.5ex]
+\cmdidx{cnc\_O2\_cnc\_O2} & O2 number concentration squared & \mlcSxmSix \\[0.5ex]
+\cmdidx{cnc\_O2} & O2 concentration & \mlcxmC \\[0.5ex]
+\cmdidx{cnc\_O2\_npl\_N2\_clm} & Column total O2 number concentration times N2 number path & \mlcSxmF \\[0.5ex]
+\cmdidx{cnc\_O2\_npl\_N2} & O2 number concentration times N2 number path & \mlcSxmF \\[0.5ex]
+\cmdidx{cnc\_O2\_npl\_O2\_clm} & Column total O2 number concentration times O2 number path & \mlcSxmF \\[0.5ex]
+\cmdidx{cnc\_O2\_npl\_O2\_clm\_frc} & Fraction of column total O2-O2 at or above each layer & fraction \\[0.5ex]
+\cmdidx{cnc\_O2\_npl\_O2} & O2 number concentration times O2 number path & \mlcSxmF \\[0.5ex]
+\cmdidx{cnc\_O3} & O3 concentration & \nbrxmC \\[0.5ex]
+\cmdidx{cnc\_OH} & OH concentration & \nbrxmC \\[0.5ex]
+\cmdidx{cnc\_dry\_air} & Dry concentration & \nbrxmC \\[0.5ex]
+\cmdidx{cnc\_mst\_air} & Moist air concentration & \nbrxmC \\[0.5ex]
+\cmdidx{dns\_CO2} & Density of CO2 & \kgxmC \\[0.5ex]
+\cmdidx{dns\_CH4} & Density of CH4 & \kgxmC \\[0.5ex]
+\cmdidx{dns\_N2O} & Density of N2O & \kgxmC \\[0.5ex]
+\cmdidx{dns\_CFC11} & Density of CFC11 & \kgxmC \\[0.5ex]
+\cmdidx{dns\_CFC12} & Density of CFC12 & \kgxmC \\[0.5ex]
+\cmdidx{dns\_H2OH2O} & Density of H20H2O & \kgxmC \\[0.5ex]
+\cmdidx{dns\_H2O} & Density of H2O & \kgxmC \\[0.5ex]
+\cmdidx{dns\_N2} & Density of N2 & \kgxmC \\[0.5ex]
+\cmdidx{dns\_NO2} & Density of \NOd & \kgxmC \\[0.5ex]
+\cmdidx{dns\_O2O2} & Density of O2-O2 & \kgxmC \\[0.5ex]
+\cmdidx{dns\_O2\_dns\_N2} & O2 mass concentration times N2 mass concentration & \kgSxmSix \\[0.5ex]
+\cmdidx{dns\_O2\_dns\_O2} & O2 mass concentration squared & \kgSxmSix \\[0.5ex]
+\cmdidx{dns\_O2} & Density of O2 & \kgxmC \\[0.5ex]
+\cmdidx{dns\_O2\_mpl\_N2\_clm} & Column total O2 mass concentration times N2 mass path & \kgSxmF \\[0.5ex]
+\cmdidx{dns\_O2\_mpl\_N2} & O2 mass concentration times N2 mass path & \kgSxmF \\[0.5ex]
+\cmdidx{dns\_O2\_mpl\_O2\_clm} & Column total O2 mass concentration times O2 mass path & \kgSxmF \\[0.5ex]
+\cmdidx{dns\_O2\_mpl\_O2} & O2 mass concentration times O2 mass path & \kgSxmF \\[0.5ex]
+\cmdidx{dns\_O3} & Density of O3 & \kgxmC \\[0.5ex]
+\cmdidx{dns\_OH} & Density of OH & \kgxmC \\[0.5ex]
+\cmdidx{dns\_aer} & Aerosol density & \kgxmC \\[0.5ex]
+\cmdidx{dns\_bga} & Background aerosol density & \kgxmC \\[0.5ex]
+\cmdidx{dns\_dry\_air} & Density of dry air & \kgxmC \\[0.5ex]
+\cmdidx{dns\_mst\_air} & Density of moist air & \kgxmC \\[0.5ex]
+\cmdidx{eqn\_time\_sec} & foo & second \\[0.5ex]
+\cmdidx{ext\_cff\_mss\_aer} & Aerosol mass extinction coefficient & \mSxkg \\[0.5ex]
+\cmdidx{ext\_cff\_mss\_bga} & Background aerosol mass extinction coefficient & \mSxkg \\[0.5ex]
+\cmdidx{frc\_ice} & Fraction of condensate that is ice & fraction \\[0.5ex]
+\cmdidx{frc\_ice\_ttl} & Fraction of column condensate that is ice & fraction \\[0.5ex]
+\cmdidx{frc\_str\_zen\_ngl\_sfc} & Surface fraction of strong zenith angle dependence & fraction \\[0.5ex]
+\cmdidx{gas\_cst\_mst\_air} & Specific gas constant for moist air & joule kilogram-1 kelvin-1 \\[0.5ex]
+\cmdidx{gmt\_day} & foo & day \\[0.5ex]
+\cmdidx{gmt\_doy} & foo & day \\[0.5ex]
+\cmdidx{gmt\_hr} & foo & hour \\[0.5ex]
+\cmdidx{gmt\_mnt} & foo & minute \\[0.5ex]
+\cmdidx{gmt\_mth} & foo & month \\[0.5ex]
+\cmdidx{gmt\_sec} & foo & second \\[0.5ex]
+\cmdidx{gmt\_ydy} & foo & day \\[0.5ex]
+\cmdidx{gmt\_yr} & foo & year \\[0.5ex]
+\cmdidx{grv} & Gravity & meter second-2 \\[0.5ex]
+\cmdidx{oro} & Orography flag & flag \\[0.5ex]
+\cmdidx{lat\_cos} & Cosine of latitude & fraction \\[0.5ex]
+\cmdidx{lat\_dgr} & Latitude (degrees) & degree \\[0.5ex]
+\cmdidx{lat} & Latitude (radians) & radian \\[0.5ex]
+\cmdidx{lcl\_time\_hr} & Local day hour & hour \\[0.5ex]
+\cmdidx{lcl\_yr\_day} & Day of year in local time & day \\[0.5ex]
+\cmdidx{lev} & Layer pressure & pascal \\[0.5ex]
+\cmdidx{levp} & Interface pressure & pascal \\[0.5ex]
+\cmdidx{lmt\_day} & foo & day \\[0.5ex]
+\cmdidx{lmt\_doy} & foo & day \\[0.5ex]
+\cmdidx{lmt\_hr} & foo & hour \\[0.5ex]
+\cmdidx{lmt\_mnt} & foo & minute \\[0.5ex]
+\cmdidx{lmt\_mth} & foo & month \\[0.5ex]
+\cmdidx{lmt\_sec} & foo & second \\[0.5ex]
+\cmdidx{lmt\_ydy} & foo & day \\[0.5ex]
+\cmdidx{lmt\_yr} & foo & year \\[0.5ex]
+\cmdidx{lon\_dgr} & foo & degree \\[0.5ex]
+\cmdidx{lon} & foo & radian \\[0.5ex]
+\cmdidx{lon\_sec} & foo & second \\[0.5ex]
+\cmdidx{ltst\_day} & foo & day \\[0.5ex]
+\cmdidx{ltst\_doy} & foo & day \\[0.5ex]
+\cmdidx{ltst\_hr} & foo & hour \\[0.5ex]
+\cmdidx{ltst\_mnt} & foo & minute \\[0.5ex]
+\cmdidx{ltst\_mth} & foo & month \\[0.5ex]
+\cmdidx{ltst\_sec} & foo & second \\[0.5ex]
+\cmdidx{ltst\_ydy} & foo & day \\[0.5ex]
+\cmdidx{ltst\_yr} & foo & year \\[0.5ex]
+\cmdidx{mmw\_mst\_air} & Mean molecular weight of moist air & kilogram mole-1 \\[0.5ex]
+\cmdidx{mpc\_CO2} & Mass path of CO2 in column & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_CH4} & Mass path of CH4 in column & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_N2O} & Mass path of N2O in column & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_CFC11} & Mass path of CFC11 in column & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_CFC12} & Mass path of CFC12 in column & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_CWP} & Total column Condensed Water Path & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_H2OH2O} & Mass path of H2O dimer in column & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_H2O} & Mass path of H2O in column & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_IWP} & Total column Ice Water Path & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_LWP} & Total column Liquid Water Path & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_N2} & Mass path of N2 in column & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_NO2} & Mass path of \NOd in column & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_O2O2} & Mass path of O2-O2 in column & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_O2} & Mass path of O2 in column & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_O3\_DU} & Mass path of O3 in column & Dobson \\[0.5ex]
+\cmdidx{mpc\_O3} & Mass path of O3 in column & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_OH} & Mass path of OH in column & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_aer} & Total column mass path of aerosol & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_bga} & Total column mass path of background aerosol & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_dry\_air} & Mass path of dry air in column & \kgxmS \\[0.5ex]
+\cmdidx{mpc\_mst\_air} & Mass path of moist air in column & \kgxmS \\[0.5ex]
+\cmdidx{mpl\_CO2} & Mass path of CO2 in layer & \kgxmS \\[0.5ex]
+\cmdidx{mpl\_CH4} & Mass path of CH4 in layer & \kgxmS \\[0.5ex]
+\cmdidx{mpl\_N2O} & Mass path of N2O in layer & \kgxmS \\[0.5ex]
+\cmdidx{mpl\_CFC11} & Mass path of CFC11 in layer & \kgxmS \\[0.5ex]
+\cmdidx{mpl\_CFC12} & Mass path of CFC12 in layer & \kgxmS \\[0.5ex]
+\cmdidx{mpl\_CWP} & Layer Condensed Water Path & \kgxmS \\[0.5ex]
+\cmdidx{mpl\_H2OH2O} & Mass path of H2O dimer in layer & \kgxmS \\[0.5ex]
+\cmdidx{mpl\_H2O} & Mass path of H2O in layer & \kgxmS \\[0.5ex]
+\cmdidx{mpl\_IWP} & Layer Ice Water Path & \kgxmS \\[0.5ex]
+\cmdidx{mpl\_LWP} & Layer Liquid Water Path & \kgxmS \\[0.5ex]
+\cmdidx{mpl\_N2} & Mass path of N2 in layer & \kgSxmF \\[0.5ex]
+\cmdidx{mpl\_NO2} & Mass path of \NOd in layer & \kgxmS \\[0.5ex]
+\cmdidx{mpl\_O2O2} & Mass path of O2-O2 in layer & \kgxmS \\[0.5ex]
+\cmdidx{mpl\_O2} & Mass path of O2 in layer & \kgSxmF \\[0.5ex]
+\cmdidx{mpl\_O3} & Mass path of O3 in layer & \kgxmS \\[0.5ex]
+\cmdidx{mpl\_OH} & Mass path of OH in layer & \kgxmS \\[0.5ex]
+\cmdidx{mpl\_aer} & Layer mass path of aerosol & \kgxmS \\[0.5ex]
+\cmdidx{mpl\_bga} & Layer mass path of aerosol & \kgxmS \\[0.5ex]
+\cmdidx{mpl\_dry\_air} & Mass path of dry air in layer & \kgxmS \\[0.5ex]
+\cmdidx{mpl\_mst\_air} & Mass path of moist air in layer & \kgxmS \\[0.5ex]
+\cmdidx{npc\_CO2} & Column number path of CO2 & \mlcxmS \\[0.5ex]
+\cmdidx{npc\_CH4} & Column number path of CH4 & \mlcxmS \\[0.5ex]
+\cmdidx{npc\_N2O} & Column number path of N2O & \mlcxmS \\[0.5ex]
+\cmdidx{npc\_CFC11} & Column number path of CFC11 & \mlcxmS \\[0.5ex]
+\cmdidx{npc\_CFC12} & Column number path of CFC12 & \mlcxmS \\[0.5ex]
+\cmdidx{npc\_H2OH2O} & Column number path of H2O dimer & \mlcxmS \\[0.5ex]
+\cmdidx{npc\_H2O} & Column number path of H2O & \mlcxmS \\[0.5ex]
+\cmdidx{npc\_N2} & Column number path of O2 & \mlcxmS \\[0.5ex]
+\cmdidx{npc\_NO2} & Column number path of \NOd & \mlcxmS \\[0.5ex]
+\cmdidx{npc\_O2O2} & Column number path of O2O2 & \mlcxmS \\[0.5ex]
+\cmdidx{npc\_O2} & Column number path of O2 & \mlcxmS \\[0.5ex]
+\cmdidx{npc\_O3} & Column number path of O3 & \mlcxmS \\[0.5ex]
+\cmdidx{npc\_OH} & Column number path of OH & \mlcxmS \\[0.5ex]
+\cmdidx{npc\_dry\_air} & Column number path of dry air & \mlcxmS \\[0.5ex]
+\cmdidx{npc\_mst\_air} & Column number path of moist air & \mlcxmS \\[0.5ex]
+\cmdidx{npl\_CO2} & Number path of CO2 in layer & \mlcxmS \\[0.5ex]
+\cmdidx{npl\_CH4} & Number path of CH4 in layer & \mlcxmS \\[0.5ex]
+\cmdidx{npl\_N2O} & Number path of N2O in layer & \mlcxmS \\[0.5ex]
+\cmdidx{npl\_CFC11} & Number path of CFC11 in layer & \mlcxmS \\[0.5ex]
+\cmdidx{npl\_CFC12} & Number path of CFC12 in layer & \mlcxmS \\[0.5ex]
+\cmdidx{npl\_H2OH2O} & Number path of H2O dimer in layer & \mlcxmS \\[0.5ex]
+\cmdidx{npl\_H2O} & Number path of H2O in layer & \mlcxmS \\[0.5ex]
+\cmdidx{npl\_N2} & Number path of N2 in layer & \mlcSxmF \\[0.5ex]
+\cmdidx{npl\_NO2} & Number path of \NOd in layer & \mlcxmS \\[0.5ex]
+\cmdidx{npl\_O2O2} & Number path of O2-O2 in layer & \mlcxmS \\[0.5ex]
+\cmdidx{npl\_O2} & Number path of O2 in layer & \mlcSxmF \\[0.5ex]
+\cmdidx{npl\_O3} & Number path of O3 in layer & \mlcxmS \\[0.5ex]
+\cmdidx{npl\_OH} & Number path of OH in layer & \mlcxmS \\[0.5ex]
+\cmdidx{npl\_dry\_air} & Number path of dry air in layer & \mlcxmS \\[0.5ex]
+\cmdidx{npl\_mst\_air} & Number path of moist air in layer & \mlcxmS \\[0.5ex]
+\cmdidx{odxc\_obs\_aer} & Column aerosol extinction optical depth & fraction \\[0.5ex]
+\cmdidx{odxc\_obs\_bga} & Column background aerosol extinction optical depth & fraction \\[0.5ex]
+\cmdidx{odxl\_obs\_aer} & Layer aerosol extinction optical depth & fraction \\[0.5ex]
+\cmdidx{odxl\_obs\_bga} & Layer background aerosol extinction optical depth & fraction \\[0.5ex]
+\cmdidx{oneD\_foo} &  &  \\[0.5ex]
+\cmdidx{ppr\_CO2} & Partial pressure of CO2 & pascal \\[0.5ex]
+\cmdidx{ppr\_CH4} & Partial pressure of CH4 & pascal \\[0.5ex]
+\cmdidx{ppr\_N2O} & Partial pressure of N2O & pascal \\[0.5ex]
+\cmdidx{ppr\_CFC11} & Partial pressure of CFC11 & pascal \\[0.5ex]
+\cmdidx{ppr\_CFC12} & Partial pressure of CFC12 & pascal \\[0.5ex]
+\cmdidx{ppr\_H2OH2O} & Partial pressure of H2O dimer & pascal \\[0.5ex]
+\cmdidx{ppr\_H2O} & Partial pressure of H2O & pascal \\[0.5ex]
+\cmdidx{ppr\_N2} & Partial pressure of N2 & pascal \\[0.5ex]
+\cmdidx{ppr\_NO2} & Partial pressure of \NOd & pascal \\[0.5ex]
+\cmdidx{ppr\_O2O2} & Partial pressure of O2O2 & pascal \\[0.5ex]
+\cmdidx{ppr\_O2} & Partial pressure of O2 & pascal \\[0.5ex]
+\cmdidx{ppr\_O3} & Partial pressure of O3 & pascal \\[0.5ex]
+\cmdidx{ppr\_OH} & Partial pressure of OH & pascal \\[0.5ex]
+\cmdidx{ppr\_dry\_air} & Partial pressure of dry air & pascal \\[0.5ex]
+\cmdidx{prs\_cld\_btm} & Highest interface beneath all clouds in column & pascal \\[0.5ex]
+\cmdidx{prs\_cld\_mid} & Pressure at midpoint of all clouds in column & pascal \\[0.5ex]
+\cmdidx{prs\_cld\_thick} & Thickness of region containing all clouds & meter \\[0.5ex]
+\cmdidx{prs\_cld\_top} & Lowest interface above all clouds in column & pascal \\[0.5ex]
+\cmdidx{prs\_dlt} & Layer pressure thickness & pascal \\[0.5ex]
+\cmdidx{prs} & Pressure & pascal \\[0.5ex]
+\cmdidx{prs\_ntf} & Interface pressure & pascal \\[0.5ex]
+\cmdidx{prs\_sfc} & Surface pressure & pascal \\[0.5ex]
+\cmdidx{q\_CO2} & Mass mixing ratio of CO2 & \kgxkg \\[0.5ex]
+\cmdidx{q\_CH4} & Mass mixing ratio of CH4 & \kgxkg \\[0.5ex]
+\cmdidx{q\_N2O} & Mass mixing ratio of N2O & \kgxkg \\[0.5ex]
+\cmdidx{q\_CFC11} & Mass mixing ratio of CFC11 & \kgxkg \\[0.5ex]
+\cmdidx{q\_CFC12} & Mass mixing ratio of CFC12 & \kgxkg \\[0.5ex]
+\cmdidx{q\_H2OH2O} & Water vapor dimer mass mixing ratio & \kgxkg \\[0.5ex]
+\cmdidx{q\_H2OH2O\_rcp\_q\_H2O} & Ratio of dimer mmr to monomer mmr & fraction \\[0.5ex]
+\cmdidx{q\_H2O} & Water vapor mass mixing ratio & fraction \\[0.5ex]
+\cmdidx{q\_N2} & Mass mixing ratio of N2 & \kgxkg \\[0.5ex]
+\cmdidx{q\_NO2} & Mass mixing ratio of \NOd & \kgxkg \\[0.5ex]
+\cmdidx{q\_O2O2} & Ozone mass mixing ratio & \kgxkg \\[0.5ex]
+\cmdidx{q\_O2} & Mass mixing ratio of O2 & \kgxkg \\[0.5ex]
+\cmdidx{q\_O3} & Ozone mass mixing ratio & \kgxkg \\[0.5ex]
+\cmdidx{q\_OH} & Mass mixing ratio of OH & \kgxkg \\[0.5ex]
+\cmdidx{qst\_H2O\_ice} & Saturation mixing ratio w/r/t ice & \kgxkg \\[0.5ex]
+\cmdidx{qst\_H2O\_lqd} & Saturation mixing ratio w/r/t liquid & \kgxkg \\[0.5ex]
+\cmdidx{r\_CO2} & Dry-mass mixing ratio (r) of CO2 & \kgxkg \\[0.5ex]
+\cmdidx{r\_CH4} & Dry-mass mixing ratio (r) of CH4 & \kgxkg \\[0.5ex]
+\cmdidx{r\_N2O} & Dry-mass mixing ratio (r) of N2O & \kgxkg \\[0.5ex]
+\cmdidx{r\_CFC11} & Dry-mass mixing ratio (r) of CFC11 & \kgxkg \\[0.5ex]
+\cmdidx{r\_CFC12} & Dry-mass mixing ratio (r) of CFC12 & \kgxkg \\[0.5ex]
+\cmdidx{r\_H2OH2O} & Dry-mass mixing ratio (r) of H2O dimer & \kgxkg \\[0.5ex]
+\cmdidx{r\_H2O} & Dry-mass mixing ratio (r) of H2O & \kgxkg \\[0.5ex]
+\cmdidx{r\_N2} & Dry-mass mixing ratio (r) of N2 & \kgxkg \\[0.5ex]
+\cmdidx{r\_NO2} & Dry-mass mixing ratio (r) of \NOd & \kgxkg \\[0.5ex]
+\cmdidx{r\_O2O2} & Dry-mass mixing ratio (r) of O2O2 & \kgxkg \\[0.5ex]
+\cmdidx{r\_O2} & Dry-mass mixing ratio (r) of O2 & \kgxkg \\[0.5ex]
+\cmdidx{r\_O3} & Dry-mass mixing ratio (r) of O3 & \kgxkg \\[0.5ex]
+\cmdidx{r\_OH} & Dry-mass mixing ratio (r) of OH & \kgxkg \\[0.5ex]
+\cmdidx{rds\_fct\_ice} & Effective radius of ice crystals & micron \\[0.5ex]
+\cmdidx{rds\_fct\_lqd} & Effective radius of liquid droplets & micron \\[0.5ex]
+\cmdidx{rgh\_len} & Aerodynamic roughness length & meter \\[0.5ex]
+\cmdidx{scl\_hgt} & Local scale height & meter \\[0.5ex]
+\cmdidx{sfc\_ems} & Surface emissivity & fraction \\[0.5ex]
+\cmdidx{slr\_azi\_dgr} & Solar azimuth angle & degree \\[0.5ex]
+\cmdidx{slr\_crd\_gmm\_dgr} & foo & degree \\[0.5ex]
+\cmdidx{slr\_cst} & Solar constant & \wxmS \\[0.5ex]
+\cmdidx{slr\_dcl\_dgr} & Solar declination & degree \\[0.5ex]
+\cmdidx{slr\_dmt\_dgr} & Diameter of solar disc & degree \\[0.5ex]
+\cmdidx{slr\_dst\_au} & Earth-sun distance & astronomical units \\[0.5ex]
+\cmdidx{slr\_elv\_dgr} & Solar elevation & degree \\[0.5ex]
+\cmdidx{slr\_flx\_TOA} & Solar flux at TOA & \wxmS \\[0.5ex]
+\cmdidx{slr\_flx\_nrm\_TOA} & Solar constant corrected for orbital
+position & \wxmS \\[0.5ex]
+\cmdidx{slr\_hr\_ngl\_dgr} & Solar hour angle & degree \\[0.5ex]
+\cmdidx{slr\_rfr\_ngl\_dgr} & Solar refraction angle & degree \\[0.5ex]
+\cmdidx{slr\_rgt\_asc\_dgr} & Solar right ascension & degree \\[0.5ex]
+\cmdidx{slr\_zen\_ngl\_cos} & Cosine solar zenith angle & fraction \\[0.5ex]
+\cmdidx{slr\_zen\_ngl\_dgr} & Solar zenith angle in degrees & degree \\[0.5ex]
+\cmdidx{slr\_zen\_ngl} & Solar zenith angle & radian \\[0.5ex]
+\cmdidx{snow\_depth} & Snow depth & meter \\[0.5ex]
+\cmdidx{spc\_heat\_mst\_air} & Specific heat at constant pressure of moist air & joule kilogram-1 kelvin-1 \\[0.5ex]
+\cmdidx{time\_lmt} & Seconds between 1969 and LMT of simulation & second \\[0.5ex]
+\cmdidx{time\_ltst} & Seconds between 1969 and LTST of simulation & second \\[0.5ex]
+\cmdidx{time\_unix} & Seconds between 1969 and GMT of simulation & second \\[0.5ex]
+\cmdidx{tpt\_cls} & Layer temperature (Celsius) & celsius \\[0.5ex]
+\cmdidx{tpt\_cls\_ntf} & Interface temperature (Celsius) & celsius \\[0.5ex]
+\cmdidx{tpt} & Layer Temperature & kelvin \\[0.5ex]
+\cmdidx{tpt\_ntf} & Interface temperature & kelvin \\[0.5ex]
+\cmdidx{tpt\_sfc} & Temperature of air in contact with surface & kelvin \\[0.5ex]
+\cmdidx{tpt\_skn} & Temperature of surface & kelvin \\[0.5ex]
+\cmdidx{tpt\_vrt} & Virtual temperature & kelvin \\[0.5ex]
+\cmdidx{vmr\_CO2} & Volume mixing ratio of CO2 & number number-1 \\[0.5ex]
+\cmdidx{vmr\_CH4} & Volume mixing ratio of CH4 & number number-1 \\[0.5ex]
+\cmdidx{vmr\_N2O} & Volume mixing ratio of N2O & number number-1 \\[0.5ex]
+\cmdidx{vmr\_CFC11} & Volume mixing ratio of CFC11 & number number-1 \\[0.5ex]
+\cmdidx{vmr\_CFC12} & Volume mixing ratio of CFC12 & number number-1 \\[0.5ex]
+\cmdidx{vmr\_H2OH2O} & Volume mixing ratio of H2O dimer & number number-1 \\[0.5ex]
+\cmdidx{vmr\_H2O} & Volume mixing ratio of H2O & number number-1 \\[0.5ex]
+\cmdidx{vmr\_N2} & Volume mixing ratio of N2 & number number-1 \\[0.5ex]
+\cmdidx{vmr\_NO2} & Volume mixing ratio of \NOd & number number-1 \\[0.5ex]
+\cmdidx{vmr\_O2O2} & Volume mixing ratio of O2O2 & number number-1 \\[0.5ex]
+\cmdidx{vmr\_O2} & Volume mixing ratio of O2 & number number-1 \\[0.5ex]
+\cmdidx{vmr\_O3} & Volume mixing ratio of O3 & number number-1 \\[0.5ex]
+\cmdidx{vmr\_OH} & Volume mixing ratio of OH & number number-1 \\[0.5ex]
+\cmdidx{wvl\_obs\_aer} & Wavelength of aerosol optical depth specification & meter \\[0.5ex]
+\cmdidx{wvl\_obs\_bga} & Wavelength of background aerosol optical depth specification & meter \\[0.5ex]
+\cmdidx{xnt\_fac} & Eccentricity factor & fraction \\[0.5ex]
+\hline
+\end{longtable}
+\end{landscape} % End tbl:fld_nm_clm
+
+% Bibliography
+%\renewcommand\refname{\normalsize Publications}
+%\nocite{ZeK971}
+\bibliographystyle{agu04}
+\bibliography{bib}
+\printindex % Requires makeidx KoD95 p. 221
+
+\csznote{ 
+% Usage: Place usage here at end of file so comment character % not needed
+cd ~/crr;make -W psd.tex psd.dvi psd.ps psd.pdf psd.txt;cd -
+
+# dvips -Ppdf -G0 -o ${DATA}/ps/psd.ps ~/crr/psd.dvi;ps2pdf ${DATA}/ps/psd.ps ${DATA}/ps/psd.pdf
+# cd ~/crr;texcln psd;make psd.pdf;bibtex psd;makeindex psd;make psd.pdf;bibtex psd;makeindex psd;make psd.pdf;cd -
+scp -p ~/crr/psd.tex ~/crr/psd.txt ~/crr/psd.dvi ${DATA}/ps/psd.ps ${DATA}/ps/psd.pdf dust.ess.uci.edu:/var/www/html/facts/psd
+
+# NB: latex2html works well on psd.tex
+# cd ~/crr;latex2html -dir /var/www/html/facts/psd psd.tex
+# NB: tth works poorly on psd.tex
+# cd ~/crr;tth -a -Lpsd -p./:${TEXINPUTS}:${BIBINPUTS} < psd.tex > psd.html
+# scp psd.html dust.ess.uci.edu:/var/www/html/facts/psd
+# NB: tex4ht works well on psd.tex
+# cd ~/crr;htlatex psd.tex # Works OK, index not linked
+cd ~/crr;htlatex psd.tex;makeindex -o psd.ind psd.4dx
+cd ~/crr;scp psd*.css psd*.html dust.ess.uci.edu:/var/www/html/facts/psd
+# NB: tex4moz works poorly on psd.tex
+cd ~/crr;/usr/share/tex4ht/mzlatex psd.tex
+cd ~/crr;scp psd*.css psd*.html psd*.xml dust.ess.uci.edu:/var/www/html/facts/psd
+} % end csznote on usage
+
+\end{document}

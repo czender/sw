@@ -1,0 +1,151 @@
+#! /bin/sh
+#-----------------------------------------------------------------------
+# $Time-stamp: "1996/09/06 15:19:14 thibaud@kether.cgd.ucar.edu"$
+#-----------------------------------------------------------------------
+# killproc
+#
+# Kill some processes knowing their names rather then their Pid's
+#
+# Usage:
+# example% killproc [-s] process_name
+#
+# [-s] shows the process which would have been killed
+#
+# Note:
+# =====
+# As the PId, which is ultimately needed to actually kill a process,
+# is determined by extracting the PId from all the lines of a long
+# listing of all the processes running on the system containing as a
+# string the argument to the command, one can shoot oneself in the
+# foot quite easily:
+#
+# to kill all the `tcsh' on the system:
+# example% killproc tcsh
+#
+# to kill all the processes belonging to $USER:
+# example% killproc $USER
+#
+# Hopefully the `kill' command will only sent the SIGKILL signal to
+# the processes belonging to the user. `root' should think before
+# using `killproc'.
+#
+# Original version: F.Thibaud  15.07.1988
+# Modified: C. Zender 1999/11/03
+#-----------------------------------------------------------------------
+
+# Name of the script
+SCRIPT=`basename ${0}`
+# How to use this script
+USAGE="usage: ${SCRIPT} [-s] process_name[s]."
+# Number of arguments
+NARGS=$#
+# Return status
+STATUS=0
+# Show rather then kill option
+SHOW=0
+
+# Test if SYSTYPE is defined; we need it to use the right options for
+# `ps'
+#-----------------------------------------------------------------------
+if [ ! "${SYSTYPE-}" ]; then
+	echo "${SCRIPT}: SYSTYPE is undefined."
+	exit 1
+fi
+
+# Determine the options for `ps' based on SYSTYPE
+#------------------------------------------------
+if [ "${SYSTYPE}" = "SVR3" -o "${SYSTYPE}" = "SVR4" -o "${SYSTYPE}" = "HPUX" ]; then
+	PS_OPTS="-ef"
+elif [ "${SYSTYPE}" = "BSD" ]; then
+	PS_OPTS="auxwww"
+else
+	echo "${SCRIPT}: SYSTYPE \"${SYSTYPE}\" is an unknown system type;"
+	echo "${SCRIPT}: known system types are SVR3, SVR4, HPUX, BSD."
+	exit 1
+fi
+
+# Test for arguments
+#-------------------
+if [ "${1}" = "" ]; then
+	echo ${USAGE}
+	exit 2
+fi
+
+# Process options
+#----------------
+if [ "${1}" = "-s" ]; then
+	SHOW=1
+	NARGS=`expr $NARGS - 1`
+	shift
+fi
+
+# Test for remaining arguments
+#-----------------------------
+if [ "${1}" = "" ]; then
+	echo ${USAGE}
+	exit 3
+fi
+
+# Main routine to do the job
+#---------------------------
+doit () {
+	# List processes and find the PId of the process to kill
+	#-------------------------------------------------------
+	if [ ${SHOW} -eq 0 ]; then
+# csz++
+# 19991104 Replace FPT's command with architecture-independent command
+	if [ "${PVM_ARCH}" = "SGIMP" -o "${PVM_ARCH}" = "SGIMP64" ]; then
+		KILLED=`ps ${PS_OPTS} | grep "$1" | grep -v "grep" | grep -v "killproc" | cut -c13-19`
+	elif [ "${PVM_ARCH}" = "SUNMP" -o "${PVM_ARCH}" = "SUN4SOL2" ]; then
+		KILLED=`ps ${PS_OPTS} | grep "$1" | grep -v "grep" | grep -v "killproc" | cut -c9-14`
+	else
+		KILLED=`ps ${PS_OPTS} | grep "$1" | grep -v "grep" | grep -v "killproc" | cut -c9-14`
+	fi
+# csz--
+		# Maybe this process has died already
+		#------------------------------------
+		if [ "${KILLED}" = "" ]; then
+			echo "${SCRIPT}: \"${1}\" does not have a PId."
+			return 1
+		else
+			KILLED=`echo ${KILLED} | sed -e 's?\$? ?g'`
+			echo "${SCRIPT}: killing \"${1}\"; PId[s]: ${KILLED}"
+			kill -9 ${KILLED}
+		fi
+	elif [ ${SHOW} -eq 1 ]; then
+		KILLED=`ps ${PS_OPTS} | grep "$1" | grep -v "grep" | grep -v "killproc"`
+		if [ "${KILLED}" = "" ]; then
+			echo "${SCRIPT}: \"${1}\" does not have a PId."
+			return 1
+		else
+			echo "${SCRIPT}: would kill the following process[es]:"
+			echo "${KILLED}"
+		fi
+	fi;
+}
+
+# Loop over arguments, killing them one by one...
+#------------------------------------------------
+while [ ! ${NARGS} -eq 0 ]; do
+	doit $1
+	STATUS=`expr $STATUS + $?`
+	shift
+	NARGS=`expr $NARGS - 1`
+done
+
+exit $STATUS
+
+#-----------------------------------------------------------------------
+# RCS identification:
+# $Author: zender $; $Locker:  $
+# $Revision$; $Date$ GMT; $State: Exp $
+# $Source: /home/zender/cvs/sh/killproc,v $
+#-----------------------------------------------------------------------
+# For GNU Emacs:
+# Local Variables:
+# comment-column: 40
+# comment-start: "# "
+# tab-width: 4
+# End:
+#-----------------------------------------------------------------------
+

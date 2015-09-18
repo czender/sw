@@ -1,0 +1,209 @@
+% $Id$ -*-LaTeX-*-
+
+% Purpose: Seminar on dust radiative forcing
+% PDFscreen example: http://www.cgd.ucar.edu/stats/LATEX
+
+% Usage: 
+% cd ~/tex;pdflatex smn_cit.tex;cd -
+% cd ~/tex;make -W smn_cit.tex smn_cit.dvi smn_cit.ps smn_cit.pdf;cd -
+% cd ~/tex;pdflatex smn_cit.tex;thumbpdf smn_cit;pdflatex smn_cit.tex;cd -
+% cd ~/tex;make -W smn_cit.tex smn_cit.pdf;cd -
+
+\documentclass[12pt]{article}
+
+% Standard packages
+\usepackage{ifpdf} % Define \ifpdf
+\ifpdf % PDFLaTeX
+\pdfcompresslevel=9
+%\usepackage{thumbpdf} % Generate thumbnails
+\usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
+\fi % !PDFLaTeX
+\usepackage{xspace} % Unknown
+\usepackage{colortbl} % Unknown
+
+% pdfscreen uses hyperref to set margins for screen mode
+% pdfscreen calls hyperref internally if hyperref is not already invoked
+% pdfscreen also loads packages graphicx, color, calc, and comment
+% print 	Print version
+% screen 	Screen version
+% panelright	Navigation panel on RHS
+% paneltoc	Table of Contents in panel
+% sectionbreak	Introduces pagebreak before a sections
+% code		Commands producing fancy verbatim-like effects
+\usepackage[screen,code,panelright,paneltoc,sectionbreak]{pdfscreen}
+
+% Personal packages
+\usepackage{csz} % Library of personal definitions (\ifpdf...)
+\usepackage{abc} % Alphabet as three letter macros
+\usepackage{dmn} % Dimensional units
+\usepackage{chm} % Chemistry
+\usepackage{dyn} % Fluid dynamics
+\usepackage{aer} % Aerosol physics
+\usepackage{rt} % Commands specific to radiative transfer
+
+% Commands which must be executed in preamble
+
+% Commands specific to this file
+\newcommand{\pdfscreen}{\texttt{\small\color{section1}pdfscreen}\xspace} % Pretty format for pdfscreen string
+
+% Float placement
+% NB: Placement of figures is very sensitive to \textfraction
+\renewcommand\textfraction{0.0} % Minimum fraction of page that is text
+\setcounter{totalnumber}{73} % Maximum number of floats per page
+\setcounter{topnumber}{73} % Maximum number of floats at top of page
+\setcounter{dbltopnumber}{73} % Maximum number of floats at top of two-column page
+\setcounter{bottomnumber}{73} % Maximum number of floats at bottom of page
+\renewcommand\topfraction{1.0} % Maximum fraction of top of page occupied by floats
+\renewcommand\dbltopfraction{1.0} % Maximum fraction of top of two-column page occupied by floats
+\renewcommand\bottomfraction{1.0} % Maximum fraction of bottom of page occupied by floats
+\renewcommand\floatpagefraction{1.0} % Fraction of float page filled with floats
+\renewcommand\dblfloatpagefraction{1.0} % Fraction of double column float page filled with floats
+
+% Screen geometry
+\begin{screen}
+% These commands are all defined by pdfscreen
+\margins{0.65in}{0.65in}{0.65in}{0.65in} % Left, right, top, bottom margins
+%\emblema{logoLUC.png} % Location of graphic file for pdfscreen navigation panel
+\screensize{6.25in}{8in} % Screen dimensions of PDF output
+%\urlid{http://www.ess.uci.edu/~zender} % Homepage button in navigation panel points here
+\changeoverlay % Cycle through default overlays, repeating every tenth section
+\paneloverlay{but.pdf} % Overlay for navigation panel
+\overlay{/data/zender/ps/toms_199807_aer_idx_331_360.pdf} % Overlay for screen area
+\def\pfill{\vskip6pt}
+\end{screen}
+
+% Commands performed only in print section
+\begin{print}
+\notesname{Notes:} % String appearing in notes ovals adjacent to slides
+% Redefine section formatting in print mode
+\makeatletter
+\def\@seccntformat#1{\llap{\scshape\color{section\thesection@level}\csname the#1\endcsname.\hspace*{6pt}}}
+\makeatother
+\end{print}
+
+\hypersetup{ % A command provided by \hyperref
+pdftitle={Foo},
+pdfsubject={Foo},
+pdfauthor={Charlie Zender},
+pdfkeywords={aer mnr dst}
+pdfpagemode={FullScreen}
+} % end \hypersetup
+
+\begin{document} % End preamble
+
+% Title for screen mode
+\begin{screen}
+\title{\color{section0}\Huge Understanding the Global Distribution and
+Radiative Forcing of Mineral Dust Aerosol}
+\end{screen}
+
+% Title for print mode
+\begin{print}
+\title{\Huge\texttt{Understanding the Global Distribution and
+Radiative Forcing of Mineral Dust Aerosol}}
+\end{print}
+
+\author{
+\color{section1}\Large
+\href{http://www.ess.uci.edu/~zender}{Charles~S.~Zender}
+{\small\href{mailto:zender@uci.edu}{\color{section1}\texttt{<zender@uci.edu>}}}\\
+\href{http://www.ess.uci.edu}{Department of Earth System Science}\\
+\href{http://www.uci.edu}{University of California, Irvine}\\
+} % end author
+
+\pagedissolve{Split /D 2 /Dm /H /M /O} % pagedissolve options in pdfscreen manual p. 9
+
+\date{} % Empty braces turns off date
+\maketitle
+\begin{screen}
+\vfill
+\end{screen}
+
+\begin{abstract}
+\noindent Radiative Forcing by mineral dust may be important
+\end{abstract}
+
+% Do not use \tableofcontents command in document when paneltoc is option
+\begin{print}
+\tableofcontents
+\end{print}
+\begin{screen}
+\vfill
+\end{screen}
+
+\section[Outline]{Outline}
+\begin{itemize}
+\item Observed Distribution
+\item Physical processes
+\item Radiative Forcing
+\item Biogeochemical Implications
+\end{itemize}
+\vfill
+
+\section[IPCC Forcing]{IPCC Forcing}
+\begin{figure*}
+\begin{center}
+\includegraphics[angle=270,height=0.7\vsize]{ipcc_rad_frc}\vfill
+\end{center}
+\end{figure*}
+\vfill
+
+\section[Observed Distribution]{Observed Distribution}
+\pagedissolve{Glitter} % pagedissolve options in pdfscreen manual p. 9
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=0.5\hsize]{toms_1998_1202_aer_idx_331_360}%
+\includegraphics*[width=0.5\hsize]{toms_1998_0608_aer_idx_331_360}%
+
+\includegraphics*[width=0.5\hsize]{toms_1998_0305_aer_idx_331_360}%
+\includegraphics*[width=0.5\hsize]{toms_1998_0911_aer_idx_331_360}%
+\end{center}
+\end{figure*}
+\vfill
+
+\section{Dry Deposition Parameterization}
+\pagedissolve{} % pagedissolve options in pdfscreen manual p. 9
+\begin{eqnarray}
+\flxdps & = & - \vlcdps \cnc \\ % SeP97 p. 958 (19.1)
+\label{eqn:flx_dps_dfn}
+\vlcdps & = & \vlctrb + \vlcgrv \nonumber \\
+\label{eqn:vlc_dps_dfn}
+& = & \frac{1}{\rssaer + \rsslmn + \rssaer \rsslmn \vlcgrv } + \vlcgrv \\
+\label{eqn:rss_dps_dfn}
+\rsslmn & = & \left\{
+\begin{array}{ >{\displaystyle}l<{} @{\quad:\quad}l}
+\frac{1}{\wndfrc ( \shmnbr^{-2/3} + 10^{-3/\stknbr} ) } & \mbox{Solid surfaces} \\
+\frac{1}{\wndfrc ( \shmnbr^{-1/2} + 10^{-3/\stknbr} ) } & \mbox{Liquid surfaces}
+\end{array} \right.
+\label{eqn:rss_lmn_dfn}
+\end{eqnarray}
+\vfill
+
+\section{Size Sensitivity of Dry Deposition}
+Dry deposition velocity $\vlcdps$ (\cmxs) as a function of aerosol
+size $\dmtprt$ (\um), and surface roughness length $\rghmmn$ (cm).
+\begin{figure*}
+\includegraphics[height=1.0\vsize]{vlc_dps_aer}\vfill
+\caption[Dry Deposition Velocity]{
+Dry deposition velocity $\vlcdps$ (\cmxs) as a function of aerosol
+size $\dmtprt$ (\um), and surface roughness length $\rghmmn$ (cm).
+Shown are the total dry deposition velocity $\vlcdps$ (solid), 
+the gravitational settling velocity $\vlcgrv$ (dashed), and the
+turbulent velocity $\vlctrb$ (dotted).
+\label{fgr:vlc_dps_aer}}
+\end{figure*}
+\vfill
+\clearpage
+
+\begin{slide}
+\section[Slides]{Slides}
+Slide format--do things look bigger?
+\begin{itemize}
+\item Yes, but slides in screen format have this distracting box next
+to them
+\end{itemize}
+\end{slide}
+\vfill
+
+\end{document}
+

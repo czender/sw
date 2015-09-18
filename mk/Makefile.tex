@@ -1,0 +1,207 @@
+# $Id$ -*-Makefile-*-
+
+# Purpose: Makefile for TeX/LaTeX/PDFTeX/PDFLaTeX document processing
+
+# Usage:
+# Put following line in Makefile in local source directory
+# include ${HOME}/mk/Makefile.tex
+
+ifndef ${BIBTEX}
+ BIBTEX := bibtex
+endif
+ifndef ${DVIPS}
+# See below for notes on dvips and DVIPSFLAGS
+ DVIPS := dvips
+endif
+ifndef ${GZIP}
+ GZIP := gzip
+endif
+ifndef LATEX
+# --src-specials embeds inverse search information in DVI file
+# Emacs can use inverse search information search DVI files
+ LATEX := latex --src-specials
+endif # endif LATEX
+ifndef ${LATEX2HTML}
+ LATEX2HTML := latex2html
+endif
+ifndef ${MAKEINDEX}
+ MAKEINDEX := makeindex
+endif
+ifndef ${PDFLATEX}
+# -shell-escape enables epstopdf.sty to run epstopdf 
+ PDFLATEX := pdflatex -shell-escape
+endif
+# http://www.cs.wisc.edu/~ghost/doc/AFPL/7.04/Ps2pdf.htm
+ifndef ${PS2PDF}
+ PS2PDF := 'ps2pdf -dMaxSubsetPct=100 -dCompatibilityLevel=1.2 -dSubsetFonts=true -dEmbedAllFonts=true -sAutoRotatePages=PageByPage -sColorConversionStrategy=LeaveColorUnchanged'
+# An alternative posted to comp.text.tex 20040825
+# PS2PDF := gs -dSAFER -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sPAPERSIZE=letter -dPDFSETTINGS=/printer -dCompatibilityLevel=1.3 -dMaxSubsetPct=100 -dSubsetFonts=true -dEmbedAllFonts=true -sOutputFile=myfile.pdf myfile.ps
+endif
+ifndef ${PSDRAFT}
+ PSDRAFT := psdraft
+endif
+ifndef ${TEX}
+ TEX := tex
+endif
+ifndef ${THB}
+ THB := Y
+endif
+ifndef ${THUMBPDF}
+ THUMBPDF := thumbpdf
+endif
+ifndef ${UNTEX}
+ UNTEX := untex
+endif
+ifndef ${PDFTOTEXT}
+ PDFTOTEXT := pdftotext
+endif
+ifndef ${OPTS}
+ OPTS := 
+endif
+
+ifndef ${DVIPSFLAGS}
+# Theoretically, -Ppdf causes dvips to produce nice scalable fonts rather than bitmap fonts
+# My experience is that -Ppdf produces worse output (on screen) in gv
+# Some European distributions default to A4 papertype
+# -t letter: Set papertype to letter 
+# Most documents use a combination of fonts.
+# Type 1 fonts 
+# Type 3 fonts.
+# 
+# -Ppdf: Convert everything to Type 1 fonts. Looks great in acroread, OK in ghostview.
+# Type 3 fonts look great in acroread and great in ghostview.
+# -G0: Suppress implicit switch activated by -Ppdf causing weird ligatures comp.text.tex 20021010
+ DVIPSFLAGS := -t letter -Ppdf -G0
+endif
+ifeq (${OPTS},L)
+ DVIPSFLAGS += -t landscape
+endif
+
+# Disable standard pattern rules
+%.dvi: %.tex
+
+# Do not delete following targets
+.PRECIOUS: %.aux %.bbl %.eps %.ind
+
+# Handle citations for bibliography
+# .aux rule is long and sophisticated
+%.aux: %.tex
+# \\nonstopmode causes LaTeX to keep running even if errors are encountered
+# It seems counterproductive to run in \\nonstopmode, however since errors are hard to notice
+# Where are all these modes documented?
+#	@${LATEX} \\nonstopmode \\input{$*}
+	@${LATEX} \\input{$*}
+# Look for citations and ensure grep never returns an error code
+	@grep "^\\\\citation" *.aux > .btmp.new || true
+# If citations are unchanged, do nothing, otherwise replace .btmp file to make sure Bibtex will be run
+	@if ( diff .btmp.new .btmp >& /dev/null ); then rm .btmp.new; else mv .btmp.new .btmp; fi
+# If numbering is unchanged, do nothing, otherwise replace .itmp file to make sure makeindex will be run
+	@if [ -f $*.idx ]; then cp $*.idx .itmp.new; else touch .itmp.new; fi
+	@if ( diff .itmp.new .itmp >& /dev/null ); then rm .itmp.new; else mv .itmp.new .itmp; fi
+
+.btmp:
+
+%.bbl: ${BIBFILES} .btmp
+# Only use BibTeX if \bibliography occurs in document
+# In that case, run BibTeX and recompile
+# .btmp is touched to prevent useless making next time
+	@if ( grep "^\\\\bibliography{" $*.tex > /dev/null ); then ${BIBTEX} $*; touch .rerun; fi
+	@touch .btmp
+
+.itmp:
+
+%.ind: .itmp
+	@if [ -f $*.idx ]; then ${MAKEINDEX} $*; touch .rerun; touch .itmp; fi
+
+%.dvi: %.aux %.ind %.bbl
+# Make sure DVI file exists; if not then recompile
+	@if [ ! -f $*.dvi ]; then touch .rerun; fi
+	@if [ -f .rerun ]; then rm .rerun; ${LATEX} \\input{$*}; else ${MAKE} $*.aux; fi
+# While references et al. are changed then recompile
+	@while ( grep Rerun $*.log > /dev/null ); do ${LATEX} \\input{$*}; done
+	@if [ -f $*.ind ]; then touch $*.ind; fi
+
+# %.dvi : %.tex
+# 	-${LATEX} $*.tex
+# 	-${BIBTEX} $*
+# 	-${MAKEINDEX} $*
+
+%.html : %.tex
+	-mkdir ${HOME}/public_html/$*
+	-${LATEX2HTML} $*.tex
+
+## Method tested starting 20040410: Treats bibliographies intelligently, like .dvi
+#%.pdf : %.aux %.ind %.bbl 
+## Make sure PDF file exists; if not then recompile
+#	@if [ ! -f ${DATA}/ps/$*.pdf ]; then touch .rerun; fi
+#	@if [ -f .rerun ]; then rm .rerun; ${PDFLATEX} \\input{$*}; else ${MAKE} $*.aux; fi
+## While references et al. are changed then recompile
+#	@while ( grep Rerun $*.log > /dev/null ); do ${PDFLATEX} \\input{$*}; done
+#	@if [ -f $*.ind ]; then touch $*.ind; fi
+
+# Method used until 20040410: Is not smart about bibliographies
+# In any case, using thumbpdf.sty package may obsolete running thumbpdf 
+%.pdf : %.tex
+	-${PDFLATEX} $*.tex
+	-${BIBTEX} $*
+	-${MAKEINDEX} $*
+	-${PDFLATEX} $*.tex
+	-${BIBTEX} $*
+	-${MAKEINDEX} $*
+	-${PDFLATEX} $*.tex
+	-mv -f $*.pdf ${DATA}/ps
+
+# NSF FastLane recommends
+# dvips -Ppdf -o <file>.ps <file>.dvi 
+# The -Ppdf causes ugliness in ghostview
+# Use ps2pdf
+# %.pdf : ${DATA}/ps/%.ps
+# 	-${LATEX} $*.tex
+# 	-${BIBTEX} $*
+# 	-${MAKEINDEX} $*
+# 	${DVIPS} ${DVIPSFLAGS} $*.dvi -o ${DATA}/ps/$*.ps
+# 	-${PS2PDF} ${DATA}/ps/$*.ps ${DATA}/ps/$*.pdf
+
+%.ps : %.dvi
+	${DVIPS} ${DVIPSFLAGS} $< -o ${DATA}/ps/$*.ps
+#	${PSDRAFT} ${DATA}/ps/$*.ps > ${DATA}/ps/foo.ps
+#	/bin/mv -f foo.ps $*.ps
+
+# Convert Postscript seminar to Postcard mode Postscript format
+%_pst.ps : %.ps
+	mpage -R -4 ${DATA}/ps/$*.ps > ${DATA}/ps/$*_pst.ps
+
+# Convert Postcard mode Postscript format to Postcard mode PDF format
+%_pst.pdf : %_pst.ps
+	${PS2PDF} ${DATA}/ps/$*_pst.ps ${DATA}/ps/$*_pst.pdf
+
+%.ps.gz : %.ps
+	-${GZIP} --verbose --force ${DATA}/ps/$*.ps
+
+%.pdf.gz : %.pdf
+	-${GZIP} --verbose --force ${DATA}/ps/$*.pdf
+
+# Pattern rules to build tex files
+%.tpt : %.tex
+	-${THUMBPDF} ${DATA}/ps/$*.pdf
+	-mv -f ${DATA}/ps/$*.tpt .
+
+%.txt : ${DATA}/ps/%.pdf
+	-${PDFTOTEXT} ${DATA}/ps/$*.pdf > $*.txt
+	-mv -f ${DATA}/ps/$*.txt .
+
+%.txt : %.tex
+	-${UNTEX} $*.tex > $*.txt
+
+# Byte-compile elisp files
+%.elc: %.el
+	emacs -batch -f batch-byte-compile $*.el
+
+all: 
+
+tags: 
+	etags *.tex *.sty *.txt *.html *.shtml Makefile README ChangeLog TODO
+
+clean: cln
+cln: 
+	rm -f *.aux *.bbl *.blg *.brf *.cb *.dvi *.glo *.idx *.ilg *.ind *.inx *.log *.lot *.out *.pdf *.ps *.toc *.tpt

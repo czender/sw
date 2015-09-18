@@ -1,0 +1,26 @@
+# -*-Perl-*-
+
+# $Id$
+
+# Purpose: Initialization file for LaTeX2HTML
+
+# Usage:
+# If this file is named .latex2html-init and is stored in home directory,
+# then latex2html loads it automatically
+# Hence this file may be used to over-ride latex2html settings
+
+$DO_INCLUDE = "mdwlist:upgreek:url";
+
+#$DONT_INCLUDE = "csz";
+
+# Ignored commands as described in 
+# file:///usr/share/doc/latex2html/html/Mnode10_id.html
+&ignore_commands( <<_IGNORED_CMDS_);
+documentstyle # [] # {}
+linebreak # []
+csznote # [] # {}
+longtable # [] # {}
+mbox
+_IGNORED_CMDS_
+
+1; # This must be the last line (return true for success)

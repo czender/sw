@@ -1,0 +1,120 @@
+cd CFchecker
+************************************************************************
+ACDD/CF/IOOS compliance-checker
+https://github.com/ioos/compliance-checker
+Used by Ed Armstrong
+************************************************************************
+# mkvirtualenv --no-site-packages compliance-checker
+# workon compliance-checker
+sudo yum install python-devel (swig needs Python.h)
+sudo yum install pip -y # Python package manager
+sudo pip install numpy
+sudo pip install compliance-checker
+compliance-checker --help
+sudo yum install swig # Used to build udunitspy
+# sudo pip install udunitspy # UDUnits (fails to install because udunits2.h in /usr/include/udunits2)
+# sudo C_INCLUDE_PATH="/usr/include/udunits2" pip install udunitspy # fails because needs libexpat.so
+cd /usr/lib64;sudo ln -s libexpat.so.1 libexpat.so
+sudo C_INCLUDE_PATH="/usr/include/udunits2" pip install udunitspy
+compliance-checker --test=cf ~/nco/data/in.nc
+compliance-checker --test=cf --verbose ~/nco/data/in.nc # works
+compliance-checker --test=cf --verbose ~/nco/data/in_grp.nc # works
+compliance-checker --test=cf --verbose ${DATA}/hdf/mabel_l2a_20120419t075900_809_1.h5 # borken
+compliance-checker --test=cf --verbose ~/nco/data/hdf.hdf # works
+compliance-checker --test=acdd --verbose ~/nco/data/in.nc # borken
+************************************************************************
+RPM-based CFchecker from Germany (Michael Decker and Martin Schultz)
+************************************************************************
+sudo yum install numpy -y # CFchecker
+sudo yum install netcdf4-python -y # CFchecker
+sudo yum install python-lxml -y # CFchecker
+
+# CFunits-python hand-install
+# http://code.google.com/p/cfunits-python/
+cd ${DATA}/tmp
+wget http://cfunits-python.googlecode.com/files/cfunits-0.9.6.tar.gz .
+cd cfunits-0.9.6
+sudo python setup.py install
+
+# CFchecker hand-install
+# https://redmine.iek.fz-juelich.de/projects/cfchecker
+# https://bitbucket.org/mde_/cfchecker
+cd ${DATA}/tmp
+wget https://bitbucket.org/mde_/cfchecker/downloads/CFchecker-1.5.15.tar.bz2 . 
+tar xvjf CFchecker-1.5.15.tar.bz2 
+
+sudo python setup.py install
+
+************************************************************************
+RPM-based CFchecker from LLNL (Stephen Pascoe and Rosalyn Hatcher)
+Stephen Pascoe <stephen.pascoe@stfc.ac.uk>
+Rosalyn Hatcher <r.s.hatcher@reading.ac.uk>
+************************************************************************
+# Web-upload version:
+http://puma.nerc.ac.uk/cgi-bin/cf-checker.pl
+
+# CFchecker sits atop CDAT-lite which sits atop Python:
+# http://proj.badc.rl.ac.uk/cedaservices/wiki/CdatLite
+sudo yum install python-devel -y # needed for CDAT-lite
+sudo easy_install cdat_lite # Install cdat_lite
+sudo easy_install -m cdat_lite # Remove cdat_lite
+
+# Now install CFchecker hand-install
+# https://pypi.python.org/pypi/cfchecker
+# http://cf-pcmdi.llnl.gov/conformance/compliance-checker
+export PYTHONPATH=/usr/lib/python2.7/site-packages
+export UDUNITS=/usr/share/udunits/udunits2.xml
+export CF_STANDARD_NAMES=
+export CF_AREA_TYPES=
+cd ${DATA}/tmp
+wget https://pypi.python.org/packages/source/c/cfchecker/cfchecker-2.0.5ceda.p1.tar.gz .
+tar xvzf cfchecker-2.0.5ceda.p1.tar.gz
+cd ${DATA}/tmp/cfchecker-2.0.5ceda.p1
+sudo python setup.py install
+
+# Debugging reveals no netCDF library linkage
+ldd /usr/lib/python2.7/site-packages/cdat_lite-6.0rc2-py2.7-linux-x86_64.egg/cdtime.so
+
+# CFchecker script is actually called cfchecks.py
+cfchecks.py
+
+# Hand-install
+cd ${DATA}/tmp
+wget http://ndg.nerc.ac.uk/dist/cdat_lite-6.0rc2.tar.gz
+tar zxf cdat_lite-6.0rc2.tar.gz
+cd cdat_lite*
+python setup.py build
+
+************************************************************************
+Debian-based
+************************************************************************
+sudo aptitude install python-dev # provides python.h for netCDF4-python
+sudo aptitude install python-numpy # CFchecker
+sudo aptitude install python-lxml # CFchecker
+
+# netCDF4-python hand-install
+# Download netCDF4-python
+http://code.google.com/p/netcdf4-python/downloads/list/
+http://code.google.com/p/netcdf4-python/downloads/detail?name=netCDF4-1.0.5.tar.gz&can=2&q=
+tar xvzf netCDF4-1.0.5.tar.gz
+cd netCDF4-1.0.5
+sudo python setup.py install
+
+# CFunits-python hand-install
+# http://code.google.com/p/cfunits-python/
+cd ${DATA}/tmp
+wget http://cfunits-python.googlecode.com/files/cfunits-0.9.6.tar.gz .
+tar xvzf cfunits-0.9.6.tar.gz
+cd cfunits-0.9.6
+sudo python setup.py install
+
+# lxml hand install NOT Necessary because included in python2.7
+# lxml.de/installation.html
+sudo aptitude install python-lxml # CFchecker
+
+# CFchecker hand-install
+cd ${DATA}/tmp
+wget https://bitbucket.org/mde_/cfchecker/downloads/CFchecker-1.5.15.tar.bz2 . 
+tar xvjf CFchecker-1.5.15.tar.bz2 
+cd CFchecker
+sudo python setup.py install

@@ -1,0 +1,154 @@
+-----------------------------------------------------------------
+ Mid-latitude summer profile for CCM3 Column Radiation Model 
+-----------------------------------------------------------------
+   83.333333    day of year (1=jan 1; from 1 to 365)
+   0.           latitude    (from +90 to -90)
+  level   p(mb)    t(k)   h2ommr (g/g) o3mmr (g/g) cld cvr  cld lwp (g/m2)
+    92    0.093    225.42   4.000E-06  1.453E-06  0.000E+00  0.000E+00
+    91    0.108    228.54   4.000E-06  1.708E-06  0.000E+00  0.000E+00
+    90    0.126    231.71   4.000E-06  1.937E-06  0.000E+00  0.000E+00
+    89    0.147    234.92   4.000E-06  2.142E-06  0.000E+00  0.000E+00
+    88    0.172    238.17   4.000E-06  2.326E-06  0.000E+00  0.000E+00
+    87    0.200    241.46   4.000E-06  2.493E-06  0.000E+00  0.000E+00
+    86    0.233    244.80   4.000E-06  2.644E-06  0.000E+00  0.000E+00
+    85    0.272    248.19   4.000E-06  2.783E-06  0.000E+00  0.000E+00
+    84    0.317    251.62   4.000E-06  2.910E-06  0.000E+00  0.000E+00
+    83    0.370    255.10   4.000E-06  3.027E-06  0.000E+00  0.000E+00
+    82    0.431    258.62   4.000E-06  3.136E-06  0.000E+00  0.000E+00
+    81    0.503    262.18   4.000E-06  3.237E-06  0.000E+00  0.000E+00
+    80    0.586    265.78   4.000E-06  3.332E-06  0.000E+00  0.000E+00
+    79    0.683    269.40   4.000E-06  3.422E-06  0.000E+00  0.000E+00
+    78    0.797    272.98   4.000E-06  3.505E-06  0.000E+00  0.000E+00
+    77    0.929    275.90   4.000E-06  3.617E-06  0.000E+00  0.000E+00
+    76    1.083    276.04   4.000E-06  4.176E-06  0.000E+00  0.000E+00
+    75    1.263    274.64   4.000E-06  4.770E-06  0.000E+00  0.000E+00
+    74    1.472    272.50   4.000E-06  5.256E-06  0.000E+00  0.000E+00
+    73    1.716    269.87   4.000E-06  5.694E-06  0.000E+00  0.000E+00
+    72    2.001    267.00   4.000E-06  6.611E-06  0.000E+00  0.000E+00
+    71    2.333    264.06   4.000E-06  7.532E-06  0.000E+00  0.000E+00
+    70    2.720    261.10   4.000E-06  8.290E-06  0.000E+00  0.000E+00
+    69    3.172    258.15   4.000E-06  8.908E-06  0.000E+00  0.000E+00
+    68    3.698    255.24   4.000E-06  9.284E-06  0.000E+00  0.000E+00
+    67    4.311    252.36   4.000E-06  9.521E-06  0.000E+00  0.000E+00
+    66    5.027    249.53   4.000E-06  9.704E-06  0.000E+00  0.000E+00
+    65    5.861    246.84   4.000E-06  9.845E-06  0.000E+00  0.000E+00
+    64    6.833    244.32   4.000E-06  9.960E-06  0.000E+00  0.000E+00
+    63    7.967    241.88   4.000E-06  1.005E-05  0.000E+00  0.000E+00
+    62    9.288    239.48   4.000E-06  1.012E-05  0.000E+00  0.000E+00
+    61   10.830    237.10   4.000E-06  1.016E-05  0.000E+00  0.000E+00
+    60   12.626    234.75   4.000E-06  1.016E-05  0.000E+00  0.000E+00
+    59   14.721    232.42   4.000E-06  9.550E-06  0.000E+00  0.000E+00
+    58   17.164    230.12   4.000E-06  8.758E-06  0.000E+00  0.000E+00
+    57   20.011    227.88   4.000E-06  8.081E-06  0.000E+00  0.000E+00
+    56   23.332    225.89   4.000E-06  7.506E-06  0.000E+00  0.000E+00
+    55   27.203    224.33   4.000E-06  7.008E-06  0.000E+00  0.000E+00
+    54   31.716    223.04   4.000E-06  6.418E-06  0.000E+00  0.000E+00
+    53   36.978    221.82   4.000E-06  5.819E-06  0.000E+00  0.000E+00
+    52   43.113    220.62   4.000E-06  5.240E-06  0.000E+00  0.000E+00
+    51   50.266    219.43   4.000E-06  4.502E-06  0.000E+00  0.000E+00
+    50   58.606    218.24   4.000E-06  3.670E-06  0.000E+00  0.000E+00
+    49   68.330    217.06   4.000E-06  2.938E-06  0.000E+00  0.000E+00
+    48   79.667    216.07   4.000E-06  2.233E-06  0.000E+00  0.000E+00
+    47   92.885    215.77   4.000E-06  1.654E-06  0.000E+00  0.000E+00
+    46  110.000    215.75   4.000E-06  1.209E-06  0.000E+00  0.000E+00
+    45  130.000    215.75   4.000E-06  9.152E-07  0.000E+00  0.000E+00
+    44  150.000    215.78   4.043E-06  7.466E-07  0.000E+00  0.000E+00
+    43  170.000    216.29   4.650E-06  5.872E-07  0.000E+00  0.000E+00
+    42  190.000    218.79   9.582E-06  4.603E-07  0.000E+00  0.000E+00
+    41  210.000    222.69   2.081E-05  3.693E-07  0.000E+00  0.000E+00
+    40  230.000    226.57   4.060E-05  3.221E-07  0.000E+00  0.000E+00
+    39  250.000    230.20   7.257E-05  2.811E-07  0.000E+00  0.000E+00
+    38  270.000    233.61   1.207E-04  2.381E-07  0.000E+00  0.000E+00
+    37  290.000    236.82   1.738E-04  2.092E-07  0.000E+00  0.000E+00
+    36  310.000    239.85   2.181E-04  1.940E-07  0.000E+00  0.000E+00
+    35  330.000    242.73   2.693E-04  1.798E-07  0.000E+00  0.000E+00
+    34  350.000    245.47   3.286E-04  1.656E-07  0.000E+00  0.000E+00
+    33  370.000    248.08   3.964E-04  1.529E-07  0.000E+00  0.000E+00
+    32  390.000    250.57   4.736E-04  1.433E-07  0.000E+00  0.000E+00
+    31  410.000    252.94   5.607E-04  1.350E-07  0.000E+00  0.000E+00
+    30  430.000    255.21   6.543E-04  1.271E-07  0.000E+00  0.000E+00
+    29  450.000    257.37   7.453E-04  1.193E-07  0.000E+00  0.000E+00
+    28  470.000    259.42   8.452E-04  1.120E-07  0.000E+00  0.000E+00
+    27  490.000    261.38   9.557E-04  1.056E-07  0.000E+00  0.000E+00
+    26  510.000    263.25   1.078E-03  1.007E-07  0.000E+00  0.000E+00
+    25  530.000    265.06   1.212E-03  9.630E-08  0.000E+00  0.000E+00
+    24  550.000    266.80   1.360E-03  9.218E-08  0.000E+00  0.000E+00
+    23  570.000    268.49   1.543E-03  8.866E-08  0.000E+00  0.000E+00
+    22  590.000    270.13   1.802E-03  8.547E-08  0.000E+00  0.000E+00
+    21  610.000    271.72   2.087E-03  8.246E-08  0.000E+00  0.000E+00
+    20  630.000    273.26   2.396E-03  7.964E-08  0.000E+00  0.000E+00
+    19  650.000    274.77   2.729E-03  7.701E-08  0.000E+00  0.000E+00
+    18  670.000    276.24   3.086E-03  7.454E-08  0.000E+00  0.000E+00
+    17  690.000    277.67   3.465E-03  7.219E-08  0.000E+00  0.000E+00
+    16  710.000    279.07   3.867E-03  6.996E-08  0.000E+00  0.000E+00
+    15  730.000    280.43   4.289E-03  6.789E-08  0.000E+00  0.000E+00
+    14  750.000    281.76   4.732E-03  6.593E-08  0.000E+00  0.000E+00
+    13  770.000    283.06   5.193E-03  6.405E-08  0.000E+00  0.000E+00
+    12  790.000    284.31   5.672E-03  6.226E-08  0.000E+00  0.000E+00
+    11  810.000    285.51   6.166E-03  6.072E-08  1.000E+02  1.000E+00
+    10  830.000    286.64   6.674E-03  5.948E-08  1.000E+02  1.000E+00
+     9  850.000    287.68   7.194E-03  5.829E-08  1.000E+02  1.000E+00
+     8  870.000    288.62   7.722E-03  5.714E-08  1.000E+02  1.000E+00
+     7  890.000    289.48   8.259E-03  5.602E-08  1.000E+02  1.000E+00
+     6  910.000    290.29   8.802E-03  5.494E-08  0.000E+00  0.000E+00
+     5  930.000    291.05   9.351E-03  5.390E-08  0.000E+00  0.000E+00
+     4  950.000    291.79   9.905E-03  5.290E-08  0.000E+00  0.000E+00
+     3  970.000    292.51   1.046E-02  5.194E-08  0.000E+00  0.000E+00
+     2  990.000    293.21   1.102E-02  5.101E-08  0.000E+00  0.000E+00
+     1 1006.500    293.78   1.148E-02  5.027E-08  0.000E+00  0.000E+00
+       1013.25 	
+	294.00  surface air temperature
+        294.00  ground (skin) temperature
+                      1     surface type flag (0=ocn, 1=lnd, 2=sea-ice)
+                    0.010   surface aerodynamic roughness (m)
+                    0.000   snow cover (m) in liquid water equivalent
+                    0.100   visible surface albedo for strng zen ang srfcs
+                    0.100   visible surface albedo for weak  zen ang srfcs
+                    0.100   near-ir surface albedo for strng zen ang srfcs
+                    0.100   near-ir surface albedo for weak zen ang srfcs
+                    0.000   fraction strng zen ang srf
+                    3.55e-4 co2 volume mixing ratio
+    0.311e-6  N2O volume mixing ratio
+    1.714e-6  CH4 volume mixing ratio
+    0.280e-9  CFC11 volume mixing ratio
+    0.503e-9  CFC12 volume mixing ratio
+    0.14      Aerosol visible extinction optical depth
+ 1367.0       Solar constant [W m-2]
+ 1995         Year AD (integer)
+    0.0       Longitude (degrees East, from 0.0 to 360.0)
+
+Notes on the input:
+
+1) Day of year includes the fraction that determines the solar elevation
+angle; for example, if day 15.0 was used, the local time of calculation
+would be midnight; if day 15.5, conditions would be local noon.  Day of 
+year also includes the change in earth/sun distance, as is done in ccm3.
+The solar constant is set by a data statement in routine 'radcsw'.
+
+2) Latitude runs from +90 to -90 degrees.
+
+3) Total number of levels must be the same as the 'plev = ' parameter.
+ 
+4) Pressure data is at the same levels as temperature and other fields;
+for the radiation, the interface pressures between layers are required;
+these are computed as simple averages of adjacent level pressures.
+Pressure data is in milli-bars.
+
+5) Temperatures are in K, h2o and o3 are mass mixing ratios, cloud cover
+as fraction, and cloud liquid water path in g/m2. Note that cloud cover
+of 1 is reset internally to .99999, since exactly 1.0  will cause the 
+longwave code to fail.
+
+6) The last pressure is the surface pressure.
+
+7) The surface temperatures are given as the air temperature in contact
+with the surface, and the actual skin temperature of the surface.
+
+8) Surface type determines how the surface albedos are computed; if ocean
+or sea-ice, albedos are set internally; otherwise, the spectral/zenith
+angle type albedos read in are used.
+
+9) Surface aerodynamic roughness and snow cover are used over land and
+sea-ice to help set surface albedos.
+
+10) CO2 volume mixing ratio is in fraction.

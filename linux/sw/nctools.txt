@@ -1,0 +1,8 @@
+dtm
+scp dust.ess.uci.edu:/data/zender/tmp/nctools.tar .
+tar xvf nctools.tar
+cd nctools/
+ls
+make -f Makefile.unix
+ls
+sudo cp tbl2cdf /usr/local/bin

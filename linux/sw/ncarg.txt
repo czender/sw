@@ -1,0 +1,436 @@
+-*-Fundamental-*-
+
+# 20040129: dust.ess.uci.edu RedHat Linux 9 NCAR graphics and NCL
+mkdir -p ${DATA}/tmp
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/ncarg-4.3.1.LINUX9.x_gnu_PC.tar.gz .
+scp dust.ess.uci.edu:/data/zender/tmp/ncl-4.2.0.a031.LINUX_RH9.x_PC.tar.gz . 
+tar xvzf ncarg-4.3.1.LINUX9.x_gnu_PC.tar.gz
+sudo /bin/rm -r /usr/local/ncarg
+sudo mkdir /usr/local/ncarg
+cd INSTALL
+sudo ./INSTALL 
+cd ${DATA}/tmp
+sudo cp ncl-4.2.0.a031.LINUX_RH9.x_PC.tar.gz /usr/local/ncarg
+cd /usr/local/ncarg
+sudo tar xvzf ncl-4.2.0.a031.LINUX_RH9.x_PC.tar.gz
+sudo rm ncl-4.2.0.a031.LINUX_RH9.x_PC.tar.gz
+
+# 20040616: ashes Debian Mepis NCAR graphics and NCL
+mkdir -p ${DATA}/tmp
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/ncarg-4.3.1.LINUX9.x_gnu_PC.tar.gz .
+scp dust.ess.uci.edu:/data/zender/tmp/ncl-4.2.0.a031.LINUX_RH9.x_PC.tar.gz . 
+tar xvzf ncarg-4.3.1.LINUX9.x_gnu_PC.tar.gz
+sudo /bin/rm -r /usr/local/ncarg
+sudo mkdir /usr/local/ncarg
+sudo ln -s /usr/bin/awk /bin/awk
+cd INSTALL
+sudo ./INSTALL 
+cd ${DATA}/tmp
+sudo cp ncl-4.2.0.a031.LINUX_debian2.2_PC.tar.gz /usr/local/ncarg
+cd /usr/local/ncarg
+sudo tar xvzf  ncl-4.2.0.a031.LINUX_debian2.2_PC.tar.gz 
+sudo rm  ncl-4.2.0.a031.LINUX_debian2.2_PC.tar.gz 
+
+************************************************************************
+# 20050706: ashes.ess.uci.edu LINUX Debian/Ubuntu Hoary Hedgehog 
+************************************************************************
+# NCAR graphics and NCL
+# Use RedHat-compiled binaries (more up to date) but do not attempt to install
+# OPeNDAP-enabled NCL ("d" in "RH9d" means "OPeNDAP-enabled") fails!
+sudo apt-get install csh
+mkdir -p ${DATA}/tmp
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/ncarg-4.4.0.REDHAT9_GNU3_PC.tar.gz . 
+scp dust.ess.uci.edu:/data/zender/tmp/ncl-4.2.0.a032.LINUX_RH9_PC.tar.gz .
+tar xvzf ncarg-4.4.0.REDHAT9_GNU3_PC.tar.gz
+sudo /bin/rm -r /usr/local/ncarg
+sudo mkdir /usr/local/ncarg
+# Installation script expects to find /bin/awk
+sudo ln -s /usr/bin/awk /bin/awk
+cd INSTALL
+sudo ./INSTALL 
+cd ${DATA}/tmp
+sudo cp ncl-4.2.0.a032.LINUX_RH9_PC.tar.gz /usr/local/ncarg
+cd /usr/local/ncarg
+sudo tar xvzf ncl-4.2.0.a032.LINUX_RH9_PC.tar.gz
+sudo rm ncl-4.2.0.a032.LINUX_RH9_PC.tar.gz
+# Test with
+cd ~/ncl;ng4ex cn14n
+
+NCL problems:
+OPeNDAP-enabled ncl-4.2.0.a032.LINUX_RH9d_PC.tar.gz produces error:
+Running NCL...
+ncl: error while loading shared libraries: libssl.so.4: cannot open shared object file: No such file or directory
+This is because they linked to an old (RH9?) version of DODS/OPeNDAP
+which relies on libssl.so.4.
+************************************************************************
+# 20050706: ashes.ess.uci.edu LINUX Debian/Ubuntu Hoary Hedgehog 
+************************************************************************
+
+************************************************************************
+# 20050801: sand/silt/clay.ess.uci.edu LINUXAMD64 Debian/Ubuntu Hoary Hedgehog 
+************************************************************************
+# NCL
+# Mary Haley on ncl-talk says LINUXAMD64 binaries will be part of NCL release a033 
+# Rick Grubin <grubin@ucar.edu> made x86_64 NCL binaries available via
+# anonymous FTP at ftp://ftp.ucar.edu/ncl/ncl-4.2.0.a032.x86_64_LINUX_PC.tar.gz
+# NCAR Graphics binaries were not made available, but can be compiled from source
+# (NCAR graphics installation lines below are placeholders for future)
+sudo apt-get install csh
+mkdir -p ${DATA}/tmp
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/ncarg-4.4.0.x86_64.tar.gz .
+scp dust.ess.uci.edu:/data/zender/tmp/ncl-4.2.0.a032.x86_64_LINUX_PC.tar.gz .
+tar xvzf ncarg-4.4.0.x86_64_LINUX_PC.tar.gz
+sudo /bin/rm -r /usr/local/ncarg
+sudo mkdir /usr/local/ncarg
+# Installation script expects to find /bin/awk
+sudo ln -s -f /usr/bin/awk /bin/awk
+cd INSTALL
+sudo ./INSTALL 
+cd ${DATA}/tmp
+sudo cp ncl-4.2.0.a032.x86_64_LINUX_PC.tar.gz /usr/local/ncarg
+cd /usr/local/ncarg
+sudo tar xvzf ncl-4.2.0.a032.x86_64_LINUX_PC.tar.gz
+sudo rm ncl-4.2.0.a032.x86_64_LINUX_PC.tar.gz
+# Test with
+cd ~/ncl;ng4ex cn14n
+************************************************************************
+# 20050801: sand/silt/clay.ess.uci.edu LINUXAMD64 Debian/Ubuntu Hoary Hedgehog 
+************************************************************************
+
+************************************************************************
+# 20060616: virga.ess.uci.edu LINUX Debian/Ubuntu Dapper 
+************************************************************************
+# NCAR graphics and NCL
+# Use RedHat-compiled binaries (more up to date) but do not attempt to install
+# OPeNDAP-enabled NCL ("d" in "RH9d" means "OPeNDAP-enabled") fails!
+sudo apt-get install csh
+mkdir -p ${DATA}/tmp
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/ncarg-4.4.0.REDHAT9_GNU3_PC.tar.gz . 
+scp dust.ess.uci.edu:/data/zender/tmp/ncl-4.2.0.a033.Linux_i686.tar.gz .
+tar xvzf ncarg-4.4.0.REDHAT9_GNU3_PC.tar.gz
+sudo /bin/rm -r /usr/local/ncarg
+sudo mkdir /usr/local/ncarg
+# Installation script expects to find /bin/awk
+sudo ln -s /usr/bin/awk /bin/awk
+cd INSTALL
+sudo ./INSTALL 
+cd ${DATA}/tmp
+sudo cp ncl-4.2.0.a033.Linux_i686.tar.gz /usr/local/ncarg
+cd /usr/local/ncarg
+sudo tar xvzf ncl-4.2.0.a033.Linux_i686.tar.gz
+sudo rm ncl-4.2.0.a033.Linux_i686.tar.gz
+# Test with
+cd ~/ncl;ng4ex cn14n
+************************************************************************
+# 20060616: virga.ess.uci.edu LINUX Debian/Ubuntu Dapper 
+************************************************************************
+
+************************************************************************
+# 20060619: sand/silt/clay.ess.uci.edu LINUXAMD64 Debian/Ubuntu Breezy 
+************************************************************************
+# NCL
+sudo apt-get install csh
+mkdir -p ${DATA}/tmp
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/ncarg-4.4.0.x86_64.tar.gz .
+scp dust.ess.uci.edu:/data/zender/tmp/ncl-4.2.0.a033.Linux_x86_64.tar.gz .
+tar xvzf ncarg-4.4.0.Linux_x86_64.tar.gz
+sudo /bin/rm -r /usr/local/ncarg
+sudo mkdir /usr/local/ncarg
+# Installation script expects to find /bin/awk
+sudo ln -s -f /usr/bin/awk /bin/awk
+cd INSTALL
+sudo ./INSTALL 
+cd ${DATA}/tmp
+sudo cp ncl-4.2.0.a033.Linux_x86_64.tar.gz /usr/local/ncarg
+cd /usr/local/ncarg
+sudo tar xvzf ncl-4.2.0.a033.Linux_x86_64.tar.gz
+sudo rm ncl-4.2.0.a033.Linux_x86_64.tar.gz
+# Test with
+cd ~/ncl;ng4ex cn14n
+************************************************************************
+# 20060619: sand/silt/clay.ess.uci.edu LINUXAMD64 Debian/Ubuntu Breezy 
+************************************************************************
+
+************************************************************************
+# 20070701: ashes.ess.uci.edu LINUX Debian/Ubuntu Feisty 
+************************************************************************
+# NCAR graphics and NCL
+# Use RedHat-compiled binaries (more up to date) but do not attempt to install
+# OPeNDAP-enabled NCL ("d" in "RH9d" means "OPeNDAP-enabled") fails!
+sudo apt-get install csh
+mkdir -p ${DATA}/tmp
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/ncarg-4.4.0.REDHAT9_GNU3_PC.tar.gz . 
+scp dust.ess.uci.edu:/data/zender/tmp/ncl-4.3.0.Linux_i686_gcc4.tar.gz .
+tar xvzf ncarg-4.4.0.REDHAT9_GNU3_PC.tar.gz
+sudo /bin/rm -r /usr/local/ncarg
+sudo mkdir /usr/local/ncarg
+# Installation script expects to find /bin/awk
+sudo ln -s /usr/bin/awk /bin/awk
+cd INSTALL
+sudo ./INSTALL 
+cd ${DATA}/tmp
+sudo cp ncl-4.3.0.Linux_i686_gcc4.tar.gz /usr/local/ncarg
+cd /usr/local/ncarg
+sudo tar xvzf ncl-4.3.0.Linux_i686_gcc4.tar.gz
+sudo rm ncl-4.3.0.Linux_i686_gcc4.tar.gz
+# Test with
+cd ~/ncl;ng4ex cn14n
+************************************************************************
+# 20070701: ashes.ess.uci.edu LINUX Debian/Ubuntu Feisty 
+************************************************************************
+
+************************************************************************
+# 20070701: sand.ess.uci.edu LINUX Debian/Ubuntu Dapper 
+************************************************************************
+# NCAR graphics and NCL
+# Use RedHat-compiled binaries (more up to date) but do not attempt to install
+# OPeNDAP-enabled NCL ("d" in "RH9d" means "OPeNDAP-enabled") fails!
+sudo apt-get install csh
+mkdir -p ${DATA}/tmp
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/ncarg-4.4.0.REDHAT9_GNU3_PC.tar.gz . 
+scp dust.ess.uci.edu:/data/zender/tmp/ncl-4.3.0.Linux_x86_64_gcc4.tar.gz .
+tar xvzf ncarg-4.4.0.REDHAT9_GNU3_PC.tar.gz
+sudo /bin/rm -r /usr/local/ncarg
+sudo mkdir /usr/local/ncarg
+# Installation script expects to find /bin/awk
+sudo ln -s /usr/bin/awk /bin/awk
+cd INSTALL
+sudo ./INSTALL 
+cd ${DATA}/tmp
+sudo cp ncl-4.3.0.Linux_x86_64_gcc4.tar.gz /usr/local/ncarg
+cd /usr/local/ncarg
+sudo tar xvzf ncl-4.3.0.Linux_x86_64_gcc4.tar.gz
+sudo rm ncl-4.3.0.Linux_x86_64_gcc4.tar.gz
+# Test with
+cd ~/ncl;ng4ex cn14n
+************************************************************************
+# 20070701: sand.ess.uci.edu LINUX Debian/Ubuntu Dapper 
+************************************************************************
+
+************************************************************************
+# 20070925: ashes.ess.uci.edu LINUX Debian/Ubuntu Feisty 
+************************************************************************
+# NCAR graphics and NCL
+# Use RedHat-compiled binaries (more up to date) but do not attempt to install
+# OPeNDAP-enabled NCL ("d" in "RH9d" means "OPeNDAP-enabled") fails!
+sudo apt-get install csh
+mkdir -p ${DATA}/tmp
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/ncarg-4.4.0.REDHAT9_GNU3_PC.tar.gz . 
+scp dust.ess.uci.edu:/data/zender/tmp/ncl-4.3.1.Linux_i686_gcc4.tar.gz .
+tar xvzf ncarg-4.4.0.REDHAT9_GNU3_PC.tar.gz
+sudo /bin/rm -r /usr/local/ncarg
+sudo mkdir /usr/local/ncarg
+# Installation script expects to find /bin/awk
+sudo ln -s /usr/bin/awk /bin/awk
+cd INSTALL
+sudo ./INSTALL 
+cd ${DATA}/tmp
+sudo cp ncl-4.3.1.Linux_i686_gcc4.tar.gz /usr/local/ncarg
+cd /usr/local/ncarg
+sudo tar xvzf ncl-4.3.1.Linux_i686_gcc4.tar.gz
+sudo rm ncl-4.3.1.Linux_i686_gcc4.tar.gz
+# Test with
+cd ~/ncl;ng4ex cn14n
+************************************************************************
+# 20070925: ashes.ess.uci.edu LINUX Debian/Ubuntu Feisty 
+************************************************************************
+
+************************************************************************
+# 20071101: sand.ess.uci.edu LINUX Debian/Ubuntu Dapper 
+************************************************************************
+# NCAR graphics and NCL
+# Use RedHat-compiled binaries (more up to date) but do not attempt to install
+# OPeNDAP-enabled NCL ("d" in "RH9d" means "OPeNDAP-enabled") fails!
+sudo apt-get install csh
+mkdir -p ${DATA}/tmp
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/ncarg-4.4.0.REDHAT9_GNU3_PC.tar.gz . 
+scp dust.ess.uci.edu:/data/zender/tmp/ncl-4.3.1.Linux_x86_64_gcc4.tar.gz .
+tar xvzf ncarg-4.4.0.REDHAT9_GNU3_PC.tar.gz
+sudo /bin/rm -r /usr/local/ncarg
+sudo mkdir /usr/local/ncarg
+# Installation script expects to find /bin/awk
+sudo ln -s /usr/bin/awk /bin/awk
+cd INSTALL
+sudo ./INSTALL 
+cd ${DATA}/tmp
+sudo cp ncl-4.3.1.Linux_x86_64_gcc4.tar.gz /usr/local/ncarg
+cd /usr/local/ncarg
+sudo tar xvzf ncl-4.3.1.Linux_x86_64_gcc4.tar.gz
+sudo rm ncl-4.3.1.Linux_x86_64_gcc4.tar.gz
+# Test with
+cd ~/ncl;ng4ex cn14n
+************************************************************************
+# 20071101: sand.ess.uci.edu LINUX Debian/Ubuntu Dapper 
+************************************************************************
+
+************************************************************************
+# 20080104: sand.ess.uci.edu LINUX Ubuntu Gutsy 
+************************************************************************
+# NCAR graphics and NCL
+# Use RedHat-compiled binaries (more up to date) but do not attempt to install
+# OPeNDAP-enabled NCL ("d" in "RH9d" means "OPeNDAP-enabled") fails!
+sudo apt-get install csh
+mkdir -p ${DATA}/tmp
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/ncarg-4.4.0.REDHAT9_GNU3_PC.tar.gz . 
+scp dust.ess.uci.edu:/data/zender/tmp/ncl-4.3.1.Linux_x86_64_gcc4.tar.gz .
+tar xvzf ncarg-4.4.0.REDHAT9_GNU3_PC.tar.gz
+sudo /bin/rm -r /usr/local/ncarg
+sudo mkdir /usr/local/ncarg
+# Installation script expects to find /bin/awk
+sudo ln -s /usr/bin/awk /bin/awk
+cd INSTALL
+sudo ./INSTALL 
+cd ${DATA}/tmp
+sudo cp ncl-4.3.1.Linux_x86_64_gcc4.tar.gz /usr/local/ncarg
+cd /usr/local/ncarg
+sudo tar xvzf ncl-4.3.1.Linux_x86_64_gcc4.tar.gz
+sudo rm ncl-4.3.1.Linux_x86_64_gcc4.tar.gz
+# Test with
+cd ~/ncl;ng4ex cn14n
+************************************************************************
+# 20080104: sand.ess.uci.edu LINUX Ubuntu Gutsy 
+************************************************************************
+
+************************************************************************
+# 20080104: neige.ess.uci.edu LINUX Debian/Ubuntu Gutsy 
+************************************************************************
+# NCAR graphics and NCL
+# Use RedHat-compiled binaries (more up to date) but do not attempt to install
+# OPeNDAP-enabled NCL ("d" in "RH9d" means "OPeNDAP-enabled") fails!
+sudo aptitude install gfortran-4.1 # Needed for NCL/NCAR Graphics
+sudo aptitude install csh
+mkdir -p ${DATA}/tmp
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/ncl_ncarg-5.0.0.Linux_x86_64_gcc4.tar.gz .
+sudo /bin/rm -r /usr/local/ncarg
+sudo mkdir /usr/local/ncarg
+cd /usr/local/ncarg
+sudo cp /data/zender/tmp/ncl_ncarg-5.0.0.Linux_x86_64_gcc4.tar.gz .
+sudo tar xvzf ncl_ncarg-5.0.0.Linux_x86_64_gcc4.tar.gz
+sudo rm ncl_ncarg-5.0.0.Linux_x86_64_gcc4.tar.gz
+# Test with
+cd ~/ncl;ng4ex cn14n
+************************************************************************
+# 20080104: neige.ess.uci.edu LINUX Debian/Ubuntu Gutsy 
+************************************************************************
+
+************************************************************************
+# 20080505: virga.ess.uci.edu LINUX Debian/Ubuntu Hardy 
+************************************************************************
+# NCAR graphics and NCL
+# Use RedHat-compiled binaries (more up to date) but do not attempt to install
+# OPeNDAP-enabled NCL ("d" in "RH9d" means "OPeNDAP-enabled") fails!
+sudo aptitude install gfortran-4.1 # Needed for NCL/NCAR Graphics
+sudo aptitude install csh
+mkdir -p ${DATA}/tmp
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/ncl_ncarg-5.0.0.Linux_i686_gcc4.tar.gz .
+sudo /bin/rm -r /usr/local/ncarg
+sudo mkdir /usr/local/ncarg
+cd /usr/local/ncarg
+sudo cp /data/zender/tmp/ncl_ncarg-5.0.0.Linux_i686_gcc4.tar.gz .
+sudo tar xvzf ncl_ncarg-5.0.0.Linux_i686_gcc4.tar.gz
+sudo rm ncl_ncarg-5.0.0.Linux_i686_gcc4.tar.gz
+# Test with
+cd ~/ncl;ng4ex cn14n
+************************************************************************
+# 20080505: virga.ess.uci.edu LINUX Debian/Ubuntu Hardy 
+************************************************************************
+
+************************************************************************
+# 20090317: givre.ess.uci.edu LINUX Debian/Ubuntu Intrepid
+************************************************************************
+# NCAR graphics and NCL
+# Use RedHat-compiled binaries (more up to date) but do not attempt to install
+# OPeNDAP-enabled NCL ("d" in "RH9d" means "OPeNDAP-enabled") fails!
+sudo aptitude install gfortran-4.2 # Needed for NCL/NCAR Graphics
+sudo aptitude install csh
+mkdir -p ${DATA}/tmp
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/ncl_ncarg-5.1.0.Linux_x86_64_gcc422.tar.gz .
+sudo /bin/rm -r /usr/local/ncarg
+sudo mkdir /usr/local/ncarg
+cd /usr/local/ncarg
+sudo cp /data/zender/tmp/ncl_ncarg-5.1.0.Linux_x86_64_gcc422.tar.gz .
+sudo tar xvzf ncl_ncarg-5.1.0.Linux_x86_64_gcc422.tar.gz
+sudo rm ncl_ncarg-5.1.0.Linux_x86_64_gcc422.tar.gz
+# Test with
+cd ~/ncl;ng4ex cn14n
+************************************************************************
+# 20090317: givre.ess.uci.edu LINUX Debian/Ubuntu Intrepid
+************************************************************************
+
+************************************************************************
+# 20100914: givre.ess.uci.edu LINUX Debian/Ubuntu Lucid
+************************************************************************
+# NCAR graphics and NCL
+# Use RedHat-compiled binaries (more up to date) but do not attempt to install
+# OPeNDAP-enabled NCL ("d" in "RH9d" means "OPeNDAP-enabled") fails!
+sudo aptitude install gfortran-4.3 # Needed for NCL/NCAR Graphics
+sudo aptitude install csh
+mkdir -p ${DATA}/tmp
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/ncl_ncarg-5.2.1.Linux_x86_64_gcc432.tar.gz .
+sudo /bin/rm -r /usr/local/ncarg
+sudo mkdir /usr/local/ncarg
+cd /usr/local/ncarg
+sudo cp /data/zender/tmp/ncl_ncarg-5.2.1.Linux_x86_64_gcc432.tar.gz .
+sudo tar xvzf ncl_ncarg-5.2.1.Linux_x86_64_gcc432.tar.gz
+sudo rm ncl_ncarg-5.2.1.Linux_x86_64_gcc432.tar.gz
+# Test with
+cd ~/ncl;ng4ex cn14n
+************************************************************************
+# 20100914: givre.ess.uci.edu LINUX Debian/Ubuntu Lucid
+************************************************************************
+
+************************************************************************
+# 20130212: givre.ess.uci.edu LINUX Debian/Ubuntu Quantal
+************************************************************************
+# NCAR graphics and NCL
+# Use RedHat-compiled binaries (more up to date) but do not attempt to install
+# OPeNDAP-enabled NCL ("d" in "RH9d" means "OPeNDAP-enabled") fails!
+sudo aptitude install gfortran-4.3 # Needed for NCL/NCAR Graphics
+sudo aptitude install csh
+mkdir -p ${DATA}/tmp
+cd ${DATA}/tmp
+scp dust.ess.uci.edu:/data/zender/tmp/ncl_ncarg-6.1.2.Linux_Debian6.0_x86_64_gcc445.tar.gz .
+sudo /bin/rm -r /usr/local/ncarg
+sudo mkdir /usr/local/ncarg
+cd /usr/local/ncarg
+sudo cp /data/zender/tmp/ncl_ncarg-6.1.2.Linux_Debian6.0_x86_64_gcc445.tar.gz .
+sudo tar xvzf ncl_ncarg-6.1.2.Linux_Debian6.0_x86_64_gcc445.tar.gz
+sudo rm ncl_ncarg-6.1.2.Linux_Debian6.0_x86_64_gcc445.tar.gz
+# Test with
+cd ~/ncl;ng4ex cn14n
+************************************************************************
+# 20130212: givre.ess.uci.edu LINUX Debian/Ubuntu Quantal
+************************************************************************
+
+************************************************************************
+# 20131016: givre.ess.uci.edu LINUX Debian/Ubuntu Quantal
+************************************************************************
+# NCAR graphics and NCL
+# Use RedHat-compiled binaries (more up to date) but do not attempt to install
+# OPeNDAP-enabled NCL ("d" in "RH9d" means "OPeNDAP-enabled") fails!
+sudo aptitude install gfortran-4.3 # Needed for NCL/NCAR Graphics
+sudo aptitude install csh
+mkdir -p ${DATA}/tmp
+cd ${DATA}/tmp
+sudo yum install ncl ncl-examples
+# Test with
+cd ~/ncl;ng4ex cn14n
+************************************************************************
+# 20131016: givre.ess.uci.edu LINUX Debian/Ubuntu Quantal
+************************************************************************
+

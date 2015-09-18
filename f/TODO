@@ -1,0 +1,45 @@
+TODO list for fortran module f
+
+1. ftn_strcmp(tst_sng,'prn') works on all machines except Linux/pgf90:
+
+zender@cgd85:~/f$ fff --drc_in=$HOME/nco/data --tst=prn
+Source file unknown Version unknown Date unknown
+Ingested /home/zender/nco/data/in.nc
+HINT: Invoke with  --tst=tst_sng to see specific test or --dbg=3 to see current test
+ftn_strlen(tst_sng) =  3
+ftn_strlen('prn') =  3
+tst_sng(1:ftn_strlen(tst_sng)) = prn
+tst_sng(1:len_trim(tst_sng)) = prn
+p = 112, r = 114, n = 110, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0, NUL =   0
+ , 
+p = 112, r = 114, n = 110
+,
+ftn_strcmp(tst_sng,'prn') = -1
+ main() reports flt_foo =    0.0000000000000000E+000
+ main() reports dbl_foo =    0.0000000000000000E+000
+ main() reports int_foo =            -1
+Wrote results to foo.nc
+
+7. Replace statement functions with inline'd routines
+9. OpenMP on ifc needs ordered clause
+10. Add intent clauses to libcsz_f90
+11. Make all libcsz_f90 reals use precision r8?
+12. Create top-level module for libcsz_f90
+13. wrp_allocate() call in fff dies under ifc with 
+wrp_allocate_scl_FourByteReal: ERROR variable lat already associated
+14. ICE in ifc using OPTS=X on OpenMP
+
+Copy ~/f library to ~/aer:
+cp ~/f/dbg_mdl.F90 ~/f/xtr_mdl.F90 ~/f/sng_mdl.F90 ~/f/utl_mdl.F90 ~/f/vec_mdl.F90 ~/f/xtr_mdl.F90 ~/aer
+
+cd ~/f;/bin/rm foo
+for fl in `/bin/ls *_mdl.F90` ; do
+	echo "Comparing ${fl}..."
+	diff ~/f/${fl} ~/aer/${fl} 2>&1 >> foo
+done
+
+15. Change getopt if else if construct to select case but how to handle fall-through cases elegantly?
+16. fxm 20040907: valgrind consistently reports memory warnings in vec_mdl.F90
+    "Conditional jump or move depends on uninitialised value(s)"
+17. Deprecate precision.F90 module and adopt Metcalf's dntv formulation
+18. 

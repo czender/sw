@@ -1,0 +1,5 @@
+$Id$ -*-text-*-
+
+This directory contains template C programs and libraries.
+
+This module installs date_time.c in the include directory.

@@ -1,0 +1,1 @@
+etags /home/zender/aca/*.F /home/zender/arese/*.f /home/zender/arese/*.ncl /home/zender/aca/*.pl /home/zender/aca/aca.pro /home/zender/mie/*.cc /home/zender/mie/*.hh /home/zender/f/parameter.com /home/zender/arese/*.pl /home/zender/arese/*.pro 

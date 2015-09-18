@@ -1,0 +1,30 @@
+# /etc/hosts
+
+# Purpose: UNIX hosts database for networking
+
+# Usage: 
+# sudo cp ~/linux/etc/hosts /etc/hosts
+# See also http://www.linuxdoc.org/HOWTO/ISP-Hookup-HOWTO-2.html
+# Just list the localhost and static IP addresses of this machine
+# Nameserver provides all other addresses, which are then cached
+# Listing other static IPs causes problems when IPs change (e.g., krein)
+
+# Local host
+127.0.0.1	localhost	localhost.localdomain
+
+# Static IP
+128.200.14.25	dust.ess.uci.edu	dust.ess	dust
+128.200.14.80	lanina.ess.uci.edu	lanina.ess	lanina
+128.200.14.39	seasalt.ess.uci.edu	seasalt.ess	seasalt
+128.200.14.62	haze.ess.uci.edu	haze.ess	haze
+
+# NCAR
+128.117.23.85	cgd85.cgd.ucar.edu	cgd85.cgd	cgd85
+128.117.24.2	bearmtn-e0				bearmtn
+
+# Home network
+# 192.168.[0--255].x with netmask 255.255.255.0 are reserved for class C home LANs
+#192.168.1.1	dakine	dakine.zender.org
+#192.168.1.1	mangogw
+#192.168.1.73	lanina.zender.org
+

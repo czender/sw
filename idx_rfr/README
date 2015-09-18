@@ -1,0 +1,276 @@
+$Id$ -*-text-*- 
+
+This directory, ~/idx_rfr, contains data files and Fortran
+subroutines related to complex index of refraction data.
+
+As of 20060707, all refractive index source data are stored
+here or in subdirectory hitran, or roush, or doccd. 
+All CDL files are stored here, while their .nc counterparts are
+centralized in ${DATA}/aca. 
+
+The Reference & DataBase of Optical Constants at 
+
+http://www.astro.spbu.ru/JPDOC/1-dbase.html
+
+Th.Henning et al. (1999) WWW database of optical constants for
+astronomy. Astron. Astrophys. Suppl. 136, 405.
+
+provides an excellent reference list to older data.
+Unfortunately, nothing new and useful on quartz or hematite there.
+
+************************************************************************
+Begin Data (fxm: 20060707 incomplete, needs updating)
+************************************************************************
+hitran/			Directory of data files directly from HITRAN96 database
+idx_rfr_GADS.cdl	Sea salt, from GADS (NASA GISS) (provided by Jung-Wook Lee)
+idx_rfr_NNM98.cdl	H2SO4, based on NNM98 (provided by Caspar Ammann)
+idx_rfr_SAJ93.cdl	Afghan dust, based on SAJ93
+idx_rfr_Vol73.cdl	Saharan dust, a combination of Pat81, DKS91, and Vol73
+idx_rfr_DKS91.cdl	Dust-like aerosol, H2SO4 from DKS91
+idx_rfr_PaW75.cdl	H2SO4 aerosol from PaW75 (provided by Caspar Ammann)
+idx_rfr_shettle.cdl	HITRAN96 CDROM file /cdrom/aerosols/shettle.dat
+idx_rfr_H2O_liq_WWQ89.txt	Table of idx_rfr_H2O_liq from WWQ89
+idx_rfr_H2O_liq_Seg81.txt	Table of idx_rfr_H2O_liq from Seg81
+************************************************************************
+End Data
+************************************************************************
+
+Subroutines:
+
+Makefile		Builds object files and does .cdl -> .nc conversion
+idx_rfr_H2O_ice_bpb.f	BPB's old ice routine. Data source is unknown.
+			Two separate data ranges: 0.95--4.0 um and
+			8.0--12.5 um.
+idx_rfr_H2O_ice_sgw.f	SGW's state-of-the-art ice routine. Modified
+			by CSZ to use PeG91 data from 250--400 nm.
+			Works from 45 nm -- 8.6 m. Includes T
+			dependence. 
+idx_rfr_H2O_liq_bpb.f	BPB's old liquid routine. Data source is
+			unknown. Works from 0.225--12.5 um.
+
+idx_rfr_Lac01.f		Andy Lacis' code (2001)
+
+RAYWAT.f	Routines from BPB to compute idx_rfr_H2O_liq for 2.0 <
+		lambda < 10 um. From Ray (1972) Applied Optics, V. 11.
+REFWAT.f	BPB routines to compute idx_rfr_H2O_liq for 0.01 um <
+		lambda < 10 m. This incorporates data of Seg81, but
+		not WWQ89.
+REFICE.f	BPB version of SGW routines to compute idx_rfr_H2O_ice
+		for 45 nm < lambda < 8.6 m
+
+************************************************************************
+Ted Roush is The Grand Curator of Refractive indices in electronic format
+He sent me lists of the contents of his collection:
+Begin Mineral Optical Constants in collection of T. Roush
+************************************************************************
+Directory/                  Wavelength        Literature
+subdirec./                  Coverage          Reference
+     filename               (microns)         Available
+
+memilham/
+     lmstn.con (limestone)   0.2-33                n
+     methl.con (liq. CH3OH)  1.25-20               n
+     shrdst.con (Sahara dust)2.5-40                n
+     wvllt.con (wavellite)   0.3-182               n
+     
+metals/
+     aluminum.oc             0.04-32               y
+     gold.oc                 0.05-9.9              y
+     iron.oc                 0.1-285               y
+     silver.oc               0.1-9.9               y
+
+nanophase/
+     vol02.oc (palagonite)   0.2-5.0               n
+     vol15all.oc (palagonite)0.7-25                n
+     vol15ir.oc              5.0-25                y
+
+organics/
+     ac1.oc (amorph. carbon) 0.0004-300            y
+     am_carb1.oc (am. carb)  0.1-800               y
+     amhc.oc (am. hyd. carb) 0.35-10               y
+     arc_c.oc (carb. arc rod)0.12-2.1              y
+     be1.oc                  0.0004-300            y
+     carbon_avg.oc           2.5-25                n
+     diamond.oc              0.04-6.5              y
+     fc21ps.oc               0.0004-300            y
+     graphite.oc             0.03-61               y
+     grph1.oc (graphite)     0.2-55                n
+     grph2.oc (graphite)     0.2-55                n
+     grph5.oc (graphite)     0.2-55                n
+     grph6.oc (graphite)     0.2-55                n
+     haps.oc                 0.0004-300            y
+     icethol.oc              0.06-40               n
+     khare_kerogen.oc        0.15-40               y
+     polyhcn.oc              0.15-40               y
+     refractory.oc           0.09-3600             n
+     tholin.oc               0.02-920              y
+
+oxides/
+     al2o3_1.oc              0.6-400               y
+     al2o3_2.oc              0.2-400               y
+     hematite_ext.oc         0.21-56               n
+     hematite_ord.oc         0.21-56               n
+     limonite.oc             0.2-55                n
+     magnetite_1.oc          0.24-1000000          n
+     magnetite_2.oc          0.3-56                n
+     tio2_1.oc               0.1-1303              y
+     tio2_2.oc               2.5-56                n
+
+rocks/
+     andesite.oc            5-50                   y
+     basalt.oc              5-50                   y
+     basalt_glass.oc        5-50                   y
+
+salts/
+
+     bromides/
+
+     csi.oc                  0.1-2000              y
+     kbr.oc                  0.03-8500             y
+
+     carbonates/
+
+     caco3ext.out            2.5-333               y
+     caco3ord.out            2.5-333               y
+     caco3pel.oc             2.5-333               y
+     dolomite_ext.oc         2.5-50                n
+     dolomite_ord.oc         2.5-40                n
+     dyp_avg.oc              5.0-25                n
+
+     chlorides/
+
+     nacl.oc                 0.05-2000              y
+
+     nitrates/
+
+     dara_avg.oc             2.5-25                 n
+
+     sulfates/
+
+     anhydrite.oc            2.5-55                n
+     caso4pel.oc             2.5-333                y
+     fibrob_avg.oc           5-25                   n
+     gypsum                  2.6-25                 y
+     gypsum.wv               2.6-25                 n
+
+silicates/
+
+     glass/
+       lucey_glass_data     0.3-2.6?                y
+
+     ino/
+
+       pyroxenes/
+         ortho/
+            enstatite.glass  0.04-62                y
+            pyroxene_1.oc    0.1-667000             y
+            pyx02_powder.oc  5.0-25                 y
+            pyx02_slab.oc    5.0-25                 y
+            lucey_orthopxn   0.3-2.6                y
+         clino/
+            diopside_1.oc    5.9-43                 y
+            lucey_cpx_data   0.3-2.6                y
+
+     neso/
+
+     forsterite.glass        0.04-62                y
+     garnet_1.oc             2.5-39                 y
+     olivine_1.oc            7-200                  y
+     olivine_2.oc            0.1-667000             y
+     lucey_olivine           0.25-2.4               y
+
+     phyllo/
+
+     biotite_a.oc            2.5-25                n
+     biotite_b.oc            2.5-25                n
+     biotite_c.oc            2.5-25                n
+     chlorite.oc             2.5-50                y
+     illite.oc               2.5-200               n
+     illite_EH.oc            0.18-2.6              y
+     kaolinite_1.oc          5.0-25                y
+     kaolinite_2.oc          2.5-200               n
+     kaolinite_EH.oc         0.18-2.6              y
+     montmorillonite_1.oc    5.0-25                y
+     montmorillonite_2.oc    2.5-200               n
+     montmorillonite_3.oc    5.0-40                y
+     montmorillonite_4.oc    5.0-40                y
+     montmorillonite_5.0c    0.66-25               y
+     montmorillonite_6.oc    0.4-2.5               y
+     montmorillonite_EH1.oc  0.18-2.6              y
+     montmorillonite_EH2.oc  0.18-2.6              y
+     muscovite_a.oc          6.67-31.25            y
+     muscovite_b.oc          6.67-31.25            y
+     muscovite_c.oc          6.67-31.25            y
+     pyrophyllite.oc         5.0-25                y
+     saponite.oc             5.-25                 y
+     serpentine_1.oc         5.0-25                y
+     serpentine_2.oc         5.0-25                y
+
+     soro/
+
+     tecto/
+
+     Na_glass.oc             2.5-30                 y
+     sio2.glass              0.5-500                y
+     sio2ext.oc              0.19-333               y
+     sio2ext_2.oc            5-50                   y
+     sio2ord.oc              0.05-1000              y
+     sio2ord_2.oc            5-50                   y
+     anorthosite.oc          2.5-25                 n
+
+************************************************************************
+Ice Optical Constants in collection of T. Roush
+************************************************************************
+
+          wavelength
+               range
+ice       (microns)           Source                   Reference
+
+CO	1.43-2.5 data from B. Schmitt, Solar System Ices II Book
+	2.7-14.3 data from Roux et al., 20K, Journal Article
+
+CH4	1.43-2.5 data from B. Schmitt, Part of Grundy work below
+	1.42-2.0 ~30K, Pearl et al. 1991, J. Geophys. Res.-Planets (E2), 17,477-17,482.
+	2.0-10.9 ~30K, Pearl et al. 1991, J. Geophys. Res.-Planets (E2), 17,477-17,482.
+	2.0-2.5 data from Hudgins, ~30K, Ap J. article
+	2.7-14.3 data from Roux et al., 20K, Journal Article
+            0.96-2.7 data from Grundy, JGR article
+
+N2	2-5.9 data from Brown, alpha-N2, see Cruikshank Journal Article
+	2-5.9 data from Brown, beta-N2, see Cruikshank Journal Article
+	2.7-14.3 data from Roux et al., 20K, Journal Article
+	1.43-2.5 data from B. Schmitt, 36.6K, beta-N2, see Schmitt & Grundy article
+
+H2O	1.1-144 data from Fink and Sill and Hudgins, amorphous ice, ~100K, Book & Ap J.
+               article, respectively
+	2.5-80 data from Leger, amorphous ice, ~80K, Journal article
+	0.89-333 data combined from Ockman & Bertie et al., hexagonal ice, ~100K, Thesis and
+                Journal article, respectively
+	0.18-100 data from Warren, hexagonal ice ~265K, Journal article
+	0.96-2.7 data from Grundy, hexagonal ice, various temperatures 20-270K, JGR article
+
+CO2	0.05-20000 data from Hansen, 150K, JGR article
+	0.9-3.77 data from Calvin, ~90K, JGR article
+
+SO2    0.63-50 data from Schmitt, Solar System Ices II book
+
+O2       2.7-14.3, 20 K, data from Roux et al., Journal article
+
+NO      2.7-14.3, 20 K, data from Roux et al. Journal article
+
+NH4OH 1-2.5, ~80 K, 1% & 3% concentrations in H2O, data from several journal articles
+
+NH3     0.14-200, Martonchik et al., journal article
+
+HCl       2.7-14.3, 20 K, data from Roux et al., journal article
+
+CH3OH 1-5, ~90 & 120 K, data from Brown, see Cruikshank journal article
+
+C2H6   1.64-20.8, ~30 K, Pearl et al. 1991, J. Geophys. Res.-Planets (E2), 17,477-17,482.
+
+molecular mixtures
+
+N2-CO   1.43-2.5 data from B. Schmitt, 1%CO in N2, 36.7K, personal communication and
+               Doute et al. Icarus article
+
+N2-CH4 1.43-2.5 data from B. Schmitt, 0.8%CH4 in N2, 36.6K,  Cruikshank et al. Icarus, Doute et al. Icarus, Quirico et al. Icarus

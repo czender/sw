@@ -1,0 +1,154 @@
+# $Header: /home/zender/cvs/linux/usr/local/rsi/license/license.dat.sand,v 1.3 2004-12-28 23:09:47 zender Exp $
+
+# csz++
+# Usage:
+# diff ~/linux/usr/local/rsi/license/license.dat.sand /usr/local/rsi/license/license.dat
+# sudo cp ~/linux/usr/local/rsi/license/license.dat.sand /usr/local/rsi/license/license.dat
+# lmgrd server is started by /etc/rc.d/rc.local
+# IDL 5.2 licenses deactivated (commented out) 19991219
+# csz--
+################### LICENSE INFO ########################
+############ license file comments, do not delete ###############
+# Installation Number(s): 97041 
+
+# IDL wants to use port 1700, while PGI wants to use port 7496
+# NB: Only one SERVER line per file
+##SERVER dust.ps.uci.edu 00c04f60738d 7496
+#SERVER dust.ps.uci.edu 00c04f60738d 1700
+#DAEMON idl_lmgrd /usr/local/rsi/idl_5.2/bin 
+#INCREMENT idl_drawx idl_lmgrd 1.000 1-jan-0000 1 CBF660813C1CC4F6BB40 \
+#         VENDOR_STRING="97041University of California at Irvine" ck=234
+#INCREMENT insight idl_lmgrd 2.000 1-jan-0000 1 AB76B041138075B3BA0A \
+#         VENDOR_STRING="97041University of California at Irvine" ck=15
+#INCREMENT idl idl_lmgrd 5.200 1-jan-0000 6 9BA68091CE626B533332 \
+#         VENDOR_STRING="97041University of California at Irvine" ck=235
+#FEATURESET idl_lmgrd ADE863C210CEB0E6
+
+# csz++
+# IDL 5.3 licenses received and activated 19991219 
+# IDL 5.3 licenses deactivated (commented out) 20010910
+# csz--
+# Installation Number(s): 97041 
+# IDL wants to use port 1700, while PGI wants to use port 7496
+# NB: Only one SERVER line per file
+#SERVER dust.ps.uci.edu 00c04f60738d 7496
+#SERVER dust.ps.uci.edu 00c04f60738d 1700
+#DAEMON idl_lmgrd /usr/local/rsi/idl/bin 
+#INCREMENT idl_drawx idl_lmgrd 1.000 1-jan-0000 1 CBF660813C1CC4F6BB40 \
+#         VENDOR_STRING="97041University of California at Irvine" ck=234
+#INCREMENT insight idl_lmgrd 2.000 1-jan-0000 1 AB76B041138075B3BA0A \
+#         VENDOR_STRING="97041University of California at Irvine" ck=15
+#INCREMENT idl idl_lmgrd 5.300 1-jan-0000 6 3B267051FA8E335B93BE \
+#         VENDOR_STRING="97041University of California at Irvine" ck=2
+#FEATURESET idl_lmgrd 6C60E8439E26A5A8
+
+# csz++
+# IDL 5.4 licenses received and activated 20010910 by pjones
+# IDL 5.4 licenses deactivated (commented out) 20011016
+# IDL wants to use port 1700, while PGI wants to use port 7496
+# NB: Only one SERVER line per file
+# csz--
+# Installation Number(s): 97041
+# SERVER dust.ps.uci.edu 00c04f60738d 1700
+# DAEMON idl_lmgrd /usr/local/rsi/idl_5.4/bin
+# INCREMENT idl_drawx idl_lmgrd 1.000 1-jan-0000 1 CBF660813C1CC4F6BB40 \
+#          VENDOR_STRING="97041University of California at Irvine" ck=234
+# INCREMENT insight idl_lmgrd 2.000 1-jan-0000 1 AB76B041138075B3BA0A \
+#          VENDOR_STRING="97041University of California at Irvine" ck=15
+# INCREMENT idl idl_lmgrd 5.400 1-jan-0000 6 8BA62011A66A8B13533A \
+#          VENDOR_STRING="97041University of California at Irvine" ck=202
+# FEATURESET idl_lmgrd C3C5200AC51E8B7E
+
+# csz++
+# IDL 5.5 licenses received and activated 20011016
+# IDL 5.5 licenses deactivated (commented out) ???
+# IDL wants to use port 1700, while PGI wants to use port 7496
+# NB: Only one SERVER line per file
+# csz--
+####################### LICENSE.DAT #######################
+############ license file comments, do not delete ###############
+# License Number(s): 97041 
+#SERVER dust.ps.uci.edu 00c04f60738d 1700
+#DAEMON idl_lmgrd /usr/local/rsi/idl_5.5/bin 
+#DAEMON idl_lmgrd /usr/local/rsi/idl/bin 
+#INCREMENT idl_drawx idl_lmgrd 1.000 1-jan-0000 1 CBF660813C1CC4F6BB40 \
+#	VENDOR_STRING="97041University of California at Irvine" ck=234
+#INCREMENT idl_mpeg idl_lmgrd 1.000 1-jan-0000 1 7B06E0A1C761E3B438F1 \
+#	VENDOR_STRING="97041University of California at Irvine" ck=27
+#INCREMENT insight idl_lmgrd 2.000 1-jan-0000 1 AB76B041138075B3BA0A \
+#	VENDOR_STRING="97041University of California at Irvine" ck=15
+#INCREMENT idl idl_lmgrd 5.500 1-jan-0000 6 4B2670D102A6737BD376 \
+#	VENDOR_STRING="97041University of California at Irvine" ck=194
+#FEATURESET idl_lmgrd 4B1531F8AFE70811
+##################### end of license file #######################
+###########################################################
+
+#djn: installed idl version 5.6 2002 11 22
+#below is license.dat info from email
+####################### LICENSE.DAT #######################
+############ license file comments, do not delete ###############
+# License Number(s): 97041
+
+#SERVER dust.ps.uci.edu 00c04f60738d 1700
+##DAEMON idl_lmgrd /usr/local/rsi/idl_5.6/bin
+#DAEMON idl_lmgrd /usr/local/rsi/idl/bin
+#INCREMENT idl_mpeg idl_lmgrd 1.000 1-jan-0000 1 7B06E0A1C761E3B438F1 \
+#    VENDOR_STRING="97041University of California at Irvine" ck=27
+#INCREMENT idl idl_lmgrd 5.600 1-jan-0000 6 1BA6F0919E12EBF353A2 \
+#    VENDOR_STRING="97041University of California at Irvine" ck=249
+#FEATURESET idl_lmgrd 7E66736EFF21D3B8
+##################### end of license file #######################
+########################################################### 
+
+# csz: installed IDL version 6.1 on sand.ess.uci.edu on 20041228
+####################### LICENSE.DAT #######################
+############ license file comments, do not delete ###############
+# License Number(s): 97041 
+SERVER sand 00d0680399a4 1700
+#DAEMON idl_lmgrd /usr/local/rsi/idl_6.1/bin/ 
+DAEMON idl_lmgrd /usr/local/rsi/idl/bin/ 
+INCREMENT idl_gif idl_lmgrd 1.000 1-jan-0000 1 2B2680519BD8A816E818 \
+	VENDOR_STRING="97041University of California at Irvine" ck=230
+INCREMENT idl_tifflzw idl_lmgrd 1.000 1-jan-0000 1 \
+	AB5600F1ADFD7EB5E06B VENDOR_STRING="97041University of \
+	California at Irvine" ck=91
+INCREMENT idl idl_lmgrd 6.100 1-jan-0000 6 BB26E0A1987B17E72A4F \
+	VENDOR_STRING="97041University of California at Irvine" ck=30
+INCREMENT idl_mpeg idl_lmgrd 6.100 1-jan-0000 1 2BC6F0014AC58F5AFFC9 \
+	VENDOR_STRING="97041University of California at Irvine" ck=123
+FEATURESET idl_lmgrd 4259C98D9FF5113C
+##################### end of license file #######################
+###########################################################
+
+# csz++
+# Usage:
+# sudo cp ~/linux/usr/local/pgi/license.dat /usr/local/pgi/license.dat
+# lmgrd server is started by /etc/rc.d/rc.local
+# Following licenses received 20001002 for PGI 3.2 for dust.ps.uci.edu
+# lmgrd fails when IDL and PGI licenses use different port numbers
+# IDL wants to use port 1700, while PGI wants to use port 7496
+#SERVER dust.ps.uci.edu 00c04f60738d 7496
+#SERVER dust.ps.uci.edu 00c04f60738d 1700
+#DAEMON pgroupd /usr/local/pgi/linux86/bin/pgroupd
+# Be sure real licenses precede original temporary licences 
+# Temporary licenses should be commented out or deleted or else
+# "WARNING: duplicate license file lines" will result on lmgrd startup
+# csz--
+
+#FEATURE pghpf-linux86 pgroupd 3.200 31-dec-0 1 3BB89021003E7E884556 \
+#    VENDOR_STRING=109584:4 HOSTID=00c04f60738d ck=206
+#FEATURE pgf90-linux86 pgroupd 3.200 31-dec-0 1 7BE88021DA4D4D2B2487 \
+#    VENDOR_STRING=109584:4 HOSTID=00c04f60738d ck=17
+#FEATURE pgf77-linux86 pgroupd 3.200 31-dec-0 1 0B58D0B1424BC9091B90 \
+#    VENDOR_STRING=109584:4 HOSTID=00c04f60738d ck=233
+#FEATURE pgprof pgroupd 3.200 31-dec-0 1 2B7840519367C0F9C22B \
+#    VENDOR_STRING=109584:4 HOSTID=00c04f60738d ck=198
+#FEATURE pgdbg pgroupd 3.200 31-dec-0 1 BB98E0E1F00C145FCC90 \
+#    VENDOR_STRING=109584:4 HOSTID=00c04f60738d ck=50
+
+#################################################################
+
+
+
+
+

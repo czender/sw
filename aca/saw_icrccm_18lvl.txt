@@ -1,0 +1,44 @@
+-----------------------------------------------------------------
+ sub-arctic winter profile  (h2o and o3 as mass mixing ratios)
+-----------------------------------------------------------------
+  83.0           day of year (1=jan 1; from 1 to 365)
+   0.00           latitude  (from +90 to -90)
+  level   p(mb)    t(k)   h2ommr (g/g) o3mmr (g/g) cld cvr  cld lwp (g/m2)
+    18    2.02600    237.10   4.00000E-06  1.20000E-05  0.00000E+00 0.000E+00
+    17    5.47020    221.46   4.00000E-06  1.00000E-05  0.00000E+00 0.000E+00
+    16   15.29630    213.90   4.00000E-06  9.00000E-06  0.00000E+00 0.000E+00
+    15   33.93550    212.86   4.00000E-06  8.00000E-06  0.00000E+00 0.000E+00
+    14   60.78000    215.06   4.00000E-06  6.00000E-06  0.00000E+00 0.000E+00  
+    13  103.22470    216.97   4.00000E-06  3.50000E-06  0.00000E+00 0.000E+00 
+    12  161.26960    217.07   7.71919E-06  1.20000E-06  0.00000E+00 0.000E+00
+    11  234.50950    217.07   1.35608E-05  7.00000E-07  0.00000E+00 0.000E+00
+    10  323.04570    219.40   2.39986E-05  1.00000E-07  0.00000E+00 0.000E+00
+     9  420.09110    231.08   1.00564E-04  9.00000E-08  0.00000E+00 0.000E+00
+     8  516.83260    240.66   3.16551E-04  7.00000E-08  0.00000E+00 0.000E+00
+     7  613.47280    248.23   6.10219E-04  5.00000E-08  0.00000E+00 0.000E+00
+     6  709.91040    253.64   8.63813E-04  4.50000E-08  0.00000E+00 0.000E+00
+     5  799.15570    257.18   9.92197E-04  4.00000E-08  1.00000E+00 10.000E+00
+     4  873.00340    259.05   1.01102E-03  3.50000E-08  1.00000E+00 10.000E+00
+     3  931.55480    258.78   9.56882E-04  3.25000E-08  1.00000E+00 10.000E+00
+     2  974.80990    257.93   9.11414E-04  3.00000E-08  1.00000E+00 10.000E+00
+     1 1002.76870    257.32   8.83924E-04  3.00000E-08  0.00000E+00 0.000E+00
+       1013.25     
+                   257.32   surface air temperature
+                   257.32   ground (skin) temperature
+                      2     surface type flag (0=ocn, 1=lnd, 2=sea-ice)
+                    0.040   surface aerodynamic roughness (m)
+                    0.005   snow cover (m) in liquid water equivalent
+                    0.100   visible surface albedo for strng zen ang srfcs
+                    0.100   visible surface albedo for weak  zen ang srfcs
+                    0.100   near-ir surface albedo for strng zen ang srfcs
+                    0.100   near-ir surface albedo for weak zen ang srfcs
+                    0.000   fraction strng zen ang srf
+                    3.55e-4 co2 volume mixing ratio
+    0.311e-6  N2O volume mixing ratio
+    1.714e-6  CH4 volume mixing ratio
+    0.280e-9  CFC11 volume mixing ratio
+    0.503e-9  CFC12 volume mixing ratio
+    0.14      Aerosol visible extinction optical depth
+ 1367.0       Solar constant [W m-2]
+ 1995         Year AD (integer)
+    0.0       Longitude (degrees East, from 0.0 to 360.0)

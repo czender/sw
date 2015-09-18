@@ -1,0 +1,11 @@
+!csz++
+! Purpose: Swap Caps_Lock and Control_L
+! Usage: xmodmap ~/.xmodmaprc.gss1
+! 98/10/11: Took this example from AIX xmodmap manpage
+!csz--
+remove Lock = Caps_Lock
+remove Control = Control_L
+keysym Control_L = Caps_Lock
+keysym Caps_Lock = Control_L
+add Lock = Caps_Lock
+add Control = Control_L

@@ -1,0 +1,33 @@
+-90.0 90.0 0.0 360.0
+  0.0  0.0 0.0   0.0
+Above: ZBN03, ZNT03 taper all coastal sources globally
+
+README:
+Above data describe four corners of lat x lon rectangles
+(degrees N, degrees N, degrees E, degrees E) where
+erodibility factors (area_acm_fct and flw_acm_fct) are 
+tapered at the coast.
+1. Each line is one rectangle
+2. Input rectangle list is terminated by null rectangle entry "0.0 0.0 0.0 0.0"
+3. Data come before any comments
+
+60.0 90.0   0.0 360.0
+38.0 46.0 268.0 278.0
+48.0 60.0 348.0 360.0
+48.0 60.0   0.0  16.0
+ 0.0  0.0   0.0   0.0
+Above: Dave Newman tapered these regions to improve simulations
+near mouths of major rivers with fully back-filled geomorphologic/
+hydrologic erodibility factors
+
+60.0 90.0 0.0   360.0
+38.0 46.0 268.0 278.0
+48.0 60.0 348.0 360.0
+48.0 60.0 0.0    16.0
+ 0.0  0.0 0.0     0.0
+# Above: alternative region list tested by Newman
+
+60.0 90.0 0.0 360.0
+0.0  0.0  0.0 0.0
+# Above: alternative region list tested by Newman
+

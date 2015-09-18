@@ -1,0 +1,67 @@
+# Purpose: Dismember netCDF4/HDF5 hierarchical files. CF-check them.
+# Place each input file group in separate netCDF3 output file
+# Described in NCO User Guide at http://nco.sf.net/nco.html#dismember
+# Requirements: NCO 4.3.x+, UNIX shell utilities awk, grep, sed
+# Optional: CFchecker command https://bitbucket.org/mde_/cfchecker
+
+# Usage:
+# ncdismember <fl_in> <drc_out> [flg_cf] [cf_vrs] [opt]
+# where fl_in is input file/URL to dismember, drc_out is output directory,
+# CF-compliance check is performed when optional third argument is 'cf',
+# Optional fourth argument cf_vrs is CF version to check
+# Optional fifth argument opt passes straight through to ncks
+# chmod a+x ~/sh/ncdismember
+# ncdismember ~/nco/data/mdl_1.nc /data/zender/nco/tmp
+# ncdismember ~/nco/data/mdl_1.nc /data/zender/nco/tmp
+# ncdismember http://dust.ess.uci.edu/nco/mdl_1.nc /data/zender/nco/tmp
+# ncdismember http://thredds-test.ucar.edu/thredds/dodsC/testdods/foo.nc /data/zender/nco/tmp
+# ncdismember ~/nco/data/mdl_1.nc /data/zender/nco/tmp cf
+# ncdismember ~/nco/data/mdl_1.nc /data/zender/nco/tmp cf 1.3
+# ncdismember ~/nco/data/mdl_1.nc /data/zender/nco/tmp cf 1.5 --fix_rec_dmn=all
+
+# Command line argument defaults
+fl_in="${HOME}/nco/data/mdl_1.nc" # [sng] Input file to dismember/check
+drc_out="${DATA}/nco/tmp" # [sng] Output directory
+flg_cf='0' # [flg] Perform CF-compliance check
+cf_vrs='1.5' # [sng] Compliance-check this CF version (e.g., '1.5')
+opt='' # [flg] Additional ncks options (e.g., '--fix_rec_dmn=all')
+# Use single quotes to pass multiple arguments to opt=${5}
+# Otherwise arguments would be seen as ${5}, ${6}, ${7} ...
+
+# Command line argument option parsing
+if [ -n "${1}" ]; then fl_in=${1}; fi
+if [ -n "${2}" ]; then drc_out=${2}; fi
+if [ -n "${3}" ]; then flg_cf=${3}; fi
+if [ -n "${4}" ]; then cf_vrs=${4}; fi
+if [ -n "${5}" ]; then opt=${5}; fi
+
+# Prepare output directory
+echo "NCO dismembering file ${fl_in}"
+fl_stb=$(basename ${fl_in})
+drc_out=${drc_out}/${fl_stb}
+mkdir -p ${drc_out}
+cd ${drc_out}
+# Obtain group list
+grp_lst=`ncks --cdl -m ${fl_in} | grep '// group' | awk '{$1=$2=$3="";sub(/^  */,"",$0);print}'`
+IFS=$'\n' # Change Internal-Field-Separator from <Space><Tab><Newline> to <Newline>
+for grp_in in ${grp_lst} ; do
+    # Replace slashes by dots for output group filenames
+    grp_out=`echo ${grp_in} | sed 's/\///' | sed 's/\//./g'`
+    if [ "${grp_out}" = '' ]; then grp_out='root' ; fi
+    # Tell older NCO/netCDF if HDF4 with --hdf4 switch (signified by .hdf/.HDF suffix)
+    hdf4=`echo ${fl_in} | awk '{if(match(tolower($1),".hdf$")) hdf4="--hdf4"; print hdf4}'`
+    # Flatten to netCDF3, anchor, no history, no temporary file, padding, HDF4 flag, options
+    cmd="ncks -O -3 -G : -g ${grp_in}/ -h --no_tmp_fl --hdr_pad=40 ${hdf4} ${opt} ${fl_in} ${drc_out}/${grp_out}.nc"
+    # Use eval in case ${opt} contains multiple arguments separated by whitespace
+    eval ${cmd}
+    if [ ${flg_cf} = 'cf' ]; then
+       # cfchecker needs Conventions <= 1.5
+       ncatted -h -a Conventions,global,o,c,"CF-${cf_vrs}" ${drc_out}/${grp_out}.nc
+    else # !flg_cf
+       echo ${drc_out}/${grp_out}.nc
+    fi # !flg_cf
+done
+if [ ${flg_cf} = 'cf' ]; then
+    echo "CFchecker reports CF-compliance of each group in flat netCDF3 format"
+    cfchecker -c ${cf_vrs} *.nc
+fi # !flg_cf

@@ -1,0 +1,266 @@
+<!-- $Id$
+
+Purpose: LaTeX source homepage
+
+Usage:
+http://dust.ess.uci.edu/doc/tex/index.shtml
+file:/home/zender/tex/index.shtml
+scp ~/tex/index.shtml dust.ess.uci.edu:/var/www/html/doc/tex/index.shtml
+
+Update LaTeX sources and bibliography:
+cd ~/tex;scp -p \
+bib.bib \
+csz.sty \
+jas_abb.tex \
+jgr_abb.tex \
+jrn_agu.sty \
+jrn_ams.sty \
+dust.ess.uci.edu:/var/www/html/doc/tex
+
+cd ~/mk;scp -p \
+Makefile.tex \
+dust.ess.uci.edu:/var/www/html/doc/tex
+
+cd ~/poetry;scp -p \
+poetry.sty \
+dust.ess.uci.edu:/var/www/html/doc/tex
+
+cd ~/tex/cls;scp -p \
+dchem.sty \
+dust.ess.uci.edu:/var/www/html/doc/tex
+
+cd ~/tex/bst;scp -p \
+agu.bst \
+agu04.bst \
+jas.bst \
+dust.ess.uci.edu:/var/www/html/doc/tex
+
+cd ~/crr;scp -p \
+abc.sty \
+aer.sty \
+chm.sty \
+dmn.sty \
+dyn.sty \
+hmw.sty \
+hyp.sty \
+lct.sty \
+psd.sty \
+rt.sty \
+smn.sty \
+snw.sty \
+tdy.sty \
+dust.ess.uci.edu:/var/www/html/doc/tex
+-->
+
+<!doctype html public "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+   <title>Zender LaTeX Homepage</title>
+   <meta name="Generator" content="Old fashioned typing">
+   <meta name="Author" content="Charlie Zender">
+   <meta name="Keywords" content="Documentation">
+</head>
+<body text="#000000" link="#0000EF" vlink="#008080" alink="#FF0000">
+
+<table width="100%"><tr><td align="center" valign="top">
+<a href="http://dust.ess.uci.edu/dead">DEAD</a> /
+<a href="http://dust.ess.uci.edu/doc">Doc</a> /
+<a href="http://dust.ess.uci.edu"><tt>dust</tt></a> /
+<a href="http://www.ess.uci.edu">ESS</a> /
+<a href="http://www.ess.uci.edu/esmf">ESMF</a> /
+<a href="http://dust.ess.uci.edu/facts">FACTs</a> /
+<a href="http://nco.sf.net">NCO</a> /
+<a href="http://dust.ess.uci.edu/poetry">Poetry</a> /
+<a href="http://www.ess.uci.edu/~zender">Zender</a>
+</td></tr></table>
+
+<p><hr width="100%"></p>
+<p><h1 align=center>Zender Group LaTeX Source Homepage</h1>
+
+<a href="http://dust.ess.uci.edu/doc/tex/index.shtml">This document</a>
+describes how to (modify and) build Zender Group documents 
+(e.g., <a href="http://dust.ess.uci.edu/doc">Cheat Sheets</a> and
+<a href="http://dust.ess.uci.edu/facts">FACTs</a>) from LaTeX source.
+
+<h2>Standard software/class/style files for building Zender's documents</h2>
+First, install an up-to-date LaTeX installation.
+We recommend Thomas Esser's 
+<a href="http://www.tug.org/tetex">teTeX</a>, the default TeX
+installation for many popular Linux distributions.  
+Our documents use many Standard class/style files.
+Most require a subset of the following packages:
+<tt>agu2001</tt>, 
+<tt>aguplus</tt>, 
+<tt>amsmath</tt>, 
+<tt>array</tt>, 
+<tt>datetime</tt>, 
+<tt>epstopdf</tt>, 
+<tt>hyperref</tt>, 
+<tt>ifpdf</tt>, 
+<tt>latexsym</tt>, 
+<tt>lineno</tt>, 
+<tt>longtable</tt>, 
+<tt>lscape</tt>, 
+<tt>makeidx</tt>, 
+<tt>mdwlist</tt>, 
+<tt>natbib</tt>, 
+<tt>preview</tt>, 
+<tt>subfigure</tt>, 
+<tt>thumbpdf</tt>, 
+<tt>times</tt>, 
+<tt>tocbibind</tt>, 
+<tt>upgreek</tt>, 
+<tt>url</tt>.
+Most of theses packages come with the default <tt>teTeX</tt>
+distribution.
+Obtain the rest from your local
+<a href="www.ctan.org/tex-archive/help/Catalogue">CTAN</a>.
+The few system style files that are difficult to find we make directly
+available here:  
+<ul>
+<li><a href="http://dust.ess.uci.edu/doc/tex/agu.bst"><tt>agu.bst</tt></a> AGU Bibliography Style (last modified <!--#flastmod file="agu.bst"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/agu04.bst"><tt>agu04.bst</tt></a> AGU 2004 Bibliography Style (last modified <!--#flastmod --> <!--file="agu04.bst"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/dchem.sty"><tt>dchem.sty</tt></a> Chemistry macros of Donald Arsenau (last modified <!--#flastmod file="dchem.sty"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/jas.bst"><tt>jas.bst</tt></a> JAS Bibliography Style (last modified <!--#flastmod file="jas.bst"-->)</li>
+</ul>
+
+<h2>Zender group class/style files</h2>
+These style files define the science macros used heavily
+used in most of the documents: 
+<ul>
+<li><a href="http://dust.ess.uci.edu/doc/tex/abc.sty"><tt>abc.sty</tt></a> Declaration of entire alphabet as three letter macros (last modified <!--#flastmod file="abc.sty"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/aer.sty"><tt>aer.sty</tt></a> Commands specific to aerosol physics (last modified <!--#flastmod file="aer.sty"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/bib.bib"><tt>bib.bib</tt></a> BibTeX bibliography database (last modified <!--#flastmod file="bib.bib"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/csz.sty"><tt>csz.sty</tt></a> Frequently used macros for LaTeX (last modified <!--#flastmod file="csz.sty"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/chm.sty"><tt>chm.sty</tt></a> Commands specific to chemistry (last modified <!--#flastmod file="chm.sty"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/dmn.sty"><tt>dmn.sty</tt></a> Dimensional units (last modified <!--#flastmod file="dmn.sty"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/dyn.sty"><tt>dyn.sty</tt></a> Commands general to fluid dynamics (last modified <!--#flastmod file="dyn.sty"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/hmw.sty"><tt>hmw.sty</tt></a> Preamble for course homework (last modified <!--#flastmod file="hmw.sty"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/hyp.sty"><tt>hyp.sty</tt></a> Hyphenation exception list (last modified <!--#flastmod file="hyp.sty"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/jgr_abb.tex"><tt>jgr_abb.tex</tt></a> AGU-sanctioned journal title abbreviations (last modified <!--#flastmod file="jgr_abb.tex"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/jrn_agu.sty"><tt>jrn_agu.sty</tt></a> AGU-sanctioned journal title abbreviations (last modified <!--#flastmod file="jrn_agu.sty"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/jas_abb.tex"><tt>jas_abb.tex</tt></a> AMS-sanctioned journal title abbreviations (last modified <!--#flastmod file="jas_abb.tex"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/jrn_ams.sty"><tt>jrn_ams.sty</tt></a> AMS-sanctioned journal title abbreviations (last modified <!--#flastmod file="jrn_ams.sty"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/lct.sty"><tt>lct.sty</tt></a> Preamble for course lecture notes (last modified <!--#flastmod file="lct.sty"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/poetry.sty"><tt>poetry.sty</tt></a> Poetry format (last modified <!--#flastmod file="poetry.sty"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/psd.sty"><tt>psd.sty</tt></a> Commands specific to particle size distributions (last modified <!--#flastmod file="psd.sty"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/rt.sty"><tt>rt.sty</tt></a> Commands specific to radiative transfer (last modified <!--#flastmod file="rt.sty"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/smn.sty"><tt>smn.sty</tt></a> Commands specific to seminar presentations and FoilTeX (last modified <!--#flastmod file="smn.sty"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/snw.sty"><tt>snw.sty</tt></a> Commands pertaining to snow measurement and modeling (last modified <!--#flastmod file="snw.sty"-->)</li>
+<li><a href="http://dust.ess.uci.edu/doc/tex/tdy.sty"><tt>tdy.sty</tt></a> Commands pertaining to thermodynamics (last modified <!--#flastmod file="tdy.sty"-->)</li>
+</ul>
+
+<p>Now you are ready to build most of the Zender Group documents.
+As an example, let us build the Particle Size Distribution monograph:
+
+<ul>
+<li>Particle Size Distributions: Theory and Application to Aerosols, Clouds, and Soils</li>
+<a href="http://dust.ess.uci.edu/facts/psd/psd.dvi">DVI</a>,
+<a href="http://dust.ess.uci.edu/facts/psd/psd.html">HTML</a>,
+<a href="http://dust.ess.uci.edu/facts/psd/psd.tex">LaTeX</a>,
+<a href="http://dust.ess.uci.edu/facts/psd/psd.pdf">PDF</a>,
+<a href="http://dust.ess.uci.edu/facts/psd/psd.ps">PS</a>, 
+<a href="http://dust.ess.uci.edu/facts/psd/psd.txt">TXT</a>, 
+<a href="http://dust.ess.uci.edu/facts/psd/psd.xml">XML</a>
+</ul>
+
+<p>Step 0. Install LaTeX and Standard packages.
+
+<p>Step 1. Install Bibliography (<tt>bib.bib</tt>) and bibliography style files (<tt>*.bst</tt>) on your
+<tt>${BIBINPUTS}</tt> path: 
+<tt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/bib.bib</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/agu.bst</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/agu04.bst</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/jas.bst</dt>
+</tt>
+
+<p>Step 2. Install Zender group style files on your
+<tt>${TEXINPUTS}</tt> path: 
+<tt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/abc.sty</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/aer.sty</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/chm.sty</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/csz.sty</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/dchem.sty</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/dmn.sty</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/dyn.sty</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/hmw.sty</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/hyp.sty</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/jas_abb.tex</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/jgr_abb.tex</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/jrn_agu.sty</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/jrn_ams.sty</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/lct.sty</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/poetry.sty</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/psd.sty</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/rt.sty</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/smn.sty</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/snw.sty</dt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/tdy.sty</dt>
+</tt>
+
+<!--
+cat > list.txt << EOF
+csz.sty jas_abb.tex jgr_abb.tex jrn_agu.sty jrn_ams.sty abc.sty \ 
+aer.sty chm.sty dmn.sty dyn.sty hmw.sty hyp.sty lct.sty poetry.sty psd.sty rt.sty \
+smn.sty snw.sty tdy.sty
+EOF
+wget -P . -B http://dust.ess.uci.edu/doc/tex/ -i list.txt
+wget --directory-prefix=. http://dust.ess.uci.edu/doc/tex/abc.sty
+-->
+
+<p>Step 2. Download document source:
+<tt>
+<dt>wget http://dust.ess.uci.edu/facts/psd/psd.tex</dt>
+</tt>
+
+<p>Step 3. <tt>Option A:</tt> Create PDF manually:
+<tt>
+<dt>pdflatex psd.tex;bibtex psd;makeindex psd;pdflatex psd.tex;bibtex psd;makeindex psd;pdflatex psd.pdf</dt>
+</tt>
+
+<p>Step 3. <tt>Option B:</tt> Create PDF using <a href="http://dust.ess.uci.edu/doc/tex/Makefile.tex">Makefile.tex</a>:
+<tt>
+<dt>wget http://dust.ess.uci.edu/doc/tex/Makefile.tex -O Makefile</dt>
+<dt>make psd.pdf;bibtex psd;makeindex psd;make psd.pdf;bibtex psd;makeindex psd;make psd.pdf</dt>
+</tt>
+
+<p>Our most complex document is the LaTeX Cheat Sheet. 
+Download the source below. 
+If you can build this, you can build anything.</p>
+<ul>
+<li>LaTeX Cheat Sheet</li>
+<a href="http://dust.ess.uci.edu/doc/ltx/ltx.dvi">DVI</a>, 
+<a href="http://dust.ess.uci.edu/doc/ltx/ltx.html">HTML</a>,
+<a href="http://dust.ess.uci.edu/doc/ltx/ltx.tex">LaTeX</a>,
+<a href="http://dust.ess.uci.edu/doc/ltx/ltx.pdf">PDF</a>,
+<a href="http://dust.ess.uci.edu/doc/ltx/ltx.ps">PS</a>, 
+<a href="http://dust.ess.uci.edu/doc/ltx/ltx.txt">TXT</a>, 
+<a href="http://dust.ess.uci.edu/doc/ltx/ltx.xml">XML</a>
+</ul>
+
+Each document is produced from a single LaTeX source file.
+Conversions are performed from LaTeX to
+DVI (with <tt>latex</tt> and <tt>bibtex</tt>),
+HTML (with <tt>htlatex</tt>, <tt>latex2html</tt>, or <tt>tth -Lfoo -p${TEXINPUTS}</tt>),
+PDF (with <tt>pdflatex</tt> and <tt>thumbpdf</tt>), 
+PS (with <tt>dvips -t letter -Ppdf -G0</tt>), 
+TXT (with <tt>pdftotext</tt> or <tt>untex</tt>), and 
+XML (with <tt>mzlatex</tt>).
+
+Unfortunately, many HTML converters (<tt>htlatex</tt>,
+<tt>latex2html</tt>, <tt>tth</tt>) and XML converters
+(<tt>mzlatex</tt>) produce illegible or incomplete output.
+The TXT converter, <tt>untex</tt>, is a LaTeX-stripper&mdash;it
+only does a good job of preserving un-formatted text.
+Suggestions for producing better HTML, TXT, and XML from LaTeX are welcome!
+</p>
+
+<p>
+<hr></p>
+Address questions and comments about this web page to
+<address>
+<a href="mailto:surname@uci.edu">Charlie &ldquo;my surname is zender&rdquo; Zender</a></address>
+</body>
+</html>

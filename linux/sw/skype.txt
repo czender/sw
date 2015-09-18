@@ -1,0 +1,6 @@
+Skype requires GCC 3.3
+cd ${DATA}/tmp
+sudo apt-get install libstdc++5 gcc-3.3-base
+wget http://skype.com/go/getskype-linux-deb
+sudo dpkg --install ${DATA}/tmp/skype_1.2.0.18-2_i386.deb
+

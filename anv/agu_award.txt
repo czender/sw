@@ -1,0 +1,18 @@
+Charles S. Zender
+
+I received my BA in Physics from Harvard in 1990.  While there,
+interest in nuclear winter and ozone depletion curbed my interests
+from astronomy to global change.  The next year I taught math and
+physics at the College of the Atlantic in Bar Harbor, ME.  I landed in
+the Atmospheric Science Dept. at the Univ. Colorado Boulder in 1991.
+I worked on radiative methods for ozone retrieval until coming to work
+with my academic advisor Jeff Kiehl in the Climate Modelling Section
+of NCAR.  In 1993 I received my MS on the topic of the radiative
+sensitivity of tropical anvils to small ice crystals.  I am now
+finishing my PhD, which centers on simulating the observed effects of
+tropical anvils on the radiation budget using a new prognostic cloud
+scheme in the NCAR GCM.  Future research interests include
+identification of physical mechanisms causing radiation models to
+underpredict shortwave absorption and effects of dust and soil aerosol on  
+the global radiative budget.
+

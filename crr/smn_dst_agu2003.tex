@@ -1,0 +1,770 @@
+% $Id$
+
+% Purpose: Seminar on mineral dust Ca measurements and modeling
+
+% URL: http://dust.ess.uci.edu/tmp/smn_dst_agu2003.pdf
+
+% Usage: 
+% cd ${HOME}/crr;make -W smn_dst_agu2003.tex smn_dst_agu2003.ps;ps2pdf ${DATA}/ps/smn_dst_agu2003.ps ${DATA}/ps/smn_dst_agu2003.pdf;cd -
+% scp ${DATA}/ps/smn_dst_agu2003.pdf ${DATA}/ps/smn_dst_agu2003.ps dust.ess.uci.edu:/var/www/html/tmp
+
+\documentclass[final,dvips]{foils}
+
+% Standard packages
+\usepackage{amsmath} % \subequations, \eqref, \align
+\usepackage{array} % Table and array extensions, e.g., column formatting
+\usepackage[usenames]{color} % usenames allows, e.g., ``ForestGreen''
+\usepackage{graphicx} % Defines \includegraphics*
+\usepackage{longtable} % Multi-page tables, e.g., acronyms and symbols
+\usepackage{mdwlist} % Compact list formats \itemize*, \enumerate*
+\usepackage{natbib} % \cite commands from aguplus
+\usepackage[figuresright]{rotating} % Allows sideways figures and tables
+%\usepackage{times} % Times/Roman font, aguplus STRONGLY recommends this for the camera-ready version!!
+\usepackage{url} % Typeset URLs and e-mail addresses
+
+% Personal packages
+\usepackage{csz} % Library of personal definitions
+\usepackage{abc} % Alphabet as three letter macros
+\usepackage{dmn} % Dimensional units
+\usepackage{chm} % Chemistry
+\usepackage{dyn} % Fluid dynamics
+\usepackage{aer} % Aerosol physics
+\usepackage{rt} % Radiative transfer
+\usepackage{psd} % Particle size distributions
+\usepackage{smn} % Seminars
+\input{jgr_abb} % JGR-sanctioned journal abbreviations
+
+% Margins
+\topmargin 0in \headheight 0pt \headsep 0pt
+\textheight 9in \textwidth 6.5in
+\oddsidemargin 0in \evensidemargin 0in
+\marginparwidth 0pt \marginparsep 0pt
+\footskip 0pt
+\footnotesep=0pt
+
+% Commands specific to this file
+\newcommand{\bluestar}{\textcolor{blue}{$^{*}$}}
+\newcommand{\greenstar}{\textcolor{green}{$^{*}$}}
+\newcommand{\redstar}{\textcolor{red}{$^{*}$}}
+
+% 1. Fundamental commands
+\newcommand{\egv}{\ensuremath{\lambda}} % [frc] Eigenvalue
+\newcommand{\eof}{\ensuremath{\mathrm{EOF}}} % [frc] Empirical Orthogonal Function
+\newcommand{\eofidx}{\ensuremath{i}} % [idx] Empirical Orthogonal Function term index
+\newcommand{\eofnbr}{\ensuremath{N}} % [nbr] Number of Empirical Orthogonal Function terms
+\newcommand{\prncmp}{\ensuremath{\mathrm{PC}}} % [frc] Principal Component
+\newcommand{\vrn}{\ensuremath{v}} % [frc] Variance
+
+% 2. Derived commands
+\newcommand{\egvtrm}{\ensuremath{\egv_{\eofidx}}} % [frc] i'th Eigenvalue
+\newcommand{\eofone}{\ensuremath{\eof_{1}}} % [frc] First Empirical Orthogonal Function
+\newcommand{\eoftwo}{\ensuremath{\eof_{2}}} % [frc] Second Empirical Orthogonal Function
+\newcommand{\eofnbrprm}{\ensuremath{\eofnbr^{\prime}}} % [nbr] Number of Empirical Orthogonal Function terms
+\newcommand{\eoftrm}{\ensuremath{\eof_{\eofidx}}} % [frc] i'th Empirical Orthogonal Function
+\newcommand{\prncmpone}{\ensuremath{\prncmp_{1}}} % [frc] First Principal Component
+\newcommand{\prncmptwo}{\ensuremath{\prncmp_{2}}} % [frc] Second Principal Component
+\newcommand{\prncmptrm}{\ensuremath{\prncmp_{\eofidx}}} % [frc] i'th Principal Component
+
+% FoilTeX macros
+\MyLogo{} % Appears bottom left corner every page
+\rightfooter{} % Pagenumber is the default
+\leftheader{} % Appears upper left
+\rightheader{} % Appears upper right
+
+\begin{document}
+\raggedright % Default is justified
+
+\rotatefoilhead{\LARGE \textcolor{blue}{
+Mineral dust aerosol and tropospheric ozone: 
+Sensitivity to season, species, uptake rate, and chemical composition}}\vspace{-0.5in}\LARGE
+\begin{center}
+Charlie Zender$^{1}$ and Huisheng Bian$^{1,2}$\\
+$^{1}$Dept.\ of Earth System Science,\\ University of California, Irvine\\
+$^{2}$Goddard Earth Sciences and Technology Center, NASA GSFC, Maryland\\
+\bigskip
+\bigskip
+\bigskip
+%European Geophysical Society, Nice, April~26, 2004\\
+EGS, Nice, April~26, 2004\\
+{\large Thanks: Vicki Grassian, Michael Prather}
+\normalsize
+\end{center}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Background \hfill}}\vspace{-0.75in}\large
+Dust accounts for more surface area than any other aerosol\\
+Oxidant budgets may be sensitive to dust \cite[]{DCZ96,ZhC99,GCS01}\\
+\begin{itemize*}
+\item Up to 10\% \Ot, 50\% \NOt\ removed by dust!
+\end{itemize*}
+Problems with ``early'' studies:
+\begin{enumerate*}
+\item Uptake rate uncertainties (\textcolor{blue}{reduced?}, \textcolor{red}{still ${\cal O}(10^{3})$ for \HNOt})
+\item Uncertainties not propagated to~\dlthchOt\ (\textcolor{blue}{quantified})
+\item Most active \Ot\ removal paths unknown (\textcolor{blue}{determined})
+\item Uncertain relative roles of photochemical, heterogeneous forcing (\textcolor{blue}{quantified})
+\item No coeval dust, oxidant measurements in ``natural'' settings (\textcolor{blue}{much improved})
+\item Simplistic or no mineralogical effects (\textcolor{red}{unchanged})
+\item Inadequate representation of aging, surface saturation (\textcolor{red}{unchanged})
+\end{enumerate*}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Recent Work \hfill}}\vspace{-0.75in}\large
+Subsequently, 
+\begin{enumerate*}
+\item Uptake rate measurements on ideal and authentic dust samples 
+  \cite{USP01,MUG02,HaC01a,HaC03a,HaC03b}
+\item ACE Asia, MINATROC, PRIDE, SHADE, TRACE-P
+\item Global model \Ot\ sensitivity studies by
+  \cite{MJL02,BiZ03,BiZ04} and \cite{BBS04}  
+\begin{itemize*}
+\item Effects of season, surface albedo, precursor proximity, uptake
+path, uptake rate, chemical composition 
+\end{itemize*}
+\item Use of Inorganic Thermodynamic Equilibrium Models (ITEMs) \cite[]{MDKJ02,RoD041}
+\end{enumerate*}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Modeling Strategy \hfill}}\vspace{-0.5in}\large
+\begin{enumerate*}
+\item Dust Entrainment And Deposition (DEAD) model
+  (\url{http://dust.ess.uci.edu/dead}) simulations of 1990--1999  
+\item UCI CTM quantifies range tropospheric~\Ot\ based on range of
+  measured $\mssuptcff$ 
+\item Empirical Orthogonal Function (EOF) and Principal
+  Component Analysis (PCA)
+\end{enumerate*}
+
+\foilhead{
+\Large\textcolor{blue}{\hfill MOZAIC Comparison: Abidjan\hfill}}\vspace{-0.5in}\large
+\enlargethispage*{1in} 
+\begin{figure}
+\begin{center}
+\includegraphics*[width=0.6\hsize]{fgbw/model-obs}%
+\end{center}
+\caption{January \Ot\ vertical profile over Abidjan ($5$\,\dgrn,
+$4$\,\dgrw) from 1994--1999 MOZAIC observations \cite[]{MJL02}.
+\csznote{
+Error bars indicate observed standard deviation based on 28~observations.
+Model results without mineral dust (thin dashes); with mineral dust
+photolysis forcing only (thin dash-dot line); with both photolysis and
+heterogeneous base-value uptake coefficients (thick dashes) and
+a new set of uptake coefficients (see text) (thick dash-dot line).
+}} 
+\label{fgr:model-obs}
+\end{figure}
+
+\foilhead{
+\Large\textcolor{blue}{\hfill Dust Forcing \Ot: Photolysis\hfill}}\vspace{-0.5in}\large
+\enlargethispage*{1in} 
+\begin{figure}
+\centering
+\includegraphics*[width=1.0\hsize]{/data/zender/fgr/ppr_BiZ03/fgbw/paperphoo3}%
+\caption{Photolysis rate forcing of \Ot~[ppb] by dust in January and
+July at three atmospheric layers. 
+Global annual mean \Ot\ \textcolor{red}{increase}: 0.23\%.
+\label{fgr:phooh}}
+\end{figure}
+
+\foilhead{
+\Large\textcolor{blue}{\hfill Dust Forcing \Ot: Heterogeneous\hfill}}\vspace{-0.5in}\large
+\enlargethispage*{1in} 
+\begin{figure}
+\centering
+\includegraphics*[width=1.0\hsize]{/data/zender/fgr/ppr_BiZ03/fgcolor/paperheto3}%
+\caption{Decrease in \Ot~[ppb] due to heterogeneous reactions on
+dust in January and July at three atmospheric layers.
+Global annual mean \Ot\ \textcolor{blue}{decrease}: 0.9\% (assumes $\mssuptcffHNOt = 0.001$).
+\label{fgr:heto3}}
+\end{figure}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Results~I: Hetero.\ vs.\ Photo.\ \hfill}}\vspace{-0.75in}\large
+\begin{enumerate*}
+\item Heterogeneous uptake much more important than Photochemistry
+\item Photochemical forcing strongly sensitive to precursors,
+  surface-albedo, season, hemisphere
+\item Non-linear coupling causes $< 20$\% of dust \Ot\ forcing
+\item Polar \Ot\ changes dominated by transport of perturbed air
+\item Global annual mean \Ot\ decrease: 0.7\% (assumes $\mssuptcffHNOt = 0.001$)
+\item Climatological regional \Ot\ decreases up to $10\times$ more
+\end{enumerate*}
+Uncertainty range in $\HNOt$ uptake rate is $10^{-5} < \mssuptcffHNOt < 0.2$.
+If we propagate this to $\dlthchOt$ \ldots
+
+\foilhead{}
+%\Large\textcolor{blue}{\hfill Sensitivity of Tropospheric \Ot\ to \hfill}\vspace{-0.5in}\large
+\enlargethispage*{1in} 
+\begin{figure}
+\centering
+\includegraphics*[width=\hsize,height=\vsize]{ucictm_O3_gmm_HNO3_sns_bw}\vfill
+%\includegraphics*[width=\hsize,height=9.0in]{ucictm_O3_gmm_HNO3_sns_blu}\vfill
+%\caption{
+%Change in tropospheric \Ot\,[\%] due to heterogeneous chemistry and
+%photochemisty effects of dust for 
+%(a)~$\mssuptcffHNOt = 0.1$, (b)~$\mssuptcffHNOt = 0.001$, and
+%(c)~Difference: (a)~$-$~(b).
+%\label{fgr:sns_mssuptcff}}
+\end{figure}
+
+\foilhead{
+\Large\textcolor{blue}{\hfill \Ot\ Sensitivity to Species\hfill}}\vspace{-0.5in}\large
+\enlargethispage*{1in} 
+\begin{figure}
+\begin{center}
+\includegraphics*[width=0.6\hsize]{/data/zender/fgr/ppr_BiZ04/fgcolor/vheto3-cl.eps}%
+\end{center}
+\caption{Zonal mean \eofone\ of \dlthchXOt\ variances due to
+  irreversible uptake of seven reactive species on mineral dust (left).
+\csznote{
+  Percent variances along \eofone\ (\ref{eqn:var_pct_dfn}) are
+indicated.
+}
+  Correlation $\crrcff$ between \eofone\ of \dlthchOt\ and \dlthchXOt, 
+  and correlation between \prncmpone\ of \dlthchOt\ and \dlthchXOt are shown.}
+\label{fgr:vheto3}
+\end{figure}
+
+\foilhead{}
+\enlargethispage*{1in} 
+\begin{figure}
+\begin{center}
+\includegraphics*[width=1.0\hsize]{/data/zender/fgr/ppr_BiZ04/fgbw/surface}%
+\end{center}
+\caption{
+Primary modes of surface \Ot\ reduction due to irreversible uptake by
+mineral dust of (a)~All eight gases, (b)~\Ot\ only, (c)~\HNOt\ only,
+and (d)~\NOt\ only.}
+\label{fgr:surface}
+\end{figure}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Results~II: Uptake Pathways, Uncertainty \hfill}}\vspace{-0.75in}\large
+\begin{enumerate*}
+\item Indirect mechanism (\HNOt\ removal) more important than direct
+  \Ot\ uptake 
+\begin{enumerate*}
+\item Direct \Ot\ uptake \textit{may} exceed \HNOt-induced \Ot\ uptake
+  (especially in Northern Spring) if 
+$\mssuptcffOt > 5.0 \times 10^{-5}$ and 
+$\mssuptcffHNOt < 1.1 \times 10^{-3}$.
+\item \NOt~is also important in NH summer 
+\end{enumerate*}
+\item Uptake rate range of $10^{-5} < \mssuptcffHNOt < 0.1$ leads to
+  \dlthchOt\ of $0.5$--$5.2$\% 
+\begin{enumerate*}
+\item Flawed models exaggerate \dlthchOt\ uncertainty
+\end{enumerate*}
+\end{enumerate*}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Future Prospects \hfill}}\vspace{-0.75in}\large
+Reducing these order-of-magnitude uncertainties in \dlthchOt\ requires   
+correct model representation of global dust composition, deliquescence,
+and aging.
+\begin{enumerate*}
+\item Measurements: Target $\mssuptcffHNOt$ ($\mssuptcffNOt$, $\mssuptcffOt$)
+\begin{itemize*}
+\item Are surface area corrections ($\mssuptcff \rightarrow \mssuptcffBET$) necessary?
+\item Characterize $\mssuptcffHNOt$ dependence on \RH\ and \CaCOt\ \cite[]{KGL03}
+\item Systematize $\mssuptcff$ mixing and aging rules
+\end{itemize*}
+\item Models: Incorporate accurate source mineralogy
+\begin{itemize*}
+\item Remote sensing measurements of heterogeneous source soil
+  mineralogy \cite[]{TSG02} 
+\item $\mssuptcff$ mixing, aging, saturation, RH, \CaCOt\ rules
+\item ITEMs with mixed-phase, internal, external mixing
+\end{itemize*}
+\end{enumerate*}
+
+\rotatefoilhead{\Large \textcolor{blue}{
+Detection of the geographic distribution of source soil mineralogy in
+long range transported aerosol from {\Ca} measurements and simulations
+in the {Dust Entrainment And Deposition (DEAD)} model}}\vspace{-0.5in}\LARGE
+\begin{center}
+Charlie Zender, Huisheng Bian, Sarah Bortz\\
+Dept.\ of Earth System Science, UC Irvine\\
+\bigskip
+\bigskip
+\bigskip
+AGU, San Francisco, Dec.~10, 2003\\
+{\large Thanks:\\ Rich Arimoto, Joe Prospero, Phil Rasch, Dennis Savoie}
+\normalsize
+\end{center}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Silly \Ca\ Factoids \hfill}}\vspace{-0.75in}\large
+\vspace{-0.5in}
+\begin{enumerate*}
+\item Crustal fraction of \Ca\ is $\sim 4.1$\% and highly variable % \cite[]{CRC95}
+\item Mean continental \CaCOt\ topsoil content is $\sim 2.5$\% \cite[]{Sch99}
+\item Dust particles are 3--5\% \CaCOt\ \cite[]{Pye87}
+%\item \CaCOt\ affects soil alkalinity \cite[]{Pye87}
+\item \CaCOt\ larger fraction of silt than clay-sized particles \cite[]{CSB99}
+\item \CaCOt\ affects soil aggregation and $\wndfrcthr$ (Alfaro, 2003)
+\item \CaCOt\ highly correlated ($\crrcff \approx 0.8$) with \Al\ in
+  China (Arimoto, 2003)
+\end{enumerate*}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Why study \Ca\ in dust? \hfill}}\vspace{-0.75in}\large
+\begin{enumerate*}
+\item \CaCOt\ content of dust is 3--5\% \cite[]{Pye87}, highly variable (up to 20\%)
+\item \CaCOt\ buffers aerosol \pH\ (important for soluble \Fe)
+\item \CaCOt\ \textcolor{ForestGreen}{limits \HNOt} and \SOd\ uptake on dust \cite[]{DCZ96}
+\item \CaCOt\ \textcolor{ForestGreen}{increases hygroscopicity}
+\cite[]{KGL03} and likely \HNOt\ uptake (important for \Ot\ formation)
+\item Disparity in measured uptake coefficients of \HNOt\
+  ($\mssuptcffHNOt$) on authentic dust is $\sim 10^{3}$
+  \cite[e.g.,][]{HaC01a,Gra02}
+\item \Ca\ \textcolor{ForestGreen}{``accelerated aging''} may explain
+  $\mssuptcffHNOt$ disparity, reduce uncertainty in dust-induced
+  removal of $1$--$5$\% of tropospheric \Ot\ \cite[]{BiZ04}  
+\end{enumerate*}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Objectives \hfill}}\vspace{-0.75in}\large
+\begin{enumerate*}
+\item Do downwind station measurements show spatial signature of \Ca\  
+  in soil? 
+\item Is \Ca\ useful tracer for dust source region?
+\item How best to estimate \Ca\ in dust for chemistry studies?
+\end{enumerate*}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Modeling Strategy \hfill}}\vspace{-0.5in}\large
+Use MATCH global tracer model to simulate climatological \CaCOt\
+concentration in two Dust Entrainment And Deposition (DEAD) model   
+%(\url{http://dust.ess.uci.edu/dead}) 
+simulations of 1990--1992:
+\begin{enumerate*}
+\item Spatially Uniform: $\msscncCa = 0.04 \times \msscncdst$
+\item Spatially Heterogeneous: \Ca\ from IGBP \CaCOt\ database
+  \cite[]{CaS98,Sch99}  
+\end{enumerate*}
+Caveat: Model does not (yet) account for insoluble~\Ca,
+anthropogenic~\Ca\ (cement?), or sea salt~\Ca.
+\par
+UCI CTM used to quantify range of effects on tropospheric~\Ot.
+
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Data Evaluation \hfill}}\vspace{-0.5in}\large
+Evaluate simulated against measured and inferred \Ca:
+\begin{enumerate*}
+% NAA = Neutron Activation Analysis
+% AAS = Atomic Absorption Spectrometry
+% IC = Ion Chromatography
+\item Total \Ca\ measured by Neutron Activation Analysis
+  \cite[]{ADR95,ADS96} of daily samples at Barbados (1984--1992),
+  Bermuda (1988--1997),  Iza\~{n}a (1989--1997), Mace Head
+  (1989--1994) (mostly AEROCE data)
+\item Soluble \Ca\ measured by atomic absorption spectrometry
+  of biweekly samples at Ogori, Tsushima, and Seoul (Wakamatsu et~al.,
+  1996) (1990--1992),  
+\item Infer \Ca\ as 4\% of dust from Arimoto \Al\ measurements
+\item Infer \Ca\ as 4\% of dust from U.~Miami ash measurements
+\end{enumerate*}
+
+\foilhead{
+\Large\textcolor{blue}{\hfill Soil \CaCOt\ Content \hfill}}\vspace{-0.5in}\large
+\enlargethispage*{1in} 
+\begin{figure}
+\centering
+% ${HOME}/idl/gcm.pro:gcm_xy_bch,pll=4,img=0,fld_top=1,pnl_lbl='!5(a)',prn=0
+\includegraphics*[width=\hsize]{map_clm_mss_frc_CaCO3}\vfill
+%\includegraphics*[width=\hsize]{dstmch90_clm_DSTMPC}\vfill
+% ${HOME}/idl/gcm.pro:gcm_xy_bch,pll=4,img=0,fld_top=1,pnl_lbl='!5(b)',prn=0
+%\includegraphics*[width=\hsize]{/data/zender/ps/dstmch90_clm_DSTMPC}\vfill
+\includegraphics*[width=\hsize]{/data/zender/ps/dstmch90_clm_DSTSFDPS}\vfill
+\caption{
+(a)~Mass fraction of \CaCOt\ [\%] in surface soil \cite[]{Sch99}.
+%(b)~Column mass burden of dust [\mgxmS] \cite[]{ZBN03}.
+(b)~Mass deposition flux of dust [\ugxmSs] \cite[]{ZBN03}.
+\label{fgr:mss_frc_CaCO3}}
+\end{figure}
+
+\csznote{
+export caseid=dstmch90;export yr_sng='clm';
+ncap -O -s "DSTSFDPSCA=DSTSFDPS*0.04" -s "DSTSFDPSCA@units='kg m-2 s-1'" -s "DSTMPCCA=DSTMPC*0.04" -s "DSTMPCCA@units='kg m-2'" ${DATA}/${caseid}/${caseid}_${yr_sng}.nc ${DATA}/${caseid}/${caseid}_${yr_sng}.nc
+
+export caseid=dstmchx3;export yr_sng='clm';
+ncap -O -s "DSTSFDPSCA=DSTSFDPS*0.40" -s "DSTSFDPSCA@units='kg m-2 s-1'" -s "DSTMPCCA=DSTMPC*0.40" -s "DSTMPCCA@units='kg m-2'" ${DATA}/${caseid}/${caseid}_${yr_sng}.nc ${DATA}/${caseid}/${caseid}_${yr_sng}.nc
+} % end csznote
+
+\foilhead{
+\Large\textcolor{blue}{\hfill \Ca\ deposition\hfill}}\vspace{-0.5in}\large
+\enlargethispage*{1in} 
+\begin{figure}
+\centering
+% ${HOME}/idl/gcm.pro:gcm_xy_bch,pll=4,img=0,fld_top=1,pnl_lbl='!5(b)',prn=0
+\includegraphics*[width=\hsize]{/data/zender/ps/dstmch90_clm_DSTSFDPSCA}\vfill
+% ${HOME}/idl/gcm.pro:gcm_xy_bch,pll=4,img=0,fld_top=1,pnl_lbl='!5(b)',prn=0
+\includegraphics*[width=\hsize]{/data/zender/ps/dstmchx3_clm_DSTSFDPSCA}\vfill
+\caption{
+Mass deposition flux of \Ca\ [\ngxmSs] for (a)~Uniform (4\%) and
+(b)~Hetergeneous (IGBP-based) mixing ratios in dust.
+\label{fgr:DSTSFDPSCA}}
+\end{figure}
+
+\foilhead{
+\Large\textcolor{blue}{\hfill Atmospheric \Ca\ Burden\hfill}}\vspace{-0.5in}\large
+\enlargethispage*{1in} 
+\begin{figure}
+\centering
+% ${HOME}/idl/gcm.pro:gcm_xy_bch,pll=4,img=0,fld_top=1,pnl_lbl='!5(b)',prn=0
+\includegraphics*[width=\hsize]{/data/zender/ps/dstmch90_clm_DSTMPCCA}\vfill
+% ${HOME}/idl/gcm.pro:gcm_xy_bch,pll=4,img=0,fld_top=1,pnl_lbl='!5(b)',prn=0
+\includegraphics*[width=\hsize]{/data/zender/ps/dstmchx3_clm_DSTMPCCA}\vfill
+\caption{
+Column mass burden of \Ca\ [\mgxmS] for (a)~Uniform (4\%) and 
+(b)~Hetergeneous (IGBP-based) mixing ratios in dust.
+\label{fgr:DSTMPC}}
+\end{figure}
+
+\foilhead{
+\Large\textcolor{blue}{\hfill Near-surface \Ca\ at Barbados \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering
+% ncl < ${HOME}/caco3/caco3_Ca_clm_Brb.ncl;pepsi ${DATA}/ps/caco3_Ca_clm_Brb.eps
+\includegraphics*[width=\hsize]{caco3_Ca_clm_Brb}\vfill
+%\caption{
+%(a)~Near-surface \Ca\ mass concentration [\ugxmC] 
+%\label{fgr:Ca_clm_brb}}
+\end{figure}
+
+\foilhead{
+\Large\textcolor{blue}{\hfill Near-Surface \Ca\ at Iza\~{n}a \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering
+\includegraphics*[width=\hsize]{caco3_Ca_clm_Izn}\vfill
+\end{figure}
+
+\foilhead{
+\Large\textcolor{blue}{\hfill Near-Surface \Ca\ at Bermuda \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering
+\includegraphics*[width=\hsize]{caco3_Ca_clm_Brm}\vfill
+\end{figure}
+
+\foilhead{
+\Large\textcolor{blue}{\hfill Near-Surface \Ca\ at Tsushima \hfill}}\vspace{-0.5in}\large
+\begin{figure}
+\centering
+\includegraphics*[width=\hsize]{caco3_Ca_clm_Tsu}\vfill
+\end{figure}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill \Ca\ Budget \hfill}}\vspace{-0.5in}\large
+\begin{table*}
+\begin{minipage}{\hsize}
+\renewcommand{\footnoterule}{\rule{\hsize}{0.0cm}\vspace{-0.0cm}} % KoD95 p. 111
+\centering % \centering uses less vertical space than center-environment
+\caption[Global \Ca\ Budget]{
+Global \Ca\ emission/deposition mass flux [\Tgxyr] and atmospheric
+burden [Tg] for Uniform (4\%) and Heterogeneous (IGBP) \Ca\ mixing
+ratios in dust.  
+Percentages are relative to total dust emission and burden,
+respectively. 
+\label{tbl:bdg}}
+\vspace{\cpthdrhlnskp}
+\begin{tabular}{l *{2}{>{$}r<{$}}}
+\hline \rule{0.0ex}{\hlntblhdrskp}%
+& \mbox{Emission} & \mbox{Burden Tg} \\[0.0ex]
+& \mbox{\Tgxyr\ (\%)} & \mbox{Tg (\%)} \\[0.0ex]
+\hline \rule{0.0ex}{\hlntblntrskp}%
+& & \\[-2.0ex]
+Uniform \Ca\ & 60 (4.0\%) & 0.68 (4.0\%) \\[0.0ex]
+IGBP \Ca\    & 25 (1.7\%) & 0.25 (1.5\%) \\[0.0ex]
+\hline
+\end{tabular}
+\end{minipage}
+\end{table*} % end tbl:bdg
+\csznote{
+export caseid=dstmchx3;export yr_sng='clm';
+export caseid=dstmch90;export yr_sng='clm';
+ncap -O -D 1 -s "DSTSFDPS=DSTSFGRV+DSTSFPCP+DSTSFTRB" -s "DSTSFDRY=DSTSFGRV+DSTSFTRB" ${DATA}/${caseid}/${caseid}_${yr_sng}.nc ${DATA}/${caseid}/${caseid}_${yr_sng}.nc
+ncwa -O -a lat,lon -w gw ${DATA}/${caseid}/${caseid}_${yr_sng}.nc ${DATA}/${caseid}/${caseid}_${yr_sng}_xy.nc
+ncap -O -s "DSTMPCTG=DSTMPC*4.0*3.141*(6.370e+06)^2/(1.0e12/1.0e3)" -s "DSTSFDPSTGXYR@units='Tg'" -s "DSTSFDPSTGXYR=DSTSFDPS*4.0*3.141*(6.370e+06)^2*86400*365/(1.0e12/1.0e3)" -s "DSTSFDPSTGXYR@units='Tg yr-1'" -s "DSTSFMBLTGXYR=DSTSFMBL*4.0*3.141*(6.370e+06)^2*86400*365/(1.0e12/1.0e3)" -s "DSTSFMBLTGXYR@units='Tg yr-1'" ${DATA}/${caseid}/${caseid}_${yr_sng}_xy.nc ${DATA}/${caseid}/${caseid}_${yr_sng}_xy.nc
+ncks -C -v DSTMPCTG,DSTSFDPSTGXYR,DSTSFMBLTGXYR -H -u ${DATA}/${caseid}/${caseid}_${yr_sng}_xy.nc
+} % end csznote
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill \CaCOt\ in Dust: Impact on Air Quality \hfill}}\vspace{-0.75in}\large
+\cite{KGL03} observed in atmospheric conditions
+\begin{rxnarray}
+% fxm: These reactions are numbered with DCZ96 prefixes in aer.ps
+\CaCOt + 2\HNOt & \yields & \CaNOtd + \HdCOt \\ % KGL03 p. 48-1 (R1)
+\label{rxn:CaCO3+2HNO3}
+\CaNOtd + \HdCOt & \yields & \CaNOtd + \COd + \HdO \\ % KGL03 p. 48-1 (R1), HaC01a p. 3102 (1)
+\label{rxn:CaNO32+H2CO3}
+\CaNOtd\sldprn + n\cdot\HdO & \yields & \CaNOtd\lqdprn % KGL03 p. 48-1 (R2)
+\label{rxn:CaNO32+nH2O}
+\end{rxnarray}
+Phase change in (\ref{rxn:CaNO32+nH2O}) may explain the observed
+high reactivity of \HNOt\ and dust, $\mssuptcffHNOt \sim 0.1$
+(Hanisch and Crowley, 2001, 2003).
+At this rate \textcolor{ForestGreen}{irreversible \HNOt\ uptake
+  occurs as fast on authentic dust as on cloud droplets}
+
+\foilhead{}
+%\Large\textcolor{blue}{\hfill Effect of Dust on Tropospheric \Ot\ \hfill}}\vspace{-0.5in}\large
+\enlargethispage*{1in} 
+\begin{figure}
+\centering
+\includegraphics*[width=\hsize,height=\vsize]{ucictm_O3_gmm_HNO3_sns_bw}\vfill
+%\includegraphics*[width=\hsize,height=9.0in]{ucictm_O3_gmm_HNO3_sns_blu}\vfill
+%\caption{
+%Change in tropospheric \Ot\,[\%] due to heterogeneous chemistry and
+%photochemisty effects of dust for 
+%$(a)~$\mssuptcffHNOt = 0.1$, (b)~$\mssuptcffHNOt = 0.001$, and
+%(c)~Difference: (a)~$-$~(b).
+%\label{fgr:Ca_clm_brb}}
+\end{figure}
+
+\rotatefoilhead{\bgl
+\Large\textcolor{blue}{\hfill Conclusions \hfill}}\vspace{-0.5in}\large
+\begin{enumerate*}
+\item Uniform \Ca\ mixing better predicts near-surface \Ca\
+  concentration at Iza\~{n}a, Bermuda, Tsushima. 
+  Heterogeneous \Ca\ mixing does better at Barbados.
+\item Incorporating size-dependent \Ca\ fractionation \cite[]{CSB99}
+  worsens bias (not shown)
+\item Consistent with underprediction of large particle transport
+  \cite[]{Gin03,CTH03,GrZ04} 
+\item Consistent with up to $3 \times$ \Ca-enrichment in sandblasted
+  particles (dust). Possible strategy for chemical models.
+\item Uniform (4\%) \Ca\ distribution with high (observed)
+  $\mssuptcffHNOt$ removes $\sim 5$\% of tropospheric~\Ot.
+  Heterogeneous \Ca\ distribution with low (observed)
+  $\mssuptcffHNOt$ removes $\sim 1$\% of tropospheric~\Ot.
+\end{enumerate*}
+
+\csznote{
+% Transfer required figures to local machine
+for fl_stb in \
+caco3_Ca_clm_Brb \
+caco3_Ca_clm_Brm \
+caco3_Ca_clm_Izn \
+caco3_Ca_clm_Tsu \
+ucictm_O3_gmm_HNO3_sns_bw \
+ucictm_O3_gmm_HNO3_sns_blu \
+map_clm_mss_frc_CaCO3 \
+dstmch90_clm_DSTSFDPS \
+dstmch90_clm_DSTSFDPSCA \
+dstmchx3_clm_DSTSFDPSCA \
+dstmch90_clm_DSTMPC \
+dstmch90_clm_DSTMPCCA \
+dstmchx3_clm_DSTMPCCA \
+; do 
+scp 'ashes.ess.uci.edu:${DATA}/ps/'${fl_stb}'.eps' ${DATA}/ps
+epstopdf ${DATA}/ps/${fl_stb}.eps
+done
+} % end csznote
+% $: rebalance syntax highlighting
+
+\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill References\hfill}}\vspace{-0.5in}\large
+% Bibliography
+%\renewcommand\refname{\normalsize Publications}
+\bibliographystyle{jas}
+\bibliography{bib}
+
+\csznote{
+************************************************************************
+Begin Letters from Savoie
+************************************************************************
+Sarah and Charlie:  My responses are included below. _ Dennis
+
+At 09-06-2002 11:54 -0800, bortz@uci.edu wrote:
+
+>         Although I have already contacted you before, I'll introduce myself
+> >again. My name is Sarah Bortz and I am a graduate student of Dr. Charlie
+> >Zender's in the Earth System Science Department at the University of
+> >California at Irvine.  My summer research project has involved studying
+> >the calcium content of mineral dust at Bermuda, mostly by comparing two
+> >observational data sets (hereafter abbreviated RSMAS [from Dennis
+> >Savoie] and NMSU [from Richard Arimoto]) and output from a chemical
+> >transport model (labeled dstmch93 on the attached plots).
+> >       I have plotted both the climatologies and the monthly averages for the
+> >specific time period of September 1990 to June 1991 (the sampling period
+> >covered by the RSMAS data) of total dust, total calcium, and non-seasalt
+> >calcium; along with the ratios of non-seasalt calcium to total calcium,
+> >non-seasalt calcium to total dust, and total calcium to total dust.
+> >Since the RSMAS data contained values for both total calcium and
+> >non-seasalt calcium, I assumed that the rest of the calcium was present
+> >as seasalt calcium (ie...... seasalt calcium concentration = total
+> >calcium concentration - non-seasalt calcium),
+> >
+> >1)Is it reasonable to assume that the concentration of seasalt calcium
+> >can be calculated by subtracting non-seasalt calcium from total
+> >calcium?
+
+Yes, this is a reasonable assumption.  In fact, the determination of
+monsea-salt calcium was actually calculated from total calcium minus
+seasalt calcium which I calculated as Na+ times 0.03825 (the Ca/Na
+ratio in bulk seawater). 
+
+> >2)Can there really be that much calcium present in seasalt?
+
+If there is enough seasalt, there certainly can be.  In fact, the
+seasalt concentrations at Bermuda are not that high compared to some
+other areas of the oceans. 
+
+> >3)Are there (other) ways to measure or calculate seasalt calcium
+> >concentrations and to account for the extra calcium?
+
+I know of no better way to estimate seasalt calcium than from the
+concentration of water-soluble Na+. 
+
+> >and since the NMSU data only contained trace element concentrations, I
+> >calculated the total dust concentrations using the assumption that
+> >globally, aluminum composed 8% of total dust.
+> >4) Was that a reasonable assumption as well?
+
+That assumption is as good as any and is widely used.  There is a
+potentially significant problem in heavily polluted areas with a
+significant amount of flyash since the major element composition of
+flyash is very similar to that of average continental crust.  The
+trace element concentrations might help to sort this out but the
+results are not necessarily unambiguous. 
+
+> >Finally, I compared all of the observational data for total calcium to
+> >model values calculated as 3% of the total dust concentrations (another
+> >global assumption).
+
+This is a much poorer assumtion as the calcite and/or gypsum contant
+of continental dust varies widely from one location to another.
+Saharan dust collected over the Mediterranean Sea has much more
+calcium than that collected over the tropical North Atlantic.
+Glaccum's measurements of calcite + gypsum yields a dust calcium
+concentration of about 2 at Barbados and 3-4 at Sal Island.  These
+results agree fairly well with my estimates based on measurements of
+nss calcium (from Na+) and mineral dust. 
+
+> >       As you can probably tell from the attached plots, the RSMAS total
+> >calcium concentration peaks in March and October, while the NMSU total
+> >calcium concentration shows the highest peak in late summer/early fall,
+> >with a smaller peak in the spring.  Our chemical transport model is able
+> >to reproduce the primary NMSU peak fairly well but misses the secondary
+> >peak, and does not correlate well with the RSMAS total calcium data.
+> >Specifically, our model predicts the highest concentrations of dust
+> >during the three months of unavailable RSMAS data. Additionally, when
+> >the ratio of total calcium to total dust is highest, the ratio of
+> >non-seasalt calcium to total calcium is lowest. According to plots of
+> >the NMSU data, the ratio of climatological averages of total calcium to
+> >(calculated) total dust is greater than one during January.
+> >5)How can I explain this?
+
+You need to look at more than the ratios.  A high ratio of total
+calcium to total dust may be indicative of either a very high sea-salt
+concentration (i.e. high sea-salt) or of a very low dust concentration
+or both.  A low ratio would result from the reverse situation.  If any
+of the concentrations are very low, there may be a problem with
+uncertainties in the concentrations that are strongly magnified in the
+ratios. 
+
+> >6)Lastly, exactly what techniques were used to measure both the total
+> >dust, total calcium (RSMAS and NMSU) and non-seasalt calcium
+> >concentrations (RSMAS)?
+
+This brings up a problem that Rich and I and others discussed
+extensively during several AEROCE meetings.  The NMSU calcium and
+sodium concentrations are made with instrumental neutron activation
+analysis and should therefore measure total sodium and total calcium
+regardless of whether there is any insoluble component.  My analyses
+are of the water-soluble Na and Ca components only.  In both cases,
+nss Ca was estimated as Ca minus 0.03825 times Na.  My analyses of Na+
+at Izana (virtually no sea-salt) indicate that Saharan dust contains
+virtually no water-soluble sodium.  Hence the water-soluble sodium
+should be solely a reflection of sea-salt sodium; that may not be the
+case with Na from NAA if dust contains sodium that is not
+water-soluble.  There is also a posssibility that not all of the Ca in
+Saharan dust is water-soluble. 
+Total dust at Bermuda was estimated from the neutron activation
+analysis of Al in the manner that you have stated previously.. 
+
+> I would appreciate any information you can provide to help me resolve my
+> questions .
+> Regards,
+> Sarah E. Bortz
+************************************************************************
+End Letters from Savoie
+************************************************************************
+
+************************************************************************
+Begin Letters from Arimoto
+************************************************************************
+Folks: Just got back from a trip to Taiwan and I apologize for not
+responding earlier.  However, I think Dennis has answered all of the
+questions in about the same way I would have. 
+
+The INAA data show that during  the high dust season at Bermuda, about
+10\% or a little more of the monthly mean aerosol Na can be ascribed to
+crustal sources rather than sea salt, but in general the
+contribution of mineral dust to Na is quite small.  Again, be
+careful about soluble vs. total Na, Ca, etc. 
+
+There are some minor differences in the various references giving the
+elemental composition of seawater, but the Ca to Na ratio shouldn't
+vary by more then a few percent among them.  Also, at one point, there
+was some discussion of possible enrichments of Ca due to bubble
+scavenging and microlayer effects, but I think this too was resolved
+as being relatively unimportant (I'm not sure that anything was
+actually published on this after the effects of dust on the marine
+aerosol were recognized.  My recollection is that some of the data we
+collected for SEAREX showed a small, i.e., few percent, enrichment of
+Ca in sea salt over seawater ratios, but I wasn't sure that the
+analyses were accurate enough to make much of this.) 
+
+There also are slight differences in the Ca and Al contents of crustal
+material in the various compilations of data.  I usually use the
+Taylor and McLennan data from the mid 90s.  As Dennis noted, you might
+want to look at the Ca data with special attention to source region as
+this element is more variable than some others. 
+
+Rich
+************************************************************************
+At 03:03 PM 12/19/2002 -0800, you wrote:
+
+> Hi Rich,
+
+> We have mixed results. Our hypotheses is that there should be
+> some significant spatial variation in the Ca:Al ratio because Ca
+> is more variable in source soils than Al is.
+
+OK. I was/still am doing a simple assessment of soluble Ca (as
+measured by IC) vs. Al.  For Gosan, the correlation is very good (also
+true for the other alkali/alkaline earths we determine. 
+
+> For a given
+> station we would not expect much temporal variation in Ca:Al.
+> When we account for the Ca variation in source soils
+> (and leave Al ~ 8%) in the model, we get better agreement with
+> your Ca observations at some stations in the Atlantic, but not all.
+> Ca simulations at Barbados improve, no clear winner at Mace Head, and
+> worsen at Izana and Bermuda.
+> We seem to have an anthropogenic Ca signal at Mace Head and Tsushima.
+> But I'm not aware of any anthropogenic Ca sources, are you?
+
+Cement.
+
+The Ca/Al ratio at Zhenbeitai, was about 1 (which is about the same as
+in Chinese loess).  At Gosan, the Ca/Al ratio is a little lower, about
+0.6, but I'm still working up the data so these numbers might change a
+little. 
+
+Thanks for the info.
+
+My best for '03.
+
+Rich
+************************************************************************
+End Letters from Arimoto
+************************************************************************
+
+} % csznote
+
+\end{document}
+

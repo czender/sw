@@ -1,0 +1,528 @@
+% $Id$ -*-LaTeX-*-
+
+% Purpose: Seminar on global climate change 
+% Presented to: Dartmouth club 20020315, ESS 20E 20020605, Old folks,
+% PDFscreen example: http://www.cgd.ucar.edu/stats/LATEX
+
+% Usage: 
+% cd ~/crr;pdflatex smn_gcc.tex;cd -
+% cd ~/crr;make -W smn_gcc.tex smn_gcc.dvi smn_gcc.ps smn_gcc.pdf;cd -
+% cd ~/crr;pdflatex smn_gcc.tex;thumbpdf smn_gcc;pdflatex smn_gcc.tex;cd -
+% cd ~/crr;make -W smn_gcc.tex smn_gcc.pdf;cd -
+
+\documentclass[12pt]{article}
+
+% Standard packages
+\usepackage{ifpdf} % Define \ifpdf
+\ifpdf % PDFLaTeX
+\usepackage[pdftex]{graphicx} % Defines \includegraphics*
+\pdfcompresslevel=9
+%\usepackage{thumbpdf} % Generate thumbnails
+\usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
+\graphicspath{/data/zender/fgr/esmf} % Help epstopdf find .eps figures to convert
+\else % !PDFLaTeX
+\usepackage{graphicx} % Defines \includegraphics*
+\fi % !PDFLaTeX
+\usepackage{array} % Table and array extensions, e.g., column formatting
+\usepackage[usenames]{color} % usenames allows, e.g., ``ForestGreen''
+\usepackage{colortbl} % Colored columns in tables, required by pdfscreen
+\usepackage{makeidx} % Index keyword processor: \printindex and \see
+\usepackage{mdwlist} % Compact list formats \itemize*, \enumerate*
+\usepackage[numbers,sort]{natbib} % \cite commands from aguplus
+\usepackage{times} % Postscript Times-Roman font KoD99 p. 375
+%\usepackage{tocbibind} % Add Bibliography and Index to Table of Contents
+\usepackage{xspace} % Unknown
+
+% pdfscreen uses hyperref to set margins for screen mode
+% pdfscreen calls hyperref internally if hyperref is not already invoked
+% pdfscreen also loads packages graphicx, color, calc, and comment
+% print         Print version
+% screen        Screen version
+% panelright    Navigation panel on RHS
+% paneltoc      Table of Contents in panel
+% sectionbreak  Introduces pagebreak before section
+% code          Commands producing fancy verbatim-like effects
+%\usepackage[screen,code,panelright,paneltoc,sectionbreak]{pdfscreen}
+\usepackage[screen,code,sectionbreak]{pdfscreen}
+%\usepackage[print]{pdfscreen}
+
+% Personal packages
+\usepackage{csz} % Library of personal definitions (\ifpdf...)
+\usepackage{abc} % Alphabet as three letter macros
+\usepackage{dmn} % Dimensional units
+\usepackage{chm} % Chemistry
+\usepackage{dyn} % Fluid dynamics
+\usepackage{aer} % Aerosol physics
+\usepackage{rt} % Commands specific to radiative transfer
+
+% Commands which must be executed in preamble
+
+% Commands specific to this file
+\newcommand{\pdfscreen}{\texttt{\small\color{section1}pdfscreen}\xspace} % Pretty format for pdfscreen string
+\newcommand{\bluestar}{\textcolor{blue}{$^{*}$}}
+\newcommand{\greenstar}{\textcolor{green}{$^{*}$}}
+\newcommand{\redstar}{\textcolor{red}{$^{*}$}}
+
+% Float placement
+% NB: Placement of figures is very sensitive to \textfraction
+\renewcommand\textfraction{0.0} % Minimum fraction of page that is text
+\setcounter{totalnumber}{73} % Maximum number of floats per page
+\setcounter{topnumber}{73} % Maximum number of floats at top of page
+\setcounter{dbltopnumber}{73} % Maximum number of floats at top of two-column page
+\setcounter{bottomnumber}{73} % Maximum number of floats at bottom of page
+\renewcommand\topfraction{1.0} % Maximum fraction of top of page occupied by floats
+\renewcommand\dbltopfraction{1.0} % Maximum fraction of top of two-column page occupied by floats
+\renewcommand\bottomfraction{1.0} % Maximum fraction of bottom of page occupied by floats
+\renewcommand\floatpagefraction{1.0} % Fraction of float page filled with floats
+\renewcommand\dblfloatpagefraction{1.0} % Fraction of double column float page filled with floats
+
+% Screen geometry
+\begin{screen}
+% These commands are all defined by pdfscreen
+\margins{0.65in}{0.65in}{0.65in}{0.65in} % Left, right, top, bottom margins
+%\emblema{logoLUC.png} % Location of graphic file for pdfscreen navigation panel
+\screensize{6.25in}{8in} % Screen dimensions of PDF output
+\urlid{http://www.ess.uci.edu/~zender} % Homepage button in navigation panel points here
+\changeoverlay % Cycle through default overlays, repeating every tenth section
+\paneloverlay{but.pdf} % Overlay for navigation panel
+%\overlay{/data/zender/ps/ipcc_rad_frc.pdf} % Overlay for screen area
+\def\pfill{\vskip6pt}
+\end{screen}
+
+% Commands performed only in print section
+\begin{print}
+\notesname{Notes:} % String appearing in notes ovals adjacent to slides
+% Redefine section formatting in print mode
+\makeatletter
+\def\@seccntformat#1{\llap{\scshape\color{section\thesection@level}\csname the#1\endcsname.\hspace*{6pt}}}
+\makeatother
+\end{print}
+
+\hypersetup{ % A command provided by \hyperref
+pdftitle={21st Century Climate Change: A Southern Californian Perspective}, % Title given to acroread window displaying this file
+pdfsubject={21st Century Climate Change: A Southern Californian Perspective},
+pdfauthor={Charlie Zender},
+pdfkeywords={gcc},
+pdfpagemode={FullScreen}, % Starts in full screen mode, hit 'Esc' to escape
+pdfmenubar=true % Allow access to reader's menubar
+} % end \hypersetup
+
+\begin{document} % End preamble
+
+% Title for screen mode
+\begin{screen}
+\title{\color{section0}\Huge 21st Century Climate Change: A Southern Californian Perspective}
+\end{screen}
+
+% Title for print mode
+\begin{print}
+\title{\Huge\texttt{21st Century Climate Change: A Southern Californian Perspective}}
+%\title{\Huge\texttt{Causes, Predictions, Impacts, Adaptation, Vulnerability}}
+\end{print}
+
+\author{
+\color{section1}\Large
+\href{http://www.ess.uci.edu/~zender}{Charles~S.~Zender}
+{\small\href{mailto:zender@uci.edu}{\color{section1}\texttt{<zender@uci.edu>}}}\\
+\href{http://www.ess.uci.edu}{Department of Earth System Science}\\
+\href{http://www.uci.edu}{University of California, Irvine}\\
+Presented to:\\
+\href{http://unex.uci.edu/all/}{UC Irvine Academy for Lifelong Learning}, February 27, 2003\\
+%\href{http://www.alum.dartmouth.org/clubs/orange/index.html}{Dartmouth Alumni of Orange County}, March 13, 2002\\
+%\href{http://eee.uci.edu/02s/42020}{ESS20E: The Atmosphere}, 
+%\href{http://eee.uci.edu/02s/42020/lct/ess_atm_lct_20_pst.pdf}{Lecture 20}\\
+} % end author
+
+\pagedissolve{Split /D 2 /Dm /H /M /O} % pagedissolve options in pdfscreen manual p. 9
+
+\date{} % Empty braces turns off date
+\maketitle
+\begin{screen}
+\vfill
+\end{screen}
+
+\begin{abstract}
+\noindent Scientific observations and theories give us a basis
+for understanding and predicting climate change.
+We explore some predicted impacts of climate change that are of
+particular relevance to Southern California.
+Appreciating these impacts helps us to identify our potential
+vulnerabilities, and to plan to adapt.
+\end{abstract}
+
+% Do not use \tableofcontents command in document when paneltoc is option
+\begin{print}
+\tableofcontents
+\end{print}
+\begin{screen}
+\vfill
+\end{screen}
+
+\Large
+\section[Outline]{Outline}
+\begin{itemize*}
+\item Earth System Science 
+%\item Causes: Natural or Man-made?
+\item Global Perspective 
+\item Impacts: A Southern Californian Perspective
+\begin{itemize*}
+\item Temperature
+\item Water
+\item Sea Level Rise
+\item Weather-Related Insurance
+\end{itemize*}
+\item Vulnerability: Who is at risk?
+\item Adaptation: How can we adjust?
+\begin{itemize*}
+\item The Good (for us) News 
+\end{itemize*}
+\item Future Prospects
+\end{itemize*}
+\vfill
+
+\section[Earth System Science]{Earth System Science Department at UCI}
+Our Department \ldots
+\begin{itemize*}
+\item Dedicated to understanding climate on scale of human lifetime
+\item Founded 1989 by Cicerone (UCI Chancellor)
+\item Influential---top ranked in citations per professor
+\item 17 Faculty (and growing!)
+\item Croul Hall opened September 2003
+\end{itemize*}
+Scientific goals: Carbon Cycle and Climate System \ldots
+\begin{itemize*}
+\item Demographic, Economic models $\rightarrow$ (GHG)
+Emissions scenarios $\rightarrow$ \textcolor{green}{Climate Models} $\rightarrow$
+\textcolor{green}{Forecasts} $\rightarrow$ Impacts $\rightarrow$ Adaptation
+\item Climate models simulate all relevant physical processes (we hope!)
+\item ``Hindcasts'' of 20th century \textcolor{green}{\textit{climate}} are rather good
+\item Involved in national efforts to improve models, measurements
+\end{itemize*}
+\vfill
+
+\section[IPCC Scenarios]{A Global Perspective: IPCC Scenarios}
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{ *{7}{>{}c<{}} }
+Date & Population & GDP & Surface \Ot & \COd & $\Delta T$\greenstar & $\Delta\mbox{MSL}$\greenstar \\[4pt]
+& (billions) & $10^{12}$ US\$ yr$^{-1}$ & ppm & ppm & \dgrf & (inches) \\[4pt]
+\tableline
+\hline \rule{0.0ex}{\hlntblntrskp}%
+1990 & 5.3 & 21 & -- & 354 & 0 & 0 \\[4pt]
+2000 & 6.1--6.2 & 25--28 & 40 & 367 & 0.36 & 2 \\[4pt]
+2050 & 8.4--11.3 & 59--187 & $\sim$60 & 463--623 & \textcolor{red}{1.4--4.7} & \textcolor{red}{2--13} \\[4pt]
+2100 & 7.0--15.1 & 197--550 & $>$70 & 478--1099 & 2.5--10.5 & 3.5--35 \\[4pt]
+\end{tabular}
+\end{center}
+\caption{\greenstar Discussed today\label{tbl:ipcc}}
+\end{table}
+\begin{itemize*}
+\item IPCC is consensus report by $>$1000 top scientists
+\item Large ranges in forecast values due to \ldots
+\begin{itemize*}
+\item Emissions scenarios (1990 level, business as usual, China \ldots)
+\item Intrinsic uncertainty (natural variability, chaos)
+\item Model differences
+\end{itemize*}
+\end{itemize*}
+\clearpage
+
+\section[Temperature]{Temperature}
+\begin{itemize*}
+\item Past century: N. America \textcolor{red}{warmed} $\sim$1.3\,\dgrf
+\item Next century: Likely \textcolor{red}{warming} by 1.8--5.4\,\dgrf (best case) to 6.3--12.6\,\dgrf
+\begin{itemize*}
+\item Very likely \textcolor{red}{increasing} minimum temperatures
+\begin{itemize*}
+\item Fewer \textcolor{blue}{cold} days, \textcolor{blue}{frost} days
+\item Less heating required in Winter
+\end{itemize*}
+\item Very likely \textcolor{red}{increasing} maximum temperatures
+\begin{itemize*}
+\item More \textcolor{red}{hot} days, \textcolor{red}{heat} waves
+\item More cooling required in Summer
+\end{itemize*}
+\item Frequency of (currently) rare events will increase
+\begin{itemize*}
+\item Hottest year in 100 years was 1995. Soon once in 10 years!
+\end{itemize*}
+\end{itemize*}
+\item El Ni\~{n}o/La Ni\~{n}a more pervasive
+\begin{itemize*}
+\item El Ni\~{n}o brings strong winter storms to Southland
+\end{itemize*}
+\end{itemize*}
+\vfill
+
+\section[Water]{Water}
+\begin{itemize*}
+\item Condensation in warmer climate
+\begin{itemize*}
+\item More winter rainfall--less snowfall
+\item Less snowpack $\rightarrow$ Earlier seasonal peak in runoff
+\item Possible declines in groundwater recharge--water supply
+\item Increased frequency of intense precipitation--flash floods, sediments
+\end{itemize*}
+\item Warmer lakes and streams
+\begin{itemize*}
+\item Warmwater species benefit, but reduced lake levels
+\item Damage to coldwater species (trout, salmon)
+\end{itemize*}
+\item How to adapt?
+\begin{itemize*}
+\item Improve management of water storage capacity
+\item Voluntary water transfers between users
+\item Pressure to transfer irrigation water $\rightarrow$ cities
+\item Move to crops with lower water demand
+\item Ski earlier, use snow machines
+\end{itemize*}
+\end{itemize*}
+\vfill
+
+\section[Sea Level Rise]{Sea Level Rise}
+\begin{itemize*}
+\item Present: Sea levels are \textcolor{red}{rising} at 1--2\,\mm\ per year
+\item Next Century: Total \textcolor{red}{Rise} of 4--36\,in
+\begin{itemize*}
+\item Causes
+\begin{itemize*}
+\item Thermal expansion, glacier melt, sea-ice thinning
+\item Greenhouse gases \textit{accelerate} thermal expansion\ldots
+\end{itemize*}
+\item Consequences
+\begin{itemize*}
+\item Shelf slope of $\sim$3\% $\rightarrow$ 1\,ft vertical rise engulfs 30\,ft of shoreline
+\item Increased erosion
+\item Storm surges
+\item Siltation
+\end{itemize*}
+\item Developments along exposed coast especially vulnerable
+\begin{itemize*}
+\item Southern California less vulnerable than SE US
+\item Louisiana, Florida, Texas, North Carolina most vulnerable
+\end{itemize*}
+\end{itemize*}
+\end{itemize*}
+\vfill
+
+\section[Weather-Related Insurance]{Weather-Related Insurance}
+\begin{itemize*}
+\item Insurance spreads weather-related risk across society
+\item Sensitive to many weather-related phenomena
+\begin{itemize*}
+\item Storms: Hurricanes, Tornados, Winds, Surges \ldots
+\item Other: Fire, Frost, Flood, Landslide, Drought, Subsidence, \ldots
+\end{itemize*}
+\item Insurance industry may be vulnerable
+\begin{itemize*}
+\item Weather-related losses increased three times faster than
+property/casualty premiums from 1985--1999 
+\item 80--90\% of natural disaster losses are weather-related
+\end{itemize*}
+\item How to adapt?
+\begin{itemize*}
+\item Reduce coverage (e.g., no flood, crop insurance)
+\item Increased demand for publically funded compensation
+\end{itemize*}
+\end{itemize*}
+\vfill
+
+\section[Future Work]{Future Work}
+\begin{itemize*}
+\item Forecast/Hindcast Atmospheric Soil Dust
+\begin{itemize*}
+\item Radiative forcing (like greenhouse gases)
+\item Iron fertilization of marine ecosystems (\COd\ sink)
+\item Phosphate fertilization of terrestrial ecosystems (\COd\ sink)
+\item Role in cloud formation and structure
+\end{itemize*}
+\end{itemize*}
+\vfill
+
+\section{The Scientific Consensus on Global Warming}
+\begin{center}
+Charles S. Zender\\
+Deptartment of Earth System Science\\
+University of California, Irvine\\
+\bigskip
+\bigskip
+\bigskip
+Unitarian Universalist Church of Orange County\\
+Costa Mesa, CA, August~18, 2004\\
+\bigskip
+\normalsize
+\end{center}
+
+\section{The Scientific Consensus on Global Warming}
+\begin{itemize*}
+\item Is Earth's climate changing significantly?
+\item Did Humans cause the recent changes?
+\item How is climate change expected to affect Earth globally?
+\item How is climate change expected to affect Southern California?
+\item Is global warming irreversible? 
+\item How do scientists answer global warming skeptics?   
+\end{itemize*}
+
+\section{Definitions}
+\begin{itemize*}
+\item \textcolor{green}{Climate}: Average patterns of
+  temperature, rainfall, wind\ldots 
+\begin{itemize*}
+\item Averages taken over 1000's of miles, many years
+\item Climate is intrinsically noisy (butterfly effect)
+\end{itemize*}
+\item \textcolor{green}{Climate change}: Statistically significant change in climate
+\begin{itemize*}
+\item Natural climate change occurs independent of humans
+\item Detectable \textcolor{green}{anthropogenic} (man-made)
+  climate change must exceed the envelop of natural variability 
+\end{itemize*}
+\item \textcolor{green}{Global Change}: Includes
+  \textcolor{red}{Global Warming} (temperature change)
+\begin{itemize*}
+\item Stratospheric Ozone Depletion, Acid Rain, De-forestation 
+\item Impacts biodiversity, human health, agriculture\ldots
+\end{itemize*}
+\end{itemize*}
+
+\section{Is Climate Changing Significantly?}
+Satellite sensors and thermometers measure temperature directly.
+Temperature \textcolor{green}{proxies} from tree rings, pollen,
+ice cores, and sedimentary rock extend the temperature record in time.
+\begin{itemize*}
+\item Earth's climate has changed dramatically more in the past
+  century than in the past 10,000 years  
+\item Humans are driving Greenhouse Gas (GHG) concentrations to levels
+  not reached since the Eocene (50,000,000\,\yr\ ago)
+\end{itemize*} 
+The Intergovernmental Panel on Climate Change (IPCC), a UN and
+government appointed group of $\sim 1000$ experts in climate science,
+agree that these GHG increases will very likely accelerate climate
+change over the next century and beyond.
+
+\section{Are Humans Changing Climate?}
+Climate is a statistic so most appropriate evidence that humans cause
+climate change is statistical (i.e.,
+circumstantial)---\textcolor{blue}{there is no ``smoking gun''}.   
+\begin{itemize*}
+\item Legal standards for convictions in court
+\begin{itemize*} 
+\item Civil: ``preponderance of evidence''
+\item Criminal: ``beyond a reasonable doubt'' 
+\end{itemize*}
+\item Scientists have demanding standards for evidence too!
+\begin{itemize*}
+\item Statistical significance (e.g., 95\% confidence),
+  reproducibility, peer review  
+\item Cautious attribution of climate change means it is
+  \textcolor{blue}{much likelier that scientists attribute too little 
+  than too much climate change to humans}
+\end{itemize*}
+\end{itemize*}
+
+\section{Crime of the Century: Is Humanity Guilty?}
+Scientists agree that most warming of last 50\,\yr\ is likely due to
+humans.
+How would they prosecute this allegation?
+\begin{itemize*}
+\item \textcolor{green}{Motive}: None! No one wants to change Earth's climate
+\item \textcolor{green}{Opportunity}: Industrial, consumer, population
+  pressures $\rightarrow$ increase fuel, land use $\rightarrow$
+  unregulated GHG increases
+\item \textcolor{green}{Method}: Physical law dictates that
+  \textcolor{red}{GHGs increase temperature} 
+\item \textcolor{green}{Weapon}: Greenhouse Gas (GHG), aerosol emission, land-use
+\item \textcolor{green}{Evidence} humans are responsible:
+\begin{itemize*}
+ \item \textcolor{blue}{Anthropogenic GHGs and aerosols leave
+  predictable ``fingerprints''} (diurnal temperature range decrease,
+  accelerated polar warming, precipitation frequency/intensity)
+\item Computer models accurately hindcast/predict recent change
+  (response to eruptions, interannual warming/cooling)
+\end{itemize*}
+\end{itemize*}
+
+\section{What Global Climate Changes to Expect?}
+Scientists agree that \textcolor{blue}{the following changes will very
+  likely occur} in the 21st century:
+\begin{itemize*}
+\item Global temperature \textcolor{red}{increases} (relative to
+  1960--1990) by $1.8\mbox{--}5.5$\,\dgrf\ (low) to
+  $2.7\mbox{--}8.1$\,\dgrf\ (high) by 2085   
+\item Sea level rises $4\mbox{--}36$\,inches
+\item Disappearing glaciers (ice sheets take longer)
+\item Increased: minimum and maximum temperatures; summer drying and drought;
+rainfall intensity; tropical cyclone (hurricane) winds, precipitation
+\end{itemize*}
+
+\section{Climate Changes to Expect in California}
+A recent study examined two future climate change scenarios in two
+climate prediction models.
+The ``low'' and ``high'' emissions increase scenarios represent
+agressive emissions reductions and business as usual, respectively. 
+\begin{itemize*}
+\item Summer temperature \textcolor{red}{increases} in CA (relative to 1960--1990): 
+$3\mbox{--}3.5$\,\dgrf\ (low) to $2.5\mbox{--}5.5$\,\dgrf\ (high) by 2035,
+$4.5\mbox{--}8$\,\dgrf\ (low) to $7.5\mbox{--}15$\,\dgrf\ (high) by 2085.
+\item By the 2090s, heatwave days and excess heat-related deaths in LA
+  will increase by $2\mbox{--}3$ times (low) to $5\mbox{--}7$ times (high). 
+\item Warmer Winter storms and earlier snowmelt stress reservoirs
+\item Spring Sierra snowpack decrease by $25\mbox{--}40$\% by 2035,
+  $30\mbox{--}90$\% by 2085 
+\item Alpine forest reduction and desert expansion
+\end{itemize*}
+
+\section{Is Climate Change Irreversible?}
+Earth's Climate system takes many years to respond to forcings:
+\begin{itemize*}
+\item \textcolor{blue}{Our pollution outlives us}---GHG lifetimes: \CHq~(10\,\yr),
+  \COd~(150\,\yr), \NdO~(300\,\yr) CFCs~(10000\,\yr)
+\item Ice sheets bases take millenia to feel atmospheric temperature 
+\item Oceans store/release \COd, heat in 1000--5000\,\yr\ cycles
+\end{itemize*}
+Our actions decades ago determined current climate change.
+\textcolor{blue}{Restricing GHG emissions now will avert the worst  
+  impacts in coming decades and centuries.}    
+Individuals and societies will \textcolor{blue}{lead and act now}
+to limit climate change, or 
+\textcolor{red}{leave our children to deal with our mess}.
+
+\section{What About Skeptics' Arguments?}
+Climate change skeptics \textcolor{blue}{agree} that global surface
+temperature \textcolor{red}{increased} $1\,\dgrf$ since \textit{c.}~1900.
+They \textcolor{blue}{dispute} attributing this change to
+anthropogenic forcing (GHGs, aerosols, \ldots).
+\begin{itemize*}
+\item Theories and models of natural climate change (Solar, Volcanic)
+  \textit{explain} much of pre-anthropogenic climate change.
+\item Natural climate change \textit{does not explain} recent
+  (since $\sim$1900) climate change patterns
+\item Greenhouse Gases and Aerosols, together with Natural forcing, 
+  \textit{do explain} recent climate change patterns
+\item Precautionary Principle: ``Better safe than sorry''
+\end{itemize*}
+
+\section{Where to Learn More}
+\begin{itemize*}
+\item My Website: \url{http://www.ess.uci.edu/~zender}
+\item IPCC Website: \url{http://www.ipcc.ch}
+\item UCS/ESA Report on Climate Change in California:
+  \url{http://www.ucsusa.org/climatechange/california.html}
+\item Hayhoe et~al.\ paper \url{http://www.pnas.org/cgi/doi/10.1073/pnas.0404500101}
+\end{itemize*}
+
+\csznote{
+% Usage: Place usage here at end of file so comment character % not needed
+cd ~/crr;pdflatex smn_gcc.tex;cd -
+cd ~/crr;make -W smn_gcc.tex smn_gcc.dvi smn_gcc.ps smn_gcc.pdf;cd -
+cd ~/crr;pdflatex smn_gcc.tex;thumbpdf smn_gcc;pdflatex smn_gcc.tex;cd -
+cd ~/crr;texcln smn_gcc;make smn_gcc.pdf;bibtex smn_gcc;makeindex smn_gcc;make smn_gcc.pdf;bibtex smn_gcc;makeindex smn_gcc;make smn_gcc.pdf;cd -
+cd ~/crr;make -W smn_gcc.tex smn_gcc.pdf;cd -
+
+scp ${DATA}/ps/smn_gcc.pdf dust.ess.uci.edu:/var/www/html/smn/smn_gcc.pdf
+} % end csznote
+
+% $: rebalance syntax highlighting
+
+\end{document}
+

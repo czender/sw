@@ -1,0 +1,70 @@
+#!/usr/local/bin/perl
+
+# Search for the location of a list of files in a specified set of directories.
+# Use -f option to start list of filenames and -d option to start list of
+# directories.  The pathname where each file is found is written to std out
+# one to a line.
+
+if ( @ARGV == 0 ) {
+  print "Usage: find_files -f filenames -d directories\n";
+}
+
+# Process command line args.
+
+ARG:
+while (@ARGV) {
+  if ( $ARGV[0] eq "-d" || $ARGV[0] eq "-f" ) {
+    $opt = shift;
+    next ARG;
+  }
+  if ( $opt eq "-d" ) {
+    push( path, shift );
+  } elsif ( $opt eq "-f" ) {
+    push( file_list, shift );
+  } else {
+    die "error in command line args, stopped";
+  }
+}
+
+# Prepend "./" so search starts in current directory.
+# Note that @path is a global variable used in subroutine findsrc.
+
+unshift(@path,"./");
+foreach $dir (@path) {              # Expand tildes in path names.
+  $dir = `/bin/csh -c "glob $dir"`;
+}
+
+# Search specified path for the file.
+
+foreach $file ( @file_list ) {
+  if ( $absfile = &findsrc( $file ) ) {
+    print "$absfile\n";
+  } else {
+    print "$file not found\n";
+  }
+}
+
+sub findsrc {
+
+# Search for the specified file in the list of directories in the global
+# array @path.  Return the first occurance found, or the null string if
+# the file is not found.
+
+  local( $file ) = @_;
+  local( $dir, $fname );
+
+  foreach $dir (@path) {
+
+    if( $dir =~ m#/$# ) {             # allow directory name to end with /
+      $fname = $dir . $file;
+    } else {
+      $fname = $dir . '/' . $file;
+    }
+
+    if ( -e  $fname ) {
+      return $fname;
+    }
+
+  }
+  return '';  # file not found
+}

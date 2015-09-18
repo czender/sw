@@ -1,0 +1,1233 @@
+% $Id$
+
+% Purpose: ANV parameterization and implementation paper.
+
+% Usage:
+% dvips -Ppdf -G0 -o ${DATA}/ps/anv.ps ~/anv/anv.dvi;ps2pdf ${DATA}/ps/anv.ps ${DATA}/ps/anv.pdf
+% cd ~/anv;make -W anv.tex anv.dvi anv.ps;cd -
+% cd ~/anv;texcln anv;make anv.pdf;bibtex anv;makeindex anv;make anv.pdf;bibtex anv;makeindex anv;make anv.pdf;cd -
+% scp -p ${DATA}/ps/anv.ps ${DATA}/ps/anv.pdf dust.ess.uci.edu:/var/www/html/ppr
+
+\documentclass[twoside,agupp]{aguplus}
+%\documentclass[twoside,draft,agupp]{aguplus} % excludes figures
+%\documentclass[agums]{aguplus}
+%\documentclass[twoside,agums]{aguplus}
+%\documentclass[jgrga]{aguplus}
+
+%  AGU++ OPTIONS
+%\printfigures        % ADDS FIGURES AT END
+%\doublecaption{35pc} % CAPTIONS PRINTED TWICE
+\sectionnumbers      % TURNS ON SECTION NUMBERS
+%\extraabstract       % ADDS SUPPLEMENTAL ABSTRACT
+%\afour               % EUROPEAN A4 PAPER SIZE
+%\figmarkoff          % SUPPRESS MARGINAL MARKINGS
+
+%  AGUTeX OPTIONS AND ENTRIES
+%\tighten             % TURNS OFF DOUBLE SPACING, has no effect with agupp
+%\singlespace         % RESTORES SINGLE SPACING
+%\doublespace         % RESTORES DOUBLE SPACING
+
+% Standard packages
+\usepackage{ifpdf} % Define \ifpdf
+\ifpdf % We are running PDFLaTeX
+\usepackage[pdftex]{graphicx} % Defines \includegraphics*
+\pdfcompresslevel=9
+\usepackage{thumbpdf} % Generate thumbnails
+\usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
+\else % We are not running PDFLaTeX
+\usepackage[dvips]{graphicx} % Defines \includegraphics*
+\fi % endif PDFLaTeX
+
+\usepackage{longtable} % for long tables, like acronyms and symbols
+\usepackage{tabularx} % for long tables, like acronyms and symbols
+
+\usepackage{csz} % all my local definitions
+\usepackage{dmn} % Dimensional units
+\input{jgr_abb}
+
+% jgrga documentstyle automatically uppercases \lefthead and \righthead
+\lefthead{ZENDER AND KIEHL: CLIMATE SENSITIVITY TO ANVIL STRUCTURE}
+%\righthead{Climate sensitivity to anvil condensate phase, height, and size}
+%\righthead{Climate sensitivity to tropical anvil representation}
+\righthead{ZENDER AND KIEHL: CLIMATE SENSITIVITY TO ANVIL STRUCTURE}
+%\righthead{Climate sensitivity to tropical anvil structure}
+\received{December~19, 1996}
+\revised{May~5, 1997}
+\accepted{July~12, 1997}
+\journalid{JGRD}{October 27, 1997}
+\articleid{23793}{23803}
+\paperid{97JD02009}
+% The $ in the following line screws up the hilit19 highlighting
+\ccc{0148-0227/97/97JD-02009\$09.00}
+%\ccc{0148-0227/97/97JD-02009\ 09.00}
+% \cpright{PD}{1997}
+% \cpright{Crown}{1997}
+% (No \ccc{} for Crown copyrights.)
+\cpright{AGU}{1997}
+
+\authoraddr{J. T. Kiehl and Charles S. Zender, National Center for Atmospheric
+Research, P.O. Box 3000, Boulder, CO 80307-3000. (e-mail:
+jtkon@ncar.ucar.edu; zender@ncar.ucar.edu)} 
+
+\slugcomment{JOURNAL OF GEOPHYSICAL RESEARCH, VOL.~102, NO.~D20, PAGES
+23,793--23,803, OCTOBER~27,~1997}
+%\slugcomment{, 102(D20), 23,793--23,803, 1997. Copyright \copyright 1997 AGU.} 
+%\slugcomment{\today}
+
+\begin{document}
+%} % not phdcsz
+
+% NB: title must be lowercased by hand. The documentstyle does not enforce it.
+%\def\paperchaptertitle{Sensitivity of a climate simulation to vertical
+%distribution, phase, and size of anvil condensate through radiative effects}  
+%\def\paperchaptertitle{Tropical Climate Sensitivity to Representation
+%of Cirrus Anvil Lifecycle}  
+%\def\paperchaptertitle{Sensitivity of tropical climate simulations to
+%convectively generated anvils}   
+\def\paperchaptertitle{Sensitivity of climate simulations to
+radiative effects of tropical anvil structure}   
+\title{\paperchaptertitle}
+\author{Charles S. Zender and J. T. Kiehl}
+\affil{National Center for Atmospheric Research, Boulder, Colorado}
+
+\begin{abstract}
+
+Climate sensitivity to the representation of tropical anvil is
+investigated in a version of the National Center for Atmospheric
+Research Community Climate Model.
+Common features of tropical anvil generation and structure, consistent
+with observations and cloud resolving models, are incorporated into a
+simple prognostic anvil parameterization. 
+These features include anvil convective origin, vertical profile,
+phase, areal extent, and lifespan.  
+Two numerical climate integrations are forced by 1985--1989 sea
+surface temperature (SST):
+the control, with simple diagnostic anvil, and the experiment, which  
+simulates tropical anvil structure prognostically.
+The prognostic anvil formulation enhances ice and reduces liquid in
+the tropics.    
+Increase in hydrometeor size associated with anvil weakens cloud
+radiative extinction per unit mass by factors of 1--3.
+The weaker mass extinction efficiency approximately balances enhanced
+ice amount so that anvil ice mass quadruples without biasing the mean
+radiative energy balance, but significantly alters the vertical
+distribution of radiative effects.
+Enhanced anvil perturbs the tropical upper troposphere temperature
+structure more strongly in winter, when the column is clearer and
+anvil radiatively heats the troposphere above 200~mb. 
+In the summer tropics, enhanced anvil reduces radiative cooling up to 
+200~mb, and enhances cooling above that.
+The prognostic anvil formulation improves longwave cloud radiative
+response to SST cooling but worsens response to warming $> 2\
+\dgr$C.  
+The net response of convection is a shift toward the winter hemisphere
+in solstice months.
+These changes lead to a significant response in the extratropical
+height field in January. 
+These results emphasize the importance of representing tropical anvil
+structure in climate simulations.
+\end{abstract}
+
+\section{Introduction}\label{sec:anv_intro}
+
+% Get rid of the horizontal rule separating this footnote from text
+\renewcommand{\footnoterule}{} 
+\setlength{\footnotesep}{12pt} 
+\footnote{\noindent Copyright 1997 by the American Geophysical Union.\\
+Paper number 97JD02009\\
+0148-0227/97/97JD-02009\$09.00}%
+Radiative forcing from the extended tropical upper tropospheric cloud
+known as cirrus anvil plays a dominant role in determining the
+diabatic heating which drives the general circulation.  
+Tropical cirrus anvil originates in the complex interaction of a
+mesoscale convective system (MCS) with the environment.
+A general circulation model (GCM) does not resolve this interaction
+and must rely on sub-gridscale methods to diagnose or predict anvil
+cloud. 
+This study combines distinctive features of tropical anvil structure
+into a parameterization suitable for GCMs, and then examines the
+impact of accounting for the radiative effects of tropical anvil on
+the climate system. 
+
+The radiative effects of anvil depend on its distinctive lifecycle and
+structure, which may be briefly summarized as follows:
+Deep convection is the ultimate source of tropical upper tropospheric
+extended clouds, i.e., tropical anvils \cite[e.g.,][]{WeS80}. 
+The relative area of convecting cores to the associated anvil is
+10--20\% \cite[]{LeH80,FDR90}.
+Anvil lifetime, typically 6--12~hr \cite[]{ALV88,LeH80}, exceeds the
+duration of deep convection by many hours \cite[]{Hou89}.
+Thus, although the cumulonimbus core produces the strongest radiative
+impact per unit area, the anvil region dominates the radiative impacts
+of the convective cluster as a whole \cite[]{MaR93,WSS932}.
+\cite{LeH80} and \cite[]{GaH83} inferred the hydrologic budgets of 
+tropical convective systems from observations:
+Roughly 60--75\% of anvil condensate is detrained from deep convective
+updrafts. 
+The remainder, roughly 25--40\% of anvil mass, is generated by
+circulations outside the deep convective core, i.e., in the anvil
+itself. 
+Roughly 40\% of MCS precipitation comes from the stratiform region. 
+Observations and numerical simulations
+\cite[e.g.,][]{WSS931,SLT94,GMK96,McH96,McH971} show time mean
+condensate mixing ratio \qc\ in tropical convective systems 
+does not decrease significantly (but can increase) from the freezing 
+level to $\sim 300$~mb, above which \qc\ decreases rapidly.  
+The intrinsically mesoscale nature of these anvil features has
+hindered their representation in most GCM moist convection schemes 
+\cite[]{Don93}.   
+%How sensitive are climate simulations, and, ultimately, climate, to
+%these features of tropical anvil lifecycle? 
+How explicitly should these features of anvil structure and lifecycle
+be represented in GCMs?  
+The answer depends on climate sensitivity to tropical anvil.
+
+Many previous GCM studies have advanced understanding of climate
+sensitivity to tropical anvils by modeling climate sensitivity to
+anvil representation.
+\cite{RPM83} showed non-black cirrus is crucial to maintaining
+the observed tropical upper troposphere temperature structure and  
+meridional temperature gradient.
+\cite{ChR85} showed simulated zonal average upper troposphere
+temperature increased significantly when treating frozen cloud 
+particles as 20\,\um\ larger than liquid.
+\cite{SlS88} showed tropical anvil not only warms the tropical upper  
+troposphere, but also accelerates the subtropical jets and excites
+responses in the northern hemisphere winter height field. 
+%\cite{RHD89} showed detrained anvil condensate could be an important
+%moistening mechanism for the upper troposphere.
+\cite{RaR891} showed shortwave heating in tropical anvil is a
+significant fraction of total diabatic heating above 300~mb, and plays
+an important role in the maintenance of the upper tropospheric
+temperature structure. 
+Furthermore, they suggested the relative abundance of detached cirrus 
+anvil to anvil embedded in deep convective systems determines the sign
+of net radiative heating above 300~mb.
+\cite{RaC91} hypothesized cirrus radiative forcing can be an important
+negative feedback for stabilizing column energy changes induced by
+local positive SST anomalies over warm ocean.
+\cite{SeM93} showed representing ice cloud prognostically rather than
+diagnostically could substantially alter modeled climate sensitivity
+to CO$_2$ doubling and SST change. 
+\cite{SRB94} examined climate sensitivity to anvil radiative forcing
+over the west Pacific warm pool.
+They showed atmospheric heating by tropical cirrus is primarily
+balanced by vertical advective cooling, in accord with \cite{ALV88}.
+\cite{LoR95} showed climate response to blackbody cirrus forcing
+resembles the response to increased SST forcing even though the direct
+heating mechanisms, enhanced cirrus radiative heating and surface
+evaporation, respectively, are vertically distinct.
+
+These GCM studies employed a variety of methods to determine anvil
+condensate amount. 
+Most of the aforementioned studies diagnose anvil cloud from
+atmospheric thermodynamic properties (e.g., relative humidity, column
+vapor, and stability).
+However, prognostic schemes are more physically based than diagnostic.
+\cite{SeM93} showed radiative feedbacks from prognostic cloud could be
+significantly different than feedbacks from cloud diagnosed from
+relative humidity. 
+Newer GCMs \cite[e.g.,][]{Tie93,DYK96} prognose stratiform
+anvil cloud from bulk microphysics.
+These schemes detrain condensate predicted by the moist convection
+parameterization into the stratiform anvil.
+
+Our motivation in the present study is to examine the role of
+tropical anvil radiative forcing in a climate where the representation
+of tropical anvil agrees with the gross behavior of tropical mesoscale
+convective systems, summarized above.
+We replace a representation of tropical cloud which diagnoses cloud
+mass from column vapor with a prognostic representation which
+forecasts anvil generation from the vertical profile of convective
+mass flux and anvil precipitation from mesoscale budget estimates. 
+%This builds upon previous GCM cirrus sensitivity studies in an
+%important way: the forecast anvil is self-consistent with
+%cloud-resolving, cumulus ensemble model simulations and observations  
+%of mesoscale convective systems. 
+Thus, the forcing in the experiment is an integrated set of
+constraints (ratio of convective condensate generation to vertical
+mass flux profile, horizontal extent, vertical condensate profile, ice
+fraction, ratio of mesoscale precipitation to sublimation, and
+lifetime) consistent with tropical anvil structure but not present in
+most current GCM cloud parameterizations.
+By comparing the simulated climates to each other we can deduce
+climate sensitivity to the representation of tropical anvil
+structure. 
+
+The parameterization of tropical anvil used in the numerical climate
+experiment is developed in section~\ref{sec:anv_mdl}.   
+Section~\ref{sec:ss} presents the mean climate response to the
+tropical anvil representation.
+Section~\ref{sec:enso} examines anvil response to SST forcing in
+the 1987 El Ni\~no. 
+Section~\ref{sec:anv_cnc} contains the conclusions. 
+
+\section{GCM Anvil Parameterization}\label{sec:anv_mdl}
+
+%Empirical budget studies suggest the hydrologic cycle of tropical
+%anvil may be conceptually divided into convective and stratiform
+%components \cite[]{LeH80,GaH83}. 
+%Convective formation accounts for ice formed in deep convective 
+%updrafts and detrained into the stratiform anvil.
+%Stratiform formation accounts for ice formed outside convective
+%cores, such as condensate formed or frozen in large-scale ascent. 
+%The above studies indicate roughly 60--75\% of anvil condensate
+%originates in convective cores.
+%The remainder, roughly 25--40\% of anvil mass, is generated by
+%circulations outside the deep convective core. 
+
+Spatio-temporal scale mismatch between convective and stratiform
+processes and GCM resolution makes anvil parameterization difficult.
+GCMs currently employ two common methods to represent these processes:
+(i) diagnosing anvil cloud from column thermodynamic properties (e.g.,
+relative humidity) and (ii) prognosing anvil cloud by assuming an
+anvil detrainment efficiency which acts on the convective mass flux
+predicted by the moist convection scheme.
+Diagnostic methods like (i) have difficulty representing
+convective-radiative hysteresis, such as the radiative influence of 
+detached anvils.
+As \cite{Don93} points out, prognostic methods like (ii) often do not
+explicitly account for the 25--40\% of anvil mass formed by secondary
+circulations outside the deep convective core.
+
+Cloud resolving models and mesoscale budget studies suggest the
+hydrologic structure of MCS anvils may be simply parameterized in
+terms of large scale forcing.  
+Figure~\ref{fig:anv_concept} shows our modified version of the
+\cite{LeH80} conceptual anvil model.
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/anv_concept}\vfill
+\end{center}
+\caption{
+Conceptual model of the ice budget in ANV. 
+$c_1$--$c_3$ and \pc\ are free parameters.
+\label{fig:anv_concept}}
+\end{figure}
+We implement the parameterization of this conceptual anvil model,
+denoted ANV, as follows:  
+For a grid cell of density $\rho$ and ice mixing ratio \qi\ located in
+a convecting column with convective mass flux \Mc\ at 500~mb,
+the ice budget that defines ANV is:
+\begin{equation}
+\label{eqn:qi_cnv}
+{D\qi \over Dt} = {c_1 \Mc \over \rho \Delta Z} - c_2 \qi - c_3 \qi
+\end{equation}
+where $\Delta Z$ is the thickness of the convecting portion of the
+column in which $T < 0$\,\dgrc.
+\qi, $\rho$, and the wind vector $\vec u$ (hidden in the material
+derivative) vary in the vertical.
+The material derivative on the LHS accounts for advection.
+In this study the advection of the prognostic ice is computed using
+the same semi-Lagrangian advection algorithm used for water vapor
+\cite{WiR94}.    
+The first term on the RHS relates the generation of total column ice
+to \Mc.
+Basing the generation of \qi\ throughout the anvil on the mass flux
+near anvil base \Mc\ (rather than local $M$) produces a vertical
+profile of \qi\ which increases or remains constant (rather than
+significantly decreasing) from anvil base up to $\sim 300$~mb, in
+accord with current understanding \cite[e.g.,][]{Hou89,WSS931}.
+Justification for the $c_1$ term is described in the next section.
+The $c_2$ term represents local sublimation of the anvil due to 
+sub-gridscale entrainment and subsaturation.
+The $c_3$ term converts ice to precipitation.
+
+Parameters $c_1$--$c_3$ do not vary in time or space---they are the
+free parameters of the parameterization.
+The values of $c_1$--$c_3$ which yield a realistic climate depend on
+the physical parameterizations (e.g., moist convection) used in the
+host GCM.  
+$c_2$ and $c_3$ are determined from observations \cite[]{LeH80,GaH83}
+and process studies in a microphysical cloud model \cite[]{ZeK941}.
+The present study sets $c_1 = .75 \times 10^{-3}$, $c_2 = .3 c_3$, and
+$c_3 = 1.85 \times 10^{-4}$\,\xs.
+We assume the detrained anvil completely covers a gridcell, i.e.,
+cloud fraction is 1. 
+At the GCM scale (i.e., horizontal gridscale $> 100$~km), this
+assumption overestimates anvil coverage relative to observations
+\cite{LeH80,Hou89,MaH93}.  
+%Cloud systems larger than $100^2$\,\kmS\ account for the bulk of
+%tropical cirrus cover cite[]{Hou89}.  
+
+\subsection{Linking Anvil Growth to Anvil-base Mass Flux}\label{sec:mc}
+
+Prior studies indicate convective mass flux $M$ is the best single
+parameter to characterize the formation of tropical anvil. 
+\cite{XuK91} concluded $M$ best predicts tropical convective cloud
+amount and the ice water content of individual anvil layers.   
+Based on satellite observations, \cite{MaR93} suggested convective
+mass flux at the base of cumulonimbus cores determines the mean cloud 
+properties of mesoscale convective systems, including the stratiform
+anvil region.
+
+We use a cloud resolving, cumulus ensemble model (CEM) to provide a
+high spatial and temporal resolution dataset which spans the range of
+MCS activity from the convective to the GCM scale.
+A comprehensive review of our CEM simulation is presented by
+\cite{GMK96}.  
+Figure~\ref{fig:mc}a shows the variation of \Mc\ and anvil mass
+growth rate \IWPdot\ through the first day of the CEM simulation.
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth,height=.25\textheight]{/data/zender/fgr/anv/cem_mc_diwpdt_a}\vfill
+\includegraphics*[width=\halfwidth,height=.25\textheight]{/data/zender/fgr/anv/cem_mc_diwpdt_c}\vfill
+\end{center}
+\caption{
+Results of Cumulus Ensemble Model experiment.
+(a) Evolution of 500~mb convective mass flux \Mc\ (\gxmS) (solid) and
+\IWPdot\ (dashed) during the first 24 hours of the CEM simulation. 
+\IWPdot\ is expressed in \gxmSgcmt, i.e., mass change per GCM
+timestep.  
+(b) Linear correlation and least squares fit of 500~mb convective mass
+flux \Mc\ (\gxmSs) to anvil growth rate \IWPdot\ (\gxmSgcmt) from the
+the first 2.5 hours of (a).
+\label{fig:mc}}
+\end{figure}
+The initial anvil formation, lasting about six hours, occurred as a
+prescribed thermal instability triggered concentrated convective
+updrafts (cores) which detrained frozen condensate into a cirrus anvil
+above 500~mb.
+The variation of \IWPdot\ is strongest during convectively
+active periods, and subdued during the convectively quiescent period
+($400 < t < 900$~min) between the first and second generation anvils. 
+Non-convective formation of anvil ice is also evident during the
+quiescent period. 
+Periods when \IWPdot\ is negative occur when net anvil dissipation
+(due to precipitation and sublimation) exceeds production. 
+
+In order to isolate the processes controlling ice generation
+from destruction we focused on the initial hours of anvil formation,
+when a single convective tower dominated the mass budget of the entire
+domain. 
+Figure~\ref{fig:mc}b shows the correlation of \Mc\ and \IWPdot\
+through the first 2.5~hr of the CEM simulation. 
+This initial correlation is excellent, but anvil decay processes and
+scattered convection within the CEM domain cause the correlation to
+deteriorate after 2.5~hr.
+The slope of the least squares fit between between \Mc\ and \IWPdot\  
+provides the initial estimate for $c_1$ in (\ref{eqn:qi_cnv}).
+%Since \IWPdot\ includes convectively detrained condensate and
+%condensate generated in the young anvil, the empirically determined 
+%$c_1$ implicitly accounts for some anvil mass formed by secondary
+%circulations.  
+Note \IWPdot\ includes convectively detrained condensate as well as
+condensate produced in the young anvil.
+The parameter $c_1$ is intended to implicitly account for the anvil
+mass formed by both convective and mesoscale circulations.
+The results of our GCM simulations with constant $c_1$ (below) show
+numerous improvements in anvil climatology over a more traditional
+method. 
+Parameterizing $c_1$ from an ensemble of CEM integrations, perhaps as
+a function of large scale forcing (e.g., wind shear, SST) is the next
+logical step.
+
+\subsection{Ice Fraction and Hydrometeor Size}\label{sec:fice}
+
+Recent field observations and models \cite[e.g.,][]{SLT94,GMK96,GrM96}
+suggest that, above 500~mb, anvil condensate is dominated by ice.
+In terms of temperature, the complete phase transition may occur over
+less than 10\,\dgr K.
+The control model, a version of the National Center for Atmospheric
+Research Community Climate Model \cite[]{KBB96} denoted CCM,
+partitions diagnostic condensate between liquid and ice via   
+\begin{equation}
+\ficeccm = \cases{
+  0 & $T > - 10$\,\dgr C \cr
+  -{T+10 \over 20} & $-10 \geq T \geq -30$\,\dgr C \cr
+  1 & $T < -30$\,\dgr C \cr}
+\label{eqn:ficeccm}
+\end{equation}
+The experiment, denoted ANV, restricts diagnostic liquid condensate
+(and, hence, mixed phase cloud) to a narrower and warmer range than
+the control model according to
+\begin{equation}
+\ficeanv = \cases{
+  0 & $T > 0$\,\dgr C \cr
+  -{T \over 5} & $0 \geq T \geq -5$\,\dgr C \cr
+  1 & $T < -5$\,\dgr C \cr}
+\label{eqn:ficeanv}
+\end{equation}
+Since CCM classifies some condensate as cold as $-30\,\dgr$C as
+liquid (\ref{eqn:ficeccm}), while ANV has no liquid colder than
+$-5$\,\dgr C (\ref{eqn:ficeanv}), it is clear the ANV atmosphere
+will contain much more ice than the CCM. 
+The effect of using (\ref{eqn:ficeccm}) vs.\ (\ref{eqn:ficeanv}) is
+shown in Figure~\ref{fig:anv_fice}, which shows the vertical
+distribution of \fice\ averaged over the equatorial Pacific 
+(140--270~$\dgr$E, 10~$\dgr$S--10~$\dgr$N) for each GCM
+layer in the mixed phase region (GCM data are from the simulations
+described below).
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/anv_fice}\vfill
+\end{center}
+\caption[Modeled ice fraction \fice\ over the equatorial Pacific in 
+July]{
+Modeled ice fraction \fice\ over the equatorial Pacific in July for
+the CEM (solid), CCM (dotted), and ANV (dashed).
+Arrows indicate 500~mb level.
+\label{fig:anv_fice}}   
+% NB: ncwa -O -a lat,lon -w gw -v PRES,T,QC,QICE,QL -d lat,-10.,10. -d lon,140.,270. amip5_8589_07.nc foo.nc
+% NB: ncks -C -H -v PRES,T,QICE,QC,QL foo.nc | m
+\end{figure}
+ANV underestimates liquid condensate near 500~mb but otherwise agrees 
+with the CEM ((\ref{eqn:ficeanv}) imposes the agreement).
+CCM cloud has the same mixed phase composition as ANV cloud
+approximately 20\,\dgr C warmer.
+
+For both the control and the experiment, the determination of
+hydrometeor size and its radiative treatment is as described in
+\cite{KBB96}: 
+Model cloud droplet effective radius \rel\ is fixed at 10\,\um\ over
+ocean and sea ice but varies from 5--10\,\um\ over land.
+Ice crystal effective radius \rei\ represents an equivalent surface
+area sphere and varies linearly with a normalized pressure coordinate.
+Over ocean this results in $\rei = 10$\,\um\ for $p > 800$~mb to  
+$\rei = 30$\,\um\ for $p < 400$~mb.
+Solar single scattering and longwave emissivity properties are from
+\cite{Sli89} (liquid) and \cite{EbC92} (ice).
+
+Since ice hydrometeors are prescribed to be larger than liquid,
+classifying more condensate as ice (\ref{eqn:ficeanv}) also decreases 
+the extinction efficiency per unit mass of anvil
+\cite[e.g.,][]{ZeK941}. 
+This proves to be an important factor in diagnosing the cause of
+change in climatological cloud radiative properties in this
+sensitivity study.
+
+\subsection{Diagnostic Condensate Formation}\label{sec:ccm}
+
+For convenience, this section summarizes the diagnostic treatment of 
+condensate employed in the control model, CCM.
+For a fuller description, the reader is referred to \cite{KBB96}. 
+In CCM, grid box average \qc\ is logarithmically proportional to
+total column  vapor \Qv\ and linearly proportional to local cloud
+fraction $A$ through
+\begin{eqnarray}
+\label{eqn:qc}
+\qc & = & A \rho_\ell / \rho \\
+\label{eqn:rhol}
+\rho_\ell & = & \rho_\ell^0 e^{(-z/h_\ell)} \\
+\label{eqn:hl}
+h_\ell & = & 810 \ln \Qv
+\end{eqnarray}
+where $\rho$ is density, $\rho_\ell^0 \equiv .18$\,\gxmC\
+is ``in-cloud'' condensed water density at the surface, $z$ is height,
+and $h_\ell$ is the scale height of condensed water.
+Note the strong coupling of \qc\ to local surface temperature by the
+Clausius-Clapeyron relationship implicit in (\ref{eqn:hl}).
+Inserting tropical values for \Qv\ we find $h_\ell \lesssim 4$~km so
+that \qc\ monotonically decreases from the surface (for fixed $A$).
+A drawback to this procedure is that the upper tropospheric peak in
+\qc\ profile of an anvil system must be captured by significantly
+modulating $A$ across the anvil deck (\ref{eqn:qc}).
+
+\section{Sensitivity Study Results}\label{sec:ss}
+
+To assess climate sensitivity to the features of convectively
+generated anvil described above, we compare the results of two
+numerical climate integrations forced with observed 1985--1989 SST.  
+The control, denoted CCM, uses a diagnostic cloud scheme with no
+special provisions for anvil \cite[]{KBB96}.
+The experiment, denoted ANV, forecasts anvil ice from
+(\ref{eqn:qi_cnv}), which incorporates modeled and observed 
+characteristics of tropical anvil production and structure (i.e.,
+explicitly linking anvil condensate generation to anvil base
+convective mass flux, strong vertical profiles of condensate up to
+300~mb, and increased ice fraction).
+The focus of the present study is on the radiative effects of the
+anvil condensate. 
+Thus we restrict the effects of \qi\ in (1) to radiative heating
+alone. 
+The results focus on tropical climate, where anvil forcing is
+greatest.   
+
+%We stress the control model (CCM) includes diagnostic anvil---the
+%sensitivity experiment (ANV) shows the impact of forecasting anvil
+%based on the physics of tropical anvil.
+
+%We have investigated the sensitivity of the simulated climate to
+%the radiative effects of a representation of ice cloud prognosed from 
+%modeled and observed characteristics of tropical anvil. 
+%In particular, we replaced a representation of tropical cloud which
+%diagnoses cloud mass from column vapor with a prognostic
+%representation which forecasts anvil generation from the vertical
+%profile of convective mass flux and anvil precipitation from mesoscale
+%budget estimates.
+
+\subsection{Condensate Distribution}\label{sec:qc}
+
+The climate response to anvil representation is driven by radiative
+forcing resulting from the distribution, partitioning (ice or liquid),
+and size of cloud condensate. 
+The direct effect of representing the structure and convective
+production of anvils is to sequester more condensate in the upper
+troposphere, a larger fraction of which is ice. 
+Figure~\ref{fig:xavg_8589_CP} separates modeled January and July 
+total condensed water path CWP by phase ($\CWP \equiv \LWP + \IWP$).
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/anv/xavg_8589_01_TOTLWP}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/anv/xavg_8589_07_TOTLWP}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/anv/xavg_8589_01_TOTIWP}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/anv/xavg_8589_07_TOTIWP}%
+
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/anv/xavg_8589_01_TOTCWP}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/anv/xavg_8589_07_TOTCWP}%
+\end{center}
+\caption[Zonal average column condensate burdens from
+1985--1989 January and July simulations by CCM and ANV]{
+Zonal average column condensate burdens (\gxmS) from
+1985--1989 (left) January and (right) July simulations by (solid) CCM
+and (dashed) ANV of (a,b) LWP, (c,d) IWP, and (e,f) CWP.   
+\label{fig:xavg_8589_CP}}   
+\end{figure*}
+The refined anvil representation increases tropical IWP by factors
+of 2--4, and reduces tropical LWP by 20\%.
+The net increase in tropical CWP is 10--50\%, comprising a mean
+increase of upper tropospheric condensate with a repartitioning of 
+condensate from liquid to ice due to (\ref{eqn:ficeanv}).
+The mean increase is partly due to implicitly accounting for anvil
+formed in mesoscale circulations.
+The tropical response to the experiment in July is similar to January
+in the preponderance of the results.  
+Thus for economy we omit showing July results in most of the following
+fields. 
+
+Figure~\ref{fig:xavg_8589_QC} contours the ensemble mean January
+vertical profile of change in zonal average condensate \qc\ in 
+the tropics.  
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/spcp_85_8589_amip5_8589_xavg_01_QC}\vfill
+\end{center}
+\caption{
+Change (ANV$-$CCM) in zonal average condensate mixing ratio \qc\
+(\mgxkg) due to prognostic anvil representation.
+Contour interval is 2\,\mgxkg.
+Shading indicates values $< 0$.
+Data are from ensemble averages of 5 simulated Januarys from
+1985--1989.
+\label{fig:xavg_8589_QC}}   
+\end{figure}
+The largest model differences occur in the ascending branch of
+the Hadley cell, where the 600--200~mb maxima signals enhanced
+tropical anvils with better vertical definition.
+These changes in condensate distribution and ice fraction
+(\ref{eqn:ficeccm}--\ref{eqn:ficeanv}) agree with inferences from
+recent observations \cite[]{WSS931,GrM96,McH96,McH971} and cumulus
+ensemble model simulations \cite[]{SLT94,GMK96}.  
+%We stress the control model includes diagnostic ice cloud---the
+%sensitivity experiment shows the impact of forecasting ice cloud based
+%on the physics of tropical anvil.
+
+Before examining the climate response to changes in anvil structure,
+it is of interest to estimate the relative roles of the two major
+modifications to the original CCM anvil treatment in forcing the
+climate.
+To describe this relative forcing, we examine the terms in the
+linearized net TOA energy budget, 
+\begin{equation}
+\label{eqn:ss}
+\Delta F = {\partial F \over \partial \CWP} \Delta \CWP +
+{\partial F \over \partial \fice} \Delta \fice + \ldots
+\end{equation}
+where $F$ represents a net radiative flux and $\Delta$ the change
+between the control and the experiment.
+Thus the LHS is the net radiative climate response to the forcings on
+the RHS.
+The first term on the RHS represents the climate forcing due to the
+radiative effects of the change in condensate path \CWP\ and vertical
+location which arise from the prognostic formulation of anvil 
+generation (\ref{eqn:qi_cnv}) (cf.\ Figure~\ref{fig:xavg_8589_QC}).
+The second term on the RHS represents the climate forcing due to the
+radiative effects of the increase in ice fraction \fice\ arising from 
+(\ref{eqn:ficeanv}) (cf.\ Figure~\ref{fig:anv_fice}). 
+These two terms are the dominant forcing mechanisms in the experiment.
+The global annual average TOA radiative budgets of the control and the
+experiment balance to within .5\,\wxmS, agree between models to
+within 2.5\,\wxmS\ (agreement with ERBE is within 4\,\wxmS). 
+In other words $\Delta F \approx 0$\,\wxmS\ for $F$ representing TOA
+flux or cloud forcing. 
+In particular, the zonal average TOA radiative budgets of the models
+closely agree in the tropics.
+The agreement holds for the total radiative fluxes and the shortwave
+and longwave components separately (the surface energy budgets are
+similarly balanced). 
+
+The sensitivity factors in (\ref{eqn:ss}) were estimated with an
+offline, column version of the CCM radiation code. 
+We obtained $\partial F/\partial \CWP$ by differencing the diurnal
+average radiative fluxes from the control and experimental zonal
+average \qc\ profiles for January at $5\ \dgr$S, using the CCM ice
+fraction (\ref{eqn:ficeccm}) for both profiles.  
+Similarly, $\partial F/\partial \fice$ was estimated by differencing
+the fluxes obtained using the control and experimental ice fractions
+on the CCM \qc\ profile. 
+From these computations, the prognostic formulation for anvil
+structure alone (\ref{eqn:qi_cnv}) imposes a $-19$\,\wxmS\ shortwave
+forcing and a $+24$\,\wxmS\ longwave forcing in the tropics, for a net 
+radiative forcing of $+5$\,\wxmS.
+Thus the increased upper tropospheric condensate due to
+(\ref{eqn:qi_cnv}) and shown in Figures~\ref{fig:xavg_8589_CP}\
+and~\ref{fig:xavg_8589_QC}\ acts to significantly strengthen tropical
+cloud radiative forcing.   
+The enhanced ice fraction alone (\ref{eqn:ficeanv}) imposes a
+$+10$\,\wxmS\ shortwave forcing and a $-9$\,\wxmS\ longwave forcing in
+the tropics, for a net radiative forcing of $+1$\,\wxmS.
+Thus the increased upper tropospheric ice fraction due to
+(\ref{eqn:ficeccm}) and shown in Figures~\ref{fig:anv_fice}\
+and~\ref{fig:xavg_8589_CP}\ acts to significantly weaken tropical
+cloud radiative forcing.    
+As mentioned in Section~\ref{sec:fice}, this is largely due to the 
+larger hydrometeor size associated with ice.
+The magnitude of the tropical radiative forcing by the increased upper
+tropospheric condensate is 2--3~times the magnitude of the forcing due
+to the increased ice fraction. 
+
+\subsection{Tropical Upper Tropospheric Heating}\label{sec:tut} 
+
+In this experiment the changes in tropical anvil structure 
+force the circulation by altering total radiative heating \QR.
+Anvil induced changes in the vertical and horizontal distribution of
+\QR\ alter total diabatic heating \QT, which includes latent heating
+(\QL), radiation (\QR), and diffusion (turbulence).
+Figure~\ref{fig:xavg_8589_QDIABAT} shows the change in zonal average
+\QR\ and \QT\ in the tropics. 
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/spcp_85_8589_amip5_8589_xavg_01_RADD}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/spcp_85_8589_amip5_8589_xavg_01_QDIABAT}\vfill
+\end{center}
+\caption{
+As in Figure~\ref{fig:xavg_8589_QC} but for (a) radiative heating \QR\
+only, and (b) total diabatic heating \QT.
+Contour intervals are .1\,\kxday.   
+\label{fig:xavg_8589_QDIABAT}}   
+\end{figure}
+Changes above 200~mb, where condensation is weak, are due to the
+radiative heating perturbation induced by the enhanced anvil.
+Enhanced anvil perturbs tropical upper troposphere heating more
+strongly in winter, when the column is clearer and anvil radiatively
+heats the troposphere above 200~mb.  
+In the summer tropics, enhanced anvil occurs in a cloudier 
+environment, reducing radiative cooling up to 200~mb, and enhancing
+cooling above that. 
+Thus, winter and summer tropics fall, respectively, into the ``anvil''
+and ``deep'' cloud scenarios of \cite{RaR891}.
+Reduced optical depth keeps the intrinsically greater solar absorption
+of ice (relative to liquid) from causing a ubiquitous heating increase
+above 600~mb.
+
+Beneath 200~mb, change in \QT\ is dominated by change in latent
+heating \QL. 
+The response in \QL\ is, to first order, induced by the change in
+\QR. 
+Convection intensifies from 0--10\,\dgr N in ANV in both seasons,
+reflecting an enhanced ITCZ, notably over Micronesia, the east
+Indian Ocean, and northeast of Brazil. 
+Deep convection in the remainder of the ascending branch of the Hadley
+circulation is reduced. 
+Weaker summer hemisphere diabatic heating in ANV reduced Hadley cell
+strength by 13\% in January, 7\% in July.
+Change in tropical water vapor (not shown) strongly resembles $\Delta
+\QL$.
+
+Figure~\ref{fig:xavg_8589_T} shows ANV warms the 50~mb beneath the
+tropical tropopause by 2--3~$\dgr$K, roughly 5 times the standard
+deviation of zonal average monthly $T$ from a 10~yr AMIP CCM2
+simulation. 
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/spcp_85_8589_amip5_8589_xavg_01_T}\vfill
+\end{center}
+\caption{
+As in Figure~\ref{fig:xavg_8589_QC} but for temperature $T$ (\dgr
+K).
+Contour interval is .1\,\dgr K. 
+\label{fig:xavg_8589_T}}   
+\end{figure}
+The meridionally symmetric increase in tropical upper tropospheric
+temperature includes anvil-induced increase in radiative equilibrium
+$T$ and decreased heat export by the Hadley cell.
+%The near meridional symmetry of the $T$ increase reflects the
+%inability of the upper troposphere to maintain large temperature
+%gradients \cite[]{LiH88}.
+There is no significant change in tropical atmospheric stability
+beneath 200~mb. 
+
+\subsection{Radiative Forcing}\label{sec:cf}
+
+We present the radiative results of the experiment in terms of
+top-of-atmosphere (TOA) cloud forcing, observed by the Earth Radiation
+Budget Experiment (ERBE) satellite system from 1985--1989
+\cite[]{HuC92}.
+Shortwave cloud forcing (SWCF) is defined as the net increase in
+reflected shortwave (SW) flux at TOA due to cloud scattering and
+absorption. 
+Figure~\ref{fig:xavg_8589_SWCF} shows zonal average SWCF for January
+and July. 
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/xavg_8589_01_SWCF}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/xavg_8589_07_SWCF}\vfill
+\end{center}
+\caption[Zonal average shortwave cloud forcing SWCF from ERBE,
+CCM, and ANV for January and July]{ 
+Zonal average shortwave cloud forcing SWCF (\wxmS) from ERBE
+(solid), CCM (dotted), and ANV (dashed) for (a) January and (b) July.
+\label{fig:xavg_8589_SWCF}}   
+\end{figure}
+Dramatic changes seen in condensate distribution and phase
+(Figures~\ref{fig:xavg_8589_CP} and~\ref{fig:xavg_8589_QC}), are not
+seen in zonal average cloud forcing.
+%This introduces a central result of our investigation.
+%The effects of improved representation of tropical anvil lifecycle 
+The models predict similar equatorial LWP beneath 600~mb but ANV has
+up to 5 times more equatorial IWP. 
+Agreement in modeled tropical cloud forcing illustrates how increased
+IWP can radiatively offset increased \rdsffc\ (Section~\ref{sec:fice}).
+%The weak January zonal maxima in ANV at 60~$\dgr$S resembles the
+%disparity in modeled CWP (Figure~\ref{fig:xavg_8589_CP}e).
+% NB: This is interesting because you would infer from the 60S maxima 
+% that SWCF is entirely due to CWP differences, not tau/fice changes.
+% Vertical profile/mean photon path length differences might be
+% important here.
+ANV worsens the zonal average bias at the July ITCZ by improving
+(increasing) SWCF in the equatorial east Pacific and Atlantic oceans
+without reducing SWCF in the Indo-Pacific.
+%ANV eliminates nearly half the 40\,\wxmS\ bias poleward of
+%60~$\dgr$N in July.
+
+The effect of cloud on terrestrial or longwave (LW) radiation, that
+is, the reduction in outgoing longwave radiation (OLR) due to cloud
+condensate, is called longwave cloud forcing (LWCF).
+LWCF is a radiative proxy for tropical anvil.
+Figure~\ref{fig:8589_LWCF} shows the geographic variation of change in
+January tropical LWCF due to convectively generated anvils.
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/spcp_85_8589_amip5_8589_01_LWCF_bw}\vfill
+\end{center}
+\caption{
+As in Figure~\ref{fig:xavg_8589_QC} but for longwave cloud forcing
+LWCF (\wxmS). 
+Contour interval is 10\,\wxmS. 
+\label{fig:8589_LWCF}}   
+\end{figure}
+July results (not shown) confirm LWCF generally increased in the
+winter hemisphere and decreased in the summer.
+The strongest bias of the ANV prognostic anvil scheme is an
+overestimate of cloud forcing over wintertime desert, due to weak
+sublimation in subsidence regimes.
+Usually enhanced ice amount and fraction in the prognostic
+anvil balances the weaker mass extinction efficiency of large ice
+crystals because hydrometeor size is specified to increase with
+hydrometeor height \cite[]{KBB96}.
+However, LWCF significantly decreases (and improves) over the central
+Indian Ocean in January despite a ubiquitous increase in anvil mass in
+the tropics (cf.\ Figure~\ref{fig:xavg_8589_QC}).  
+This is due to reduced upper level divergence over the central Indian
+Ocean, a region where prognostic anvil significantly alters the
+vertical distribution of cloud radiative effects. 
+
+\subsection{Tropical Circulation}\label{sec:cio}
+
+The change in large scale divergent motion in the tropics due to
+prognostic anvil representation is shown in
+Figure~\ref{fig:pres_8589_01_CHI}, which depicts the geographic
+response of the January 200~mb velocity potential $\chi$. 
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/spcp_85_8589_amip5_8589_pres_01_CHI}\vfill
+\end{center}
+\caption{
+As in Figure~\ref{fig:xavg_8589_QC} but for 200~mb velocity potential
+$\chi$ (\mSxs). 
+Contour interval is $1 \times 10^6$\,\mSxs.  
+Shading indicates less subsidence (more divergence). 
+\label{fig:pres_8589_01_CHI}}   
+\end{figure}
+%The prognostic anvil is less strongly coupled to SST.
+%Based on the 1987 El Ni\~no, the prognostic anvil formulation improves
+%longwave cloud radiative response to SST cooling but worsens response
+%to warming $> 2$\,\dgrc. 
+%In conjunction with weaker mass extinction of ice, this weakens the
+%feedback between longwave cloud forcing and convection over SST maxima.
+Deep convection shifts toward the winter hemisphere
+(cf.\ Figure~\ref{fig:xavg_8589_QDIABAT}).
+ECMWF analyses confirm the strong maxima (reduced divergence) over the
+central Indian Ocean eliminates a persistent convective bias. 
+The decreased Indian Ocean convection also decreased subsidence over
+African and Arabian desert, allowing too much high cloud to form there
+(Figure~\ref{fig:8589_LWCF}). 
+%Moreover, increased convection and high cloud north of the equator
+%propagate Rossby waves to the extratropics.  
+%This causes significant ridging in the 500~mb height field over the
+%west coasts of North America and Europe (not shown), substantially improving
+%agreement with analysis. 
+
+As seen above, TOA cloud forcing does not reveal the full extent of 
+circulation change due to anvil representation. 
+Tropical circulation is sensitive to the specific vertical (and
+horizontal) location of anvil heating \cite[]{RaR891,SRB94}. 
+Figure~\ref{fig:xyavg_reg_Indian_Central_8589} shows
+the vertical profile of simulated diabatic heating components over 
+the central Indian Ocean for January conditions.
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/anv/amip5_xyavg_reg_Indian_Central_8589_01}%
+\includegraphics*[width=.5\hsize]{/data/zender/fgr/anv/spcp_85_8589_amip5_8589_xyavg_reg_Indian_Central_01}%
+\end{center}
+\caption[Model simulated profiles of diabatic heating
+and differences between models (ANV$-$CCM) over the central 
+Indian Ocean for 1985--1989 January]{
+Model simulated profiles of (a) diabatic heating
+(\kxday), and (b) differences between models (ANV$-$CCM) for the
+central Indian Ocean (15\,\dgr S--5\,\dgr N, 60--80\,\dgr E) 
+for 1985--1989 January.
+Heatings shown are total diabatic (solid), shortwave (dotted),
+longwave (short dash), resolved (dash-dot), turbulent
+(dash-dot-dot-dot), and convective (long dash).
+Note difference in scales.
+\label{fig:xyavg_reg_Indian_Central_8589}}
+\end{figure*}
+The CCM heating profile,
+Figure~\ref{fig:xyavg_reg_Indian_Central_8589}a, is typical of deep
+convective regions in both models. 
+Convective heating dominates radiative from the boundary layer to
+250~mb. 
+Large scale heating in the upper troposphere, representing stratiform
+condensation in anvil, enhances latent heating but the stratiform
+precipitation evaporatively cools the lower troposphere.
+SW heating is 30--60\% of LW cooling from 800--200~mb, and dominates
+\QT\ from 150--100~mb \cite[]{RaR891}. 
+
+Differences between ANV and CCM heating profiles, shown in
+Figure~\ref{fig:xyavg_reg_Indian_Central_8589}b, range from 10--50\%
+of mean heating rates.
+The prognostic anvil representation reduces anvil formation over the
+central Indian Ocean.
+Reduced condensate absorptivity increases LW cooling by $\sim 30\%$
+from 800--400~mb and enhances anvil-base heating near 300~mb. 
+This radiative heating dipole increases atmospheric stability.
+%Decreased anvil reduced both cloud radiative heating beneath 350~mb
+%and cloud top cooling above, which increased column stability.
+Weaker vertical motion and upper level divergence
+(Figure~\ref{fig:pres_8589_01_CHI}) are accompanied by a large
+reduction in convective heating and precipitation (3\,\mmxday).
+Reduced convective activity also dries the column, which exacerbates
+increased cooling beneath 400~mb.
+Thus, a relatively small reduction in anvil heating appears to
+leverage much larger reductions in latent heating.
+This behavior agrees with \cite{SRB94}, who suggest compensation
+between vertical motion and anvil heating is an efficient means of
+restoring energy balance in a regime of weak horizontal gradients of
+moist static energy. 
+%This is atypical of tropical summer, when the response to prognostic
+%anvil is normally enhanced cloud base heating and cloud top cooling
+%(cf. Figure~\ref{fig:xavg_8589_QDIABAT}).
+Differences in diabatic heating components are $< .2$\,\kxday\ in July,
+when much of the central Indian Ocean is colder than 28~$\dgr$C, 
+and the prognostic anvil effect is minimal.
+
+Significant changes in precipitation and high cloud also occur in the
+tropical Pacific in January.
+Precipitation associated with the Australian monsoon shifts northward.
+This shift enhances Micronesian rainfall by up to 7.5\,\mmxday, and 
+mid-tropospheric heating rates by up to 2.7\,\kxday. 
+
+\subsection{Extratropical Response}\label{sec:phi}
+
+\cite{HoK81} showed extratropical stationary wave structure is 
+sensitive to the distribution of tropical diabatic heating.
+The prognostic representation of tropical anvil significantly alters
+stationary wave patterns from the central Pacific to western Europe.
+Figure~\ref{fig:pres_8589_Z2TEST} compares the observed and modeled
+wintertime 500~mb height field.
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.33\hsize]{/data/zender/fgr/anv/ecmwf_pres_9095_01_Z2TEST}%
+\includegraphics*[width=.33\hsize]{/data/zender/fgr/anv/amip5_pres_8589_01_Z2TEST}%
+\includegraphics*[width=.33\hsize]{/data/zender/fgr/anv/spcp_85_pres_8589_01_Z2TEST}%
+\end{center}
+\caption[January 500~mb geopotential height field for
+30--90~$\dgr$N from ECMWF 1990--1995 analyses and model 
+simulations of 1985--1989 by CCM and ANV]{
+January 500~mb geopotential height field (gpm) for
+30--90~$\dgr$N from (a) ECMWF 1990--1995 analyses and model 
+simulations of 1985--1989 by (b) CCM and (c) ANV.
+Contour interval is 10~gpm. 
+\label{fig:pres_8589_Z2TEST}}   
+\end{figure*}
+% NB: 10~yr. ECMWF observed standard deviation of January $\Phi$ over the PNA is ???~m.
+% NB: 20~yr. CCM2 388 modeled standard deviation of January $\Phi$ over the PNA is 40--80~m.
+% NB: HBK94 p. 20793 Figure~6a,b is standard deviation of the daily
+% differences from the monthly mean.
+ANV deepens the central Pacific trough and shifts it $\sim 10 
+\dgr$~E.
+The associated ridge splits flow around California but reproduces 
+observed ridging over the west coast of Canada, absent in CCM.
+ANV strengthens the ridge over west Europe, as observed, and shifts
+the central European trough $\sim 20 \dgr$~E towards analyses. 
+Model differences are 1--3 times model standard deviation in the
+vicinity of these ridges. 
+These disturbances in extratropical planetary wave structure originate
+near the tropical Indo-Pacific heating disturbances and propagate to
+the extratropics. 
+A similar North American response, also linked to a northward shift of
+Australian monsoon precipitation, occurred in \cite{Kie942}.
+
+\section{Cloud Response to SST Forcing in the Equatorial
+Pacific}\label{sec:enso}   
+
+The Equatorial Pacific SST anomaly associated with the 1987 El Ni\~no
+provides a stringent test of model ability to mimic observed
+changes in convective patterns and associated anvil cloud.
+During the 1987 El Ni\~no the center of deep convection, accompanying
+a large positive SST anomaly, shifted from the west to the central
+equatorial Pacific. 
+Cloud forcing responded by increasing in the central and east
+equatorial Pacific through much of 1987, while cooler SST reduced
+cloud forcing in the west.
+\cite{HaM93} and \cite{Cho94} emphasize cloud enhancement from
+10~$\dgr$S--10~$\dgr$N was largely compensated by clearer sky
+from 10--30$\dgr$ in both hemispheres.
+We will use the strong SST anomaly in the equatorial Pacific region
+from $10\ \dgr$S--$10\ \dgr$N to test the deep convective
+response of the differing anvil representations to transient SST
+forcing.   
+We focus on Springtime behavior because equatorial SST peaks in April
+(when the seasonal cycle peaks), and proximity to the equinox
+maximizes the hemispheric symmetry of solar forcing \cite[]{RaC91}. 
+The Spring SST of the entire equatorial Pacific (10\,\dgr
+S--10\,\dgr N, 140\,\dgr E--90\,\dgr W) warmed .9\,\dgr K
+from 1985 to 1987, while the central equatorial Pacific alone
+(10\,\dgr S--10\,\dgr N, 180--130\,\dgr W) warmed
+1.2\,\dgr K. 
+Differencing the cold year (1985) Spring months from the warm (1987)
+removes the mean cloud forcing state and isolates the cloud forcing
+sensitivity (which implicitly includes any reorganization of
+convection patterns) to SST change.
+Note that atmospheric response could not feed back to SST (a
+prescribed boundary condition).  
+
+Figure~\ref{fig:yavg_10S10N_87m85_MAM_QC} shows change in modeled
+cloud condensate $\delta \qc$ for 1987$-$1985 over the equatorial
+Pacific averaged for Spring. 
+Note $\delta$ refers to $1987 - 1985$ temporal change for a given
+model, not to inter-model change. 
+\begin{figure}
+\begin{center}
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/amip5_yavg_10S10N_87m85_MAM_QC}\vfill
+\includegraphics*[width=\halfwidth]{/data/zender/fgr/anv/spcp_85_yavg_10S10N_87m85_MAM_QC}\vfill
+\end{center}
+\caption[Longitude-height profile of the $1987-1985$ difference in
+Spring quarter (March, April, and May) mean condensate \qc\ over the
+equatorial Pacific simulated by CCM and ANV]{
+Longitude-height profile of the $1987-1985$ difference in Spring
+quarter (March, April, and May) mean condensate \qc\ (\mgxkg) over the
+equatorial Pacific (averaged 10\,\dgr S--10\,\dgr N, 
+ocean only) simulated by (a) CCM and (b) ANV.
+Contour interval is 2\,\mgxkg.
+Shading indicates \qc\ decrease from 1985 to 1987.
+% NB: IDL gets the shading of the first -'ve contour wrong when land
+% is masked so i included land points in this file, no significant
+% difference from maritime only above 400 mb.
+\label{fig:yavg_10S10N_87m85_MAM_QC}}   
+\end{figure}
+High cloud increases in both models over the central equatorial
+Pacific (where $\delta$SST peaks) in 1987, and decreases over the
+western equatorial Pacific.
+ANV predicts $\delta \qc$ extrema at the same longitude as CCM
+(145~$\dgr$E, 175~$\dgr$W), but roughly 100~mb higher,
+and 2--4 times stronger.
+Yearly ERBE LWCF (not shown) suggests \qc\ should increase from 
+140--110~$\dgr$W, as ANV predicts.  
+Thus prognostic anvil representation strengthens and appears to improve
+CWP response to SST, but this cannot be demonstrated conclusively
+without reliable observational estimates of CWP.
+
+Figure~\ref{fig:reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF} plots 
+$\delta$LWCF vs.\ $\delta$SWCF (i.e., cloud forcing sensitivity to
+SST) for the equatorial Pacific.
+\begin{figure*}
+\begin{center}
+\includegraphics*[width=.33\hsize]{/data/zender/fgr/anv/erbe_b_reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF}%
+\includegraphics*[width=.33\hsize]{/data/zender/fgr/anv/amip5_reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF}%
+\includegraphics*[width=.33\hsize]{/data/zender/fgr/anv/spcp_85_reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF}%
+\end{center}
+\caption[$1987-1985$ differences in Spring quarter (March, April, and
+May) monthly mean maritime LWCF and SWCF over the Equatorial Pacific
+for ERBE, CCM, and ANV]{ 
+$1987-1985$ differences in Spring quarter (March, April, and May) 
+monthly mean maritime LWCF and SWCF (\wxmS) over the Equatorial
+Pacific (10\,\dgr S--10\,\dgr N, 140\,\dgr E--90\,\dgr W) 
+for (a) ERBE, (b) CCM, and (c) ANV.
+Solid line is least-squares fit.
+\label{fig:reg_Pacific_Equatorial_87m85_0305_LWCF_SWCF}}   
+\end{figure*}
+Crosses represent GCM gridpoint ($\sim 300^2$\,\kmS) monthly averages. 
+Note $\delta \LWCF$ is positively correlated with $\delta \SST$ so
+the upper left of the scattergrams are dominated by points from the
+equatorial west Pacific, and the center and lower right by points from
+the central and east equatorial Pacific.
+Gridpoints with $\delta \LWCF < -20$\,\wxmS\ are more copious in ANV,
+but extend unrealistically beyond $\delta \LWCF < -50$\,\wxmS.
+This response, and weaker response of the prognostic anvil
+respresentation to $\delta \SST \gtrsim 2$\,\dgrc ($\delta \LWCF >
+50$\,\wxmS), stem from the prognostic formulation of cloud mass. 
+The diagnostic cloud mass, which determines CCM cloud forcing, varies
+approximately exponentially with SST during convection \cite[]{KBB96}. 
+In contrast, ANV cloud mass (hence cloud forcing) peaks with maximum
+500~mb convective intensity, which is not necessarily collocated with
+SST maxima \cite[]{Hac94}.
+By decoupling cloud mass from SST, the prognostic anvil representation
+couples cloud forcing more tightly to other factors determining
+convective intensity, e.g., atmospheric instability, evaporation, and
+surface level wind \cite[]{FDR90}. 
+In summary, the prognostic representation of anvil production and
+structure has generally improved LWCF response for $\delta \SST < 0\
+\dgr$C and worsened LWCF response for $\delta \SST > 2\
+\dgr$C. 
+
+The slope $m \equiv \delta \SWCF / \delta \LWCF$ approximately
+measures the reduction in surface insolation relative to the increase
+in atmospheric heating.
+The ERBE data show local net cloud forcing response to El Ni\~no is a
+linear ($|r| = .94$), moderately negative feedback ($|m| \approx
+1.2$), i.e., the albedo effect of anvil responds more strongly to
+local SST anomalies than the greenhouse effect. 
+Both models predict $m \approx -.95$, i.e., cloud forcing is a weak
+positive local feedback to column energy for equatorial Pacific SST
+change, rather than a moderate negative feedback, as observed.
+This model agreement is surprising because \cite{RaC91} argue
+$|m| > 1$ due to radiative properties of tropical anvil, which is
+diagnosed in CCM, but prognosed by (\ref{eqn:qi_cnv}) in ANV.
+Despite model differences in anvil representation, the trends of
+$\delta$LWCF with $\delta$SST closely agree with each other and
+observations: ERBE, CCM, and ANV trends of $\delta$LWCF with
+$\delta$SST are $17.0$, $15.7$, and $16.0$\,\wxmSk, with correlations
+$.65$, $.60$, and $.54$, respectively.  
+However, ERBE, CCM, and ANV trends of $\delta$SWCF with $\delta$SST
+are $-20.1$, $-12.8$, and $-15.5$\,\wxmSk, with correlations $-.59$,
+$-.43$, and $-.44$, respectively. 
+Thus the primary reason both model underestimate $|m|$ is their
+25--45\% bias in SWCF response.
+
+\cite{RaC91}, in their Table~1, showed $|m| > 1$ over the equatorial
+Pacific independent of which non-El Ni\~no season or year is used for
+$\delta$. 
+Moreover, the same qualitative behavior is ubiquitous over equatorial
+Pacific subregions (i.e., east, central, west) (not shown).
+Thus atmospheric GCMs should adequately simulate $m$ in order to
+realistically cooperate with SST changes when coupled to an oceanic 
+GCM, e.g., in climate change and ENSO experiments.
+Studies are currently underway at NCAR which should improve cloud
+radiative response to SST change, i.e., simulation of $m$.
+These include representing anvil with fully prognostic microphysical
+schemes, using probability distributions of tropical cloud fraction
+determined from satellite observations, and imposing observed
+hydrometeor effective radius. 
+
+%Why is modeled $\delta$SWCF too weak with modeled $\delta$LWCF so
+%close to ERBE?   
+%Recall that upper tropospheric \rei\ is time-invariant so $\delta \rei
+%\approx 0$.  
+%Thus $\delta$CWP largely determines $\delta$SWCF.
+
+\section{Conclusions}\label{sec:anv_cnc}
+
+Radiative forcing from cirrus anvil plays a dominant role in
+determining the diabatic heating which drives the general circulation
+yet many features of tropical anvil structure and lifecycle are not
+represented in current GCM anvil parameterizations.   
+Five year integrations of the National Center for Atmospheric Research
+Community Climate Model (CCM2) were used to ellucidate climate
+features sensitive to the representation of anvil production and
+structure. 
+Anvil features emphasized in the sensitivity study included the
+direct relationship between anvil growth and anvil-base convective 
+mass flux, mesoscale condensate formation, the excess of ice over
+supercooled liquid, and the vertical distribution of condensate. 
+%Five year integrations of the National Center for Atmospheric Research
+%Community Climate Model showed climate statistics from a diagnostic
+%ice cloud representation based on temperature, humidity, and
+%stability, differ significantly from statistics from a prognostic
+%representation which forecasts cloud from modeled and observed
+%characteristics of tropical anvil lifecycle.
+
+The direct effect of improving anvil representation is to sequester
+more condensate in the upper troposphere, a larger fraction of which
+is ice. 
+The radiative effects of enhancing ice amount and fraction were
+approximately balanced by weaker radiative extinction per unit mass
+because anvil vertical location was tied to larger hydrometeor size.  
+Thus top-of-atmosphere climatological radiative measures such as cloud
+forcing were not biased by two to fourfold increases in tropical anvil
+mass.
+The thermal structure and circulation of the tropics were more
+dramatically affected due to a vertical shift in heating.
+
+Enhanced anvil perturbs the tropical upper troposphere temperature
+structure more strongly in winter, when the column is clearer and
+anvil radiatively heats the troposphere above 200~mb. 
+In the summer tropics, enhanced anvil occurs in a ``deep cloud''
+environment, reducing radiative cooling up to 200~mb, and enhancing
+cooling above that. 
+Reduced optical depth keeps the intrinsically greater solar absorption
+of ice relative to liquid from causing a ubiquitous heating increase
+above 600~mb.
+Radiative heating contributes to warming the region just below the
+tropical tropopause 2--3~$\dgr$K.   
+
+Based on the 1987 El Ni\~no, the prognostic anvil formulation improves
+longwave cloud radiative response to SST cooling but worsens response
+to warming $> 2$\,\dgrc. 
+%In conjunction with weaker radiative extinction of ice, this weakens the
+%feedback between longwave cloud forcing and convection over SST maxima.
+The net response of convection is a shift toward the winter hemisphere
+in solstice months.
+This convective reorganization reduced Hadley cell strength and
+eliminated a persistent convective bias the central Indian Ocean.
+Moreover, the increased convection and high cloud north of the equator
+in January propagate Rossby waves to the extratropics.  
+This causes significant ridging in the 500~mb height field over the
+west coasts of North America and Europe, which substantially improves
+agreement with analysis. 
+
+In summary, climate features sensitive to anvil representation include
+tropical upper troposphere temperature structure, Hadley cell
+strength, tropical deep convection, and the northern hemisphere
+wintertime flow field.   
+Many of these responses improved the climate simulation.
+Thus our study isolates some fundamental climate statistics in the 
+tropics and extratropics that are partially controlled by features of
+tropical anvil not represented in most current GCM anvil
+parameterizations.   
+Accounting for these features should be a high priority for future GCM
+cloud parameterizations.
+
+% Balance preprint columns
+\balance
+
+% Appendices
+
+% Acknowledgements
+\acknowledgments
+CSZ gratefully acknowledges discussions with B.~Briegleb and
+R.~Saravanan.
+G.~Branstator provided insight interpreting
+Figure~\ref{fig:pres_8589_Z2TEST}.   
+P.~Rasch provided helpful guidance with cloud parameterization. 
+This work was supported in part by NASA Earth Observing System project
+W-17,661 and by DOE Atmospheric Radiation Measurements Program grant
+DE-AI05-92ER61376.
+
+% Bibliography
+\bibliographystyle{agu}
+\bibliography{bib}
+
+\end{document}

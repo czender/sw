@@ -1,0 +1,31 @@
+# /etc/sudoers
+#
+# This file MUST be edited with the 'visudo' command as root.
+#
+# See the man page for details on how to write a sudoers file.
+#
+
+# Host alias specification
+
+# User alias specification
+User_Alias SYSADMIN=root,zender
+
+# Cmnd alias specification
+Cmnd_Alias MNT=/bin/mount,/bin/umount
+Cmnd_Alias PRT=/usr/bin/enable,/usr/bin/disable
+
+# Defaults
+
+Defaults	!lecture,tty_tickets,!fqdn
+
+# User privilege specification
+root	ALL=(ALL) ALL
+
+# Allow sysadmin group to do anything without authentication
+SYSADMIN        ALL=(ALL) NOPASSWD: ALL
+
+# Allow everyone to mount and to print without authentication
+ALL             ALL=MNT,PRT
+
+# Members of the admin group may gain root privileges
+%admin	ALL=(ALL) ALL

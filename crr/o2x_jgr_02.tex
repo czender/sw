@@ -1,0 +1,227 @@
+% $Id$
+
+% Purpose: Response to Reviewer A of Zen99 for JGR
+
+% Usage:
+% cd ~/crr;make -W o2x_jgr_02.tex o2x_jgr_02.ps;cd -
+% cd ~/crr;make -W o2x_jgr_02.tex o2x_jgr_02.ps o2x_jgr_03.ps o2x_jgr_04.ps;cd -
+% latex o2x_jgr_02; dvips -o /data/zender/ps/o2x_jgr_02.ps o2x_jgr_02.dvi
+
+\documentclass[12pt,twoside]{article}
+
+% Standard packages
+\usepackage{graphicx} % defines \includegraphics*
+\usepackage{natbib} % \cite commands from aguplus
+\usepackage{ifthen} % Boolean and programming commands
+
+% Personal packages
+\usepackage{csz} % Library of personal definitions
+\usepackage{dmn} % Dimensional units
+\usepackage{chm} % Commands generic to chemistry
+\input{jgr_abb} % JGR-sanctioned journal abbreviations
+
+% Commands specific to this file
+\usepackage{o2x} % Commands specific to O2*X work
+
+\begin{document}
+ 
+\noindent
+Revisions to Manuscript JGRd-1999R036, \\
+\begin{center}\normalsize
+``Global climatology of abundance and solar absorption of oxygen
+collision complexes'' 
+\end{center}
+\medskip\noindent
+by Charlie Zender \\
+\medskip\noindent
+Date: July 11, 1999
+
+%\section{Response to Reviewer~A}
+\medskip\noindent\textbf{Response to Reviewer~A}\medskip
+
+I thank the Reviewer for thoroughly reading the manuscript and
+carefully commenting on the study.
+This manuscript has benefitted from the Reviewer's constructive
+criticism. 
+
+%\subsection{Specific Comments}
+\medskip\noindent\textbf{Specific Comments}
+
+\begin{enumerate}
+\item Abstract: The abstract reports the estimated radiative forcing
+of \OdX\ as ranges whose maxima and minima were determined by the
+uncertainty analysis. 
+Thus, an important part of the uncertainty analysis is already present
+in the abstract, which I have tried to keep concise.
+But, since the Reviewer requests that the abstract contain more
+information on the uncertainties in our results, I have added to the
+abstract the sentence ``These ranges bracket the uncertainties due to
+spectral absorption cross sections, \OdNd\ efficiency, \OdX\
+abundance, and cloud distribution''.
+
+\item Section 2.2: 
+\begin{enumerate}
+\item I believe the uncertainty analysis already adequately addresses
+the issue raised by the Reviewer.
+The Reviewer asks that the manuscript address the sensitivity of the
+simulated \OdX\ absorption at 1.27~\um\ to uncertainty in the
+partitioning of 1.27~\um\ oxygen absorption into line absorption
+(due to magnetic dipole transition) and \OdX\ continuum absorption.  
+As stated on p.~18 of the original manuscript, the lower bounds in
+\OdX\ absorption that we report correspond to the \OdX\ cross-sections
+of \cite{MCB98}, while the upper bounds corresponds to the
+cross-sections of \cite{SPS98}.
+As \cite{MCB98} note, if the 1.27~\um\ \Od\ line absorption they used
+(from HITRAN96) is, in fact 15\% too high, then their 1.27~\um\ \OdX\
+continuum absorption is too low and so their estimate of total \OdX\
+absorption is a lower bound.
+The most recent published measurements of \Od\ line parameters at
+1.27~\um\ \cite[]{LSL98} support this interpretation. 
+
+I could not find where \cite{SPS98} stated that updates to HITRAN
+``would not impact their results''.
+My understanding is that uncertainty in the integrated band strength
+of the \Od\ magnetic dipole band may indirectly affect the \OdX\
+continuum cross-sections proposed by \cite{SPS98}.
+The two may be related because \cite{SPS98} base their estimate of
+\OdX\ continuum absorption on previous laboratory measurements which
+also had to remove the contribution of \Od\ line absorption at
+1.27~\um. 
+However, the studies examined by \cite{SPS98} were laboratory
+measurements in which it was possible to deduce \OdX\ absorption by
+isolating the quadratic (in \Od\ concentration) component of the
+absorption \cite[e.g.,][]{GOB90} rather than by inferring \OdX\
+absorption as the difference between modeled \Od\ line absorption and
+total absorption (i.e., the residual method used by \cite{MCB98}).   
+Thus to what extent the 1.27~\um\ \OdOd\ absorption estimated by
+\cite{SPS98} may be influenced by a larger \Od\ line absorption band
+strength is unclear.
+But the above discussion shows why it is reasonable to take the 
+cross-sections of \cite{SPS98} (together with $\epsNd = 30\%$)
+as an upper bound for \OdX\ absorption.
+
+In summary, the issue identified by the reviewer has, I feel, been
+adequately examined by both \citeauthor{SPS98} and
+\citeauthor{MCB98}. 
+Without anything new to contribute to this issue, the most responsible 
+course for the submitted manuscript is to alert the reader to the
+existence of discrepancies and to refer them to the original studies. 
+
+\item Side by side comparisons of \cite{MCB98} and \cite{SPS98} in a
+line-by-line model are unwarranted because we would learn little that
+is not already acknowledged and discussed in these studies.
+By construction, the \citeauthor{MCB98} cross-sections will have a
+much lower radiance residual when compared to the ASTI radiances
+(which, as the reviewer notes, are from a single observation)
+than will the \citeauthor{SPS98} cross-sections which are lab
+measurements or are inferred from lab measurements taken over a wide 
+dynamic range of conditions.
+By the same token, the \citeauthor{MCB98} cross-sections are inferior
+relative to \citeauthor{SPS98} when compared to the \cite{GOB90}
+laboratory measurements of 1.06~\um\ band \OdOd\ absorption. 
+
+In my opinion, Sections~2.2 and~4.2 adequately inform the reader about
+the relevant uncertainties and their potential impact on our results.
+Page~9 of our original manuscript states that differences in the two
+studies' treatments of the near infrared \OdX\ continua at 1.06 and
+1.27~\um\ are of order 30\%.  
+We mention that \cite{MCB98} and \cite{SPS98} both comment on
+this discrepancy.
+Further, we conclude (p.~26) that improved laboratory measurements of
+\OdX\ cross sections could remove about half of the uncertainty in
+total \OdX\ absorption. 
+Finally, adding more figures or tables to this study would conflict
+with the desire of Reviewer~B to shorten the manuscript.
+
+\item The section on p.~9 has been revised to clarify this point. 
+It now reads ``For consistency, our study adopts the same cross-sections as
+\cite{SPS98}, but we note two choices that keep our results for total
+\OdX\ absorption closer to those of \cite{MCB98}.   
+First, we use $\epsNd = 0.2$, a somewhat conservative value.
+Second, we neglect the \OdOd\ absorption band near 1.58~\um.
+This band absorbs about 9\% as much as the 1.27~\um\ band
+\cite[]{MCB98}. 
+Had we appended the 1.58~\um\ continuum to the \citeauthor{SPS98}
+cross-sections, our computed \OdX\ solar forcing would increase by a
+few percent.''
+\end{enumerate}
+\item Section 3: Agreed. 
+The revised manuscript says ``weakly destabilizes''.
+\item Section~4.2: 
+The error analysis attempts to include all sources of error for which
+published estimates exist. 
+The uncertainty due to spectral absorption cross sections is described 
+in Section~2.2, where the $\xsxbOdX$ data are discussed.
+The discussion in Section~4.2 now refers the reader to Section~2.2,
+which, on p.~9, has been expanded in response to the Reviewer's
+suggestion:   
+``The uncertainty in $\xsxbOdX(\wvl)$ is less than 10\% for $0.335 <
+\wvl < 1.137$~\um\ \cite[]{GOB90}. 
+Uncertainty in $1.27$~\um\ band absorption is $\sim 30\%$. 
+This was estimated by extrapolating to global scale the difference
+between single column simulations employing the continua proposed by
+\citeauthor{SPS98} and by \citeauthor{MCB98}.''
+
+The Reviewer is correct to question the omission of the 1.58~\um\ band
+absorption from the error analysis.
+The original manuscript did not include 1.58~\um\ band absorption in
+the error estimate, because, in my subjective opinion, neglecting it
+would offset likely overestimates of 1.27~\um\ band strength.
+However, these are logically independent quantities and a conservative
+error estimate must account for both to measure the true uncertainty.
+Thus, the revised manuscript increases the upper bound error bar on
+total \OdX\ absorption from 25\% to 30\% of our best guess to account
+for the 1.58~\um\ band. 
+The upper ranges of \OdX\ forcing have been been revised upwards
+throughout the manuscript.
+The ``best guess'' estimates shown in Table~2 are unchanged.
+Text on p.~9 and p.~17 now includes the statement that adding the
+1.58~\um\ continuum ``would increase our computed total \OdX\ solar
+forcing by about~4\%.''
+
+Section~4.2 of the revised manuscript includes the proviso
+``As discussed in Section~2.1, the possible temperature dependence of 
+$xsxbOdX(\lambda)$ is not yet fully understood
+\cite[]{GOB90,NeB98,OFH98}.     
+Therefore we have not included uncertainty due to possible temperature
+dependence of $xsxbOdX$ in our error analysis.''
+The relevant portion of Section~2.1 now includes results from
+\cite{OFH98}. 
+
+\item Section~4.3:
+The Reviewer's observation that the same $\npcOdX$ produces greater
+forcing in the Arctic than in the Southern mid-latitudes during JJA
+is correct.
+However, Figure~8 clearly shows that the reason for the greater
+forcing efficiency in the Arctic is that the length of day in the
+Arctic greatly exceeds that in the Southern mid-latitudes during JJA. 
+Presumably if the \OdX\ forcing were first normalized by the TOA
+insolation, the resulting differences would be due to surface albedo
+and clouds.
+However, in absolute terms, the seasonal change in insolation causes
+a much greater change in forcing efficiency than albedo differences
+cause. 
+
+\item Figures: 
+\begin{enumerate}
+\item Agreed. 
+The lines in Figures~1 and~2 are now thicker.
+I changed one of the blues to a yellow to make it easier to
+differentiate \Od\ from \OdNd. 
+\item Agreed.
+The publisher will add the `a'--`d' to the panels when they are in the
+galley stage, and will do a neater job of it than I have been able to
+with my software.    
+\item Good eye. 
+This gaffe has been fixed.
+\end{enumerate}
+\end{enumerate}
+
+% Bibliography
+\renewcommand\refname{\normalsize References}
+\bibliographystyle{agu}
+\bibliography{bib}
+
+\end{document}
+
+

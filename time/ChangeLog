@@ -1,0 +1,22 @@
+2002-07-02  Charlie Zender  <zender@uci.edu>
+
+	* Translated slr_crd_utl.F into ~/f/slr_crd_mdl.F90 and included
+	this in libcsm_f90. This removes additional module dependency for 
+	aca builds.
+
+2000-09-14  Charlie Zender  <zender@uci.edu>
+
+	* Added capability to specify time on command line to time_gmt2unix
+
+2000-09-13  Charlie Zender  <zender@uci.edu>
+
+	* Added logic for possibility that TZ is not found by getenv()
+
+	* Update to ANSI/POSIX C standards
+
+1998-09-05  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Finished implementation of module time
+
+	* Added README and ChangeLog for time
+

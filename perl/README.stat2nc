@@ -1,0 +1,60 @@
+************************************************************************
+THIS IS UNSUPPORTED SOFTWARE! 'NUFF SAID.
+************************************************************************
+
+Purpose:
+stat2nc creates a netCDF file out of all the fields that are printed
+to the standard output device by the CCM2 each timestep (i.e., all the
+numbers on the "NSTEP = ..." lines in the ASCII output file).  stat2nc
+can be useful in determining whether your CCM2 run has "spun up", is
+blowing up, or for tracking user-defined outputs. A CCM processor
+script can, of course, do everything stat2nc does if you save the
+necessary fields to a history tape each timestep. stat2nc is primarily
+intended for the arsenal of CCM2 users who modify the physics
+routines, print out their own info (i.e., debugging) every timestep,
+or who simply want a quick look at the global diagnostics of their
+run.
+
+Requirements:
+* CCM2 version 2.1
+* Perl, version 4.0 patch 36 or higher (stat2nc looks in /usr/local/bin/perl)
+* netCDF (must be installed on your system), in particular....
+* ncgen must be in your executables path
+* a graphical netCDF viewer, such as ncbrowse (optional, see below)
+
+Obtaining the source:
+Anonymous FTP to ftp.cgd.ucar.edu. Look in the directory
+pub/zender/stat2nc and grab the compressed tar file stat2nc.tar.gz
+which contains the entire source tree.
+
+Files:
+stat2nc.tar.gz			the entire source tree:
+./stat2nc/README.stat2nc	this file
+./stat2nc/stat2nc		Perl executable (and man page)
+./stat2nc/stat2nc_input.txt	sample ASCII input file from CCM2 run
+./stat2nc/stat2nc_output.cdl 	sample output file in netCDF CDL language
+./stat2nc/stat2nc_output.nc 	sample output netCDF binary
+
+Installation:
+The compressed tarfile stat2nc.tar.gz must be uncompressed (with GNU
+gunzip) and then untarred (tar -xvf stat2nc.tar).  Make sure the file
+"stat2nc" is on your path and is executable.  The executable
+"stat2nc" is its own man page; either install a symbolic link to it
+named stat2nc.1 in your man/man1 directory (and view with "man
+stat2nc"), or view it directory with "nroff -man stat2nc | less".
+
+Other software:
+To view the output file, stat2nc_output.nc, use a netCDF viewer.  The
+textual viewer available at all netCDF sites is ncdump. For a
+graphical viewer, write your own, or, if your site licenses IDL, you
+can use the publicly available IDL netCDF viewer called ncbrowse,
+available via WWW at
+ftp://ftp.unidata.ucar.edu:/pub/gopherd/gopher-data/anon.ftp/netcdf/contrib/ncbrowse.pro
+
+Good luck,
+cz
+--
+Charlie Zender                
+NCAR/CGD/CMS Rm ML-320        
+P.O. Box 3000                 zender@ncar.ucar.edu
+Boulder CO 80307-3000         http://www.cgd.ucar.edu/cms/zender

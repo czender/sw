@@ -1,0 +1,24 @@
+-*-text-*-
+
+This directory, $HOME/tex, contains TeX and LaTeX related files
+
+README
+Makefile
+README
+abb.tex
+bib.bib
+bst
+cls
+csz.sty
+graphics.cfg	Replaces $TEXMFDIR/tex/latex/config/graphics.cfg
+jas_abb.tex
+jgr_abb.tex
+jrn_agu.sty
+jrn_ams.sty
+lettermacros.tex
+ncarletter.cls
+ppr_tpl.tex
+sym.tex
+testpage.tex
+utl.tex
+zenletter.cls

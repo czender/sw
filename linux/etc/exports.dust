@@ -1,0 +1,8 @@
+# /etc/exports file
+# Usage:
+# sudo cp ~/linux/etc/exports.dust /etc/exports
+# /usr/sbin/exportfs -av
+# Export /data filesystem to seasalt:
+/data		seasalt.ps.uci.edu(rw)
+
+

@@ -1,0 +1,221 @@
+// $Id$
+// ncgen -b -o ${DATA}/aca/idx_rfr_EgH79.nc ${HOME}/idx_rfr/idx_rfr_EgH79.cdl
+// scp ${DATA}/aca/idx_rfr_EgH79.nc ${HOME}/idx_rfr/idx_rfr_EgH79.cdl dust.ess.uci.edu:/var/www/html/idx_rfr
+
+netcdf idx_rfr_EgH79 {
+
+dimensions:
+	bnd = UNLIMITED ; // (44 currently)
+variables:
+
+// global attributes:
+	:RCS_Header = "$Id$" ;
+	:history = "" ;
+	:description = "Refractive indices from EgH79" ;
+	:source="
+Charlie Zender (UCI) <zender at uci dot edu> entered 20060211.
+
+Reference: EgH79
+Egan, W. G., and T. W. Hilgeman (1979), Optical Properties of Inhomogeneous Materials: Applications to Geology, Astronomy, Chemistry, and Engineering, Academic Press, San Diego, CA, 235 pp..
+
+Data from 0.185--2.6 microns measured for illite, kaolinite, montmorillonite
+Illite EgH79 p. 103 sample from Fithian, Illinois
+Kaolinite EgH79 p. 105 sample from Macon, Georgia
+Montmorillonite_I  EgH79 p. 113 sample from Clay Spur, Wyoming
+Montmorillonite_II EgH79 p. 115 sample from Amory, Missippippi
+Montmorillonite_II has a slightly different wavelength grid than the other minerals
+Montmorillonite_II has no measurement at 0.215 um
+Montmorillonite_II has a measurement at 0.355 um instead of 0.360 um
+These differences are so slight that I placed Montmorillonite_II
+on the standard EgH79 wavelength grid by creating an artificial
+entry for 0.215 um as the average of the 0.210 and 0.220 entries,
+and simply shifting the 0.355 um entry to 0.360 um.
+
+************************************************************************
+Begin Procedure to create netCDF from EgH79.txt text file:
+************************************************************************
+fl_stb=idx_rfr_EgH79
+fl_txt=${fl_stb}.txt
+fl_nc=${fl_stb}.nc
+cat > /tmp/${fl_stb}.header << EOF
+bnd:f idx_rfr_montmorillonite_img_log10:f idx_rfr_montmorillonite_rl:f
+EOF
+tail --lines=+0 ~/EgH79.txt > /tmp/${fl_txt}
+tbl2cdf -h /tmp/${fl_stb}.header /tmp/${fl_txt} /tmp/${fl_nc}
+ncrename -O -d u,bnd /tmp/${fl_nc}
+ncap -O -s idx_rfr_montmorillonite_img=10.0^idx_rfr_montmorillonite_img_log10 /tmp/${fl_nc} /tmp/${fl_nc}
+ncks /tmp/${fl_nc} | m
+ncdump /tmp/${fl_nc} > /tmp/${fl_stb}.cdl
+************************************************************************
+End Procedure to create netCDF from EgH79.txt text file
+************************************************************************
+	";
+
+// Begin contents EgH79.txt file:
+
+	float bnd(bnd) ;
+		bnd:units = "microns" ;
+		bnd:longname = "Band center wavelength" ;
+		bnd:C_format = "%.5g" ;
+
+	float idx_rfr_illite_rl(bnd) ;
+		idx_rfr_illite_rl:units = "" ;
+		idx_rfr_illite_rl:longname = "Illite refractive index, real part " ;
+		idx_rfr_illite_rl:C_format = "%.4g" ;
+
+	float idx_rfr_illite_img(bnd) ;
+		idx_rfr_illite_img:units = "" ;
+		idx_rfr_illite_img:longname = "Illite refractive index, imag part " ;
+		idx_rfr_illite_img:C_format = "%.3g" ;
+
+	float idx_rfr_illite_img_log10(bnd) ;
+		idx_rfr_illite_img_log10:units = "" ;
+		idx_rfr_illite_img_log10:longname = "Illite refractive index, log base 10" ;
+		idx_rfr_illite_img_log10:C_format = "%.3g" ;
+
+	float idx_rfr_kaolinite_rl(bnd) ;
+		idx_rfr_kaolinite_rl:units = "" ;
+		idx_rfr_kaolinite_rl:longname = "Kaolinite refractive index, real part " ;
+		idx_rfr_kaolinite_rl:C_format = "%.4g" ;
+
+	float idx_rfr_kaolinite_img(bnd) ;
+		idx_rfr_kaolinite_img:units = "" ;
+		idx_rfr_kaolinite_img:longname = "Kaolinite refractive index, imag part " ;
+		idx_rfr_kaolinite_img:C_format = "%.3g" ;
+
+	float idx_rfr_kaolinite_img_log10(bnd) ;
+		idx_rfr_kaolinite_img_log10:units = "" ;
+		idx_rfr_kaolinite_img_log10:longname = "Kaolinite refractive index, log base 10" ;
+		idx_rfr_kaolinite_img_log10:C_format = "%.3g" ;
+
+	float idx_rfr_montmorillonite_1_rl(bnd) ;
+		idx_rfr_montmorillonite_1_rl:units = "" ;
+		idx_rfr_montmorillonite_1_rl:longname = "Montmorillonite_1 refractive index, real part " ;
+		idx_rfr_montmorillonite_1_rl:C_format = "%.4g" ;
+
+	float idx_rfr_montmorillonite_1_img(bnd) ;
+		idx_rfr_montmorillonite_1_img:units = "" ;
+		idx_rfr_montmorillonite_1_img:longname = "Montmorillonite_1 refractive index, imag part " ;
+		idx_rfr_montmorillonite_1_img:C_format = "%.3g" ;
+
+	float idx_rfr_montmorillonite_1_img_log10(bnd) ;
+		idx_rfr_montmorillonite_1_img_log10:units = "" ;
+		idx_rfr_montmorillonite_1_img_log10:longname = "Montmorillonite_1 refractive index, log base 10" ;
+		idx_rfr_montmorillonite_1_img_log10:C_format = "%.3g" ;
+
+	float idx_rfr_montmorillonite_2_rl(bnd) ;
+		idx_rfr_montmorillonite_2_rl:units = "" ;
+		idx_rfr_montmorillonite_2_rl:longname = "Montmorillonite_2 refractive index, real part " ;
+		idx_rfr_montmorillonite_2_rl:C_format = "%.4g" ;
+
+	float idx_rfr_montmorillonite_2_img(bnd) ;
+		idx_rfr_montmorillonite_2_img:units = "" ;
+		idx_rfr_montmorillonite_2_img:longname = "Montmorillonite_2 refractive index, imag part " ;
+		idx_rfr_montmorillonite_2_img:C_format = "%.3g" ;
+
+	float idx_rfr_montmorillonite_2_img_log10(bnd) ;
+		idx_rfr_montmorillonite_2_img_log10:units = "" ;
+		idx_rfr_montmorillonite_2_img_log10:longname = "Montmorillonite_2 refractive index, log base 10" ;
+		idx_rfr_montmorillonite_2_img_log10:C_format = "%.3g" ;
+
+// End contents EgH79.txt file:
+
+data:
+
+ bnd = 0.185, 0.19, 0.2, 0.21, 0.215, 0.22, 0.225, 0.233, 0.24, 0.26, 0.28, 
+    0.3, 0.325, 0.36, 0.37, 0.4, 0.433, 0.466, 0.5, 0.533, 0.566, 0.6, 0.633, 
+    0.666, 0.7, 0.817, 0.907, 1, 1.105, 1.2, 1.303, 1.4, 1.5, 1.6, 1.7, 1.8, 
+    1.9, 2, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6 ;
+
+ idx_rfr_illite_rl = 1.448, 1.444, 1.441, 1.438, 1.434, 1.431, 1.427, 1.424, 
+    1.42, 1.417, 1.411, 1.401, 1.404, 1.406, 1.415, 1.423, 1.42, 1.418, 
+    1.415, 1.414, 1.412, 1.411, 1.407, 1.403, 1.399, 1.395, 1.391, 1.387, 
+    1.387, 1.387, 1.387, 1.387, 1.387, 1.387, 1.387, 1.387, 1.387, 1.387, 
+    1.387, 1.387, 1.387, 1.387, 1.387, 1.387 ;
+
+ idx_rfr_illite_img = 0.002238721, 0.002187761, 0.002290867, 0.002344228, 
+    0.002398834, 0.002691535, 0.002398834, 0.002344228, 0.002454709, 
+    0.002041738, 0.001862087, 0.001819701, 0.001659587, 0.00144544, 
+    0.001230269, 0.001174897, 0.001071519, 0.001071519, 0.001023293, 
+    0.0008317639, 0.0007079456, 0.0007079456, 0.0006918308, 0.001148153, 
+    0.001202264, 0.001230269, 0.001202264, 0.001230269, 0.001174897, 
+    0.001174897, 0.001202264, 0.001174897, 0.001148153, 0.001288249, 
+    0.001698244, 0.00144544, 0.001778279, 0.001288249, 0.001584893, 
+    0.001949844, 0.002691535, 0.002041738, 0.003467368, 0.002344228 ;
+
+ idx_rfr_illite_img_log10 = -2.65, -2.66, -2.64, -2.63, -2.62, -2.57, -2.62, 
+    -2.63, -2.61, -2.69, -2.73, -2.74, -2.78, -2.84, -2.91, -2.93, -2.97, 
+    -2.97, -2.99, -3.08, -3.15, -3.15, -3.16, -2.94, -2.92, -2.91, -2.92, 
+    -2.91, -2.93, -2.93, -2.92, -2.93, -2.94, -2.89, -2.77, -2.84, -2.75, 
+    -2.89, -2.8, -2.71, -2.57, -2.69, -2.46, -2.63 ;
+
+ idx_rfr_kaolinite_rl = 1.491, 1.494, 1.496, 1.498, 1.501, 1.503, 1.506, 
+    1.508, 1.511, 1.513, 1.506, 1.514, 1.512, 1.509, 1.5, 1.49, 1.491, 1.492, 
+    1.493, 1.493, 1.493, 1.493, 1.494, 1.496, 1.497, 1.499, 1.501, 1.502, 
+    1.502, 1.502, 1.502, 1.502, 1.502, 1.502, 1.502, 1.502, 1.502, 1.502, 
+    1.502, 1.502, 1.502, 1.502, 1.502, 1.502 ;
+
+ idx_rfr_kaolinite_img = 0.0009549926, 0.0001047129, 0.001202264, 
+    0.001412538, 0.001258925, 0.001380385, 0.001230269, 0.001202264, 
+    0.001230269, 0.001174897, 0.001174897, 0.001071519, 0.0008128307, 
+    0.0003981071, 0.0002754229, 0.0002041738, 0.000144544, 0.0001230269, 
+    9.549926e-05, 5.248072e-05, 3.890453e-05, 3.801893e-05, 4.168693e-05, 
+    9.332538e-05, 1e-04, 0.0001288249, 0.0001230269, 0.0001584893, 
+    0.0001348963, 0.0001584893, 0.0002041738, 0.0003467368, 0.0003090295, 
+    0.0003162278, 0.0004073802, 0.0004570883, 0.0005623413, 0.0005623413, 
+    0.0006918308, 0.001202264, 0.001778279, 0.001584893, 0.003311311, 
+    0.004265796 ;
+
+ idx_rfr_kaolinite_img_log10 = -3.02, -3.98, -2.92, -2.85, -2.9, -2.86, 
+    -2.91, -2.92, -2.91, -2.93, -2.93, -2.97, -3.09, -3.4, -3.56, -3.69, 
+    -3.84, -3.91, -4.02, -4.28, -4.41, -4.42, -4.38, -4.03, -4, -3.89, -3.91, 
+    -3.8, -3.87, -3.8, -3.69, -3.46, -3.51, -3.5, -3.39, -3.34, -3.25, -3.25, 
+    -3.16, -2.92, -2.75, -2.8, -2.48, -2.37 ;
+
+ idx_rfr_montmorillonite_1_rl = 1.544, 1.543, 1.542, 1.541, 1.54, 1.539, 1.539, 
+    1.538, 1.537, 1.536, 1.534, 1.523, 1.523, 1.524, 1.524, 1.525, 1.525, 
+    1.526, 1.526, 1.524, 1.522, 1.52, 1.522, 1.523, 1.525, 1.527, 1.528, 
+    1.53, 1.53, 1.53, 1.53, 1.53, 1.53, 1.53, 1.53, 1.53, 1.53, 1.53, 1.53, 
+    1.53, 1.53, 1.53, 1.53, 1.53 ;
+
+ idx_rfr_montmorillonite_1_img = 0.001905461, 0.001659587, 0.002089296, 
+    0.002187761, 0.002238721, 0.002570396, 0.002041738, 0.001949844, 
+    0.001905461, 0.001174897, 0.0008317639, 0.0005888437, 0.0004677352, 
+    0.0003548134, 0.0002511887, 0.0002041738, 0.0001230269, 0.0001071519, 
+    5.248072e-05, 4.265796e-05, 3.388443e-05, 3.63078e-05, 4.466837e-05, 
+    9.332538e-05, 9.772367e-05, 0.0001288249, 0.0001258925, 0.0001584893, 
+    0.0001348963, 0.0001548817, 0.0001659587, 0.0001318256, 0.000245471, 
+    0.0002344228, 0.0002187761, 0.0002630269, 0.0004073802, 0.0004570883, 
+    0.0004365159, 0.000616595, 0.0007943284, 0.0007943284, 0.001380385, 
+    0.0009549926 ;
+
+ idx_rfr_montmorillonite_1_img_log10 = -2.72, -2.78, -2.68, -2.66, -2.65, 
+    -2.59, -2.69, -2.71, -2.72, -2.93, -3.08, -3.23, -3.33, -3.45, -3.6, 
+    -3.69, -3.91, -3.97, -4.28, -4.37, -4.47, -4.44, -4.35, -4.03, -4.01, 
+    -3.89, -3.9, -3.8, -3.87, -3.81, -3.78, -3.88, -3.61, -3.63, -3.66, 
+    -3.58, -3.39, -3.34, -3.36, -3.21, -3.1, -3.1, -2.86, -3.02 ;
+
+ idx_rfr_montmorillonite_2_rl = 1.564, 1.563, 1.569, 1.566, 1.564, 1.562, 
+    1.561, 1.56, 1.561, 1.562, 1.564, 1.556, 1.544, 1.538, 1.539, 1.54, 
+    1.536, 1.532, 1.529, 1.525, 1.52, 1.52, 1.518, 1.514, 1.516, 1.511, 1.51, 
+    1.514, 1.509, 1.496, 1.484, 1.483, 1.483, 1.482, 1.481, 1.483, 1.485, 
+    1.487, 1.483, 1.478, 1.475, 1.472, 1.47, 1.47 ;
+
+ idx_rfr_montmorillonite_2_img = 0.003467368, 0.002570396, 0.003981071, 
+    0.004265796, 0.004216965, 0.004168693, 0.004168693, 0.004365159, 
+    0.004168693, 0.003890451, 0.004168693, 0.004365159, 0.004073802, 
+    0.003981071, 0.003715352, 0.003162278, 0.002511887, 0.002238721, 
+    0.001778279, 0.001230269, 0.0008511381, 0.0007585778, 0.0007413101, 
+    0.0007413101, 0.0007585778, 0.0007943284, 0.0009332544, 0.001047128, 
+    0.0007079456, 0.0007762473, 0.0008511381, 0.0008128307, 0.001122018, 
+    0.0007762473, 0.0008511381, 0.001148153, 0.00162181, 0.001202264, 
+    0.001479109, 0.001698244, 0.00162181, 0.001659587, 0.002884032, 
+    0.004786302 ;
+
+ idx_rfr_montmorillonite_2_img_log10 = -2.46, -2.59, -2.4, -2.37, -2.375, 
+    -2.38, -2.38, -2.36, -2.38, -2.41, -2.38, -2.36, -2.39, -2.4, -2.43, 
+    -2.5, -2.6, -2.65, -2.75, -2.91, -3.07, -3.12, -3.13, -3.13, -3.12, -3.1, 
+    -3.03, -2.98, -3.15, -3.11, -3.07, -3.09, -2.95, -3.11, -3.07, -2.94, 
+    -2.79, -2.92, -2.83, -2.77, -2.79, -2.78, -2.54, -2.32 ;
+
+}

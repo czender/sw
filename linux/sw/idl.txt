@@ -1,0 +1,53 @@
+************************************************************************
+20060225 IDL 6.1 on ashes.ess.uci.edu Debian Ubuntu Dapper drake:
+
+# IDL wants to provide documentation via a web-server so installing 
+# Apache helps but is not necessary
+sudo apt-get install apache2
+cd ${DATA}/tmp
+scp sand.ess.uci.edu:/data/zender/tmp/idl6.1_linux.x86.tar.gz .
+sudo mkdir /usr/local/rsi
+sudo cp idl6.1_linux.x86.tar.gz /usr/local/rsi
+cd /usr/local/rsi
+sudo tar xvzf idl6.1_linux.x86.tar.gz
+sudo ./install
+# install asks questions about the configuration
+# Rather than the default (option 1), which populates /usr/local/bin
+# with symlinks to IDL stuff, I choose option 2, and place a few links
+# in my bashrc
+sudo rm idl6.1_linux.x86.tar.gz
+************************************************************************
+
+************************************************************************
+20050925 IDL 6.1 on ashes.ess.uci.edu Debian Ubuntu Hoary:
+
+# IDL wants to provide documentation via a web-server so installing 
+# Apache helps (but is not necessary), it seems like overkill to 
+# have apache running on most IDL clients so I do not do this
+# sudo apt-get install apache2
+cd ${DATA}/tmp
+scp sand.ess.uci.edu:/data/zender/tmp/idl6.1_linux.x86.tar.gz .
+sudo mkdir /usr/local/rsi
+sudo cp idl6.1_linux.x86.tar.gz /usr/local/rsi
+cd /usr/local/rsi
+sudo tar xvzf idl6.1_linux.x86.tar.gz
+sudo ./install
+# install asks questions about the configuration
+# Rather than the default (option 1), which populates /usr/local/bin
+# with symlinks to IDL stuff, I choose option 2, and place a few links
+# in my bashrc
+************************************************************************
+
+************************************************************************
+20010101 Dave Newman installing IDL 5.4 on haze.ps.uci.edu:
+A few enviroment variables need to be set in the .bashrc file. In
+particular, the following lines need to appear 
+PATH=${PATH}\:/usr/local/rsi/idl_5.4/bin/bin.linux.x86
+export IDL_DIR=/usr/idl/idl_5.4 
+export IDL_DEVICE='X'
+export IDL_STARTUP="${HOME}/.idl"
+export IDL_PATH=${HOME}/idl:${IDL_DIR}/lib:${IDL_DIR}/lib/obsolete:/usr/local/hiphop
+export LM_LICENSE_FILE="${PGI}/license.dat:1700@dust.ps.uci.edu"
+Then source the .bashrc file and run IDL (use "idl" or "idlde" for text or GUI based
+startup respectively).
+************************************************************************

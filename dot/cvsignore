@@ -1,0 +1,15 @@
+*.4ct *.4tc
+*.aux *.bbl *.blg *.brf *.dvi *.glo *.idx *.ilg *.ind *.lof *.log *.lot *.out *.png *.toc *.tpt
+*.cp *.cps *.fn *.ky *.pg *.tp *.vr
+*.info *.info-*
+*.mod
+*.hdf *.nc
+*.pdf *.ps
+*.tmp
+.btmp .itmp .rerun
+.inslog2 tca.log tca.map
+core.*
+foo foo.*
+thumbdta.tex
+work.pc
+work.pcl

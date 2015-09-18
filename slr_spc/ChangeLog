@@ -1,0 +1,15 @@
+2001-10-14  Charlie Zender  <zender@uci.edu>
+
+	* Converting to nco_c++ library
+
+	* slr_spc.cc: Using C++ wrapped C headers
+
+1998-09-05  Charlie Zender  <zender@z.ppp.ucar.edu>
+
+	* Finished implementation of module slr_spc
+
+	* Revised slr_spc.cc to use libc++ and gcc-2.8 headers, e.g.,
+	string instead of String.h
+
+	* Updated README and added ChangeLog for slr_spc
+

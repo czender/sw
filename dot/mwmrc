@@ -1,0 +1,163 @@
+# $Id$
+
+# menu pane descriptions
+
+# Root Menu Description
+Menu RootMenu
+{
+    "Root Menu Options" f.title
+    "FTPs"         	f.menu  "FTPs"
+    "Rlogins"           f.menu  "Rlogins"
+    "Telnets"           f.menu  "Telnets"
+    "Applications"      f.menu  "Applications"
+    "Screen Options"    f.title
+    "Clear Colormap"    !"clear_colormap"
+    "Lock Screen"       !"xlock &"
+    "Refresh"           f.refresh
+    "MWM Options"       f.title
+    "Restart"           f.restart
+    "Quit"              f.quit_mwm
+}
+
+Menu Applications
+{
+    "Applications"      f.title
+    "Mail"		!"xterm -ut -e elm -f =inbox &"
+    "SCD xmDSL"		!"rsh dsl.ucar.edu -l xmdsl heinlein.cgd:0" 
+    "Screen Print"	!"xprintcopy &"
+    "gs"		!"gs &"
+    "xcalc"		!"xcalc &"
+    "xclock"		!"xclock -analog -geometry 70x70 &"
+    "xdbx"		!"/usr/local/bin/xdbx &"
+    "xdvi"		!"xdvi &"
+    "xgopher"		!"xgopher &"
+    "xload"		!"xload &"
+    "xmag"		!"xmag &"
+    "xman"		!"xman &"
+    "xmosaic"		!"xmosaic &"
+    "xpostit"		!"xpostit -sv &"
+    "xrn"		!"/X11/bin/xrn &"
+    "xterm"		!"xterm -name `hostname` &"
+}
+ 
+Menu "FTPs"
+{
+    "FTPs"     f.title
+
+	"acd.colorado.edu" !"xterm -title 'ftp acd' -n 'ftp acd' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp acd.ucar.edu &"
+	"alcor.colorado.edu" !"xterm -title 'ftp alcor' -n 'ftp alcor' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp alcor.colorado.edu &"
+	"archive.cis.ohio-state.edu" !"xterm -title 'ftp archive.cis.ohio-state.edu' -n 'ftp archive.cis.ohio-state.edu' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp archive.cis.ohio-state.edu &"
+	"bogart.colorado.edu" !"xterm -title 'ftp bogart' -n 'ftp bogart' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp bogart.colorado.edu &"
+	"chief.ucar.edu" !"xterm -title 'ftp chief' -n 'ftp chief' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp chief.ucar.edu &"
+	"cmns-sun.think.com" !"rcmd cmns-sun.think.com xterm -title 'ftp cmns-sun' -n 'ftp cmns-sun' -geometry 80x24 -fn 10x20 -sk -sb &"
+	"expo.lcs.mit.edu" !"xterm -title 'ftp expo.lcs.mit.edu' -n 'ftp expo.lcs.mit.edu' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp expo.lcs.mit.edu &"
+	"ftp.ucar.edu" !"xterm -title 'ftp ftp.ucar.edu' -n 'ftp ftp.ucar.edu' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp ftp.ucar.edu &"
+	"ftp.uu.net" !"xterm -title 'ftp ftp.uu.net' -n 'ftp ftp.uu.net' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp ftp.uu.net &"
+	"ftp.ncsa.uiuc.edu" !"xterm -title 'ftp ftp.ncsa.uiuc.edu' -n 'ftp ftp.ncsa.uiuc.edu' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp ftp.ncsa.uiuc.edu &"
+	"graywolf.ucar.edu" !"xterm -title 'ftp graywolf' -n 'ftp graywolf' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp graywolf.ucar.edu &"
+	"maxim.colorado.edu" !"xterm -title 'ftp maxim' -n 'ftp maxim' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp maxim.colorado.edu &"
+	"poplar.mmm.ucar.edu" !"xterm -title 'ftp poplar' -n 'ftp poplar' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp poplar.mmm.ucar.edu &"
+	"prep.ai.mit.edu" !"xterm -title 'ftp prep.ai.mit.edu' -n 'ftp prep.ai.mit.edu' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp prep.ai.mit.edu &"
+	"shavano.ucar.edu" !"xterm -title 'ftp shavano' -n 'ftp shavano' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp shavano.ucar.edu &"
+	"sn2025.craycos.com" !"xterm -title 'ftp sn2025' -n 'ftp sn2025' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp sn2025.craycos.com &"
+	"ucsu.colorado.edu" !"xterm -title 'ftp ucsu' -n 'ftp ucsu' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e ftp ucsu.colorado.edu &"
+}
+
+Menu Rlogins
+{
+    "Rlogins"     f.title
+
+	"djinn.cgd.ucar.edu" !"rcmd djinn.cgd.ucar.edu xterm -title djinn -n djinn -geometry 80x24 -fn 10x20 -sk -sb &"
+	"flagstaf.cgd.ucar.edu" !"rcmd flagstaf.cgd.ucar.edu xterm -title flagstaf -n flagstaf -geometry 80x24 -fn 10x20 -sk -sb &"
+	"heinlein.cgd.ucar.edu" !"rcmd heinlein.cgd.ucar.edu xterm -title heinlein -n heinlein -geometry 80x24 -fn 10x20 -sk -sb &"
+	"isis.cgd.ucar.edu" !"rcmd isis.cgd.ucar.edu xterm -title isis -n isis -geometry 80x24 -fn 10x20 -sk -sb &"
+	"kavieng.cgd.ucar.edu" !"rcmd kavieng.cgd.ucar.edu xterm -title kavieng -n kavieng -geometry 80x24 -fn 10x20 -sk -sb &"
+	"neit.cgd.ucar.edu" !"rcmd neit.cgd.ucar.edu xterm -title neit -n neit -geometry 80x24 -fn 10x20 -sk -sb &"
+	"odin.cgd.ucar.edu" !"rcmd odin.cgd.ucar.edu xterm -title odin -n odin -geometry 80x24 -fn 10x20 -sk -sb &"
+	"ra.cgd.ucar.edu" !"rcmd ra.cgd.ucar.edu xterm -title ra -n ra -geometry 80x24 -fn 10x20 -sk -sb &"
+	"sage.cgd.ucar.edu" !"rcmd sage.cgd.ucar.edu xterm -title sage -n sage -geometry 80x24 -fn 10x20 -sk -sb &"
+	"starfury.cgd.ucar.edu" !"rcmd starfury.cgd.ucar.edu xterm -title starfury -n starfury -geometry 80x24 -fn 10x20 -sk -sb &"
+	"dataproc.ucar.edu" !"xterm -title dataproc -n dataproc -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e rlogin dataproc.ucar.edu &"
+}
+
+Menu Telnets
+{
+    "Telnets"     f.title
+
+	"antero.ucar.edu" !"xterm -title antero -n antero -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e telnet antero.ucar.edu &"
+	"aztec.ucar.edu" !"xterm -title aztec -n aztec -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e telnet aztec.ucar.edu &"
+	"meeker.ucar.edu" !"xterm -title meeker.ucar.edu -n meeker -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e telnet meeker &"
+	"ouray.ucar.edu" !"xterm -title ouray -n ouray -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e telnet ouray.ucar.edu &"
+	"paiute.ucar.edu" !"xterm -title paiute -n paiute -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e telnet paiute.ucar.edu &"
+	"st-elmo.ucar.edu" !"xterm -title 'st-elmo' -n 'st-elmo' -fn 10x20 -bg black -bd blue -g 80x24+0+0 -e telnet st-elmo.ucar.edu &"
+}
+
+# Default Window Menu Description
+
+Menu DefaultWindowMenu MwmWindowMenu
+{
+    "Restore"	_R	Alt<Key>F5	f.normalize
+    "Move"	_M	Alt<Key>F7	f.move
+    "Size"	_S	Alt<Key>F8	f.resize
+    "Minimize"	_n	Alt<Key>F9	f.minimize
+    "Maximize"	_x	Alt<Key>F10	f.maximize
+    "Lower"	_L	Alt<Key>F3	f.lower
+    no-label				f.separator
+    "Close"	_C	Alt<Key>F4	f.kill
+}
+
+#
+# key binding descriptions
+#
+
+Keys DefaultKeyBindings
+{
+    Meta<Key>space              icon|window             f.post_wmenu
+    Meta<Key>Tab                root|icon|window        f.next_key
+    Meta Shift<Key>Tab		root|icon|window        f.prev_key
+    Meta<Key>Escape             root|icon|window        f.next_key
+    Meta Shift<Key>Escape       root|icon|window        f.prev_key
+    Meta Ctrl Shift<Key>exclam	root|icon|window        f.set_behavior
+    Meta<Key>F6			window			f.next_key transient
+    Meta<Key>F1			root|icon|window        f.refresh
+}
+
+#
+# button binding descriptions
+#
+
+Buttons DefaultButtonBindings
+{
+    <Btn1Down>          frame|icon      f.raise
+    <Btn2Down>          frame|icon      f.post_wmenu
+    <Btn1Down>          root            f.menu  RootMenu
+    Meta<Btn1Down>	icon|window     f.lower
+    Meta<Btn2Down>	window|icon     f.resize
+    Meta<Btn3Down>	window          f.move
+}
+ 
+Buttons ExplicitButtonBindings
+{
+    <Btn1Down>          frame|icon      f.raise
+    <Btn2Down>          frame|icon      f.post_wmenu
+    <Btn3Down>          frame|icon      f.lower
+    <Btn1Down>          root            f.menu  RootMenu
+    Meta<Btn1Down>	window|icon     f.lower
+    Meta<Btn2Down>	window|icon     f.resize
+    Meta<Btn3Down>	window|icon     f.move
+
+}
+ 
+Buttons PointerButtonBindings
+{
+    <Btn1Down>          frame|icon      f.raise
+    <Btn2Down>          frame|icon      f.post_wmenu
+    <Btn3Down>          frame|icon      f.lower
+    <Btn1Down>          root            f.menu  RootMenu
+    Meta<Btn1Down>	window|icon     f.raise
+    Meta<Btn2Down>	window|icon     f.resize
+    Meta<Btn3Down>	window|icon     f.move
+}
+#
+#  END OF mwm RESOURCE DESCRIPTION FILE
+#
