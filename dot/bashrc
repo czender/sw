@@ -1068,7 +1068,7 @@ alias cvc='cvs commit -m ""'
 alias cvu='cvs update -kk'
 alias svc='svn commit -m ""'
 alias svu='svn update'
-alias gtc='cd ~/sw;git commit -am "lazy commit";git push'
+alias gtc='for rps in acd diwg nco pnp prv rsr sw; do cd ~/${rps};git commit -am "lazy commit";git push;done'
 alias gtp='git pull'
 alias detex='detex -c' # -c = echo rather than delete cite{} commands
 alias df='df -k' # -k = units are kB rather than 512 B
