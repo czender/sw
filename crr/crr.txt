@@ -2,9 +2,6 @@
 cd
 git clone http://github.com/czender/prv
 ************************************************************************
-cd
-ln -s sw/sh sh
-************************************************************************
 for drc in cns grd hire job jrn ltr mny poetry rvw pr sdn trv www \
 aca anl anv bxm c c++ ck cld crm crr dead dot elisp f fsf hdf idl idx_rfr linux lsm map match matlab mie mk ncl perl sh slr_spc sltsbl tex time \
 ess ess_acc ess_atm ess_bnd ess_ccc ess_ccp ess_cnt ess_gng ess_gpc ess_hyd ess_lsp ess_phz ess_prc ess_rdn ess_sco uci \

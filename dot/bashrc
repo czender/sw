@@ -1015,21 +1015,21 @@ alias dtm='cd ${DATA}/tmp' # ; function dtmcp { cp ${1} ${DATA}/tmp ; }
 alias dze='cd ${DATA}' # ; function dzecp { cp ${1} ${DATA} ; }
 
 alias hbi='cd ${HOME}/bin' ; function hbicp { cp ${1} ${HOME}/bin ; }
-alias hac='cd ${HOME}/aca' ; function haccp { cp ${1} ${HOME}/aca ; }
-alias hcp='cd ${HOME}/c++' ; function hcpcp { cp ${1} ${HOME}/c++ ; }
-alias hcr='cd ${HOME}/crr' ; function hcrcp { cp ${1} ${HOME}/crr ; }
-alias hdo='cd ${HOME}/dot' ; function hdocp { cp ${1} ${HOME}/dot ; }
-alias hds='cd ${HOME}/dst' ; function hdscp { cp ${1} ${HOME}/dst ; }
-alias hf='cd ${HOME}/f' ; function hfcp { cp ${1} ${HOME}/f ; }
-alias hic='cd ${HOME}/icr' ; function hiccp { cp ${1} ${HOME}/icr ; }
-alias hid='cd ${HOME}/idl' ; function hidcp { cp ${1} ${HOME}/idl ; }
-alias hjo='cd ${HOME}/job' ; function hjocp { cp ${1} ${HOME}/job ; }
-alias hjr='cd ${HOME}/jrn' ; function hjrcp { cp ${1} ${HOME}/jrn ; }
-alias hmi='cd ${HOME}/mie' ; function hmicp { cp ${1} ${HOME}/mie ; }
+alias hac='cd ${HOME}/sw/aca' ; function haccp { cp ${1} ${HOME}/sw/aca ; }
+alias hcp='cd ${HOME}/sw/c++' ; function hcpcp { cp ${1} ${HOME}/sw/c++ ; }
+alias hcr='cd ${HOME}/sw/crr' ; function hcrcp { cp ${1} ${HOME}/sw/crr ; }
+alias hdo='cd ${HOME}/sw/dot' ; function hdocp { cp ${1} ${HOME}/sw/dot ; }
+alias hds='cd ${HOME}/sw/dst' ; function hdscp { cp ${1} ${HOME}/rsr/dst ; }
+alias hf='cd ${HOME}/sw/f' ; function hfcp { cp ${1} ${HOME}/sw/f ; }
+alias hic='cd ${HOME}/rsr/icr' ; function hiccp { cp ${1} ${HOME}/rsr/icr ; }
+alias hid='cd ${HOME}/sw/idl' ; function hidcp { cp ${1} ${HOME}/sw/idl ; }
+alias hjo='cd ${HOME}/prv/job' ; function hjocp { cp ${1} ${HOME}/prv/job ; }
+alias hjr='cd ${HOME}/prv/jrn' ; function hjrcp { cp ${1} ${HOME}/prv/jrn ; }
+alias hmi='cd ${HOME}/sw/mie' ; function hmicp { cp ${1} ${HOME}/sw/mie ; }
 alias hnc='cd ${HOME}/nco' ; function hnccp { cp ${1} ${HOME}/nco ; }
-alias hpr='cd ${HOME}/prp' ; function hprcp { cp ${1} ${HOME}/prp ; }
-alias hrv='cd ${HOME}/rvw' ; function hrvcp { cp ${1} ${HOME}/rvw ; }
-alias hte='cd ${HOME}/tex' ; function htecp { cp ${1} ${HOME}/tex ; }
+alias hpr='cd ${HOME}/pnp/prp' ; function hprcp { cp ${1} ${HOME}/pnp/prp ; }
+alias hrv='cd ${HOME}/prv/rvw' ; function hrvcp { cp ${1} ${HOME}/prv/rvw ; }
+alias hte='cd ${HOME}/sw/tex' ; function htecp { cp ${1} ${HOME}/sw/tex ; }
 
 alias pze='cd /ptmp/${USER}' ; function pzecp { cp ${1} /ptmp/${USER} ; }
 
@@ -1066,6 +1066,10 @@ alias cp='cp -i -p' # -i = inquire, -p = preserve mode and time
 alias csrc="source ${HOME}/.cshrc"
 alias cvc='cvs commit -m ""'
 alias cvu='cvs update -kk'
+alias svc='svn commit -m ""'
+alias svu='svn update'
+alias gtc='cd ~/sw;git commit -am "lazy commit";git push'
+alias gtp='git pull'
 alias detex='detex -c' # -c = echo rather than delete cite{} commands
 alias df='df -k' # -k = units are kB rather than 512 B
 alias diff='diff -c -w' # -c = print 3 lines around diff, -w = ignore whitespace diffs
@@ -1079,7 +1083,7 @@ alias fr='export LANG=fr_FR.utf8;export LANGUAGE=fr_FR:fr:en_GB:en;export LC_ALL
 alias ess_gng='ssh -X 42080s12@eee.uci.edu'
 alias ess_cnt='ssh -X 42100s12@eee.uci.edu'
 alias ess_sco='ssh -X 42350w13@eee.uci.edu'
-alias gbsh="/bin/cp ${HOME}/dot/bashrc.greenplanet ${HOME}/.bashrc;source ${HOME}/.bashrc"
+alias gbsh="/bin/cp ${HOME}/sw/dot/bashrc.greenplanet ${HOME}/.bashrc;source ${HOME}/.bashrc"
 alias aerosol='ssh -X aerosol.ess.uci.edu'
 alias firn='ssh -X firn.ess.uci.edu'
 alias givre='ssh -X givre.ess.uci.edu'
@@ -1115,8 +1119,6 @@ alias scp='scp -p -C' # -p = preserve mode, time, -C = enable compression
 alias silt='ssh -X silt.ess.uci.edu'
 alias snow='ssh -X snow.engin.umich.edu'
 alias ssh='ssh -X' # -X = enable X11 forwarding
-alias svc='svn commit -m ""'
-alias svu='svn update'
 alias temperature='finger temperature@atd.ucar.edu'
 alias tephra='ssh -X tephra.ess.uci.edu'
 alias topz='top -U${USER}' # -Uusername
@@ -1134,7 +1136,7 @@ alias xwininfo='xwininfo -int'
 # Begin section not yet merged with cshrc 
 alias x16='startx -- -bpp 16 :1' # Start 16 bpp display acessible as Ctl-Alt-F8
 # End section not yet merged with cshrc
-function bin_obj_rm { rm "${HOME}/bin/*/${1} ${HOME}/obj/*/${1}.o ${HOME}/obj/*/${1}.d" ; }
+function bin_obj_rm { rm "${HOME}/bin/${1} ${HOME}/obj/${1}.o ${HOME}/obj/${1}.d" ; }
 function dotgrep { 'egrep ${1} .[a-zA-Z]*' ; }
 function difffunc { diff -c -w ${1} ${2} | more ; } # -c = print 3 lines around diff, -w = ignore whitespace diffs
 function dirtdiff { scp ${1} dirt.ess.uci.edu:${PWD}/foo; ssh dirt.ess.uci.edu diff -c ${PWD}/${1} ${PWD}/foo ; }
@@ -1198,8 +1200,8 @@ esac # endcase ${PVM_ARCH}
 case ${PVM_ARCH} in
 # Place PDFTeX before TeX so, e.g., pdftexinfo.tex is loaded first
     AIX* | LINUX* | MACOSX* | SUN* | WIN32* )
-    export TEXINPUTS=".:${HOME}/tex//:${HOME}/crr//:${DATA}/fgr//:${DATA}/ps//:${TEXMFDIR}/pdftex//:${TEXMFDIR}/tex//::" # // is recursive, :: activates default system search paths
-    export BIBINPUTS=".:${HOME}/tex//:${TEXMFDIR}/bibtex//::" # // is recursive, :: activates default system search paths
+    export TEXINPUTS=".:${HOME}/sw/tex//:${HOME}/sw/crr//:${DATA}/fgr//:${DATA}/ps//:${TEXMFDIR}/pdftex//:${TEXMFDIR}/tex//::" # // is recursive, :: activates default system search paths
+    export BIBINPUTS=".:${HOME}/sw/tex//:${TEXMFDIR}/bibtex//::" # // is recursive, :: activates default system search paths
 #    export TEXMFCNF=${TEXMFDIR}/web2c # One level above bibtex, tex,
 #    export THUMBPDF="--debug --verbose --device=mono" # Arguments to thumbpdf
     ;; # endif SUN* | LINUX* | AIX* | SGI* )
@@ -1243,7 +1245,7 @@ case ${PVM_ARCH} in
     LINUX* )
     export IDL_DEVICE='X'
 # Obsolete directory only necessary for cw_bselector in IBP
-    export IDL_PATH=${HOME}/idl:${IDL_DIR}/lib:${IDL_DIR}/lib/obsolete:/usr/local/hiphop
+    export IDL_PATH=${HOME}/sw/idl:${IDL_DIR}/lib:${IDL_DIR}/lib/obsolete:/usr/local/hiphop
     export IDL_STARTUP="${HOME}/.idl"
     export MATLABPATH=/usr/local/matlab7/netcdf/netcdf:/usr/local/matlab7/netcdf/mexcdf:/usr/local/matlab7/netcdf/netcdf/ncfiles:/usr/local/matlab7/netcdf/netcdf/nctype:/usr/local/matlab7/netcdf/netcdf/ncutility
 
