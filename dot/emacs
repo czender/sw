@@ -3,7 +3,7 @@
 ; Purpose: Emacs initialization file
 
 ; Usage:
-; cd ~/dot;make dot;cd -
+; cd ~/sw/dot;make dot;cd -
 
 ; Contributors: 
 ; January 15, 1985 Keith Brezinsky
@@ -13,7 +13,7 @@
 ; 1994             Francois Thibaud
 ; 1995--           Charlie Zender
 
-(add-to-list 'load-path "~/elisp")
+(add-to-list 'load-path "~/sw/elisp")
 ;(add-to-list 'load-path "/data/zender/tramp/lisp") ; Support TRAMP
 (add-to-list 'load-path "/usr/share/emacs/site-lisp") ; Support AUC TeX (Linux)
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp") ; Support AUC TeX
@@ -55,7 +55,7 @@
 (setq sun-esc-bracket t)
 
 ;; KDVI compatibility for reverse search 20060529
-(add-to-list 'load-path (expand-file-name "~/elisp/"))
+(add-to-list 'load-path (expand-file-name "~/sw/elisp/"))
 (require 'kdvi-search)
 (add-hook 'LaTeX-mode-hook (lambda () (local-set-key "\C-x\C-j" 'kdvi-jump-to-line)))
 (add-hook 'tex-mode-hook (lambda () (local-set-key "\C-x\C-j" 'kdvi-jump-to-line)))
@@ -92,7 +92,7 @@
 
 ; 20100914 Add NCL mode during workshop
 (setq auto-mode-alist (cons '("\.ncl$" . ncl-mode) auto-mode-alist))
-(autoload 'ncl-mode "~/elisp/ncl.el") 
+(autoload 'ncl-mode "~/sw/elisp/ncl.el") 
 (add-hook 'ncl-mode-hook
 	  (lambda ()  
 	    )
@@ -173,8 +173,8 @@
 (setq calendar-latitude +39.978056) ; Converted to decimal
 (setq calendar-location-name "Irvine, California, USA")
 (setq calendar-time-zone -420.0) ; 7 hours West of Greenwich
-(setq diary-file "~/elisp/diary") ; location of the diary file
-;(setq diary-file (expand-file-name "~/elisp/diary")) ; location of the diary file
+(setq diary-file "~/sw/elisp/diary") ; location of the diary file
+;(setq diary-file (expand-file-name "~/sw/elisp/diary")) ; location of the diary file
 (setq mark-diary-entries-in-calendar t)	; days with an entry are marked +
 
 ; Appointment related stuff
@@ -304,7 +304,7 @@
 ;(setq-default ispell-program-name "aspell") 
 (setq-default ispell-program-name "ispell") 
 ;(custom-set-variables
-;'(ispell-personal-dictionary "~/elisp/ispell_english"))
+;'(ispell-personal-dictionary "~/sw/elisp/ispell_english"))
 (custom-set-faces)
 
 ; Save unreliable software until the end here so rest of stuff gets loaded

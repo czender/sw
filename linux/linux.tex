@@ -4595,8 +4595,13 @@ git clone git@github.com:czender/rsr.git
 git clone git@github.com:czender/sw.git
 git clone git@github.com:nco/nco.git
 git clone git@github.com:diwg/diwg.git
-git clone git@github.com:diwg/diwg.git
+git clone git@github.com:ACME-Climate/PreAndPostProcessingScripts
 ln -s sw/sh sh
+cd ~/sh
+ln -s ~/nco/data/sld_nco.sh sld_nco.sh
+ln -s ~/PreAndPostProcessingScripts/generate_climatologies/climo_ann.sh climo_ann.sh
+ln -s ~/PreAndPostProcessingScripts/generate_climatologies/climo_nco.sh climo_nco.sh
+sudo codesign -s 'Charlie Zender' `which gdb`
 \end{verbatim}
 
 \begin{verbatim}
