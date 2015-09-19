@@ -27,7 +27,9 @@
 if [ -f /etc/bashrc ]; then
 # fxm: 20030206 Seems to cause infinite recursion
 #    source /etc/bashrc
-    sleep 0 # fxm
+#    sleep 0
+# 2050917 reintroduce /etc/bashrc so to setup softenv in batch jobs on Cooley ALCF
+    . /etc/bashrc
 fi # endif
 
 function fl_is_exe {
