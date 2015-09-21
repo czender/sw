@@ -19,7 +19,7 @@
 % URL: http://dust.ess.uci.edu/doc/ltx/ltx.pdf
 
 % Usage (see also end of file):
-% cd ~/tex;make ltx.pdf;cd -
+% cd ~/sw/tex;make ltx.pdf;cd -
 
 \documentclass[12pt]{article}
 
@@ -59,7 +59,7 @@
 %\usepackage{pslatex} % Use Times, Helvetica and Courier fonts wherever possible
 \usepackage[inactive]{srcltx} % Enable dvi <-> tex searches fxm: not working
 \usepackage{subfigure} % \subfigure for panel labeling within figure environment
-\usepackage{texnames} % Typeset AMSTeX, METAFONT, BiBTeX (poorly coded)
+%\usepackage{texnames} % Typeset AMSTeX, METAFONT, BiBTeX (poorly coded)
 \usepackage[safe]{tipa} % International Phonetic Alphabet
 \usepackage{tocbibind} % Add Bibliography and Index to Table of Contents
 \usepackage{type1cm} % Type 1 fonts are scalable
@@ -1421,9 +1421,9 @@ Symbol & Command & Package \\[0.0ex]
 \LaTeX & \cmdltxidx{\LaTeX}, \verb'\LATEX' & none, \textsf{texnames} \\[0.5ex]
 \LaTeXe & \cmdltxidx{\LaTeXe} & none \\[0.5ex]
 \MF\index{Metafont@\verb'\MF'} & \cmdltxidx{\MF} & \textsf{mflogo} \\[0.5ex]
-\METAFONT & \verb'\METAFONT' & \textsf{texnames} \\[0.5ex]
-\AMSTEX & \verb'\AMSTEX', \verb'\AmSTeX', \cmdltxidx{\AMSTeX} & \textsf{texnames} \\[0.5ex]
-\BIBTEX & \verb'\BIBTEX', \verb'\BIBTeX', \cmdltxidx{\BibTeX} & \textsf{texnames} \\[0.5ex]
+%\METAFONT & \verb'\METAFONT' & \textsf{texnames} \\[0.5ex]
+%\AMSTEX & \verb'\AMSTEX', \verb'\AmSTeX', \cmdltxidx{\AMSTeX} & \textsf{texnames} \\[0.5ex]
+%\BIBTEX & \verb'\BIBTEX', \verb'\BIBTeX', \cmdltxidx{\BibTeX} & \textsf{texnames} \\[0.5ex]
 % texnames.sty defines \AMSTEX, \AMSTeX, \AmSTeX, \BIBTEX, \BIBTeX, \BibTeX, \LAMSTeX, \LAmSTeX, \LaTeX, \LATEX, \METAFONT, \MF, \SLITEX, \SLITeX, \SLiTeX, \SliTeX
 \hline
 \end{tabular}
@@ -1766,7 +1766,8 @@ image=true: Loads an image (requires graphicx) as drop cap
 } % end Lettrine
 % 20140531 Absolute path /home/zender incompatible with Mac OS X directory structure
 % Need working relative pathnames
-\lettrine[image=true,lines=3,findent=3pt,nindent=0pt]{/home/zender/texmf/fonts/csz/saints_initial_O.jpg}{nce} 
+%\lettrine[image=true,lines=3,findent=3pt,nindent=0pt]{/home/zender/texmf/fonts/csz/saints_initial_O.jpg}{nce} 
+\lettrine[image=true,lines=3,findent=3pt,nindent=0pt]{/Users/zender/texmf/fonts/csz/saints_initial_O.jpg}{nce} 
 we assemble a complete alphabet of initial letters from illuminated
 manuscripts, it will be a pleasure to typeset manuscripts.
 Imagine the beautiful cadences of paragraphs illustrated with initials.
@@ -1910,7 +1911,7 @@ to~4 to indicate the degree of penalty associated with breaking a
 display environment, with 0 merely allowing a break to take place,
 and~4 requiring that the page break, e.g., \verb'\displaybreak[4]'.
 
-\AMSTeX\ also supplies the \cmdltxidx{\allowdisplaybreaks} macro which
+AMS\TeX\ also supplies the \cmdltxidx{\allowdisplaybreaks} macro which
 changes the default to permit displayed equations to flow smoothly
 from one page to the next. 
 This macro should be placed in the document preamble.
