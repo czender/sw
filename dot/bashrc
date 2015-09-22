@@ -206,7 +206,7 @@ export MY_INC_DIR=${HOME}/include
 # IBM ld recognizes LIBPATH environment variable (not LD_LIBRARY_PATH)
 
 # MANPATH:
-# Put /usr/local/man last. 
+# Put /usr/local/man last
 
 # Initalize all paths to current directory (insecure, but frequently useful)
 LD_LIBRARY_PATH='./'
