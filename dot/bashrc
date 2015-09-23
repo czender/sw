@@ -233,7 +233,6 @@ case "${PVM_ARCH}" in
 		export DATA=/data/${USER}
 		export NETCDF_INC=/usr/local/include
 		export NETCDF_LIB=/usr/local/lib # 64 bit ABI (default)
-		export TEXMFDIR='/fxm' # One level above bibtex, tex,
 		case "${HOST}" in 
 		    esqf0[1-7]* ) # UCI
 		    export OMP_NUM_THREADS=8 # OpenMP
@@ -1070,8 +1069,6 @@ alias cvc='cvs commit -m ""'
 alias cvu='cvs update -kk'
 alias svc='svn commit -m ""'
 alias svu='svn update'
-alias gtc='for rps in acd diwg nco pnp prv PreAndPostProcessingScripts rsr sw; do cd ~/${rps};git commit -am "lazy commit";echo "Pushing ${rps}...";git push;done;cd -'
-alias gtp='for rps in acd diwg nco pnp prv PreAndPostProcessingScripts rsr sw; do cd ~/${rps};echo "Pulling ${rps}...";git pull;done;cd -'
 alias detex='detex -c' # -c = echo rather than delete cite{} commands
 alias df='df -k' # -k = units are kB rather than 512 B
 alias diff='diff -c -w' # -c = print 3 lines around diff, -w = ignore whitespace diffs
@@ -1137,6 +1134,9 @@ alias xwininfo='xwininfo -int'
 # Begin section not yet merged with cshrc 
 alias x16='startx -- -bpp 16 :1' # Start 16 bpp display acessible as Ctl-Alt-F8
 # End section not yet merged with cshrc
+alias gtc='for rps in acd diwg nco pnp prv PreAndPostProcessingScripts rsr sw; do cd ~/${rps};git commit -am "lazy commit";echo "Pushing ${rps}...";git push;done;cd -'
+alias gtp='for rps in acd diwg nco pnp prv PreAndPostProcessingScripts rsr sw; do cd ~/${rps};echo "Pulling ${rps}...";git pull;done;cd -'
+function gtm { for rps in acd diwg nco pnp prv PreAndPostProcessingScripts rsr sw; do cd ~/${rps};git commit -am "${1}";echo "Pushing ${rps}...";git push;done;cd - ; }
 function bin_obj_rm { rm "${HOME}/bin/${1} ${HOME}/obj/${1}.o ${HOME}/obj/${1}.d" ; }
 function dotgrep { 'egrep ${1} .[a-zA-Z]*' ; }
 function difffunc { diff -c -w ${1} ${2} | more ; } # -c = print 3 lines around diff, -w = ignore whitespace diffs
