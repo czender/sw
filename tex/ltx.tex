@@ -30,7 +30,7 @@
 \pdfcompresslevel=9
 \usepackage{thumbpdf} % Generate thumbnails
 \usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
-\graphicspath{/data/zender/ps} % Help epstopdf find .eps figures to convert
+\graphicspath{/Users/zender/data/ps} % Help epstopdf find .eps figures to convert
 \else % !PDFLaTeX
 \usepackage{graphicx} % Defines \includegraphics*
 \fi % !PDFLaTeX
@@ -602,11 +602,11 @@ as an \href{subsubsection.2.5.2}{internal link} and as an
 \end{verbatim}
 
 The \cmdidx{\href} macro can access ``local'' URLs.
-This \href{file:///data/zender/ps/ltx.pdf#section.4}{local file link}
+This \href{file:///Users/zender/data/ps/ltx.pdf#section.4}{local file link}
 accesses the \cmdprn{hyperref}-generated link to Section~\ref{sxn:txt}
 through the HTTP \cmdidx{file://} protocol:  
 \begin{verbatim}
-This \href{file:///data/zender/ps/ltx.pdf#section.4}{active link} ...
+This \href{file:///Users/zender/data/ps/ltx.pdf#section.4}{active link} ...
 \end{verbatim}
 When a local file link points to the file being viewed, the viewer
 (e.g., \cmdidx{xpdf}) jumps to the link without spawning a new
@@ -648,7 +648,7 @@ Samples of these macros for generic situations are
 \end{verbatim}
 Actual targets that work in typical situations are
 \begin{verbatim}
-\hyperbaseurl{file:///data/zender/ps/abb.pdf}
+\hyperbaseurl{file:///Users/zender/data/ps/abb.pdf}
 \hypertarget{sxn:abb}{}
 \end{verbatim}
 The \cmdltxidx{\hypertarget} command sets fxm.
@@ -1506,8 +1506,8 @@ figure looks like
 \end{verbatim}
 \begin{figure*}
 \centering
-\includegraphics[width=0.5\hsize]{/data/zender/ps/erbe_b_sld012d_8589_01_x_SWCF}\vfill
-\includegraphics[width=0.5\hsize]{/data/zender/ps/erbe_b_sld012d_8589_07_x_SWCF}%
+\includegraphics[width=0.5\hsize]{/Users/zender/data/ps/erbe_b_sld012d_8589_01_x_SWCF}\vfill
+\includegraphics[width=0.5\hsize]{/Users/zender/data/ps/erbe_b_sld012d_8589_07_x_SWCF}%
 \caption[Shortwave Cloud Forcing]{SWCF for (a) January and (b) July. 
 \label{fgr:SWCF_x2}}
 \end{figure*}
@@ -1527,8 +1527,8 @@ Subfigures may be explicitly accounted for when using the
 \caption[Shortwave Cloud Forcing]{SWCF for (a) January and (b) July. 
 \label{fgr:SWCF_x3}}
 %\addtocounter{figure}{-1}% Decrement figure counter when caption is above figure
-\subfigure[January]{\includegraphics[width=0.5\hsize]{/data/zender/ps/erbe_b_sld012d_8589_01_x_SWCF}\label{fgr:SWCF_x_01}}
-\subfigure[July]{\includegraphics[width=0.5\hsize]{/data/zender/ps/erbe_b_sld012d_8589_07_x_SWCF}\label{fgr:SWCF_x_07}}
+\subfigure[January]{\includegraphics[width=0.5\hsize]{/Users/zender/data/ps/erbe_b_sld012d_8589_01_x_SWCF}\label{fgr:SWCF_x_01}}
+\subfigure[July]{\includegraphics[width=0.5\hsize]{/Users/zender/data/ps/erbe_b_sld012d_8589_07_x_SWCF}\label{fgr:SWCF_x_07}}
 \end{figure}
 } % subfigure breaks htlatex
 
@@ -1546,13 +1546,13 @@ Here is how a \GIFacr\ figure might be indicated
 \DeclareGraphicsRule{.gif}{eps}{}{`gif2eps #1 -} % Convert GIF files to eps
 \begin{figure*}
 \centering
-\includegraphics[width=0.5in,height=0.5in]{/data/zender/fgr/dmr/r2d2.gif}
+\includegraphics[width=0.5in,height=0.5in]{/Users/zender/data/fgr/dmr/r2d2.gif}
 \caption[R2D2]{R2D2.\label{fgr:r2d2}}
 \end{figure*}
 \end{verbatim}
 \begin{figure*}
 \centering
-\includegraphics[width=0.5in,height=0.5in]{/data/zender/fgr/dmr/r2d2.eps}
+\includegraphics[width=0.5in,height=0.5in]{/Users/zender/data/fgr/dmr/r2d2.eps}
 \caption[R2D2]{R2D2.\label{fgr:r2d2}}
 \end{figure*}
 These commands produced Figure~\ref{fgr:r2d2}.
@@ -1567,7 +1567,7 @@ To trim images, use the \cmdidx{trim} and \cmdidx{clip} options to
 Specify the viewport margins in the order Left, Bottom, Right, Top.
 ``Liberty'' is a good mnenomonic for the \cmdprn{lbrt} ordering.
 \begin{verbatim}
-\includegraphics[width=1.0\hsize,clip=true,trim=0.75in 4.1in 0.1in 4.9in]{/data/zender/fgr/ess_atm/ppr_Rud05_fgr1}%
+\includegraphics[width=1.0\hsize,clip=true,trim=0.75in 4.1in 0.1in 4.9in]{/Users/zender/data/fgr/ess_atm/ppr_Rud05_fgr1}%
 \end{verbatim}
  
 \subsection[Trademarks]{Trademarks}\label{sxn:trd}

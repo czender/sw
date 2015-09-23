@@ -1,0 +1,15 @@
+# Git-ignore patterns for TeX-family by-products
+
+# LaTeX
+*.aux
+*.bbl
+*.blg
+*.glo
+*.log
+*.idx
+*.ilg
+*.lof
+*.log
+*.lot
+*.out
+*.toc
