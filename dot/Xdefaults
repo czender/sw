@@ -1,9 +1,8 @@
 /* $Id$
- Purpose: X configuration defaults database
- Well behaved programs look in $XAPPLRESDIR directory for default resource settings
- Usage:
- xrdb -merge ${HOME}/.Xdefaults
-*/
+  Purpose: X configuration defaults database
+  Well-behaved programs look in $XAPPLRESDIR directory for default resource settings
+  Usage:
+  xrdb -merge ${HOME}/.Xdefaults */
 
 /* 20071029: Joel Norris recommends this */
 Netscape*documentFonts.charset*adobe-fontspecific: iso-8859-1
