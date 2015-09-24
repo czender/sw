@@ -3249,8 +3249,8 @@ UCI PO:
 Apple Macbook Pro Retina Display
 Model A1398
 Received at UCI 20150702
-Apple Serial \#: 
-AppleCare Protection Plan Agreement #: 
+Apple Serial \#: C02PX49RG8WM
+AppleCare Protection Plan Agreement #: 4306813717
 15.4 inch MacBook Pro
 1 TB Flash
 2.6 GHz
@@ -3262,10 +3262,10 @@ Retina display: 15.4-inch diagonal
 IPS technology 2880x1800 resolution
 RAM: 16 GB DDR3L 1600MHz
 Disk: 1 TB PCIe-based flash storage
-NVIDIA GeForce GT 750M with 2 GB GDDR5 memory
+AMD Radeon R9 M370X 2048 MB
 Simultaneously supports full native resolution on built-in display and up to 2560x1600 on up to two external displays
 HDMI output: support 1080p at 60 Hz, 3840x2160 at 30 Hz, 4096x2160 at 24 Hz
-CPU: 2.6 GHz quad-core Intel Core i7 with 6 MB shared L3 cache
+CPU: 2.8 GHz quad-core Intel Core i7 with 6 MB shared L3 cache
 USB: 2 USB3 ports
 Thunderbolt: 2 Thunderbolt2 ports
 SDXC Card slot
@@ -4985,11 +4985,11 @@ cd ~/dead;make # Build dead module
 cd ~/aca;make OMP=N # Build aca module
 # Copy important data directories wholesale
 for drc in aca arese avhrr data dst fgr hitran icr lsmdata map mny mtrdst no2 ppr prp rsmas specfun tex toms tomsaod tuv wiscombe ; do
- rsync -av dust.ess.uci.edu:/data/zender/${drc} ${DATA}
+ rsync -av givre.ess.uci.edu:/data/zender/${drc} ${DATA}
  printf "Copied dust.ess.uci.edu:/data/zender/${drc}\n"
 done
 # Copy personal data directories wholesale
-for drc in bc_health clean cns dstmch90 dstmtr dvr esh ess ess_atm ess_bnd ess_ccp ess_cnt ess_gcm ess_gng ess_gpc ess_hyd ess_phz ess_prc ess_sco fr frnd harvard hire hlt hrv ipcc iusd kdz lbaop lgl mny mtrdst opac pix slf trv uci ; do
+for drc in bc_health clean dstmch90 dstmtr dvr esh ess ess_atm ess_bnd ess_ccp ess_cnt ess_gcm ess_gng ess_gpc ess_hyd ess_phz ess_prc ess_sco fr frnd harvard hire hlt ipcc iusd kdz lbaop lgl mny mtrdst opac pix slf trv uci ; do
  rsync -av givre.ess.uci.edu:/data/zender/${drc} ${DATA}
  printf "Copied givre.ess.uci.edu:/data/zender/${drc}\n"
 done
