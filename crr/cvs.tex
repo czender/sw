@@ -1417,6 +1417,17 @@ described
 
 \subsection{Cloning}\label{sxn:git_cln}
 
+It is much more convenient to clone repositories with SSH 
+than with HTTPS because SSH replaces the cumbersome
+key-management/wallet apps that vary between OS's. 
+To clone a remote repository using SSH protocol, first install
+an SSH key from the development machine to the remote server (e.g.,
+GitHub), by following these instructions
+\href{https://help.github.com/articles/generating-ssh-keys}.
+\begin{verbatim}
+git clone git@github.com:ACME-Climate/DiagnosticsWorkflow
+\end{verbatim}
+
 To clone a remote repository using HTTPS protocol, use
 \begin{verbatim}
 git clone https://github.com/ACME-Climate/DiagnosticsWorkflow
@@ -1424,14 +1435,11 @@ git clone https://github.com/ACME-Climate/DiagnosticsWorkflow
 Note that OLCF does not support HTTPS protocol.
 On OLCF machines, one must use clone Git repositories with the 
 SSH protocol instead.
-
-To clone a remote repository using SSH protocol, first install
-an SSH key from the development machine to the remote server (e.g.,
-GitHub), by following these instructions
-\href{https://help.github.com/articles/generating-ssh-keys}.
-
+To change the access protocol for a checked-out repository from
+HTTPS to SSH use
 \begin{verbatim}
-git clone git@github.com:ACME-Climate/DiagnosticsWorkflow
+git remote set-url origin git@github.com:username/repository.git
+git remote set-url origin git@github.com:czender/prv.git
 \end{verbatim}
 
 \subsection{Modules}\label{sxn:git_mdl}
@@ -1483,10 +1491,12 @@ git push origin master
 # Above method does not work as intended because devel and master have (some) different files
 # Assume we are working on devel and make changes we want to incorporate into master
 # First, commit the changes to devel (so they are not lost when checking out master)
+git commit -am ``Changes to devel''
+# The follow this recipe
 git fetch
 git checkout master
 git pull
-git checkout devel file1 file2
+git checkout devel climo_nco.sh climo_ann.sh
 git status
 git diff --cached
 git commit -am ``message''
