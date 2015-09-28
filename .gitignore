@@ -4,10 +4,12 @@
 *.aux
 *.bbl
 *.blg
+*.brf
 *.glo
 *.log
 *.idx
 *.ilg
+*.ind
 *.lof
 *.log
 *.lot
