@@ -1,6 +1,6 @@
-# Git-ignore patterns for TeX-family by-products
+# Git-ignore patterns
 
-# LaTeX
+# TeX-family by-products
 *.aux
 *.bbl
 *.blg
@@ -15,3 +15,9 @@
 *.lot
 *.out
 *.toc
+
+# Editors
+*.~?~
+*~
+TAGS
+
