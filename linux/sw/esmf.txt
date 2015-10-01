@@ -142,17 +142,17 @@ GenerateRLLMesh --lat 180 --lon 360 --lon_begin -0.5 --lon_end 359.5 --file ${DA
 GenerateRLLMesh --lat 90 --lon 180 --lon_begin -1.0 --lon_end 359.0 --file ${DATA}/rgr/msh_90x180.g
 GenerateOverlapMesh --a ${DATA}/rgr/msh_180x360.g --b ${DATA}/rgr/msh_90x180.g --out ${DATA}/rgr/msh_ovr_180x360_to_90x180.g
 GenerateOverlapMesh --a ${DATA}/rgr/msh_90x180.g --b ${DATA}/rgr/msh_180x360.g --out ${DATA}/rgr/msh_ovr_90x180_to_180x360.g
-GenerateOfflineMap --in_mesh ${DATA}/rgr/msh_180x360.g --out_mesh ${DATA}/rgr/msh_90x180.g --ov_mesh ${DATA}/rgr/msh_ovr_180x360_to_90x180.g --out_map ${DATA}/maps/map_180x360_to_90x180.20150818.nc
-GenerateOfflineMap --in_mesh ${DATA}/rgr/msh_90x180.g --out_mesh ${DATA}/rgr/msh_180x360.g --ov_mesh ${DATA}/rgr/msh_ovr_90x180_to_180x360.g --out_map ${DATA}/maps/map_90x180_to_180x360.20150818.nc
+GenerateOfflineMap --in_mesh ${DATA}/rgr/msh_180x360.g --out_mesh ${DATA}/rgr/msh_90x180.g --ov_mesh ${DATA}/rgr/msh_ovr_180x360_to_90x180.g --out_map ${DATA}/maps/map_180x360_to_90x180.20150901.nc
+GenerateOfflineMap --in_mesh ${DATA}/rgr/msh_90x180.g --out_mesh ${DATA}/rgr/msh_180x360.g --ov_mesh ${DATA}/rgr/msh_ovr_90x180_to_180x360.g --out_map ${DATA}/maps/map_90x180_to_180x360.20150901.nc
 
 # Hybrid: NCO grids with Tempest overlap/map
-GenerateOverlapMesh --a ${DATA}/grids/180x360_SCRIP.20150820.nc --b ${DATA}/grids/90x180_SCRIP.20150820.nc --out ${DATA}/rgr/msh_ovr_180x360_to_90x180.g
-GenerateOverlapMesh --a ${DATA}/grids/90x180_SCRIP.20150820.nc --b ${DATA}/grids/180x360_SCRIP.20150820.nc --out ${DATA}/rgr/msh_ovr_90x180_to_180x360.g
-GenerateOfflineMap --in_mesh ${DATA}/grids/180x360_SCRIP.20150820.nc --out_mesh ${DATA}/grids/90x180_SCRIP.20150820.nc --ov_mesh ${DATA}/rgr/msh_ovr_180x360_to_90x180.g --out_map ${DATA}/maps/map_180x360_to_90x180.20150820.nc
-GenerateOfflineMap --in_mesh ${DATA}/grids/90x180_SCRIP.20150820.nc --out_mesh ${DATA}/grids/180x360_SCRIP.20150820.nc --ov_mesh ${DATA}/rgr/msh_ovr_90x180_to_180x360.g --out_map ${DATA}/maps/map_90x180_to_180x360.20150820.nc
+GenerateOverlapMesh --a ${DATA}/grids/180x360_SCRIP.20150901.nc --b ${DATA}/grids/90x180_SCRIP.20150901.nc --out ${DATA}/rgr/msh_ovr_180x360_to_90x180.g
+GenerateOverlapMesh --a ${DATA}/grids/90x180_SCRIP.20150901.nc --b ${DATA}/grids/180x360_SCRIP.20150901.nc --out ${DATA}/rgr/msh_ovr_90x180_to_180x360.g
+GenerateOfflineMap --in_mesh ${DATA}/grids/180x360_SCRIP.20150901.nc --out_mesh ${DATA}/grids/90x180_SCRIP.20150901.nc --ov_mesh ${DATA}/rgr/msh_ovr_180x360_to_90x180.g --out_map ${DATA}/maps/map_180x360_to_90x180.20150901.nc
+GenerateOfflineMap --in_mesh ${DATA}/grids/90x180_SCRIP.20150901.nc --out_mesh ${DATA}/grids/180x360_SCRIP.20150901.nc --ov_mesh ${DATA}/rgr/msh_ovr_90x180_to_180x360.g --out_map ${DATA}/maps/map_90x180_to_180x360.20150901.nc
 
-ncks -O -D 5 -t 1 --map=${DATA}/maps/map_180x360_to_90x180.20150818.nc ${DATA}/data/dst_1x1.nc ${DATA}/rgr/dst_2x2.nc
-ncks -O -D 5 -t 1 --map=${DATA}/maps/map_90x180_to_180x360.20150818.nc ${DATA}/data/dst_2x2.nc ${DATA}/rgr/dst_1x1.nc
+ncks -O -D 5 -t 1 --map=${DATA}/maps/map_180x360_to_90x180.20150901.nc ${DATA}/data/dst_1x1.nc ${DATA}/rgr/dst_2x2.nc
+ncks -O -D 5 -t 1 --map=${DATA}/maps/map_90x180_to_180x360.20150901.nc ${DATA}/data/dst_2x2.nc ${DATA}/rgr/dst_1x1.nc
 
 GenerateCSMesh --alt --res 30 --file ${DATA}/rgr/msh_ne30.g
 GenerateCSMesh --alt --res 120 --file ${DATA}/rgr/msh_ne120.g
