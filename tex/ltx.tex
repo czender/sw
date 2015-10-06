@@ -349,19 +349,19 @@ scp 'dust.ess.uci.edu:tex/cls/dchem.sty' ~/texmf/tex/latex/dchem
 # Place links to personal packages in ~/texmf/tex/latex/csz
 mkdir -p ~/texmf/tex/latex/csz
 for fl in csz uci_ltr ; do
-    /bin/ln -s ~/tex/${fl}.sty ~/texmf/tex/latex/csz/${fl}.sty
+    /bin/ln -s ~/sw/tex/${fl}.sty ~/texmf/tex/latex/csz/${fl}.sty
 done
-cd ~/crr
+cd ~/sw/crr
 for fl in `ls *.sty` ; do
-    /bin/ln -s ~/crr/${fl} ~/texmf/tex/latex/csz/${fl}
+    /bin/ln -s ~/sw/crr/${fl} ~/texmf/tex/latex/csz/${fl}
 done
 
 # Place links to bibliography and styles in ~/texmf/bibtex/bst/csz
 mkdir -p ~/texmf/bibtex/bst/csz
 for fl in agu agu04 jas jqsrtcsz unsrtnat ; do
-    /bin/cp ~/tex/bst/${fl}.bst ~/texmf/bibtex/bst/csz/${fl}.bst
+    /bin/cp ~/sw/tex/bst/${fl}.bst ~/texmf/bibtex/bst/csz/${fl}.bst
 done
-/bin/ln -s ~/tex/bib.bib ~/texmf/bibtex/bst/csz/bib.bib
+/bin/ln -s ~/sw/tex/bib.bib ~/texmf/bibtex/bst/csz/bib.bib
 \end{verbatim}
 
 \subsection[Hyphenation]{Hyphenation}\label{sxn:hyp}

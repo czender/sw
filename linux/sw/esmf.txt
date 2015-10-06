@@ -334,7 +334,7 @@ map_ne120np4_fv257x512_aave.150418.nc   # Area-averaged (ESMF algorithm) for dow
 map_ne120np4_fv801x1600_bilin.150418.nc # Bilinear to a finer grid, to preserve all scales
 
 # Copy these grids and maps to rhea
-wget --no-check-certificate https://zender:abracad1@acme-svn2.ornl.gov/acme-repo/acme/mapping/grids/129x256_SCRIP.130510.nc
+wget --no-check-certificate https://zender:abracad1@acme-svn2.ornl.gov/acme-repo/acme/mapping/grids/129x256_SCRIP.20150901.nc
 
 # Create remap files from grid files:
 ESMF_RegridWeightGen -s ne30np4_091226_pentagons.nc -d 129x256_SCRIP.nc -w map_ne30np4_fv129x256_aave.DATE.nc --method conserve
@@ -378,17 +378,17 @@ ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_ne30np4_to_ne30np4_aave.2015060
 ESMF_RegridWeightGen -s ${DATA}/grids/ne30np4_pentagons.091226.nc -d ${DATA}/grids/ne120np4_pentagons.100310.nc -w ${DATA}/maps/map_ne30np4_to_ne120np4_aave.20150603.nc --method conserve
 ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_ne30np4_to_ne120np4_aave.20150603.nc ${DATA}/ne30/rgr/famipc5_ne30_v0.3_00003.cam.h0.1979-01.nc ${DATA}/ne30/rgr/dogfood.nc
 
-ESMF_RegridWeightGen -s ${DATA}/grids/129x256_SCRIP.130510.nc -d ${DATA}/grids/ne30np4_pentagons.091226.nc -w ${DATA}/maps/map_fv129x256_to_ne30np4_aave.20150602.nc --method conserve
-ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_fv129x256_to_ne30np4_aave.20150602.nc ${DATA}/ne30/rgr/fv_FSNT.nc ${DATA}/ne30/rgr/dogfood.nc
+ESMF_RegridWeightGen -s ${DATA}/grids/129x256_SCRIP.20150901.nc -d ${DATA}/grids/ne30np4_pentagons.091226.nc -w ${DATA}/maps/map_fv129x256_to_ne30np4_aave.20150901.nc --method conserve
+ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_fv129x256_to_ne30np4_aave.20150901.nc ${DATA}/ne30/rgr/fv_FSNT.nc ${DATA}/ne30/rgr/dogfood.nc
 
-ESMF_RegridWeightGen -s ${DATA}/grids/ne30np4_pentagons.091226.nc -d ${DATA}/grids/remap_grid_T42.nc -w ${DATA}/maps/map_ne30np4_to_T42_aave.20150601.nc --method conserve
-ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_ne30np4_to_T42_aave.20150601.nc ${DATA}/ne30/rgr/famipc5_ne30_v0.3_00003.cam.h0.1979-01.nco.nc ${DATA}/ne30/rgr/dogfood.nc
+ESMF_RegridWeightGen -s ${DATA}/grids/ne30np4_pentagons.091226.nc -d ${DATA}/grids/t42_SCRIP.20150901.nc -w ${DATA}/maps/map_ne30np4_to_t42_aave.20150901.nc --method conserve
+ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_ne30np4_to_t42_aave.20150901.nc ${DATA}/ne30/rgr/famipc5_ne30_v0.3_00003.cam.h0.1979-01.nco.nc ${DATA}/ne30/rgr/dogfood.nc
 
-ESMF_RegridWeightGen -s ${DATA}/grids/remap_grid_T42.nc -d ${DATA}/grids/129x256_SCRIP.130510.nc -w ${DATA}/maps/map_t42_to_fv129x256_aave.20150621.nc --method conserve
-ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_t42_to_fv129x256_aave.20150621.nc ${DATA}/dstmch90/dstmch90_clm.nc ${DATA}/ne30/rgr/dogfood.nc
+ESMF_RegridWeightGen -s ${DATA}/grids/t42_SCRIP.20150901.nc -d ${DATA}/grids/129x256_SCRIP.20150901.nc -w ${DATA}/maps/map_t42_to_fv129x256_aave.20150901.nc --method conserve
+ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_t42_to_fv129x256_aave.20150901.nc ${DATA}/dstmch90/dstmch90_clm.nc ${DATA}/ne30/rgr/dogfood.nc
 
-ESMF_RegridWeightGen -s ${DATA}/grids/129x256_SCRIP.130510.nc -d ${DATA}/grids/257x512_SCRIP.130510.nc -w map_fv129x256_to_fv257x512_aave.20150529.nc --method conserve
-ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_fv129x256_to_fv257x512_aave.20150529.nc ${DATA}/ne30/rgr/famipc5_ne30_v0.3_00003.cam.h0.1979-01.nco.nc ${DATA}/ne30/rgr/dogfood.nc
+ESMF_RegridWeightGen -s ${DATA}/grids/129x256_SCRIP.20150901.nc -d ${DATA}/grids/257x512_SCRIP.20150901.nc -w map_fv129x256_to_fv257x512_aave.20150901.nc --method conserve
+ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_fv129x256_to_fv257x512_aave.20150901.nc ${DATA}/ne30/rgr/famipc5_ne30_v0.3_00003.cam.h0.1979-01.nco.nc ${DATA}/ne30/rgr/dogfood.nc
 
 RRM:
 GenerateOverlapMesh --a ${DATA}/rgr/msh_180x360.g --b ${DATA}/grids/california_25km.nc --out ${DATA}/rgr/msh_ovr_180x360_to_ca25km.g
