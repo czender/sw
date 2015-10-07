@@ -43,6 +43,9 @@
 \newcommand{\PTV}{PTV} % [sng] Per-Thread-Variables
 \newcommand{\SSDRA}{SSDRA} % [sng] Server-side Data Reduction and Analysis
 \newcommand{\avgidx}{\ensuremath{j}} % [idx] Average index
+\newcommand{\abssbs}{\ensuremath{+}} % [sbs] Absolute value subscript
+\newcommand{\maxsbs}{\ensuremath{\mathrm{max}}} % [sbs] Maximum subscript
+\newcommand{\minsbs}{\ensuremath{\mathrm{min}}} % [sbs] Minimum subscript
 \newcommand{\avgsbs}{\ensuremath{\mathrm{A}}} % [sbs] Average subscript
 \newcommand{\bndwdt}{\ensuremath{b}} % [bit s-1] Bandwidth
 \newcommand{\brdsbs}{\ensuremath{\mathrm{B}}} % [sbs] Broadcast subscript
@@ -111,6 +114,7 @@
 \newcommand{\nsbs}{\ensuremath{N}} % [sbs] N subscript
 \newcommand{\ndsbs}{\ensuremath{N\mathrm{D}}} % [sbs] N-dimensional subscript
 \newcommand{\outsbs}{\ensuremath{\mathrm{O}}} % [sbs] Output subscript
+\newcommand{\psl}{\ensuremath{\epsilon}} % [frc] Error ("ePSiLon") 
 \newcommand{\rdsbs}{\ensuremath{\mathrm{R}}} % [sbs] Read subscript
 \newcommand{\rnksbs}{\ensuremath{\mathrm{R}}} % [sbs] Rank subscript
 \newcommand{\rqssrv}{\ensuremath{L}} % [nbr] Server transaction requests
@@ -185,6 +189,12 @@
 \newcommand{\lmnnbrwrt}{\ensuremath{\lmnnbr_{\wrtsbs}}} % [nbr] Number of elements to write
 \newcommand{\mmrsysnbr}{\ensuremath{\mmrnbr_{\syssbs}}} % [nbr] Number of system memory calls
 \newcommand{\mmrusrnbr}{\ensuremath{\mmrnbr_{\usrsbs}}} % [nbr] Number of user memory operations
+\newcommand{\pslavg}{\ensuremath{\bar{\psl}}} % [frc] Mean error
+\newcommand{\pslmax}{\ensuremath{\psl_{\maxsbs}}} % [frc] Maximum error
+\newcommand{\pslmin}{\ensuremath{\psl_{\minsbs}}} % [frc] Minimum error
+\newcommand{\pslmebs}{\ensuremath{\bar{\psl}ˆ{\abssbs}}} % [frc] Mean absolute error
+\newcommand{\pslmabs}{\ensuremath{\psl_{\maxsbs}ˆ{\abssbs}}} % [frc] Maximum absolute error
+\newcommand{\pslmibs}{\ensuremath{\psl_{\minsbs}ˆ{\abssbs}}} % [frc] Minimum absolute error
 \newcommand{\rnkavg}{\ensuremath{\dmnnbr_{\avgsbs}}} % [nbr] Number of dimensions averaged over
 \newcommand{\rnkbrd}{\ensuremath{\rnk_{\brdsbs}}} % [sbs] Rank of variable to broadcast
 \newcommand{\rnkfnl}{\ensuremath{\rnk_{\mathrm{f}}}} % [sbs] Rank subscript, final
