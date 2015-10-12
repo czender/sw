@@ -4682,6 +4682,14 @@ echo 'export PATH=/usr/local/bin:$PATH' >> ~/.bash_profile
 
 sudo port selfupdate
 sudo port upgrade outdated
+
+# Webserver
+# Ensure port 80 is open
+sudo apachectl start # Start web server
+sudo apachectl stop # Stop web server
+sudo apachectl restart # Restart web server after configuration changes
+
+
 \end{verbatim}
 \begin{verbatim}
 # Begin Fedora installation procedure on roulee.ess.uci.edu 20130607
