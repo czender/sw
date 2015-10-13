@@ -19,7 +19,7 @@
 % URL: http://dust.ess.uci.edu/doc/linux/linux.pdf
 
 % Usage (see also end of file):
-% cd ${HOME}/linux;make linux.pdf;cd -
+% cd ~/sw/linux;make linux.pdf;cd -
 
 \documentclass[12pt,twoside]{article}
 
@@ -3250,7 +3250,7 @@ Apple Macbook Pro Retina Display
 Model A1398
 Received at UCI 20150702
 Apple Serial \#: C02PX49RG8WM
-AppleCare Protection Plan Agreement #: 4306813717
+AppleCare Protection Plan Agreement \#: 4306813717
 15.4 inch MacBook Pro
 1 TB Flash
 2.6 GHz
@@ -3282,7 +3282,7 @@ Apple Macbook Pro Retina Display
 Model A1398
 Received at UCI 20140528
 Apple Serial \#: C02MQ1HGFD59
-AppleCare Protection Plan Agreement #: 6212819251
+AppleCare Protection Plan Agreement \#: 6212819251
 15.4 inch MacBook Pro
 1 TB Flash
 2.6 GHz
@@ -8088,21 +8088,24 @@ Use \cmdidx{aptitude clean} to free space used by Debian package installation.
 
 \csznote{ 
 % Usage: Place usage here at end of file so comment character % not needed
-cd ${HOME}/linux;make linux.txt linux.dvi linux.ps linux.pdf;cd -
+cd ~/sw/linux;make linux.tex;cd -
+cd ~/sw/linux;make linux.pdf;cd -
+#cd ~/sw/linux;make linux.dvi;cd -
+cd ~/sw/linux;make linux.ps;cd -
 
-scp ${HOME}/linux/linux.tex ${HOME}/linux/linux.txt ${DATA}/ps/linux.ps ${DATA}/ps/linux.pdf ${HOME}/linux/linux.dvi dust.ess.uci.edu:/var/www/html/doc/linux
+scp ~/sw/linux/linux.tex ~/sw/linux/linux.txt ${DATA}/ps/linux.ps ${DATA}/ps/linux.pdf ~/sw/linux/linux.dvi dust.ess.uci.edu:Sites/doc/linux
 
 # NB: latex2html chokes on linux.tex
-# latex2html -dir /var/www/html/doc/linux linux.tex
+# latex2html -dir Sites/doc/linux linux.tex
 # NB: tth chokes on linux.tex
-# cd ${HOME}/linux;tth -a -Llinux -p./:${TEXINPUTS}:${BIBINPUTS} < ${HOME}/linux/linux.tex > linux.html
-# scp linux.html dust.ess.uci.edu:/var/www/html/doc/linux
+# cd ~/sw/linux;tth -a -Llinux -p./:${TEXINPUTS}:${BIBINPUTS} < ~/sw/linux/linux.tex > linux.html
+# scp linux.html dust.ess.uci.edu:Sites/doc/linux
 # NB: tex4ht works well on linux.tex
-cd ${HOME}/linux;htlatex linux.tex
-scp linux*.css linux*.html dust.ess.uci.edu:/var/www/html/doc/linux
+cd ~/sw/linux;htlatex linux.tex
+scp linux*.css linux*.html dust.ess.uci.edu:Sites/doc/linux
 # NB: tex4moz works well on linux.tex
-cd ${HOME}/linux;/usr/share/tex4ht/mzlatex linux.tex
-scp linux*.css linux*.html linux*.xml dust.ess.uci.edu:/var/www/html/doc/linux
+cd ~/sw/linux;/usr/share/tex4ht/mzlatex linux.tex
+scp linux*.css linux*.html linux*.xml dust.ess.uci.edu:Sites/doc/linux
 } % end csznote on usage
 
 \end{document}
