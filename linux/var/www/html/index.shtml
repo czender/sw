@@ -7,9 +7,13 @@ http://dust.ess.uci.edu
 file:/var/www/html/index.shtml
 file:/home/zender/linux/var/www/html/index.shtml
 
-diff ~/linux/var/www/html/index.shtml /var/www/html/index.shtml
-sudo cp -p ~/linux/var/www/html/index.shtml /var/www/html/index.shtml
-scp -p ~/linux/var/www/html/index.shtml dust.ess.uci.edu:/var/www/html/index.shtml
+diff ~/sw/linux/var/www/html/index.shtml /var/www/html/index.shtml
+sudo cp -p ~/sw/linux/var/www/html/index.shtml /var/www/html/index.shtml
+scp -p ~/sw/linux/var/www/html/index.shtml dust.ess.uci.edu:/var/www/html/index.shtml
+
+diff ~/sw/linux/var/www/html/index.shtml ~/Sites/index.shtml
+sudo cp -p ~/sw/linux/var/www/html/index.shtml ~/Sites/index.shtml
+scp -p ~/sw/linux/var/www/html/index.shtml dust.ess.uci.edu:Sites/index.shtml
 -->
 
 <!doctype html public "-//W3C//DTD HTML 3.2//EN">
@@ -53,6 +57,7 @@ scp -p ~/linux/var/www/html/index.shtml dust.ess.uci.edu:/var/www/html/index.sht
 <li><a href="http://hp4050.ess.uci.edu">Group Printer HP4050 (Croul 1101)</a></li>
 <li><a href="http://hp4600.ess.uci.edu">Group Printer HP4600 (Croul 3228)</a></li>
 <li><a href="http://hp6840.ess.uci.edu">Group Printer HP6840 (Rowland 240U)</a></li>
+<!-- 
 <li><a href="http://dust.ess.uci.edu/allenr">Group Webspace: Allen, Bob</a></li>
 <li><a href="http://dust.ess.uci.edu/scapps">Group Webspace: Capps, Scott</a></li>
 <li><a href="http://dust.ess.uci.edu/mflanner">Group Webspace: Flanner, Mark</a></li>
@@ -62,6 +67,7 @@ scp -p ~/linux/var/www/html/index.shtml dust.ess.uci.edu:/var/www/html/index.sht
 <li><a href="http://dust.ess.uci.edu/~wangd">Group Webspace: Wang, Daniel</a></li>
 <li><a href="http://dust.ess.uci.edu/wenshanw">Group Webspace: Wang, Wenshan</a></li>
 <li><a href="http://dust.ess.uci.edu/xianweiw">Group Webspace: Wang, Xianwei</a></li>
+-->
 <li><a href="http://nco.sf.net">netCDF Operators (NCO) Homepage</a></li>
 <li><a href="http://dust.ess.uci.edu/20120917">Temporary files</a></li>
 </ul>
@@ -152,6 +158,22 @@ It runs Ubuntu Lucid 10.04.3 LTS.
 the RAID5. 
 The previous <tt>pbs</tt> became <tt>pbs4</tt>, a storage server for
 the BDUC cluster running gluster over RDMA/Infiniband.
+</p>
+
+The <tt>pbs</tt> ran for about four years until failing in about May
+2014. 
+It was a pure Apache2 web server based on a 2U&nbsp;Broadcom retiree
+with dual Opterons and a 1.5&nbsp;TB <tt>mdadm</tt> RAID5. 
+It runs Ubuntu Lucid 10.04.3 LTS. 
+<tt>/home</tt>, currently on a single OS disk, is mirrored nightly to
+the RAID5. 
+The previous <tt>pbs</tt> became <tt>pbs4</tt>, a storage server for
+the BDUC cluster running gluster over RDMA/Infiniband.
+</p>
+
+On October&nbsp;12, 2015, <tt>firn.ess.uci.edu</tt> became <tt>dust</tt>.
+<tt>firn</tt> is a MacBook Pro with 16&nbsp;GB RAM and running, right
+now, OS X 10.11, Mountain Lion.
 </p>
 
 <hr>
