@@ -1472,9 +1472,9 @@ git fetch
 # Reset current branch (master) to origin's master
 git reset --hard origin/master
 \end{verbatim}
-This procedure is often necessary with NCO, because older machines
-automatically generate different .cpp and .hpp files than newer
-machines. 
+This procedure is often necessary with NCO on older machines that
+automatically generate different .cpp and .hpp files from newer
+machines.  
 
 Merging changes in branches to the master
 \begin{verbatim}
@@ -1491,7 +1491,7 @@ git push origin master
 # Above method does not work as intended because devel and master have (some) different files
 # Assume we are working on devel and make changes we want to incorporate into master
 # First, commit the changes to devel (so they are not lost when checking out master)
-git commit -am ``Changes to devel''
+git commit -am "Changes to devel"
 # The follow this recipe
 git fetch
 git checkout master
@@ -1499,7 +1499,7 @@ git pull
 git checkout devel climo_nco.sh climo_ann.sh
 git status
 git diff --cached
-git commit -am ``message''
+git commit -am "message"
 git push origin master
 git checkout devel
 \end{verbatim}
