@@ -370,7 +370,7 @@ case "${PVM_ARCH}" in
 	export X11='/usr/X11R6'
 	case "${HOST}" in 
 	    cooley* | cc* ) export DATA="/projects/HiRes_EarthSys/${USER}" ; ;; # endif ALCF
-	    edison* | hopper* ) export DATA="${HOME}/data" ; ;; # endif NERSC
+	    edison* | hopper* | nid* ) export DATA="${HOME}/data" ; ;; # endif NERSC
 	    gplogin* ) export DATA="/data/${USER}" ; ;; # endif EMT64 Rocks Cluster
 	    hpc* ) export DATA="/data/users/${USER}" ; ;; # endif hpc
 	    mirage* ) export DATA="/glade/scratch/${USER}" ; ;; # endif mirage
@@ -858,7 +858,7 @@ fi # endif hostname
 # System-specific environments
 case "${HOST}" in
     cooley* | cc* ) export PROJID='HiRes_EarthSys' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
-    edison* | hopper* ) export PROJID='HiRes_EarthSys' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
+    edison* | hopper* | nid* ) export PROJID='acme' ; export DATA="${HOME}/data" ; ;;
     rhea* ) export PROJID='cli115' ; export MY_MEMBERWORK="${MEMBERWORK}/${PROJID}" ; export MY_PROJWORK="${PROJWORK}/${PROJID}/${USER}" ; export MY_WORLDWORK="${WORLDWORK}/${PROJID}/${USER}" ; export DATA="${MY_PROJWORK}" ; ;;
 esac # endcase ${HOST}
 

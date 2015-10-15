@@ -1491,14 +1491,15 @@ git push origin master
 # Above method does not work as intended because devel and master have (some) different files
 # Assume we are working on devel and make changes we want to incorporate into master
 # First, commit the changes to devel (so they are not lost when checking out master)
+cd ~/PreAndPostProcessingScripts/generate_climatologies
 git commit -am "Changes to devel"
 # The follow this recipe
 git fetch
 git checkout master
 git pull
 git checkout devel climo_nco.sh climo_ann.sh
-git status
-git diff --cached
+#git status
+#git diff --cached
 git commit -am "message"
 git push origin master
 git checkout devel
