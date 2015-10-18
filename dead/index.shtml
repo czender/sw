@@ -6,8 +6,8 @@ Usage:
 http://dust.ess.uci.edu/dead
 file:/home/zender/dead/index.shtml
 
-cp -f ~/dead/index.shtml /var/www/html/dead/index.shtml
-scp -p ~/dead/index.shtml dust.ess.uci.edu:/var/www/html/dead/index.shtml
+cp -f ~/sw/dead/index.shtml ~/Sites/dead/index.shtml
+scp -p ~/sw/dead/index.shtml dust.ess.uci.edu:Sites/dead/index.shtml
 -->
 
 <table width="100%"><tr><td align="left" valign="top">/
