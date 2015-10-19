@@ -19,7 +19,7 @@
 % URL: http://dust.ess.uci.edu/facts/aer/aer.pdf
 
 % Usage (see also end of file):
-% cd ~/crr;make -W aer.tex aer.pdf;cd -
+% cd ~/sw/crr;make -W aer.tex aer.pdf;cd -
 
 \documentclass[12pt,twoside]{book}
 
@@ -179,7 +179,7 @@ Irvine, CA~~92697-3100 \hfill Fax: (949)\thinspace 824-3256
 
 \begin{figure*}[b]
 \centering
-\includegraphics[width=\hsize]{/data/zender/fgr/aer/esh_fgr_cpy}\vfill
+\includegraphics[width=\hsize]{/Users/zender/data/fgr/aer/esh_fgr_cpy}\vfill
 \caption[Mineral Dust Lifecycle]{
 Mineral dust lifecycle. 
 Illustration by Robynn Zender.
@@ -5611,7 +5611,7 @@ as a function of aerosol size and surface roughness length.
 % Compare to SeP97 p. 970 Figure 19.3, p. 971 Figure 19.4
 % Seh84 p. 553 Figure 12.3, Seh80 p. 999 Figure 5
 % Figure created by mie.pro:scv_gph()
-\includegraphics[width=0.8\hsize]{/data/zender/fgr/aer/vlc_dps_aer}\vfill
+\includegraphics[width=0.8\hsize]{/Users/zender/data/fgr/aer/vlc_dps_aer}\vfill
 \end{center}
 \caption[Dry Deposition Velocity]{
 Dry deposition velocity $\vlcdps$ (\cmxs) as a function of aerosol
@@ -6484,7 +6484,7 @@ and an aerosol population.
 \begin{center}
 % Compare to DaH76 p. 46 Fgr 1, SeP97 p. 1020 Fgr 20.10
 % Figure created by mie.pro:psd_bch()
-\includegraphics[width=0.8\hsize]{/data/zender/fgr/aer/psd_cll_fsh}\vfill
+\includegraphics[width=0.8\hsize]{/Users/zender/data/fgr/aer/psd_cll_fsh}\vfill
 \end{center}
 \caption[Collision Efficiency]{
 Collision efficiency $\cllfsh$ as a function of aerosol size
@@ -6809,7 +6809,7 @@ $\flxvlmpcp = 1.0$\,\mmxhr.
 \begin{figure*}
 \begin{center}
 % Figure created by mie.pro:psd_bch()
-\includegraphics[width=0.8\hsize]{/data/zender/fgr/aer/psd_scv_cff}\vfill
+\includegraphics[width=0.8\hsize]{/Users/zender/data/fgr/aer/psd_scv_cff}\vfill
 \end{center}
 \caption[Scavenging coefficient]{
 Scavenging coefficient $\scvcff$\,\xs\ as a function of aerosol size  
@@ -7039,7 +7039,7 @@ and $\dmtpcpnma = 400$\,\um, $\gsdpcp = 1.86$, respectively
 \begin{center}
 % Figure created by mie.pro:scv_gph
 % cp -f ${DATA}/ps/scv_gph.eps ${DATA}/fgr/aer
-\includegraphics[width=0.8\hsize]{/data/zender/fgr/aer/scv_gph}\vfill
+\includegraphics[width=0.8\hsize]{/Users/zender/data/fgr/aer/scv_gph}\vfill
 \end{center}
 \caption[Scavenging coefficient for polydisperse raindrops]{
 Precipitation-normalized scavenging coefficient 
@@ -14147,25 +14147,25 @@ In Cartesian coordinates, the $\xxx$ component of
 
 \csznote{ 
 % Usage: Place usage here at end of file so comment character % not needed
-cd ~/crr;make -W aer.tex aer.dvi aer.ps aer.pdf aer.txt;cd -
+cd ~/sw/crr;make -W aer.tex aer.dvi aer.ps aer.pdf aer.txt;cd -
 
-# dvips -Ppdf -G0 -o ${DATA}/ps/aer.ps ~/crr/aer.dvi;ps2pdf ${DATA}/ps/aer.ps ${DATA}/ps/aer.pdf
-# cd ~/crr;texcln aer;make aer.pdf;bibtex aer;makeindex aer;make aer.pdf;bibtex aer;makeindex aer;make aer.pdf;cd -
-scp -p ~/crr/aer.tex ~/crr/aer.txt ~/crr/aer.dvi ${DATA}/ps/aer.ps ${DATA}/ps/aer.pdf dust.ess.uci.edu:/var/www/html/facts/aer
+# dvips -Ppdf -G0 -o ${DATA}/ps/aer.ps ~/sw/crr/aer.dvi;ps2pdf ${DATA}/ps/aer.ps ${DATA}/ps/aer.pdf
+# cd ~/sw/crr;texcln aer;make aer.pdf;bibtex aer;makeindex aer;make aer.pdf;bibtex aer;makeindex aer;make aer.pdf;cd -
+scp -p ~/sw/crr/aer.tex ~/sw/crr/aer.txt ~/sw/crr/aer.dvi ${DATA}/ps/aer.ps ${DATA}/ps/aer.pdf dust.ess.uci.edu:Sites/facts/aer
 
 # 20030625: latex2html chokes on math in tables in \csznote{}s
-# cd ~/crr;latex2html -dir /var/www/html/facts/aer aer.tex
-# cd ~/crr;latex2html -nolatex -dir /var/www/html/facts/aer aer.tex
+# cd ~/sw/crr;latex2html -dir Sites/facts/aer aer.tex
+# cd ~/sw/crr;latex2html -nolatex -dir Sites/facts/aer aer.tex
 # NB: tth works well on aer.tex
-# cd ~/crr;tth -a -Laer -p./:${TEXINPUTS}:${BIBINPUTS} < aer.tex > aer.html
-# scp aer.html dust.ess.uci.edu:/var/www/html/facts/aer
+# cd ~/sw/crr;tth -a -Laer -p./:${TEXINPUTS}:${BIBINPUTS} < aer.tex > aer.html
+# scp aer.html dust.ess.uci.edu:Sites/facts/aer
 # NB: tex4ht works poorly on aer.tex
-# cd ~/crr;htlatex aer.tex # Works OK, index not linked
-cd ~/crr;htlatex aer.tex;makeindex -o aer.ind aer.4dx
-cd ~/crr;scp aer*.css aer*.html dust.ess.uci.edu:/var/www/html/facts/aer
+# cd ~/sw/crr;htlatex aer.tex # Works OK, index not linked
+cd ~/sw/crr;htlatex aer.tex;makeindex -o aer.ind aer.4dx
+cd ~/sw/crr;scp aer*.css aer*.html dust.ess.uci.edu:Sites/facts/aer
 # NB: tex4moz works poorly on aer.tex
-cd ~/crr;/usr/share/tex4ht/mzlatex aer.tex
-cd ~/crr;scp aer*.css aer*.html aer*.xml dust.ess.uci.edu:/var/www/html/facts/aer
+cd ~/sw/crr;/usr/share/tex4ht/mzlatex aer.tex
+cd ~/sw/crr;scp aer*.css aer*.html aer*.xml dust.ess.uci.edu:Sites/facts/aer
 } % end csznote on usage
 
 \end{document}

@@ -7,8 +7,8 @@
 # See http://www.gnu.org/copyleft/gpl.html for full license text
 
 # Quickie test copies:
-# scp ~/f/Makefile givre.ess.uci.edu:f/Makefile	
-# scp ~/f/Makefile greenplanet.ps.uci.edu:f/Makefile	
+# scp ~/sw/f/Makefile givre.ess.uci.edu:f/Makefile	
+# scp ~/sw/f/Makefile greenplanet.ps.uci.edu:f/Makefile	
 
 # Usage:
 # make
@@ -1098,8 +1098,8 @@ dpn_cln :
 http : dst
 dst : sng
 	tar cvzf /tmp/sng.tar.gz sng.F90 sng_mdl.F90 dbg_mdl.F90 sng-README.txt index.shtml VERSION
-	scp -p ${HOME}/f/VERSION ${HOME}/f/index.shtml ${HOME}/f/sng-README.txt /tmp/sng.tar.gz dust.ess.uci.edu:/var/www/html/f
-	-ssh dust.ess.uci.edu "cd /var/www/html/f;ls -l"
+	scp -p ${HOME}/sw/f/VERSION ${HOME}/sw/f/index.shtml ${HOME}/sw/f/sng-README.txt /tmp/sng.tar.gz dust.ess.uci.edu:Sites/f
+	-ssh dust.ess.uci.edu "cd Sites/f;ls -l"
 http_cln :
 	rm -f ${MDL_HTTP}
 # Targets in inc

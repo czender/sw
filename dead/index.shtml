@@ -108,6 +108,8 @@ heterogeneous chemistry.
 <dt><a name="News"></a></dt>
 <h2>DEAD News</h2>
 <ul>
+<li>20150703: Ported to MacOSX MacPorts gfortran</li>
+<li>20121102: Incorporated netCDF4 options</li>
 <li>20090806: DEAD version 1.5.0 released</li>
 <li>20060524: DEAD version 1.4.3 released</li>
 <li>20050825: Saltation-sandblasting module <a href="#sltsbl"><tt>sltsbl</tt></a> version 1.0 posted on website</li>

@@ -19,26 +19,26 @@
 % URL: http://dust.ess.uci.edu/facts/rt/rt.pdf
 
 % Usage: 
-% dvips -Ppdf -G0 -o ${DATA}/ps/rt.ps ~/crr/rt.dvi;ps2pdf ${DATA}/ps/rt.ps ${DATA}/ps/rt.pdf
-% cd ~/crr;make rt.pdf;cd -
-% cd ~/crr;make rt.dvi rt.pdf rt.ps rt.txt;cd -
-% cd ~/crr;texcln rt;make rt.pdf;bibtex rt;makeindex rt;make rt.pdf;bibtex rt;makeindex rt;make rt.pdf;cd -
-% scp -p ${HOME}/crr/rt.tex ${HOME}/crr/rt.txt ${HOME}/crr/rt.dvi ${DATA}/ps/rt.ps ${DATA}/ps/rt.pdf dust.ess.uci.edu:/var/www/html/facts/rt
+% dvips -Ppdf -G0 -o ${DATA}/ps/rt.ps ~/sw/crr/rt.dvi;ps2pdf ${DATA}/ps/rt.ps ${DATA}/ps/rt.pdf
+% cd ~/sw/crr;make rt.pdf;cd -
+% cd ~/sw/crr;make rt.dvi rt.pdf rt.ps rt.txt;cd -
+% cd ~/sw/crr;texcln rt;make rt.pdf;bibtex rt;makeindex rt;make rt.pdf;bibtex rt;makeindex rt;make rt.pdf;cd -
+% scp -p ${HOME}/crr/rt.tex ${HOME}/crr/rt.txt ${HOME}/crr/rt.dvi ${DATA}/ps/rt.ps ${DATA}/ps/rt.pdf dust.ess.uci.edu:Sites/facts/rt
 
 % # NB: latex2html works poorly on rt.tex
 % 20010615: latex2html no longer works on rt.tex
 % 20030625: latex2html chokes on math in tables in \csznote{}s
 % 20050514: latex2html chokes on math in footnotes in tables
-% cd ~/crr;latex2html -dir /var/www/html/facts/rt rt.tex
+% cd ~/sw/crr;latex2html -dir Sites/facts/rt rt.tex
 % # NB: tth works well on rt.tex
 % cd ${HOME}/crr;tth -a -Lrt -p${TEXINPUTS}:${BIBINPUTS} < rt.tex > rt.html
-% scp rt.html dust.ess.uci.edu:/var/www/html/facts/rt
+% scp rt.html dust.ess.uci.edu:Sites/facts/rt
 % # NB: tex4ht works well on rt.tex
 % cd ${HOME}/crr;htlatex rt.tex
-% cd ${HOME}/crr;scp rt*.css rt*.html dust.ess.uci.edu:/var/www/html/facts/rt
+% cd ${HOME}/crr;scp rt*.css rt*.html dust.ess.uci.edu:Sites/facts/rt
 % # NB: tex4moz works poorly on rt.tex
 % cd ${HOME}/crr;/usr/share/tex4ht/mzlatex rt.tex
-% cd ${HOME}/crr;scp rt*.css rt*.html rt*.xml dust.ess.uci.edu:/var/www/html/facts/rt
+% cd ${HOME}/crr;scp rt*.css rt*.html rt*.xml dust.ess.uci.edu:Sites/facts/rt
 
 % Plausible nomenclatural changes: 
 % Ste94 discriminates between optical depth and optical thickness
@@ -973,9 +973,9 @@ in a clear mid-latitude summer atmosphere, and the absorption
 cross-section and quantum yield of \NOd.
 \begin{figure*}
 \centering
-\includegraphics[width=0.8\hsize]{/data/zender/fgr/rt/j_NO2_act_flx}\vfill
-\includegraphics[width=0.8\hsize]{/data/zender/fgr/rt/j_NO2_abs_xsx}\vfill
-\includegraphics[width=0.8\hsize]{/data/zender/fgr/rt/j_NO2_qnt_yld}\vfill
+\includegraphics[width=0.8\hsize]{/Users/zender/data/fgr/rt/j_NO2_act_flx}\vfill
+\includegraphics[width=0.8\hsize]{/Users/zender/data/fgr/rt/j_NO2_abs_xsx}\vfill
+\includegraphics[width=0.8\hsize]{/Users/zender/data/fgr/rt/j_NO2_qnt_yld}\vfill
 \caption[Cross Section and Quantum Yield of Nitrogen Dioxide]{
 (a)~Spectral distribution of actinic flux $\flxact$\,[\phtxmSsum] at TOA
 and at the surface for a \trmidx{mid-latitude summer} (MLS) atmosphere
@@ -990,8 +990,8 @@ $\prcNOd$\,[\xs] for the conditions shown in
 Figure~(\ref{fgr:j_NO2_spc}). 
 \begin{figure*}
 \centering
-\includegraphics[width=0.8\hsize]{/data/zender/fgr/rt/j_NO2_arese_19951011}\vfill
-\includegraphics[width=0.8\hsize]{/data/zender/fgr/rt/j_NO2_rlt_arese_19951011}\vfill
+\includegraphics[width=0.8\hsize]{/Users/zender/data/fgr/rt/j_NO2_arese_19951011}\vfill
+\includegraphics[width=0.8\hsize]{/Users/zender/data/fgr/rt/j_NO2_rlt_arese_19951011}\vfill
 \caption[Vertical Distribution of Photodissociation Rates]{
 Vertical distribution of $\prcNOd$\,[\xs] (\ref{rxn:NO2+hv_NO+O})
 for the conditions shown in Figure~(\ref{fgr:j_NO2_spc}). 
@@ -11298,9 +11298,9 @@ and absorbed solar radiation observed by the ERBE satellite system
 from 1985--1989.  
 \begin{figure*}
 \centering
-\includegraphics[height=0.3\vsize]{/data/zender/fgr/rt/erbe_b_8589_SOLIN}\vfill
-\includegraphics[height=0.3\vsize]{/data/zender/fgr/rt/erbe_b_8589_FSUT}\vfill
-\includegraphics[height=0.3\vsize]{/data/zender/fgr/rt/erbe_b_8589_FSNT}\vfill
+\includegraphics[height=0.3\vsize]{/Users/zender/data/fgr/rt/erbe_b_8589_SOLIN}\vfill
+\includegraphics[height=0.3\vsize]{/Users/zender/data/fgr/rt/erbe_b_8589_FSUT}\vfill
+\includegraphics[height=0.3\vsize]{/Users/zender/data/fgr/rt/erbe_b_8589_FSNT}\vfill
 \caption[Climatological Mean Absorbed Solar Radiation]{
 Geographic distribution of 1985--1989 climatological mean (a)
 insolation $\FSDT$, (b) reflected shortwave irradiance $\FSUT$, and
@@ -11313,9 +11313,9 @@ emitted by the surface, trapped by the atmosphere, and escaping to
 space as observed by the ERBE satellite system from 1985--1989.  
 \begin{figure*}
 \centering
-\includegraphics[height=0.3\vsize]{/data/zender/fgr/rt/erbe_b_8589_FLUS}\vfill
-\includegraphics[height=0.3\vsize]{/data/zender/fgr/rt/erbe_b_8589_GCLD}\vfill
-\includegraphics[height=0.3\vsize]{/data/zender/fgr/rt/erbe_b_8589_FLNT}\vfill
+\includegraphics[height=0.3\vsize]{/Users/zender/data/fgr/rt/erbe_b_8589_FLUS}\vfill
+\includegraphics[height=0.3\vsize]{/Users/zender/data/fgr/rt/erbe_b_8589_GCLD}\vfill
+\includegraphics[height=0.3\vsize]{/Users/zender/data/fgr/rt/erbe_b_8589_FLNT}\vfill
 \caption[Climatological Mean Emitted Longwave Radiation]{
 Geographic distribution of 1985--1989 climatological mean terrestrial
 radiation (a) emitted by the surface $\FLUS$, (b) trapped by the
@@ -11328,8 +11328,8 @@ Figure~\ref{fgr:ENSO_tpt} shows the temperature and OLR response to ENSO
 in terms of Hovm\"{o}ller diagrams.
 \begin{figure*}
 \centering
-\includegraphics[width=0.5\hsize,height=0.9\vsize]{/data/zender/fgr/rt/sld012d_yavg_10S10N_8589_0160_TS1}%
-\includegraphics[width=0.5\hsize,height=0.9\vsize]{/data/zender/fgr/rt/erbe_b_yavg_10S10N_8589_0160_FLNT}
+\includegraphics[width=0.5\hsize,height=0.9\vsize]{/Users/zender/data/fgr/rt/sld012d_yavg_10S10N_8589_0160_TS1}%
+\includegraphics[width=0.5\hsize,height=0.9\vsize]{/Users/zender/data/fgr/rt/erbe_b_yavg_10S10N_8589_0160_FLNT}
 \caption[ENSO Temperature and OLR]{
 Hovm\"{o}ller diagrams of (a) sea surface temperature [\K] and (b)
 outgoing longwave radiation [\wxmS] over the
@@ -11343,8 +11343,8 @@ Figure~\ref{fgr:SWCF} shows the shortwave cloud forcing ($\SWCF$)
 observed by the ERBE satellite system from 1985--1989.
 \begin{figure*}
 \centering
-\includegraphics[width=0.8\hsize]{/data/zender/fgr/rt/erbe_b_8589_01_SWCF}\vfill
-\includegraphics[width=0.8\hsize]{/data/zender/fgr/rt/erbe_b_8589_07_SWCF}%
+\includegraphics[width=0.8\hsize]{/Users/zender/data/fgr/rt/erbe_b_8589_01_SWCF}\vfill
+\includegraphics[width=0.8\hsize]{/Users/zender/data/fgr/rt/erbe_b_8589_07_SWCF}%
 \caption[Seasonal Shortwave Cloud Forcing]{
 Geographic distribution of shortwave cloud forcing $\SWCF$ [\wxmS] 
 for 1985--1989 from ERBE observations for (a) January and (b) July.
@@ -11355,8 +11355,8 @@ Figure~\ref{fgr:SWCF_x} shows the zonal mean shortwave cloud forcing
 ($\SWCF$) observed by the ERBE satellite system from 1985--1989.
 \begin{figure*}
 \centering
-\includegraphics*[width=0.8\hsize]{/data/zender/fgr/rt/erbe_b_sld012d_8589_01_x_SWCF}\vfill
-\includegraphics*[width=0.8\hsize]{/data/zender/fgr/rt/erbe_b_sld012d_8589_07_x_SWCF}%
+\includegraphics*[width=0.8\hsize]{/Users/zender/data/fgr/rt/erbe_b_sld012d_8589_01_x_SWCF}\vfill
+\includegraphics*[width=0.8\hsize]{/Users/zender/data/fgr/rt/erbe_b_sld012d_8589_07_x_SWCF}%
 \caption[Zonal Mean Shortwave Cloud Forcing]{
 Zonal mean shortwave cloud forcing $\SWCF$ [\wxmS] 
 for 1985--1989 from ERBE observations and from CCM simulations for (a)
@@ -11368,8 +11368,8 @@ Figure~\ref{fgr:LWCF} shows the longwave cloud forcing ($\LWCF$)
 observed by the ERBE satellite system from 1985--1989.
 \begin{figure*}
 \centering
-\includegraphics[width=0.8\hsize]{/data/zender/fgr/rt/erbe_b_8589_01_LWCF}\vfill
-\includegraphics[width=0.8\hsize]{/data/zender/fgr/rt/erbe_b_8589_07_LWCF}%
+\includegraphics[width=0.8\hsize]{/Users/zender/data/fgr/rt/erbe_b_8589_01_LWCF}\vfill
+\includegraphics[width=0.8\hsize]{/Users/zender/data/fgr/rt/erbe_b_8589_07_LWCF}%
 \caption[Seasonal Longwave Cloud Forcing]{
 Geographic distribution of shortwave cloud forcing $\LWCF$ [\wxmS] 
 for 1985--1989 from ERBE observations for (a) January and (b) July.
@@ -11380,8 +11380,8 @@ Figure~\ref{fgr:LWCF_x} shows the zonal mean longwave cloud forcing
 ($\LWCF$) observed by the ERBE satellite system from 1985--1989.
 \begin{figure*}
 \centering
-\includegraphics*[width=0.8\hsize]{/data/zender/fgr/rt/erbe_b_sld012d_8589_01_x_LWCF}\vfill
-\includegraphics*[width=0.8\hsize]{/data/zender/fgr/rt/erbe_b_sld012d_8589_07_x_LWCF}%
+\includegraphics*[width=0.8\hsize]{/Users/zender/data/fgr/rt/erbe_b_sld012d_8589_01_x_LWCF}\vfill
+\includegraphics*[width=0.8\hsize]{/Users/zender/data/fgr/rt/erbe_b_sld012d_8589_07_x_LWCF}%
 \caption[Zonal Mean Longwave Cloud Forcing]{
 Zonal mean shortwave cloud forcing $\LWCF$ [\wxmS] 
 for 1985--1989 from ERBE observations and from CCM simulations for (a)
@@ -11394,9 +11394,9 @@ cloud forcing as observed by the ERBE satellite system from
 1985--1989.   
 \begin{figure*}
 \centering
-\includegraphics[height=0.3\vsize]{/data/zender/fgr/rt/erbe_b_8589_SWCF}\vfill
-\includegraphics[height=0.3\vsize]{/data/zender/fgr/rt/erbe_b_8589_LWCF}\vfill
-\includegraphics[height=0.3\vsize]{/data/zender/fgr/rt/erbe_b_8589_NCF}\vfill
+\includegraphics[height=0.3\vsize]{/Users/zender/data/fgr/rt/erbe_b_8589_SWCF}\vfill
+\includegraphics[height=0.3\vsize]{/Users/zender/data/fgr/rt/erbe_b_8589_LWCF}\vfill
+\includegraphics[height=0.3\vsize]{/Users/zender/data/fgr/rt/erbe_b_8589_NCF}\vfill
 \caption[Climatological Mean Net Cloud Forcing]{
 Geographic distribution of 1985--1989 climatological mean 
 (a) shortwave cloud forcing $\SWCF$, (b) longwave cloud forcing
@@ -11409,8 +11409,8 @@ forcing over the Pacific in terms of Hovm\"{o}ller diagrams of cloud
 forcing. 
 \begin{figure*}
 \centering
-\includegraphics[width=0.5\hsize,height=0.9\vsize]{/data/zender/fgr/rt/erbe_b_yavg_10S10N_8589_0160_LWCF}%
-\includegraphics[width=0.5\hsize,height=0.9\vsize]{/data/zender/fgr/rt/erbe_b_yavg_10S10N_8589_0160_SWCF}
+\includegraphics[width=0.5\hsize,height=0.9\vsize]{/Users/zender/data/fgr/rt/erbe_b_yavg_10S10N_8589_0160_LWCF}%
+\includegraphics[width=0.5\hsize,height=0.9\vsize]{/Users/zender/data/fgr/rt/erbe_b_yavg_10S10N_8589_0160_SWCF}
 \caption[ENSO Cloud Forcing]{
 Hovm\"{o}ller diagrams of cloud forcing [\wxmS] in the 
 Equatorial Pacific (averaged 10\,\dgrs--10\,\dgrn).

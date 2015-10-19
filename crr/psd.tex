@@ -19,7 +19,7 @@
 % URL: http://dust.ess.uci.edu/facts/psd/psd.pdf
 
 % Usage (see also end of file):
-% cd ~/crr;make -W psd.tex psd.pdf;cd -
+% cd ~/sw/crr;make -W psd.tex psd.pdf;cd -
 
 \documentclass[12pt,twoside]{article}
 
@@ -2595,24 +2595,24 @@ position & \wxmS \\[0.5ex]
 
 \csznote{ 
 % Usage: Place usage here at end of file so comment character % not needed
-cd ~/crr;make -W psd.tex psd.dvi psd.ps psd.pdf psd.txt;cd -
+cd ~/sw/crr;make -W psd.tex psd.dvi psd.ps psd.pdf psd.txt;cd -
 
-# dvips -Ppdf -G0 -o ${DATA}/ps/psd.ps ~/crr/psd.dvi;ps2pdf ${DATA}/ps/psd.ps ${DATA}/ps/psd.pdf
-# cd ~/crr;texcln psd;make psd.pdf;bibtex psd;makeindex psd;make psd.pdf;bibtex psd;makeindex psd;make psd.pdf;cd -
-scp -p ~/crr/psd.tex ~/crr/psd.txt ~/crr/psd.dvi ${DATA}/ps/psd.ps ${DATA}/ps/psd.pdf dust.ess.uci.edu:/var/www/html/facts/psd
+# dvips -Ppdf -G0 -o ${DATA}/ps/psd.ps ~/sw/crr/psd.dvi;ps2pdf ${DATA}/ps/psd.ps ${DATA}/ps/psd.pdf
+# cd ~/sw/crr;texcln psd;make psd.pdf;bibtex psd;makeindex psd;make psd.pdf;bibtex psd;makeindex psd;make psd.pdf;cd -
+scp -p ~/sw/crr/psd.tex ~/sw/crr/psd.txt ~/sw/crr/psd.dvi ${DATA}/ps/psd.ps ${DATA}/ps/psd.pdf dust.ess.uci.edu:Sites/facts/psd
 
 # NB: latex2html works well on psd.tex
-# cd ~/crr;latex2html -dir /var/www/html/facts/psd psd.tex
+# cd ~/sw/crr;latex2html -dir Sites/facts/psd psd.tex
 # NB: tth works poorly on psd.tex
-# cd ~/crr;tth -a -Lpsd -p./:${TEXINPUTS}:${BIBINPUTS} < psd.tex > psd.html
-# scp psd.html dust.ess.uci.edu:/var/www/html/facts/psd
+# cd ~/sw/crr;tth -a -Lpsd -p./:${TEXINPUTS}:${BIBINPUTS} < psd.tex > psd.html
+# scp psd.html dust.ess.uci.edu:Sites/facts/psd
 # NB: tex4ht works well on psd.tex
-# cd ~/crr;htlatex psd.tex # Works OK, index not linked
-cd ~/crr;htlatex psd.tex;makeindex -o psd.ind psd.4dx
-cd ~/crr;scp psd*.css psd*.html dust.ess.uci.edu:/var/www/html/facts/psd
+# cd ~/sw/crr;htlatex psd.tex # Works OK, index not linked
+cd ~/sw/crr;htlatex psd.tex;makeindex -o psd.ind psd.4dx
+cd ~/sw/crr;scp psd*.css psd*.html dust.ess.uci.edu:Sites/facts/psd
 # NB: tex4moz works poorly on psd.tex
-cd ~/crr;/usr/share/tex4ht/mzlatex psd.tex
-cd ~/crr;scp psd*.css psd*.html psd*.xml dust.ess.uci.edu:/var/www/html/facts/psd
+cd ~/sw/crr;/usr/share/tex4ht/mzlatex psd.tex
+cd ~/sw/crr;scp psd*.css psd*.html psd*.xml dust.ess.uci.edu:Sites/facts/psd
 } % end csznote on usage
 
 \end{document}

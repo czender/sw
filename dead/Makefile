@@ -20,10 +20,10 @@
 # cd ~/dead;CURL_LIB='/contrib/curl/7.21.2/lib' HDF5_ROOT='/contrib/hdf5-1.8.6_seq' NETCDF_ROOT='/contrib/netcdf-4.1.2_seq' SZ_LIB='/contrib/szip/lib' make NETCDF4=Y SZ=Y all;cd -
 
 # Copy Makefile to test machines:
-# scp ~/dead/Makefile esmf.ess.uci.edu:dead
-# scp ~/dead/Makefile goldhill.cgd.ucar.edu:dead
+# scp ~/sw/dead/Makefile esmf.ess.uci.edu:dead
+# scp ~/sw/dead/Makefile goldhill.cgd.ucar.edu:dead
 # Copy to on-line box model web directory
-# sudo scp ${MY_BIN_DIR}/dead /var/www/html/dead/dead
+# sudo scp ${MY_BIN_DIR}/dead Sites/dead/dead
 
 # Known problems: 
 
@@ -37,7 +37,7 @@ MY_BLD_DIR := .
 MY_DAT_DIR := .
 MY_DOC_DIR := .
 MY_DPN_DIR := ${MY_OBJ_DIR}
-MY_HTTP_DIR := /var/www/html/dead
+MY_HTTP_DIR := Sites/dead
 MY_INC_DIR := .
 MY_SRC_DIR := .
 ifndef MY_BIN_DIR
@@ -1069,8 +1069,8 @@ DST_MFL := ChangeLog FAQ index.shtml INSTALL MANIFEST Makefile README TODO VERSI
 DOT_H_FL := dst.h misc.h params.h preproc.h # Distribution .h files
 dst : ${DST_MFL} ${SRC_LST}
 	tar cvzf ${DATA}/tmp/dead-${VERSION}.tar.gz ${DST_MFL} ${DOT_H_FL} ${SRC_LST}
-	scp -p ${DST_MFL} ${HOME}/c/makdep.c ${DATA}/tmp/dead-${VERSION}.tar.gz dust.ess.uci.edu:/var/www/html/dead
-	-ssh dust.ess.uci.edu "cd /var/www/html/dead;ln -s -f dead-${VERSION}.tar.gz dead.tar.gz"
+	scp -p ${DST_MFL} ${HOME}/sw/c/makdep.c ${DATA}/tmp/dead-${VERSION}.tar.gz dust.ess.uci.edu:Sites/dead
+	-ssh dust.ess.uci.edu "cd Sites/dead;ln -s -f dead-${VERSION}.tar.gz dead.tar.gz"
 patch : pch
 pch : 
 	-mkdir -p ${MY_SRC_DIR}/glue/match/readers;cp -f ${HOME}/match_dst/readers/mss.c ${MY_SRC_DIR}/glue/match/readers

@@ -19,22 +19,23 @@
 % URL: http://dust.ess.uci.edu/dead/dead.pdf
 
 % Usage: 
-% dvips -Ppdf -G0 -o ${DATA}/ps/dead.ps ~/crr/dead.dvi;ps2pdf ${DATA}/ps/dead.ps ${DATA}/ps/dead.pdf
-% cd ~/crr;make -W dead.tex dead.txt dead.dvi dead.ps dead.pdf;cd -
-% cd ~/crr;texcln dead;make dead.pdf;bibtex dead;makeindex dead;make dead.pdf;bibtex dead;makeindex dead;make dead.pdf;cd -
-% scp -p ${HOME}/crr/dead.tex ${HOME}/crr/dead.txt ${DATA}/ps/dead.ps ${DATA}/ps/dead.pdf ${HOME}/crr/dead.dvi dust.ess.uci.edu:/var/www/html/dead
+% dvips -Ppdf -G0 -o ${DATA}/ps/dead.ps ~/sw/crr/dead.dvi;ps2pdf ${DATA}/ps/dead.ps ${DATA}/ps/dead.pdf
+% cd ~/sw/crr;make dead.pdf;cd -
+% cd ~/sw/crr;make -W dead.tex dead.txt dead.dvi dead.ps dead.pdf;cd -
+% cd ~/sw/crr;texcln dead;make dead.pdf;bibtex dead;makeindex dead;make dead.pdf;bibtex dead;makeindex dead;make dead.pdf;cd -
+% scp -p ${HOME}/crr/dead.tex ${HOME}/crr/dead.txt ${DATA}/ps/dead.ps ${DATA}/ps/dead.pdf ${HOME}/crr/dead.dvi dust.ess.uci.edu:Sites/dead
 
 % # NB: latex2html works well on dead.tex
-% latex2html -dir /var/www/html/dead dead.tex
+% latex2html -dir Sites/dead dead.tex
 % # NB: tth chokes on dead.tex
 % cd ${HOME}/crr;tth -a -Ldead -p./:${TEXINPUTS}:${BIBINPUTS} < ${HOME}/crr/dead.tex > dead.html
-% scp dead.html dust.ess.uci.edu:/var/www/html/dead
+% scp dead.html dust.ess.uci.edu:Sites/dead
 % # NB: tex4ht works well on dead.tex
 % cd ${HOME}/crr;htlatex dead.tex
-% scp dead*.css dead*.html dust.ess.uci.edu:/var/www/html/dead
+% scp dead*.css dead*.html dust.ess.uci.edu:Sites/dead
 % # NB: tex4moz works well on dead.tex
 % cd ${HOME}/crr;/usr/share/tex4ht/mzlatex dead.tex
-% scp dead*.css dead*.html dead*.xml dust.ess.uci.edu:/var/www/html/dead
+% scp dead*.css dead*.html dead*.xml dust.ess.uci.edu:Sites/dead
 
 \documentclass[12pt,twoside]{article}
 
@@ -50,6 +51,7 @@
 \fi % !PDFLaTeX
 \usepackage{amsmath} % \subequations, \eqref, \align
 \usepackage{array} % Table and array extensions, e.g., column formatting
+\usepackage{etoolbox} % \newbool, \setbool, \ifxxx
 \usepackage{longtable} % Multi-page tables, e.g., acronyms and symbols
 \usepackage{lscape} % Landscape environment
 \usepackage{makeidx} % Index keyword processor: \printindex and \see

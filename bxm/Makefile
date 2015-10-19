@@ -3,16 +3,16 @@
 # Purpose: Makefile for web box model files module bxm
 
 # Usage:
-# cd ~/bxm;sudo make bxm;cd - # Install box model scripts on web server
-# cd ~/bxm;sudo make bxm_dead;cd - # Install current private executable on web server
+# cd ~/sw/bxm;sudo make bxm;cd - # Install box model scripts on web server
+# cd ~/sw/bxm;sudo make bxm_dead;cd - # Install current private executable on web server
 
 # System files are installed here
 MDL_NM := bxm
 
-MY_BXM_DIR := ${HOME}/${MDL_NM}
+MY_BXM_DIR := ${HOME}/sw/${MDL_NM}
 MY_DOC_DIR := .
 MY_FTP_DIR := /var/ftp/pub/zender
-MY_HTTP_DIR := /var/www/html/dead
+MY_HTTP_DIR := Sites/dead
 MY_HTTP_MCH := dust.ess.uci.edu
 MY_TMP_DIR := /tmp/${MDL_NM}
 ifndef VERSION
