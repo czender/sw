@@ -5,37 +5,37 @@ Purpose: LaTeX source homepage
 Usage:
 http://dust.ess.uci.edu/doc/tex/index.shtml
 file:/home/zender/tex/index.shtml
-scp ~/tex/index.shtml dust.ess.uci.edu:/var/www/html/doc/tex/index.shtml
+scp ~/sw/tex/index.shtml dust.ess.uci.edu:Sites/doc/tex/index.shtml
 
 Update LaTeX sources and bibliography:
-cd ~/tex;scp -p \
+cd ~/sw/tex;scp -p \
 bib.bib \
 csz.sty \
 jas_abb.tex \
 jgr_abb.tex \
 jrn_agu.sty \
 jrn_ams.sty \
-dust.ess.uci.edu:/var/www/html/doc/tex
+dust.ess.uci.edu:Sites/doc/tex
 
-cd ~/mk;scp -p \
+cd ~/sw/mk;scp -p \
 Makefile.tex \
-dust.ess.uci.edu:/var/www/html/doc/tex
+dust.ess.uci.edu:Sites/doc/tex
 
-cd ~/poetry;scp -p \
+cd ~/prv/poetry;scp -p \
 poetry.sty \
-dust.ess.uci.edu:/var/www/html/doc/tex
+dust.ess.uci.edu:Sites/doc/tex
 
-cd ~/tex/cls;scp -p \
+cd ~/sw/tex/cls;scp -p \
 dchem.sty \
-dust.ess.uci.edu:/var/www/html/doc/tex
+dust.ess.uci.edu:Sites/doc/tex
 
-cd ~/tex/bst;scp -p \
+cd ~/sw/tex/bst;scp -p \
 agu.bst \
 agu04.bst \
 jas.bst \
-dust.ess.uci.edu:/var/www/html/doc/tex
+dust.ess.uci.edu:Sites/doc/tex
 
-cd ~/crr;scp -p \
+cd ~/sw/crr;scp -p \
 abc.sty \
 aer.sty \
 chm.sty \
@@ -49,7 +49,7 @@ rt.sty \
 smn.sty \
 snw.sty \
 tdy.sty \
-dust.ess.uci.edu:/var/www/html/doc/tex
+dust.ess.uci.edu:Sites/doc/tex
 -->
 
 <!doctype html public "-//W3C//DTD HTML 3.2//EN">

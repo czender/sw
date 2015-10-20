@@ -295,13 +295,44 @@ AllowOverride All
 DirectoryIndex index.shtml index.html index.php
 </IfModule>
 
-<Directory "/Users/zender/Sites/tmp">
+# csz add each directory where users can get listing
+<Directory "/Users/zender/Sites/crm">
+    Options Indexes
+</Directory>
+<Directory "/Users/zender/Sites/dead">
+    Options Indexes
+</Directory>
+<Directory "/Users/zender/Sites/doc">
     Options Indexes
 </Directory>
 <Directory "/Users/zender/Sites/essgcm14">
     Options Indexes
 </Directory>
 <Directory "/Users/zender/Sites/essgcm15">
+    Options Indexes
+</Directory>
+<Directory "/Users/zender/Sites/f">
+    Options Indexes
+</Directory>
+<Directory "/Users/zender/Sites/facts">
+    Options Indexes
+</Directory>
+<Directory "/Users/zender/Sites/job">
+    Options Indexes
+</Directory>
+<Directory "/Users/zender/Sites/poetry">
+    Options Indexes
+</Directory>
+<Directory "/Users/zender/Sites/tmp">
+    Options Indexes
+</Directory>
+<Directory "/Users/zender/Sites/ppr">
+    Options Indexes
+</Directory>
+<Directory "/Users/zender/Sites/prp">
+    Options Indexes
+</Directory>
+<Directory "/Users/zender/Sites/smn">
     Options Indexes
 </Directory>
 
