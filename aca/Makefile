@@ -3,26 +3,26 @@
 # Purpose: Makefile for radiation codes
 
 # Copyright (C) 1994--2014 Charlie Zender
-# License: GNU General Public License (GPL) Version 3
+# You may copy, distribute, and/or modify this software under the terms of the GNU General Public License (GPL) Version 3
 # See http://www.gnu.org/copyleft/gpl.html for full license text
 
 # Quickie test copies:
-# scp ~/aca/Makefile givre.ess.uci.edu:aca/Makefile	
-# scp ~/aca/Makefile greenplanet.ps.uci.edu:aca/Makefile	
+# scp ~/sw/aca/Makefile givre.ess.uci.edu:aca/Makefile	
+# scp ~/sw/aca/Makefile greenplanet.ps.uci.edu:aca/Makefile	
 
 # Compilation:
 # swnb2 is intimately linked to the fortran library libcsz_f90
 # These two pieces must be compiled with the same intrinsic precisions
 # Debugging compilation:
-# cd ${HOME}/f  ;make cln;make OMP=N OPTS=X PRC=D
-# cd ${HOME}/aca;make cln;make OMP=N OPTS=X PRC=D
+# cd ~/sw/f  ;make cln;make OMP=N OPTS=X PRC=D
+# cd ~/sw/aca;make cln;make OMP=N OPTS=X PRC=D
 # Production compilation:
-# cd ${HOME}/f  ;make cln;make OMP=N OPTS=O PRC=D
-# cd ${HOME}/aca;make cln;make OMP=N OPTS=O PRC=D
-# cd ${HOME}/f  ;make cln;make OMP=N OPTS=D MPI=Y PRC=D # greenplanet NB: Intel MPI IPO does not work with -ipo option set by ICC_RCH_ARGS when OPTS=O
-# cd ${HOME}/aca;make cln;make OMP=N OPTS=D MPI=Y PRC=D # greenplanet NB: Intel MPI IPO does not work with -ipo option set by ICC_RCH_ARGS when OPTS=O
-# cd ${HOME}/f  ;make cln;make OPTS=D MPI=Y OMP=N PRC=D # NB: Intel MPI IPO does not work with -ipo option set by ICC_RCH_ARGS when OPTS=O
-# cd ${HOME}/aca;make cln;make OPTS=D MPI=Y OMP=N PRC=D # NB: Intel MPI IPO does not work with -ipo option set by ICC_RCH_ARGS when OPTS=O
+# cd ~/sw/f  ;make cln;make OMP=N OPTS=O PRC=D
+# cd ~/sw/aca;make cln;make OMP=N OPTS=O PRC=D
+# cd ~/sw/f  ;make cln;make OMP=N OPTS=D MPI=Y PRC=D # greenplanet NB: Intel MPI IPO does not work with -ipo option set by ICC_RCH_ARGS when OPTS=O
+# cd ~/sw/aca;make cln;make OMP=N OPTS=D MPI=Y PRC=D # greenplanet NB: Intel MPI IPO does not work with -ipo option set by ICC_RCH_ARGS when OPTS=O
+# cd ~/sw/f  ;make cln;make OPTS=D MPI=Y OMP=N PRC=D # NB: Intel MPI IPO does not work with -ipo option set by ICC_RCH_ARGS when OPTS=O
+# cd ~/sw/aca;make cln;make OPTS=D MPI=Y OMP=N PRC=D # NB: Intel MPI IPO does not work with -ipo option set by ICC_RCH_ARGS when OPTS=O
 
 include ${HOME}/mk/Makefile.tex
 
@@ -104,6 +104,10 @@ ifndef STC
 # Created statically linked executable
  STC := N
 endif
+ifndef SZ
+# Link to Szip library
+ SZ := N
+endif
 ifndef UNAMES
  UNAMES := $(shell uname -s)
 endif
@@ -114,9 +118,10 @@ endif # endif USR_TKN
 ifeq (${NETCDF4},Y)
  CPPFLAGS += -DENABLE_NETCDF4
  USR_TKN += -DENABLE_NETCDF4
-endif
-# endif NETCDF4
+endif # endif NETCDF4
 
+# Derived-tokens based on primary tokens
+# These tokens should not be altered by hand
 ifeq (${PRC},D)
  USR_TKN := -DPRC_DBL ${USR_TKN}
 else
@@ -132,7 +137,7 @@ CPP_TKN = ${USR_TKN} -D${PVM_ARCH} -DHOSTNAME='${HOST}' -DUSER='${USER}'
 
 # Default build. DAP, NETCDF4, and PNETCDF clauses may overwrite this
 NC_LDFLAGS := -L${NETCDF_LIB}
-NC_LIBS := -lnetcdf 
+NC_LIBS := -lnetcdf -lcurl
 
 ifeq (${NETCDF4},Y)
 # Enable netCDF4 functionality
@@ -145,14 +150,25 @@ endif
 ifndef HDF5_LIB
  HDF5_LIB := ${HDF5_ROOT}/lib # Directory containing libhdf5.a
 endif
+# fxm: Temporary kludge: Machines with MPI_ROOT set are assumed to have parallel filesystems for NCO builds
+ifdef MPI_ROOT
+ HDF5_INC += -I${MPI_ROOT}/include # Directory containing mpi.h
+ HDF5_LIB += ${MPI_ROOT}/lib64 # Directory containing libmpi.a
+endif # !MPI_ROOT
  NETCDF_INC := ${NETCDF4_ROOT}/include $(shell nc-config --fflags)
  NETCDF_LIB := ${NETCDF4_ROOT}/lib
- NC_LDFLAGS := -L${NETCDF_LIB} -L${HDF5_LIB}
+ NC_LDFLAGS := -L${NETCDF_LIB} $(addprefix -L,${HDF5_LIB})
 # NC_LIBS := -lnetcdf -lhdf5_hl -lhdf5 -lz -lcurl
  NC_LIBS := $(shell nc-config --flibs)
+ifdef MPI_ROOT
+ NC_LIBS += -lmpi
+endif # !MPI_ROOT
+ifdef CURL_LIB
+ NC_LDFLAGS += -L${CURL_LIB}
+endif # end 
 ifeq (${SZ},Y)
 ifndef SZ_LIB
- SZ_LIB := /sopt/lib # Directory containing libsz.a
+ SZ_LIB := /usr/lib # Directory containing libsz.a
 endif
  NC_LDFLAGS += -L${SZ_LIB}
  NC_LIBS += -lsz
@@ -169,7 +185,8 @@ endif # endif NETCDFF
 
 # Derived-tokens based on primary tokens
 # These tokens should not be altered by hand
-ifneq (${null},$(findstring LINUX,${PVM_ARCH}))
+# Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, FREEBSD, MACOSX, and WIN32
+ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSDMACOSXWIN32))
 # Decide among the plethora of Linux compilers
 ifndef LINUX_CXX
 # C++ compiler for Linux
@@ -192,7 +209,8 @@ endif # endif LINUX_CC
 ifndef LINUX_FC
 # Fortran compiler for Linux
  #LINUX_FC := g95
- LINUX_FC := gfortran -std=f95
+ LINUX_FC := gfortran
+ #LINUX_FC := gfortran -std=f95
  #LINUX_FC := lf95
  #LINUX_FC := ifort
  #LINUX_FC := pathf95
@@ -209,7 +227,7 @@ newline := \n
 # Source file names with directories removed
 MDL_SRC := H2OH2O.F90 NO2.F90 O2X.F90 O3.F90 clm.F90 htrn2nb.F machine.F mie2nc.F nbm.F swnb2.F90 bdref.f d1mach.f disort.f disort2.f linpak.f r1mach.f rdhtrn.f
 # Directories to search for source files
-MDL_PTH := . ${HOME}/include ${HOME}/f
+MDL_PTH := . ${HOME}/include ${HOME}/sw/f
 # Dependency list for executable
 MDL_OBJ := $(addprefix ${MY_OBJ_DIR}/,$(addsuffix .o, $(basename ${MDL_SRC}))) 
 # Dependency (make) file for each object file
@@ -222,7 +240,7 @@ CPP_PTH := $(foreach dir,${MDL_PTH},-I${dir})
 # Variables having to do with binary executables created by module
 MDL_BIN_TRG := swnb2 htrn2nb O3 NO2 H2OH2O O2X clm # Binary targets
 MDL_BIN_SYM_LNK := # Symbolic links
-MDL_BIN_STB := ${MDL_BIN_TRG} ${MDL_BIN_SYM_LNK} # All C++ files in MY_BIN_DIR
+MDL_BIN_STB := ${MDL_BIN_TRG} ${MDL_BIN_SYM_LNK} # All executables in MY_BIN_DIR
 MDL_BIN := $(addprefix ${MY_BIN_DIR}/,${MDL_BIN_STB}) # dst_cln removes these files
 
 # Variables having to do with header files created by module
@@ -261,7 +279,7 @@ ${MY_OBJ_DIR}/%.o : %.cc
 # Fortran rules
 ${MY_OBJ_DIR}/%.o : %.F90
 	${FC} -c ${FFLAGS} ${CPPFLAGS} -o ${MY_OBJ_DIR}/$(notdir $@) $<
-%.${MDL_SFX} : %.F90
+ %.${MDL_SFX} : %.F90
 	- if test -f ${NETCDF_LIB}/netcdf.${MDL_SFX}; then ln -s -f ${NETCDF_LIB}/netcdf.${MDL_SFX} .; else if test -f ${NETCDF_INC}/netcdf.${MDL_SFX} ; then ln -s -f ${NETCDF_INC}/netcdf.${MDL_SFX} .; fi; fi
 	${FC} -c ${FFLAGS} ${CPPFLAGS} -o ${MY_OBJ_DIR}/$(notdir $@) $<
 ${MY_OBJ_DIR}/%.o : %.f90
@@ -271,6 +289,8 @@ ${MY_OBJ_DIR}/%.o : %.F
 ${MY_OBJ_DIR}/%.o : %.f
 	${FC} -c ${FFLAGS} -o ${MY_OBJ_DIR}/$(notdir $@) $<
 %.f : %.F
+	${CPP} -P ${CPPFLAGS} -o $@ $<
+%.f90 : %.F90
 	${CPP} -P ${CPPFLAGS} -o $@ $<
 
 # Dependency rules
@@ -342,8 +362,8 @@ LD := ld
 # -bmaxdata: Overrides ulimits stack and heap settings
 # MATCH adds to LDFLAGS: -bmaxdata:2147483648 -bmaxstack:268435456
 # Obtain maximum allowable: -bmaxdata:0x80000000 -bmaxstack:0x10000000
-#LDFLAGS := ${OMP_FLG} -L${MY_LIB_DIR} -lcsm_f90 -lcsz_f90 ${NC_LDFLAGS} ${NC_LIBS} -lspecfun -lrecipes_f -bnoquiet
-LDFLAGS := ${OMP_FLG} -L${MY_LIB_DIR} -lcsm_f90 -lcsz_f90 ${NC_LDFLAGS} ${NC_LIBS} -bnoquiet
+#LDFLAGS := ${OMP_FLG} -L${MY_LIB_DIR} ${NC_LDFLAGS} ${NC_LIBS} -bnoquiet
+LDFLAGS := ${OMP_FLG} -L${MY_LIB_DIR} ${NC_LDFLAGS} ${NC_LIBS} -bnoquiet -qsuppress=1501-245 
 LEX := lex
 LINT := lint
 YACC := yacc
@@ -365,6 +385,7 @@ ifeq (${OPTS},D)
 endif
 ifeq (${OPTS},X)
  CFLAGS += -g
+# -qcheck=all generates run-time bounds, divide-by-zero, and null-dereference checks
 # -qthreaded: Ensure all internally-generated temporaries have automatic storage
 # -qwarn64: Detect truncation of 8 byte integers to 4 bytes
 # -qflttrap=... # Detect and trap floating point arithmetic problems
@@ -376,7 +397,7 @@ ifeq (${OPTS},X)
 # :en: enable # Enable specified exception trapping
 # -qfullpath # Show full path back to floating point exceptions
 # -qhalt=e stop compiler if error severity equals or exceeds i, w, e, s, u
- FFLAGS += -g -qinitauto=7FF7FFFF -qflttrap=inv:ov:zero:en -qfullpath -qsigtrap -qextchk -qthreaded -qwarn64 -C
+ FFLAGS += -g -qinitauto=7FF7FFFF -qflttrap=inv:ov:und:zero:en -qfullpath -qsigtrap -qextchk -qthreaded -qwarn64 -C
 endif
 # -q64: Select 64-bit compiler mode (required for accessing large files)
 # -qwarn64: Warn on possible long-to-integer or pointer-to-integer truncation
@@ -477,8 +498,8 @@ ${MY_OBJ_DIR}/%.o : %.f
 endif
 # endif CRAY
 
-# Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD
-ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSD))
+# Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOSX
+ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSDMACOSX))
 CXX := ${LINUX_CXX}
 CC := ${LINUX_CC}
 CPP := ${CC}
@@ -508,7 +529,7 @@ endif
 endif # end GNU Compiler Collection
 # G77 Fortran compiler
 ifeq (${FC},g77)
- FFLAGS := -ffixed-line-length-132 -fno-second-underscore
+ FFLAGS := -ffixed-line-length-132
 ifeq (${OPTS},O)
  FFLAGS += -O -g ${GCC_RCH_ARG}
 endif
@@ -524,9 +545,9 @@ endif
 endif # end G77 Fortran compiler
 # G95 Compiler
 ifeq (${FC},g95)
-# FFLAGS := -ffixed-line-length-132 -fno-second-underscore -Wline-truncation -Waliasing -Wimplicit-none -Wunused-label -Wall
-# FFLAGS := -ffixed-line-length-132 -fno-second-underscore -Wimplicit-none -Wunused-label -Wall
- FFLAGS := -ffixed-line-length-132 -fno-second-underscore -Wimplicit-none -Wall
+# FFLAGS := -ffixed-line-length-132 -Wline-truncation -Waliasing -Wimplicit-none -Wunused-label -Wall
+# FFLAGS := -ffixed-line-length-132 -Wimplicit-none -Wunused-label -Wall
+ FFLAGS := -ffixed-line-length-132 -Wimplicit-none -Wall -Wuninitialized
 ifeq (${PRC},D)
  FFLAGS += -r8
 else
@@ -547,14 +568,17 @@ ifeq (${OPTS},X)
 # -flogical=none/true/false : Initialize uninitialized scalar logical variables
 # -fpointer=none/null/invalid : Initialize uninitialized scalar pointers
 # -freal=none/zero/nan/inf/+inf/-inf : Initialize uninitialized scalar logical variables
-# -ftrace=frame or -ftrace=full
-# FFLAGS += -finteger=-2147483648 -flogical=none -freal=nan -fpointer=invalid
- FFLAGS += -finteger=-2147483648 -flogical=none -freal=nan -fpointer=invalid -ftrace=full
+ FFLAGS += -finteger=-2147483648 -flogical=none -freal=nan -fpointer=invalid
 endif
 endif # end G95 Compiler
 # GNU Fortran Compiler (called as gfortran-mp-4.9 on MACOSX)
 ifneq (${null},$(findstring gfortran,${FC}))
  FFLAGS := -ffixed-line-length-132 -Wall
+ifeq (${OMP},Y)
+ OMP_FLG_C := -fopenmp
+ OMP_FLG_F := -fopenmp
+ LDFLAGS += -lgomp -lpthread
+endif # endif OMP
 ifeq (${PRC},D)
  FFLAGS += -fdefault-real-8
 else
@@ -611,8 +635,8 @@ ifeq (${FC},ifort)
 # -tune pn4: optimize for Pentium(R) 4 processor (DEFAULT)
 # -us: append an underscore to external subroutine names
 # -vms: enable VMS and DEC statement extensions
-# -w95: supress warnings for non-standard fortran (which includes OpenMP)
- FFLAGS := -diag-disable 5268 -extend_source -fpconstant -fpp2 -implicitnone -w95
+# -w95: supress warnings for non-standard fortran (which includes OpenMP) (deprecated 20140129)
+ FFLAGS := -diag-disable 5268 -extend_source -fpconstant -fpp2 -implicitnone
 # -lsvml needed with -[a]xW
  LDFLAGS += -lsvml
  OMP_FLG_F := -openmp
@@ -679,9 +703,8 @@ ifeq (pathf95,$(firstword ${FC}))
 # -O2 = -O : Default optimization
 # -Ofast = -O3:
 # -woff801 : Turn off unknown compiler directive warnings triggered by !cdir
- FFLAGS := -extend_source -byteswapio -fno-second-underscore -woff801
-# -mp required to resolve link to OpenMP-enabled libcsz_f90, even though aca is not OpenMP-enabled
- LDFLAGS += -mp
+ FFLAGS := -extend_source -byteswapio -woff801
+ LDFLAGS += 
  OMP_FLG_F := -apo -mp
 ifeq (${PRC},D)
  FFLAGS += -r8 -i4
@@ -724,10 +747,11 @@ endif
 endif # endif Portland Group C++ Compiler
 # Portland Group Fortran Compiler
 ifneq (${null},$(findstring pgf,${FC}))
+# -Kieee : Used by CCSM
 # -Ktrap=align|denorm|divz|fp|inexact|inv|none|ovf|unf : IEEE Trap conditions
 # -Ktrap=fp : Equivalent to -Ktrap=inv,divz,ovf
 # -M[no]daz : Treat denormalized numbers as zero
- FFLAGS := -Mextend -Mnosecond_underscore -byteswapio -Mrecursive -Mdalign -Ktrap=fp -Mlfs
+ FFLAGS := -Mextend -byteswapio -Mrecursive -Mdalign -Ktrap=fp -Mlfs
  OMP_FLG_F := -mp
 ifeq (${PRC},D)
  FFLAGS += -r8 -i4
@@ -740,8 +764,9 @@ endif # endif STC
 ifeq (${OPTS},O)
 # -fast    Common optimizations: -O2 -Munroll=c:1 -Mnoframe -Mlre
 # -fastsse == -fast -Mvect=sse -Mscalarsse -Mcache_align -Mflushzendif
+# -mvect=nosse : Used by CCSM
 # 20061105: -fastsse breaks CAM unexpectedly and is not worth it anyway
- FFLAGS += -g -fast
+ FFLAGS += -g -fast -mvect=nosse
 endif
 ifeq (${OPTS},D)
  FFLAGS += -g
@@ -766,7 +791,7 @@ ifeq (${MPI},Y)
  FC := $(subst ifort,mpif90,${FC})
 endif # endif MPI
 endif
-# endif LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, FREEBSD
+# endif LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOSX
 
 ifeq (${UNAMES},IRIX64)
 CXX := CC
@@ -865,24 +890,45 @@ endif
 # endif SunOS=SUN4SOL2,SUNMP
 
 ifeq (${PVM_ARCH},WIN32)
-C_ONLY := Y
-CXX := g++
-CC := gcc -ansi
-# NB: nameser.h needs -Di386, but gcc is sending -Di586 (on pentiums)
+CXX := ${LINUX_CXX}
+CC := ${LINUX_CC}
+# NB: nameser.h needs -Di386, but gcc sends -Di586 (on pentiums)
 CPPFLAGS := -Di386 ${CPP_TKN} ${CPP_PTH} -I${NETCDF_INC}
-FC := g77
+FC := ${LINUX_FC}
 LD := ld
 LDFLAGS := -L${MY_LIB_DIR} -lcsm_f90 -lcsz_f90 ${NC_LDFLAGS} ${NC_LIBS}
 LDFLAGS += 
 LEX := flex
 LINT := lint
 YACC := bison
+# G95 Compiler
+ifeq (${FC},g95)
+ FFLAGS := -ffixed-line-length-132 -Wimplicit-none -Wall -Wuninitialized
+ifeq (${PRC},D)
+ FFLAGS += -r8
+else
+ FFLAGS += 
+endif
 ifeq (${OPTS},O)
- CFLAGS := -O -g ${GCC_RCH_ARG}
+ FFLAGS += -O -g
 endif
 ifeq (${OPTS},D)
- CFLAGS := -g
+ FFLAGS += -g
 endif
+ifeq (${OPTS},R)
+ FFLAGS += -g
+endif
+ifeq (${OPTS},X)
+ FFLAGS += -g -O -fbounds-check -pedantic
+# -finteger : Initialize uninitialized scalar integer variables
+# -flogical=none/true/false : Initialize uninitialized scalar logical variables
+# -fpointer=none/null/invalid : Initialize uninitialized scalar pointers
+# -freal=none/zero/nan/inf/+inf/-inf : Initialize uninitialized scalar logical variables
+# -ftrace=frame or -ftrace=full
+# FFLAGS += -finteger=-2147483648 -flogical=none -freal=nan -fpointer=invalid
+ FFLAGS += -finteger=-2147483648 -flogical=none -freal=nan -fpointer=invalid -ftrace=frame
+endif
+endif # end G95 Compiler
 endif
 # endif WIN32
 
@@ -903,8 +949,7 @@ ifeq (${OMP},N)
  LDFLAGS := $(filter-out -mpio,${LDFLAGS})
  CFLAGS := $(filter-out -mp,${CFLAGS})
  FFLAGS := $(filter-out -mp,${FFLAGS})
-# pathf95 aca programs need -mp to link to libcsz_f90
-# LDFLAGS := $(filter-out -mp,${LDFLAGS})
+ LDFLAGS := $(filter-out -mp,${LDFLAGS})
  ifneq (${UNAMES},SunOS)
   CPPFLAGS += -U_OPENMP
  endif # endif SunOS
@@ -923,11 +968,11 @@ all: ${MDL_BIN_TRG} lib
 # Delete targets that were not successfully made
 .DELETE_ON_ERROR:
 lib_dir :
-	- if ! test -d ${MY_LIB_DIR}; then mkdir ${MY_LIB_DIR}; fi
+	- if ! test -d ${MY_LIB_DIR}; then mkdir -p ${MY_LIB_DIR}; fi
 bin_dir :
-	- if ! test -d ${MY_BIN_DIR}; then mkdir ${MY_BIN_DIR}; fi
+	- if ! test -d ${MY_BIN_DIR}; then mkdir -p ${MY_BIN_DIR}; fi
 obj_dir :
-	- if ! test -d ${MY_OBJ_DIR}; then mkdir ${MY_OBJ_DIR}; fi
+	- if ! test -d ${MY_OBJ_DIR}; then mkdir -p ${MY_OBJ_DIR}; fi
 
 # Targets in bin
 CLM_OBJ := ${MY_OBJ_DIR}/clm.o
@@ -1029,6 +1074,7 @@ dbg:
 	@printf "ICC_RCH_ARG = ${ICC_RCH_ARG}\n"
 	@printf "HOSTNAME = ${HOSTNAME}\n"
 	@printf "LDFLAGS = ${LDFLAGS}\n"
+	@printf "LIBNETCDFF = ${LIBNETCDFF}\n"
 	@printf "LINUX_CC = ${LINUX_CC}\n"
 	@printf "LINUX_CXX = ${LINUX_CXX}\n"
 	@printf "LINUX_FC = ${LINUX_FC}\n"
@@ -1048,6 +1094,8 @@ dbg:
 	@printf "MY_SHR_DIR = ${MY_SHR_DIR}\n"
 	@printf "MY_OBJ_DIR = ${MY_OBJ_DIR}\n"
 	@printf "MY_OBJ_DIR_RX = ${MY_OBJ_DIR_RX}\n"
+	@printf "NC_LDFLAGS = ${NC_LDFLAGS}\n"
+	@printf "NC_LIBS = ${NC_LIBS}\n"
 	@printf "NETCDF4 = ${NETCDF4}\n"
 	@printf "NETCDF4_ROOT = ${NETCDF4_ROOT}\n"
 	@printf "NETCDF_INC = ${NETCDF_INC}\n"
@@ -1092,7 +1140,7 @@ inc_cln :
 	rm -f ${MDL_INC}
 # Targets in lib
 lib :
-	-cd ${HOME}/f; ${MAKE} lib
+	-cd ${HOME}/sw/f; ${MAKE} lib
 lib_cln :
 	-cd ${MY_LIB_DIR};
 # Targets in mod

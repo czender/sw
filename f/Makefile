@@ -965,7 +965,7 @@ ifeq (${OMP},N)
 endif # endif OMP
 
 # Define any remaining variables
-libcsz_f90 := ${MY_LIB_DIR}/libcsz_f90
+nlibcsz_f90 := ${MY_LIB_DIR}/libcsz_f90
 libcsm_f90 := ${MY_LIB_DIR}/libcsm_f90
 
 # Default targets
