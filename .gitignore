@@ -5,11 +5,13 @@
 *.bbl
 *.blg
 *.brf
+*.btmp
 *.glo
 *.log
 *.idx
 *.ilg
 *.ind
+*.itmp
 *.lof
 *.log
 *.lot

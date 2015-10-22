@@ -1,0 +1,6 @@
+# Git-ignore patterns
+
+# Volatile TeX targets
+linux.dvi
+linux.pdf
+linux.txt

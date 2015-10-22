@@ -6,8 +6,8 @@ Usage:
 http://dust.ess.uci.edu/f
 file:/home/zender/f/index.shtml
 
-cp -f ~/f/index.shtml /var/www/html/f/index.shtml
-scp -p ~/f/index.shtml dust.ess.uci.edu:/var/www/html/f/index.shtml
+cp -f ~/sw/f/index.shtml Sites/f/index.shtml
+scp -p ~/sw/f/index.shtml dust.ess.uci.edu:Sites/f/index.shtml
 -->
 
 <table width="100%"><tr><td align="left" valign="top">/
@@ -93,10 +93,10 @@ of the sng.F90 driver program. They are short and simple so I repeat
 them here, with the example output from the demo program
 <tt>sng.F90</tt>: 
 <pre>
-zender@lanina:~/f$ pgf90 -o dbg_mdl.o -c dbg_mdl.F90
-zender@lanina:~/f$ pgf90 -o sng_mdl.o -c sng_mdl.F90
-zender@lanina:~/f$ pgf90 -o sng sng_mdl.o dbg_mdl.o sng.F90
-zender@lanina:~/f$ sng --dbg=0 --dbl=1.234e234 --flt=-5.67e-37 --int=12345678 --lgc=T --sng="GNU's Not UNIX" --drc_out=${HOME}/output/directory
+zender@lanina:~/sw/f$ pgf90 -o dbg_mdl.o -c dbg_mdl.F90
+zender@lanina:~/sw/f$ pgf90 -o sng_mdl.o -c sng_mdl.F90
+zender@lanina:~/sw/f$ pgf90 -o sng sng_mdl.o dbg_mdl.o sng.F90
+zender@lanina:~/sw/f$ sng --dbg=0 --dbl=1.234e234 --flt=-5.67e-37 --int=12345678 --lgc=T --sng="GNU's Not UNIX" --drc_out=${HOME}/output/directory
  Before command line parsing and string manipulation: 
  main() reports cmd_ln = 
  main() reports dbl_foo =    0.0000000000000000E+000
