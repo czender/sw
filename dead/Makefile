@@ -1,9 +1,9 @@
-# $Id$
+# $Id$ -*-makefile-*-
 
 # Purpose: Makefile for aerosol module dead
 
 # Copyright (C) 1994--2014 Charlie Zender
-# License: GNU General Public License (GPL) Version 3
+# You may copy, distribute, and/or modify this software under the terms of the GNU General Public License (GPL) Version 3
 # See http://www.gnu.org/copyleft/gpl.html for full license text
 
 # Usage: Options are additive...
@@ -25,14 +25,15 @@
 # Copy to on-line box model web directory
 # sudo scp ${MY_BIN_DIR}/dead Sites/dead/dead
 
-# Known problems: 
+# Usage: 
+# make
 
 # Use separate directory for dead objects because they are often 
 # compiled with -r8 -i4 and thus incompatible with, e.g., map
 ifndef PVM_ARCH
  PVM_ARCH := $(shell pvmgetarch)
 endif
-MY_OBJ_DIR := ./obj/${PVM_ARCH}
+MY_OBJ_DIR := ./obj
 MY_BLD_DIR := .
 MY_DAT_DIR := .
 MY_DOC_DIR := .
@@ -41,7 +42,7 @@ MY_HTTP_DIR := Sites/dead
 MY_INC_DIR := .
 MY_SRC_DIR := .
 ifndef MY_BIN_DIR
- MY_BIN_DIR := ./bin/${PVM_ARCH}
+ MY_BIN_DIR := ./bin
 endif
 ifndef MY_LIB_DIR
  MY_LIB_DIR := ../lib
@@ -53,9 +54,6 @@ ifndef ${ABI}
 # 32- vs. 64-bit ABI: 32=32-bit mode, 64=64-bit mode (default) if available
  ABI := 64
 endif # endif ABI
-ifndef CURL_LIB
- CURL_LIB := ${CURL_LIB}
-endif
 ifndef ${DBG}
 # Debugging token N=No (default) Y=Yes
  DBG := N
@@ -72,6 +70,9 @@ endif # endif ICC_RCH_ARG
 ifndef MDL_SFX
  MDL_SFX := mod
 endif # endif MDL_SFX
+ifndef ${MPI} # MPI
+ MPI := N
+endif # endif MPI
 ifndef ${NETCDF4} # netCDF4 support
  NETCDF4 := Y
 endif # endif NETCDF4
@@ -94,7 +95,7 @@ ifndef ${OMP} # OpenMP
  OMP := Y
 endif # endif OMP
 ifndef OPTS
- OPTS := X
+ OPTS := O
 endif
 ifndef ${PRC}
 # Precision token D=Double (default) S=Single
@@ -106,6 +107,10 @@ endif
 ifndef STC
 # Created statically linked executable
  STC := N
+endif
+ifndef SZ
+# Link to Szip library
+ SZ := N
 endif
 ifndef UNAMES
  UNAMES := $(shell uname -s)
@@ -120,9 +125,10 @@ endif
 ifeq (${NETCDF4},Y)
  CPPFLAGS += -DENABLE_NETCDF4
  USR_TKN += -DENABLE_NETCDF4
-endif
-# endif NETCDF4
+endif # endif NETCDF4
 
+# Derived-tokens based on primary tokens
+# These tokens should not be altered by hand
 ifeq (${PRC},D)
  USR_TKN := -DPRC_DBL ${USR_TKN}
 else
@@ -159,7 +165,7 @@ endif # !MPI_ROOT
  NETCDF_INC := ${NETCDF4_ROOT}/include $(shell nc-config --fflags)
  NETCDF_LIB := ${NETCDF4_ROOT}/lib
  NC_LDFLAGS := -L${NETCDF_LIB} $(addprefix -L,${HDF5_LIB})
-# NC_LIBS := -lnetcdf -lhdf5_hl -lhdf5 -lz ${NC_LIBS}
+# NC_LIBS := -lnetcdf -lhdf5_hl -lhdf5 -lz -lcurl
  NC_LIBS := $(shell nc-config --flibs)
 ifdef MPI_ROOT
  NC_LIBS += -lmpi
@@ -186,7 +192,8 @@ endif # endif NETCDFF
 
 # Derived-tokens based on primary tokens
 # These tokens should not be altered by hand
-ifneq (${null},$(findstring LINUX,${PVM_ARCH}))
+# Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, FREEBSD, MACOSX, and WIN32
+ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSDMACOSXWIN32))
 # Decide among the plethora of Linux compilers
 ifndef LINUX_CXX
 # C++ compiler for Linux
@@ -209,7 +216,8 @@ endif # endif LINUX_CC
 ifndef LINUX_FC
 # Fortran compiler for Linux
  #LINUX_FC := g95
- LINUX_FC := gfortran -std=f95
+ LINUX_FC := gfortran
+ #LINUX_FC := gfortran -std=f95
  #LINUX_FC := lf95
  #LINUX_FC := ifort
  #LINUX_FC := pathf95
@@ -261,7 +269,7 @@ ${MY_OBJ_DIR}/%.o : %.cc
 # Fortran rules
 ${MY_OBJ_DIR}/%.o : %.F90
 	${FC} -c ${FFLAGS} ${CPPFLAGS} -o ${MY_OBJ_DIR}/$(notdir $@) $<
-%.${MDL_SFX} : %.F90
+ %.${MDL_SFX} : %.F90
 	- if test -f ${NETCDF_LIB}/netcdf.${MDL_SFX}; then ln -s -f ${NETCDF_LIB}/netcdf.${MDL_SFX} .; else if test -f ${NETCDF_INC}/netcdf.${MDL_SFX} ; then ln -s -f ${NETCDF_INC}/netcdf.${MDL_SFX} .; fi; fi
 	${FC} -c ${FFLAGS} ${CPPFLAGS} -o ${MY_OBJ_DIR}/$(notdir $@) $<
 ${MY_OBJ_DIR}/%.o : %.f90
@@ -474,8 +482,8 @@ ${MY_OBJ_DIR}/%.o : %.f
 endif
 # endif CRAY
 
-# Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD
-ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSD))
+# Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOSX
+ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSDMACOSX))
 CXX := ${LINUX_CXX}
 CC := ${LINUX_CC}
 CPP := ${CC}
@@ -505,7 +513,7 @@ endif
 endif # end GNU Compiler Collection
 # G77 Fortran compiler
 ifeq (${FC},g77)
- FFLAGS := -ffixed-line-length-132 -fno-second-underscore
+ FFLAGS := -ffixed-line-length-132
 ifeq (${OPTS},O)
  FFLAGS += -O -g ${GCC_RCH_ARG}
 endif
@@ -521,9 +529,9 @@ endif
 endif # end G77 Fortran compiler
 # G95 Compiler
 ifeq (${FC},g95)
-# FFLAGS := -ffixed-line-length-132 -fno-second-underscore -Wline-truncation -Waliasing -Wimplicit-none -Wunused-label -Wall
-# FFLAGS := -ffixed-line-length-132 -fno-second-underscore -Wimplicit-none -Wunused-label -Wall
- FFLAGS := -ffixed-line-length-132 -fno-second-underscore -Wimplicit-none -Wall -Wuninitialized
+# FFLAGS := -ffixed-line-length-132 -Wline-truncation -Waliasing -Wimplicit-none -Wunused-label -Wall
+# FFLAGS := -ffixed-line-length-132 -Wimplicit-none -Wunused-label -Wall
+ FFLAGS := -ffixed-line-length-132 -Wimplicit-none -Wall -Wuninitialized
 ifeq (${PRC},D)
  FFLAGS += -r8
 else
@@ -612,8 +620,8 @@ ifeq (${FC},ifort)
 # -tune pn4: optimize for Pentium(R) 4 processor (DEFAULT)
 # -us: append an underscore to external subroutine names
 # -vms: enable VMS and DEC statement extensions
-# -w95: supress warnings for non-standard fortran (which includes OpenMP)
- FFLAGS := -diag-disable 5268 -extend_source -fpconstant -fpp2 -implicitnone -w95
+# -w95: supress warnings for non-standard fortran (which includes OpenMP) (deprecated 20140129)
+ FFLAGS := -diag-disable 5268 -extend_source -fpconstant -fpp2 -implicitnone
 # -lsvml needed with -[a]xW
  LDFLAGS += -lsvml
  OMP_FLG_F := -openmp
@@ -636,6 +644,11 @@ ifeq (${OPTS},X)
 # -e95 issues warnings for non-standard fortran (which includes OpenMP)
  FFLAGS += -g -C -e95
 endif
+ifeq (${MPI},Y)
+ CC := $(subst icc,mpicc,${CC})
+ CXX := $(subst icpc,mpiCC,${CXX})
+ FC := $(subst ifort,mpif90,${FC})
+endif # endif MPI
 endif # end Intel (Kai) Fortran Compiler
 # Lahey-Fujitsu Fortran Compiler
 ifeq (${FC},lf95)
@@ -675,7 +688,7 @@ ifeq (pathf95,$(firstword ${FC}))
 # -O2 = -O : Default optimization
 # -Ofast = -O3:
 # -woff801 : Turn off unknown compiler directive warnings triggered by !cdir
- FFLAGS := -extend_source -byteswapio -fno-second-underscore -woff801
+ FFLAGS := -extend_source -byteswapio -woff801
  LDFLAGS += 
  OMP_FLG_F := -apo -mp
 ifeq (${PRC},D)
@@ -719,10 +732,11 @@ endif
 endif # endif Portland Group C++ Compiler
 # Portland Group Fortran Compiler
 ifneq (${null},$(findstring pgf,${FC}))
+# -Kieee : Used by CCSM
 # -Ktrap=align|denorm|divz|fp|inexact|inv|none|ovf|unf : IEEE Trap conditions
 # -Ktrap=fp : Equivalent to -Ktrap=inv,divz,ovf
 # -M[no]daz : Treat denormalized numbers as zero
- FFLAGS := -Mextend -Mnosecond_underscore -byteswapio -Mrecursive -Mdalign -Ktrap=fp -Mlfs
+ FFLAGS := -Mextend -byteswapio -Mrecursive -Mdalign -Ktrap=fp -Mlfs
  OMP_FLG_F := -mp
 ifeq (${PRC},D)
  FFLAGS += -r8 -i4
@@ -735,8 +749,9 @@ endif # endif STC
 ifeq (${OPTS},O)
 # -fast    Common optimizations: -O2 -Munroll=c:1 -Mnoframe -Mlre
 # -fastsse == -fast -Mvect=sse -Mscalarsse -Mcache_align -Mflushzendif
+# -mvect=nosse : Used by CCSM
 # 20061105: -fastsse breaks CAM unexpectedly and is not worth it anyway
- FFLAGS += -g -fast
+ FFLAGS += -g -fast -mvect=nosse
 endif
 ifeq (${OPTS},D)
  FFLAGS += -g
@@ -748,13 +763,20 @@ ifeq (${OPTS},X)
  FFLAGS += -g -Mbounds
 endif
 endif # end Portland Group Fortran Compiler
+# End compiler-specific switches for Linux
+# Linux-generic processing for after compiler-specific argument have been set:
 ifeq (${OMP},Y)
  CFLAGS += ${OMP_FLG_C}
  FFLAGS += ${OMP_FLG_F}
  LDFLAGS := ${OMP_FLG_F} ${LDFLAGS}
 endif # endif OMP
+ifeq (${MPI},Y)
+ CC := $(subst icc,mpicc,${CC})
+ CXX := $(subst icpc,mpiCC,${CXX})
+ FC := $(subst ifort,mpif90,${FC})
+endif # endif MPI
 endif
-# endif LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, FREEBSD
+# endif LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOSX
 
 ifeq (${UNAMES},IRIX64)
 CXX := CC
@@ -853,24 +875,45 @@ endif
 # endif SunOS=SUN4SOL2,SUNMP
 
 ifeq (${PVM_ARCH},WIN32)
-C_ONLY := Y
-CXX := g++
-CC := gcc -ansi
-# NB: nameser.h needs -Di386, but gcc is sending -Di586 (on pentiums)
+CXX := ${LINUX_CXX}
+CC := ${LINUX_CC}
+# NB: nameser.h needs -Di386, but gcc sends -Di586 (on pentiums)
 CPPFLAGS := -Di386 ${CPP_TKN} ${CPP_PTH} -I${NETCDF_INC}
-FC := g77
+FC := ${LINUX_FC}
 LD := ld
 LDFLAGS := -L${MY_LIB_DIR} ${NC_LDFLAGS} ${NC_LIBS}
 LDFLAGS += 
 LEX := flex
 LINT := lint
 YACC := bison
+# G95 Compiler
+ifeq (${FC},g95)
+ FFLAGS := -ffixed-line-length-132 -Wimplicit-none -Wall -Wuninitialized
+ifeq (${PRC},D)
+ FFLAGS += -r8
+else
+ FFLAGS += 
+endif
 ifeq (${OPTS},O)
- CFLAGS := -O -g ${GCC_RCH_ARG}
+ FFLAGS += -O -g
 endif
 ifeq (${OPTS},D)
- CFLAGS := -g
+ FFLAGS += -g
 endif
+ifeq (${OPTS},R)
+ FFLAGS += -g
+endif
+ifeq (${OPTS},X)
+ FFLAGS += -g -O -fbounds-check -pedantic
+# -finteger : Initialize uninitialized scalar integer variables
+# -flogical=none/true/false : Initialize uninitialized scalar logical variables
+# -fpointer=none/null/invalid : Initialize uninitialized scalar pointers
+# -freal=none/zero/nan/inf/+inf/-inf : Initialize uninitialized scalar logical variables
+# -ftrace=frame or -ftrace=full
+# FFLAGS += -finteger=-2147483648 -flogical=none -freal=nan -fpointer=invalid
+ FFLAGS += -finteger=-2147483648 -flogical=none -freal=nan -fpointer=invalid -ftrace=frame
+endif
+endif # end G95 Compiler
 endif
 # endif WIN32
 
@@ -922,11 +965,11 @@ all: dir ${MDL_BIN_TRG}
 # Target directories which may not exist
 dir: bin_dir obj_dir 
 lib_dir :
-	- if ! test -d ${MY_LIB_DIR}; then mkdir -p ${MY_LIB_DIR}; fi
+	- if ! test -d ${MY_LIB_DIR}; then mkdir ${MY_LIB_DIR}; fi
 bin_dir :
-	- if ! test -d ${MY_BIN_DIR}; then mkdir -p ${MY_BIN_DIR}; fi
+	- if ! test -d ${MY_BIN_DIR}; then mkdir ${MY_BIN_DIR}; fi
 obj_dir :
-	- if ! test -d ${MY_OBJ_DIR}; then mkdir -p ${MY_OBJ_DIR}; fi
+	- if ! test -d ${MY_OBJ_DIR}; then mkdir ${MY_OBJ_DIR}; fi
 
 # Targets in bin
 ifeq (${FC},ifort)
@@ -1013,7 +1056,6 @@ dbg:
 	@printf "CPP_DFN_F = ${CPP_DFN_F}\n"
 	@printf "CPP_PTH = ${CPP_PTH}\n"
 	@printf "CPP_TKN = ${CPP_TKN}\n"
-	@printf "CURL_LIB = ${CURL_LIB}\n"
 	@printf "CXX = ${CXX}\n"
 	@printf "CXXFLAGS = ${CXXFLAGS}\n"
 	@printf "DBG = ${DBG}\n"
@@ -1027,6 +1069,7 @@ dbg:
 	@printf "ICC_RCH_ARG = ${ICC_RCH_ARG}\n"
 	@printf "HOSTNAME = ${HOSTNAME}\n"
 	@printf "LDFLAGS = ${LDFLAGS}\n"
+	@printf "LIBNETCDFF = ${LIBNETCDFF}\n"
 	@printf "LINUX_CC = ${LINUX_CC}\n"
 	@printf "LINUX_CXX = ${LINUX_CXX}\n"
 	@printf "LINUX_FC = ${LINUX_FC}\n"
@@ -1034,6 +1077,7 @@ dbg:
 	@printf "MDL_OBJ = ${MDL_OBJ}\n"
 	@printf "MDL_PTH = ${MDL_PTH}\n"
 	@printf "MDL_SRC = ${MDL_SRC}\n"
+	@printf "MPI = ${MPI}\n"
 	@printf "MY_BIN_DIR = ${MY_BIN_DIR}\n"
 	@printf "MY_BLD_DIR = ${MY_BLD_DIR}\n"
 	@printf "MY_DAT_DIR = ${MY_DAT_DIR}\n"
@@ -1093,4 +1137,3 @@ ifeq (${INCLUDE_DPN},TRUE)
 # Incorporate dependency files into Makefile rules
 -include ${MDL_DPN}
 endif
-
