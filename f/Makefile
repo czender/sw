@@ -7,19 +7,19 @@
 # See http://www.gnu.org/copyleft/gpl.html for full license text
 
 # Quickie test copies:
-# scp ~/sw/f/Makefile givre.ess.uci.edu:f/Makefile	
-# scp ~/sw/f/Makefile greenplanet.ps.uci.edu:f/Makefile	
+# scp ~/sw/f/Makefile givre.ess.uci.edu:sw/f/Makefile	
+# scp ~/sw/f/Makefile greenplanet.ps.uci.edu:sw/f/Makefile	
 
 # Usage:
 # make
-# cd ~/f;make OPTS=D NETCDF4=Y;cd - # netCDF4
-# cd ~/f;make OPTS=D MPI=Y NETCDF4=Y;cd - # greenplanet
-# cd ~/f;NETCDF_ROOT='/usr' NETCDF_INC='/usr/include' NETCDF_LIB='/usr/lib' make OPTS=D NETCDF4=N NETCDFF=Y; cd - # netCDF3 from /usr
-# cd ~/f;NETCDF4_ROOT='/usr' NETCDF_INC='/usr/include' NETCDF_LIB='/usr/lib' make OPTS=D NETCDF4=Y NETCDFF=Y; cd - # netCDF3 from /usr
+# cd ~/sw/f;make OPTS=D NETCDF4=Y;cd - # netCDF4
+# cd ~/sw/f;make OPTS=D MPI=Y NETCDF4=Y;cd - # greenplanet
+# cd ~/sw/f;NETCDF_ROOT='/usr' NETCDF_INC='/usr/include' NETCDF_LIB='/usr/lib' make OPTS=D NETCDF4=N NETCDFF=Y; cd - # netCDF3 from /usr
+# cd ~/sw/f;NETCDF4_ROOT='/usr' NETCDF_INC='/usr/include' NETCDF_LIB='/usr/lib' make OPTS=D NETCDF4=Y NETCDFF=Y; cd - # netCDF3 from /usr
 # 32-bit ABI on NCAR AIX systems:
-# cd ~/f;NETCDF_LIB=/usr/local/lib32/r4i4 make lib_cln cln all ABI=32;cd -
+# cd ~/sw/f;NETCDF_LIB=/usr/local/lib32/r4i4 make lib_cln cln all ABI=32;cd -
 # 64-bit ABI netCDF4 on NCAR AIX systems (bluefire):
-# cd ~/f;CURL_LIB='/contrib/curl/7.21.2/lib' HDF5_ROOT='/contrib/hdf5-1.8.6_seq' NETCDF_ROOT='/contrib/netcdf-4.1.2_seq' SZ_LIB='/contrib/szip/lib' make SZ=Y all;cd -
+# cd ~/sw/f;CURL_LIB='/contrib/curl/7.21.2/lib' HDF5_ROOT='/contrib/hdf5-1.8.6_seq' NETCDF_ROOT='/contrib/netcdf-4.1.2_seq' SZ_LIB='/contrib/szip/lib' make SZ=Y all;cd -
 
 # Module issues:
 # The greatest problem with Fortran90 makefiles is getting modules to build
@@ -497,7 +497,10 @@ ifeq (${OPTS},X)
  FFLAGS := -g -N 132 -e i
 endif
 # 1997/10/21 Added -P to suppress #line # directives on Fortran files
+# 1998/09/07 Added -N to prevent CPP from producing .f that complain about single quotes ('s)
+# 1998/09/08 Added -I${NETCDF_INC} to ${FC} for CCM code (e.g., initext.F) that uses Fortran includes
 # 1999/05/24 Added -C for cpp to retain comments (else cpp thinks Fortran string concatenator // is a C++ comment and removes it)
+# NB: -N and -P are not part of CPPFLAGS because they should only used for Fortran files
 ${MY_OBJ_DIR}/%.o : %.F
 	${CPP} -N -P ${CPPFLAGS} $< > ${MY_OBJ_DIR}/$(patsubst %.F,%.f,$(notdir $<))
 	${FC} ${FFLAGS} -b $@ ${MY_OBJ_DIR}/$(patsubst %.F,%.f,$(notdir $<))
@@ -965,7 +968,7 @@ ifeq (${OMP},N)
 endif # endif OMP
 
 # Define any remaining variables
-nlibcsz_f90 := ${MY_LIB_DIR}/libcsz_f90
+libcsz_f90 := ${MY_LIB_DIR}/libcsz_f90
 libcsm_f90 := ${MY_LIB_DIR}/libcsm_f90
 
 # Default targets

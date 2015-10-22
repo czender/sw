@@ -4,7 +4,7 @@ Purpose: Homepage for SNG, the Fortran command line parser
 
 Usage:
 http://dust.ess.uci.edu/f
-file:/home/zender/f/index.shtml
+file:~/sw/f/index.shtml
 
 cp -f ~/sw/f/index.shtml Sites/f/index.shtml
 scp -p ~/sw/f/index.shtml dust.ess.uci.edu:Sites/f/index.shtml

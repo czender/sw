@@ -4,12 +4,13 @@
 # Allow for precedence of user-modified files, different search paths
 # This Makefile requires GNU make, AT&T Berkeley-style make will not parse it
 
+# Copyright (C) 1994--2014 Charlie Zender
+# You may copy, distribute, and/or modify this software under the terms of the GNU General Public License (GPL) Version 3
+# See http://www.gnu.org/copyleft/gpl.html for full license text
+
 # Known problems: 
 # 19990907: GNU make 3.77 has a bug in wildcard function on Solaris
 # Solution: Use a different version of GNU make on that platform
-
-# 19990907: Solaris f90 does not support -r8 -i4 so netCDF output is garbage
-# Workaround: Use f77 on Solaris and #undef CRM_SRB in misc.h to remove Fortran90 code
 
 # Usage: 
 # make dir;make
@@ -17,18 +18,18 @@
 # unset MY_BIN_DIR MY_INC_DIR MY_OBJ_DIR MY_LIB_DIR;make
 
 # Quickie test copies:
-# scp dust.ess.uci.edu:crm/bld/Makefile ~/crm/bld/Makefile 
-# scp givre.ess.uci.edu:crm/bld/Makefile ~/crm/bld/Makefile 
+# scp dust.ess.uci.edu:crm/bld/Makefile ~/sw/crm/bld/Makefile 
+# scp givre.ess.uci.edu:crm/bld/Makefile ~/sw/crm/bld/Makefile 
 
 # Usage:
 # make
-# cd ~/crm/bld;make OPTS=D NETCDF4=Y;cd - # netCDF4
-# cd ~/crm/bld;make OPTS=D MPI=Y NETCDF4=Y;cd - # greenplanet
-# cd ~/crm/bld;NETCDF_ROOT='/usr' NETCDF_INC='/usr/include' NETCDF_LIB='/usr/lib' make OPTS=D NETCDF4=N NETCDFF=Y; cd - # netCDF3 from /usr
+# cd ~/sw/crm/bld;make OPTS=D NETCDF4=Y;cd - # netCDF4
+# cd ~/sw/crm/bld;make OPTS=D MPI=Y NETCDF4=Y;cd - # greenplanet
+# cd ~/sw/crm/bld;NETCDF_ROOT='/usr' NETCDF_INC='/usr/include' NETCDF_LIB='/usr/lib' make OPTS=D NETCDF4=N NETCDFF=Y; cd - # netCDF3 from /usr
 # 32-bit ABI on NCAR AIX systems:
-# cd ~/crm/bld;NETCDF_LIB=/usr/local/lib32/r4i4 make lib_cln cln all ABI=32;cd -
+# cd ~/sw/crm/bld;NETCDF_LIB=/usr/local/lib32/r4i4 make lib_cln cln all ABI=32;cd -
 # 64-bit ABI netCDF4 on NCAR AIX systems (bluefire):
-# cd ~/crm/bld;CURL_LIB='/contrib/curl/lib' HDF5_ROOT='/contrib/hdf5-1.8.4-patch1_sequential' NETCDF_ROOT='/contrib/netcdf-4.1.1_sequential' SZ_LIB='/contrib/szip/lib' make SZ=Y all;cd -
+# cd ~/sw/crm/bld;CURL_LIB='/contrib/curl/lib' HDF5_ROOT='/contrib/hdf5-1.8.4-patch1_sequential' NETCDF_ROOT='/contrib/netcdf-4.1.1_sequential' SZ_LIB='/contrib/szip/lib' make SZ=Y all;cd -
 
 MY_BIN_DIR := ../bin
 MY_BLD_DIR := ../bld
@@ -133,6 +134,8 @@ ifeq (${NETCDF4},Y)
  USR_TKN += -DENABLE_NETCDF4
 endif # endif NETCDF4
 
+# Derived-tokens based on primary tokens
+# These tokens should not be altered by hand
 ifeq (${PRC},D)
  USR_TKN := -DPRC_DBL ${USR_TKN}
 else
@@ -169,7 +172,7 @@ endif # !MPI_ROOT
  NETCDF_INC := ${NETCDF4_ROOT}/include $(shell nc-config --fflags)
  NETCDF_LIB := ${NETCDF4_ROOT}/lib
  NC_LDFLAGS := -L${NETCDF_LIB} $(addprefix -L,${HDF5_LIB})
-# NC_LIBS := -lnetcdf -lhdf5_hl -lhdf5 -lz ${NC_LIBS}
+# NC_LIBS := -lnetcdf -lhdf5_hl -lhdf5 -lz -lcurl
  NC_LIBS := $(shell nc-config --flibs)
 ifdef MPI_ROOT
  NC_LIBS += -lmpi
@@ -196,8 +199,8 @@ endif # endif NETCDFF
 
 # Derived-tokens based on primary tokens
 # These tokens should not be altered by hand
-# Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, FREEBSD, and WIN32
-ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSDWIN32))
+# Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, FREEBSD, MACOSX, and WIN32
+ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSDMACOSXWIN32))
 # Decide among the plethora of Linux compilers
 ifndef LINUX_CXX
 # C++ compiler for Linux
@@ -221,6 +224,7 @@ ifndef LINUX_FC
 # Fortran compiler for Linux
  #LINUX_FC := g95
  LINUX_FC := gfortran
+ #LINUX_FC := gfortran -std=f95
  #LINUX_FC := lf95
  #LINUX_FC := ifort
  #LINUX_FC := pathf95
@@ -422,44 +426,88 @@ ${MY_OBJ_DIR}/%.o : %.f
 endif
 # endif AIX
 
+ifeq (${PVM_ARCH},ALPHA)
+ifeq (${OMP},Y)
+ OMP_FLG := -omp
+endif # endif OMP
+CXX := cxx -std strict_ansi
+CC := cc
+CFLAGS := ${OMP_FLG}
+CPP := cpp
+CPPFLAGS := -DOSF1 ${CPP_TKN} ${CPP_PTH} -I${NETCDF_INC} -I${NETCDF_LIB}
+FC := f95
+FFLAGS := -c ${OMP_FLG} -automatic -fpe3
+FIXEDFLAGS := -extend_source
+FREEFLAGS := -DHIDE_SHR_MSG -free
+LD := ld
+LDFLAGS := ${OMP_FLG} -L${MY_LIB_DIR} ${NC_LDFLAGS} ${NC_LIBS}
+LEX := lex
+LINT := lint
+YACC := yacc
+ifeq (${PRC},D)
+ FFLAGS += -r8 -i4
+else
+ FFLAGS += -r4 -i4
+endif # PRC != D
+ifeq (${OPTS},O)
+ CFLAGS += -O2 -g
+ FFLAGS += -O3 -g -inline speed
+endif
+ifeq (${OPTS},D)
+ CFLAGS += -g -check_bounds -check -check_omp
+ FFLAGS += -g
+endif
+ifeq (${OPTS},X)
+ CFLAGS := -g -N 132
+ FFLAGS := -g -check bounds -check omp_bindings -check overflow -check underflow
+endif
+${MY_OBJ_DIR}/%.o : %.F90
+	${FC} -c ${FREEFLAGS} ${FFLAGS} ${CPPFLAGS} -o ${MY_OBJ_DIR}/$(notdir $@) $<
+${MY_OBJ_DIR}/%.o : %.F
+	${FC} -c ${FIXEDFLAGS} ${FFLAGS} ${CPPFLAGS} -o ${MY_OBJ_DIR}/$(notdir $@) $<
+endif
+# endif ALPHA
+
 ifeq (${PVM_ARCH},CRAY)
-C++ := g++
+CXX := g++
 CC := cc
 CPP := cpp
-CPPFLAGS := ${CPP_TKN} ${CPP_PTH} -I${NETCDF_INC}
+CPPFLAGS := ${CPP_TKN} ${CPP_PTH} -I${NETCDF_INC} -I${NETCDF_LIB}
 FC := f90
 LD := ld
-LDFLAGS := -L${MY_LIB_DIR} ${NC_LDFLAGS} ${NC_LIBS} -lm
+LDFLAGS := -L${MY_LIB_DIR} ${NC_LDFLAGS} ${NC_LIBS}
+LDFLAGS += -L/lib -lf
 LEX := lex
 LINT := lint
 YACC := yacc
 ifeq (${OPTS},O)
- CFLAGS := -O
- FFLAGS = -N 132
+ CFLAGS := -O -g
+ FFLAGS := -N 132
 endif
 ifeq (${OPTS},D)
- CFLAGS := -g 
- FFLAGS = -g -N 132
+ CFLAGS := -g
+ FFLAGS := -g -N 132
 endif
 ifeq (${OPTS},X)
  CFLAGS := -g -N 132
- FFLAGS = -g -N 132 -e i
+ FFLAGS := -g -N 132 -e i
 endif
 # 1997/10/21 Added -P to suppress #line # directives on Fortran files
 # 1998/09/07 Added -N to prevent CPP from producing .f that complain about single quotes ('s)
 # 1998/09/08 Added -I${NETCDF_INC} to ${FC} for CCM code (e.g., initext.F) that uses Fortran includes
+# 1999/05/24 Added -C for cpp to retain comments (else cpp thinks Fortran string concatenator // is a C++ comment and removes it)
 # NB: -N and -P are not part of CPPFLAGS because they should only used for Fortran files
 ${MY_OBJ_DIR}/%.o : %.F
 	${CPP} -N -P ${CPPFLAGS} $< > ${MY_OBJ_DIR}/$(patsubst %.F,%.f,$(notdir $<))
-	${FC} -I${NETCDF_INC} ${FFLAGS} -b $@ ${MY_OBJ_DIR}/$(patsubst %.F,%.f,$(notdir $<))
+	${FC} ${FFLAGS} -b $@ ${MY_OBJ_DIR}/$(patsubst %.F,%.f,$(notdir $<))
 ${MY_OBJ_DIR}/%.o : %.f
 	${FC} -c ${FFLAGS} $<
 	mv -f $(notdir $@) ${MY_OBJ_DIR}
 endif
 # endif CRAY
 
-# Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD
-ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSD))
+# Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOSX
+ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSDMACOSX))
 CXX := ${LINUX_CXX}
 CC := ${LINUX_CC}
 CPP := ${CC}
@@ -474,7 +522,7 @@ YACC := bison
 ifeq (${CC},gcc)
  CFLAGS := -Wall
 ifeq (${OPTS},O)
- CFLAGS += -O -g
+ CFLAGS += -O -g ${GCC_RCH_ARG}
 endif
 ifeq (${OPTS},D)
  CFLAGS += -g
@@ -489,9 +537,9 @@ endif
 endif # end GNU Compiler Collection
 # G77 Fortran compiler
 ifeq (${FC},g77)
- FFLAGS := -ffixed-line-length-132 -fno-second-underscore
+ FFLAGS := -ffixed-line-length-132
 ifeq (${OPTS},O)
- FFLAGS += -O -g
+ FFLAGS += -O -g ${GCC_RCH_ARG}
 endif
 ifeq (${OPTS},D)
  FFLAGS += -g -fdebug-kludge
@@ -503,7 +551,7 @@ ifeq (${OPTS},X)
  FFLAGS += -g -O -fdebug-kludge -fbounds-check
 endif
 endif # end G77 Fortran compiler
-# GNU Fortran9x Compiler
+# G95 Compiler
 ifeq (${FC},g95)
 # -DF2K causes sng to use compiler's F2K-compatible command line argument routines
  CPPFLAGS += -DF2K
@@ -526,11 +574,16 @@ ifeq (${OPTS},R)
 endif
 ifeq (${OPTS},X)
  FFLAGS += -g -O -fbounds-check -pedantic
+# -finteger : Initialize uninitialized scalar integer variables
+# -flogical=none/true/false : Initialize uninitialized scalar logical variables
+# -fpointer=none/null/invalid : Initialize uninitialized scalar pointers
+# -freal=none/zero/nan/inf/+inf/-inf : Initialize uninitialized scalar logical variables
+ FFLAGS += -finteger=-2147483648 -flogical=none -freal=nan -fpointer=invalid
 endif
-endif # end GNU Fortran9x Compiler
-# GNU Fortran Compiler
-ifeq (gfortran,$(firstword ${FC}))
- FFLAGS := -fcray-pointer -ffixed-line-length-132 -Wall
+endif # end G95 Compiler
+# GNU Fortran Compiler (called as gfortran-mp-4.9 on MACOSX)
+ifneq (${null},$(findstring gfortran,${FC}))
+ FFLAGS := -ffixed-line-length-132 -Wall
 ifeq (${OMP},Y)
  OMP_FLG_C := -fopenmp
  OMP_FLG_F := -fopenmp
@@ -572,22 +625,30 @@ ifeq (${OPTS},X)
 endif
  CXXFLAGS := ${CFLAGS}
 endif # end Intel (Kai) C Compiler
+# Intel (Kai) Fortran Compiler
 ifeq (${FC},ifort)
-# -132 specify 132 column lines for fixed form sources (same as -extend_source)
+# -132: specify 132 column lines for fixed form sources (same as -extend_source)
+# -axW: generate generic IA32 code and specialized code exclusively for Pentium 4 processors (requires linking to libsvml.a)
+# -diag-disable 5268: quiet warnings that comments exceed allowed length
+# -e95: die on warnings for non-standard Fortran95 (which includes OpenMP)
 # -fast: enable -xP -O3 -ipo -static
-# -fpp2 necessary, but not sufficient, for  OpenMP
-# -ftz enable/disable flush denormal results to zero
-# -ip enable single-file IP optimizations
-# -ipo enable multi-file IP optimizations
-# -module specifies path to place .mod files
-# -mp maintain floating point precision (disables some optimizations) (deprecated 20100708)
-# -axW generate generic IA32 code and specialized code exclusively for Pentium 4 processors
-# -vec_report[n] n=1 indicate vectorized loops (DEFAULT)
-# -tune pn4 optimize for Pentium(R) 4 processor (DEFAULT)
-# -w95 supresses warnings for non-standard fortran (which includes OpenMP)
- FFLAGS := -extend_source -fpconstant -fpp2 -implicitnone -w95
-# -lPEPCF90 needed for iargc_, getarg_
-# LDFLAGS += -lPEPCF90
+# -fpconstant: extend precision of single precision constants assigned to double precision variables to double precision
+# -fpp2: necessary, but not sufficient, for  OpenMP
+# -ftz: enable/disable flush denormal results to zero
+# -ip: enable single-file IP optimizations
+# -ipo: enable multi-file IP optimizations
+# -module: specifies path to place .mod files
+# -mp: maintain floating point precision (disables some optimizations) (deprecated 20090129)
+# -nus: do not append an underscore to external subroutine names
+# -openmp: enable compiler to generate multi-threaded OpenMP code
+# -vec_report1: indicate vectorized loops (DEFAULT)
+# -tune pn4: optimize for Pentium(R) 4 processor (DEFAULT)
+# -us: append an underscore to external subroutine names
+# -vms: enable VMS and DEC statement extensions
+# -w95: supress warnings for non-standard fortran (which includes OpenMP) (deprecated 20140129)
+ FFLAGS := -diag-disable 5268 -extend_source -fpconstant -fpp2 -implicitnone
+# -lsvml needed with -[a]xW
+ LDFLAGS += -lsvml
  OMP_FLG_F := -openmp
 ifeq (${PRC},D)
  FFLAGS += -i4 -r8
@@ -595,7 +656,7 @@ else
  FFLAGS += -i4
 endif
 ifeq (${OPTS},O)
- FFLAGS += -O3 -g -axW -vec_report1 -ftz
+ FFLAGS += -O3 -g -vec_report1 -ftz ${ICC_RCH_ARG}
 endif
 ifeq (${OPTS},D)
  FFLAGS += -g
@@ -608,6 +669,11 @@ ifeq (${OPTS},X)
 # -e95 issues warnings for non-standard fortran (which includes OpenMP)
  FFLAGS += -g -C -e95
 endif
+ifeq (${MPI},Y)
+ CC := $(subst icc,mpicc,${CC})
+ CXX := $(subst icpc,mpiCC,${CXX})
+ FC := $(subst ifort,mpif90,${FC})
+endif # endif MPI
 endif # end Intel (Kai) Fortran Compiler
 # Lahey-Fujitsu Fortran Compiler
 ifeq (${FC},lf95)
@@ -640,6 +706,35 @@ ifeq (${OPTS},X)
  FFLAGS += -g --chk a,e,s,u,x --chkglobal --pca --trace --trap
 endif
 endif # end Lahey-Fujitsu Fortran Compiler
+# Pathscale (QLogic) Fortran Compiler
+ifeq (pathf95,$(firstword ${FC}))
+# man -k pathscale for full listing
+# -col120 : Allow F77 source to be 120 columns
+# -O2 = -O : Default optimization
+# -Ofast = -O3:
+# -woff801 : Turn off unknown compiler directive warnings triggered by !cdir
+ FFLAGS := -extend_source -byteswapio -woff801
+ LDFLAGS += 
+ OMP_FLG_F := -apo -mp
+ifeq (${PRC},D)
+ FFLAGS += -r8 -i4
+else
+ FFLAGS += -r4 -i4
+endif
+ifeq (${OPTS},O)
+ FFLAGS += -O3 -g ${PSC_RCH_ARG}
+endif
+ifeq (${OPTS},D)
+ FFLAGS += -g
+endif
+ifeq (${OPTS},R)
+ FFLAGS += -O2
+endif
+ifeq (${OPTS},X)
+# -C: Bounds checking
+ FFLAGS += -g -C -trapuv
+endif
+endif # end Pathscale (QLogic) Fortran Compiler
 # Portland Group C++ Compiler
 ifeq (${CXX},pgCC)
 # Enable Large File Support (LFS) by default
@@ -661,8 +756,12 @@ endif
  CXXFLAGS := ${CFLAGS}
 endif # endif Portland Group C++ Compiler
 # Portland Group Fortran Compiler
-ifeq (${FC},pgf90)
- FFLAGS := -Mextend -Mnosecond_underscore -byteswapio -Mrecursive -Mdalign -Ktrap=fp -Mlfs
+ifneq (${null},$(findstring pgf,${FC}))
+# -Kieee : Used by CCSM
+# -Ktrap=align|denorm|divz|fp|inexact|inv|none|ovf|unf : IEEE Trap conditions
+# -Ktrap=fp : Equivalent to -Ktrap=inv,divz,ovf
+# -M[no]daz : Treat denormalized numbers as zero
+ FFLAGS := -Mextend -byteswapio -Mrecursive -Mdalign -Ktrap=fp -Mlfs
  OMP_FLG_F := -mp
 ifeq (${PRC},D)
  FFLAGS += -r8 -i4
@@ -673,7 +772,11 @@ ifeq ($(STC),Y)
  LDFLAGS := -Wl,-Bstatic ${LDFLAGS}
 endif # endif STC
 ifeq (${OPTS},O)
- FFLAGS += -g -fast
+# -fast    Common optimizations: -O2 -Munroll=c:1 -Mnoframe -Mlre
+# -fastsse == -fast -Mvect=sse -Mscalarsse -Mcache_align -Mflushzendif
+# -mvect=nosse : Used by CCSM
+# 20061105: -fastsse breaks CAM unexpectedly and is not worth it anyway
+ FFLAGS += -g -fast -mvect=nosse
 endif
 ifeq (${OPTS},D)
  FFLAGS += -g
@@ -685,226 +788,182 @@ ifeq (${OPTS},X)
  FFLAGS += -g -Mbounds
 endif
 endif # end Portland Group Fortran Compiler
+# End compiler-specific switches for Linux
+# Linux-generic processing for after compiler-specific argument have been set:
 ifeq (${OMP},Y)
  CFLAGS += ${OMP_FLG_C}
  FFLAGS += ${OMP_FLG_F}
  LDFLAGS := ${OMP_FLG_F} ${LDFLAGS}
 endif # endif OMP
+ifeq (${MPI},Y)
+ CC := $(subst icc,mpicc,${CC})
+ CXX := $(subst icpc,mpiCC,${CXX})
+ FC := $(subst ifort,mpif90,${FC})
+endif # endif MPI
 endif
-# endif LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, FREEBSD
+# endif LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOSX
 
-ifeq (${PVM_ARCH},RS6K)
-C++ := g++
-CC := gcc -ansi
-CPP := /lib/cpp -P
-CPPFLAGS := ${CPP_TKN} ${CPP_PTH} -I${NETCDF_INC}
-FC := xlf
-LD := ld
-LDFLAGS := -L${MY_LIB_DIR} ${NC_LDFLAGS} ${NC_LIBS}
-LEX := lex
-LINT := lint
-YACC := yacc
-ifeq (${OPTS},O)
- CFLAGS := -O2
- PREPROCESS.F := ${CPP} ${CPPFLAGS}
- FFLAGS := -O -NS2000 -qfixed=132
-endif
-ifeq (${OPTS},D)
- CFLAGS := -g
- PREPROCESS.F := ${CPP} ${CPPFLAGS}
- FFLAGS := -g -NS2000 -qfixed=132
-endif
- FFLAGS += -qREALSIZE=8 -qINTSIZE=4
-${MY_OBJ_DIR}/%.o : %.F
-	${CPP} ${CPPFLAGS} $< ${MY_OBJ_DIR}/$(basename $<).f 
-	${FC} -c ${FFLAGS} -o ${MY_OBJ_DIR}/$(notdir $@) ${MY_OBJ_DIR}/$(basename $<).f
-${MY_OBJ_DIR}/%.o : %.f
-	${FC} -c ${FFLAGS} -o ${MY_OBJ_DIR}/$(notdir $@) $<
-endif
-# endif RS6K
-
-# SGI6, SGI64, SGIMP64
-ifneq (${null},$(findstring SGI,${PVM_ARCH}))
-C++ := CC -LANG:std
-CC := cc
-# 20000302: -w suppresses warnings which will swamp linker
-#C++ := g++ -w
-#CC := gcc
-CPPFLAGS := ${CPP_TKN} ${CPP_PTH} -I${NETCDF_INC}
-ifdef $(MIPSPRO_SGI)
-# SGIs like dataproc keep omp.h in special location determined by module MIPSpro
- CPPFLAGS := -I$(MIPSPRO_SGI)/usr/include ${CPPFLAGS}
-endif
+ifeq (${UNAMES},IRIX64)
+CXX := CC
+CC := cc -c99
+CFLAGS := -64 -mips4
+CPP := /usr/lib/cpp
+CPPFLAGS := ${CPP_TKN} ${CPP_PTH} -I${NETCDF_INC} -I${NETCDF_LIB}
 FC := f90 -cpp
+FFLAGS := -64 -mips4 -extend_source -mp -mpio
 LD := ld
+# 20000706: Added -mp -mpio for OpenMP compliance
+LDFLAGS := -64 -mp -mips4 -L${MY_LIB_DIR} -lrecipes_f ${NC_LDFLAGS} ${NC_LIBS}
+# 20021220: Pat Worley on cam-dev says when using MPI on SGI, link library order is important 
+#LDFLAGS += -mp -lmp -lmpi
 LEX := flex
 LINT := lint
 YACC := bison
-ifeq (${PVM_ARCH},SGI6)
-# SGI6
-GCC_ABI_FLG := -mabi=32
-GCC_LDFLAGS_SZ_SPC := ${GCC_ABI_FLG} -mips3 
-SGI_ABI_FLG := -n32 -mips3
-# endif SGI6
+ifeq (${PRC},D)
+ FFLAGS += -r8 -i4 
 else
-# SGI64, SGIMP64
-GCC_ABI_FLG := -mabi=64
-GCC_LDFLAGS_SZ_SPC := ${GCC_ABI_FLG} -mips4 -L/usr/local/lib/mabi=64
-SGI_ABI_FLG := -64 -mips4
-#SGI_ABI_FLG += -mp -mpio # Add multithreading
-# endif SGI64, SGIMP64
+ FFLAGS += -r4 -i4
 endif
-ifeq (${CC},gcc)
- LDFLAGS += $(GCC_LDFLAGS_SZ_SPC) -lm -L${NETCDF_LIB} -lnetcdf
 ifeq (${OPTS},O)
- CFLAGS += ${GCC_ABI_FLG} -O2 -Wall
+ CFLAGS += -O2 -g3
+ FFLAGS += -O2 -g3
 endif
 ifeq (${OPTS},R)
- CFLAGS += ${GCC_ABI_FLG} -Wall
+ CFLAGS += 
+ FFLAGS += 
 endif
 ifeq (${OPTS},D)
- CFLAGS += ${GCC_ABI_FLG} -g -Wall
+ CFLAGS += -g
+ FFLAGS += -g
 endif
 ifeq (${OPTS},X)
- CFLAGS += ${GCC_ABI_FLG} -g -O -Wall
-endif
- CXXFLAGS := ${CFLAGS}
-endif
-# endif CC=gcc
-ifeq (${CC},cc)
- LDFLAGS += ${SGI_ABI_FLG} -lm -L${NETCDF_LIB} -lnetcdf
-ifeq (${OPTS},O)
- CFLAGS += ${SGI_ABI_FLG} -O2
-endif
-ifeq (${OPTS},R)
- CFLAGS += ${SGI_ABI_FLG}
-endif
-ifeq (${OPTS},D)
- CFLAGS += ${SGI_ABI_FLG} -g
-endif
-ifeq (${OPTS},X)
- CFLAGS += ${SGI_ABI_FLG} -g -trapuv
+ CFLAGS += -g -trapuv
+ FFLAGS += -g -check_bounds -ansi -uvar
 endif
 endif
-# endif CC=cc
-# Fortran flags
-ifeq (${OPTS},O)
- FFLAGS := ${SGI_ABI_FLG} -O2 -extend_source
-endif
-ifeq (${OPTS},R)
- FFLAGS := ${SGI_ABI_FLG} -extend_source
-endif
-ifeq (${OPTS},D)
- FFLAGS := ${SGI_ABI_FLG} -g -extend_source
-endif
-ifeq (${OPTS},X)
- FFLAGS := ${SGI_ABI_FLG} -g -extend_source -check_bounds -trapuv
-endif
- FFLAGS += -r8 -i4
-# end fortran flags
-endif
-# endif SGI6, SGI64, SGIMP64
+# endif IRIX64=SGI64,SGIMP64
 
-ifeq (${PVM_ARCH},SUN4)
-C++ := g++
-CC := acc
-CPP := cpp
-CPPFLAGS := ${CPP_TKN} ${CPP_PTH} -I${NETCDF_INC}
-FC := f77
-LD := ld
-LDFLAGS := -L${MY_LIB_DIR} ${NC_LDFLAGS} ${NC_LIBS}
-LEX := lex
-LINT := lint
-YACC := yacc
-ifeq (${OPTS},O)
- CFLAGS := -O2
- FFLAGS := -fast -e -Nl99
-endif
-ifeq (${OPTS},D)
- CFLAGS := -g
- FFLAGS := -g -e -Nl99
-endif
- FFLAGS += -r8 -i4
-endif
-# endif SUN4
-
-ifeq (${PVM_ARCH},SUN4SOL2)
-C++ := g++
+ifeq (${UNAMES},SunOS) 
+CXX := g++
 CC := gcc -ansi
+CFLAGS := -Wall
 CPP := cpp
-CPPFLAGS := ${CPP_TKN} ${CPP_PTH} -I${NETCDF_INC}
-FC := f77
+CPPFLAGS := ${CPP_TKN} ${CPP_PTH} -I${NETCDF_INC} 
+FC := f90 -DHIDE_SHR_MSG
+#FFLAGS := -xs -stackvar -e -Qoption f90comp -r8const
+# Adding -dalign may be required if netCDF library was compiled with it
+# -M: Module directory
+FFLAGS := -xs -stackvar -e -M${NETCDF_INC}
 LD := ld
-LDFLAGS := -L${MY_LIB_DIR} ${NC_LDFLAGS} ${NC_LIBS}
+LDFLAGS := -L/opt/SUNWspro/lib -lf77compat -L${MY_LIB_DIR} ${NC_LDFLAGS} ${NC_LIBS} -lsunmath -lsocket -lnsl
+LDFLAGS += -lF77 -lM77 -lresolv
 LEX := lex
 LINT := lint
 YACC := yacc
 ifeq (${OPTS},O)
- CFLAGS := -O2
- FFLAGS := -O -e
+ CFLAGS += -O2 -g
+ FFLAGS += -fast -inline=%auto
+ LDFLAGS += -fast # 20010420 Yes, -fast tells Sun linker to add extra libraries
 endif
 ifeq (${OPTS},D)
- CFLAGS := -g
- FFLAGS := -g -e
+ CFLAGS += -g
+ FFLAGS += -g
 endif
 ifeq (${OPTS},X)
- CFLAGS := -g 
- FFLAGS := -g -e
-# NB: 1998/06/01 -C (range-checking) is not supported by Sun f90
+ CFLAGS += -g 
+ FFLAGS += -g
 ifeq (${FC},f77)
- FFLAGS += -C -r8 -i4
+# NB: 19980601 -C (range-checking) is not supported by Sun f90
+ FFLAGS += -C
 endif
 endif
-# NB: 1999/09/07 -r8 -i4 are not supported by Sun f90, Sun f77 now uses -dbl
-ifeq (${FC},f77)
- FFLAGS += -r8 -i4
+ifeq (${OMP},Y)
+ FFLAGS += -openmp # Equivalent to -mp=openmp -explicitpar -stackvar -D_OPENMP
+ LDFLAGS += -openmp # 
 endif
-endif
-# endif SUN4SOL2
-
-ifeq (${PVM_ARCH},SUNMP)
-C++ := g++
-CC := gcc -ansi
-CPP := cpp
-CPPFLAGS := ${CPP_TKN} ${CPP_PTH} -I${NETCDF_INC}
-FC := f90
-LD := ld
-LDFLAGS := -L${MY_LIB_DIR} ${NC_LDFLAGS} ${NC_LIBS}
-LEX := lex
-LINT := lint
-YACC := yacc
-ifeq (${OPTS},O)
- CFLAGS := -O2
- FFLAGS := -O -e
-endif
-ifeq (${OPTS},D)
- CFLAGS := -g
- FFLAGS := -g -e
-endif
-ifeq (${OPTS},X)
- CFLAGS := -g 
- FFLAGS := -g -e
-# 1998/06/01 -C (range-checking) is not supported by Sun f90
-ifeq (${FC},f77)
- FFLAGS += ${FFLAGS} -C
-endif
-endif
-# 1999/09/07 -r8 -i4 are not supported by Sun f90
-ifeq (${FC},f77)
- FFLAGS += -r8 -i4
-else
+ifeq (${PRC},D)
+# Do not add -r8const flag unless all constants are given precision in the code
+#FFLAGS += -r8const
+#FFLAGS += -r8 -i4
+# Using xtypemap appears to cause aer to fail
  FFLAGS += -xtypemap=real:64,double:64,integer:32
+ifeq (${FC},f77)
+ FFLAGS += -r8 -i4
+endif
+else
+ FFLAGS += -xtypemap=real:32,double:64,integer:32
+ifeq (${FC},f77)
+ FFLAGS += -r4 -i4
 endif
 endif
-# endif SUNMP
+endif
+# endif SunOS=SUN4SOL2,SUNMP
+
+ifeq (${PVM_ARCH},WIN32)
+CXX := ${LINUX_CXX}
+CC := ${LINUX_CC}
+# NB: nameser.h needs -Di386, but gcc sends -Di586 (on pentiums)
+CPPFLAGS := -Di386 ${CPP_TKN} ${CPP_PTH} -I${NETCDF_INC}
+FC := ${LINUX_FC}
+LD := ld
+LDFLAGS := -L${MY_LIB_DIR} ${NC_LDFLAGS} ${NC_LIBS}
+LDFLAGS += 
+LEX := flex
+LINT := lint
+YACC := bison
+# G95 Compiler
+ifeq (${FC},g95)
+ FFLAGS := -ffixed-line-length-132 -Wimplicit-none -Wall -Wuninitialized
+ifeq (${PRC},D)
+ FFLAGS += -r8
+else
+ FFLAGS += 
+endif
+ifeq (${OPTS},O)
+ FFLAGS += -O -g
+endif
+ifeq (${OPTS},D)
+ FFLAGS += -g
+endif
+ifeq (${OPTS},R)
+ FFLAGS += -g
+endif
+ifeq (${OPTS},X)
+ FFLAGS += -g -O -fbounds-check -pedantic
+# -finteger : Initialize uninitialized scalar integer variables
+# -flogical=none/true/false : Initialize uninitialized scalar logical variables
+# -fpointer=none/null/invalid : Initialize uninitialized scalar pointers
+# -freal=none/zero/nan/inf/+inf/-inf : Initialize uninitialized scalar logical variables
+# -ftrace=frame or -ftrace=full
+# FFLAGS += -finteger=-2147483648 -flogical=none -freal=nan -fpointer=invalid
+ FFLAGS += -finteger=-2147483648 -flogical=none -freal=nan -fpointer=invalid -ftrace=frame
+endif
+endif # end G95 Compiler
+endif
+# endif WIN32
 
 # Link to Electric Fence library, see man efence
 ifeq (${PVM_ARCH},LINUX)
 ifneq (${null},$(findstring ${OPTS},DX))
- LDFLAGS += -lefence
+# LDFLAGS += -lefence
 endif
 endif
 # endif LINUX
+
+# Disable OpenMP on platforms that automatically support it
+ifeq (${OMP},N)
+ FFLAGS := $(filter-out -omp,${FFLAGS})
+ FIXEDFLAGS := $(filter-out -omp,${FIXEDFLAGS})
+ CFLAGS := $(filter-out -mpio,${CFLAGS})
+ FFLAGS := $(filter-out -mpio,${FFLAGS})
+ LDFLAGS := $(filter-out -mpio,${LDFLAGS})
+ CFLAGS := $(filter-out -mp,${CFLAGS})
+ FFLAGS := $(filter-out -mp,${FFLAGS})
+ LDFLAGS := $(filter-out -mp,${LDFLAGS})
+ ifneq (${UNAMES},SunOS)
+  CPPFLAGS += -U_OPENMP
+ endif # endif SunOS
+endif # endif OMP
 
 # Define any remaining variables
 
@@ -914,8 +973,16 @@ all : ${MDL_BIN_TRG}
 .PHONY: all cln dst_cln debug 
 # Delete default suffixes---this should increase speed
 .SUFFIXES: 
-# Define suffixes which matter
-.SUFFIXES: .cc .c .o .F .d
+# Define suffixes that matter
+.SUFFIXES: .cc .c .${DPN_SFX} .F .F90 .f90 .${MDL_SFX} .o
+# Delete targets that were not successfully made
+.DELETE_ON_ERROR:
+lib_dir :
+	- if ! test -d ${MY_LIB_DIR}; then mkdir ${MY_LIB_DIR}; fi
+bin_dir :
+	- if ! test -d ${MY_BIN_DIR}; then mkdir ${MY_BIN_DIR}; fi
+obj_dir :
+	- if ! test -d ${MY_OBJ_DIR}; then mkdir ${MY_OBJ_DIR}; fi
 
 # Targets in bin
 CRM_OBJ := ${MDL_OBJ}
@@ -943,30 +1010,57 @@ dbg:
 	@printf "CPP_DFN_F = ${CPP_DFN_F}\n"
 	@printf "CPP_PTH = ${CPP_PTH}\n"
 	@printf "CPP_TKN = ${CPP_TKN}\n"
-	@printf "CURL_LIB = ${CURL_LIB}\n"
 	@printf "CXX = ${CXX}\n"
 	@printf "CXXFLAGS = ${CXXFLAGS}\n"
+	@printf "DBG = ${DBG}\n"
+	@printf "FC = ${FC}\n"
+	@printf "FFLAGS = ${FFLAGS}\n"
+	@printf "FIXEDFLAGS = ${FIXEDFLAGS}\n"
+	@printf "FREEFLAGS = ${FREEFLAGS}\n"
+	@printf "GCC_RCH_ARG = ${GCC_RCH_ARG}\n"
+	@printf "GSL_LIB = ${GSL_LIB}\n"
+	@printf "HOST = ${HOST}\n"
+	@printf "ICC_RCH_ARG = ${ICC_RCH_ARG}\n"
+	@printf "HOSTNAME = ${HOSTNAME}\n"
 	@printf "LDFLAGS = ${LDFLAGS}\n"
-	@printf "LEX = $(LEX)\n"
+	@printf "LIBNETCDFF = ${LIBNETCDFF}\n"
+	@printf "LINUX_CC = ${LINUX_CC}\n"
+	@printf "LINUX_CXX = ${LINUX_CXX}\n"
+	@printf "LINUX_FC = ${LINUX_FC}\n"
 	@printf "MDL_DPN = ${MDL_DPN}\n"
 	@printf "MDL_OBJ = ${MDL_OBJ}\n"
 	@printf "MDL_PTH = ${MDL_PTH}\n"
 	@printf "MDL_SRC = ${MDL_SRC}\n"
+	@printf "MPI = ${MPI}\n"
 	@printf "MY_BIN_DIR = ${MY_BIN_DIR}\n"
 	@printf "MY_BLD_DIR = ${MY_BLD_DIR}\n"
 	@printf "MY_DAT_DIR = ${MY_DAT_DIR}\n"
 	@printf "MY_DOC_DIR = ${MY_DOC_DIR}\n"
-	@printf "MY_DPN_DIR = ${MY_DPN_DIR}\n"
+	@printf "MY_DPN_DIR_RX = ${MY_DPN_DIR_RX}\n"
+	@printf "MY_ES_DIR = ${MY_ES_DIR}\n"
 	@printf "MY_INC_DIR = ${MY_INC_DIR}\n"
 	@printf "MY_LIB_DIR = ${MY_LIB_DIR}\n"
+	@printf "MY_SHR_DIR = ${MY_SHR_DIR}\n"
 	@printf "MY_OBJ_DIR = ${MY_OBJ_DIR}\n"
-	@printf "MY_SRC_DIR = ${MY_SRC_DIR}\n"
+	@printf "MY_OBJ_DIR_RX = ${MY_OBJ_DIR_RX}\n"
+	@printf "NC_LDFLAGS = ${NC_LDFLAGS}\n"
+	@printf "NC_LIBS = ${NC_LIBS}\n"
+	@printf "NETCDF4 = ${NETCDF4}\n"
+	@printf "NETCDF4_ROOT = ${NETCDF4_ROOT}\n"
 	@printf "NETCDF_INC = ${NETCDF_INC}\n"
 	@printf "NETCDF_LIB = ${NETCDF_LIB}\n"
+	@printf "NETCDF_ROOT = ${NETCDF_ROOT}\n"
+	@printf "NETCDFF = ${NETCDFF}\n"
+	@printf "OMP = ${OMP}\n"
+	@printf "OMP_FLG_C = ${OMP_FLG_C}\n"
+	@printf "OMP_FLG_F = ${OMP_FLG_F}\n"
+	@printf "OPTS = ${OPTS}\n"
+	@printf "PGI_RCH_ARG = ${PGI_RCH_ARG}\n"
+	@printf "PRC = ${PRC}\n"
+	@printf "PSC_RCH_ARG = ${PSC_RCH_ARG}\n"
 	@printf "PVM_ARCH = ${PVM_ARCH}\n"
-	@printf "SRC_LST = $(SRC_LST)\n"
+	@printf "UNAMES = ${UNAMES}\n"
 	@printf "VPATH = ${VPATH}\n"
-	@printf "YACC = $(YACC)\n"
 distclean : dst_cln
 dst_cln : cln bld_cln
 install : inc 
@@ -1003,6 +1097,7 @@ else
  INCLUDE_DPN := FALSE
 endif
 ifeq (${INCLUDE_DPN},TRUE)
+# Incorporate dependency files into Makefile rules
 -include ${MDL_DPN}
 endif
 
