@@ -338,6 +338,9 @@ DirectoryIndex index.shtml index.html index.php
 <Directory "/Users/zender/Sites/smn">
     Options Indexes
 </Directory>
+<Directory "/Users/zender/Sites/swnb2">
+    Options Indexes
+</Directory>
 
 #
 # The following lines prevent .htaccess and .htpasswd files from being 
