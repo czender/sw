@@ -131,6 +131,11 @@ file.</h2>
 -->
 
 <p>
+2015/10/22: 
+CRM&nbsp;2.1.8 is released.
+Executable tested and working on Mac OS X with <tt>gfortran</tt> compiler.
+
+<p>
 2012/09/17: 
 CRM&nbsp;2.1.7 is released.
 Updates compiler settings for new netCDF library structure.

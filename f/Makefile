@@ -2,7 +2,7 @@
 
 # Purpose: Makefile for Fortran module f
 
-# Copyright (C) 1994--2014 Charlie Zender
+# Copyright (C) 1994--2015 Charlie Zender
 # You may copy, distribute, and/or modify this software under the terms of the GNU General Public License (GPL) Version 3
 # See http://www.gnu.org/copyleft/gpl.html for full license text
 
@@ -585,7 +585,7 @@ endif
 endif # end G95 Compiler
 # GNU Fortran Compiler (called as gfortran-mp-4.9 on MACOSX)
 ifneq (${null},$(findstring gfortran,${FC}))
- FFLAGS := -ffixed-line-length-132 -Wall
+FFLAGS := -ffixed-line-length-132 -Wall -fcray-pointer
 ifeq (${OMP},Y)
  OMP_FLG_C := -fopenmp
  OMP_FLG_F := -fopenmp
