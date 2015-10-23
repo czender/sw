@@ -326,6 +326,9 @@ DirectoryIndex index.shtml index.html index.php
 <Directory "/Users/zender/Sites/tmp">
     Options Indexes
 </Directory>
+<Directory "/Users/zender/Sites/pix">
+    Options Indexes
+</Directory>
 <Directory "/Users/zender/Sites/pr">
     Options Indexes
 </Directory>
