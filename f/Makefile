@@ -1092,7 +1092,7 @@ dat_cln :
 # Targets in dff
 diff : dff
 dff : 
-	diff -r --exclude='.#*' --exclude='*~' --exclude='*.MOD' --exclude='*.mod' --exclude='*.o' --exclude='*.pcl' --exclude='*.svn*' --exclude='.cvsignore' --exclude=ChangeLog  --exclude='CVS' --exclude='foo*' --exclude='index*' --exclude=Makefile --exclude=README --exclude=TAGS --exclude=TODO --exclude=VERSION ${HOME}/dead ${HOME}/f
+	diff -r --exclude='.#*' --exclude='*~' --exclude='*.MOD' --exclude='*.mod' --exclude='*.o' --exclude='*.pcl' --exclude='*.svn*' --exclude='.cvsignore' --exclude=ChangeLog  --exclude='CVS' --exclude='foo*' --exclude='index*' --exclude=Makefile --exclude=README --exclude=TAGS --exclude=TODO --exclude=VERSION ${HOME}/dead ${HOME}/sw/f
 # Targets in dpn
 dpn : ${MDL_DPN}
 dpn_cln :

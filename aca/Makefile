@@ -2,7 +2,7 @@
 
 # Purpose: Makefile for radiation codes
 
-# Copyright (C) 1994--2014 Charlie Zender
+# Copyright (C) 1994--2015 Charlie Zender
 # You may copy, distribute, and/or modify this software under the terms of the GNU General Public License (GPL) Version 3
 # See http://www.gnu.org/copyleft/gpl.html for full license text
 
