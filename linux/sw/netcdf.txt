@@ -5934,7 +5934,7 @@ http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
 #***********************************************************************
 
 #***********************************************************************
-# 20150622: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 22 gcc/gfortran 5.1.1 netcdf-4.4.0-rc1 HDF4 git HDF5 threadsafe
+# 20151024: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 22 gcc/gfortran 5.1.1 netcdf-4.4.0-rc4 HDF4 git
 #***********************************************************************
 sudo aptitude install antlr bison doxygen flex gcc g++ gsl-bin libgsl0-dev libcurl4-gnutls-dev libexpat1-dev libxml2-dev netcdf-bin udunits-bin libudunits2-0 libudunits2-dev # Install netCDF prequisites
 sudo yum install antlr antlr-C++ curl-devel libxml2-devel bison flex gcc gcc-c++ gcc-gfortran gsl gsl-devel librx librx-devel udunits2 udunits2-devel
@@ -5980,9 +5980,7 @@ export HDF5_ROOT=${NETCDF4_ROOT}
 # HDF5_ROOT=${DATA}/tmp/hdf5-1.8.13/hdf5
 # 20150622 Thread-safety is an HDF5 compile-time option
 # Provides multiple concurrent reads by serializing its internal library calls, sacrificing their built-in concurrency
-# Unclear whether this trade-off is worthwhile
-# 
-# https://www.hdfgroup.org/hdf5-quest.html#mthread
+# Unclear whether this trade-off is worthwhile. Seems not to be.
 # https://www.hdfgroup.org/hdf5-quest.html#mthread
 # HDF5 --enable-threadsafe --with-pthread=$PTHREAD_DIR
 ./configure --prefix=${HDF5_ROOT} --enable-cxx --enable-fortran > hdf5.configure.${GNU_TRP}.foo 2>&1
@@ -5991,7 +5989,7 @@ export HDF5_ROOT=${NETCDF4_ROOT}
 # ./configure --prefix=${HDF5_ROOT} --enable-fortran --enable-parallel
 make > hdf5.make.${GNU_TRP}.foo 2>&1
 # make check > hdf5.check.${GNU_TRP}.foo 2>&1
-scp hdf5.*.foo dust.ess.uci.edu:/var/www/html/tmp
+scp hdf5.*.foo dust.ess.uci.edu:Sites/tmp
 sudo make install
 
 # Do same for netCDF4 Fortran
@@ -6004,7 +6002,7 @@ LDFLAGS='-L/usr/local/lib' ./configure --prefix=/usr/local > netcdff.configure.$
 mv -f config.log netcdff.config.log.${GNU_TRP}.foo
 make > netcdff.make.${GNU_TRP}.foo 2>&1
 make check > netcdff.check.${GNU_TRP}.foo 2>&1
-scp netcdff.*.foo dust.ess.uci.edu:/var/www/html/tmp
+scp netcdff.*.foo dust.ess.uci.edu:Sites/tmp
 sudo make install
 sudo cp ${DATA}/tmp/netcdf-fortran/fortran/.libs/libnetcdff90.a ${NETCDF4_ROOT}/lib/libnetcdff90.a.gfortran
 sudo cp ${DATA}/tmp/netcdf-fortran/fortran/.libs/libnetcdff.a ${NETCDF4_ROOT}/lib/libnetcdff.a.gfortran
@@ -6021,7 +6019,7 @@ LDFLAGS='-L/usr/local/lib' ./configure --prefix=/usr/local > netcdf_cxx.configur
 make > netcdf_cxx.make.${GNU_TRP}.foo 2>&1
 mv -f config.log netcdf_cxx.config.log.${GNU_TRP}.foo
 make check > netcdf_cxx.check.${GNU_TRP}.foo 2>&1
-scp netcdf_cxx.*.foo dust.ess.uci.edu:/var/www/html/tmp
+scp netcdf_cxx.*.foo dust.ess.uci.edu:Sites/tmp
 sudo make install
 
 # Do same for netCDF4 C++ (new interface)
@@ -6032,7 +6030,7 @@ LDFLAGS='-L/usr/local/lib' ./configure --prefix=/usr/local > netcdf_c++.configur
 make > netcdf_c++.make.${GNU_TRP}.foo 2>&1
 mv -f config.log netcdf_c++.config.log.${GNU_TRP}.foo
 make check > netcdf_c++.check.${GNU_TRP}.foo 2>&1
-scp netcdf_c++.*.foo dust.ess.uci.edu:/var/www/html/tmp
+scp netcdf_c++.*.foo dust.ess.uci.edu:Sites/tmp
 sudo make install
 
 # Do same for netCDF4 C
@@ -6064,8 +6062,8 @@ CPPFLAGS='-I/usr/local/include -I/usr/include/hdf' LDFLAGS='-L/usr/local/lib -L/
 CPPFLAGS='-I/usr/local/include' LDFLAGS='-L/usr/local/lib' LIBS='-ljpeg' ./configure --prefix=/usr/local --enable-shared --enable-dap --enable-hdf4 --enable-logging --enable-netcdf4 --enable-v2 > netcdf.configure.${GNU_TRP}.foo 2>&1
 mv -f config.log netcdf.config.log.${GNU_TRP}.foo
 make > netcdf.make.${GNU_TRP}.foo 2>&1
-make check > netcdf.check.${GNU_TRP}.foo 2>&1
-scp netcdf.*.foo dust.ess.uci.edu:/var/www/html/tmp
+Make check > netcdf.check.${GNU_TRP}.foo 2>&1
+scp netcdf.*.foo dust.ess.uci.edu:Sites/tmp
 sudo make install
 # NB: Fortran symbols do get munged into libnetcdf.a somehow
 sudo cp ${DATA}/tmp/netcdf-c/libsrc/.libs/libnetcdf3.a ${NETCDF4_ROOT}/lib/libnetcdf3.a.gcc
@@ -6078,6 +6076,6 @@ http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
 http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
 http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
 #***********************************************************************
-# 20150622: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 22 gcc/gfortran 5.1.1 netcdf-4.4.0-rc1 HDF4 git HDF5 threadsafe
+# 20151024: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 22 gcc/gfortran 5.1.1 netcdf-4.4.0-rc4 HDF4 git
 #***********************************************************************
 
