@@ -23,3 +23,7 @@
 *~
 TAGS
 
+# Compilers
+*.d
+*.mod
+*.o

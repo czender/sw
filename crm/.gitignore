@@ -1,0 +1,4 @@
+# Git-ignore patterns
+
+crm.nc
+crm/bin/crm
