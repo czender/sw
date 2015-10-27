@@ -1,4 +1,5 @@
 # Git-ignore patterns
 
-crm.nc
-crm/bin/crm
+# DEAD-specific files
+dead.nc
+dst_mss_bdg.nc
