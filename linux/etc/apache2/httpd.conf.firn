@@ -317,6 +317,9 @@ DirectoryIndex index.shtml index.html index.php
 <Directory "/Users/zender/Sites/facts">
     Options Indexes
 </Directory>
+<Directory "/Users/zender/Sites/hire">
+    Options Indexes
+</Directory>
 <Directory "/Users/zender/Sites/job">
     Options Indexes
 </Directory>
