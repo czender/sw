@@ -6,7 +6,6 @@ Usage:
 http://dust.ess.uci.edu/doc/index.shtml
 file:/home/zender/linux/index.shtml
 scp ~/sw/linux/index.shtml dust.ess.uci.edu:Sites/doc/index.shtml
-scp ~/sw/linux/index.shtml dust.ess.uci.edu:Sites/doc/index.shtml
 -->
 
 <!doctype html public "-//W3C//DTD HTML 3.2//EN">
