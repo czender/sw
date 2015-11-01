@@ -1317,7 +1317,7 @@ if [ "${PVM_ARCH}" != "CRAY" ]; then
     alias print7r='enscript -2rG -fHelvetica7'
     alias printr='enscript -rG -fHelvetica10'
     alias printt='enscript -G -fCourier9'
-    alias printt2r='enscript -2rG -fCourier7' # printt2r -o ~/foo.ps ~/trv/trv_san_francisco_201012.txt
+    alias printt2r='enscript -2rG -fCourier7' # printt2r -o ~/foo.ps ~/prv/trv/trv_san_francisco_201012.txt
     alias printtr='enscript -rG -fCourier11'
     alias smallfry='xterm -geometry 95x6+0+0 -sb -sl 80 -sk -n Smallfry -T Smallfry -iconic -fn 6x10 \&'
 
