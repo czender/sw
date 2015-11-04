@@ -4,12 +4,8 @@ Purpose: Homepage for Zender Group Webserver
 
 Usage:
 http://dust.ess.uci.edu
-file:/var/www/html/index.shtml
-file:/home/zender/linux/var/www/html/index.shtml
-
-diff ~/sw/linux/var/www/html/index.shtml /var/www/html/index.shtml
-sudo cp -p ~/sw/linux/var/www/html/index.shtml /var/www/html/index.shtml
-scp -p ~/sw/linux/var/www/html/index.shtml dust.ess.uci.edu:/var/www/html/index.shtml
+file:Sites/index.shtml
+file:~zender/linux/var/www/html/index.shtml
 
 diff ~/sw/linux/var/www/html/index.shtml ~/Sites/index.shtml
 sudo cp -p ~/sw/linux/var/www/html/index.shtml ~/Sites/index.shtml
