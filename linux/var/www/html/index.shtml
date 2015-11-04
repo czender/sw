@@ -51,9 +51,7 @@ scp -p ~/sw/linux/var/www/html/index.shtml dust.ess.uci.edu:Sites/index.shtml
 <li><a href="http://dust.ess.uci.edu/doc">Group Documentation</a></li>
 <li><a href="http://www.ess.uci.edu/~zender">Group Homepage</a></li>
 <li><a href="http://dust.ess.uci.edu/poetry">Group Poetry</a></li>
-<li><a href="http://hp4050.ess.uci.edu">Group Printer HP4050 (Croul 1101)</a></li>
-<li><a href="http://hp4600.ess.uci.edu">Group Printer HP4600 (Croul 3228)</a></li>
-<li><a href="http://hp6840.ess.uci.edu">Group Printer HP6840 (Rowland 240U)</a></li>
+<li><a href="http://hp4600.ess.uci.edu">Group Printer HP4700 (Croul 3223)</a></li>
 <!-- 
 <li><a href="http://dust.ess.uci.edu/allenr">Group Webspace: Allen, Bob</a></li>
 <li><a href="http://dust.ess.uci.edu/scapps">Group Webspace: Capps, Scott</a></li>
