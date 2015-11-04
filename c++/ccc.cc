@@ -235,7 +235,7 @@ int main(int argc,char **argv)
   // Derived fields
   std::string drc_dat((nvr_DATA_RT.length() > 0) ? nvr_DATA_RT : "/data/zender/aca"); // [sng] Data directory
   std::string drc_in((nvr_HOME.length() > 0) ? nvr_HOME+"/nco/data" : "/home/zender/nco/data"); // [sng] Input directory
-  std::string drc_out((nvr_HOME.length() > 0) ? nvr_HOME+"/c++" : ""); // [sng] Output directory
+  std::string drc_out((nvr_HOME.length() > 0) ? nvr_HOME+"/sw/c++" : ""); // [sng] Output directory
 
   static struct option opt_lng[]={
     /* The option structure is {char *name,int has_arg,int *flag,int val} 

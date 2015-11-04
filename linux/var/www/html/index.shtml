@@ -34,7 +34,6 @@ scp -p ~/sw/linux/var/www/html/index.shtml dust.ess.uci.edu:Sites/index.shtml
 <a href="http://dust.ess.uci.edu"><tt>dust</tt></a> /
 <a href="http://www.ess.uci.edu">ESS</a> /
 <a href="http://dust.ess.uci.edu/facts">FACTs</a> /
-<a href="http://ipcc.ess.uci.edu">IPCC</a> /
 <a href="http://nco.sf.net">NCO</a> /
 <a href="http://sourceforge.net/projects/nco">NCO Project</a> /
 <a href="http://www.ess.uci.edu/~zender">Zender</a>
