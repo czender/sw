@@ -1760,7 +1760,7 @@ Installing \trmidx{Cygwin} requires a few additional commands.
 Be sure to install \cmdidx{sudo}.
 \begin{verbatim}
 # Get LaTeX working
-rsync dust.ess.uci.edu:tex/cls ~/tex
+rsync dust.ess.uci.edu:sw/tex/cls ~/sw/tex
 scp -r 'dust.ess.uci.edu:${TEXMFDIR}/tex/latex/datetime' .;sudo mv datetime ${TEXMFDIR}/tex/latex # datetime.sty
 scp -r 'dust.ess.uci.edu:${TEXMFDIR}/tex/latex/fmtcount' .;sudo mv fmtcount ${TEXMFDIR}/tex/latex # fmtcount.sty
 scp -r 'dust.ess.uci.edu:${TEXMFDIR}/tex/latex/ifdraft' .;sudo mv ifdraft ${TEXMFDIR}/tex/latex # ifdraft.sty
