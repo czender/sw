@@ -432,6 +432,7 @@ case "${PVM_ARCH}" in
 	esac # endcase ${HOST}
 	# Set NCARG
 	case "${HOST}" in 
+	    glace* | grele* ) NCARG_ROOT='/usr/local/ncl-6.3.0' ; ;; # endif EMT64 Rocks Cluster
 	    gplogin* ) NCARG_ROOT='/sopt/ncl' ; ;; # endif EMT64 Rocks Cluster
 	esac # endcase ${HOST}
 	# Set PGI
