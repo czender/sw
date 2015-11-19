@@ -370,7 +370,7 @@ case "${PVM_ARCH}" in
 	export X11='/usr/X11R6'
 	case "${HOST}" in 
 	    cooley* | cc* ) export DATA="/projects/HiRes_EarthSys/${USER}" ; ;; # endif ALCF
-	    edison* | hopper* | nid* ) export DATA="${HOME}/data" ; ;; # endif NERSC
+	    cori* | edison* | hopper* | nid* ) export DATA="${HOME}/data" ; ;; # endif NERSC
 	    gplogin* ) export DATA="/data/${USER}" ; ;; # endif EMT64 Rocks Cluster
 	    hpc* ) export DATA="/data/users/${USER}" ; ;; # endif hpc
 	    mirage* ) export DATA="/glade/scratch/${USER}" ; ;; # endif mirage
@@ -860,7 +860,7 @@ fi # endif hostname
 # System-specific environments
 case "${HOST}" in
     cooley* | cc* ) export PROJID='HiRes_EarthSys' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
-    edison* | hopper* | nid* ) export PROJID='acme' ; export DATA="${HOME}/data" ; ;;
+    cori* | edison* | hopper* | nid* ) export PROJID='acme' ; export DATA="${HOME}/data" ; ;;
     rhea* ) export PROJID='cli115' ; export MY_MEMBERWORK="${MEMBERWORK}/${PROJID}" ; export MY_PROJWORK="${PROJWORK}/${PROJID}/${USER}" ; export MY_WORLDWORK="${WORLDWORK}/${PROJID}/${USER}" ; export DATA="${MY_PROJWORK}" ; ;;
 esac # endcase ${HOST}
 
@@ -1057,8 +1057,9 @@ alias rhea='ssh -X rhea.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
 alias acmetest='ssh -X acmetest.ornl.gov' # then leapfrog to pileus
 alias pileus='ssh -X pileus-login01.ornl.gov' # then leapfrog to pileus
 alias cooley='ssh -X cooley.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
-alias hopper='ssh -X hopper.nersc.gov' # pw_hgh (case-sensitive!)
-alias edison='ssh -X edison.nersc.gov' # pw_hgh (case-sensitive!)
+alias cori='ssh -X cori.nersc.gov' # pw_hgh
+alias hopper='ssh -X hopper.nersc.gov' # pw_hgh
+alias edison='ssh -X edison.nersc.gov' # pw_hgh
 alias bsrc="source ${HOME}/.bashrc"
 alias chm='chmod 644 *.*' # Make readable
 alias clay='ssh -X clay.ess.uci.edu'
