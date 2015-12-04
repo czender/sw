@@ -1,0 +1,9 @@
+# Git-ignore patterns
+
+# Symbolic link used by fff in f-module
+in.nc
+
+# Compilers
+*.d
+*.mod
+*.o
