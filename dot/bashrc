@@ -375,7 +375,7 @@ case "${PVM_ARCH}" in
 	    hpc* ) export DATA="/data/users/${USER}" ; ;; # endif hpc
 	    mirage* ) export DATA="/glade/scratch/${USER}" ; ;; # endif mirage
 	    pileus* ) export DATA="/home/${USER}/data" ; ;; # endif CADES
-	    rhea* ) export DATA="/lustre/atlas/proj-shared/cli115/${USER}" ; ;; # endif OLCF
+	    mira* | rhea* | titan* ) export DATA="/lustre/atlas/proj-shared/cli115/${USER}" ; ;; # endif OLCF
 	    ys* ) export DATA="/glade/p/work/${USER}" ; ;; # endif NCAR
 	    * ) export DATA="/data/${USER}" ; ;; # endif default
 	esac # endcase ${HOST}
@@ -544,9 +544,9 @@ case "${PVM_ARCH}" in
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
 	case "${HOST}" in 
 	    # 20130916: Support NCAR modules on yellowstone by removing custom environment variables
-#	    ys* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/apps/opt/udunits/2.1.24/gnu/default/lib; ;; # endif NCAR
 	    pileus* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/ACME/lib\:/opt/ACME/uvcdat-2.2-build/install/Externals/lib; ;; # endif CADES
 	    rhea* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/sw/redhat6/udunits/2.1.24/rhel6.4_intel13.1.3/lib; ;; # endif ORNL
+#	    ys* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/apps/opt/udunits/2.1.24/gnu/default/lib; ;; # endif NCAR
 	    ys* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/apps/opt/udunits/2.1.24/intel/12.1.4/lib; ;; # endif NCAR
 	esac # endcase ${HOST}
 	case "${HOST}" in 
@@ -814,7 +814,7 @@ case "${HOST}" in
     hpc* ) export LINUX_CC=${CC_pgcc} ; export LINUX_CXX=${CXX_pgCC} ; export LINUX_FC=${FC_pgf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # endif pgcc/pgCC/pgf95 MPICH2
 #   soot* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_g95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX=${LINUX_CXX} ;; # endif icc/icpc/g95 MPICH
     givre* | neige* | roulee* | silt* | snow* | virga* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # endif gcc/g++/gfortran OpenMPI
-    rhea* | ys* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
+    mira* | rhea* | titan* | ys* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # endif gcc/g++/g95 MPICH 
 esac # endcase ${HOST}
 # LAMMPICC and LAMPICXX are OS-independent
@@ -861,7 +861,7 @@ fi # endif hostname
 case "${HOST}" in
     cooley* | cc* ) export PROJID='HiRes_EarthSys' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
     cori* | edison* | hopper* | nid* ) export PROJID='acme' ; export DATA="${HOME}/data" ; ;;
-    rhea* ) export PROJID='cli115' ; export MY_MEMBERWORK="${MEMBERWORK}/${PROJID}" ; export MY_PROJWORK="${PROJWORK}/${PROJID}/${USER}" ; export MY_WORLDWORK="${WORLDWORK}/${PROJID}/${USER}" ; export DATA="${MY_PROJWORK}" ; ;;
+    mira* | rhea* | titan* ) export PROJID='cli115' ; export MY_MEMBERWORK="${MEMBERWORK}/${PROJID}" ; export MY_PROJWORK="${PROJWORK}/${PROJID}/${USER}" ; export MY_WORLDWORK="${WORLDWORK}/${PROJID}/${USER}" ; export DATA="${MY_PROJWORK}" ; ;;
 esac # endcase ${HOST}
 
 # Export the big three
@@ -1053,7 +1053,9 @@ alias ashes='ssh -X -p 264 68.109.196.84' # Forward to 192.168.1.75:22 (to ashes
 alias bc='bc -l' # -l = defines standard math library and sets scale to 20
 alias beepoff='xset b off' # Turn beep sound off for quiet work envionments
 alias yellowstone='ssh -X yellowstone.ucar.edu' # Yubikey 5573
+alias mira='ssh -X mira.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
 alias rhea='ssh -X rhea.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
+alias titan='ssh -X titan.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
 alias acmetest='ssh -X acmetest.ornl.gov' # then leapfrog to pileus
 alias pileus='ssh -X pileus-login01.ornl.gov' # then leapfrog to pileus
 alias cooley='ssh -X cooley.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
