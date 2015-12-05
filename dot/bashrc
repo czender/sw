@@ -373,9 +373,10 @@ case "${PVM_ARCH}" in
 	    cori* | edison* | hopper* | nid* ) export DATA="${HOME}/data" ; ;; # endif NERSC
 	    gplogin* ) export DATA="/data/${USER}" ; ;; # endif EMT64 Rocks Cluster
 	    hpc* ) export DATA="/data/users/${USER}" ; ;; # endif hpc
-	    mirage* ) export DATA="/glade/scratch/${USER}" ; ;; # endif mirage
+	    mirage* ) export DATA="/glade/scratch/${USER}" ; ;; # endif NCAR mirage
+	    mira* ) export DATA="/glade/scratch/${USER}" ; ;; # endif OLCF mira
 	    pileus* ) export DATA="/home/${USER}/data" ; ;; # endif CADES
-	    mira* | rhea* | titan* ) export DATA="/lustre/atlas/proj-shared/cli115/${USER}" ; ;; # endif OLCF
+	    rhea* | titan* ) export DATA="/lustre/atlas/world-shared/cli115/${USER}" ; ;; # endif OLCF
 	    ys* ) export DATA="/glade/p/work/${USER}" ; ;; # endif NCAR
 	    * ) export DATA="/data/${USER}" ; ;; # endif default
 	esac # endcase ${HOST}
@@ -597,6 +598,7 @@ case "${PVM_ARCH}" in
 	export PYTHONPATH=/usr/lib/portage/pym
 	export TEXMFDIR=/opt/local/share/texmf-texlive # One level above bibtex, tex,
 	
+	PATH=${PATH}\:/Users/zender/miniconda2/bin # Miniconda
 	PATH=${PATH}\:/opt/local/libexec/gnubin # Up-to-date GNU commands from port install coreutils
 	PATH=${PATH}\:/usr/local/bin # Custom-built 3rd party packages
 	PATH=${PATH}\:/opt/local/bin # MacPorts packages
@@ -859,9 +861,9 @@ fi # endif hostname
 
 # System-specific environments
 case "${HOST}" in
-    cooley* | cc* ) export PROJID='HiRes_EarthSys' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
+    cooley* | cc* | mira* ) export PROJID='HiRes_EarthSys' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
     cori* | edison* | hopper* | nid* ) export PROJID='acme' ; export DATA="${HOME}/data" ; ;;
-    mira* | rhea* | titan* ) export PROJID='cli115' ; export MY_MEMBERWORK="${MEMBERWORK}/${PROJID}" ; export MY_PROJWORK="${PROJWORK}/${PROJID}/${USER}" ; export MY_WORLDWORK="${WORLDWORK}/${PROJID}/${USER}" ; export DATA="${MY_PROJWORK}" ; ;;
+    rhea* | titan* ) export PROJID='cli115' ; export MY_MEMBERWORK="${MEMBERWORK}/${PROJID}" ; export MY_PROJWORK="${PROJWORK}/${PROJID}/${USER}" ; export MY_WORLDWORK="${WORLDWORK}/${PROJID}/${USER}" ; export DATA="${MY_PROJWORK}" ; ;;
 esac # endcase ${HOST}
 
 # Export the big three
