@@ -1,6 +1,6 @@
 # $Header$
 
-# Purpose: Apache configuration for Zender group server
+# Purpose: Apache configuration for Zender group server (MacOSX)
 
 # Usage:
 # diff ~/sw/linux/etc/apache2/httpd.conf.firn /etc/apache2/httpd.conf
@@ -295,11 +295,15 @@ AllowOverride All
 DirectoryIndex index.shtml index.html index.php
 </IfModule>
 
-# csz add each directory where users can get listing
+# csz add each directory where users can get listing, then run
+# sudo apachectl restart
 <Directory "/Users/zender/Sites/crm">
     Options Indexes
 </Directory>
 <Directory "/Users/zender/Sites/dead">
+    Options Indexes
+</Directory>
+<Directory "/Users/zender/Sites/dead/data">
     Options Indexes
 </Directory>
 <Directory "/Users/zender/Sites/doc">
@@ -309,6 +313,9 @@ DirectoryIndex index.shtml index.html index.php
     Options Indexes
 </Directory>
 <Directory "/Users/zender/Sites/essgcm15">
+    Options Indexes
+</Directory>
+<Directory "/Users/zender/Sites/ess_gcc">
     Options Indexes
 </Directory>
 <Directory "/Users/zender/Sites/f">
