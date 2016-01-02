@@ -125,7 +125,8 @@ ESMF_RegridWeightGen -s ${DATA}/scrip/grids/remap_grid_POP43.nc -d ${DATA}/scrip
 # 20150401: aerosol.ess.uci.edu x86_64-apple-darwin14.1.0 MacOSX 10.10 Yosemite clang 6.0 netcdf-4.3.3.1
 #***********************************************************************
 # Tempest
-# No additional ports needed for tempestremap on MACOSX. Everything (blas, lapack) already installed by XTools.
+# Only one additional port needed for tempestremap on MACOSX. Everything (blas, lapack) already installed by XTools.
+sudo port install netcdf-cxx
 cd ${DATA}/tmp
 git clone https://github.com/ClimateGlobalChange/tempestremap.git
 cd ${DATA}/tmp/tempestremap

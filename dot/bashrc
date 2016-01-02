@@ -863,7 +863,7 @@ fi # endif hostname
 case "${HOST}" in
     cooley* | cc* | mira* ) export PROJID='HiRes_EarthSys' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
     cori* | edison* | hopper* | nid* ) export PROJID='acme' ; export DATA="${HOME}/data" ; ;;
-    rhea* | titan* ) export PROJID='cli115' ; export MY_MEMBERWORK="${MEMBERWORK}/${PROJID}" ; export MY_PROJWORK="${PROJWORK}/${PROJID}/${USER}" ; export MY_WORLDWORK="${WORLDWORK}/${PROJID}/${USER}" ; export DATA="${MY_PROJWORK}" ; ;;
+    rhea* | titan* ) export PROJID='cli115' ; export DATA="/lustre/atlas/world-shared/${PROJID}/${USER}" ; ;; # endif OLCF
 esac # endcase ${HOST}
 
 # Export the big three
