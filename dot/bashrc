@@ -1123,7 +1123,11 @@ alias rsync='rsync -av' # -p = preserve mode, time, -C = enable compression
 alias scp='scp -p -C' # -p = preserve mode, time, -C = enable compression
 alias silt='ssh -X silt.ess.uci.edu'
 alias snow='ssh -X snow.engin.umich.edu'
-#alias ssh='ssh -X' # -X = enable X11 forwarding
+# Enable X11 forwarding on remote machine
+# ssh -X foo.domain.com will forward X displays from foo to localhost. Great for ncview data from remote HPC centers
+# However, ssh -X also completely bogs-down 1 core on local MacBookPro regardless of whether or not any X windows displaying
+# After killing X on MBP, remote clients cannot serve X windows locally, must instead re-connect with ssh -X. Conundrum!
+#alias ssh='ssh -X' # -X = enable X11 forwarding on remote machine
 alias temperature='finger temperature@atd.ucar.edu'
 alias tephra='ssh -X tephra.ess.uci.edu'
 alias topz='top -U${USER}' # -Uusername

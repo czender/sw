@@ -13646,7 +13646,6 @@ spherical polar coordinates ($\rdl$,$\plr$,$\azi$) as
 \label{eqn:crt_sph_trn}
 \end{align}
 \end{subequations}
-
 Cartesian unit vectors ($\ihat$,$\jhat$,$\khat$) transform into
 spherical polar unit vectors ($\rdlhat$,$\plrhat$,$\azihat$)
 \begin{subequations}
@@ -13658,6 +13657,38 @@ spherical polar unit vectors ($\rdlhat$,$\plrhat$,$\azihat$)
 \end{align}
 \end{subequations}
 It can be verified the basis vectors are orthonormal.
+
+Spherical meteorological coordinates ($\rdl$,$\mrd$,$\znl$) transform into
+\trmidx{Cartesian coordinates} ($\xxx$,$\yyy$,$\zzz$) as
+\begin{subequations}
+\begin{align}
+\xxx & = \rdl\cos\mrd\cos\znl \\
+\yyy & = \rdl\cos\mrd\sin\znl \\
+\zzz & = \rdl\sin\mrd
+\label{eqn:mtr_crt_trn}
+\end{align}
+\end{subequations}
+Cartesian coordinates ($\xxx$,$\yyy$,$\zzz$) transform into
+spherical meteorological coordinates ($\rdl$,$\mrd$,$\znl$) as
+\begin{subequations}
+\begin{align}
+\rdl & = \sqrt{\xxx^{2}+\yyy^{2}+\zzz^{2}} \\
+\mrd & = \arcsin(\zzz/\rdl) \\
+\znl & = \arctan(\yyy/\xxx)
+\label{eqn:crt_sph_trn}
+\end{align}
+\end{subequations}
+Cartesian unit vectors ($\ihat$,$\jhat$,$\khat$) transform into
+spherical meteorological unit vectors ($\rdlhat$,$\mrdhat$,$\znlhat$)
+(20160117 fxm: verify this)
+\begin{subequations}
+\begin{align}
+\rdlhat & = \cos\mrd\cos\znl\ihat + \cos\mrd\sin\znl\jhat + \sin\mrd\khat \\
+\mrdhat & = \sin\mrd\cos\znl\ihat + \sin\mrd\sin\znl\jhat - \cos\mrd\khat \\
+\znlhat & = -\sin\znl\ihat + \cos\znl\jhat
+\label{eqn:crt_mtr_unit_vct_trn}
+\end{align}
+\end{subequations}
 
 \subsection[Gradient]{Gradient}\label{sxn:grd_sph}
 In spherical meteorological coordinates, the \trmidx{gradient} of $\sclfld$ is 
