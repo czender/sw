@@ -490,7 +490,7 @@ case "${PVM_ARCH}" in
 		;; # endif G1-development machines
 	esac # endcase ${HOST}
 	case "${HOST}" in 
-	    aims4* ) PATH=${PATH}\:/usr/local/uvcdat/2016-01-21/bin ; ;; # endif LLNL
+	    aims4* ) PATH=${PATH}\:/usr/local/uvcdat/2016-01-21/bin:/usr/local/uvcdat/2016-01-21/Externals/bin ; ;; # endif LLNL
 	    gplogin* | mirage* ) # x86-64
 		PATH=${PATH}\:${ICC_ROOT}/bin/intel64
 		;; # endif greenplanet
