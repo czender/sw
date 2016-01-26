@@ -369,6 +369,7 @@ case "${PVM_ARCH}" in
 	export TEXMFDIR='/usr/share/texmf-texlive' # One level above bibtex, tex,
 	export X11='/usr/X11R6'
 	case "${HOST}" in 
+	    aims4* ) export DATA="/export/${USER}/data" ; ;; # endif LLNL
 	    cooley* | cc* ) export DATA="/projects/HiRes_EarthSys/${USER}" ; ;; # endif ALCF
 	    cori* | edison* | hopper* | nid* ) export DATA="${HOME}/data" ; ;; # endif NERSC
 	    gplogin* ) export DATA="/data/${USER}" ; ;; # endif EMT64 Rocks Cluster
@@ -422,7 +423,7 @@ case "${PVM_ARCH}" in
 		clay* | neige* | silt* | virga* ) export OMP_NUM_THREADS='2' ; ;; # endif dual processor
 		aerosol* | firn* | givre* | hpc* | pbs* | tephra* ) export OMP_NUM_THREADS='4' ; ;; # endif quad processor
 		glace* | gplogin* | grele* | roulee* | snow* ) export OMP_NUM_THREADS='8' ; ;; # endif dual-quad processor
-		mirage* | pileus* | rhea* | ys* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-octet processor
+		aims4* | mirage* | pileus* | rhea* | ys* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-octet processor
 	esac # endcase ${HOST}
 
 	# Set MPI
@@ -489,6 +490,7 @@ case "${PVM_ARCH}" in
 		;; # endif G1-development machines
 	esac # endcase ${HOST}
 	case "${HOST}" in 
+	    aims4* ) PATH=${PATH}\:/usr/local/uvcdat/2016-01-21/bin ; ;; # endif LLNL
 	    gplogin* | mirage* ) # x86-64
 		PATH=${PATH}\:${ICC_ROOT}/bin/intel64
 		;; # endif greenplanet
@@ -545,6 +547,7 @@ case "${PVM_ARCH}" in
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
 	case "${HOST}" in 
 	    # 20130916: Support NCAR modules on yellowstone by removing custom environment variables
+	    aims4* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/uvcdat/2016-01-21/lib:/usr/local/uvcdat/2016-01-21/Externals/lib64:/usr/local/uvcdat/2016-01-21/Externals/lib; ;; # endif LLNL
 	    pileus* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/ACME/lib\:/opt/ACME/uvcdat-2.2-build/install/Externals/lib; ;; # endif CADES
 	    rhea* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/sw/redhat6/udunits/2.1.24/rhel6.4_intel13.1.3/lib; ;; # endif ORNL
 #	    ys* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/apps/opt/udunits/2.1.24/gnu/default/lib; ;; # endif NCAR
@@ -1060,7 +1063,7 @@ alias rhea='ssh -X rhea.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
 alias titan='ssh -X titan.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
 alias acmetest='ssh -X acmetest.ornl.gov' # then leapfrog to pileus
 alias pileus='ssh -X pileus-login01.ornl.gov' # then leapfrog to pileus
-alias aims4='ssh -X zender1@aims4.llnl.gov' # pw_hgh
+alias aims4='ssh -X zender1@aims4.llnl.gov' # pw_hgh source /usr/local/uvcdat/latest/bin/setup_runtime.sh
 alias cooley='ssh -X cooley.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
 alias cori='ssh -X cori.nersc.gov' # pw_hgh
 alias hopper='ssh -X hopper.nersc.gov' # pw_hgh

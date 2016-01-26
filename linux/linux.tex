@@ -4615,7 +4615,6 @@ git clone git@github.com:Unidata/EC-netCDF-CF
 ln -s sw/mk mk
 ln -s sw/sh sh
 cd ~/sh
-ln -s ~/nco/data/sld_nco.sh sld_nco.sh
 ln -s ~/PreAndPostProcessingScripts/generate_climatologies/climo_ann.sh climo_ann.sh
 ln -s ~/PreAndPostProcessingScripts/generate_climatologies/climo_nco.sh climo_nco.sh
 sudo codesign -s 'Charlie Zender' `which gdb`
@@ -4866,7 +4865,7 @@ svn checkout ${SVNROOT}/dot ${SVNROOT}/elisp ${SVNROOT}/linux ${SVNROOT}/sh # Re
 # Use KDE/GNOME control center to left-hand mouse, auto-raise 
 # xmodmap ~/dot/xmodmaprc # Swap ctl and caps-lock # deprecated
 export PVM_ARCH=`~/sh/pvmgetarch`
-cd ~;mkdir -p bin/${PVM_ARCH} include lib/${PVM_ARCH} obj/${PVM_ARCH} share/locale/es/LC_MESSAGES share/locale/fr/LC_MESSAGES
+cd ~;mkdir -p bin include lib obj share/locale/es/LC_MESSAGES share/locale/fr/LC_MESSAGES
 # Ubuntu: First activate 'universe' sources in sources.list
 sudo aptitude install firefox # Install browser
 sudo aptitude install auctex preview-latex # Install Emacs add-ons
