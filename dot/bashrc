@@ -1060,6 +1060,7 @@ alias rhea='ssh -X rhea.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
 alias titan='ssh -X titan.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
 alias acmetest='ssh -X acmetest.ornl.gov' # then leapfrog to pileus
 alias pileus='ssh -X pileus-login01.ornl.gov' # then leapfrog to pileus
+alias aims4='ssh -X zender1@aims4.llnl.gov' # pw_hgh
 alias cooley='ssh -X cooley.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
 alias cori='ssh -X cori.nersc.gov' # pw_hgh
 alias hopper='ssh -X hopper.nersc.gov' # pw_hgh
