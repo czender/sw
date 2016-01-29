@@ -333,9 +333,6 @@ DirectoryIndex index.shtml index.html index.php
 <Directory "/Users/zender/Sites/poetry">
     Options Indexes
 </Directory>
-<Directory "/Users/zender/Sites/tmp">
-    Options Indexes
-</Directory>
 <Directory "/Users/zender/Sites/pix">
     Options Indexes
 </Directory>
@@ -358,6 +355,12 @@ DirectoryIndex index.shtml index.html index.php
     Options Indexes
 </Directory>
 <Directory "/Users/zender/Sites/swnb2">
+    Options Indexes
+</Directory>
+<Directory "/Users/zender/Sites/terraref">
+    Options Indexes
+</Directory>
+<Directory "/Users/zender/Sites/tmp">
     Options Indexes
 </Directory>
 
