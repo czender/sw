@@ -1,0 +1,46 @@
+#***********************************************************************
+# 20150320: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 21 gcc/gfortran 4.9.2 netcdf-4.3.3.1
+#***********************************************************************
+# Tempest
+sudo yum install lapack lapack-devel blas
+cd ${DATA}/tmp
+git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+# Compile with g++ -std-c++11
+# Link to -llapack -lblas
+make
+#***********************************************************************
+# 20150320: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 21 gcc/gfortran 4.9.2 netcdf-4.3.3.1
+#***********************************************************************
+
+#***********************************************************************
+# 20150401: aerosol.ess.uci.edu x86_64-apple-darwin14.1.0 MacOSX 10.10 Yosemite clang 6.0 netcdf-4.3.3.1
+#***********************************************************************
+# Tempest
+# Only one additional port needed for tempestremap on MACOSX. Everything (blas, lapack) already installed by XTools.
+sudo port install netcdf-cxx
+cd ${DATA}/tmp
+git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+# No Makefile modifications needed
+make
+#***********************************************************************
+# 20150401: aerosol.ess.uci.edu x86_64-apple-darwin14.1.0 MacOSX 10.10 Yosemite clang 6.0 netcdf-4.3.3.1
+#***********************************************************************
+
+#***********************************************************************
+# 20160209: grele.ess.uci.edu x86_64/EMT64 Ubuntu Trusty gcc/gfortran 4.8.4 netcdf-4.3.3.1
+#***********************************************************************
+# Tempest
+sudo aptitude install netcdf-cxx
+sudo aptitude install lapack lapack-devel blas
+cd ${DATA}/tmp
+git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+# Compile with g++ -std-c++11
+# Link to -llapack -lblas
+make
+#***********************************************************************
+# 20160209: grele.ess.uci.edu x86_64/EMT64 Ubuntu Trusty gcc/gfortran 4.8.4 netcdf-4.3.3.1
+#***********************************************************************
+
