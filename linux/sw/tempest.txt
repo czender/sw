@@ -32,14 +32,12 @@ make
 # 20160209: grele.ess.uci.edu x86_64/EMT64 Ubuntu Trusty gcc/gfortran 4.8.4 netcdf-4.3.3.1
 #***********************************************************************
 # Tempest
-sudo aptitude install netcdf-cxx
-sudo aptitude install lapack lapack-devel blas
+# First install netcdf-cxx from source the old-fashioned way
 cd ${DATA}/tmp
 git clone https://github.com/ClimateGlobalChange/tempestremap.git
 cd ${DATA}/tmp/tempestremap
-# Compile with g++ -std-c++11
-# Link to -llapack -lblas
 make
+# Needed to manually add -std=c++11 to two compile commands because of old compiler (gcc 4.8.4)
 #***********************************************************************
 # 20160209: grele.ess.uci.edu x86_64/EMT64 Ubuntu Trusty gcc/gfortran 4.8.4 netcdf-4.3.3.1
 #***********************************************************************
