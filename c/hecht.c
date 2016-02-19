@@ -9,23 +9,21 @@ to "rate += 0.02".
 	Here it is:
 
 -----Matthew.
-
-
 -- 
 Matthew Hecht
 National Center for Atmospheric Research
 PO Box 3000				phone: (303) 497-1702
 Boulder, CO 80307-3000                  e-mail: hecht@ncar.ucar.edu
-
 */
 
 #include <stdio.h>
 #include <math.h>
-main()
+int main()
 {
   float principal, rate, rate_max, payment, twelfth, pay();
   float nbr_year;
-  float interest, tot_int;
+  float interest;
+  float tot_int=0.0;
   int n_months, count, arm_flag, year;
 
   twelfth=1.0/12.0;
@@ -58,9 +56,10 @@ main()
     year++;
     printf("after year %2d, at %f,\n",
 	   year, rate);
-    printf("\t payment = %5.2f, principal = %5.2f, total interest = %5.2f\n",
-	   payment, principal, tot_int);
+    printf("\t payment = %6.2f, principal = %6.2f, interest = %6.2f, total principal = %6.2f, total interest = %6.2f\n",
+	   payment, payment-interest, interest, principal, tot_int);
   }
+  return 0;
 }
 
 float pay(principal, rate, n_months)
@@ -103,7 +102,7 @@ float pay(principal, rate, n_months)
   }
   /* printf("after %d iterations, remaining principal is %f.\n",
      it_count, residual);*/
-  return (payment);
+  return payment;
 }
 
 float resid( n_months, principal, rate, payment )
@@ -123,5 +122,5 @@ float resid( n_months, principal, rate, payment )
     principal -= (payment-interest);
   }
 
-  return(principal);
+  return principal;
 }
