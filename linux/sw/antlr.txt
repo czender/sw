@@ -145,3 +145,23 @@ make clean
 #***********************************************************************
 # 20150716: pileus.ornl.gov 
 #***********************************************************************
+
+#***********************************************************************
+# 20160224: grele.ess.uci.edu 
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+wget http://glace.ess.uci.edu/libs/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+./configure  --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+make
+make test
+sudo make install
+#make clean
+#***********************************************************************
+# 20160224: grele.ess.uci.edu 
+#***********************************************************************
