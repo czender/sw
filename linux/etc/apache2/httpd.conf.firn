@@ -301,10 +301,12 @@ DirectoryIndex index.shtml index.html index.php
     Options Indexes
 </Directory>
 <Directory "/Users/zender/Sites/dead">
-    Options Indexes
+# Everyone receives "permission denied" errors on dead/data, though not on dead, unless FollowSymLinks explicitly stated for each directory that contains symlinks. This trait is not inherited.
+    Options Indexes FollowSymLinks Multiviews
+    MultiviewsMatch Any
 </Directory>
 <Directory "/Users/zender/Sites/dead/data">
-    Options Indexes
+    Options Indexes FollowSymLinks Multiviews
 </Directory>
 <Directory "/Users/zender/Sites/doc">
     Options Indexes

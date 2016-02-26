@@ -62,10 +62,6 @@ We hope they help you understand our research and software.
 <a href="http://dust.ess.uci.edu/doc/abb/abb.tex">LaTeX</a>,
 <a href="http://dust.ess.uci.edu/doc/abb/abb.pdf">PDF</a> (last modified <!--#flastmod file="abb/abb.ps"-->)
 
-<li>CVS Cheat Sheet (<i>helps use CVS for software management</i>)</li>
-<a href="http://dust.ess.uci.edu/doc/cvs/cvs.tex">LaTeX</a>,
-<a href="http://dust.ess.uci.edu/doc/cvs/cvs.pdf">PDF</a> (last modified <!--#flastmod file="cvs/cvs.ps"-->)
-
 <li>ESMF Cheat Sheet (<i>helps getting running on the ESMF</i>)</li>
 <a href="http://dust.ess.uci.edu/doc/esmf/esmf.tex">LaTeX</a>,
 <a href="http://dust.ess.uci.edu/doc/esmf/esmf.pdf">PDF</a> (last modified <!--#flastmod file="esmf/esmf.ps"-->)
@@ -81,6 +77,10 @@ We hope they help you understand our research and software.
 <li>Linux Cheat Sheet (<i>helps setting up, running, and debugging Linux</i>)</li> 
 <a href="http://dust.ess.uci.edu/doc/linux/linux.tex">LaTeX</a>,
 <a href="http://dust.ess.uci.edu/doc/linux/linux.pdf">PDF</a> (last modified <!--#flastmod file="linux/linux.ps"-->)
+
+<li>VCS Cheat Sheet (<i>helps use CVS/Subversion/Git for software management</i>)</li>
+<a href="http://dust.ess.uci.edu/doc/vcs/vcs.tex">LaTeX</a>,
+<a href="http://dust.ess.uci.edu/doc/vcs/vcs.pdf">PDF</a> (last modified <!--#flastmod file="vcs/vcs.ps"-->)
 </ul>
 
 <p>(<a href="http://dust.ess.uci.edu/doc/tex/index.shtml">This document</a>

@@ -1,8 +1,8 @@
 % $Id$
 
-% Purpose: Summarize frequently used CVS commands
+% Purpose: Summarize frequently used VCS commands
 
-% Copyright (c) 1998--2014, Charles S. Zender
+% Copyright (c) 1998--2016, Charles S. Zender
 % Permission is granted to copy, distribute and/or modify this document
 % under the terms of the GNU Free Documentation License (GFDL), Version 1.3
 % or any later version published by the Free Software Foundation;
@@ -17,20 +17,20 @@
 % Irvine, CA 92697-3100
 
 % Usage: 
-% cd ${HOME}/crr;make -W cvs.tex cvs.txt cvs.dvi cvs.ps cvs.pdf;cd -
-% scp ${HOME}/crr/cvs.tex ${HOME}/crr/cvs.txt ${DATA}/ps/cvs.ps ${DATA}/ps/cvs.pdf ${HOME}/crr/cvs.dvi dust.ess.uci.edu:/var/www/html/doc/cvs
+% cd ${HOME}/crr;make -W vcs.tex vcs.txt vcs.dvi vcs.ps vcs.pdf;cd -
+% scp ${HOME}/crr/vcs.tex ${HOME}/crr/vcs.txt ${DATA}/ps/vcs.ps ${DATA}/ps/vcs.pdf ${HOME}/crr/vcs.dvi dust.ess.uci.edu:/var/www/html/doc/vcs
 
-% # NB: latex2html chokes on cvs.tex
-% latex2html -dir /var/www/html/doc/cvs cvs.tex
-% # NB: tth works well on cvs.tex
-% cd ${HOME}/crr;tth -a -Lcvs -p${TEXINPUTS} < cvs.tex > cvs.html
-% scp cvs.html dust.ess.uci.edu:/var/www/html/doc/cvs
-% # NB: tex4ht works well on cvs.tex
-% cd ${HOME}/crr;htlatex cvs.tex
-% scp cvs*.css cvs*.html dust.ess.uci.edu:/var/www/html/doc/cvs
-% # NB: tex4moz works well on cvs.tex
-% cd ${HOME}/crr;/usr/share/tex4ht/mzlatex cvs.tex
-% scp cvs*.css cvs*.html cvs*.xml dust.ess.uci.edu:/var/www/html/doc/cvs
+% # NB: latex2html chokes on vcs.tex
+% latex2html -dir /var/www/html/doc/vcs vcs.tex
+% # NB: tth works well on vcs.tex
+% cd ${HOME}/crr;tth -a -Lcvs -p${TEXINPUTS} < vcs.tex > vcs.html
+% scp vcs.html dust.ess.uci.edu:/var/www/html/doc/vcs
+% # NB: tex4ht works well on vcs.tex
+% cd ${HOME}/crr;htlatex vcs.tex
+% scp cvs*.css cvs*.html dust.ess.uci.edu:/var/www/html/doc/vcs
+% # NB: tex4moz works well on vcs.tex
+% cd ${HOME}/crr;/usr/share/tex4ht/mzlatex vcs.tex
+% scp cvs*.css cvs*.html cvs*.xml dust.ess.uci.edu:/var/www/html/doc/vcs
 
 \documentclass[12pt,twoside]{article}
 
@@ -99,10 +99,10 @@
 \begin{document}
 
 \begin{center}
-Online version: \url{http://dust.ess.uci.edu/doc/cvs} \hfill \today\\
+Online version: \url{http://dust.ess.uci.edu/doc/vcs} \hfill \today\\
 \bigskip
 \bigskip
-{\Large \textbf{CVS Cheat Sheet}}\\
+{\Large \textbf{VCS Cheat Sheet}}\\
 \bigskip
 by Charlie Zender\\
 University of California, Irvine\\
@@ -119,7 +119,7 @@ Irvine, CA~~92697-3100 \hfill Fax: (949)\thinspace 824-3256
 \tableofcontents
 \pagenumbering{arabic}
 \setcounter{page}{1}
-%\markleft{CVS Cheat Sheet}
+%\markleft{VCS Cheat Sheet}
 %\markright{}
 \thispagestyle{empty}
 
@@ -127,7 +127,8 @@ Irvine, CA~~92697-3100 \hfill Fax: (949)\thinspace 824-3256
 The process of orderly tracking, versioning, and serving, and
 administration of project source code is called
 \trmdfn{Software Configuration Management} (\trmdfn{SCM}).
-This document describes two different software tools which aid in SCM:
+A modern SCM environment requires a Version Control System (\trmdfn{VCS}).
+<This document describes three different VCS software packages:
 \href{http://www.cvshome.org}{\trmidx{Concurrent Versioning System}}
 (\trmidx{CVS}) and 
 \href{http://subversion.tigris.org}{\trmidx{Subversion}} (\trmidx{SVN}).
@@ -135,7 +136,7 @@ These tools are intimately related since SVN is designed by some of
 the original authors of CVS to replace CVS.
 Currently, all of Section~\ref{sxn:cvs} (99\% of this document)
 is devoted to CVS, while the newer portions, Section~\ref{sxn:svn},
-is devoted to SVN.
+is devoted to SVN. There is a tiny bit at the end on Git.
 
 \section{CVS}\label{sxn:cvs}
 
