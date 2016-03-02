@@ -319,7 +319,7 @@ Produced from PAWS station data with this
 <li><a href="http://dust.ess.uci.edu/dead/data/dstmch90_clm.nc">DEAD climatological simulation, 1990&ndash;1999</a> Includes all 3-D fields. (<a href="http://www.ess.uci.edu/~zender/#ZBN03">Zender et&nbsp;al., 2003a</a>)</li>
 <li><a href="http://dust.ess.uci.edu/dead/data/dstmch90_clm_0112.nc">DEAD climatological monthly simulation, 1990&ndash;1999</a> Includes selected 2-D and 3-D fields. (<a href="http://www.ess.uci.edu/~zender/#ZBN03">Zender et&nbsp;al., 2003a</a>)</li>
 <li>Global model boundary condition datasets: Search the <tt>dst_*.nc</tt> files in 
-  <a href="http://dust.ess.uci.edu/dead/data">this directory</a> 
+  <a href="http://dust.ess.uci.edu/dead/data/">this directory</a> 
   for your model resolution. Files contain spatially- and, for some
   fields, temporally-varying (monthly-mean) boundary condition data on
   a global grid. This includes vegetation, soil texture, and some
