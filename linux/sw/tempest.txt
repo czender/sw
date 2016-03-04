@@ -42,3 +42,27 @@ make
 # 20160209: grele.ess.uci.edu x86_64/EMT64 Ubuntu Trusty gcc/gfortran 4.8.4 netcdf-4.3.3.1
 #***********************************************************************
 
+#***********************************************************************
+# 20160209: grele.ess.uci.edu x86_64/EMT64 Ubuntu Trusty gcc/gfortran 4.8.4 netcdf-4.3.3.1
+#***********************************************************************
+# Tempest
+# Install netcdf-cxx from source the old-fashioned way
+cd ${DATA}/tmp
+wget ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-cxx-4.2.tar.gz
+tar xvzf netcdf-cxx-4.2.tar.gz 
+cd ${DATA}/tmp/netcdf-cxx-4.2
+CPPFLAGS='-I/sw/redhat6/netcdf/4.3.3.1/rhel6.6_gcc4.8.2--with-dap+hdf4/include' LDFLAGS='-L/sw/redhat6/netcdf/4.3.3.1/rhel6.6_gcc4.8.2--with-dap+hdf4/lib' ./configure  --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man > netcdf_cxx.configure.${GNU_TRP}.foo 2>&1
+make > netcdf_cxx.make.${GNU_TRP}.foo 2>&1
+mv -f config.log netcdf_cxx.config.log.${GNU_TRP}.foo
+make check > netcdf_cxx.check.${GNU_TRP}.foo 2>&1
+scp netcdf_cxx.*.foo dust.ess.uci.edu:Sites/tmp
+sudo make install
+
+cd ${DATA}/tmp
+git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+make
+# Needed to manually add -std=c++11 to two compile commands because of old compiler (gcc 4.8.4)
+#***********************************************************************
+# 20160209: grele.ess.uci.edu x86_64/EMT64 Ubuntu Trusty gcc/gfortran 4.8.4 netcdf-4.3.3.1
+#***********************************************************************

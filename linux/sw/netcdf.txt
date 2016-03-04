@@ -6302,7 +6302,7 @@ sudo cp ${DATA}/tmp/netcdf-fortran/fortran/typesizes.mod ${NETCDF4_ROOT}/include
 sudo cp ${DATA}/tmp/netcdf-fortran/fortran/netcdf.mod ${NETCDF4_ROOT}/include/netcdf.mod.gfortran
 make clean
 
-# Do same for netCDF4 CXX (old interface, still required by ESMF_RegridWeightGen):
+# Do same for netCDF4 CXX (old interface, still required by ESMF_RegridWeightGen and by TempestRemap):
 cd ${DATA}/tmp
 wget ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-cxx-4.2.tar.gz
 tar xvzf netcdf-cxx-4.2.tar.gz 
