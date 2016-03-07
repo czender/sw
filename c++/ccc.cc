@@ -497,8 +497,8 @@ int main(int argc,char **argv)
   if(dbg_lvl == dbg_old || tst_sng == "bnr"){
     /* ccc --dbg=3 --int_foo=0x01
        const int int_foo(0x01); // Hexadecimal notation */
-    std::cout << "Testing internal binary representation of all integer types..." << std::endl;
-    std::cout << "HINT: use --tst=gsl to see binary representation of floating point types..." << std::endl;
+    std::cout << "Testing internal binary representation of all types..." << std::endl;
+    std::cout << "HINT: use --tst=gsl --gsl_a=3.141 to see GSL's intrinsic functions for binary representation of floating point types..." << std::endl;
     std::cout << "Seed values with --int_foo, e.g., ccc --tst=bnr --int_foo=4" << std::endl;
     const bool bln_bnr(true);
     const char chr_bnr(int_foo);
