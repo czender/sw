@@ -293,12 +293,11 @@ program swnb2
   ! swnb2 -A -B -C -G -H -J -K -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.01 -F -d ~/swnb_ice.nc
   
   ! ARESE simulations: 
-  ! swnb2 -p ${DATA}/arese/clm/951011_1200_arese_clm.nc -d ~/951011_1200_arese_mdl_clr_aer.nc
-  ! swnb -p ${DATA}/arese/clm/951015_1200_arese_clm.nc -d ~/951015_1200_arese_mdl_clr_aer.nc
+  ! swnb2 -p ${DATA}/arese/clm/951011_1200_arese_clm.nc -d ~/foo.nc
   ! ncks -C -H -v flx_bb_dwn_sfc,flx_bb_abs_atm ~/foo.nc
-  ! ncks -C -H -d bnd,.5e-6 -v wvl_obs_aer,wvl_obs_bga,odxc_obs_aer,odxc_obs_bga,odxc_spc_aer,odxc_spc_bga ~/foo.nc
-  ! ncks -C -H -d bnd,.413e-6 -v wvl_obs_aer,wvl_obs_bga,odxc_obs_aer,odxc_obs_bga,odxc_spc_aer,odxc_spc_bga ~/foo.nc
-  ! ncks -C -H -d bnd,.860e-6 -v wvl_obs_aer,wvl_obs_bga,odxc_obs_aer,odxc_obs_bga,odxc_spc_aer,odxc_spc_bga ~/foo.nc
+  ! ncks -C -H -d bnd,0.5e-6 -v wvl_obs_aer,wvl_obs_bga,odxc_obs_aer,odxc_obs_bga,odxc_spc_aer,odxc_spc_bga ~/foo.nc
+  ! ncks -C -H -d bnd,0.413e-6 -v wvl_obs_aer,wvl_obs_bga,odxc_obs_aer,odxc_obs_bga,odxc_spc_aer,odxc_spc_bga ~/foo.nc
+  ! ncks -C -H -d bnd,0.860e-6 -v wvl_obs_aer,wvl_obs_bga,odxc_obs_aer,odxc_obs_bga,odxc_spc_aer,odxc_spc_bga ~/foo.nc
   
   ! Dust simulations
   ! j_NO2
