@@ -165,7 +165,7 @@ ApplyOfflineMap --map ${DATA}/maps/map_ne120np4_to_ne30np4_aave.20150614.nc --va
 
 GenerateOverlapMesh --a ${DATA}/rgr/msh_ne30.g --b ${DATA}/rgr/msh_ne120.g --out ${DATA}/rgr/msh_ovr_ne30_to_ne120.g
 GenerateOfflineMap --in_mesh ${DATA}/rgr/msh_ne30.g --out_mesh ${DATA}/rgr/msh_ne120.g --ov_mesh ${DATA}/rgr/msh_ovr_ne30_to_ne120.g --in_type cgll --out_type cgll --in_np 4 --out_np 4 --out_map ${DATA}/maps/map_ne30np4_to_ne120np4_tps.20150618.nc
-ncks -O -D 5 -t 1 -v FSNT --map=${DATA}/maps/map_ne30np4_to_ne120np4_tps.20150618.nc ${DATA}/ne30/rgr/famipc5_ne30_v0.3_00003.cam.h0.1979-01.nco.nc ${DATA}/ne30/rgr/tempest_ne120.nc
+ncks -O -D 5 -t 1 -v FSNT --map=${DATA}/maps/map_ne30np4_to_ne120np4_tps.20150618.nc ${DATA}/ne30/raw/famipc5_ne30_v0.3_00003.cam.h0.1979-01.nc ${DATA}/ne120/rgr/tempest_ne120.nc
 
 # Self-contained testing
 bds -x 180 -y 090 -m 13 -o ${DATA}/rgr/dst_2x2.nc
