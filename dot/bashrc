@@ -458,9 +458,9 @@ case "${PVM_ARCH}" in
 		PATH=${PATH}\:/fs/local/bin\:/fs/local/32/bin
 		;; # endif NCAR cluster
 	esac # endcase ${HOST}
-	PATH=${PATH}\:${HOME}/anaconda/bin
 	PATH=${PATH}\:/usr/local/bin
 	PATH=${PATH}\:/usr/local/sbin # Debian
+	PATH=${PATH}\:${HOME}/anaconda/bin
 	PATH=${PATH}\:/bin
 	PATH=${PATH}\:/sbin
 	PATH=${PATH}\:/usr/bin
@@ -602,11 +602,11 @@ case "${PVM_ARCH}" in
 	export PYTHONPATH=/usr/lib/portage/pym
 	export TEXMFDIR=/opt/local/share/texmf-texlive # One level above bibtex, tex,
 	
-	PATH=${PATH}\:${HOME}/anaconda/bin
 	PATH=${PATH}\:/opt/local/libexec/gnubin # Up-to-date GNU commands from port install coreutils
 	PATH=${PATH}\:/usr/local/bin # Custom-built 3rd party packages
 	PATH=${PATH}\:/opt/local/bin # MacPorts packages
 	PATH=${PATH}\:/opt/local/sbin # MacPorts packages
+	PATH=${PATH}\:${HOME}/anaconda/bin
 	PATH=${PATH}\:/usr/bin # OS X defaults
 	PATH=${PATH}\:/bin # OS X coreutils
 	PATH=${PATH}\:/usr/sbin # OS X root coreutils
