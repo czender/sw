@@ -67,7 +67,7 @@ bit_sng_tpl // [fnc] Construct string with binary representation of value
      Online Calculator:
      http://www.h-schmidt.net/FloatConverter/IEEE754.html
 
-     Techniques for roundig by masking and shifting
+     Techniques for rounding by masking and shifting
      http://blog.frama-c.com/index.php?post/2013/05/03/nearbyintf2
      assert (sizeof(unsigned int) == sizeof(float));
      unsigned int u;
