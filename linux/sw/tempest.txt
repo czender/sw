@@ -66,3 +66,53 @@ make
 #***********************************************************************
 # 20160209: grele.ess.uci.edu x86_64/EMT64 Ubuntu Trusty gcc/gfortran 4.8.4 netcdf-4.3.3.1
 #***********************************************************************
+
+************************************************************************
+20160322: Begin Mark Taylor script via Jon Wolfe
+************************************************************************
+# conservative (not montone) most accurate map.
+# for STATE and VECTORS
+#
+set alg = "" ; set algname = "conserve"
+$exepath/GenerateOfflineMap --in_mesh $atmgrid --out_mesh $ocngrid \
+--ov_mesh overlap_mesh.g --in_type cgll --in_np 4 --out_type fv --out_double \
+$alg --out_map ${atmtoocn}_$algname.nc
+
+#
+# monotone & conservative
+# for FLUXES
+#
+set alg = "--mono" ; set algname = "mono"
+$exepath/GenerateOfflineMap --in_mesh $atmgrid --out_mesh $ocngrid \
+--ov_mesh overlap_mesh.g --in_type cgll --in_np 4 --out_type fv --out_double \
+$alg --out_map ${atmtoocn}_$algname.nc
+
+#
+# monotone (not conservative)
+# for VIZ, other special purposes - probably not useful in a B compset
+#
+set alg = "--mono3 --noconserve" ; set algname = "intbilin"
+$exepath/GenerateOfflineMap --in_mesh $atmgrid --out_mesh $ocngrid \
+--ov_mesh overlap_mesh.g --in_type cgll --in_np 4 --out_type fv --out_double \
+$alg --out_map ${atmtoocn}_$algname.nc
+#
+# montone & conservative
+# for FLUXES.
+#
+set alg = "--volumetric" ; set algname = "mono"
+$exepath/GenerateOfflineMap --in_mesh $ocngrid --out_mesh $atmgrid \
+--ov_mesh overlap_mesh.g --out_type cgll --out_np 4 --in_type fv --in_np 1 --out_double \
+$alg --out_map ${ocntoatm}_$algname.nc
+
+#
+# 2nd order conservative (non-monotone)
+# FAILS - bug in Tempest
+#
+set echo
+set alg = "" ; set algname = "conserve"
+$exepath/GenerateOfflineMap --in_mesh $ocngrid --out_mesh $atmgrid \
+--ov_mesh overlap_mesh.g --out_type cgll --out_np 4 --in_type fv --in_np 2 --out_double \
+$alg --out_map ${ocntoatm}_$algname.nc 
+************************************************************************
+20160322: End Mark Taylor script via Jon Wolfe
+************************************************************************
