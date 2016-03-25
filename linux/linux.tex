@@ -4637,11 +4637,18 @@ git clone git@github.com:nco/nco.git
 git clone git@github.com:diwg/diwg.git
 git clone git@github.com:ACME-Climate/PreAndPostProcessingScripts
 git clone git@github.com:Unidata/EC-netCDF-CF
+mkdir -p ~/terraref
+cd ~/terraref
+git clone git@github.com:terraref/computing-pipeline.git
+git clone git@github.com:terraref/documentation.git
+cd
 ln -s sw/mk mk
 ln -s sw/sh sh
 cd ~/sh
 ln -s ~/PreAndPostProcessingScripts/generate_climatologies/climo_ann.sh climo_ann.sh
 ln -s ~/PreAndPostProcessingScripts/generate_climatologies/climo_nco.sh climo_nco.sh
+ln -s ~/terraref/computing-pipeline/scripts/hyperspectral/terraref.sh terraref.sh
+cd
 sudo codesign -s 'Charlie Zender' `which gdb`
 \end{verbatim}
 
