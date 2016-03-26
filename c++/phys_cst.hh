@@ -61,10 +61,12 @@ namespace phc{ // [nms] Physical constant namespace
   const double joules_per_eV(1.60217733e-19); // (1.60217733e-19) [J ev-1] Joules per electron volt CRC95 inside back cover
   const double k_O2_O2(2.6e-29); // (2.6e-29) [m3 mlc-1] Equilibrium rate constant for O2 + O2 <-> O2-O2 (Sha77 p. 436, 527)
   const double ltn_heat_fsn_H2O_0C(0.334e6); // (0.334e6) [J kg-1] Latent heat of fusion of H2O at 0 C Tre922 p. xxix
-  const double ltn_heat_fsn_H2O_std(0.3336e06); // (0.3336e06) [J kg-1] Latent heat of fusion of H2O at 0 C, standard CCM:lsm/phyconi.F  
+  const double ltn_heat_fsn_H2O_old(0.3336e06); // (0.3336e06) [J kg-1] Latent heat of fusion of H2O at 0 C, standard CCM:lsm/phyconi.F  
+  const double ltn_heat_fsn_H2O_std(0.3337e06); // (0.3336e06) [J kg-1] Latent heat of fusion of H2O at 0 C, standard CCSM3:shr_const_latice
   const double ltn_heat_sbl_H2O_std(2.8440e06); // (2.8440e06) [J kg-1] Latent heat of sublimation of H2O, standard CCM:lsm/phyconi.F
   const double ltn_heat_vpr_H2O_100C(2.25e6); // (2.25e6) [J kg-1] Latent heat of vaporization of H2O at 100 C Tre922 p. xxix
-  const double ltn_heat_vpr_H2O_std(2.5104e06); // (2.5104e06) [J kg-1] Latent heat of vaporization of H2O, standard CCM:lsm/phyconi.F
+  const double ltn_heat_vpr_H2O_old(2.5104e06); // (2.5104e06) [J kg-1] Latent heat of vaporization of H2O, standard CCM:lsm/phyconi.F
+  const double ltn_heat_vpr_H2O_std(2.501e06); // (2.501e06) [J kg-1] Latent heat of vaporization of H2O, standard CCSM3:shr_const_latvap
   const double mmw_Al(26.981539e-03); // (26.981539e-03) [kg mol-1] Mean molecular weight of Al IUPAC
   const double mmw_C(12.011e-03); // (12.011e-03) [kg mol-1] Mean molecular weight of C IUPAC
   const double mmw_CO2(4.4009743e-02); // (4.4009743e-02) [kg mol-1] Mean molecular weight of CO2 HITRAN96
