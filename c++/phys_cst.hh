@@ -149,11 +149,11 @@ namespace phc{ // [nms] Physical constant namespace
   const prc_cmp dns_H2O_lqd_std(1000.0); // (1000.0) [kg m-3] Density of liquid water
   const prc_cmp dns_H2O_snw_gnd_std(100.0); // (100.0) [kg m-3] Standard bulk density of snow on ground WiW80 p. 2724, 2725, CCM:physics/tsinti()
   const prc_cmp dns_H2O_snw_gnd_LSM(250.0); // (250.0) [kg m-3] Bulk density of packed snow on ground CCM:lsm/snoconi.F
-  const prc_cmp dns_H2SO4_61pct_273K_std(1526.16); // (1526.16) [kg m-3] Density of 61% H2SO4 solution (by weight) at 273 K (Timmermans in $HOME/idx_rfr/hitran/timmerma.dat)
-  const prc_cmp dns_H2SO4_72pct_273K_std(1652.95); // (1652.95) [kg m-3] Density of 72% H2SO4 solution (by weight) at 273 K (Timmermans in $HOME/idx_rfr/hitran/timmerma.dat)
-  const prc_cmp dns_H2SO4_75pct_273K_std(1688.83); // (1688.83) [kg m-3] Density of 75% H2SO4 solution (by weight) at 273 K (Timmermans in $HOME/idx_rfr/hitran/timmerma.dat)
-  const prc_cmp dns_H2SO4_75pct_303K_std(1659.65); // (1659.65) [kg m-3] Density of 75% H2SO4 solution (by weight) at 303 K (Timmermans in $HOME/idx_rfr/hitran/timmerma.dat)
-  const prc_cmp dns_H2SO4_std(1851.69); // (1851.69) [kg m-3] Density of 100% H2SO4 at 273 K (Timmermans in $HOME/idx_rfr/hitran/timmerma.dat)
+  const prc_cmp dns_H2SO4_61pct_273K_std(1526.16); // (1526.16) [kg m-3] Density of 61% H2SO4 solution (by weight) at 273 K (Timmermans in $HOME/sw/idx_rfr/hitran/timmerma.dat)
+  const prc_cmp dns_H2SO4_72pct_273K_std(1652.95); // (1652.95) [kg m-3] Density of 72% H2SO4 solution (by weight) at 273 K (Timmermans in $HOME/sw/idx_rfr/hitran/timmerma.dat)
+  const prc_cmp dns_H2SO4_75pct_273K_std(1688.83); // (1688.83) [kg m-3] Density of 75% H2SO4 solution (by weight) at 273 K (Timmermans in $HOME/sw/idx_rfr/hitran/timmerma.dat)
+  const prc_cmp dns_H2SO4_75pct_303K_std(1659.65); // (1659.65) [kg m-3] Density of 75% H2SO4 solution (by weight) at 303 K (Timmermans in $HOME/sw/idx_rfr/hitran/timmerma.dat)
+  const prc_cmp dns_H2SO4_std(1851.69); // (1851.69) [kg m-3] Density of 100% H2SO4 at 273 K (Timmermans in $HOME/sw/idx_rfr/hitran/timmerma.dat)
   const prc_cmp dns_MgSO4_std(2660.0); // (2660.0) [kg m-3] Density of MgSO4 Yu's Thesis Ch. 4
   const prc_cmp dns_NH4HSO4_std(1780.0); // (1780.0) [kg m-3] Density of NH4HSO4 Yu PhD Tbl. 4.2
   const prc_cmp dns_NH4NH4SO4_std(1769.0); // (1769.0) [kg m-3] Density of NH4NH4SO4 Yu PhD Tbl. 4.2

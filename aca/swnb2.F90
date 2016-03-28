@@ -194,7 +194,7 @@ program swnb2
   ! swnb2 -z 0.8660 -r 0.2 -s 4 -p ${DATA}/aca/trp_afgl_73lvl.nc -d ${DATA}/tmp/sk_03.nc > ~/foo_3 2>&1 &
   ! swnb2 -z 0.2588 -r 0.2 -s 4 -p ${DATA}/aca/trp_afgl_73lvl.nc -d ${DATA}/tmp/sk_04.nc > ~/foo_4 2>&1 &
   ! swnb2 -z 0.8660 -r 0.2 -s 4 -p ${DATA}/aca/sas_afgl_73lvl.nc -d ${DATA}/tmp/sk_05.nc > ~/foo_5 2>&1 &
-  ! ncks -H -C -d bnd,.7e-6 -v flx_bb_dwn_sfc ${DATA}/tmp/sk_01.nc
+  ! ncks -H -C -d bnd,0.7e-6 -v flx_bb_dwn_sfc ${DATA}/tmp/sk_01.nc
   
   ! Test cases: Set CO2 vmr to 300 ppm for most of these!
   ! NB: BPB used only most common isotope of each species for these
@@ -315,8 +315,8 @@ program swnb2
   ! -v surface spectral properties file
   ! -V BRDF type
   
-  ! The code makes heavy use of acronyms and abbreviations in variable names
-  ! These are defined in ~/crr/abb.tex and http://dust.ess.uci.edu/doc/abb/abb.pdf
+  ! Code makes heavy use of acronyms and abbreviations in variable names
+  ! These are defined in ~/sw/crr/abb.tex and http://dust.ess.uci.edu/doc/abb/abb.pdf
   
   ! Code proceeds as follows:
   ! Section 1: Initialization
@@ -676,8 +676,11 @@ program swnb2
   integer flx_bb_abs_sfc_id
   integer flx_bb_abs_ttl_id
   integer flx_bb_dwn_TOA_id
+  integer flx_bb_upw_TOA_id
   integer flx_bb_dwn_dff_id
   integer flx_bb_dwn_drc_id
+  integer flx_bb_dwn_dff_sfc_id
+  integer flx_bb_dwn_drc_sfc_id
   integer flx_bb_dwn_id
   integer flx_bb_dwn_sfc_id
   integer flx_bb_net_id
@@ -1056,7 +1059,10 @@ program swnb2
   real flx_bb_abs_sfc
   real flx_bb_abs_ttl
   real flx_bb_dwn_TOA
+  real flx_bb_upw_TOA
   real flx_bb_dwn_sfc
+  real flx_bb_dwn_dff_sfc
+  real flx_bb_dwn_drc_sfc
   real flx_nst_abs_atm
   real flx_nst_abs_sfc
   real flx_nst_abs_ttl
@@ -1211,7 +1217,7 @@ program swnb2
   real,dimension(:),allocatable::flx_bb_dwn_dff !
   real,dimension(:),allocatable::flx_bb_dwn_drc !
   real,dimension(:),allocatable::flx_bb_net !
-  real,dimension(:),allocatable::flx_bb_up !
+  real,dimension(:),allocatable::flx_bb_upw !
   real,dimension(:),allocatable::flx_nst_dwn !
   real,dimension(:),allocatable::flx_nst_net !
   real,dimension(:),allocatable::flx_nst_up !
@@ -3534,8 +3540,8 @@ program swnb2
   if(rcd /= 0) stop "allocate() failed for flx_bb_dwn_drc"
   allocate(flx_bb_net(levp_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for flx_bb_net"
-  allocate(flx_bb_up(levp_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_bb_up"
+  allocate(flx_bb_upw(levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for flx_bb_upw"
   allocate(flx_nst_dwn(levp_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for flx_nst_dwn"
   allocate(flx_nst_net(levp_nbr),stat=rcd)
@@ -4311,7 +4317,7 @@ program swnb2
      enddo                  ! end loop over plr
      flx_bb_dwn_drc(lev_idx)=0.0
      flx_bb_dwn_dff(lev_idx)=0.0
-     flx_bb_up(lev_idx)=0.0
+     flx_bb_upw(lev_idx)=0.0
   enddo                     ! end loop over lev
   
   ! Initialize counters either incremented or decremented in main loop over bands
@@ -6542,7 +6548,7 @@ program swnb2
         flx_bb_dwn_dff(lev_idx)=flx_bb_dwn_dff(lev_idx)+ &
              flx_spc_dwn_dff(bnd_idx,lev_idx)* &
              wvl_dlt(bnd_idx)
-        flx_bb_up(lev_idx)=flx_bb_up(lev_idx)+ &
+        flx_bb_upw(lev_idx)=flx_bb_upw(lev_idx)+ &
              flx_spc_upw(bnd_idx,lev_idx)* &
              wvl_dlt(bnd_idx)
      enddo                  ! end loop over lev
@@ -6551,7 +6557,7 @@ program swnb2
   ! Process broadband fluxes
   do lev_idx=1,levp_nbr
      flx_bb_dwn(lev_idx)=flx_bb_dwn_drc(lev_idx)+flx_bb_dwn_dff(lev_idx)
-     flx_bb_net(lev_idx)=flx_bb_dwn(lev_idx)-flx_bb_up(lev_idx)
+     flx_bb_net(lev_idx)=flx_bb_dwn(lev_idx)-flx_bb_upw(lev_idx)
   enddo                     ! end loop over lev
   
   ! Compute scalar diagnostics
@@ -6562,9 +6568,9 @@ program swnb2
   abs_bb_atm=(flx_bb_net(1)-flx_bb_net(levp_nbr))/max(flx_bb_dwn(1),real_tiny)
   abs_bb_sfc=flx_bb_net(levp_nbr)/max(flx_bb_dwn(1),real_tiny)
   abs_bb_snw=flx_bb_net(levp_atm_nbr)/max(flx_bb_dwn(levp_atm_nbr),real_tiny)
-  rfl_bb_SAS=flx_bb_up(1)/max(flx_bb_dwn(1),real_tiny)
-  rfl_bb_sfc=flx_bb_up(levp_nbr)/max(flx_bb_dwn(levp_nbr),real_tiny)
-  rfl_bb_snw=flx_bb_up(levp_atm_nbr)/max(flx_bb_dwn(levp_atm_nbr),real_tiny)
+  rfl_bb_SAS=flx_bb_upw(1)/max(flx_bb_dwn(1),real_tiny)
+  rfl_bb_sfc=flx_bb_upw(levp_nbr)/max(flx_bb_dwn(levp_nbr),real_tiny)
+  rfl_bb_snw=flx_bb_upw(levp_atm_nbr)/max(flx_bb_dwn(levp_atm_nbr),real_tiny)
   trn_bb_atm=flx_bb_dwn(levp_nbr)/max(flx_bb_dwn(1),real_tiny)
   trn_bb_snw=flx_bb_dwn(levp_nbr)/max(flx_bb_dwn(levp_atm_nbr),real_tiny)
   flx_bb_abs_ttl=flx_bb_net(1)
@@ -6572,7 +6578,10 @@ program swnb2
   flx_bb_abs_atm=flx_bb_net(1)-flx_bb_net(levp_nbr)
   flx_bb_abs_snw=flx_bb_net(levp_atm_nbr)-flx_bb_net(levp_nbr)
   flx_bb_dwn_TOA=flx_bb_dwn(1)
+  flx_bb_upw_TOA=flx_bb_upw(1)
   flx_bb_dwn_sfc=flx_bb_dwn(levp_nbr)
+  flx_bb_dwn_dff_sfc=flx_bb_dwn_dff(levp_nbr)
+  flx_bb_dwn_drc_sfc=flx_bb_dwn_drc(levp_nbr)
   flx_bb_dwn_snw=flx_bb_dwn(levp_atm_nbr)
   
   do lev_idx=1,lev_nbr
@@ -6704,7 +6713,7 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_dwn_dff',nf90_float,levp_dmn_id,flx_bb_dwn_dff_id),sbr_nm//': dv flx_bb_dwn_dff')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_dwn_drc',nf90_float,levp_dmn_id,flx_bb_dwn_drc_id),sbr_nm//': dv flx_bb_dwn_drc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_net',nf90_float,levp_dmn_id,flx_bb_net_id),sbr_nm//': dv flx_bb_net')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_up',nf90_float,levp_dmn_id,flx_bb_upw_id),sbr_nm//': dv flx_bb_up')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_upw',nf90_float,levp_dmn_id,flx_bb_upw_id),sbr_nm//': dv flx_bb_upw')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_nst_abs',nf90_float,lev_dmn_id,flx_nst_abs_id),sbr_nm//': dv flx_nst_abs')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_nst_dwn',nf90_float,levp_dmn_id,flx_nst_dwn_id),sbr_nm//': dv flx_nst_dwn')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_nst_net',nf90_float,levp_dmn_id,flx_nst_net_id),sbr_nm//': dv flx_nst_net')
@@ -6819,6 +6828,7 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_abs_sfc',nf90_float,flx_bb_abs_sfc_id),sbr_nm//': dv flx_bb_abs_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_abs_ttl',nf90_float,flx_bb_abs_ttl_id),sbr_nm//': dv flx_bb_abs_ttl in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_dwn_TOA',nf90_float,flx_bb_dwn_TOA_id),sbr_nm//': dv flx_bb_dwn_TOA in '//__FILE__)
+     rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_upw_TOA',nf90_float,flx_bb_upw_TOA_id),sbr_nm//': dv flx_bb_upw_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'frc_ice_ttl',nf90_float,frc_ice_ttl_id),sbr_nm//': dv frc_ice_ttl in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'lat_dgr',nf90_double,lat_dgr_id),sbr_nm//': dv lat_dgr in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'lcl_time_hr',nf90_double,lcl_time_hr_id),sbr_nm//': dv lcl_time_hr in '//__FILE__)
@@ -6874,6 +6884,10 @@ program swnb2
           sbr_nm//': dv ntn_spc_aa_zen_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_dwn_sfc',nf90_float,flx_bb_dwn_sfc_id), &
           sbr_nm//': dv flx_bb_dwn_sfc in '//__FILE__)
+     rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_dwn_dff_sfc',nf90_float,flx_bb_dwn_dff_sfc_id), &
+          sbr_nm//': dv flx_bb_dwn_dff_sfc in '//__FILE__)
+     rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_dwn_drc_sfc',nf90_float,flx_bb_dwn_drc_sfc_id), &
+          sbr_nm//': dv flx_bb_dwn_drc_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_nst_abs_atm',nf90_float,flx_nst_abs_atm_id), &
           sbr_nm//': dv flx_nst_abs_atm in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_nst_abs_sfc',nf90_float,flx_nst_abs_sfc_id), &
@@ -7076,6 +7090,8 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_TOA_id,'long_name','Broadband incoming flux at TOA (total insolation)'), &
           sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_upw_TOA_id,'long_name','Broadband upwelling flux at TOA'), &
+          sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_dff_id,'long_name','Diffuse downwelling broadband flux'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_drc_id,'long_name','Direct downwelling broadband flux'), &
@@ -7083,6 +7099,10 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_id,'long_name','Total downwelling broadband flux (direct + diffuse)'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_sfc_id,'long_name','Broadband downwelling flux at surface'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_dff_sfc_id,'long_name','Broadband downwelling diffuse flux at surface'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_drc_sfc_id,'long_name','Broadband downwelling direct flux at surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_net_id,'long_name','Net broadband flux (downwelling - upwelling)'), &
           sbr_nm//': pa long_name in '//__FILE__)
@@ -7433,10 +7453,13 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_abs_sfc_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_abs_ttl_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_TOA_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_upw_TOA_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_dff_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_drc_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_sfc_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_dff_sfc_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_drc_sfc_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_net_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_upw_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_frc_dwn_sfc_blr_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
@@ -7667,12 +7690,15 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_abs_sfc_id,flx_bb_abs_sfc),sbr_nm//': pv flx_bb_abs_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_abs_ttl_id,flx_bb_abs_ttl),sbr_nm//': pv flx_bb_abs_ttl in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_TOA_id,flx_bb_dwn_TOA),sbr_nm//': pv flx_bb_dwn_TOA in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_upw_TOA_id,flx_bb_upw_TOA),sbr_nm//': pv flx_bb_upw_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_dff_id,flx_bb_dwn_dff),sbr_nm//': pv flx_bb_dwn_dff in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_drc_id,flx_bb_dwn_drc),sbr_nm//': pv flx_bb_dwn_drc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_id,flx_bb_dwn),sbr_nm//': pv flx_bb_dwn in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_sfc_id,flx_bb_dwn_sfc),sbr_nm//': pv flx_bb_dwn_sfc in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_dff_sfc_id,flx_bb_dwn_dff_sfc),sbr_nm//': pv flx_bb_dwn_dff_sfc in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_drc_sfc_id,flx_bb_dwn_drc_sfc),sbr_nm//': pv flx_bb_dwn_drc_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_net_id,flx_bb_net),sbr_nm//': pv flx_bb_net in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_upw_id,flx_bb_up),sbr_nm//': pv flx_bb_up in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_upw_id,flx_bb_upw),sbr_nm//': pv flx_bb_upw in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_frc_dwn_sfc_id,flx_frc_dwn_sfc),sbr_nm//': pv flx_frc_dwn_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_nst_abs_atm_id,flx_nst_abs_atm),sbr_nm//': pv flx_nst_abs_atm in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_nst_abs_id,flx_nst_abs),sbr_nm//': pv flx_nst_abs in '//__FILE__)
@@ -8140,8 +8166,8 @@ program swnb2
   if(rcd /= 0) stop 'deallocate() failed for flx_bb_dwn'
   if (allocated(flx_bb_net)) deallocate(flx_bb_net,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for flx_bb_net'
-  if (allocated(flx_bb_up)) deallocate(flx_bb_up,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_bb_up'
+  if (allocated(flx_bb_upw)) deallocate(flx_bb_upw,stat=rcd)
+  if(rcd /= 0) stop 'deallocate() failed for flx_bb_upw'
   if (allocated(flx_nst_dwn)) deallocate(flx_nst_dwn,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for flx_nst_dwn'
   if (allocated(flx_nst_net)) deallocate(flx_nst_net,stat=rcd)
