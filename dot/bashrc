@@ -385,13 +385,11 @@ case "${PVM_ARCH}" in
 # PKG_ROOT is usually argument to configure --prefix=${PKG_ROOT}
 # ROCKS_ROLLS_ROOT is where Rocks clusters put rolls
 	case "${HOST}" in 
-	    gplogin* | mirage* | hpc* | pbs* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # endif EMT64 Rocks Cluster
+	    gplogin* | mirage* | hpc* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # endif EMT64 Rocks Cluster
 	esac # endcase ${HOST}
 	case "${HOST}" in 
 	    aerosol* | firn* ) PKG_ROOT='/opt/local' ; ;; # endif MAC OS X
 	    gplogin* ) PKG_ROOT='/sopt' ; ;; # endif EMT64 Rocks Cluster
-	    ipcc* ) PKG_ROOT='/opt' ; ;; # endif Rocks cluster
-	    pbs* ) PKG_ROOT='/usr/local' ; ;; # endif Ubuntu-stock
 	    mirage* ) PKG_ROOT='/fs/local' ; ;; # endif NCAR cluster
 	    hpc* ) PKG_ROOT='/software' ; ;; # endif Torque machines
 	    virga* ) PKG_ROOT='/usr/local' ; ;; # endif Ubuntu-stock
@@ -406,8 +404,6 @@ case "${PVM_ARCH}" in
 #	    gplogin* ) export HDF5_ROOT="${PKG_ROOT}/HDF5"; export NETCDF_ROOT="${PKG_ROOT}/ifort_icpc" ; export NETCDF4_ROOT="${PKG_ROOT}/ifort_icpc" ; ;; # endif EMT64 Rocks Cluster
 	    mirage* ) export HDF5_ROOT="${PKG_ROOT}"; export NETCDF_ROOT="${PKG_ROOT}" ; export NETCDF4_ROOT="${PKG_ROOT}" ; ;; # endif NCAR cluster
 	    hpc* ) export NETCDF_ROOT="${PKG_ROOT}/netcdf" ; export NETCDF4_LIB="${PKG_ROOT}/netcdf4" ; ;; # endif HPC
-	    ipcc* ) export NETCDF_ROOT='/opt/netcdf' ; ;; # endif Opteron cluster
-	    pbs* ) export NETCDF_ROOT='/usr/local' ; ;; # endif Opteron cluster
 #		export LD_ASSUME_KERNEL='2.4.1' # Prevents IPCC PGI linker complaints
 	esac # endcase ${HOST}
 	export NETCDF_INC="${NETCDF_ROOT}/include"
@@ -419,9 +415,9 @@ case "${PVM_ARCH}" in
 
 # OpenMP
 	case "${HOST}" in 
-		ashes* | ess1* | flyash* ) export OMP_NUM_THREADS='1' ; ;; # endif uniprocessor
-		clay* | neige* | silt* | virga* ) export OMP_NUM_THREADS='2' ; ;; # endif dual processor
-		aerosol* | firn* | givre* | hpc* | pbs* | tephra* ) export OMP_NUM_THREADS='4' ; ;; # endif quad processor
+		ashes* | ess1* ) export OMP_NUM_THREADS='1' ; ;; # endif uniprocessor
+		neige* | virga* ) export OMP_NUM_THREADS='2' ; ;; # endif dual processor
+		aerosol* | firn* | frazil* | givre* | hpc* ) export OMP_NUM_THREADS='4' ; ;; # endif quad processor
 		glace* | gplogin* | grele* | roulee* | snow* ) export OMP_NUM_THREADS='8' ; ;; # endif dual-quad processor
 		aims4* | mirage* | pileus* | rhea* | ys* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-octet processor
 	esac # endcase ${HOST}
@@ -445,8 +441,6 @@ case "${PVM_ARCH}" in
 	esac # endcase ${HOST}
 	# Set MPICH_ROOT
 	case "${HOST}" in 
-	    ipcc* ) MPICH_ROOT="${PGI_ROOT}/mpich2" ; ;; # endif Opteron cluster
-	    pbs* ) MPICH_ROOT="${PKG_ROOT}/mpich/gnu" ; ;; # endif Opteron cluster
 	    * ) MPICH_ROOT="${PKG_ROOT}/mpich" ; ;; # endif HPC and default
 	esac # endcase ${HOST}
 	if [ -n "${ROCKS_ROLLS_ROOT}" ]; then
@@ -493,10 +487,9 @@ case "${PVM_ARCH}" in
 	case "${HOST}" in 
 	    aims4* ) PATH=${PATH}\:/usr/local/uvcdat/2016-01-21/bin:/usr/local/uvcdat/2016-01-21/Externals/bin ; ;; # endif LLNL
 	    gplogin* | mirage* ) # x86-64
-		PATH=${PATH}\:${ICC_ROOT}/bin/intel64
-		;; # endif greenplanet
-	    givre* | neige* | roulee* ) 
-		PATH=${PATH}\:/usr/local/cuda/bin ; ;; # endif CUDA
+		PATH=${PATH}\:${ICC_ROOT}/bin/intel64 ; ;; # endif greenplanet
+#	    frazil* | givre* | neige* | roulee* ) 
+#		PATH=${PATH}\:/usr/local/cuda/bin ; ;; # endif CUDA
 	    pileus* ) PATH=${PATH}\:/opt/ACME/bin ; ;; # endif CADES
 	    *) # Default
 		PATH=${PATH}\:${ICC_ROOT}/bin
@@ -539,7 +532,7 @@ case "${PVM_ARCH}" in
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${NETCDF4_ROOT}/lib
 	case "${HOST}" in 
-	    givre* | roulee* ) # Fedora uses LIB64 directory
+	    frazil* | givre* | roulee* ) # Fedora uses LIB64 directory
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib64
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/lib64
 		;; # endif LIB64
@@ -554,19 +547,6 @@ case "${PVM_ARCH}" in
 #	    ys* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/apps/opt/udunits/2.1.24/gnu/default/lib; ;; # endif NCAR
 	    ys* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/apps/opt/udunits/2.1.24/intel/12.1.4/lib; ;; # endif NCAR
 	esac # endcase ${HOST}
-	case "${HOST}" in 
-	    givre* | neige* | roulee* ) # CUDA
-		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/cuda/lib
-		;; # endif CUDA
-	    pbs* ) 
-		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PKG_ROOT}/gridengine/lib/lx26-amd64
-		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PKG_ROOT}/globus/lib
-		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PKG_ROOT}/mpich/gnu/lib
-		;; # endif x86-64
-	    esmf* ) # 
-#		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PGI}/linux86/lib
-		;; # endif i386 machines
-	esac # endcase ${PVM_ARCH}
 	if [ -n "${MPI_ROOT}" ]; then
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MPI_ROOT}/lib # OpenMPI
 		PATH=${PATH}\:/usr/local/parallel/bin # OpenMPI
@@ -813,13 +793,13 @@ FC_pgf95='pgf95'
 case "${HOST}" in 
 #    aerosol* | firn* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif clang/clang/macports
     aerosol* | firn* ) export LINUX_CC=${CC_gcc_macports} ; export LINUX_CXX=${CXX_gxx_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif all MacPorts
-    ashes* | clay* | flyash* | glace* | gplogin* | grele* | mirage* | pbs* | tephra* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC="${LINUX_CC} -I/usr/include/mpich2" ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK -I/usr/include/mpich2" ;; # endif gcc/g++/gfortran MPICH2
+    ashes* | glace* | gplogin* | grele* | mirage* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC="${LINUX_CC} -I/usr/include/mpich2" ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK -I/usr/include/mpich2" ;; # endif gcc/g++/gfortran MPICH2
     ipcc* ) export LINUX_CC=${CC_pathcc} ; export LINUX_CXX=${CXX_pathCC} ; export LINUX_FC=${FC_pathf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # endif pathcc/pathCC/pathf95 MPICH2
     gplogin* ) export LINUX_CC=${CC_icc/icc/mpicc} ; export LINUX_CXX=${CXX_icpc/icpc/mpiCC} ; export LINUX_FC=${FC_ifort/ifort/mpif90} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort OpenMPI	
     gplogin* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort OpenMPI GreenPlanet is special because it has a parallel filesystem, lustre, and hence can take advantage of MPI I/O when compiler is MPI-aware. However, compiler switches in all of my custom Makefiles are triggered by vendor-compiler names, e.g., gfortran, ifort, and xlf90, rather than the generic mpicc/mpiCC/mpif90, which are ambiguous. Hence we use this method to designate the invocation command (e.g., "mpif90" or "pgf90") together with the underlying compiler (e.g., "gfortran" or "pgf90"): MPI=Y tells Makefile to invoke compiler with 'mpicc', 'mpif90', etc., but LINUX_CC/CXX/FC point to underlying compilers. Makefile sets compiler-specific switches and options using LINUX_CC/CXX/FC, then, afterwards, sets CC/CXX/FC to 'mpicc/mpiCC/mpif90'. Alternate method, shown in preceding line, sets LINUX_CC/CXX/FC directly to 'mpicc/mpiCC/mpif90' here in bashrc, but then compiler-specific switches in Makefile are missed.
     hpc* ) export LINUX_CC=${CC_pgcc} ; export LINUX_CXX=${CXX_pgCC} ; export LINUX_FC=${FC_pgf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # endif pgcc/pgCC/pgf95 MPICH2
 #   soot* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_g95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX=${LINUX_CXX} ;; # endif icc/icpc/g95 MPICH
-    givre* | neige* | roulee* | silt* | snow* | virga* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # endif gcc/g++/gfortran OpenMPI
+    frazil* | givre* | neige* | roulee* | silt* | snow* | virga* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # endif gcc/g++/gfortran OpenMPI
     mira* | rhea* | titan* | ys* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # endif gcc/g++/g95 MPICH 
 esac # endcase ${HOST}
@@ -833,10 +813,8 @@ export LAMMPICXX=${LINUX_CXX}
 case "${HOST}" in 
     ashes* ) export GCC_RCH_ARG='-march=pentium4' ; export ICC_RCH_ARG='-axW -mtune=pentium4' ; ;; # endif Pentium4-M
     aerosol* | firn* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='' ; ;; # endif Intel Core i7
-    flyash* ) export GCC_RCH_ARG='-march=pentium3' ; export ICC_RCH_ARG='-axK -mcpu=pentiumpro' ; ;; # endif Pentium3
-    clay* | pbs* | silt* | tephra* ) export GCC_RCH_ARG='-march=opteron -mmmx -msse -msse2 -m3dnow -pipe -fexpensive-optimizations -mfpmath=sse,387' ; export ICC_RCH_ARG='-axW -mcpu=pentium4' ; export PGI_RCH_ARG='-tp=amd64 -fast -Minfo=all' ; export PSC_RCH_ARG='-march=opteron -mmmx -msse -msse2 -m3dnow -pipe -fexpensive-optimizations' ; ;; # endif Opteron
     esqf* ) export GCC_RCH_ARG='-mtune=power4' ; export ICC_RCH_ARG='' ; ;; # endif Power4
-    givre* | glace* | grele* | neige* | roulee* | snow* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-axP -mcpu=pentium4 -msse3' ; ;; # endif Core2 Extreme EMT64
+    frazil* | givre* | glace* | grele* | neige* | roulee* | snow* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-axP -mcpu=pentium4 -msse3' ; ;; # endif Core2 Extreme EMT64
     gplogin* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-ipo -no-prec-div -Wl,-z,muldefs' ; ;; # endif Core2 Extreme EMT64
     mirage* | ys* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='-ipo -no-prec-div -Wl,-z,muldefs' ; ;; # endif Core2 Extreme EMT64
     lanina* ) export GCC_RCH_ARG='-march=k6-2' ; export ICC_RCH_ARG='' ; ;; # endif AMD K6-2
@@ -845,8 +823,8 @@ esac # endcase ${HOST}
 # Set ICC_ROOT, IFC_ROOT
 case "${HOST}" in
     aerosol* | firn* ) export ICC_ROOT='' ; export IFC_ROOT='' ; ;; # endif IA32
-    ashes* | flyash* | virga* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # endif IA32
-    clay* | givre* | glace* | grele* | neige* | pbs* | roulee* | silt* | snow* | tephra* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # endif IA64
+    ashes* | virga* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # endif IA32
+    frazil* | givre* | glace* | grele* | neige* | roulee* | snow* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # endif IA64
     gplogin* ) export ICC_ROOT='/sopt/intel/Compiler/11.0/081' ; export IFC_ROOT='/sopt/intel/Compiler/11.0/081' ; ;; # endif EMT64 Rocks Cluster
     ipcc* ) export ICC_ROOT='/opt/intel/cce/9.1.038' ; export IFC_ROOT='/opt/intel/fce/9.1.032' ; ;; # endif IPCC
     hpc* ) export ICC_ROOT='/software/intel/cc' ; export IFC_ROOT='/software/intel/fc' ; ;; # endif HPC
@@ -976,10 +954,10 @@ case ${PVM_ARCH} in
 	#export PRINTER='hp4050' # UCI croul
 	#export PRINTER='hp4250' # LGGE office
 	case ${HOST} in
-#	    aerosol* | ashes* | firn* | flyash* | neige* | roulee* | virga* ) export PRINTER='canon_mg8120' ; ;; # Irvine home office
-	    aerosol* | ashes* | firn* | flyash* | neige* | roulee* | virga* ) export PRINTER='dell5130' ; ;; # Irvine home office
-	    givre* | glace* | gplogin* | grele* ) export PRINTER='hp4700' ; ;; # UCI Croul 3323 (my office)
-#	    givre* | glace* | gplogin* | grele* ) export PRINTER='hpm600' ; ;; # UCI Croul mail room
+#	    aerosol* | ashes* | firn* | neige* | roulee* | virga* ) export PRINTER='canon_mg8120' ; ;; # Irvine home office
+	    aerosol* | ashes* | firn* | neige* | roulee* | virga* ) export PRINTER='dell5130' ; ;; # Irvine home office
+#	    frazil* | givre* | glace* | gplogin* | grele* ) export PRINTER='hp4700' ; ;; # UCI Croul 3323 (my office)
+	    frazil* | givre* | glace* | gplogin* | grele* ) export PRINTER='hpm600' ; ;; # UCI Croul mail room
 	esac # endcase ${HOST}
 	#export PRINTER='hp4350' # UCI Croul 3242 (common area)
 	#export PRINTER='hpm600' # UCI Croul mail room
@@ -1071,7 +1049,6 @@ alias hopper='ssh -X hopper.nersc.gov' # pw_hgh
 alias edison='ssh -X edison.nersc.gov' # pw_hgh
 alias bsrc="source ${HOME}/.bashrc"
 alias chm='chmod 644 *.*' # Make readable
-alias clay='ssh -X clay.ess.uci.edu'
 alias cln='rm *~ .[a-zA-Z]~ \#\*\# core core.* *.tmp *foo foo* *.o *.bak *.trace gmeta aaaa* thumb???.png thumbdta.tex *-t.tex* *.bbl *.blg *.log *.glo *.aux *.dlog *.cp *.cps *.fn *.fns *.ky *.pg *.toc *.tp *.vr *.lof *.lot *.dvi *.ttt *.fff *.stackdump PET0.*'
 alias compress='gzip'
 alias corerm='rm `find . -name core -print`'
@@ -1096,6 +1073,7 @@ alias ess_cnt='ssh -X 42100s12@eee.uci.edu'
 alias ess_sco='ssh -X 42350w13@eee.uci.edu'
 alias gbsh="/bin/cp ${HOME}/sw/dot/bashrc.greenplanet ${HOME}/.bashrc;source ${HOME}/.bashrc"
 alias firn='ssh -X firn.ess.uci.edu'
+alias frazil='ssh -X frazil.ess.uci.edu'
 alias givre='ssh -X givre.ess.uci.edu'
 alias roulee='ssh -X roulee.ess.uci.edu'
 alias aerosol='ssh -X aerosol.ess.uci.edu'
@@ -1116,7 +1094,6 @@ alias neige='ssh -X -p 267 68.109.196.84' # Forward to 192.168.1.77:22 (to neige
 alias nvr='env | sort | more'
 alias panoply='java -jar /data/zender/tmp/PanoplyJ/jars/Panoply.jar'
 alias toolsui='java -jar /data/zender/tmp/toolsUI-4.3.jar'
-alias pbs='ssh -X pbs.ess.uci.edu'
 alias ps2pdf='ps2pdf -dMaxSubsetPct=100 -dCompatibilityLevel=1.2 -dSubsetFonts=true -dEmbedAllFonts=true -sAutoRotatePages=PageByPage -sColorConversionStrategy=LeaveColorUnchanged'
 alias pslz="ps -l -U ${USER}" # -f = Full listing -U username
 alias psz="ps -f -U ${USER}" # -f = Full listing -U username
@@ -1126,7 +1103,6 @@ alias rm='rm -i' # -i = inquire
 alias rst='set noglob; eval `resize`; unset noglob'
 alias rsync='rsync -av' # -p = preserve mode, time, -C = enable compression
 alias scp='scp -p -C' # -p = preserve mode, time, -C = enable compression
-alias silt='ssh -X silt.ess.uci.edu'
 alias snow='ssh -X snow.engin.umich.edu'
 # Enable X11 forwarding on remote machine
 # ssh -X foo.domain.com will forward X displays from foo to localhost. Great for ncview data from remote HPC centers
@@ -1134,7 +1110,6 @@ alias snow='ssh -X snow.engin.umich.edu'
 # After killing X on MBP, remote clients cannot serve X windows locally, must instead re-connect with ssh -X. Conundrum!
 alias ssh='ssh -X' # -X = enable X11 forwarding on remote machine
 alias temperature='finger temperature@atd.ucar.edu'
-alias tephra='ssh -X tephra.ess.uci.edu'
 alias topz='top -U${USER}' # -Uusername
 alias uncompress='gunzip'
 alias vg='echo "valgrind --leak-check=yes --show-reachable=yes --suppressions=${HOME}/nco/doc/valgrind.txt --tool=memcheck ncks -D 5 -O ${HOME}/nco/data/in.nc ~/foo.nc > ~/foo 2>&1"'
@@ -1156,8 +1131,6 @@ function gtm { for rps in acd diwg nco pnp prv PreAndPostProcessingScripts rsr s
 function bin_obj_rm { rm "${HOME}/bin/${1} ${HOME}/obj/${1}.o ${HOME}/obj/${1}.d" ; }
 function dotgrep { 'egrep ${1} .[a-zA-Z]*' ; }
 function difffunc { diff -c -w ${1} ${2} | more ; } # -c = print 3 lines around diff, -w = ignore whitespace diffs
-function dirtdiff { scp ${1} dirt.ess.uci.edu:${PWD}/foo; ssh dirt.ess.uci.edu diff -c ${PWD}/${1} ${PWD}/foo ; }
-function dirtscp { scp ${1} dirt.ess.uci.edu:${PWD} ; }
 function fl_rm { 'set tmp = `find . -name ${1} -print`;rm ${tmp}' ; }
 function m { ${PAGER} ${*} ; } # 
 function wind { lp -ovd -dwind ${1} ; } # Wind duplex
@@ -1246,10 +1219,6 @@ case ${PVM_ARCH} in
 	alias ldd='otool -L'
 	;; # endif MACOSX*
 esac # endcase ${PVM_ARCH}
-# If machine is capable of parallel make...
-if [ "${HOST}" = 'dirt.ess.uci.edu' -o "${PVM_ARCH}" = 'SGIMP64' ]; then
-    alias make='gmake --jobs 4' # Using NCPUS + 1 is better
-fi # endif dirt
 
 # Licenses for IDL and PGI are handled by FlexLM
 # FlexLM is started in /etc/rc.d/rc.local by executing
@@ -1277,42 +1246,21 @@ case ${PVM_ARCH} in
 #    export FER_PALETTE=". ${FER_DIR}/ppl ${HOME}/ferret/ppl" # palettes
 
     case ${HOST} in
-    aerosol* | ashes* | firn* | flyash* | givre* | glace* | grele* | neige* | roulee* | virga* )
+    aerosol* | ashes* | firn* | frazil* | givre* | glace* | grele* | neige* | roulee* | virga* )
 	export INTEL_LICENSE_FILE='/opt/intel/cc/9.0/licenses:/opt/intel/fc/9.0/licenses'
-#	export LM_LICENSE_FILE='1700@sand.ess.uci.edu'
 	export LM_LICENSE_FILE='1700@ess1.ess.uci.edu'
     ;; # endif using network licenses
-    clay* | silt* ) 
-        export INTEL_LICENSE_FILE='/opt/intel/licenses'
-        export LM_LICENSE_FILE='1700@sand.ess.uci.edu'
-    ;; # endif IA64
     dhcp* )
 	export LM_LICENSE_FILE='1726@fileserver.ucar.edu'
     ;; # endif visiting NCAR
-    dirt* )
-	export INTEL_LICENSE_FILE='/opt/intel/cc/9.0/licenses:/opt/intel/fc/9.0/licenses'
-	export LM_LICENSE_FILE="${IDL_DIR}/../license/license.dat:${PGI}/license.dat"
-    ;; # endif using licenses directly on license server
     gplogin* ) 
         export INTEL_LICENSE_FILE='/opt/intel/licenses'
         export LM_LICENSE_FILE='7496@hpc.oit.uci.edu'
     ;; # endif EMT64 Rocks Cluster
-    pbs* ) 
-        export LM_LICENSE_FILE="${PGI}/license.dat"
-    ;; # endif Opteron cluster
     hpc* ) 
 	export INTEL_LICENSE_FILE='/software/icc/licenses:/software/ifc/licenses'
         export LM_LICENSE_FILE="7496@hpc.oit.uci.edu"
     ;; # endif Opteron cluster
-    pbs* | tephra* )
-        export LM_LICENSE_FILE="${PGI}/license.dat"
-    ;; # endif Opteron cluster
-    sand* )
-# Remove PGI server from sand
-	export LM_LICENSE_FILE="${PGI}/license.dat"
-        export INTEL_LICENSE_FILE='/opt/intel/licenses'
-#	export LM_LICENSE_FILE="${IDL_DIR}/../license/license.dat:${PGI}/license.dat"
-    ;; # endif using licenses directly on license server
     esac # endcase ${HOST}
 
     export PATHSCALE_SUBSCRIPTION_DAEMON='ipcc.calit2.uci.edu:7143'
