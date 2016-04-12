@@ -954,10 +954,9 @@ case ${PVM_ARCH} in
 	#export PRINTER='hp4050' # UCI croul
 	#export PRINTER='hp4250' # LGGE office
 	case ${HOST} in
-#	    aerosol* | ashes* | firn* | neige* | roulee* | virga* ) export PRINTER='canon_mg8120' ; ;; # Irvine home office
-	    aerosol* | ashes* | firn* | neige* | roulee* | virga* ) export PRINTER='dell5130' ; ;; # Irvine home office
+	    aerosol* | ashes* | roulee* | virga* ) export PRINTER='dell5130' ; ;; # Irvine home office
 #	    frazil* | givre* | glace* | gplogin* | grele* ) export PRINTER='hp4700' ; ;; # UCI Croul 3323 (my office)
-	    frazil* | givre* | glace* | gplogin* | grele* ) export PRINTER='hpm600' ; ;; # UCI Croul mail room
+	    firn* | frazil* | givre* | glace* | gplogin* | grele* | neige* ) export PRINTER='hpm600' ; ;; # UCI Croul mail room
 	esac # endcase ${HOST}
 	#export PRINTER='hp4350' # UCI Croul 3242 (common area)
 	#export PRINTER='hpm600' # UCI Croul mail room
