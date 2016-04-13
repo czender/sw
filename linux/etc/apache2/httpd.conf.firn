@@ -333,7 +333,7 @@ DirectoryIndex index.shtml index.html index.php
     Options Indexes
 </Directory>
 <Directory "/Users/zender/Sites/nco">
-    Options Indexes
+    Options Indexes FollowSymLinks Multiviews
 </Directory>
 <Directory "/Users/zender/Sites/poetry">
     Options Indexes
