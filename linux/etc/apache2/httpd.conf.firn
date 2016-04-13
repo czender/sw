@@ -342,10 +342,10 @@ DirectoryIndex index.shtml index.html index.php
     Options Indexes
 </Directory>
 <Directory "/Users/zender/Sites/pix/zen">
-    Options Indexes
+    Options Indexes FollowSymLinks Multiviews
 </Directory>
 <Directory "/Users/zender/Sites/pix/zen/*">
-    Options Indexes
+    Options Indexes FollowSymLinks Multiviews
 </Directory>
 <Directory "/Users/zender/Sites/pr">
     Options Indexes
@@ -363,10 +363,10 @@ DirectoryIndex index.shtml index.html index.php
     Options Indexes
 </Directory>
 <Directory "/Users/zender/Sites/terraref">
-    Options Indexes
+    Options Indexes FollowSymLinks Multiviews
 </Directory>
 <Directory "/Users/zender/Sites/tmp">
-    Options Indexes
+    Options Indexes FollowSymLinks Multiviews
 </Directory>
 
 #
