@@ -1,0 +1,10 @@
+# Download latest
+
+mv ~/Downloads/PanoplyJ-4.4.3.tgz $DATA/tmp
+cd $DATA/tmp
+tar xvzf PanoplyJ-4.4.3.tgz 
+
+# That is all!
+# Ensure that this is in .bashrc:
+# alias panoply='java -jar /data/zender/tmp/PanoplyJ/jars/Panoply.jar'
+# Then run from any directory with ... panoply
