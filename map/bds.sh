@@ -7,7 +7,8 @@
 
 caseid='map'
 #drc_bds="${DATA}/data" # Directory for bds output
-drc_bds='/var/www/html/dead/data' # Directory for bds output when flg_cst_tpr=T
+#drc_bds='/var/www/html/dead/data' # Directory for bds output when flg_cst_tpr=T
+drc_bds='/Users/zender/data/dead/data' # Directory for bds output when flg_cst_tpr=T
 #drc_bds='/var/www/html/dead/data/nocoast' # Directory for bds output when flg_cst_tpr=F
 #drc_bds='/var/www/html/dead/data/norgnxcl' # Directory for bds output when flg_rgn_xcl=F
 
@@ -41,6 +42,12 @@ bds --bsn_fct_hrz=F --flg_cst_tpr=T --flg_rgn_xcl=T --bkf_itr_nbr=1 -x 288 -y 18
 
 # 1x1 fxm
 bds --bsn_fct_hrz=F --flg_cst_tpr=T --flg_rgn_xcl=T --bkf_itr_nbr=1 -x 360 -y 181 -m 33 -t 19801980 -o ${drc_bds}/dst_1x1.nc
+
+# 0.5x0.5 fxm
+bds --bsn_fct_hrz=F --flg_cst_tpr=T --flg_rgn_xcl=T --bkf_itr_nbr=1 -x 720 -y 361 -m 33 -t 19801980 -o ${drc_bds}/dst_0.5x0.5.nc
+
+# 0.25x0.25 fxm
+bds --bsn_fct_hrz=F --flg_cst_tpr=T --flg_rgn_xcl=T --bkf_itr_nbr=1 -x 1440 -y 721 -m 33 -t 19801980 -o ${drc_bds}/dst_0.25x0.25.nc
 
 # 0.9x1.25 dst_0.9x1.25_c080724.nc
 # ncks -H -v lon,lat,slat,slon -m /home/zender/Desktop/dst_0.9x1.25_c080724.nc | m

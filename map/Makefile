@@ -203,7 +203,7 @@ MDL_SRC := bds.F90
 MDL_SRC += asm_mdl.F90 asm_obs.F90 bds_ctl.F90 bds_drv.F90 clm_fld.F90 dstlsm.F90 hgt_sfc.F90 lak_wtl.F90 sfc_typ_mdl.F90 soi_mnr.F90 soi_txt.F90 src_prc.F90 asm_modis.F90# libbds
 MDL_SRC += geo_mdl.F90 map_cst.F90 map_grd.F90 rgr_mdl.F90# libmap
 # Directories to search for source files
-MDL_PTH := . ${HOME}/include ${HOME}/f
+MDL_PTH := . ${HOME}/include ${HOME}/sw/f
 # Dependency list for executable
 MDL_OBJ := $(addprefix ${MY_OBJ_DIR}/,$(addsuffix .o, $(basename ${MDL_SRC}))) 
 # Dependency (make) file for each object file
