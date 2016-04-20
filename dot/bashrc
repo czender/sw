@@ -184,6 +184,14 @@ export MY_BIN_DIR=${HOME}/bin
 export MY_LIB_DIR=${HOME}/lib
 export MY_OBJ_DIR=${HOME}/obj
 export MY_INC_DIR=${HOME}/include
+case "${HOST}" in
+    cooley* ) export MY_BIN_DIR="${HOME}/bin_cooley" ; MY_LIB_DIR="${HOME}/lib_cooley" ; MY_OBJ_DIR="${HOME}/obj_cooley" ; ;;
+    cori* ) export MY_BIN_DIR="${HOME}/bin_cori" ; MY_LIB_DIR="${HOME}/lib_cori" ; MY_OBJ_DIR="${HOME}/obj_cori" ; ;;
+    edison* ) export MY_BIN_DIR="${HOME}/bin_edison" ; MY_LIB_DIR="${HOME}/lib_edison" ; MY_OBJ_DIR="${HOME}/obj_edison" ; ;;
+    mira* ) export MY_BIN_DIR="${HOME}/bin_mira" ; MY_LIB_DIR="${HOME}/lib_mira" ; MY_OBJ_DIR="${HOME}/obj_mira" ; ;;
+    rhea* ) export MY_BIN_DIR="${HOME}/bin_rhea" ; MY_LIB_DIR="${HOME}/lib_rhea" ; MY_OBJ_DIR="${HOME}/obj_rhea" ; ;;
+    titan* ) export MY_BIN_DIR="${HOME}/bin_titan" ; MY_LIB_DIR="${HOME}/lib_titan" ; MY_OBJ_DIR="${HOME}/obj_titan" ; ;;
+esac # endcase ${HOST}
 
 # *PATH:
 # Do NOT use ~ in setting paths. MANPATH, e.g., does not expand ~ when searching paths
@@ -215,7 +223,7 @@ PATH='./'
 
 # My executables 
 PATH=${PATH}\:${HOME}/sh
-PATH=${PATH}\:${HOME}/bin
+PATH=${PATH}\:${MY_BIN_DIR}
 
 # Set operating system dependent paths and packages...
 case "${PVM_ARCH}" in 
