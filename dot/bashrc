@@ -8,7 +8,7 @@
 # Bash login shells execute one of (in order) .bash_profile, .bash_login, .profile
 # .bashrc is executed at start of any subshell
 # .bash_logout is executed every time a Bash login shell exits
-# System-wide versions in /etc/bashrc and /etc/profile are
+# System-wide versions are often in /etc/bashrc and /etc/profile
 
 # Bash implements many features not supported by standard shells
 # One gotcha is that Bash functions may be defined with either of two syntaxes:
@@ -28,7 +28,7 @@ if [ -f /etc/bashrc ]; then
 # fxm: 20030206 Seems to cause infinite recursion
 #    source /etc/bashrc
 #    sleep 0
-# 2050917 reintroduce /etc/bashrc so to setup softenv in batch jobs on Cooley ALCF
+# 20150917 reintroduce /etc/bashrc so to setup softenv in batch jobs on Cooley ALCF
     . /etc/bashrc
 fi # endif
 
@@ -1044,7 +1044,7 @@ alias ashes='ssh -X -p 264 68.109.196.84' # Forward to 192.168.1.75:22 (to ashes
 alias bc='bc -l' # -l = defines standard math library and sets scale to 20
 alias beepoff='xset b off' # Turn beep sound off for quiet work envionments
 alias yellowstone='ssh -X yellowstone.ucar.edu' # Yubikey 5573
-alias mira='ssh -X mira.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
+alias mira='ssh -X mira.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
 alias rhea='ssh -X rhea.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
 alias titan='ssh -X titan.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
 alias acmetest='ssh -X acmetest.ornl.gov' # then leapfrog to pileus
@@ -1107,6 +1107,7 @@ alias psz="ps -f -U ${USER}" # -f = Full listing -U username
 alias qz="qstat -u ${USER} -rn" # -u username -rn nodelist
 alias rcp='rcp -p' # -p = preserve mode, time
 alias rm='rm -i' # -i = inquire
+alias roger='ssh -X roger-login.ncsa.illinois.edu'
 alias rst='set noglob; eval `resize`; unset noglob'
 alias rsync='rsync -av' # -p = preserve mode, time, -C = enable compression
 alias scp='scp -p -C' # -p = preserve mode, time, -C = enable compression
