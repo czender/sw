@@ -75,6 +75,9 @@ if [ -f /bin/uname -o -f /usr/bin/uname \
 	Linux,sparc)		ARCH=LINUXSPARC ;;
 	BSD/OS,i[3456]86 )      ARCH=BSD386 ;;
 	FreeBSD,i386 )          ARCH=FREEBSD ;;
+# 20160421 csz++ Implement LINUXPPC
+	Linux,ppc64 )         ARCH=LINUXPPC64 ;;
+# csz--
 # 20020812 csz++ Implement MACOSX
 	Darwin,Power* )         ARCH=MACOSX ;;
 # csz--

@@ -18,10 +18,11 @@
 
 # Usage: 
 # /bin/cp -f ${HOME}/.bashrc /fs/cgd/home0/${USER}
-# scp -p ${HOME}/dot/bashrc dust.ess.uci.edu:.bashrc
-# scp -p ${HOME}/dot/bashrc ipcc.ess.uci.edu:.bashrc
-# scp -p ${HOME}/dot/bashrc rhea.ccs.ornl.gov:.bashrc
-# scp -p ${HOME}/dot/bashrc cooley.alcf.anl.gov:.bashrc
+# scp -p ${HOME}/sw/dot/bashrc dust.ess.uci.edu:.bashrc
+# scp -p ${HOME}/sw/dot/bashrc ipcc.ess.uci.edu:.bashrc
+# scp -p ${HOME}/sw/dot/bashrc rhea.ccs.ornl.gov:.bashrc
+# scp -p ${HOME}/sw/dot/bashrc cooley.alcf.anl.gov:.bashrc
+# scp -p ${HOME}/sw/dot/bashrc roger-login.ncsa.illinois.edu:.bashrc
 
 # RedHat Linux 7.x does not define PS1 in /etc/bashrc
 if [ -f /etc/bashrc ]; then
@@ -363,7 +364,7 @@ case "${PVM_ARCH}" in
 	MANPATH=${MANPATH}\:/usr/local/man
 	;; # endif HPPA*
     
-    LINUX* ) # LINUX on i386 machines, LINUXALPHA on Alpha CPUs, LINUXAMD64 on Opteron and EMT64 CPUs
+    LINUX* ) # LINUX on i386 machines, LINUXALPHA on Alpha CPUs, LINUXAMD64 on Opteron and EMT64 CPUs, LINUXPPC64 on PowerPC64 CPUs
 #    export CLASSPATH=.:/usr/local/ncBrowse/ncBrowse.jar:/usr/local/ncBrowse/HTTPClient.jar:/usr/local/ncBrowse/noaa_pmel.jar:/usr/local/ncBrowse/netcdf2dods.jar # Location of Java archives
 	export IDL_DIR='/usr/local/rsi/idl'
 	export INFOPATH="./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/share/info"
@@ -378,6 +379,7 @@ case "${PVM_ARCH}" in
 	export X11='/usr/X11R6'
 	case "${HOST}" in 
 	    aims4* ) export DATA="/export/${USER}/data" ; ;; # endif LLNL
+	    cg-gpu* ) export DATA="/home/${USER}/data" ; ;; # endif NCSA roger
 	    cooley* | cc* ) export DATA="/projects/HiRes_EarthSys/${USER}" ; ;; # endif ALCF
 	    cori* | edison* | hopper* | nid* ) export DATA="${HOME}/data" ; ;; # endif NERSC
 	    gplogin* ) export DATA="/data/${USER}" ; ;; # endif EMT64 Rocks Cluster
@@ -397,6 +399,7 @@ case "${PVM_ARCH}" in
 	esac # endcase ${HOST}
 	case "${HOST}" in 
 	    aerosol* | firn* ) PKG_ROOT='/opt/local' ; ;; # endif MAC OS X
+	    cg-gpu* ) PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # endif NCSA roger cluster
 	    gplogin* ) PKG_ROOT='/sopt' ; ;; # endif EMT64 Rocks Cluster
 	    mirage* ) PKG_ROOT='/fs/local' ; ;; # endif NCAR cluster
 	    hpc* ) PKG_ROOT='/software' ; ;; # endif Torque machines

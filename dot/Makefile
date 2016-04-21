@@ -78,18 +78,19 @@ obj_cln :
 ssh : ${MY_SSH_DIR}/authorized_keys
 	-cp -f $(notdir $^) ${MY_SSH_DIR}
 	-scp -p $^ dust.ess.uci.edu:.ssh
-	-scp -p $^ givre.ess.uci.edu:.ssh
+	-scp -p $^ frazil.ess.uci.edu:.ssh
 	-scp -p $^ glace.ess.uci.edu:.ssh
-	-scp -p $^ gplogin2.ps.uci.edu:.ssh
 	-scp -p $^ grele.ess.uci.edu:.ssh
-	-scp -p $^ pbs.ess.uci.edu:.ssh
-	-scp -p $^ hpc.oit.uci.edu:.ssh
+	-scp -p $^ givre.ess.uci.edu:.ssh
+	-scp -p $^ gplogin2.ps.uci.edu:.ssh
 	-scp -p $^ snow.engin.umich.edu:.ssh
-	-scp -p $^ tephra.ess.uci.edu:.ssh
 	-scp -p $^ home.ps.uci.edu:.ssh
-	-scp -p $^ virga.ess.uci.edu:.ssh
+	-scp -p $^ pbs.ess.uci.edu:.ssh
 	-scp -p $^ neige.ess.uci.edu:.ssh
 	-scp -p $^ roulee.ess.uci.edu:.ssh
+#	-scp -p $^ hpc.oit.uci.edu:.ssh
+#	-scp -p $^ tephra.ess.uci.edu:.ssh
+#	-scp -p $^ virga.ess.uci.edu:.ssh
 #	-scp -p $^ seasalt.ess.uci.edu:.ssh
 #	-scp -p $^ lanina.ess.uci.edu:.ssh
 #	-scp -p $^ sand.ess.uci.edu:.ssh
