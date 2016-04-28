@@ -404,7 +404,7 @@ ncks -O --map=${DATA}/maps/map_180x360_to_ca25km.20150715.nc ${DATA}/rgr/dst_1x1
 # 20160130: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 23 gcc/gfortran 5.3.1 netcdf-4.4.0
 #***********************************************************************
 # Tempest
-sudo yum install lapack lapack-devel blas
+sudo dnf install lapack lapack-devel blas
 cd ${DATA}/tmp
 git clone https://github.com/ClimateGlobalChange/tempestremap.git
 cd ${DATA}/tmp/tempestremap
@@ -455,4 +455,66 @@ make installcheck
 #endif /* !ENABLE_ESMF */
 #***********************************************************************
 # 20160130: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 23 gcc/gfortran 5.3.1 netcdf-4.4.0
+#***********************************************************************
+
+#***********************************************************************
+# 20160427: frazil.ess.uci.edu x86_64/EMT64 Fedora Core 23 gcc/gfortran 5.3.1 netcdf-4.3.3.1
+#***********************************************************************
+# Tempest
+sudo dnf install lapack lapack-devel blas
+sudo dnf install netcdf-cxx netcdf-cxx-devel 
+cd ${DATA}/tmp
+git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+# Compile with g++ -std-c++11
+# Link to -llapack -lblas
+make
+
+# ESMF http://www.earthsystemmodeling.org
+# http://www.earthsystemcog.org/projects/regridweightgen/
+# Works fine with LINUX_FC=gfortran-mp-4.9 on aerosol (MACOSX)
+sudo dnf install netcdf-fortran netcdf-fortran-devel
+# dnf installs netcdf.mod in /usr/lib64/gfortran/modules/netcdf.mod
+sudo ln -s /usr/lib64/gfortran/modules/netcdf.mod /usr/include/netcdf.mod
+cd ${DATA}/tmp
+/bin/rm -r -f ${DATA}/esmf
+tar xvzf esmf_7_0_0_src.tar.gz
+/bin/mv ${DATA}/tmp/esmf ${DATA}
+cd ${DATA}/esmf
+export ESMF_BOPT='g' # Default is 'O' for optimized. 'g' builds debuggable library
+export ESMF_DIR='/data/zender/esmf'
+export ESMF_INSTALL_PREFIX='/usr/local'
+export ESMF_INSTALL_BINDIR='bin'
+export ESMF_INSTALL_DOCDIR='doc'
+export ESMF_INSTALL_HEADERDIR='include'
+export ESMF_INSTALL_LIBDIR='lib'
+export ESMF_INSTALL_MODDIR='include'
+export ESMF_LAPACK='internal'
+export ESMF_NETCDF='split'
+export ESMF_NETCDF_INCLUDE='/usr/include'
+export ESMF_NETCDF_LIBPATH='/usr/lib'
+export ESMF_NETCDF_LIBS='-lnetcdff -lnetcdf_c++ -lnetcdf'
+make clean
+make -j8
+make check
+
+# Run following command as root, meaning get a root terminal with 'sudo -s' then run 'make install'
+# 'sudo make install' would fail because it requires all environment variables be set. PITA.
+make install # Run as root (after defining above environment variables as root)
+make installcheck
+# Edit this if trying to install using sudo:
+# sudo ESMF_DIR='/data/zender/esmf' ESMF_INSTALL_PREFIX='/usr/local' ESMF_INSTALL_BINDIR='bin' ESMF_INSTALL_DOCDIR='doc' ESMF_INSTALL_HEADERDIR='include' ESMF_INSTALL_LIBDIR='lib' ESMF_INSTALL_MODDIR='include' make install
+
+# Necessary modifications to successfully link as library. From nco.h:
+#ifdef ENABLE_ESMF
+  /* csz 20150320
+     Define these only in main() files not in original location in ESMC_CoordSys.h  
+     Otherwise any file #including ESMC.h inadvertently includes these constants multiple times 
+     Should be defined as externals that resolve to single definition in main()
+     sudo cp ~/nco/src/nco/ESMC_CoordSys.h /usr/local/include */
+  const double ESMC_CoordSys_Deg2Rad= 0.01745329251994329547437;
+  const double ESMC_CoordSys_Rad2Deg=57.29577951308232286464772;
+#endif /* !ENABLE_ESMF */
+#***********************************************************************
+# 20160427: frazil.ess.uci.edu x86_64/EMT64 Fedora Core 23 gcc/gfortran 5.3.1 netcdf-4.3.3.1
 #***********************************************************************
