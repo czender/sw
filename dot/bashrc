@@ -1197,6 +1197,13 @@ case ${PVM_ARCH} in
     ;; # endif LINUX* )
 esac # endcase ${PVM_ARCH}
 
+# WCSTOOLS skg star catalogs
+case ${PVM_ARCH} in
+    LINUX* )
+	export WCS_BINDIR="${DATA}/astro"
+    ;; # endif LINUX* )
+esac # endcase ${PVM_ARCH}
+
 # TeX installation
 case ${PVM_ARCH} in
 # Place PDFTeX before TeX so, e.g., pdftexinfo.tex is loaded first
