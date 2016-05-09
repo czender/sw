@@ -1,3 +1,7 @@
+2016-05-09  Charlie Zender  <zender@uci.edu>
+
+	* Add diagnostics for geoengineering study
+
 2013-06-12  Charlie Zender  <zender@uci.edu>
 
 	* Need to test how HITRAN 2012 changes swnb2 relative to HITRAN 2008
@@ -898,7 +902,7 @@
 	* Added CH4 and N2O to nbm
 
 	* Renamed swnb_new as nbm for Narrow Band Model to reflect its
-	capabilit of running in longwave regions 
+	capabilit of running in longwave regions
 
 1998-11-28  Charlie Zender  <zender@z.ppp.ucar.edu>
 
@@ -915,12 +919,12 @@
 	to within 3 W m-2 for atmospheric absorption and insolation for
 	most conditions.
 
-	* Changed from _int to _ntf for "interface" 
+	* Changed from _int to _ntf for "interface"
 
 1998-11-27  Charlie Zender  <zender@z.ppp.ucar.edu>
 
 	* Added CH4, N2O, CFC11 and CFC12 capabilities to clm. Currently
-	only use average column mixing ratios, and should upgrade to use 
+	only use average column mixing ratios, and should upgrade to use
 	vertical profiles when available, e.g., from AFGL.
 
 1998-11-26  Charlie Zender  <zender@z.ppp.ucar.edu>
@@ -948,16 +952,15 @@ Wed Oct 28 15:36:15 1998  Charlie Zender  <zender@sanitas-e0.cgd.ucar.edu>
 	* Added more error checking to clm and clm_utl netCDF I/O
 
 	* Updated arese.pl and clm_utl.F to work with /data instead of
-	/data2 
+	/data2
 
 	* Added -C flag to clm to discriminate between CRM 1.x and 2.x.
-	Implemented this -C flag in arese.pl 
-	
+	Implemented this -C flag in arese.pl
+
 Mon Aug 31 19:22:45 1998  Charlie Zender  <zender@odin.cgd.ucar.edu>
 
 	* Initial source imports should not compile because programs
 	expect *.h Fortran include suffixes, which are obsolete now and
-	should be replaced by *.com include files. 
+	should be replaced by *.com include files.
 
 	* Created module aca
-

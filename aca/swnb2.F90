@@ -8,7 +8,7 @@ program swnb2
   ! DISORT computes discrete ordinates radiative transfer solution
   ! I/O uses netCDF interface
 
-  ! Copyright (C) 1994--2014 Charlie Zender
+  ! Copyright (C) 1994--2016 Charlie Zender
   ! License: GNU General Public License (GPL) Version 3
   ! See http://www.gnu.org/copyleft/gpl.html for full license text
   ! The original author of this software, Charlie Zender, seeks to improve
@@ -707,6 +707,8 @@ program swnb2
   integer flx_spc_dwn_TOA_id
   integer flx_spc_dwn_dff_id
   integer flx_spc_dwn_drc_id
+  integer flx_spc_dwn_dff_sfc_id
+  integer flx_spc_dwn_drc_sfc_id
   integer flx_spc_dwn_id
   integer flx_spc_dwn_sfc_id
   integer flx_spc_pht_dwn_sfc_id
@@ -1134,6 +1136,8 @@ program swnb2
   real,dimension(:),allocatable::flx_spc_act_pht_sfc
   real,dimension(:),allocatable::flx_spc_dwn_TOA
   real,dimension(:),allocatable::flx_spc_dwn_sfc
+  real,dimension(:),allocatable::flx_spc_dwn_dff_sfc
+  real,dimension(:),allocatable::flx_spc_dwn_drc_sfc
   real,dimension(:),allocatable::flx_spc_pht_dwn_sfc
   real,dimension(:),allocatable::j_spc_NO2_sfc
   real,dimension(:),allocatable::nrg_pht
@@ -3929,6 +3933,10 @@ program swnb2
   if(rcd /= 0) stop "allocate() failed for flx_spc_act_pht_sfc"
   allocate(flx_spc_dwn_TOA(bnd_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for flx_spc_dwn_TOA"
+  allocate(flx_spc_dwn_dff_sfc(bnd_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for flx_spc_dwn_dff_sfc"
+  allocate(flx_spc_dwn_drc_sfc(bnd_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for flx_spc_dwn_drc_sfc"
   allocate(flx_spc_dwn_sfc(bnd_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for flx_spc_dwn_sfc"
   allocate(flx_spc_pht_dwn_sfc(bnd_nbr),stat=rcd)
@@ -6328,6 +6336,8 @@ program swnb2
   do bnd_idx=1,bnd_nbr
      flx_spc_dwn_TOA(bnd_idx)=flx_spc_dwn(bnd_idx,1)
      flx_spc_dwn_sfc(bnd_idx)=flx_spc_dwn(bnd_idx,levp_nbr)
+     flx_spc_dwn_dff_sfc(bnd_idx)=flx_spc_dwn_dff(bnd_idx,levp_nbr)
+     flx_spc_dwn_drc_sfc(bnd_idx)=flx_spc_dwn_drc(bnd_idx,levp_nbr)
      flx_spc_dwn_snw(bnd_idx)=flx_spc_dwn(bnd_idx,levp_atm_nbr)
      flx_spc_upw_snw(bnd_idx)=flx_spc_upw(bnd_idx,levp_atm_nbr)
      ! Compute absorbed spectral fluxes
@@ -6874,6 +6884,10 @@ program swnb2
           sbr_nm//': dv flx_spc_act_pht_TOA')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_spc_act_pht_sfc',nf90_float,bnd_dmn_id,flx_spc_act_pht_sfc_id), &
           sbr_nm//': dv flx_spc_act_pht_sfc')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'flx_spc_dwn_dff_sfc',nf90_float,bnd_dmn_id,flx_spc_dwn_dff_sfc_id), &
+          sbr_nm//': dv flx_spc_dwn_dff_sfc')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'flx_spc_dwn_drc_sfc',nf90_float,bnd_dmn_id,flx_spc_dwn_drc_sfc_id), &
+          sbr_nm//': dv flx_spc_dwn_drc_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_frc_dwn_sfc_blr',nf90_float,bnd_dmn_id,flx_frc_dwn_sfc_blr_id), &
           sbr_nm//': dv flx_frc_dwn_sfc_blr')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_spc_pht_dwn_sfc',nf90_float,bnd_dmn_id,flx_spc_pht_dwn_sfc_id), &
@@ -7151,6 +7165,10 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_drc_id,'long_name','Spectral direct downwelling flux'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_id,'long_name','Spectral downwelling flux'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_dff_sfc_id,'long_name','Spectral insolation at surface'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_drc_sfc_id,'long_name','Spectral insolation at surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_sfc_id,'long_name','Spectral insolation at surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
@@ -7482,6 +7500,8 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_dff_id,'units','watt meter-2 meter-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_drc_id,'units','watt meter-2 meter-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_id,'units','watt meter-2 meter-1'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_dff_sfc_id,'units','watt meter-2 meter-1'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_drc_sfc_id,'units','watt meter-2 meter-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_sfc_id,'units','watt meter-2 meter-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_upw_id,'units','watt meter-2 meter-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,frc_ice_ttl_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
@@ -7840,6 +7860,10 @@ program swnb2
 #if 0
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_frc_dwn_sfc_blr_id,flx_frc_dwn_sfc_blr),sbr_nm//': pv flx_frc_dwn_sfc_blr in this big old hanging line')
 #endif /* !0 */
+     rcd=nf90_wrp(nf90_put_var(nc_id,flx_spc_dwn_dff_sfc_id,flx_spc_dwn_dff_sfc), &
+          sbr_nm//': pv flx_spc_dwn_dff_sfc in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,flx_spc_dwn_drc_sfc_id,flx_spc_dwn_drc_sfc), &
+          sbr_nm//': pv flx_spc_dwn_drc_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_frc_dwn_sfc_blr_id,flx_frc_dwn_sfc_blr), &
           sbr_nm//': pv flx_frc_dwn_sfc_blr in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_spc_act_pht_TOA_id,flx_spc_act_pht_TOA), &
@@ -7978,6 +8002,10 @@ program swnb2
   if(rcd /= 0) stop 'deallocate() failed for flx_spc_act_pht_sfc'
   if (allocated(flx_spc_dwn_TOA)) deallocate(flx_spc_dwn_TOA,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for flx_spc_dwn_TOA'
+  if (allocated(flx_spc_dwn_dff_sfc)) deallocate(flx_spc_dwn_dff_sfc,stat=rcd)
+  if(rcd /= 0) stop 'deallocate() failed for flx_spc_dwn_dff_sfc'
+  if (allocated(flx_spc_dwn_drc_sfc)) deallocate(flx_spc_dwn_drc_sfc,stat=rcd)
+  if(rcd /= 0) stop 'deallocate() failed for flx_spc_dwn_drc_sfc'
   if (allocated(flx_spc_dwn_sfc)) deallocate(flx_spc_dwn_sfc,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for flx_spc_dwn_sfc'
   if (allocated(flx_spc_pht_dwn_sfc)) deallocate(flx_spc_pht_dwn_sfc,stat=rcd)
