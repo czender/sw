@@ -180,6 +180,7 @@ make distclean
 ./configure  --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
 make
 make test
+make install
 #make clean
 #***********************************************************************
 # 20160421: roger-login.ncsa.illinois.edu 
