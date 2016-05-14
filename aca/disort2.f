@@ -576,7 +576,11 @@ c                                   ** Calculate Planck functions
       ELSE
 
          TPLANK = TEMIS*PLKAVG( WVNMLO, WVNMHI, TTEMP )
-         BPLANK =       PLKAVG( WVNMLO, WVNMHI, BTEMP )
+c     csz++ 20160513     
+c     Add emissivity of bottom boundary to simulate skyglow stimulated by anthropogenic light
+c     BPLANK =       PLKAVG( WVNMLO, WVNMHI, BTEMP )
+         BPLANK =    PLKAVG( WVNMLO, WVNMHI, BTEMP )
+c     csz-- 20160513     
 
          DO 40 LEV = 0, NLYR
             PKAG( LEV ) = PLKAVG( WVNMLO, WVNMHI, TEMPER( LEV ) )

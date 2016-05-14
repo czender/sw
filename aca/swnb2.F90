@@ -3813,7 +3813,7 @@ program swnb2
      btemp=tpt_skn 
   endif ! !flg_msm
   ttemp=tpt_ntf(1)
-  temis=0.0                 ! I have no idea what this should be
+  temis=0.0 ! 20160513: Emissivity of upper boundary is usually 0.0
   
   ! Set control flags:
   ! Set deltam=.true. unless looking at radiances within 10 degrees of forward peak.
@@ -6235,7 +6235,9 @@ program swnb2
      ! i.e., from downwelling radiance to upwelling radiance. 
      
      ! NB: Possible bug in current DISORT() documentation
-     ! Intensities are returned in arrays in order of descending cosine of polar angle.
+     ! Intensities are returned in arrays in order of descending cosine of polar angle
+     ! ndr = nadir  = travelling towards nadir
+     ! zen = zenith = travelling towards zenith
      ntn_spc_aa_ndr_sfc(bnd_idx)=u0u(1,levp_nbr)/ &
           wvl_dlt(bnd_idx)
      ntn_spc_aa_zen_sfc(bnd_idx)=u0u(plr_nbr,levp_nbr)/ &
@@ -7635,6 +7637,16 @@ program swnb2
           sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_spc_mean_id,'units','watt meter-2 meter-1 sterradian-1'), &
           sbr_nm//': pa units in '//__FILE__)
+
+     ! Axis attributes
+     rcd=nf90_wrp(nf90_put_att(nc_id,alt_id,'axis','Z'),sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,alt_ntf_id,'axis','Z'),sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lev_id,'axis','Z'),sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,levp_id,'axis','Z'),sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,alt_id,'positive','up'),sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,alt_ntf_id,'positive','up'),sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lev_id,'positive','down'),sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,levp_id,'positive','down'),sbr_nm//': pa long_name in '//__FILE__)
 
      ! All dimensions, variables, and attributes have been defined
      rcd=nf90_wrp(nf90_enddef(nc_id),sbr_nm//': enddef in '//__FILE__) 
