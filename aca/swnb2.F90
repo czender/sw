@@ -1751,7 +1751,7 @@ program swnb2
   fl_clm='mls_clr.nc'//nlc
   fl_ice='aer_h2o_ice_rds_swa_20.nc'//nlc
   fl_lqd='aer_h2o_lqd_rds_swa_10.nc'//nlc
-  fl_lmn='lmn_pht_CIE.nc'//nlc
+  fl_lmn='lmn_CIE.nc'//nlc
   fl_nst='nst_FSBR.nc'//nlc
   fl_chn='epic.nc'//nlc
   fl_aer='aer_sulfate.nc'//nlc

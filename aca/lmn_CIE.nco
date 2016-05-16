@@ -3,7 +3,8 @@
 /* Purpose: NCO/ncap2 script to process and photometric luminosity functions
 
    Usage:
-   ncap2 -v -O -S ~/sw/aca/lmn_CIE.nco ~/one.nc ${DATA}/aca/lmn_CIE.nc */
+   ncks -O -v one ~/nco/data/in.nc ~/foo.nc
+   ncap2 -v -O -S ~/sw/aca/lmn_CIE.nco ~/foo.nc ${DATA}/aca/lmn_CIE.nc */
 
 // Declare flags as RAM variables or they will clutter output file
 *flg_tst=1s; // [flg] Test mode
@@ -16,7 +17,7 @@
 if(!exists(clb_nbr)) *clb_nbr=73; // [nbr] Calibration number
 
 // [nbr] Number of wavelengths in environmental sensor
-*wvl_lmn_nbr=1024;
+*wvl_lmn_nbr=81;
 defdim("wvl_lmn",wvl_lmn_nbr);
 wvl_lmn[wvl_lmn]=0.0f;
 wvl_lmn@long_name="Wavelength";
@@ -70,3 +71,4 @@ lmn_SRF_spl={ // [frc] 10 sensitivities per line, 1024 total
 0.017000,0.011920,0.008210,0.005723,0.004102,0.002929,0.002091,0.001484,0.001047,0.000740,
 0.000520,0.000361,0.000249,0.000172,0.000120,0.000085,0.000060,0.000042,0.000030,0.000021,
 0.000015};
+
