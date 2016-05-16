@@ -37,7 +37,7 @@ program swnb2
   ! Compile these two pieces with same intrinsic precision
   ! AIX/xlf underflows on attempts to read small O(10^-40) abs_xsx_O2O2
   ! (produced by O2X) into single-precision variable
-  ! Long term solution is generic interface to SP and DP versions of rbn_vec(), ntp_vec(). 
+  ! Long term solution is generic interface to SP and DP versions of rbn_vec(), ntp_vec()
   ! Then always read and re-grid O2X files in double precision, independently
   ! of rest of program
   ! Short term solution is do not trap underflows in single precision
@@ -602,7 +602,6 @@ program swnb2
   integer bnd_idx_O3        ! counting index
   !integer bnd_idx_OH        ! counting index
   integer bnd_idx_CH4        ! counting index
-  integer bnd_idx_lmn       ! counting index
   integer bnd_idx_nst       ! counting index
   integer bnd_idx_tmp_O3    ! counting index
   integer chn_idx           ! counting index
@@ -949,9 +948,7 @@ program swnb2
 
   ! Luminosity input variables
   integer lmn_SRF_id
-  integer wvl_ctr_lmn_id
-  integer wvl_max_lmn_id
-  integer wvl_min_lmn_id
+  integer wvl_grd_lmn_id
   
   ! Instrument input variables
   integer chn_SRF_id
@@ -1152,6 +1149,7 @@ program swnb2
   real,dimension(:),allocatable::flx_spc_dwn_drc_sfc
   real,dimension(:),allocatable::flx_spc_pht_dwn_sfc
   real,dimension(:),allocatable::j_spc_NO2_sfc
+  real,dimension(:),allocatable::lmn_SRF
   real,dimension(:),allocatable::nrg_pht
   real,dimension(:),allocatable::ntn_spc_aa_ndr_sfc
   real,dimension(:),allocatable::ntn_spc_aa_zen_sfc
@@ -1408,10 +1406,8 @@ program swnb2
   real,dimension(:),allocatable::wvl_grd_rfl
   
   ! Luminosity input variables
-  real lmn_SRF(bnd_nbr_lmn_max)
-  real wvl_ctr_lmn(bnd_nbr_lmn_max)
-  real wvl_max_lmn(bnd_nbr_lmn_max)
-  real wvl_min_lmn(bnd_nbr_lmn_max)
+  real,dimension(:),allocatable::lmn_SRF_dsk
+  real,dimension(:),allocatable::wvl_grd_lmn
   
   ! Instrument input variables
   integer chn_SRF_msk(bnd_nbr_max)
@@ -1641,6 +1637,7 @@ program swnb2
   real flx_frc_drc_TOA ! [frc] TOA insolation fraction in direct beam
   real alb_cmd_ln
   real bnd_wgt(bnd_nbr_max)
+  real bnd_wgt_lmn(bnd_nbr_max)
   real float_foo
   real flx_spc_act
   real flx_spc_act_pht
@@ -1817,7 +1814,7 @@ program swnb2
   flg_vpr_H2O_abs_cld=.true. ! [flg] H2O vapor absorption in cloud allowed
   flg_xtr_aer_snw=.false. ! [flg] Extrapolate surface aerosol into snowpack
   float_foo=0.0
-  flt_lmn=.false.
+  flt_lmn=.true.
   flt_nst=.true.
   flx_frc_drc_TOA=1.0 ! [frc] TOA insolation fraction in direct beam
   force_ice_phz=.false.
@@ -2257,7 +2254,7 @@ program swnb2
      call ftn_strcpylsc(stt_Rayleigh,'Rayleigh scattering: Off')
   endif
   if (flt_lmn) then
-     call ftn_strcpylsc(stt_flt_lmn,'Luminosity spectral response function: instrument from '//fl_lmn)
+     call ftn_strcpylsc(stt_flt_lmn,'Luminosity spectral response function: Curve from '//fl_lmn)
   else
      call ftn_strcpylsc(stt_flt_lmn,'Luminosity spectral spectral response function: Off')
   endif
@@ -3453,21 +3450,25 @@ program swnb2
   rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_lmn),sbr_nm//": inquire_dim bnd")
   if (bnd_nbr_lmn>bnd_nbr_lmn_max) stop 'bnd_nbr_lmn>bnd_nbr_lmn_max'
   cnt_bnd(1)=bnd_nbr_lmn
+  cnt_bndp(1)=bnd_nbr_lmn+1
   
+  ! Array dimensions: bnd_nbr_lmn
+  allocate(lmn_SRF_dsk(bnd_nbr_lmn),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for lmn_SRF_dsk"
+  allocate(wvl_grd_lmn(bnd_nbr_lmn+1),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for wvl_grd_lmn"
+
   ! Get variable IDs
   rcd=nf90_wrp_inq_varid(nc_id,'lmn_SRF',lmn_SRF_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_lmn_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_lmn_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl',wvl_ctr_lmn_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'wvl_grd',wvl_grd_lmn_id)
   
   ! Get data
-  rcd=nf90_wrp(nf90_get_var(nc_id,lmn_SRF_id,lmn_SRF,srt_one,cnt_bnd),"gv lmn_SRF")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_lmn_id,wvl_max_lmn,srt_one,cnt_bnd),"gv wvl_max_lmn")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_lmn_id,wvl_min_lmn,srt_one,cnt_bnd),"gv wvl_min_lmn")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_lmn_id,wvl_ctr_lmn,srt_one,cnt_bnd),"gv wvl_ctr_lmn")
+  rcd=nf90_wrp(nf90_get_var(nc_id,lmn_SRF_id,lmn_SRF_dsk,srt_one,cnt_bnd),"gv lmn_SRF_dsk")
+  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_grd_lmn_id,wvl_grd_lmn,srt_one,cnt_bndp),"gv wvl_grd")
+
   ! Close file
   rcd=nf90_wrp_close(nc_id,fl_lmn,'Ingested') ! [fnc] Close file
-
+  
   ! Ingest fl_nst
   rcd=nf90_wrp_open(fl_nst,nf90_nowrite,nc_id)
   ! Get dimension IDs
@@ -3996,6 +3997,8 @@ program swnb2
   if(rcd /= 0) stop "allocate() failed for flx_spc_pht_dwn_sfc"
   allocate(j_spc_NO2_sfc(bnd_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for j_spc_NO2_sfc"
+  allocate(lmn_SRF(bnd_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for lmn_SRF"
   allocate(nrg_pht(bnd_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for nrg_pht"
   allocate(ntn_spc_aa_ndr_sfc(bnd_nbr),stat=rcd)
@@ -4307,11 +4310,10 @@ program swnb2
   endif                     ! endif dbg
   
   if (dbg_lvl>dbg_off) then
-     write (6,'(19(a,i4,/))')        &
+     write (6,'(20(a,i4,/))')        &
           '# input atmosphere levels lev_atm_nbr = ',lev_atm_nbr, &
           '# input snow levels lev_snw_nbr = ',lev_snw_nbr, &
           '# total levels lev_nbr = lev_atm_nbr+lev_snw_nbr = ',lev_nbr, &
-          '# input O3 bands bnd_nbr_O3 = ',bnd_nbr_O3, &
           '# input O3 bands bnd_nbr_O3 = ',bnd_nbr_O3, &
           '# input H2OH2O bands bnd_nbr_H2OH2O = ',bnd_nbr_H2OH2O, &
           '# input H2O narrow bands bnd_nbr_H2O = ',bnd_nbr_H2O, &
@@ -4591,7 +4593,6 @@ program swnb2
      if(rcd /= 0) stop "allocate() failed for trn_drc_drc"
   endif ! !flg_msm
   ! Absorption cross-sections should be 0 outside data range
-  if (dbg_lvl == 3) write(6,*) 'fxm gfortran wvl_grd = ',wvl_grd ! fxm gfortran
   xtr_typ_LHS=xtr_prt_nil+xtr_fll_nil
   xtr_typ_RHS=xtr_prt_nil+xtr_fll_nil
   call rbn_vec(bnd_nbr_NO2,wvl_grd_NO2,abs_xsx_NO2_dsk, &
@@ -4603,6 +4604,16 @@ program swnb2
   call rbn_vec(bnd_nbr_H2OH2O,wvl_grd_H2OH2O,abs_xsx_H2OH2O_dsk, &
        bnd_nbr,wvl_grd,abs_xsx_H2OH2O, &
        xtr_typ_LHS,xtr_typ_RHS)
+  ! Luminosity response should be 0 outside data range
+  xtr_typ_LHS=xtr_prt_wgt+xtr_fll_nil
+  xtr_typ_RHS=xtr_prt_wgt+xtr_fll_nil
+  call rbn_vec(bnd_nbr_lmn,wvl_grd_lmn,lmn_SRF_dsk, &
+       bnd_nbr,wvl_grd,lmn_SRF, &
+       xtr_typ_LHS,xtr_typ_RHS)
+  if (allocated(lmn_SRF_dsk)) deallocate(lmn_SRF_dsk,stat=rcd) !
+  if(rcd /= 0) stop "deallocate() failed for lmn_SRF_dsk"
+  if (allocated(wvl_grd_lmn)) deallocate(wvl_grd_lmn,stat=rcd) !
+  if(rcd /= 0) stop "deallocate() failed for wvl_grd_lmn"
   
   chn_SRF_msk(:)=0 ! CEWI lf95
   if (.not.mode_std) then
@@ -6473,6 +6484,12 @@ program swnb2
   ! All that need be changed to adapt to a new instrument are the
   ! lower and upper limits of the (rectangular window) bandpass. 
   ! Initialize basic instrument quantities which will be incremented
+  if (flt_lmn) then
+     do bnd_idx=1,bnd_nbr
+        bnd_wgt_lmn(bnd_idx)=lmn_SRF(bnd_idx)
+     enddo                  ! end loop over bnd
+  endif ! endif flt_lmn
+
   do lev_idx=1,levp_nbr
      flx_nst_dwn(lev_idx)=0.0
      flx_nst_up(lev_idx)=0.0
@@ -6836,6 +6853,7 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'j_spc_NO2_sfc',nf90_float,bnd_dmn_id,j_spc_NO2_sfc_id),sbr_nm//': dv j_spc_NO2_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lev',nf90_float,lev_dmn_id,lev_id),sbr_nm//': dv lev')
      rcd=nf90_wrp(nf90_def_var(nc_id,'levp',nf90_float,levp_dmn_id,levp_id),sbr_nm//': dv levp')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_SRF',nf90_float,bnd_dmn_id,lmn_SRF_id),sbr_nm//': dv lmn_SRF')
      rcd=nf90_wrp(nf90_def_var(nc_id,'nrg_pht',nf90_float,bnd_dmn_id,nrg_pht_id),sbr_nm//': dv nrg_pht')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ntn_bb_aa',nf90_float,dim_plr_levp,ntn_bb_aa_id),sbr_nm//': dv ntn_bb_aa')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ntn_bb_mean',nf90_float,lev_dmn_id,ntn_bb_mean_id),sbr_nm//': dv ntn_bb_mean')
@@ -7295,6 +7313,8 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CWP_id,'long_name','Total column Condensed Water Path'), &
           sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_SRF_id,'long_name','Luminosity spectral response function'), &
+          sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,nrg_pht_id,'long_name','Energy of photon at band center'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_bb_aa_id,'long_name','Broadband azimuthally averaged intensity'), &
@@ -7612,6 +7632,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,lcl_yr_day_id,'units','day'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lev_id,'units','pascal'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,levp_id,'units','pascal'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_SRF_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CWP_id,'units','kilogram meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,nrg_pht_id,'units','joule photon-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_bb_aa_id,'units','watt meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
@@ -7859,6 +7880,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,lev_id,lev),sbr_nm//': pv lev in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,levp_id,levp),sbr_nm//': pv levp in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,mpc_CWP_id,mpc_CWP),sbr_nm//': pv mpc_CWP in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,lmn_SRF_id,lmn_SRF),sbr_nm//': pv lmn_SRF in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,nrg_pht_id,nrg_pht),sbr_nm//': pv nrg_pht in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ntn_bb_aa_id,ntn_bb_aa),sbr_nm//': pv ntn_bb_aa in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ntn_bb_mean_id,ntn_bb_mean),sbr_nm//': pv ntn_bb_mean in '//__FILE__)
@@ -8188,6 +8210,8 @@ program swnb2
   if(rcd /= 0) stop 'deallocate() failed for flx_spc_upw_snw'
   if (allocated(rfl_spc_sfc)) deallocate(rfl_spc_sfc,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for rfl_spc_sfc'
+  if (allocated(lmn_SRF)) deallocate(lmn_SRF,stat=rcd)
+  if(rcd /= 0) stop 'deallocate() failed for lmn_SRF'
   if (allocated(trn_spc_atm_CO2)) deallocate(trn_spc_atm_CO2,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_CO2'
   if (allocated(trn_spc_atm_H2O)) deallocate(trn_spc_atm_H2O,stat=rcd)

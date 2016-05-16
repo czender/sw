@@ -4,32 +4,23 @@
 
    Usage:
    ncks -O -v one ~/nco/data/in.nc ~/foo.nc
-   ncap2 -v -O -S ~/sw/aca/lmn_CIE.nco ~/foo.nc ${DATA}/aca/lmn_CIE.nc */
+   ncap2 -v -O -S ~/sw/aca/lmn_CIE.nco ~/foo.nc ${DATA}/aca/lmn_CIE.nc
+   ncks -C -v lmn_SRF ${DATA}/aca/lmn_CIE.nc */
 
-// Declare flags as RAM variables or they will clutter output file
-*flg_tst=1s; // [flg] Test mode
-*flg_prd=0s; // [flg] Production mode
+// [nbr] Number of wavelengths in CIE table
+*wvl_nbr=81;
+defdim("wvl",wvl_nbr);
+defdim("wvl_grd",wvl_nbr+1);
+wvl_ctr[wvl]=0.0;
+wvl_ctr@long_name="Wavelength";
+wvl_ctr@units="meter";
 
-// Run in test or production mode?
-*flg_typ=flg_prd; // [enm] Run type
-
-// Defaults for values not provided on command-line
-if(!exists(clb_nbr)) *clb_nbr=73; // [nbr] Calibration number
-
-// [nbr] Number of wavelengths in environmental sensor
-*wvl_lmn_nbr=81;
-defdim("wvl_lmn",wvl_lmn_nbr);
-wvl_lmn[wvl_lmn]=0.0f;
-wvl_lmn@long_name="Wavelength";
-wvl_lmn@units="meter";
-wvl_lmn@provenance="";
-
-wvl_dlt=0.5e-9f;
 wvl_dlt@long_name="Bandwidth of luminosity function";
 wvl_dlt@units="meter";
-wvl_dlt@notes="Bandwidth is uniform 0.5 nm across all channels";
+wvl_dlt@notes="Bandwidth is uniform 5.0 nm";
+wvl_dlt=5.0e-9;
 
-wvl_lmn={ // [nm] 10 wavelengths per line, 81 total
+wvl_ctr={ // [nm] 10 wavelengths per line, 81 total
 380,385,390,395,400,405,410,415,420,425,
 430,435,440,445,450,455,460,465,470,475,
 480,485,490,495,500,505,510,515,520,525,
@@ -40,13 +31,29 @@ wvl_lmn={ // [nm] 10 wavelengths per line, 81 total
 730,735,740,745,750,755,760,765,770,775,
 780};
 // Change wavelengths from nm to m (SI)
-wvl_lmn*=1.0e-9;
+wvl_ctr*=1.0e-9;
 
-lmn_SRF[wvl_lmn]=0.0f;
-lmn_SRF_spl@long_name="Photopic luminosity curve";
-lmn_SRF_spl@units="fraction";
+// Copy central wavelength into nominal wavelength array
+wvl=wvl_ctr;
+
+// Create wavelength grid
+wvl_min=wvl_ctr-0.5*wvl_dlt;
+wvl_min@long_name="Band minimum wavelength";
+wvl_max=wvl_ctr+0.5*wvl_dlt;
+wvl_max@long_name="Band maximum wavelength";
+
+wvl_grd[wvl_grd]=0.0;
+wvl_grd@long_name="Wavelength Grid";
+wvl_grd@units="meter";
+wvl_grd(0:wvl_nbr-1)=wvl_min;
+wvl_grd(wvl_nbr)=wvl_max(wvl_nbr-1);
+
+lmn_SRF[wvl]=0.0f;
+lmn_SRF@long_name="Photopic luminosity";
+lmn_SRF@units="fraction";
+lmn_SRF@units_long="Fractional sensitivity relative to 555 nm";
 lmn_SRF@provenance="ybar(lamda) column from CIE 1931 standard colorimetric observer";
-lmn_SRF={ // [frc] 10 sensitivities per line, 1024 total
+lmn_SRF={ // [frc] 10 sensitivities per line, 81 total
 0.000039,0.000064,0.000120,0.000217,0.000396,0.000640,0.001210,0.002180,0.004000,0.007300,
 0.011600,0.016840,0.023000,0.029800,0.038000,0.048000,0.060000,0.073900,0.090980,0.112600,
 0.139020,0.169300,0.208020,0.258600,0.323000,0.407300,0.503000,0.608200,0.710000,0.793200,
@@ -57,11 +64,12 @@ lmn_SRF={ // [frc] 10 sensitivities per line, 1024 total
 0.000520,0.000361,0.000249,0.000172,0.000120,0.000085,0.000060,0.000042,0.000030,0.000021,
 0.000015};
 
-lmn_SRF_spl[wvl_lmn]=0.0f;
-lmn_SRF_spl@long_name="Supplementary (scotopic?) luminosity curve";
+lmn_SRF_spl[wvl]=0.0f;
+lmn_SRF_spl@long_name="Supplementary (scotopic?) luminosity";
 lmn_SRF_spl@units="fraction";
+lmn_SRF_spl@units_long="Fractional sensitivity relative to 555 nm?";
 lmn_SRF_spl@provenance="ybar_10(lamda) column from CIE 1964 supplementary standard colorimetric observer";
-lmn_SRF_spl={ // [frc] 10 sensitivities per line, 1024 total
+lmn_SRF_spl={ // [frc] 10 sensitivities per line, 81 total
 0.000039,0.000064,0.000120,0.000217,0.000396,0.000640,0.001210,0.002180,0.004000,0.007300,
 0.011600,0.016840,0.023000,0.029800,0.038000,0.048000,0.060000,0.073900,0.090980,0.112600,
 0.139020,0.169300,0.208020,0.258600,0.323000,0.407300,0.503000,0.608200,0.710000,0.793200,
