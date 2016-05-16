@@ -2,7 +2,7 @@
 
 % Purpose: Commands specific to radiative transfer
 
-% Copyright (c) 1998--2009, Charles S. Zender
+% Copyright (c) 1998--2016, Charles S. Zender
 % This program may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License (LPPL), 
 % either version 1.2, or (at your option) any later version.
@@ -88,7 +88,7 @@
 \newcommand{\bckcff}{\ensuremath{b}} % [frc] Backscatter coefficient
 \newcommand{\brdf}{\ensuremath{\rho}} % Bidirectional reflectance distribution function 
 \newcommand{\bry}{\ensuremath{b}} % [L] Brightness
-\newcommand{\ilm}{\ensuremath{i}} % [fc] Illuminance
+\newcommand{\ilm}{\ensuremath{i}} % [lx] Illuminance
 \newcommand{\brtsbs}{\ensuremath{\mathrm{B}}} % [sbs] Brightness subscript
 \newcommand{\bslHfnc}{\ensuremath{H}} % [fnc] Bessel function of the third kind, H
 \newcommand{\bslIfnc}{\ensuremath{I}} % [fnc] Modified Bessel function of the first kind, I
@@ -139,6 +139,7 @@
 \newcommand{\flxactfsh}{\ensuremath{E}} % [frc] Actinic flux efficiency
 \newcommand{\flxslrfrc}{\ensuremath{S}} % [frc] Fractional solar irradiance
 \newcommand{\flxwgtfrc}{\ensuremath{W}} % [frc] Spectral weight
+\newcommand{\fctopt}{\ensuremath{F}} % [frc] Factor affecting optics
 \newcommand{\flx}{\ensuremath{F}} % [xxx m-2 s-1] Flux
 \newcommand{\fnc}{\ensuremath{f}} % [fnc] Generic function
 \newcommand{\fresbs}{\ensuremath{\mathrm{F}}} % [sbs] Free subscript
@@ -159,6 +160,7 @@
 \newcommand{\hwhm}{\ensuremath{\alpha}} % [Hz] Half width at half-maximum
 \newcommand{\idxrfr}{\ensuremath{n}} % [frc] Index of refraction
 \newcommand{\im}{\ensuremath{\mathrm{\Im}}} % [fnc] Imaginary part operator (Usage: \, \im \! ... )
+\newcommand{\kst}{\ensuremath{k}} % Konstant in equation
 \newcommand{\lbbidx}{\ensuremath{l}} % [idx] Lobatto quadrature index
 \newcommand{\lbbnbr}{\ensuremath{L}} % [nbr] Number of Lobatto terms
 \newcommand{\lctcnd}{\ensuremath{\sigma}} % [V m-1] Electrical conductivity
@@ -327,6 +329,7 @@
 \newcommand{\xsxopt}{\ensuremath{\sigma}} % [m2] Optical collision cross-section
 \newcommand{\xsxsct}{\ensuremath{\sigma}} % [m2 frq] Scattering cross-section
 \newcommand{\zerosbs}{\ensuremath{0}} % [sbs] State 0 subscript
+\newcommand{\zntsbs}{\ensuremath{\mathrm{z}}} % [sbs] Zenith subscript
  
 % 2. Derived commands
 
@@ -378,6 +381,7 @@
 \newcommand{\aziprm}{\ensuremath{\azi^{\prime}}} % [rdn] Azimuthal angle prime
 \newcommand{\bckcffofplrmu}{\ensuremath{\bckcff(\plrmu)}} % [frc] Backscatter coefficient of mu
 \newcommand{\bonetwo}{\ensuremath{B_{\onesbs\twosbs}}} % [# s-1] Einstein B coefficient = Rate coefficient for photoabsorption from level 1 to level 2
+\newcommand{\bryprm}{\ensuremath{\bry^{\prime}}} % [mgn mas-2] Brightness (magnitudes per square milliarcsecond)
 \newcommand{\bslIcpx}{\ensuremath{\bslIfnc_{\bslrdrcpx}}} % [fnc] Modified Bessel function of the first kind I of order nu
 \newcommand{\bslJcpx}{\ensuremath{\bslJfnc_{\bslrdrcpx}}} % [fnc] Bessel function J of order nu
 \newcommand{\bslYcpx}{\ensuremath{\bslYfnc_{\bslrdrcpx}}} % [fnc] Bessel function Y of order nu
@@ -419,6 +423,8 @@
 \newcommand{\cstrtt}{\ensuremath{B_{\vbrsbs}}} % Rotational constant
 \newcommand{\cstthree}{\ensuremath{\cst_{3}}} % Constant of integration
 \newcommand{\csttwo}{\ensuremath{\cst_{2}}} % Constant of integration
+\newcommand{\kstone}{\ensuremath{\kst_{1}}} % Konstant in equation
+\newcommand{\ksttwo}{\ensuremath{\kst_{2}}} % Konstant in equation
 \newcommand{\ctwoone}{\ensuremath{C_{\twosbs\onesbs}}} % [# s-1] Einstein C coefficient = Rate coefficient for collisional de-excitation (quenching) from level 2 to level 1
 \newcommand{\dltfrq}{\ensuremath{\Delta {\frq}}} % [s-1] Frequency interval
 \newcommand{\bsltwoarg}[2]{\ensuremath{{#1_{#2}}}} % [fnc] Bessel function #1 of order #2
@@ -430,6 +436,7 @@
 \newcommand{\dltszprm}{\ensuremath{\Delta\szprm}} % [frc] Change in size parameter
 \newcommand{\dltwvl}{\ensuremath{\Delta \wvl}} % [m] Wavelength interval
 \newcommand{\dltwvn}{\ensuremath{\Delta {\wvn}}} % [cm-1] Wavenumber interval
+\newcommand{\dmtppl}{\ensuremath{\dmt_{\ppp}}} % [m] Diameter of pupil
 \newcommand{\drcvct}{\ensuremath{\mathbf{\drc}}} % [m] Direction vector
 \newcommand{\dstslr}{\ensuremath{D_{\slrsbs}}} % [m] Distance to Sun
 \newcommand{\eeeplr}{\ensuremath{\eeevct_{\plrsbs}}} % Vector perpindicular to wavenumber vector of polarization state
@@ -441,6 +448,11 @@
 \newcommand{\extcffoffrq}{\ensuremath{\extcffgnr(\frq)}} % Generic extinction coefficient of nu
 \newcommand{\extcffvlm}{\ensuremath{\optvlm_{\mathrm{\extsbs}}}} % [m2 m-3] = [m-1] Volume extinction coefficient
 \newcommand{\extspc}{\ensuremath{\optspc_{\extsbs}}} % [m2 kg-1] Specific extinction coefficient
+\newcommand{\fctapr}{\ensuremath{\fctopt_{\mathrm{a}}}} % [frc] Optical factor accounting for aperature size
+\newcommand{\fctsc}{\ensuremath{\fctopt_{\mathrm{SC}}}} % [frc] Optical factor accounting for Stiles-Crawford effect
+\newcommand{\fctclr}{\ensuremath{\fctopt_{\mathrm{c}}}} % [frc] Optical factor accounting for color effects
+\newcommand{\fctext}{\ensuremath{\fctopt_{\mathrm{e}}}} % [frc] Optical factor accounting for atmospheric extinction
+\newcommand{\fctobs}{\ensuremath{\fctopt_{\mathrm{o}}}} % [frc] Optical factor accounting for aperature size
 \newcommand{\flxabssw}{\ensuremath{\flx^{\mathrm{ASR}}}} % [W m-2] Absorbed solar flux
 \newcommand{\flxabs}{\ensuremath{\flx^{\xsxabs}}} % [W m-2] Absorbed solar flux 
 \newcommand{\flxact}{\ensuremath{\flx^{\prc}}} % [W m-2 Hz-1] Actinic flux
@@ -537,8 +549,12 @@
 \newcommand{\lmnslr}{\ensuremath{\lmn_{\slrsbs}}} % [W] Luminosity of Sun
 \newcommand{\lmnone}{\ensuremath{\lmn_{\onesbs}}} % [W] Luminosity of Sun, first object
 \newcommand{\lmntwo}{\ensuremath{\lmn_{\twosbs}}} % [W] Luminosity of Sun, second object
+\newcommand{\ilmppr}{\ensuremath{\ilm_{a}}} % [lx] Illuminance, apparent
+\newcommand{\ilmone}{\ensuremath{\ilm_{\onesbs}}} % [lx] Illuminance of first object
+\newcommand{\ilmtwo}{\ensuremath{\ilm_{\twosbs}}} % [lx] Illuminance of second object
 \newcommand{\mgnone}{\ensuremath{\mgnppr_{\onesbs}}} % [mgn] Apparent magnitude, first object
 \newcommand{\mgntwo}{\ensuremath{\mgnppr_{\twosbs}}} % [mgn] Apparent magnitude, second object
+\newcommand{\mgnznt}{\ensuremath{\mgnppr_{\zntsbs}}} % [mgn] Threshold apparent magnitude, zenith direction
 \newcommand{\lnshpdpp}{\ensuremath{\lnshp_{\dppsbs}}} % [Hz-1] Doppler line shape profile
 \newcommand{\lnshplrn}{\ensuremath{\lnshp_{\lrnsbs}}} % [Hz-1] Lorentz line shape profile
 \newcommand{\lnshpntr}{\ensuremath{\lnshp_{\ntrsbs}}} % [Hz-1] Natural line shape profile

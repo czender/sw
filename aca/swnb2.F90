@@ -374,6 +374,7 @@ program swnb2
   integer,parameter::bnd_nbr_bga_max=480 ! 0.01 um resolution from 0.2--5.0 um
   integer,parameter::bnd_nbr_ice_max=480 ! 0.01 um resolution from 0.2--5.0 um
   integer,parameter::bnd_nbr_lqd_max=480 ! 0.01 um resolution from 0.2--5.0 um
+  integer,parameter::bnd_nbr_lmn_max=81 ! CIE photopic luminosity function 5 nm resolution from 380-780 nm
   integer,parameter::bnd_nbr_nst_max=1000 ! new FSBR resolution
   integer,parameter::bnd_nbr_rfl_max=1690 ! WMO-spliced
   integer,parameter::bnd_nbr_mpr_max=1690 ! WMO-spliced
@@ -432,6 +433,7 @@ program swnb2
   character(sng_lng_dfl_fl)::fl_clm=nlc
   character(sng_lng_dfl_fl)::fl_ice=nlc
   character(sng_lng_dfl_fl)::fl_lqd=nlc
+  character(sng_lng_dfl_fl)::fl_lmn=nlc
   character(sng_lng_dfl_fl)::fl_nst=nlc
   character(sng_lng_dfl_fl)::fl_out=nlc
   character(sng_lng_dfl_fl)::fl_rfl=nlc
@@ -464,6 +466,7 @@ program swnb2
   character(sng_lng_dfl_stt)::stt_ice=nlc
   character(sng_lng_dfl_stt)::stt_lqd=nlc
   character(sng_lng_dfl_stt)::stt_slr=nlc
+  character(sng_lng_dfl_stt)::stt_flt_lmn=nlc
   character(sng_lng_dfl_stt)::stt_flt_nst=nlc
   character(sng_lng_dfl_stt)::stt_cld_sat=nlc
   character(sng_lng_dfl_stt)::stt_sat_cld=nlc
@@ -533,6 +536,7 @@ program swnb2
   logical flg_sct_lqd ! [flg] Liquid cloud droplets are pure scatterers
   logical flg_xtr_aer_snw ! [flg] Extrapolate surface aerosol into snowpack
   logical flg_vpr_H2O_abs_cld ! [flg] H2O vapor absorption in cloud allowed
+  logical flt_lmn ! [flg] Apply luminosity filter
   logical flt_nst
   logical force_ice_phz
   logical force_lqd_phz
@@ -564,6 +568,7 @@ program swnb2
   integer bnd_nbr_mpr       ! dimension size
   integer bnd_nbr_snw       ! dimension size
   integer bnd_nbr_non_O3    ! dimension size
+  integer bnd_nbr_lmn       ! dimension size
   integer bnd_nbr_nst       ! dimension size
   integer lev_nbr           ! dimension size
   integer lev_atm_nbr       ! dimension size
@@ -597,6 +602,7 @@ program swnb2
   integer bnd_idx_O3        ! counting index
   !integer bnd_idx_OH        ! counting index
   integer bnd_idx_CH4        ! counting index
+  integer bnd_idx_lmn       ! counting index
   integer bnd_idx_nst       ! counting index
   integer bnd_idx_tmp_O3    ! counting index
   integer chn_idx           ! counting index
@@ -941,6 +947,12 @@ program swnb2
   integer sca_cff_mss_snw_id
   integer wvl_grd_snw_id
 
+  ! Luminosity input variables
+  integer lmn_SRF_id
+  integer wvl_ctr_lmn_id
+  integer wvl_max_lmn_id
+  integer wvl_min_lmn_id
+  
   ! Instrument input variables
   integer chn_SRF_id
   integer nst_SRF_id
@@ -1395,6 +1407,12 @@ program swnb2
   real,dimension(:),allocatable::rfl_spc_sfc_dsk
   real,dimension(:),allocatable::wvl_grd_rfl
   
+  ! Luminosity input variables
+  real lmn_SRF(bnd_nbr_lmn_max)
+  real wvl_ctr_lmn(bnd_nbr_lmn_max)
+  real wvl_max_lmn(bnd_nbr_lmn_max)
+  real wvl_min_lmn(bnd_nbr_lmn_max)
+  
   ! Instrument input variables
   integer chn_SRF_msk(bnd_nbr_max)
   real chn_SRF(bnd_nbr_max,chn_nbr_max)
@@ -1452,6 +1470,7 @@ program swnb2
   real alb_sfc_vsb_drc
   real alt_cld_btm
   real alt_cld_thick
+  real azi_nbr_wvl_dlt
   real frc_ice(lev_nbr_max)
   real frc_ice_ttl
   real grv(lev_nbr_max)
@@ -1732,6 +1751,7 @@ program swnb2
   fl_clm='mls_clr.nc'//nlc
   fl_ice='aer_h2o_ice_rds_swa_20.nc'//nlc
   fl_lqd='aer_h2o_lqd_rds_swa_10.nc'//nlc
+  fl_lmn='lmn_pht_CIE.nc'//nlc
   fl_nst='nst_FSBR.nc'//nlc
   fl_chn='epic.nc'//nlc
   fl_aer='aer_sulfate.nc'//nlc
@@ -1797,6 +1817,7 @@ program swnb2
   flg_vpr_H2O_abs_cld=.true. ! [flg] H2O vapor absorption in cloud allowed
   flg_xtr_aer_snw=.false. ! [flg] Extrapolate surface aerosol into snowpack
   float_foo=0.0
+  flt_lmn=.false.
   flt_nst=.true.
   flx_frc_drc_TOA=1.0 ! [frc] TOA insolation fraction in direct beam
   force_ice_phz=.false.
@@ -1804,7 +1825,7 @@ program swnb2
   lamber=.true.
   lat_dgr_cmd_ln=mss_val  ! [dgr] Latitude
   lcl_yr_day_cmd_ln=mss_val ! [day] Local year day
-  mode_std=.true. ! Standard run mode (non-Fillmore, i.e., no ocean mask, wind speeds, channels)
+  mode_std=.true. ! Standard run mode (non-Fillmore, i.e., no ocean mask or wind speeds or channels)
   odxc_obs_mpr=0.0 ! [frc] Column impurity extinction optical depth 
   odxc_obs_snw=0.0 ! [frc] Column snow extinction optical depth 
   pi=4.0*atan(1.0)
@@ -1892,6 +1913,8 @@ program swnb2
            call ftn_arg_get(arg_idx,arg_val,fl_snw) ! [sng] Snow file
         else if (opt_sng == 'flg_bfb') then
            flg_bfb=.not.flg_bfb ! [flg] Produce bit-for-bit output
+        else if (opt_sng == 'flt_lmn') then
+           flt_lmn=.not.flt_lmn ! [flg] Use luminosity filter
         else if (opt_sng == 'flg_mie') then
            flg_mie=.not.flg_mie ! [flg] Use phase function expansion where available
         else if (opt_sng == 'flg_mpr') then
@@ -2089,6 +2112,7 @@ program swnb2
      call ftn_drcpfx(drc_in,fl_clm) ! [sng] Column file
      call ftn_drcpfx(drc_in,fl_ice) ! [sng] H2O ice file
      call ftn_drcpfx(drc_in,fl_lqd) ! [sng] H2O liquid file
+     call ftn_drcpfx(drc_in,fl_lmn) ! [sng] Luminosity file
      call ftn_drcpfx(drc_in,fl_nst) ! [sng] Instrument file
      call ftn_drcpfx(drc_in,fl_rfl) ! [sng] Spectral reflectance file
      call ftn_drcpfx(drc_in,fl_mpr) ! [sng] Impurity file
@@ -2231,6 +2255,11 @@ program swnb2
      call ftn_strcpylsc(stt_Rayleigh,'Rayleigh scattering: method of Lenoble (1993)')
   else
      call ftn_strcpylsc(stt_Rayleigh,'Rayleigh scattering: Off')
+  endif
+  if (flt_lmn) then
+     call ftn_strcpylsc(stt_flt_lmn,'Luminosity spectral response function: instrument from '//fl_lmn)
+  else
+     call ftn_strcpylsc(stt_flt_lmn,'Luminosity spectral spectral response function: Off')
   endif
   if (flt_nst) then
      call ftn_strcpylsc(stt_flt_nst,'Instrument filter spectral response function: instrument from '//fl_nst)
@@ -3415,6 +3444,30 @@ program swnb2
   ! Close file
   rcd=nf90_wrp_close(nc_id,fl_rfl,'Ingested') ! [fnc] Close file
 
+  ! Ingest fl_lmn
+  rcd=nf90_wrp_open(fl_lmn,nf90_nowrite,nc_id)
+  ! Get dimension IDs
+  rcd=nf90_wrp_inq_dimid(nc_id,'wvl',bnd_dmn_id)
+  
+  ! Get dimension sizes
+  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_lmn),sbr_nm//": inquire_dim bnd")
+  if (bnd_nbr_lmn>bnd_nbr_lmn_max) stop 'bnd_nbr_lmn>bnd_nbr_lmn_max'
+  cnt_bnd(1)=bnd_nbr_lmn
+  
+  ! Get variable IDs
+  rcd=nf90_wrp_inq_varid(nc_id,'lmn_SRF',lmn_SRF_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_lmn_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_lmn_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'wvl',wvl_ctr_lmn_id)
+  
+  ! Get data
+  rcd=nf90_wrp(nf90_get_var(nc_id,lmn_SRF_id,lmn_SRF,srt_one,cnt_bnd),"gv lmn_SRF")
+  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_lmn_id,wvl_max_lmn,srt_one,cnt_bnd),"gv wvl_max_lmn")
+  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_lmn_id,wvl_min_lmn,srt_one,cnt_bnd),"gv wvl_min_lmn")
+  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_lmn_id,wvl_ctr_lmn,srt_one,cnt_bnd),"gv wvl_ctr_lmn")
+  ! Close file
+  rcd=nf90_wrp_close(nc_id,fl_lmn,'Ingested') ! [fnc] Close file
+
   ! Ingest fl_nst
   rcd=nf90_wrp_open(fl_nst,nf90_nowrite,nc_id)
   ! Get dimension IDs
@@ -3816,10 +3869,10 @@ program swnb2
   temis=0.0 ! 20160513: Emissivity of upper boundary is usually 0.0
   
   ! Set control flags:
-  ! Set deltam=.true. unless looking at radiances within 10 degrees of forward peak.
-  ! When deltam=.true., the returned downwelling direct and diffuse fluxes are the "true" fluxes which have been recovered from scaled fluxes.
-  ! Upwelling flux is (theoretically) not affected by delta scaling.
-  ! Thus the direct/diffuse ratio computed with deltam=.true. approximately equals the ratio computed with deltam=.false. 
+  ! Set deltam=.true. unless looking at radiances within 10 degrees of forward peak
+  ! When deltam=.true., the returned downwelling direct and diffuse fluxes are the "true" fluxes which have been recovered from scaled fluxes
+  ! Upwelling flux is (theoretically) not affected by delta scaling
+  ! Thus the direct/diffuse ratio computed with deltam=.true. approximately equals the ratio computed with deltam=.false.
   ! Only forward beam radiances change significantly when deltam=.true.
   !deltam=.true.
   
@@ -4663,7 +4716,7 @@ program swnb2
   !$omp do
   do bnd_idx=1,bnd_nbr
      
-     ! skip calculation if band is outside of all instrument channels
+     ! Skip calculation if band is outside of all instrument channels
      if (.not.mode_std.and.chn_SRF_msk(bnd_idx) /= 1) then
         goto 999
      endif
@@ -6238,55 +6291,99 @@ program swnb2
      ! Intensities are returned in arrays in order of descending cosine of polar angle
      ! ndr = nadir  = travelling towards nadir
      ! zen = zenith = travelling towards zenith
-     ntn_spc_aa_ndr_sfc(bnd_idx)=u0u(1,levp_nbr)/ &
-          wvl_dlt(bnd_idx)
-     ntn_spc_aa_zen_sfc(bnd_idx)=u0u(plr_nbr,levp_nbr)/ &
-          wvl_dlt(bnd_idx)
-     
-     do lev_idx=1,levp_nbr
-        do plr_idx=1,plr_nbr
-           ntn_bb_aa(plr_idx,lev_idx)=ntn_bb_aa(plr_idx,lev_idx)+ &
-                u0u(plr_idx,lev_idx)
-        enddo               ! end loop over plr
-        ntn_spc_aa_ndr(bnd_idx,lev_idx)= &
-             u0u(1,lev_idx)/wvl_dlt(bnd_idx)
-        ntn_spc_aa_zen(bnd_idx,lev_idx)= &
-             u0u(plr_nbr,lev_idx)/wvl_dlt(bnd_idx)
-     enddo                  ! end loop over lev
-     
-     do plr_idx=1,plr_nbr
-        ntn_spc_aa_sfc(plr_idx,bnd_idx)= &
-             u0u(plr_idx,levp_nbr)/wvl_dlt(bnd_idx)
-     enddo                  ! end loop over lev
-     
-     if (bnd_idx==bnd_dbg) then
-        do azi_idx=1,azi_nbr
+     if (.true.) then
+        ! 20160515: Recover azimuthally averaged intensites from DISORT2 quantities
+        azi_nbr_wvl_dlt=azi_nbr*wvl_dlt(bnd_idx)
+        do lev_idx=1,levp_nbr
            do plr_idx=1,plr_nbr
-              do lev_idx=1,levp_nbr
+              do azi_idx=1,azi_nbr
+                 ntn_bb_aa(plr_idx,lev_idx)=ntn_bb_aa(plr_idx,lev_idx)+ &
+                      uu(plr_idx,lev_idx,azi_idx)
+              enddo            ! end loop over azi
+              ! Normalize _aa_ intensities by azi_nbr
+              ! Do NOT normalize _bb_ intensities by wvl_dlt
+              ntn_bb_aa(plr_idx,lev_idx)= &
+                   ntn_bb_aa(plr_idx,lev_idx)/azi_nbr
+           enddo               ! end loop over plr
+           do azi_idx=1,azi_nbr
+              ntn_spc_aa_ndr(bnd_idx,lev_idx)= &
+              ntn_spc_aa_ndr(bnd_idx,lev_idx)+uu(1,lev_idx,azi_idx)
+              ntn_spc_aa_zen(bnd_idx,lev_idx)= &
+                   ntn_spc_aa_zen(bnd_idx,lev_idx)+ &
+                   uu(plr_nbr,lev_idx,azi_idx)
+           enddo            ! end loop over azi
+           ! Normalize _spc_aa_ intensities by wvl_dlt and azi_nbr
+           ntn_spc_aa_ndr(bnd_idx,lev_idx)= &
+                ntn_spc_aa_ndr(bnd_idx,lev_idx)/ &
+                azi_nbr_wvl_dlt
+           ntn_spc_aa_zen(bnd_idx,lev_idx)= &
+                ntn_spc_aa_zen(bnd_idx,lev_idx)/ &
+                azi_nbr_wvl_dlt
+        enddo                  ! end loop over lev
+        do plr_idx=1,plr_nbr
+           do azi_idx=1,azi_nbr
+              ntn_spc_aa_sfc(plr_idx,bnd_idx)= &
+                   ntn_spc_aa_sfc(plr_idx,bnd_idx)+ &
+                   uu(plr_idx,levp_idx,azi_idx)
+           enddo            ! end loop over azi
+        enddo                  ! end loop over plr
+        ntn_spc_aa_sfc(plr_idx,bnd_idx)= &
+             ntn_spc_aa_sfc(plr_idx,bnd_idx)/ &
+             azi_nbr_wvl_dlt
+        ntn_spc_aa_ndr_sfc(bnd_idx)=ntn_spc_aa_sfc(1,bnd_idx)
+        ntn_spc_aa_zen_sfc(bnd_idx)=ntn_spc_aa_sfc(plr_nbr,bnd_idx)
+     endif ! endif true
+     if (.false.) then
+        ! 20160515: old DISORT1 method
+        ntn_spc_aa_ndr_sfc(bnd_idx)=u0u(1,levp_nbr)/ &
+             wvl_dlt(bnd_idx)
+        ntn_spc_aa_zen_sfc(bnd_idx)=u0u(plr_nbr,levp_nbr)/ &
+             wvl_dlt(bnd_idx)
+
+        do lev_idx=1,levp_nbr
+           do plr_idx=1,plr_nbr
+              ntn_bb_aa(plr_idx,lev_idx)=ntn_bb_aa(plr_idx,lev_idx)+ &
+                   u0u(plr_idx,lev_idx)
+           enddo               ! end loop over plr
+           ntn_spc_aa_ndr(bnd_idx,lev_idx)= &
+                u0u(1,lev_idx)/wvl_dlt(bnd_idx)
+           ntn_spc_aa_zen(bnd_idx,lev_idx)= &
+                u0u(plr_nbr,lev_idx)/wvl_dlt(bnd_idx)
+        enddo                  ! end loop over lev
+        do plr_idx=1,plr_nbr
+           ntn_spc_aa_sfc(plr_idx,bnd_idx)= &
+                u0u(plr_idx,levp_nbr)/wvl_dlt(bnd_idx)
+        enddo                  ! end loop over lev
+     endif ! endif false
+        
+     if (bnd_idx==bnd_dbg) then
+        do lev_idx=1,levp_nbr
+           do plr_idx=1,plr_nbr
+              do azi_idx=1,azi_nbr
                  ntn_spc_chn(azi_idx,plr_idx,lev_idx)= &
                       uu(plr_idx,lev_idx,azi_idx)/wvl_dlt(bnd_idx)
-              enddo         ! end loop over lev
-           enddo            ! end loop over plr
-        enddo               ! end loop over azimuthal angles
-     endif                  ! end if dbg band
+              enddo   ! end loop over azi
+           enddo      ! end loop over plr
+        enddo         ! end loop over lev
+     endif            ! end if dbg band
      
      do azi_idx=1,azi_nbr
         do plr_idx=1,plr_nbr
            ntn_spc_TOA(azi_idx,plr_idx,bnd_idx)= &
                 uu(plr_idx,1,azi_idx)/wvl_dlt(bnd_idx)
         enddo               ! end loop over plr
-     enddo                  ! end loop over azimuthal angles
+     enddo                  ! end loop over azi
      
-     if (sv_ntn) then
-        ! do azi_idx=1,azi_nbr
-        ! do plr_idx=1,plr_nbr
-        ! do lev_idx=1,levp_nbr
-        ! ntn_spc_aa(plr_idx,bnd_idx,lev_idx)= &
-        !                     u0u(plr_idx,lev_idx)/wvl_dlt(bnd_idx)
-        ! enddo         ! end loop over lev
-        ! enddo            ! end loop over plr
-        ! enddo               ! end loop over azimuthal angles
-     endif                  ! end if saving full intensity arrays
+!     if (sv_ntn) then
+!        do azi_idx=1,azi_nbr
+!           do plr_idx=1,plr_nbr
+!             do lev_idx=1,levp_nbr
+!                 ntn_spc_aa(plr_idx,bnd_idx,lev_idx)= &
+!                      u0u(plr_idx,lev_idx)/wvl_dlt(bnd_idx)
+!              enddo         ! end loop over lev
+!           enddo            ! end loop over plr
+!        enddo               ! end loop over azi
+!     endif                  ! end if saving full intensity arrays
      
 999  continue
      
@@ -7891,6 +7988,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,trn_spc_atm_H2OH2O_id,trn_spc_atm_H2OH2O), &
           sbr_nm//': pv trn_spc_atm_H2OH2O in '//__FILE__)
      if (sv_ntn) then
+        ! Comment-out for now because this consumes too much disk space
         ! ntn_spc_aa_id,
         ! ntn_spc_aa(plr_nbr_max,bnd_nbr_max,levp_nbr_max),
         ! rcd=rcd+nf90_redef(nc_id)
