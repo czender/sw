@@ -1,6 +1,6 @@
 2016-05-16  Charlie Zender  <zender@uci.edu>
 
-	* Add CIE luminosity function I/O
+	* Add and verify CIE luminosity function I/O. Ready to compute lumens!
 
 2016-05-15  Charlie Zender  <zender@uci.edu>
 
