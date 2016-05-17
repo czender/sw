@@ -4568,7 +4568,14 @@ Send HUP (hangup) signal to process:
 \begin{verbatim}
 kill -HUP pid
 \end{verbatim}
-Restart \trmidx{daemon} manually:
+
+On newer systems that use \trmidx{systemd}, restart services
+\begin{verbatim}
+sudo systemctl restart NetworkManager.service
+sudo systemctl restart sshd.service
+\end{verbatim}
+
+On older systems, restart \trmidx{daemon} manually using :
 \begin{verbatim}
 /etc/rc.d/init.d/inet restart
 /etc/rc.d/init.d/network restart

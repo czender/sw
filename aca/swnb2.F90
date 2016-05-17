@@ -703,12 +703,6 @@ program swnb2
   integer flx_nst_dwn_sfc_id
   integer flx_nst_net_id
   integer flx_nst_upw_id
-
-  integer ilm_dwn_TOA_id
-  integer ilm_dwn_id
-  integer ilm_dwn_sfc_id
-  integer ilm_upw_id
-
   integer flx_spc_abs_SAS_id
   integer flx_spc_abs_atm_id
   integer flx_spc_abs_id
@@ -726,18 +720,22 @@ program swnb2
   integer flx_spc_upw_id
   integer flx_slr_frc_id
   integer htg_rate_bb_id
+  integer ilm_dwn_TOA_id
+  integer ilm_dwn_id
+  integer ilm_dwn_sfc_id
+  integer ilm_upw_id
   integer j_NO2_id
   integer j_spc_NO2_sfc_id
   integer lmn_bb_aa_id
+  integer lmn_spc_aa_ndr_id
+  integer lmn_spc_aa_ndr_sfc_id
+  integer lmn_spc_aa_sfc_id
   integer ntn_bb_aa_id
   integer ntn_bb_mean_id
   integer rfl_chn_TOA_id
   integer ntn_spc_aa_ndr_id
   integer ntn_spc_aa_ndr_sfc_id
   integer ntn_spc_aa_sfc_id
-  integer lmn_spc_aa_ndr_id
-  integer lmn_spc_aa_ndr_sfc_id
-  integer lmn_spc_aa_sfc_id
   integer ntn_spc_aa_zen_id
   integer ntn_spc_aa_zen_sfc_id
   integer ntn_spc_chn_id
@@ -4646,6 +4644,9 @@ program swnb2
   if(rcd /= 0) stop "deallocate() failed for lmn_SRF_dsk"
   if (allocated(wvl_grd_lmn)) deallocate(wvl_grd_lmn,stat=rcd) !
   if(rcd /= 0) stop "deallocate() failed for wvl_grd_lmn"
+  do bnd_idx=1,bnd_nbr
+     bnd_wgt_lmn(bnd_idx)=lmn_SRF(bnd_idx)
+  enddo                  ! end loop over bnd
   
   chn_SRF_msk(:)=0 ! CEWI lf95
   if (.not.mode_std) then
@@ -6529,9 +6530,6 @@ program swnb2
   ! Initialize basic instrument quantities which will be incremented
   if (flt_lmn) then
      ! Treat luminosity computation similarly to instrument bandpass
-     do bnd_idx=1,bnd_nbr
-        bnd_wgt_lmn(bnd_idx)=lmn_SRF(bnd_idx)
-     enddo                  ! end loop over bnd
      do lev_idx=1,levp_nbr
         ilm_dwn(lev_idx)=0.0
         ilm_upw(lev_idx)=0.0
