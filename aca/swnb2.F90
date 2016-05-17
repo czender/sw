@@ -728,12 +728,16 @@ program swnb2
   integer htg_rate_bb_id
   integer j_NO2_id
   integer j_spc_NO2_sfc_id
+  integer lmn_bb_aa_id
   integer ntn_bb_aa_id
   integer ntn_bb_mean_id
   integer rfl_chn_TOA_id
   integer ntn_spc_aa_ndr_id
   integer ntn_spc_aa_ndr_sfc_id
   integer ntn_spc_aa_sfc_id
+  integer lmn_spc_aa_ndr_id
+  integer lmn_spc_aa_ndr_sfc_id
+  integer lmn_spc_aa_sfc_id
   integer ntn_spc_aa_zen_id
   integer ntn_spc_aa_zen_sfc_id
   integer ntn_spc_chn_id
@@ -1159,6 +1163,7 @@ program swnb2
   real,dimension(:),allocatable::j_spc_NO2_sfc
   real,dimension(:),allocatable::lmn_SRF
   real,dimension(:),allocatable::nrg_pht
+  real,dimension(:),allocatable::lmn_spc_aa_ndr_sfc
   real,dimension(:),allocatable::ntn_spc_aa_ndr_sfc
   real,dimension(:),allocatable::ntn_spc_aa_zen_sfc
   real,dimension(:),allocatable::odac_spc_aer
@@ -1270,13 +1275,16 @@ program swnb2
   real,dimension(:,:),allocatable::flx_spc_dwn_dff
   real,dimension(:,:),allocatable::flx_spc_dwn_drc
   real,dimension(:,:),allocatable::flx_spc_upw
+  real,dimension(:,:),allocatable::lmn_spc_aa_ndr
   real,dimension(:,:),allocatable::ntn_spc_aa_ndr
   real,dimension(:,:),allocatable::ntn_spc_aa_zen
 
   ! Array dimensions: plr,bnd
+  real,dimension(:,:),allocatable::lmn_spc_aa_sfc
   real,dimension(:,:),allocatable::ntn_spc_aa_sfc
 
   ! Array dimensions: plr,levp
+  real,dimension(:,:),allocatable::lmn_bb_aa
   real,dimension(:,:),allocatable::ntn_bb_aa
 
   ! Array dimensions: azi,plr,bnd
@@ -1821,6 +1829,7 @@ program swnb2
   flg_sat_cld=.false. ! [flg] Force saturated layers to be cloudy
   flg_sct_lqd=.false. ! [flg] Liquid cloud droplets are pure scatterers
   flg_snw=.true. ! [flg] Snow grains are optically active in snow model
+  ! flg_toa_isot=.false. ! [flg] TOA isotropic flux as sky brightness in nL?
   flg_vpr_H2O_abs_cld=.true. ! [flg] H2O vapor absorption in cloud allowed
   flg_xtr_aer_snw=.false. ! [flg] Extrapolate surface aerosol into snowpack
   float_foo=0.0
@@ -3632,6 +3641,8 @@ program swnb2
   ! Array dimensions: bnd,levp (still unknown, see below)
   ! Array dimensions: plr,bnd (still unknown, see below)
   ! Array dimensions: plr,levp
+  allocate(lmn_bb_aa(plr_nbr,levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for lmn_bb_aa"
   allocate(ntn_bb_aa(plr_nbr,levp_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for ntn_bb_aa"
   ! Array dimensions: azi,plr,bnd (still unknown, see below)
@@ -4015,6 +4026,8 @@ program swnb2
   if(rcd /= 0) stop "allocate() failed for lmn_SRF"
   allocate(nrg_pht(bnd_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for nrg_pht"
+  allocate(lmn_spc_aa_ndr_sfc(bnd_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for lmn_spc_aa_ndr_sfc"
   allocate(ntn_spc_aa_ndr_sfc(bnd_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for ntn_spc_aa_ndr_sfc"
   allocate(ntn_spc_aa_zen_sfc(bnd_nbr),stat=rcd)
@@ -4194,12 +4207,16 @@ program swnb2
   if(rcd /= 0) stop "allocate() failed for flx_spc_dwn_drc"
   allocate(flx_spc_upw(bnd_nbr,levp_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for flx_spc_upw"
+  allocate(lmn_spc_aa_ndr(bnd_nbr,levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for lmn_spc_aa_ndr"
   allocate(ntn_spc_aa_ndr(bnd_nbr,levp_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for ntn_spc_aa_ndr"
   allocate(ntn_spc_aa_zen(bnd_nbr,levp_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for ntn_spc_aa_zen"
 
   ! Array dimensions: plr,bnd
+  allocate(lmn_spc_aa_sfc(plr_nbr,bnd_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for lmn_spc_aa_sfc"
   allocate(ntn_spc_aa_sfc(plr_nbr,bnd_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for ntn_spc_aa_sfc"
 
@@ -4390,6 +4407,7 @@ program swnb2
   enddo                     ! end loop over lev
   do lev_idx=1,levp_nbr
      do plr_idx=1,plr_nbr
+        lmn_bb_aa(plr_idx,lev_idx)=0.0
         ntn_bb_aa(plr_idx,lev_idx)=0.0
      enddo                  ! end loop over plr
      flx_bb_dwn_drc(lev_idx)=0.0
@@ -6316,48 +6334,59 @@ program swnb2
      ! Intensities are returned in arrays in order of descending cosine of polar angle
      ! ndr = nadir  = travelling towards nadir
      ! zen = zenith = travelling towards zenith
-     if (.true.) then
-        ! 20160515: Recover azimuthally averaged intensites from DISORT2 quantities
-        azi_nbr_wvl_dlt=azi_nbr*wvl_dlt(bnd_idx)
-        do lev_idx=1,levp_nbr
-           do plr_idx=1,plr_nbr
-              do azi_idx=1,azi_nbr
-                 ntn_bb_aa(plr_idx,lev_idx)=ntn_bb_aa(plr_idx,lev_idx)+ &
-                      uu(plr_idx,lev_idx,azi_idx)
-              enddo            ! end loop over azi
-              ! Normalize _aa_ intensities by azi_nbr
-              ! Do NOT normalize _bb_ intensities by wvl_dlt
-              ntn_bb_aa(plr_idx,lev_idx)= &
-                   ntn_bb_aa(plr_idx,lev_idx)/azi_nbr
-           enddo               ! end loop over plr
-           do azi_idx=1,azi_nbr
-              ntn_spc_aa_ndr(bnd_idx,lev_idx)= &
-              ntn_spc_aa_ndr(bnd_idx,lev_idx)+uu(1,lev_idx,azi_idx)
-              ntn_spc_aa_zen(bnd_idx,lev_idx)= &
-                   ntn_spc_aa_zen(bnd_idx,lev_idx)+ &
-                   uu(plr_nbr,lev_idx,azi_idx)
-           enddo            ! end loop over azi
-           ! Normalize _spc_aa_ intensities by wvl_dlt and azi_nbr
-           ntn_spc_aa_ndr(bnd_idx,lev_idx)= &
-                ntn_spc_aa_ndr(bnd_idx,lev_idx)/ &
-                azi_nbr_wvl_dlt
-           ntn_spc_aa_zen(bnd_idx,lev_idx)= &
-                ntn_spc_aa_zen(bnd_idx,lev_idx)/ &
-                azi_nbr_wvl_dlt
-        enddo                  ! end loop over lev
+     ! 20160515: Recover azimuthally averaged intensites from DISORT2 quantities
+     azi_nbr_wvl_dlt=azi_nbr*wvl_dlt(bnd_idx)
+     do lev_idx=1,levp_nbr
         do plr_idx=1,plr_nbr
            do azi_idx=1,azi_nbr
-              ntn_spc_aa_sfc(plr_idx,bnd_idx)= &
-                   ntn_spc_aa_sfc(plr_idx,bnd_idx)+ &
-                   uu(plr_idx,levp_idx,azi_idx)
+              lmn_bb_aa(plr_idx,lev_idx)=lmn_bb_aa(plr_idx,lev_idx)+ &
+                   uu(plr_idx,lev_idx,azi_idx)*bnd_wgt_lmn(bnd_idx)
+              ntn_bb_aa(plr_idx,lev_idx)=ntn_bb_aa(plr_idx,lev_idx)+ &
+                   uu(plr_idx,lev_idx,azi_idx)
            enddo            ! end loop over azi
-        enddo                  ! end loop over plr
-        ntn_spc_aa_sfc(plr_idx,bnd_idx)= &
-             ntn_spc_aa_sfc(plr_idx,bnd_idx)/ &
-             azi_nbr_wvl_dlt
-        ntn_spc_aa_ndr_sfc(bnd_idx)=ntn_spc_aa_sfc(1,bnd_idx)
-        ntn_spc_aa_zen_sfc(bnd_idx)=ntn_spc_aa_sfc(plr_nbr,bnd_idx)
-     endif ! endif true
+           ! Normalize _aa_ intensities by azi_nbr
+           ! Do NOT normalize _bb_ intensities by wvl_dlt
+           lmn_bb_aa(plr_idx,lev_idx)=lumens_per_Watt_555nm* &
+                lmn_bb_aa(plr_idx,lev_idx)/azi_nbr
+           ntn_bb_aa(plr_idx,lev_idx)= &
+                ntn_bb_aa(plr_idx,lev_idx)/azi_nbr
+        enddo               ! end loop over plr
+        
+        do azi_idx=1,azi_nbr
+           lmn_spc_aa_ndr(bnd_idx,lev_idx)= &
+                lmn_spc_aa_ndr(bnd_idx,lev_idx)+ &
+                uu(1,lev_idx,azi_idx)*bnd_wgt_lmn(bnd_idx)
+           ntn_spc_aa_ndr(bnd_idx,lev_idx)= &
+                ntn_spc_aa_ndr(bnd_idx,lev_idx)+uu(1,lev_idx,azi_idx)
+           ntn_spc_aa_zen(bnd_idx,lev_idx)= &
+                ntn_spc_aa_zen(bnd_idx,lev_idx)+ &
+                uu(plr_nbr,lev_idx,azi_idx)
+        enddo            ! end loop over azi
+        ! Normalize _spc_aa_ intensities by wvl_dlt and azi_nbr
+        lmn_spc_aa_ndr(bnd_idx,lev_idx)=lumens_per_Watt_555nm* &
+             lmn_spc_aa_ndr(bnd_idx,lev_idx)/azi_nbr_wvl_dlt
+        ntn_spc_aa_ndr(bnd_idx,lev_idx)= &
+             ntn_spc_aa_ndr(bnd_idx,lev_idx)/azi_nbr_wvl_dlt
+        ntn_spc_aa_zen(bnd_idx,lev_idx)= &
+             ntn_spc_aa_zen(bnd_idx,lev_idx)/azi_nbr_wvl_dlt
+     enddo                  ! end loop over lev
+     do plr_idx=1,plr_nbr
+        do azi_idx=1,azi_nbr
+           lmn_spc_aa_sfc(plr_idx,bnd_idx)= &
+                lmn_spc_aa_sfc(plr_idx,bnd_idx)+ &
+                uu(plr_idx,levp_idx,azi_idx)*bnd_wgt_lmn(bnd_idx)
+           ntn_spc_aa_sfc(plr_idx,bnd_idx)= &
+                ntn_spc_aa_sfc(plr_idx,bnd_idx)+ &
+                uu(plr_idx,levp_idx,azi_idx)
+        enddo            ! end loop over azi
+     enddo                  ! end loop over plr
+     lmn_spc_aa_sfc(plr_idx,bnd_idx)=lumens_per_Watt_555nm* &
+          lmn_spc_aa_sfc(plr_idx,bnd_idx)/azi_nbr_wvl_dlt
+     ntn_spc_aa_sfc(plr_idx,bnd_idx)= &
+          ntn_spc_aa_sfc(plr_idx,bnd_idx)/azi_nbr_wvl_dlt
+     lmn_spc_aa_ndr_sfc(bnd_idx)=lmn_spc_aa_sfc(1,bnd_idx)
+     ntn_spc_aa_ndr_sfc(bnd_idx)=ntn_spc_aa_sfc(1,bnd_idx)
+     ntn_spc_aa_zen_sfc(bnd_idx)=ntn_spc_aa_sfc(plr_nbr,bnd_idx)
      if (.false.) then
         ! 20160515: old DISORT1 method
         ntn_spc_aa_ndr_sfc(bnd_idx)=u0u(1,levp_nbr)/ &
@@ -6510,16 +6539,17 @@ program swnb2
      do bnd_idx=1,bnd_nbr
         do lev_idx=1,levp_nbr
            ilm_dwn(lev_idx)=ilm_dwn(lev_idx)+ &
+                lumens_per_Watt_555nm* &
                 flx_spc_dwn(bnd_idx,lev_idx)* &
                 wvl_dlt(bnd_idx)*bnd_wgt_lmn(bnd_idx)
            ilm_upw(lev_idx)=ilm_upw(lev_idx)+ &
+                lumens_per_Watt_555nm* &
                 flx_spc_upw(bnd_idx,lev_idx)* &
                 wvl_dlt(bnd_idx)*bnd_wgt_lmn(bnd_idx)
         enddo                  ! end loop over lev
      enddo                     ! end loop over bnd
      ilm_dwn_TOA=ilm_dwn(1)
      ilm_dwn_sfc=ilm_dwn(levp_nbr)
-
   endif ! endif flt_lmn
 
   do lev_idx=1,levp_nbr
@@ -6889,9 +6919,12 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'ilm_dwn',nf90_float,levp_dmn_id,ilm_dwn_id),sbr_nm//': dv ilm_dwn')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ilm_upw',nf90_float,levp_dmn_id,ilm_upw_id),sbr_nm//': dv ilm_upw')
      rcd=nf90_wrp(nf90_def_var(nc_id,'nrg_pht',nf90_float,bnd_dmn_id,nrg_pht_id),sbr_nm//': dv nrg_pht')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa',nf90_float,dim_plr_levp,lmn_bb_aa_id),sbr_nm//': dv lmn_bb_aa')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ntn_bb_aa',nf90_float,dim_plr_levp,ntn_bb_aa_id),sbr_nm//': dv ntn_bb_aa')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ntn_bb_mean',nf90_float,lev_dmn_id,ntn_bb_mean_id),sbr_nm//': dv ntn_bb_mean')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_spc_aa_ndr',nf90_float,dim_bnd_levp,lmn_spc_aa_ndr_id),sbr_nm//': dv lmn_spc_aa_ndr')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ntn_spc_aa_ndr',nf90_float,dim_bnd_levp,ntn_spc_aa_ndr_id),sbr_nm//': dv ntn_spc_aa_ndr')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_spc_aa_sfc',nf90_float,dim_plr_bnd,lmn_spc_aa_sfc_id),sbr_nm//': dv lmn_spc_aa_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ntn_spc_aa_sfc',nf90_float,dim_plr_bnd,ntn_spc_aa_sfc_id),sbr_nm//': dv ntn_spc_aa_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ntn_spc_aa_zen',nf90_float,dim_bnd_levp,ntn_spc_aa_zen_id),sbr_nm//': dv ntn_spc_aa_zen')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ntn_spc_chn',nf90_float,dim_azi_plr_levp,ntn_spc_chn_id),sbr_nm//': dv ntn_spc_chn')
@@ -7043,6 +7076,8 @@ program swnb2
           sbr_nm//': dv flx_frc_dwn_sfc_blr')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_spc_pht_dwn_sfc',nf90_float,bnd_dmn_id,flx_spc_pht_dwn_sfc_id), &
           sbr_nm//': dv flx_spc_pht_dwn_sfc')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_spc_aa_ndr_sfc',nf90_float,bnd_dmn_id,lmn_spc_aa_ndr_sfc_id), &
+          sbr_nm//': dv lmn_spc_aa_ndr_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ntn_spc_aa_ndr_sfc',nf90_float,bnd_dmn_id,ntn_spc_aa_ndr_sfc_id), &
           sbr_nm//': dv ntn_spc_aa_ndr_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ntn_spc_aa_zen_sfc',nf90_float,bnd_dmn_id,ntn_spc_aa_zen_sfc_id), &
@@ -7363,13 +7398,21 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,nrg_pht_id,'long_name','Energy of photon at band center'), &
           sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_id,'long_name','Broadband azimuthally averaged luminance'), &
+          sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_bb_aa_id,'long_name','Broadband azimuthally averaged intensity'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_bb_mean_id,'long_name','Broadband mean intensity'), &
           sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_id,'long_name','Spectral luminance of nadir radiation'), &
+          sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_spc_aa_ndr_id,'long_name','Spectral intensity of nadir radiation'), &
           sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_sfc_id,'long_name','Spectral luminance of nadir radiation at surface'), &
+          sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_spc_aa_ndr_sfc_id,'long_name','Spectral intensity of nadir radiation at surface'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_sfc_id,'long_name','Spectral luminance of radiation at surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_spc_aa_sfc_id,'long_name','Spectral intensity of radiation at surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
@@ -7685,6 +7728,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,ilm_upw_id,'units','lumen meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CWP_id,'units','kilogram meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,nrg_pht_id,'units','joule photon-1'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_bb_aa_id,'units','watt meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_bb_mean_id,'units','watt meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,odac_spc_aer_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
@@ -7791,9 +7835,15 @@ program swnb2
           sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_pht_dwn_sfc_id,'units','photon meter-2 second-1 meter-1'), &
           sbr_nm//': pa units in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,ntn_spc_aa_ndr_id,'units','watt meter-2 meter-1 sterradian-1'), &
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_id,'units','lumen meter-2 meter-1 sterradian-1'), &
           sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_spc_aa_ndr_sfc_id,'units','watt meter-2 meter-1 sterradian-1'), &
+          sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_sfc_id,'units','lumen meter-2 meter-1 sterradian-1'), &
+          sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,ntn_spc_aa_ndr_id,'units','watt meter-2 meter-1 sterradian-1'), &
+          sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_sfc_id,'units','lumen meter-2 meter-1 sterradian-1'), &
           sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_spc_aa_sfc_id,'units','watt meter-2 meter-1 sterradian-1'), &
           sbr_nm//': pa units in '//__FILE__)
@@ -7936,8 +7986,11 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,ilm_dwn_sfc_id,ilm_dwn_sfc),sbr_nm//': pv ilm_dwn_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ilm_upw_id,ilm_upw),sbr_nm//': pv ilm_upw in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,nrg_pht_id,nrg_pht),sbr_nm//': pv nrg_pht in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,lmn_bb_aa_id,lmn_bb_aa),sbr_nm//': pv lmn_bb_aa in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ntn_bb_aa_id,ntn_bb_aa),sbr_nm//': pv ntn_bb_aa in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ntn_bb_mean_id,ntn_bb_mean),sbr_nm//': pv ntn_bb_mean in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,lmn_spc_aa_ndr_id,lmn_spc_aa_ndr),sbr_nm//': pv lmn_spc_aa_ndr in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,lmn_spc_aa_sfc_id,lmn_spc_aa_sfc),sbr_nm//': pv lmn_spc_aa_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ntn_spc_aa_ndr_id,ntn_spc_aa_ndr),sbr_nm//': pv ntn_spc_aa_ndr in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ntn_spc_aa_sfc_id,ntn_spc_aa_sfc),sbr_nm//': pv ntn_spc_aa_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ntn_spc_aa_zen_id,ntn_spc_aa_zen),sbr_nm//': pv ntn_spc_aa_zen in '//__FILE__)
@@ -8057,6 +8110,8 @@ program swnb2
           sbr_nm//': pv flx_spc_act_pht_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_spc_pht_dwn_sfc_id,flx_spc_pht_dwn_sfc), &
           sbr_nm//': pv flx_spc_pht_dwn_sfc in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,lmn_spc_aa_ndr_sfc_id,lmn_spc_aa_ndr_sfc), &
+          sbr_nm//': pv lmn_spc_aa_ndr_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ntn_spc_aa_ndr_sfc_id,ntn_spc_aa_ndr_sfc), &
           sbr_nm//': pv ntn_spc_aa_ndr_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ntn_spc_aa_zen_sfc_id,ntn_spc_aa_zen_sfc), &
@@ -8200,6 +8255,8 @@ program swnb2
   if(rcd /= 0) stop 'deallocate() failed for j_spc_NO2_sfc'
   if (allocated(nrg_pht)) deallocate(nrg_pht,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for nrg_pht'
+  if (allocated(lmn_spc_aa_ndr_sfc)) deallocate(lmn_spc_aa_ndr_sfc,stat=rcd)
+  if(rcd /= 0) stop 'deallocate() failed for lmn_spc_aa_ndr_sfc'
   if (allocated(ntn_spc_aa_ndr_sfc)) deallocate(ntn_spc_aa_ndr_sfc,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for ntn_spc_aa_ndr_sfc'
   if (allocated(ntn_spc_aa_zen_sfc)) deallocate(ntn_spc_aa_zen_sfc,stat=rcd)
@@ -8489,14 +8546,20 @@ program swnb2
   if(rcd /= 0) stop 'deallocate() failed for flx_spc_dwn_drc'
   if (allocated(flx_spc_upw)) deallocate(flx_spc_upw,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for flx_spc_upw'
+  if (allocated(lmn_spc_aa_ndr)) deallocate(lmn_spc_aa_ndr,stat=rcd)
+  if(rcd /= 0) stop 'deallocate() failed for lmn_spc_aa_ndr'
   if (allocated(ntn_spc_aa_ndr)) deallocate(ntn_spc_aa_ndr,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for ntn_spc_aa_ndr'
   if (allocated(ntn_spc_aa_zen)) deallocate(ntn_spc_aa_zen,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for ntn_spc_aa_zen'
   ! Array dimensions: plr,bnd
+  if (allocated(lmn_spc_aa_sfc)) deallocate(lmn_spc_aa_sfc,stat=rcd)
+  if(rcd /= 0) stop 'deallocate() failed for lmn_spc_aa_sfc'
   if (allocated(ntn_spc_aa_sfc)) deallocate(ntn_spc_aa_sfc,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for ntn_spc_aa_sfc'
   ! Array dimensions: plr,levp
+  if (allocated(lmn_bb_aa)) deallocate(lmn_bb_aa,stat=rcd)
+  if(rcd /= 0) stop 'deallocate() failed for lmn_bb_aa'
   if (allocated(ntn_bb_aa)) deallocate(ntn_bb_aa,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for ntn_bb_aa'
   ! Array dimensions: azi,plr,bnd

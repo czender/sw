@@ -32,6 +32,7 @@ module phys_cst_mdl ! [mdl] Fundamental and derived physical constants
   real,parameter::grv_cst=6.672e-11 ! [N m2 kg-2] Universal gravitational constant
   real,parameter::k_O2_O2=2.6e-29     ! [m3 mlc-1] Equilibrium rate constant for O2 + O2 <-> O2-O2 (Sha77 p. 436, 527)
   real,parameter::grv_mean_sfc=9.80665 ! [m s-2] Mean gravitational acceleration at Earth's surface
+  real,parameter::lumens_per_Watt_555nm=683.002 ! [lm W-1] Lumens per Watt at 555 nm (683 exactly at 540e12 Hz)
   ! NB: Defining mean molecular weight in SI units instead of [g mol-1]
   ! keeps Avagadro's number the same and still gets rid of all those pesky factors of 1000.0
   ! High precision mmw's come from HITRAN isotopic distribution in hitran.com

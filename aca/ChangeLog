@@ -1,5 +1,11 @@
 2016-05-16  Charlie Zender  <zender@uci.edu>
 
+	* Add CIE 1951 Scotopic and 1988 revised Photopic luminosity curves
+
+	* Add broadband and spectral luminance diagnostics
+
+	* Verified illuminance calculations are reasonable, ~120000 lux brightest sunlight
+
 	* Add and verify CIE luminosity function I/O. Ready to compute lumens!
 
 2016-05-15  Charlie Zender  <zender@uci.edu>
