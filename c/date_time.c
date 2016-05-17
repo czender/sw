@@ -17,18 +17,18 @@
    make ${MY_OBJ_DIR}/date_time.o 2>&1 | more
 
    Compilation:
-   gcc -Wall -c -O -D${PVM_ARCH} ${HOME}/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
-   gcc -Wall -c -g -D${PVM_ARCH} ${HOME}/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
-   pgcc -c -g -D${PVM_ARCH} ${HOME}/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
+   gcc -Wall -c -O -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
+   gcc -Wall -c -g -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
+   pgcc -c -g -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
 
-   pathcc -c -g -D${PVM_ARCH} ${HOME}/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
+   pathcc -c -g -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
 
-   pgcc -c -g -DPGI_CC -D${PVM_ARCH} ${HOME}/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
+   pgcc -c -g -DPGI_CC -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
 
-   xlc_r -c -O -q64 -D${PVM_ARCH} ${HOME}/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
+   xlc_r -c -O -q64 -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
 
-   cc -64 -c -O -D${PVM_ARCH} ${HOME}/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
-   gcc -DSGIMP64 -mabi=64 -O2 -Wall -c ${HOME}/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o */ 
+   cc -64 -c -O -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
+   gcc -DSGIMP64 -mabi=64 -O2 -Wall -c ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o */ 
 
 /* Standard C headers */
 #include <math.h> /* sin cos cos sin 3.14159 */

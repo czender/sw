@@ -704,10 +704,10 @@ program swnb2
   integer flx_nst_net_id
   integer flx_nst_upw_id
 
-  integer lmn_dwn_TOA_id
-  integer lmn_dwn_id
-  integer lmn_dwn_sfc_id
-  integer lmn_upw_id
+  integer ilm_dwn_TOA_id
+  integer ilm_dwn_id
+  integer ilm_dwn_sfc_id
+  integer ilm_upw_id
 
   integer flx_spc_abs_SAS_id
   integer flx_spc_abs_atm_id
@@ -1085,8 +1085,8 @@ program swnb2
   real flx_nst_abs_ttl
   real flx_nst_dwn_TOA
   real flx_nst_dwn_sfc
-  real lmn_dwn_TOA
-  real lmn_dwn_sfc
+  real ilm_dwn_TOA
+  real ilm_dwn_sfc
   real rfl_bb_SAS
   real rfl_bb_sfc
   real rfl_nst_SAS
@@ -1243,8 +1243,8 @@ program swnb2
   real,dimension(:),allocatable::flx_nst_dwn !
   real,dimension(:),allocatable::flx_nst_net !
   real,dimension(:),allocatable::flx_nst_upw !
-  real,dimension(:),allocatable::lmn_dwn !
-  real,dimension(:),allocatable::lmn_upw !
+  real,dimension(:),allocatable::ilm_dwn !
+  real,dimension(:),allocatable::ilm_upw !
 
   ! Array dimensions: plr
   real,dimension(:),allocatable::plr
@@ -3616,10 +3616,10 @@ program swnb2
   if(rcd /= 0) stop "allocate() failed for flx_nst_net"
   allocate(flx_nst_upw(levp_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for flx_nst_upw"
-  allocate(lmn_dwn(levp_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for lmn_dwn"
-  allocate(lmn_upw(levp_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for lmn_upw"
+  allocate(ilm_dwn(levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for ilm_dwn"
+  allocate(ilm_upw(levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for ilm_upw"
   ! Array dimensions: plr
   allocate(plr(plr_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for plr"
@@ -6504,23 +6504,21 @@ program swnb2
         bnd_wgt_lmn(bnd_idx)=lmn_SRF(bnd_idx)
      enddo                  ! end loop over bnd
      do lev_idx=1,levp_nbr
-!        ilm_dwn(lev_idx)=0.0
-!        ilm_upw(lev_idx)=0.0
-        lmn_dwn(lev_idx)=0.0
-        lmn_upw(lev_idx)=0.0
+        ilm_dwn(lev_idx)=0.0
+        ilm_upw(lev_idx)=0.0
      enddo                     ! end loop over lev
      do bnd_idx=1,bnd_nbr
         do lev_idx=1,levp_nbr
-           lmn_dwn(lev_idx)=lmn_dwn(lev_idx)+ &
+           ilm_dwn(lev_idx)=ilm_dwn(lev_idx)+ &
                 flx_spc_dwn(bnd_idx,lev_idx)* &
                 wvl_dlt(bnd_idx)*bnd_wgt_lmn(bnd_idx)
-           lmn_upw(lev_idx)=lmn_upw(lev_idx)+ &
+           ilm_upw(lev_idx)=ilm_upw(lev_idx)+ &
                 flx_spc_upw(bnd_idx,lev_idx)* &
                 wvl_dlt(bnd_idx)*bnd_wgt_lmn(bnd_idx)
         enddo                  ! end loop over lev
      enddo                     ! end loop over bnd
-     lmn_dwn_TOA=lmn_dwn(1)
-     lmn_dwn_sfc=lmn_dwn(levp_nbr)
+     ilm_dwn_TOA=ilm_dwn(1)
+     ilm_dwn_sfc=ilm_dwn(levp_nbr)
 
   endif ! endif flt_lmn
 
@@ -6888,8 +6886,8 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'lev',nf90_float,lev_dmn_id,lev_id),sbr_nm//': dv lev')
      rcd=nf90_wrp(nf90_def_var(nc_id,'levp',nf90_float,levp_dmn_id,levp_id),sbr_nm//': dv levp')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_SRF',nf90_float,bnd_dmn_id,lmn_SRF_id),sbr_nm//': dv lmn_SRF')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_dwn',nf90_float,levp_dmn_id,lmn_dwn_id),sbr_nm//': dv lmn_dwn')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_upw',nf90_float,levp_dmn_id,lmn_upw_id),sbr_nm//': dv lmn_upw')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'ilm_dwn',nf90_float,levp_dmn_id,ilm_dwn_id),sbr_nm//': dv ilm_dwn')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'ilm_upw',nf90_float,levp_dmn_id,ilm_upw_id),sbr_nm//': dv ilm_upw')
      rcd=nf90_wrp(nf90_def_var(nc_id,'nrg_pht',nf90_float,bnd_dmn_id,nrg_pht_id),sbr_nm//': dv nrg_pht')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ntn_bb_aa',nf90_float,dim_plr_levp,ntn_bb_aa_id),sbr_nm//': dv ntn_bb_aa')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ntn_bb_mean',nf90_float,lev_dmn_id,ntn_bb_mean_id),sbr_nm//': dv ntn_bb_mean')
@@ -7065,10 +7063,10 @@ program swnb2
           sbr_nm//': dv flx_nst_dwn_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_nst_dwn_sfc',nf90_float,flx_nst_dwn_sfc_id), &
           sbr_nm//': dv flx_nst_dwn_sfc in '//__FILE__)
-     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_dwn_TOA',nf90_float,lmn_dwn_TOA_id), &
-          sbr_nm//': dv lmn_dwn_TOA in '//__FILE__)
-     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_dwn_sfc',nf90_float,lmn_dwn_sfc_id), &
-          sbr_nm//': dv lmn_dwn_sfc in '//__FILE__)
+     rcd=nf90_wrp(nf90_def_var(nc_id,'ilm_dwn_TOA',nf90_float,ilm_dwn_TOA_id), &
+          sbr_nm//': dv ilm_dwn_TOA in '//__FILE__)
+     rcd=nf90_wrp(nf90_def_var(nc_id,'ilm_dwn_sfc',nf90_float,ilm_dwn_sfc_id), &
+          sbr_nm//': dv ilm_dwn_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'slr_zen_ngl_cos',nf90_double,slr_zen_ngl_cos_id), &
           sbr_nm//': dv slr_zen_ngl_cos in '//__FILE__)
 
@@ -7355,13 +7353,13 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_SRF_id,'long_name','Luminosity spectral response function'), &
           sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_dwn_TOA_id,'long_name','Incoming illuminance at TOA'), &
+     rcd=nf90_wrp(nf90_put_att(nc_id,ilm_dwn_TOA_id,'long_name','Incoming illuminance at TOA'), &
           sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_dwn_id,'long_name','Total downwelling illuminance (direct + diffuse)'), &
+     rcd=nf90_wrp(nf90_put_att(nc_id,ilm_dwn_id,'long_name','Total downwelling illuminance (direct + diffuse)'), &
           sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_dwn_sfc_id,'long_name','Downwelling illuminance at surface'), &
+     rcd=nf90_wrp(nf90_put_att(nc_id,ilm_dwn_sfc_id,'long_name','Downwelling illuminance at surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_upw_id,'long_name','Upwelling illuminance'), &
+     rcd=nf90_wrp(nf90_put_att(nc_id,ilm_upw_id,'long_name','Upwelling illuminance'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,nrg_pht_id,'long_name','Energy of photon at band center'), &
           sbr_nm//': pa long_name in '//__FILE__)
@@ -7681,10 +7679,10 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,lev_id,'units','pascal'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,levp_id,'units','pascal'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_SRF_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_dwn_TOA_id,'units','lumen meter-2'),sbr_nm//': pa units in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_dwn_id,'units','lumen meter-2'),sbr_nm//': pa units in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_dwn_sfc_id,'units','lumen meter-2'),sbr_nm//': pa units in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_upw_id,'units','lumen meter-2'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,ilm_dwn_TOA_id,'units','lumen meter-2'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,ilm_dwn_id,'units','lumen meter-2'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,ilm_dwn_sfc_id,'units','lumen meter-2'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,ilm_upw_id,'units','lumen meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CWP_id,'units','kilogram meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,nrg_pht_id,'units','joule photon-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_bb_aa_id,'units','watt meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
@@ -7933,10 +7931,10 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,levp_id,levp),sbr_nm//': pv levp in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,mpc_CWP_id,mpc_CWP),sbr_nm//': pv mpc_CWP in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,lmn_SRF_id,lmn_SRF),sbr_nm//': pv lmn_SRF in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_var(nc_id,lmn_dwn_TOA_id,lmn_dwn_TOA),sbr_nm//': pv lmn_dwn_TOA in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_var(nc_id,lmn_dwn_id,lmn_dwn),sbr_nm//': pv lmn_dwn in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_var(nc_id,lmn_dwn_sfc_id,lmn_dwn_sfc),sbr_nm//': pv lmn_dwn_sfc in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_var(nc_id,lmn_upw_id,lmn_upw),sbr_nm//': pv lmn_upw in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,ilm_dwn_TOA_id,ilm_dwn_TOA),sbr_nm//': pv ilm_dwn_TOA in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,ilm_dwn_id,ilm_dwn),sbr_nm//': pv ilm_dwn in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,ilm_dwn_sfc_id,ilm_dwn_sfc),sbr_nm//': pv ilm_dwn_sfc in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,ilm_upw_id,ilm_upw),sbr_nm//': pv ilm_upw in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,nrg_pht_id,nrg_pht),sbr_nm//': pv nrg_pht in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ntn_bb_aa_id,ntn_bb_aa),sbr_nm//': pv ntn_bb_aa in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ntn_bb_mean_id,ntn_bb_mean),sbr_nm//': pv ntn_bb_mean in '//__FILE__)
