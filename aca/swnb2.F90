@@ -593,26 +593,32 @@ program swnb2
   integer thr_nbr           ! [nbr] OpenMP number of threads
 #endif /* not _OPENMP */
   
+  !  integer bnd_idx_brdf	! counting index BRDF
+  !integer bnd_idx_O2        ! counting index
+  !integer bnd_idx_OH        ! counting index
   integer azi_idx           ! counting index
   integer bnd_idx           ! counting index
-  !  integer bnd_idx_brdf	! counting index BRDF
+  integer bnd_idx_CH4       ! counting index
   integer bnd_idx_CO2       ! counting index
   integer bnd_idx_H2O       ! counting index
-  !integer bnd_idx_O2        ! counting index
   integer bnd_idx_O3        ! counting index
-  !integer bnd_idx_OH        ! counting index
-  integer bnd_idx_CH4        ! counting index
   integer bnd_idx_nst       ! counting index
   integer bnd_idx_tmp_O3    ! counting index
   integer chn_idx           ! counting index
   integer i21               ! counting index
-  integer lev_idx           ! counting index
-  integer levp_idx          ! counting index
-  integer lev_snw_idx       ! counting index
+  integer lev_TOA           ! counting index
+  integer levp_TOA          ! counting index
   integer lev_bnd_snw_idx   ! counting index
+  integer lev_idx           ! counting index
+  integer lev_sfc           ! counting index
+  integer levp_sfc          ! counting index
+  integer lev_snw_idx       ! counting index
+  integer levp_idx          ! counting index
   integer levp_snw_idx      ! counting index
   integer mmn_idx           ! counting index
   integer plr_idx           ! counting index
+  integer plr_ndr           ! counting index
+  integer plr_zen           ! counting index
   integer tau_idx           ! counting index
   
   integer azi_dmn_id        ! dimension ID for azi
@@ -728,12 +734,14 @@ program swnb2
   integer j_spc_NO2_sfc_id
   integer lmn_bb_aa_id
   integer lmn_spc_aa_ndr_id
+  integer lmn_spc_aa_ndr_TOA_id
   integer lmn_spc_aa_ndr_sfc_id
   integer lmn_spc_aa_sfc_id
   integer ntn_bb_aa_id
   integer ntn_bb_mean_id
   integer rfl_chn_TOA_id
   integer ntn_spc_aa_ndr_id
+  integer ntn_spc_aa_ndr_TOA_id
   integer ntn_spc_aa_ndr_sfc_id
   integer ntn_spc_aa_sfc_id
   integer ntn_spc_aa_zen_id
@@ -1160,8 +1168,10 @@ program swnb2
   real,dimension(:),allocatable::flx_spc_pht_dwn_sfc
   real,dimension(:),allocatable::j_spc_NO2_sfc
   real,dimension(:),allocatable::lmn_SRF
-  real,dimension(:),allocatable::nrg_pht
+  real,dimension(:),allocatable::lmn_spc_aa_ndr_TOA
   real,dimension(:),allocatable::lmn_spc_aa_ndr_sfc
+  real,dimension(:),allocatable::nrg_pht
+  real,dimension(:),allocatable::ntn_spc_aa_ndr_TOA
   real,dimension(:),allocatable::ntn_spc_aa_ndr_sfc
   real,dimension(:),allocatable::ntn_spc_aa_zen_sfc
   real,dimension(:),allocatable::odac_spc_aer
@@ -2142,6 +2152,9 @@ program swnb2
   if (sv_cmp_plr_ngl) then
      plr_nbr=str_nbr
   endif
+  ! Set permanent indices to avoid barenaked constants like '1'
+  plr_ndr=1
+  plr_zen=plr_nbr
   
   ! Write diagnostic strings
   call ftn_strcpylsc(src_rfr_sng,'Model reference is Zender et al. (1997) (ZBP97)'//nlc)
@@ -2348,6 +2361,12 @@ program swnb2
      call ftn_strcpylsc(stt_msm,'Multi-layer snow model: Off')
   endif
   levp_nbr=lev_nbr+1
+
+  ! Set permanent indices to avoid barenaked constants like '1'
+  lev_sfc=lev_nbr
+  levp_sfc=levp_nbr
+  lev_TOA=1
+  levp_TOA=1
   
   ! Array dimensions: lev
   allocate(RH_lqd(lev_nbr),stat=rcd)
@@ -3927,7 +3946,7 @@ program swnb2
   ! Band-independent DISORT() initialization is now complete
   ! Remaining DISORT arguments need to be set inside main band loop
   
-  ! Figure out how many total bands will be used in entire band
+  ! Compute how many total bands will be used in entire band
   ! computation by adding the number of narrow band H2O
   ! data to the O3-O2 continua. Number of pure O2-O3 bands
   ! will be number of bands from the O2-O3 continua data
@@ -4024,8 +4043,12 @@ program swnb2
   if(rcd /= 0) stop "allocate() failed for lmn_SRF"
   allocate(nrg_pht(bnd_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for nrg_pht"
+  allocate(lmn_spc_aa_ndr_TOA(bnd_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for lmn_spc_aa_ndr_TOA"
   allocate(lmn_spc_aa_ndr_sfc(bnd_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for lmn_spc_aa_ndr_sfc"
+  allocate(ntn_spc_aa_ndr_TOA(bnd_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for ntn_spc_aa_ndr_TOA"
   allocate(ntn_spc_aa_ndr_sfc(bnd_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for ntn_spc_aa_ndr_sfc"
   allocate(ntn_spc_aa_zen_sfc(bnd_nbr),stat=rcd)
@@ -4736,7 +4759,7 @@ program swnb2
   !$omp$shared(abs_cff_mss_ice,mpl_IWP,sca_cff_mss_ice,bnd_nbr_ice,wvl_min_ice,wvl_max_ice,asm_prm_ice)
   !$omp$shared(lgn_xpn_cff_Mie_ttl,asm_prm_HG_ttl,asm_prm_lqd,asm_prm_ice,asm_prm_aer,asm_prm_bga)
   !$omp$shared(flx_spc_dwn,flx_spc_dwn_dff,flx_spc_dwn_drc,flx_spc_net,flx_spc_upw)
-  !$omp$shared(ntn_bb_aa,ntn_spc_aa_ndr,ntn_spc_aa_ndr_sfc,ntn_spc_TOA)
+  !$omp$shared(ntn_bb_aa,ntn_spc_aa_ndr,ntn_spc_aa_ndr_TOA,ntn_spc_aa_ndr_sfc,ntn_spc_TOA)
   !$omp$shared(ntn_spc_aa_sfc,ntn_spc_aa_zen,ntn_spc_aa_zen_sfc,ntn_spc_chn,ntn_spc_mean)
   !$omp$shared(odac_spc_aer,odac_spc_snw,odac_spc_mpr,odac_spc_bga,odac_spc_ice,odac_spc_lqd,odal_spc_ttl)
   !$omp$shared(odsl_spc_ttl,odxc_spc_CO2,odxc_spc_H2O,odxc_spc_H2OH2O,odxc_spc_NO2)
@@ -4884,7 +4907,7 @@ program swnb2
         u_bar(1)=q_H2O(1)*phi_wgt(1)*prs_ntf(1)/grv(1)
         prs_bar(1)=q_H2O(1)*psi_wgt(1)*prs_ntf(1)*prs_ntf(1)/grv(1)
         
-        ! Sum up integrands
+        ! Sum-up integrands
         ! Recall that dp/g = mpl_mst_air ([kg m-2]) so that, e.g., q_H2O*dp/g = mpl_H2O ([kg m-2])
         ! Using stored values saves lots of floating point operations
         do lev_idx=2,levp_nbr
@@ -4894,12 +4917,12 @@ program swnb2
                 mpl_H2O(lev_idx-1)*psi_wgt(lev_idx-1)*prs(lev_idx-1)
         enddo               ! end loop over lev
         
-        ! Normalize pressure weighted mass path
+        ! Normalize pressure-weighted mass path
         do lev_idx=1,levp_nbr
            prs_bar(lev_idx)=prs_bar(lev_idx)/(u_bar(lev_idx)*prs_HITRAN)
         enddo               ! end loop over lev
         
-        ! Figure out absorption optical depth
+        ! Compute absorption optical depth
         ! NB: The transmission being computed below is an interface quantity
         ! We could also have computed the transmission of a layer as a mid-layer 
         ! quantity directly, but BPB advises against this for subtle reasons
@@ -4941,12 +4964,12 @@ program swnb2
                 B_psi_OH(bnd_idx)*tpt_dlt_Mlk_sqr(lev_idx))
         enddo               ! end loop over lev
         
-        ! U_bar and prs_bar are layer-interface quantities.
-        ! Compute top interface.
+        ! U_bar and prs_bar are layer-interface quantities
+        ! Compute top interface
         u_bar(1)=q_OH(1)*phi_wgt(1)*prs_ntf(1)/grv(1)
         prs_bar(1)=q_OH(1)*psi_wgt(1)*prs_ntf(1)*prs_ntf(1)/grv(1)
         
-        ! Sum up integrands.
+        ! Sum-up integrands
         ! Recall that dp/g = mpl_mst_air ([kg m-2]) so that, e.g.,
         ! q_OH*dp/g = mpl_OH ([kg m-2]). Using stored values
         ! saves lots of floating point operations.
@@ -4957,7 +4980,7 @@ program swnb2
                 mpl_OH(lev_idx-1)*psi_wgt(lev_idx-1)*prs(lev_idx-1)
         enddo               ! end loop over lev
         
-        ! Normalize pressure weighted mass path.
+        ! Normalize pressure-weighted mass path
         do lev_idx=1,levp_nbr
            if (u_bar(lev_idx)>0.0) then
               prs_bar(lev_idx)=prs_bar(lev_idx)/(u_bar(lev_idx)*prs_HITRAN)
@@ -4968,7 +4991,7 @@ program swnb2
            endif
         enddo               ! end loop over lev
         
-        ! Figure out absorption optical depth. 
+        ! Compute absorption optical depth
         ! NB: The transmission being computed below is an interface
         ! quantity. We could also have computed the transmission of
         ! a layer as a mid-layer quantity directly, but BPB advises
@@ -5011,12 +5034,12 @@ program swnb2
                 B_psi_O2(bnd_idx)*tpt_dlt_Mlk_sqr(lev_idx))
         enddo               ! end loop over lev
         
-        ! U_bar and prs_bar are layer-interface quantities.
-        ! Compute top interface.
+        ! U_bar and prs_bar are layer-interface quantities
+        ! Compute top interface
         u_bar(1)=q_O2(1)*phi_wgt(1)*prs_ntf(1)/grv(1)
         prs_bar(1)=q_O2(1)*psi_wgt(1)*prs_ntf(1)*prs_ntf(1)/grv(1)
         
-        ! Sum up integrands.
+        ! Sum-up integrands
         ! Recall that dp/g = mpl_mst_air ([kg m-2]) so that, e.g.,
         ! q_O2*dp/g = mpl_O2 ([kg m-2]). Using stored values
         ! saves lots of floating point operations.
@@ -5027,12 +5050,12 @@ program swnb2
                 mpl_O2(lev_idx-1)*psi_wgt(lev_idx-1)*prs(lev_idx-1)
         enddo               ! end loop over lev
         
-        ! Normalize pressure weighted mass path.
+        ! Normalize pressure-weighted mass path
         do lev_idx=1,levp_nbr
            prs_bar(lev_idx)=prs_bar(lev_idx)/(u_bar(lev_idx)*prs_HITRAN)
         enddo               ! end loop over lev
         
-        ! Figure out absorption optical depth. 
+        ! Compute absorption optical depth
         ! NB: The transmission being computed below is an interface
         ! quantity. We could also have computed the transmission of
         ! a layer as a mid-layer quantity directly, but BPB advises
@@ -5083,12 +5106,12 @@ program swnb2
                    B_psi_CO2(bnd_idx_CO2)*tpt_dlt_Mlk_sqr(lev_idx))
            enddo            ! end loop over lev
            
-           ! U_bar and prs_bar are layer-interface quantities.
-           ! Compute top interface.
+           ! U_bar and prs_bar are layer-interface quantities
+           ! Compute top interface
            u_bar(1)=q_CO2(1)*phi_wgt(1)*prs_ntf(1)/grv(1)
            prs_bar(1)=q_CO2(1)*psi_wgt(1)*prs_ntf(1)*prs_ntf(1)/grv(1)
            
-           ! Sum up integrands.
+           ! Sum-up integrands
            ! Recall that dp/g = mpl_mst_air ([kg m-2]) so that, e.g.,
            ! q_CO2*dp/g = mpl_CO2 ([kg m-2]). Using the stored values
            ! saves lots of floating point operations.
@@ -5099,12 +5122,12 @@ program swnb2
                    mpl_CO2(lev_idx-1)*psi_wgt(lev_idx-1)*prs(lev_idx-1)
            enddo            ! end loop over lev
            
-           ! Normalize pressure weighted mass path.
+           ! Normalize pressure-weighted mass path
            do lev_idx=1,levp_nbr
               prs_bar(lev_idx)=prs_bar(lev_idx)/(u_bar(lev_idx)*prs_HITRAN)
            enddo            ! end loop over lev
            
-           ! Figure out absorption optical depth. 
+           ! Compute absorption optical depth
            ! NB: The transmission being computed below is an interface
            ! quantity. We could also have computed the transmission of
            ! a layer as a mid-layer quantity directly, but BPB advises
@@ -5190,7 +5213,7 @@ program swnb2
         ! this bnd_idx are 2*bnd_idx-1 and 2*bnd_idx.
         do bnd_idx_CH4=2*bnd_idx-1,2*bnd_idx
            
-           ! i21 toggles between 1 and 2 (really between 2 and 1).
+           ! i21 toggles between 1 and 2 (really between 2 and 1)
            ! i21 is 2: lower wavenumber, lower index, higher wavelength
            ! i21 is 1: higher wavenumber, higher index, lower wavelength
            i21=mod(bnd_idx_CH4,2)+1
@@ -5205,12 +5228,12 @@ program swnb2
                    B_psi_CH4(bnd_idx_CH4)*tpt_dlt_Mlk_sqr(lev_idx))
            enddo            ! end loop over lev
            
-           ! U_bar and prs_bar are layer-interface quantities.
-           ! Compute top interface.
+           ! U_bar and prs_bar are layer-interface quantities
+           ! Compute top interface
            u_bar(1)=q_CH4(1)*phi_wgt(1)*prs_ntf(1)/grv(1)
            prs_bar(1)=q_CH4(1)*psi_wgt(1)*prs_ntf(1)*prs_ntf(1)/grv(1)
            
-           ! Sum up integrands.
+           ! Sumuup integrands
            ! Recall that dp/g = mpl_mst_air ([kg m-2]) so that, e.g.,
            ! q_CH4*dp/g = mpl_CH4 ([kg m-2]). Using the stored values
            ! saves lots of floating point operations.
@@ -5221,12 +5244,12 @@ program swnb2
                    mpl_CH4(lev_idx-1)*psi_wgt(lev_idx-1)*prs(lev_idx-1)
            enddo            ! end loop over lev
            
-           ! Normalize pressure weighted mass path.
+           ! Normalize pressure-weighted mass path
            do lev_idx=1,levp_nbr
               prs_bar(lev_idx)=prs_bar(lev_idx)/(u_bar(lev_idx)*prs_HITRAN)
            enddo            ! end loop over lev
            
-           ! Figure out absorption optical depth. 
+           ! Compute absorption optical depth
            ! NB: The transmission being computed below is an interface
            ! quantity. We could also have computed the transmission of
            ! a layer as a mid-layer quantity directly, but BPB advises
@@ -5395,7 +5418,7 @@ program swnb2
              sca_cff_mss_aer(bnd_idx)*mpl_aer(lev_idx)
      enddo                  ! end loop over lev
 
-     ! Compute background aerosol scattering/absorption optical depths.
+     ! Compute background aerosol scattering/absorption optical depths
      do lev_idx=1,lev_nbr
         odal_bga(lev_idx)= &
              abs_cff_mss_bga(bnd_idx)*mpl_bga(lev_idx)
@@ -6355,12 +6378,12 @@ program swnb2
         do azi_idx=1,azi_nbr
            lmn_spc_aa_ndr(bnd_idx,lev_idx)= &
                 lmn_spc_aa_ndr(bnd_idx,lev_idx)+ &
-                uu(1,lev_idx,azi_idx)*bnd_wgt_lmn(bnd_idx)
+                uu(plr_ndr,lev_idx,azi_idx)*bnd_wgt_lmn(bnd_idx)
            ntn_spc_aa_ndr(bnd_idx,lev_idx)= &
-                ntn_spc_aa_ndr(bnd_idx,lev_idx)+uu(1,lev_idx,azi_idx)
+                ntn_spc_aa_ndr(bnd_idx,lev_idx)+uu(plr_ndr,lev_idx,azi_idx)
            ntn_spc_aa_zen(bnd_idx,lev_idx)= &
                 ntn_spc_aa_zen(bnd_idx,lev_idx)+ &
-                uu(plr_nbr,lev_idx,azi_idx)
+                uu(plr_zen,lev_idx,azi_idx)
         enddo            ! end loop over azi
         ! Normalize _spc_aa_ intensities by wvl_dlt and azi_nbr
         lmn_spc_aa_ndr(bnd_idx,lev_idx)=lumens_per_Watt_555nm* &
@@ -6369,29 +6392,33 @@ program swnb2
              ntn_spc_aa_ndr(bnd_idx,lev_idx)/azi_nbr_wvl_dlt
         ntn_spc_aa_zen(bnd_idx,lev_idx)= &
              ntn_spc_aa_zen(bnd_idx,lev_idx)/azi_nbr_wvl_dlt
-     enddo                  ! end loop over lev
+     enddo                  ! end loop over levp
      do plr_idx=1,plr_nbr
         do azi_idx=1,azi_nbr
            lmn_spc_aa_sfc(plr_idx,bnd_idx)= &
                 lmn_spc_aa_sfc(plr_idx,bnd_idx)+ &
-                uu(plr_idx,levp_idx,azi_idx)*bnd_wgt_lmn(bnd_idx)
+                uu(plr_idx,levp_sfc,azi_idx)*bnd_wgt_lmn(bnd_idx)
            ntn_spc_aa_sfc(plr_idx,bnd_idx)= &
                 ntn_spc_aa_sfc(plr_idx,bnd_idx)+ &
-                uu(plr_idx,levp_idx,azi_idx)
+                uu(plr_idx,levp_sfc,azi_idx)
         enddo            ! end loop over azi
-     enddo                  ! end loop over plr
-     lmn_spc_aa_sfc(plr_idx,bnd_idx)=lumens_per_Watt_555nm* &
-          lmn_spc_aa_sfc(plr_idx,bnd_idx)/azi_nbr_wvl_dlt
-     ntn_spc_aa_sfc(plr_idx,bnd_idx)= &
+        lmn_spc_aa_sfc(plr_idx,bnd_idx)=lumens_per_Watt_555nm* &
+             lmn_spc_aa_sfc(plr_idx,bnd_idx)/azi_nbr_wvl_dlt
+        ntn_spc_aa_sfc(plr_idx,bnd_idx)= &
           ntn_spc_aa_sfc(plr_idx,bnd_idx)/azi_nbr_wvl_dlt
-     lmn_spc_aa_ndr_sfc(bnd_idx)=lmn_spc_aa_sfc(1,bnd_idx)
-     ntn_spc_aa_ndr_sfc(bnd_idx)=ntn_spc_aa_sfc(1,bnd_idx)
-     ntn_spc_aa_zen_sfc(bnd_idx)=ntn_spc_aa_sfc(plr_nbr,bnd_idx)
+     enddo                  ! end loop over plr
+     lmn_spc_aa_ndr_TOA(bnd_idx)=lmn_spc_aa_ndr(bnd_idx,levp_TOA)
+     lmn_spc_aa_ndr_sfc(bnd_idx)=lmn_spc_aa_sfc(plr_ndr,bnd_idx)
+     ntn_spc_aa_ndr_TOA(bnd_idx)=ntn_spc_aa_ndr(bnd_idx,levp_TOA)
+     ntn_spc_aa_ndr_sfc(bnd_idx)=ntn_spc_aa_sfc(plr_ndr,bnd_idx)
+     ntn_spc_aa_zen_sfc(bnd_idx)=ntn_spc_aa_sfc(plr_zen,bnd_idx)
      if (.false.) then
         ! 20160515: old DISORT1 method
-        ntn_spc_aa_ndr_sfc(bnd_idx)=u0u(1,levp_nbr)/ &
+        ntn_spc_aa_ndr_TOA(bnd_idx)=u0u(plr_ndr,1)/ &
              wvl_dlt(bnd_idx)
-        ntn_spc_aa_zen_sfc(bnd_idx)=u0u(plr_nbr,levp_nbr)/ &
+        ntn_spc_aa_ndr_sfc(bnd_idx)=u0u(plr_ndr,levp_sfc)/ &
+             wvl_dlt(bnd_idx)
+        ntn_spc_aa_zen_sfc(bnd_idx)=u0u(plr_zen,levp_sfc)/ &
              wvl_dlt(bnd_idx)
 
         do lev_idx=1,levp_nbr
@@ -6400,13 +6427,13 @@ program swnb2
                    u0u(plr_idx,lev_idx)
            enddo               ! end loop over plr
            ntn_spc_aa_ndr(bnd_idx,lev_idx)= &
-                u0u(1,lev_idx)/wvl_dlt(bnd_idx)
+                u0u(plr_ndr,lev_idx)/wvl_dlt(bnd_idx)
            ntn_spc_aa_zen(bnd_idx,lev_idx)= &
-                u0u(plr_nbr,lev_idx)/wvl_dlt(bnd_idx)
+                u0u(plr_zen,lev_idx)/wvl_dlt(bnd_idx)
         enddo                  ! end loop over lev
         do plr_idx=1,plr_nbr
            ntn_spc_aa_sfc(plr_idx,bnd_idx)= &
-                u0u(plr_idx,levp_nbr)/wvl_dlt(bnd_idx)
+                u0u(plr_idx,levp_sfc)/wvl_dlt(bnd_idx)
         enddo                  ! end loop over lev
      endif ! endif false
         
@@ -6488,14 +6515,14 @@ program swnb2
   enddo                     ! end loop over bnd
   do bnd_idx=1,bnd_nbr
      flx_spc_dwn_TOA(bnd_idx)=flx_spc_dwn(bnd_idx,1)
-     flx_spc_dwn_sfc(bnd_idx)=flx_spc_dwn(bnd_idx,levp_nbr)
-     flx_spc_dwn_dff_sfc(bnd_idx)=flx_spc_dwn_dff(bnd_idx,levp_nbr)
-     flx_spc_dwn_drc_sfc(bnd_idx)=flx_spc_dwn_drc(bnd_idx,levp_nbr)
+     flx_spc_dwn_sfc(bnd_idx)=flx_spc_dwn(bnd_idx,levp_sfc)
+     flx_spc_dwn_dff_sfc(bnd_idx)=flx_spc_dwn_dff(bnd_idx,levp_sfc)
+     flx_spc_dwn_drc_sfc(bnd_idx)=flx_spc_dwn_drc(bnd_idx,levp_sfc)
      flx_spc_dwn_snw(bnd_idx)=flx_spc_dwn(bnd_idx,levp_atm_nbr)
      flx_spc_upw_snw(bnd_idx)=flx_spc_upw(bnd_idx,levp_atm_nbr)
      ! Compute absorbed spectral fluxes
      flx_spc_abs_SAS(bnd_idx)=flx_spc_net(bnd_idx,1)
-     flx_spc_abs_sfc(bnd_idx)=flx_spc_net(bnd_idx,levp_nbr)
+     flx_spc_abs_sfc(bnd_idx)=flx_spc_net(bnd_idx,levp_sfc)
      flx_spc_abs_atm(bnd_idx)= &
           flx_spc_abs_SAS(bnd_idx)-flx_spc_abs_sfc(bnd_idx)
      flx_spc_abs_snw(bnd_idx)= &
@@ -6529,30 +6556,30 @@ program swnb2
   ! Initialize basic instrument quantities which will be incremented
   if (flt_lmn) then
      ! Treat luminosity computation similarly to instrument bandpass
-     do lev_idx=1,levp_nbr
-        ilm_dwn(lev_idx)=0.0
-        ilm_upw(lev_idx)=0.0
-     enddo                     ! end loop over lev
+     do levp_idx=1,levp_nbr
+        ilm_dwn(levp_idx)=0.0
+        ilm_upw(levp_idx)=0.0
+     enddo                     ! end loop over levp
      do bnd_idx=1,bnd_nbr
-        do lev_idx=1,levp_nbr
-           ilm_dwn(lev_idx)=ilm_dwn(lev_idx)+ &
+        do levp_idx=1,levp_nbr
+           ilm_dwn(levp_idx)=ilm_dwn(levp_idx)+ &
                 lumens_per_Watt_555nm* &
-                flx_spc_dwn(bnd_idx,lev_idx)* &
+                flx_spc_dwn(bnd_idx,levp_idx)* &
                 wvl_dlt(bnd_idx)*bnd_wgt_lmn(bnd_idx)
-           ilm_upw(lev_idx)=ilm_upw(lev_idx)+ &
+           ilm_upw(levp_idx)=ilm_upw(levp_idx)+ &
                 lumens_per_Watt_555nm* &
-                flx_spc_upw(bnd_idx,lev_idx)* &
+                flx_spc_upw(bnd_idx,levp_idx)* &
                 wvl_dlt(bnd_idx)*bnd_wgt_lmn(bnd_idx)
-        enddo                  ! end loop over lev
+        enddo                  ! end loop over levp
      enddo                     ! end loop over bnd
      ilm_dwn_TOA=ilm_dwn(1)
-     ilm_dwn_sfc=ilm_dwn(levp_nbr)
+     ilm_dwn_sfc=ilm_dwn(levp_sfc)
   endif ! endif flt_lmn
 
-  do lev_idx=1,levp_nbr
-     flx_nst_dwn(lev_idx)=0.0
-     flx_nst_upw(lev_idx)=0.0
-  enddo                     ! end loop over lev
+  do levp_idx=1,levp_nbr
+     flx_nst_dwn(levp_idx)=0.0
+     flx_nst_upw(levp_idx)=0.0
+  enddo                     ! end loop over levp
   ! Initialize default instrument spectral response function
   do bnd_idx=1,bnd_nbr
      bnd_wgt(bnd_idx)=1.0
@@ -6577,26 +6604,26 @@ program swnb2
      enddo                  ! end loop over bnd
   endif                     ! endif flt_nst
   do bnd_idx=1,bnd_nbr
-     do lev_idx=1,levp_nbr
-        flx_nst_dwn(lev_idx)=flx_nst_dwn(lev_idx)+ &
-             flx_spc_dwn(bnd_idx,lev_idx)*wvl_dlt(bnd_idx)*bnd_wgt(bnd_idx)
-        flx_nst_upw(lev_idx)=flx_nst_upw(lev_idx)+ &
-             flx_spc_upw(bnd_idx,lev_idx)*wvl_dlt(bnd_idx)*bnd_wgt(bnd_idx)
-     enddo                  ! end loop over lev
+     do levp_idx=1,levp_nbr
+        flx_nst_dwn(levp_idx)=flx_nst_dwn(levp_idx)+ &
+             flx_spc_dwn(bnd_idx,levp_idx)*wvl_dlt(bnd_idx)*bnd_wgt(bnd_idx)
+        flx_nst_upw(levp_idx)=flx_nst_upw(levp_idx)+ &
+             flx_spc_upw(bnd_idx,levp_idx)*wvl_dlt(bnd_idx)*bnd_wgt(bnd_idx)
+     enddo                  ! end loop over levp
   enddo                     ! end loop over bnd
-  do lev_idx=1,levp_nbr
-     flx_nst_net(lev_idx)=flx_nst_dwn(lev_idx)-flx_nst_upw(lev_idx)
-  enddo                     ! end loop over lev
+  do levp_idx=1,levp_nbr
+     flx_nst_net(levp_idx)=flx_nst_dwn(levp_idx)-flx_nst_upw(levp_idx)
+  enddo                     ! end loop over levp
   do lev_idx=1,lev_nbr
      flx_nst_abs(lev_idx)=flx_nst_net(lev_idx)-flx_nst_net(lev_idx+1)
   enddo                     ! end loop over lev
   if (flx_nst_dwn(1)>0.0) then 
      abs_nst_SAS=flx_nst_net(1)/flx_nst_dwn(1)
-     abs_nst_atm=(flx_nst_net(1)-flx_nst_net(levp_nbr))/flx_nst_dwn(1)
-     abs_nst_sfc=flx_nst_net(levp_nbr)/flx_nst_dwn(1)
+     abs_nst_atm=(flx_nst_net(1)-flx_nst_net(levp_sfc))/flx_nst_dwn(1)
+     abs_nst_sfc=flx_nst_net(levp_sfc)/flx_nst_dwn(1)
      rfl_nst_SAS=flx_nst_upw(1)/flx_nst_dwn(1)
-     rfl_nst_sfc=flx_nst_upw(levp_nbr)/flx_nst_dwn(levp_nbr)
-     trn_nst_atm=flx_nst_dwn(levp_nbr)/flx_nst_dwn(1)
+     rfl_nst_sfc=flx_nst_upw(levp_sfc)/flx_nst_dwn(levp_sfc)
+     trn_nst_atm=flx_nst_dwn(levp_sfc)/flx_nst_dwn(1)
   else
      abs_nst_SAS=0.0
      abs_nst_atm=0.0
@@ -6605,11 +6632,11 @@ program swnb2
      rfl_nst_sfc=0.0
      trn_nst_atm=0.0
   endif
-  flx_nst_abs_atm=flx_nst_net(1)-flx_nst_net(levp_nbr)
-  flx_nst_abs_sfc=flx_nst_net(levp_nbr)
+  flx_nst_abs_atm=flx_nst_net(1)-flx_nst_net(levp_sfc)
+  flx_nst_abs_sfc=flx_nst_net(levp_sfc)
   flx_nst_abs_ttl=flx_nst_net(1)
   flx_nst_dwn_TOA=flx_nst_dwn(1)
-  flx_nst_dwn_sfc=flx_nst_dwn(levp_nbr)
+  flx_nst_dwn_sfc=flx_nst_dwn(levp_sfc)
   ! End instrument computations
   ! Multi-channel instrument computations
   if (.not.mode_std) then
@@ -6684,7 +6711,7 @@ program swnb2
         abs_spc_SAS(bnd_idx)= &
              flx_spc_net(bnd_idx,1)/flx_spc_dwn_TOA(bnd_idx)
         abs_spc_sfc(bnd_idx)= &
-             flx_spc_net(bnd_idx,levp_nbr)/flx_spc_dwn_TOA(bnd_idx)
+             flx_spc_net(bnd_idx,levp_sfc)/flx_spc_dwn_TOA(bnd_idx)
      else ! flx_spc_dwn_TOA<=0
         trn_spc_atm_ttl(bnd_idx)=0.0
         rfl_spc_SAS(bnd_idx)=0.0
@@ -6716,7 +6743,7 @@ program swnb2
              j_NO2(lev_idx)+j_spc_NO2*wvl_dlt(bnd_idx)
         ! j_NO2 refers to photolysis of NO2 into O(3P) + NO
      enddo                  ! end loop over lev
-     flx_spc_act_pht_TOA(bnd_idx)=4.0*pi*ntn_spc_mean(bnd_idx,1)/nrg_pht(bnd_idx)
+     flx_spc_act_pht_TOA(bnd_idx)=4.0*pi*ntn_spc_mean(bnd_idx,lev_TOA)/nrg_pht(bnd_idx)
      flx_spc_act_pht_sfc(bnd_idx)=flx_spc_act_pht
      j_spc_NO2_sfc(bnd_idx)=j_spc_NO2
      
@@ -6726,47 +6753,47 @@ program swnb2
              ntn_spc_mean(bnd_idx,lev_idx)* &
              wvl_dlt(bnd_idx)
      enddo                  ! end loop over lev
-     do lev_idx=1,levp_nbr
-        flx_bb_dwn_drc(lev_idx)=flx_bb_dwn_drc(lev_idx)+ &
-             flx_spc_dwn_drc(bnd_idx,lev_idx)* &
+     do levp_idx=1,levp_nbr
+        flx_bb_dwn_drc(levp_idx)=flx_bb_dwn_drc(levp_idx)+ &
+             flx_spc_dwn_drc(bnd_idx,levp_idx)* &
              wvl_dlt(bnd_idx)
-        flx_bb_dwn_dff(lev_idx)=flx_bb_dwn_dff(lev_idx)+ &
-             flx_spc_dwn_dff(bnd_idx,lev_idx)* &
+        flx_bb_dwn_dff(levp_idx)=flx_bb_dwn_dff(levp_idx)+ &
+             flx_spc_dwn_dff(bnd_idx,levp_idx)* &
              wvl_dlt(bnd_idx)
-        flx_bb_upw(lev_idx)=flx_bb_upw(lev_idx)+ &
-             flx_spc_upw(bnd_idx,lev_idx)* &
+        flx_bb_upw(levp_idx)=flx_bb_upw(levp_idx)+ &
+             flx_spc_upw(bnd_idx,levp_idx)* &
              wvl_dlt(bnd_idx)
-     enddo                  ! end loop over lev
+     enddo                  ! end loop over levp
   enddo                     ! end loop over bnd
   
   ! Process broadband fluxes
-  do lev_idx=1,levp_nbr
-     flx_bb_dwn(lev_idx)=flx_bb_dwn_drc(lev_idx)+flx_bb_dwn_dff(lev_idx)
-     flx_bb_net(lev_idx)=flx_bb_dwn(lev_idx)-flx_bb_upw(lev_idx)
-  enddo                     ! end loop over lev
+  do levp_idx=1,levp_nbr
+     flx_bb_dwn(levp_idx)=flx_bb_dwn_drc(levp_idx)+flx_bb_dwn_dff(levp_idx)
+     flx_bb_net(levp_idx)=flx_bb_dwn(levp_idx)-flx_bb_upw(levp_idx)
+  enddo                     ! end loop over levp
   
   ! Compute scalar diagnostics
   ! NB: Somewhat strange definitions here---
   ! Atmospheric quantities normalized by TOA insolation
   ! Snowpack quantities normalized by snowpack insolation
   abs_bb_SAS=flx_bb_net(1)/max(flx_bb_dwn(1),real_tiny)
-  abs_bb_atm=(flx_bb_net(1)-flx_bb_net(levp_nbr))/max(flx_bb_dwn(1),real_tiny)
-  abs_bb_sfc=flx_bb_net(levp_nbr)/max(flx_bb_dwn(1),real_tiny)
+  abs_bb_atm=(flx_bb_net(1)-flx_bb_net(levp_sfc))/max(flx_bb_dwn(1),real_tiny)
+  abs_bb_sfc=flx_bb_net(levp_sfc)/max(flx_bb_dwn(1),real_tiny)
   abs_bb_snw=flx_bb_net(levp_atm_nbr)/max(flx_bb_dwn(levp_atm_nbr),real_tiny)
   rfl_bb_SAS=flx_bb_upw(1)/max(flx_bb_dwn(1),real_tiny)
-  rfl_bb_sfc=flx_bb_upw(levp_nbr)/max(flx_bb_dwn(levp_nbr),real_tiny)
+  rfl_bb_sfc=flx_bb_upw(levp_sfc)/max(flx_bb_dwn(levp_sfc),real_tiny)
   rfl_bb_snw=flx_bb_upw(levp_atm_nbr)/max(flx_bb_dwn(levp_atm_nbr),real_tiny)
-  trn_bb_atm=flx_bb_dwn(levp_nbr)/max(flx_bb_dwn(1),real_tiny)
-  trn_bb_snw=flx_bb_dwn(levp_nbr)/max(flx_bb_dwn(levp_atm_nbr),real_tiny)
+  trn_bb_atm=flx_bb_dwn(levp_sfc)/max(flx_bb_dwn(1),real_tiny)
+  trn_bb_snw=flx_bb_dwn(levp_sfc)/max(flx_bb_dwn(levp_atm_nbr),real_tiny)
   flx_bb_abs_ttl=flx_bb_net(1)
-  flx_bb_abs_sfc=flx_bb_net(levp_nbr)
-  flx_bb_abs_atm=flx_bb_net(1)-flx_bb_net(levp_nbr)
-  flx_bb_abs_snw=flx_bb_net(levp_atm_nbr)-flx_bb_net(levp_nbr)
+  flx_bb_abs_sfc=flx_bb_net(levp_sfc)
+  flx_bb_abs_atm=flx_bb_net(1)-flx_bb_net(levp_sfc)
+  flx_bb_abs_snw=flx_bb_net(levp_atm_nbr)-flx_bb_net(levp_sfc)
   flx_bb_dwn_TOA=flx_bb_dwn(1)
   flx_bb_upw_TOA=flx_bb_upw(1)
-  flx_bb_dwn_sfc=flx_bb_dwn(levp_nbr)
-  flx_bb_dwn_dff_sfc=flx_bb_dwn_dff(levp_nbr)
-  flx_bb_dwn_drc_sfc=flx_bb_dwn_drc(levp_nbr)
+  flx_bb_dwn_sfc=flx_bb_dwn(levp_sfc)
+  flx_bb_dwn_dff_sfc=flx_bb_dwn_dff(levp_sfc)
+  flx_bb_dwn_drc_sfc=flx_bb_dwn_drc(levp_sfc)
   flx_bb_dwn_snw=flx_bb_dwn(levp_atm_nbr)
   
   do lev_idx=1,lev_nbr
@@ -6776,7 +6803,7 @@ program swnb2
           (spc_heat_mst_air(lev_idx)*prs_dlt(lev_idx))
 !     write (6,'(a,i2,a,es8.1)') ' flurt flx_bb_abs(',lev_idx,') =  ',flx_bb_abs(lev_idx)
   enddo                     ! end loop over lev
-  ! write (6,'(i4,a,es8.1)') bnd_idx,' flurt flx_spc_dwn(1690,levp_nbr) =  ',flx_spc_dwn(1690,levp_nbr)
+  ! write (6,'(i4,a,es8.1)') bnd_idx,' flurt flx_spc_dwn(1690,levp_sfc) =  ',flx_spc_dwn(1690,levp_sfc)
   
   ! Compute spectral diagnostics that depend on total fluxes
   do bnd_idx=1,bnd_nbr
@@ -7073,8 +7100,12 @@ program swnb2
           sbr_nm//': dv flx_frc_dwn_sfc_blr')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_spc_pht_dwn_sfc',nf90_float,bnd_dmn_id,flx_spc_pht_dwn_sfc_id), &
           sbr_nm//': dv flx_spc_pht_dwn_sfc')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_spc_aa_ndr_TOA',nf90_float,bnd_dmn_id,lmn_spc_aa_ndr_TOA_id), &
+          sbr_nm//': dv lmn_spc_aa_ndr_TOA')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_spc_aa_ndr_sfc',nf90_float,bnd_dmn_id,lmn_spc_aa_ndr_sfc_id), &
           sbr_nm//': dv lmn_spc_aa_ndr_sfc')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'ntn_spc_aa_ndr_TOA',nf90_float,bnd_dmn_id,ntn_spc_aa_ndr_TOA_id), &
+          sbr_nm//': dv ntn_spc_aa_ndr_TOA')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ntn_spc_aa_ndr_sfc',nf90_float,bnd_dmn_id,ntn_spc_aa_ndr_sfc_id), &
           sbr_nm//': dv ntn_spc_aa_ndr_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ntn_spc_aa_zen_sfc',nf90_float,bnd_dmn_id,ntn_spc_aa_zen_sfc_id), &
@@ -7395,6 +7426,8 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_id,'long_name','Broadband azimuthally averaged luminance'), &
           sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_TOA_id,'long_name','Spectral luminance of nadir radiation at TOA'), &
+          sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_sfc_id,'long_name','Spectral luminance of nadir radiation at surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_sfc_id,'long_name','Spectral luminance of radiation at surface'), &
@@ -7408,6 +7441,8 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_bb_mean_id,'long_name','Broadband mean intensity'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_spc_aa_ndr_id,'long_name','Spectral intensity of nadir radiation'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,ntn_spc_aa_ndr_TOA_id,'long_name','Spectral intensity of nadir radiation at TOA'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_spc_aa_ndr_sfc_id,'long_name','Spectral intensity of nadir radiation at surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
@@ -7836,7 +7871,11 @@ program swnb2
           sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_sfc_id,'units','lumen meter-2 meter-1 sterradian-1'), &
           sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_TOA_id,'units','lumen meter-2 meter-1 sterradian-1'), &
+          sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_sfc_id,'units','lumen meter-2 meter-1 sterradian-1'), &
+          sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,ntn_spc_aa_ndr_TOA_id,'units','watt meter-2 meter-1 sterradian-1'), &
           sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_spc_aa_ndr_sfc_id,'units','watt meter-2 meter-1 sterradian-1'), &
           sbr_nm//': pa units in '//__FILE__)
@@ -8107,8 +8146,12 @@ program swnb2
           sbr_nm//': pv flx_spc_act_pht_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_spc_pht_dwn_sfc_id,flx_spc_pht_dwn_sfc), &
           sbr_nm//': pv flx_spc_pht_dwn_sfc in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,lmn_spc_aa_ndr_TOA_id,lmn_spc_aa_ndr_TOA), &
+          sbr_nm//': pv lmn_spc_aa_ndr_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,lmn_spc_aa_ndr_sfc_id,lmn_spc_aa_ndr_sfc), &
           sbr_nm//': pv lmn_spc_aa_ndr_sfc in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,ntn_spc_aa_ndr_TOA_id,ntn_spc_aa_ndr_TOA), &
+          sbr_nm//': pv ntn_spc_aa_ndr_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ntn_spc_aa_ndr_sfc_id,ntn_spc_aa_ndr_sfc), &
           sbr_nm//': pv ntn_spc_aa_ndr_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ntn_spc_aa_zen_sfc_id,ntn_spc_aa_zen_sfc), &
@@ -8252,10 +8295,12 @@ program swnb2
   if(rcd /= 0) stop 'deallocate() failed for j_spc_NO2_sfc'
   if (allocated(lmn_SRF)) deallocate(lmn_SRF,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for lmn_SRF'
-  if (allocated(lmn_spc_aa_ndr_sfc)) deallocate(lmn_spc_aa_ndr_sfc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for lmn_spc_aa_ndr_sfc'
+  if (allocated(lmn_spc_aa_ndr_TOA)) deallocate(lmn_spc_aa_ndr_TOA,stat=rcd)
+  if(rcd /= 0) stop 'deallocate() failed for lmn_spc_aa_ndr_TOA'
   if (allocated(nrg_pht)) deallocate(nrg_pht,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for nrg_pht'
+  if (allocated(ntn_spc_aa_ndr_TOA)) deallocate(ntn_spc_aa_ndr_TOA,stat=rcd)
+  if(rcd /= 0) stop 'deallocate() failed for ntn_spc_aa_ndr_TOA'
   if (allocated(ntn_spc_aa_ndr_sfc)) deallocate(ntn_spc_aa_ndr_sfc,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for ntn_spc_aa_ndr_sfc'
   if (allocated(ntn_spc_aa_zen_sfc)) deallocate(ntn_spc_aa_zen_sfc,stat=rcd)
