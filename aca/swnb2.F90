@@ -142,8 +142,9 @@ program swnb2
   ! -z solar zenith angle cosine
   ! -Z number of user azimuthal angles
   
-  ! Key band indices:
+  ! Key band indices (1-based):
   ! bnd_idx = 800, wavelength = 1.0005 microns
+  ! bnd_idx = 1592, wavelength = 0.555 microns
   ! bnd_idx = 1593, wavelength = 0.55 microns
   ! bnd_idx = 1603, wavelength = 0.5 microns
   ! bnd_idx = 1229, wavelength = 0.700035 microns
@@ -1788,7 +1789,7 @@ program swnb2
   fl_brdf='brdf.nc'//nlc  ! BRDF file
   
   azi_nbr=azi_nbr_max
-  bnd_dbg=1603
+  bnd_dbg=1592
   brdf_typ=1      ! Default BRDF
   cmd_ln_alb=.false.
   cmd_ln_alb_sfc_NIR_dff=.false.
@@ -1854,13 +1855,13 @@ program swnb2
   odxc_obs_mpr=0.0 ! [frc] Column impurity extinction optical depth 
   odxc_obs_snw=0.0 ! [frc] Column snow extinction optical depth 
   pi=4.0*atan(1.0)
-  plr_nbr=2
+  plr_nbr=4
   rcd=nf90_noerr              ! nf90_noerr == 0
   single_bnd_computation=.false.
   slr_cst=slr_cst_CCM
   slr_zen_ngl_cos_cmd_ln=mss_val ! [frc] Cosine solar zenith angle
   str_nbr=4
-  sv_cmp_plr_ngl=.true.
+  sv_cmp_plr_ngl=.false.
   sv_cmp_tau=.false.
   sv_ntn=.false.
   top_lvl=.false.
@@ -3892,8 +3893,7 @@ program swnb2
   ibcnd=0
   
   ! Set solar zenith angle cosine
-  ! Beware of using 0.5 when str_nbr/2 is odd---
-  ! it is a quadrature point and can crash DISORT.
+  ! Beware of using 0.5 when str_nbr/2 is odd---it is a quadrature point and can crash DISORT
   umu0=slr_zen_ngl_cos
   
   ! Set azimuth angle of incident sunlight
@@ -4427,15 +4427,15 @@ program swnb2
      j_NO2(lev_idx)=0.0
      ntn_bb_mean(lev_idx)=0.0
   enddo                     ! end loop over lev
-  do lev_idx=1,levp_nbr
+  do levp_idx=1,levp_nbr
      do plr_idx=1,plr_nbr
-        lmn_bb_aa(plr_idx,lev_idx)=0.0
-        ntn_bb_aa(plr_idx,lev_idx)=0.0
+        lmn_bb_aa(plr_idx,levp_idx)=0.0
+        ntn_bb_aa(plr_idx,levp_idx)=0.0
      enddo                  ! end loop over plr
-     flx_bb_dwn_drc(lev_idx)=0.0
-     flx_bb_dwn_dff(lev_idx)=0.0
-     flx_bb_upw(lev_idx)=0.0
-  enddo                     ! end loop over lev
+     flx_bb_dwn_drc(levp_idx)=0.0
+     flx_bb_dwn_dff(levp_idx)=0.0
+     flx_bb_upw(levp_idx)=0.0
+  enddo                     ! end loop over levp
   
   ! Initialize counters either incremented or decremented in main loop over bands
   
@@ -5900,6 +5900,9 @@ program swnb2
      ! 2. Instruction to multiply by pi to convert isotropic fisot to horizontal flux
      ! Next line converts horizontal diffuse flux to isotropic radiance with 1/pi
      fisot=slr_cst_xnt_fac*flx_slr_frc(bnd_idx)*(1.0-flx_frc_drc_TOA)/pi
+     if (fisot < 0.0) then
+        call abort
+     endif
      ! test for JGG 20080925
      ! fisot=0.2*fbeam
   
@@ -6356,8 +6359,8 @@ program swnb2
      
      ! NB: Possible bug in current DISORT() documentation
      ! Intensities are returned in arrays in order of descending cosine of polar angle
-     ! ndr = nadir  = travelling towards nadir
-     ! zen = zenith = travelling towards zenith
+     ! ndr = nadir  = travelling towards nadir  = downwelling
+     ! zen = zenith = travelling towards zenith = upwelling
      ! 20160515: Recover azimuthally averaged intensites from DISORT2 quantities
      azi_nbr_wvl_dlt=azi_nbr*wvl_dlt(bnd_idx)
      do levp_idx=1,levp_nbr
@@ -6486,8 +6489,7 @@ program swnb2
   
   if (dbg_lvl>dbg_off) write (6,'(/)')
   
-  ! If we are storing values at computational angles then
-  ! they should have been returned in umu array.
+  ! Computational angles are returned in umu array
   if (sv_cmp_plr_ngl) then
      do plr_idx=1,plr_nbr
         plr_cos(plr_idx)=umu(plr_idx)
