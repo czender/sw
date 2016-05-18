@@ -1753,7 +1753,8 @@ program swnb2
   ! DISORT() output variables:
   real     rfldir( maxulv ), rfldn( maxulv ), flup( maxulv ), &
        dfdt( maxulv ), uavg( maxulv ), u0u( maxumu, maxulv ), &
-       uu( maxumu, maxulv, maxphi ), albmed( maxumu ), &
+       uu( maxumu, maxulv, maxphi ), albmed( maxumu ), & 
+!       uu( maxumu, 0:maxulv, maxphi ), albmed( maxumu ), & ! dbg fxm 20160517
        trnmed( maxumu )
   
   ! Main code
@@ -1860,7 +1861,7 @@ program swnb2
   slr_zen_ngl_cos_cmd_ln=mss_val ! [frc] Cosine solar zenith angle
   str_nbr=4
   sv_cmp_plr_ngl=.true.
-  sv_cmp_tau=.true.
+  sv_cmp_tau=.false.
   sv_ntn=.false.
   top_lvl=.false.
   tst_case_HG=.false.
@@ -5841,28 +5842,23 @@ program swnb2
         pmom(2,lev_idx)=pmom(2,lev_idx)+sca_frc_Ray(lev_idx)*0.1
      end do
 
-     if (.not.sv_cmp_tau) then 
-        
-        ! If usrtau==true. then place levels at top and bottom of atmosphere 
-        ! and at computational levels in between. 
-        ! This is same as setting usrtau=.false.
-        ! There is not much point (yet) setting user levels to something else, e.g., 
-        ! evenly spaced in optical depth, or at cloud top and bottom of cloud. 
-        ! However, a reason may arise someday 
-        ! In that case all radiant quantities output to netCDF must be 
-        ! dimensioned by tau_nbr instead of levp_nbr.
-        tau(1)=0.0
-        do tau_idx=2,tau_nbr
-           tau(tau_idx)=tau(tau_idx-1)+odxl_spc_ttl(bnd_idx,tau_idx-1)
-        end do              ! end loop over tau
-        
-        ntau=tau_nbr
-        do tau_idx=1,tau_nbr
-           utau(tau_idx)=tau(tau_idx)
-        end do              ! end loop over tau
-     else
+     ntau=tau_nbr
+     utau(1)=0.0
+     do tau_idx=2,tau_nbr
+        utau(tau_idx)=utau(tau_idx-1)+odxl_spc_ttl(bnd_idx,tau_idx-1)
+     end do              ! end loop over tau
+     if (bnd_idx==bnd_dbg) then
         do tau_idx=1,tau_nbr
            tau(tau_idx)=utau(tau_idx)
+        end do              ! end loop over tau
+     endif ! endif dbg
+
+     if (.not.sv_cmp_tau) then 
+        ! usrtau==.true. places levels same as usrtau=.false., at top and bottom atmosphere levels and computational levels between
+        ! Setting user levels to something else, e.g., evenly spaced in optical depth, or at cloud top and bottom of cloud
+        ! would reaquire dimensioning radiant quantities output to netCDF by tau_nbr instead of levp_nbr
+        do tau_idx=1,tau_nbr
+           utau(tau_idx)=utau(tau_idx)
         end do              ! end loop over tau
      endif                  ! end if setting user defined levels
      
@@ -6338,18 +6334,18 @@ program swnb2
              0.5*(uavg(lev_idx)+uavg(lev_idx+1))/ &
              wvl_dlt(bnd_idx)
      enddo                  ! end loop over lev
-     do lev_idx=1,levp_nbr
-        flx_spc_dwn_drc(bnd_idx,lev_idx)=rfldir(lev_idx)/ &
+     do levp_idx=1,levp_nbr
+        flx_spc_dwn_drc(bnd_idx,levp_idx)=rfldir(levp_idx)/ &
              wvl_dlt(bnd_idx)
-        flx_spc_dwn_dff(bnd_idx,lev_idx)=rfldn(lev_idx)/ &
+        flx_spc_dwn_dff(bnd_idx,levp_idx)=rfldn(levp_idx)/ &
              wvl_dlt(bnd_idx)
-        flx_spc_dwn(bnd_idx,lev_idx)= &
-             flx_spc_dwn_drc(bnd_idx,lev_idx)+ &
-             flx_spc_dwn_dff(bnd_idx,lev_idx)
-        flx_spc_upw(bnd_idx,lev_idx)=flup(lev_idx)/ &
+        flx_spc_dwn(bnd_idx,levp_idx)= &
+             flx_spc_dwn_drc(bnd_idx,levp_idx)+ &
+             flx_spc_dwn_dff(bnd_idx,levp_idx)
+        flx_spc_upw(bnd_idx,levp_idx)=flup(levp_idx)/ &
              wvl_dlt(bnd_idx)
-        flx_spc_net(bnd_idx,lev_idx)= &
-             flx_spc_dwn(bnd_idx,lev_idx)-flx_spc_upw(bnd_idx,lev_idx)
+        flx_spc_net(bnd_idx,levp_idx)= &
+             flx_spc_dwn(bnd_idx,levp_idx)-flx_spc_upw(bnd_idx,levp_idx)
      enddo                  ! end loop over lev
      
      ! In DISORT1 u0u returned azimuthally averaged intensities at user polar angles
@@ -6364,39 +6360,39 @@ program swnb2
      ! zen = zenith = travelling towards zenith
      ! 20160515: Recover azimuthally averaged intensites from DISORT2 quantities
      azi_nbr_wvl_dlt=azi_nbr*wvl_dlt(bnd_idx)
-     do lev_idx=1,levp_nbr
+     do levp_idx=1,levp_nbr
         do plr_idx=1,plr_nbr
            do azi_idx=1,azi_nbr
-              lmn_bb_aa(plr_idx,lev_idx)=lmn_bb_aa(plr_idx,lev_idx)+ &
-                   uu(plr_idx,lev_idx,azi_idx)*bnd_wgt_lmn(bnd_idx)
-              ntn_bb_aa(plr_idx,lev_idx)=ntn_bb_aa(plr_idx,lev_idx)+ &
-                   uu(plr_idx,lev_idx,azi_idx)
+              lmn_bb_aa(plr_idx,levp_idx)=lmn_bb_aa(plr_idx,levp_idx)+ &
+                   uu(plr_idx,levp_idx,azi_idx)*bnd_wgt_lmn(bnd_idx)
+              ntn_bb_aa(plr_idx,levp_idx)=ntn_bb_aa(plr_idx,levp_idx)+ &
+                   uu(plr_idx,levp_idx,azi_idx)
            enddo            ! end loop over azi
            ! Normalize _aa_ intensities by azi_nbr
            ! Do NOT normalize _bb_ intensities by wvl_dlt
-           lmn_bb_aa(plr_idx,lev_idx)=lumens_per_Watt_555nm* &
-                lmn_bb_aa(plr_idx,lev_idx)/azi_nbr
-           ntn_bb_aa(plr_idx,lev_idx)= &
-                ntn_bb_aa(plr_idx,lev_idx)/azi_nbr
+           lmn_bb_aa(plr_idx,levp_idx)=lumens_per_Watt_555nm* &
+                lmn_bb_aa(plr_idx,levp_idx)/azi_nbr
+           ntn_bb_aa(plr_idx,levp_idx)= &
+                ntn_bb_aa(plr_idx,levp_idx)/azi_nbr
         enddo               ! end loop over plr
         
         do azi_idx=1,azi_nbr
-           lmn_spc_aa_ndr(bnd_idx,lev_idx)= &
-                lmn_spc_aa_ndr(bnd_idx,lev_idx)+ &
-                uu(plr_ndr,lev_idx,azi_idx)*bnd_wgt_lmn(bnd_idx)
-           ntn_spc_aa_ndr(bnd_idx,lev_idx)= &
-                ntn_spc_aa_ndr(bnd_idx,lev_idx)+uu(plr_ndr,lev_idx,azi_idx)
-           ntn_spc_aa_zen(bnd_idx,lev_idx)= &
-                ntn_spc_aa_zen(bnd_idx,lev_idx)+ &
-                uu(plr_zen,lev_idx,azi_idx)
+           lmn_spc_aa_ndr(bnd_idx,levp_idx)= &
+                lmn_spc_aa_ndr(bnd_idx,levp_idx)+ &
+                uu(plr_ndr,levp_idx,azi_idx)*bnd_wgt_lmn(bnd_idx)
+           ntn_spc_aa_ndr(bnd_idx,levp_idx)= &
+                ntn_spc_aa_ndr(bnd_idx,levp_idx)+uu(plr_ndr,levp_idx,azi_idx)
+           ntn_spc_aa_zen(bnd_idx,levp_idx)= &
+                ntn_spc_aa_zen(bnd_idx,levp_idx)+ &
+                uu(plr_zen,levp_idx,azi_idx)
         enddo            ! end loop over azi
         ! Normalize _spc_aa_ intensities by wvl_dlt and azi_nbr
-        lmn_spc_aa_ndr(bnd_idx,lev_idx)=lumens_per_Watt_555nm* &
-             lmn_spc_aa_ndr(bnd_idx,lev_idx)/azi_nbr_wvl_dlt
-        ntn_spc_aa_ndr(bnd_idx,lev_idx)= &
-             ntn_spc_aa_ndr(bnd_idx,lev_idx)/azi_nbr_wvl_dlt
-        ntn_spc_aa_zen(bnd_idx,lev_idx)= &
-             ntn_spc_aa_zen(bnd_idx,lev_idx)/azi_nbr_wvl_dlt
+        lmn_spc_aa_ndr(bnd_idx,levp_idx)=lumens_per_Watt_555nm* &
+             lmn_spc_aa_ndr(bnd_idx,levp_idx)/azi_nbr_wvl_dlt
+        ntn_spc_aa_ndr(bnd_idx,levp_idx)= &
+             ntn_spc_aa_ndr(bnd_idx,levp_idx)/azi_nbr_wvl_dlt
+        ntn_spc_aa_zen(bnd_idx,levp_idx)= &
+             ntn_spc_aa_zen(bnd_idx,levp_idx)/azi_nbr_wvl_dlt
      enddo                  ! end loop over levp
      do plr_idx=1,plr_nbr
         do azi_idx=1,azi_nbr
@@ -6414,7 +6410,8 @@ program swnb2
      enddo                  ! end loop over plr
      lmn_spc_aa_ndr_TOA(bnd_idx)=lmn_spc_aa_ndr(bnd_idx,levp_TOA)
      lmn_spc_aa_ndr_sfc(bnd_idx)=lmn_spc_aa_sfc(plr_ndr,bnd_idx)
-     ntn_spc_aa_ndr_TOA(bnd_idx)=ntn_spc_aa_ndr(bnd_idx,levp_TOA)
+     ntn_spc_aa_ndr_TOA(bnd_idx)=ntn_spc_aa_ndr(bnd_idx,levp_TOA) ! dbg fxm 20160517 these can be negative
+     !      ntn_spc_aa_ndr_TOA(bnd_idx)=ntn_spc_aa_ndr(bnd_idx,2) ! dbg fxm 20160517 these are positive-definite
      ntn_spc_aa_ndr_sfc(bnd_idx)=ntn_spc_aa_sfc(plr_ndr,bnd_idx)
      ntn_spc_aa_zen_sfc(bnd_idx)=ntn_spc_aa_sfc(plr_zen,bnd_idx)
      if (.false.) then
@@ -6426,15 +6423,15 @@ program swnb2
         ntn_spc_aa_zen_sfc(bnd_idx)=u0u(plr_zen,levp_sfc)/ &
              wvl_dlt(bnd_idx)
 
-        do lev_idx=1,levp_nbr
+        do levp_idx=1,levp_nbr
            do plr_idx=1,plr_nbr
-              ntn_bb_aa(plr_idx,lev_idx)=ntn_bb_aa(plr_idx,lev_idx)+ &
-                   u0u(plr_idx,lev_idx)
+              ntn_bb_aa(plr_idx,levp_idx)=ntn_bb_aa(plr_idx,levp_idx)+ &
+                   u0u(plr_idx,levp_idx)
            enddo               ! end loop over plr
-           ntn_spc_aa_ndr(bnd_idx,lev_idx)= &
-                u0u(plr_ndr,lev_idx)/wvl_dlt(bnd_idx)
-           ntn_spc_aa_zen(bnd_idx,lev_idx)= &
-                u0u(plr_zen,lev_idx)/wvl_dlt(bnd_idx)
+           ntn_spc_aa_ndr(bnd_idx,levp_idx)= &
+                u0u(plr_ndr,levp_idx)/wvl_dlt(bnd_idx)
+           ntn_spc_aa_zen(bnd_idx,levp_idx)= &
+                u0u(plr_zen,levp_idx)/wvl_dlt(bnd_idx)
         enddo                  ! end loop over lev
         do plr_idx=1,plr_nbr
            ntn_spc_aa_sfc(plr_idx,bnd_idx)= &
@@ -6443,11 +6440,11 @@ program swnb2
      endif ! endif false
         
      if (bnd_idx==bnd_dbg) then
-        do lev_idx=1,levp_nbr
+        do levp_idx=1,levp_nbr
            do plr_idx=1,plr_nbr
               do azi_idx=1,azi_nbr
-                 ntn_spc_chn(azi_idx,plr_idx,lev_idx)= &
-                      uu(plr_idx,lev_idx,azi_idx)/wvl_dlt(bnd_idx)
+                 ntn_spc_chn(azi_idx,plr_idx,levp_idx)= &
+                      uu(plr_idx,levp_idx,azi_idx)/wvl_dlt(bnd_idx)
               enddo   ! end loop over azi
            enddo      ! end loop over plr
         enddo         ! end loop over lev
@@ -6463,9 +6460,9 @@ program swnb2
 !     if (sv_ntn) then
 !        do azi_idx=1,azi_nbr
 !           do plr_idx=1,plr_nbr
-!             do lev_idx=1,levp_nbr
-!                 ntn_spc_aa(plr_idx,bnd_idx,lev_idx)= &
-!                      u0u(plr_idx,lev_idx)/wvl_dlt(bnd_idx)
+!             do levp_idx=1,levp_nbr
+!                 ntn_spc_aa(plr_idx,bnd_idx,levp_idx)= &
+!                      u0u(plr_idx,levp_idx)/wvl_dlt(bnd_idx)
 !              enddo         ! end loop over lev
 !           enddo            ! end loop over plr
 !        enddo               ! end loop over azi
@@ -6923,10 +6920,10 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'abs_spc_SAS',nf90_float,bnd_dmn_id,abs_spc_SAS_id),sbr_nm//': dv abs_spc_SAS')
      rcd=nf90_wrp(nf90_def_var(nc_id,'abs_spc_atm',nf90_float,bnd_dmn_id,abs_spc_atm_id),sbr_nm//': dv abs_spc_atm')
      rcd=nf90_wrp(nf90_def_var(nc_id,'abs_spc_sfc',nf90_float,bnd_dmn_id,abs_spc_sfc_id),sbr_nm//': dv abs_spc_sfc')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'alt_ntf',nf90_float,levp_dmn_id,alt_ntf_id),sbr_nm//': dv alt_ntf')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'azi',nf90_float,azi_dmn_id,azi_id),sbr_nm//': dv azi')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'azi_dgr',nf90_float,azi_dmn_id,azi_dgr_id),sbr_nm//': dv azi_dgr')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'bnd',nf90_float,bnd_dmn_id,bnd_id),sbr_nm//': dv bnd')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'alt_ntf',nf90_double,levp_dmn_id,alt_ntf_id),sbr_nm//': dv alt_ntf')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'azi',nf90_double,azi_dmn_id,azi_id),sbr_nm//': dv azi')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'azi_dgr',nf90_double,azi_dmn_id,azi_dgr_id),sbr_nm//': dv azi_dgr')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'bnd',nf90_double,bnd_dmn_id,bnd_id),sbr_nm//': dv bnd')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_abs',nf90_float,lev_dmn_id,flx_bb_abs_id),sbr_nm//': dv flx_bb_abs')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_dwn',nf90_float,levp_dmn_id,flx_bb_dwn_id),sbr_nm//': dv flx_bb_dwn')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_dwn_dff',nf90_float,levp_dmn_id,flx_bb_dwn_dff_id),sbr_nm//': dv flx_bb_dwn_dff')
@@ -6944,8 +6941,8 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'htg_rate_bb',nf90_float,lev_dmn_id,htg_rate_bb_id),sbr_nm//': dv htg_rate_bb')
      rcd=nf90_wrp(nf90_def_var(nc_id,'j_NO2',nf90_float,lev_dmn_id,j_NO2_id),sbr_nm//': dv j_NO2')
      rcd=nf90_wrp(nf90_def_var(nc_id,'j_spc_NO2_sfc',nf90_float,bnd_dmn_id,j_spc_NO2_sfc_id),sbr_nm//': dv j_spc_NO2_sfc')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'lev',nf90_float,lev_dmn_id,lev_id),sbr_nm//': dv lev')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'levp',nf90_float,levp_dmn_id,levp_id),sbr_nm//': dv levp')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'lev',nf90_double,lev_dmn_id,lev_id),sbr_nm//': dv lev')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'levp',nf90_double,levp_dmn_id,levp_id),sbr_nm//': dv levp')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_SRF',nf90_float,bnd_dmn_id,lmn_SRF_id),sbr_nm//': dv lmn_SRF')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ilm_dwn',nf90_float,levp_dmn_id,ilm_dwn_id),sbr_nm//': dv ilm_dwn')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ilm_upw',nf90_float,levp_dmn_id,ilm_upw_id),sbr_nm//': dv ilm_upw')
@@ -6996,9 +6993,9 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'odxl_obs_mpr',nf90_float,lev_dmn_id,odxl_obs_mpr_id),sbr_nm//': dv odxl_obs_mpr')
      rcd=nf90_wrp(nf90_def_var(nc_id,'odxl_obs_snw',nf90_float,lev_dmn_id,odxl_obs_snw_id),sbr_nm//': dv odxl_obs_snw')
      rcd=nf90_wrp(nf90_def_var(nc_id,'odxl_obs_bga',nf90_float,lev_dmn_id,odxl_obs_bga_id),sbr_nm//': dv odxl_obs_bga')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'plr',nf90_float,plr_dmn_id,plr_id),sbr_nm//': dv plr')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'plr_cos',nf90_float,plr_dmn_id,plr_cos_id),sbr_nm//': dv plr_cos')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'plr_dgr',nf90_float,plr_dmn_id,plr_dgr_id),sbr_nm//': dv plr_dgr')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'plr',nf90_double,plr_dmn_id,plr_id),sbr_nm//': dv plr')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'plr_cos',nf90_double,plr_dmn_id,plr_cos_id),sbr_nm//': dv plr_cos')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'plr_dgr',nf90_double,plr_dmn_id,plr_dgr_id),sbr_nm//': dv plr_dgr')
      rcd=nf90_wrp(nf90_def_var(nc_id,'rfl_spc_SAS',nf90_float,bnd_dmn_id,rfl_spc_SAS_id),sbr_nm//': dv rfl_spc_SAS')
      rcd=nf90_wrp(nf90_def_var(nc_id,'alb_spc_snw',nf90_float,bnd_dmn_id,alb_spc_snw_id),sbr_nm//': dv alb_spc_snw')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_spc_abs_snw',nf90_float,bnd_dmn_id,flx_spc_abs_snw_id),sbr_nm//': dv flx_spc_abs_snw')
@@ -7010,8 +7007,8 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'abs_bb_snw',nf90_float,abs_bb_snw_id),sbr_nm//': dv abs_bb_snw')
      rcd=nf90_wrp(nf90_def_var(nc_id,'trn_bb_snw',nf90_float,trn_bb_snw_id),sbr_nm//': dv trn_bb_snw')
      rcd=nf90_wrp(nf90_def_var(nc_id,'rfl_spc_sfc',nf90_float,bnd_dmn_id,rfl_spc_sfc_id),sbr_nm//': dv rfl_spc_sfc')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'tau',nf90_float,tau_dmn_id,tau_id),sbr_nm//': dv tau')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'tau_prs',nf90_float,tau_dmn_id,tau_prs_id),sbr_nm//': dv tau_prs')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'tau',nf90_double,tau_dmn_id,tau_id),sbr_nm//': dv tau')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'tau_prs',nf90_double,tau_dmn_id,tau_prs_id),sbr_nm//': dv tau_prs')
      rcd=nf90_wrp(nf90_def_var(nc_id,'tpt',nf90_float,lev_dmn_id,tpt_id),sbr_nm//': dv tpt')
      rcd=nf90_wrp(nf90_def_var(nc_id,'tpt_ntf',nf90_float,levp_dmn_id,tpt_ntf_id),sbr_nm//': dv tpt_ntf')
      rcd=nf90_wrp(nf90_def_var(nc_id,'trn_spc_atm_CO2',nf90_float,bnd_dmn_id,trn_spc_atm_CO2_id),sbr_nm//': dv trn_spc_atm_CO2')
@@ -7029,14 +7026,14 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'trn_spc_atm_ice',nf90_float,bnd_dmn_id,trn_spc_atm_ice_id),sbr_nm//': dv trn_spc_atm_ice')
      rcd=nf90_wrp(nf90_def_var(nc_id,'trn_spc_atm_lqd',nf90_float,bnd_dmn_id,trn_spc_atm_lqd_id),sbr_nm//': dv trn_spc_atm_lqd')
      rcd=nf90_wrp(nf90_def_var(nc_id,'trn_spc_atm_ttl',nf90_float,bnd_dmn_id,trn_spc_atm_ttl_id),sbr_nm//': dv trn_spc_atm_ttl')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'wvl',nf90_float,bnd_dmn_id,wvl_id),sbr_nm//': dv wvl')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'wvl',nf90_double,bnd_dmn_id,wvl_id),sbr_nm//': dv wvl')
      rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_ctr',nf90_float,bnd_dmn_id,wvl_ctr_id),sbr_nm//': dv wvl_ctr')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_dlt',nf90_float,bnd_dmn_id,wvl_dlt_id),sbr_nm//': dv wvl_dlt')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_dlt',nf90_double,bnd_dmn_id,wvl_dlt_id),sbr_nm//': dv wvl_dlt')
      rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_grd',nf90_float,grd_dmn_id,wvl_grd_id),sbr_nm//': dv wvl_grd')
      rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_max',nf90_float,bnd_dmn_id,wvl_max_id),sbr_nm//': dv wvl_max')
      rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_min',nf90_float,bnd_dmn_id,wvl_min_id),sbr_nm//': dv wvl_min')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'wvn_ctr',nf90_float,bnd_dmn_id,wvn_ctr_id),sbr_nm//': dv wvn_ctr')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'wvn_dlt',nf90_float,bnd_dmn_id,wvn_dlt_id),sbr_nm//': dv wvn_dlt')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'wvn_ctr',nf90_double,bnd_dmn_id,wvn_ctr_id),sbr_nm//': dv wvn_ctr')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'wvn_dlt',nf90_double,bnd_dmn_id,wvn_dlt_id),sbr_nm//': dv wvn_dlt')
      rcd=nf90_wrp(nf90_def_var(nc_id,'wvn_max',nf90_float,bnd_dmn_id,wvn_max_id),sbr_nm//': dv wvn_max')
      rcd=nf90_wrp(nf90_def_var(nc_id,'wvn_min',nf90_float,bnd_dmn_id,wvn_min_id),sbr_nm//': dv wvn_min')
      rcd=nf90_wrp(nf90_def_var(nc_id,'alt',nf90_float,lev_dmn_id,alt_id),sbr_nm//': dv alt')
