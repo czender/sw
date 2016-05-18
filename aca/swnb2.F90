@@ -441,7 +441,7 @@ program swnb2
   character(sng_lng_dfl_fl)::fl_snw=nlc
   character(sng_lng_dfl_fl)::fl_slr=nlc
   character(sng_lng_dfl_fl)::fl_brdf=nlc
-  character*26 lcl_date_time ! Time formatted as Day Mth DD HH:MM:SS TZ YYYY
+  character lcl_date_time*26 ! Time formatted as Day Mth DD HH:MM:SS TZ YYYY
   character opt_dep_sng*100
   character plr_sng*100
   character prf_sng*100
@@ -593,7 +593,7 @@ program swnb2
   integer thr_nbr           ! [nbr] OpenMP number of threads
 #endif /* not _OPENMP */
   
-  !  integer bnd_idx_brdf	! counting index BRDF
+  !integer bnd_idx_brdf	! counting index BRDF
   !integer bnd_idx_O2        ! counting index
   !integer bnd_idx_OH        ! counting index
   integer azi_idx           ! counting index
@@ -4629,7 +4629,7 @@ program swnb2
      if(rcd /= 0) stop "allocate() failed for trn_ttl_drc_snp"
      allocate(trn_drc_drc_snp(bnd_nbr,levp_snw_nbr),stat=rcd)
      if(rcd /= 0) stop "allocate() failed for trn_drc_drc_snp"
-     ! Array dimensions: bnd,lev_snw
+     ! Array dimensions: bnd,lev_snw (20160516: so why are they all dimensioned by levp_snw_nbr)?
      allocate(rfl_ddm_spc_snw(bnd_nbr,levp_snw_nbr),stat=rcd)
      if(rcd /= 0) stop "allocate() failed for rfl_ddm_spc_snw"
      allocate(trn_ddm_spc_snw(bnd_nbr,levp_snw_nbr),stat=rcd)
@@ -6058,6 +6058,9 @@ program swnb2
      ! Snow pre-processing
      if_flg_msm: if (flg_msm) then
 
+        ! CEWI Intitialize to prevent -Werror=maybe-uninitialized when compiled with gfortran -Werror
+        trn_drc_drc(:,:)=0.0
+        
         ! CCY83 Appendix B
         do lev_snw_idx=1,lev_snw_nbr
            lev_idx=lev_snw_idx+lev_atm_nbr
@@ -6187,6 +6190,8 @@ program swnb2
            trn_ttl_drc_snp(bnd_idx,lev_snw_idx)=mss_val ! CAM3 p. 115 T_dwn(munot)
            trn_drc_drc_snp(bnd_idx,lev_snw_idx)=mss_val ! CAM3 p. 115 T_drc_drc(munot)
         enddo                  ! end loop over lev_snw
+
+        rfl_drc_spc_snw_nxt=0.0 ! CEWI 
 
         ! Proceed top-down through layers computing inhomogeneous R/T to interfaces
         do levp_snw_idx=2,levp_snw_nbr
@@ -6734,6 +6739,8 @@ program swnb2
      ! Compute actinic fluxes
      nrg_pht(bnd_idx)=Planck*speed_of_light/wvl(bnd_idx) ! J pht-1
      flx_spc_pht_dwn_sfc(bnd_idx)=flx_spc_dwn_sfc(bnd_idx)/nrg_pht(bnd_idx) ! pht m-2 s-1 m-1
+     j_spc_NO2=0.0 ! CEWI s-1 m-1
+     flx_spc_act_pht=0.0 ! CEWI W m-2 m-1 --> pht m-2 s-1 m-1
      do lev_idx=1,lev_nbr
         flx_spc_act=4.0*pi*ntn_spc_mean(bnd_idx,lev_idx) ! W m-2 m-1 sr-1 --> W m-2 m-1
         flx_spc_act_pht=flx_spc_act/nrg_pht(bnd_idx) ! W m-2 m-1 --> pht m-2 s-1 m-1
