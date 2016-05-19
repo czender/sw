@@ -6371,14 +6371,8 @@ program swnb2
               ntn_bb_aa(plr_idx,levp_idx)=ntn_bb_aa(plr_idx,levp_idx)+ &
                    uu(plr_idx,levp_idx,azi_idx)
            enddo            ! end loop over azi
-           ! Normalize _aa_ intensities by azi_nbr
-           ! Do NOT normalize _bb_ intensities by wvl_dlt
-           lmn_bb_aa(plr_idx,levp_idx)=lumens_per_Watt_555nm* &
-                lmn_bb_aa(plr_idx,levp_idx)/azi_nbr
-           ntn_bb_aa(plr_idx,levp_idx)= &
-                ntn_bb_aa(plr_idx,levp_idx)/azi_nbr
         enddo               ! end loop over plr
-        
+
         do azi_idx=1,azi_nbr
            lmn_spc_aa_ndr(bnd_idx,levp_idx)= &
                 lmn_spc_aa_ndr(bnd_idx,levp_idx)+ &
@@ -6475,6 +6469,17 @@ program swnb2
      
   enddo                     ! end loop over bnd
   
+  ! Now that loop over bnd is complete, _bb_ quantities have been accumulated and require normalization:
+  ! Normalize all _aa_ intensities by azi_nbr. Do NOT normalize _bb_ intensities by wvl_dlt.
+  do levp_idx=1,levp_nbr
+     do plr_idx=1,plr_nbr
+        lmn_bb_aa(plr_idx,levp_idx)=lumens_per_Watt_555nm* &
+             lmn_bb_aa(plr_idx,levp_idx)/azi_nbr
+        ntn_bb_aa(plr_idx,levp_idx)= &
+             ntn_bb_aa(plr_idx,levp_idx)/azi_nbr
+     enddo            ! end loop over azi
+  enddo               ! end loop over plr
+        
   ! call t_prf(0)
   
   !$omp end do
