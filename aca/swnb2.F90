@@ -497,6 +497,7 @@ program swnb2
   logical cmd_ln_dpt_snw
   logical cmd_ln_lat_dgr
   logical cmd_ln_lcl_yr_day
+  logical cmd_ln_lmn_TOA
   logical cmd_ln_mmr_mpr_snw
   logical cmd_ln_mpc_CWP
   logical cmd_ln_odxc_obs_aer
@@ -548,7 +549,8 @@ program swnb2
   logical top_lvl
   logical tst_case_HG
   logical tst_case_Rayleigh
-  logical mode_std
+  logical mode_chn
+  logical mode_ngt
   
   integer bnd_nbr           ! dimension size
   integer bnd_nbr_CO2       ! dimension size
@@ -734,6 +736,11 @@ program swnb2
   integer j_NO2_id
   integer j_spc_NO2_sfc_id
   integer lmn_bb_aa_id
+  integer lmn_bb_aa_ndr_id
+  integer lmn_bb_aa_ndr_TOA_id
+  integer lmn_bb_aa_ndr_sfc_id
+  integer lmn_bb_aa_TOA_id
+  integer lmn_bb_aa_sfc_id
   integer lmn_spc_aa_ndr_id
   integer lmn_spc_aa_ndr_TOA_id
   integer lmn_spc_aa_ndr_sfc_id
@@ -1096,6 +1103,8 @@ program swnb2
   real flx_nst_abs_ttl
   real flx_nst_dwn_TOA
   real flx_nst_dwn_sfc
+  real lmn_bb_aa_ndr_TOA
+  real lmn_bb_aa_ndr_sfc
   real ilm_dwn_TOA
   real ilm_dwn_sfc
   real rfl_bb_SAS
@@ -1259,11 +1268,14 @@ program swnb2
   real,dimension(:),allocatable::flx_nst_upw !
   real,dimension(:),allocatable::ilm_dwn !
   real,dimension(:),allocatable::ilm_upw !
+  real,dimension(:),allocatable::lmn_bb_aa_ndr !
 
   ! Array dimensions: plr
   real,dimension(:),allocatable::plr
   real,dimension(:),allocatable::plr_cos
   real,dimension(:),allocatable::plr_dgr
+  real,dimension(:),allocatable::lmn_bb_aa_TOA
+  real,dimension(:),allocatable::lmn_bb_aa_sfc
 
   ! Array dimensions: tau
   real,dimension(:),allocatable::tau
@@ -1653,29 +1665,27 @@ program swnb2
   real trn_drc_drc_crr ! [frc] Direct beam transmittance through current layer
   real trn_drc_drc_nxt ! [frc] Direct beam transmittance through next layer
   real dpt_snw_crc_fct ! [frc] Snow depth correction factor
-  real tpt_vrt_sfc ! [K] Virtual temperature at surface
-  real dns_mst_air_sfc ! [kg m-3] Density of moist air at surface
-  real sat_vpr_lqd ! [Pa] Saturation vapor pressure w/r/t liquid H2O
-  real sat_vpr_ice ! [Pa] Saturation vapor pressure w/r/t ice H2O
-  real qst_H2O_lqd ! [kg kg-1] Saturation mixing ratio w/r/t liquid H2O
-  real qst_H2O_ice ! [kg kg-1] Saturation mixing ratio w/r/t ice H2O
-  real odxl_tmp ! [frc] Temporary optical depth
-  real mpl_tmp ! [kg m-2] Temporary optical depth
-  real flx_frc_drc_TOA ! [frc] TOA insolation fraction in direct beam
+
   real alb_cmd_ln
   real bnd_wgt(bnd_nbr_max)
   real bnd_wgt_lmn(bnd_nbr_max)
+  real dns_mst_air_sfc ! [kg m-3] Density of moist air at surface
+  real dns_snw_cmd_ln ! [kg m-3] Snow density
+  real dpt_snw_cmd_ln ! [m] Snowpack thickness
   real float_foo
+  real flx_frc_drc_TOA ! [frc] TOA insolation fraction in direct beam
   real flx_spc_act
   real flx_spc_act_pht
   real flx_spc_net(bnd_nbr_max,levp_nbr_max)
   real idx_rfr_air_STP(bnd_nbr_max)
   real j_spc_NO2
-  real mpc_CWP_cmd_ln
-  real dns_snw_cmd_ln ! [kg m-3] Snow density
-  real dpt_snw_cmd_ln ! [m] Snowpack thickness
+  real lmn_TOA_cmd_ln ! [lm m-2 sr-1] Isotropic downwelling luminance at TOA
+  real lmn_TOA ! [lm m-2 sr-1] Isotropic downwelling luminance at TOA
   real mmr_mpr_snw_cmd_ln
+  real mpc_CWP_cmd_ln
   real mpc_IWP
+  real mpl_tmp ! [kg m-2] Temporary optical depth
+  real odal_CH4(lev_nbr_max)
   real odal_CO2(lev_nbr_max)
   real odal_H2O(lev_nbr_max)
   real odal_H2OH2O(lev_nbr_max)
@@ -1685,38 +1695,43 @@ program swnb2
   real odal_O2O2(lev_nbr_max)
   real odal_O3(lev_nbr_max)
   real odal_OH(lev_nbr_max)
-  real odal_CH4(lev_nbr_max)
   real odal_spc_ttl(bnd_nbr_max,lev_nbr_max)
-  real odsl_tmp
-  real odsl_Ray(lev_nbr_max)
-  real odsl_spc_ttl(bnd_nbr_max,lev_nbr_max)
   real odsl_HG(lev_nbr_max)
   real odsl_Mie(lev_nbr_max)
+  real odsl_Ray(lev_nbr_max)
+  real odsl_spc_ttl(bnd_nbr_max,lev_nbr_max)
+  real odsl_tmp
   real odxc_obs_aer_cmd_ln
   real odxc_obs_snw_cmd_ln
-  real opt_dep_ITOD_CO2_hires(levp_nbr_max,2)
+  real odxl_tmp ! [frc] Temporary optical depth
   real opt_dep_ITOD_CH4_hires(levp_nbr_max,2)
+  real opt_dep_ITOD_CO2_hires(levp_nbr_max,2)
   real opt_dep_ITOD_H2O(levp_nbr_max)
   real opt_dep_ITOD_O2(levp_nbr_max)
   real opt_dep_ITOD_OH(levp_nbr_max)
-  real opt_dep_LTOD_CO2_hires
   real opt_dep_LTOD_CH4_hires
+  real opt_dep_LTOD_CO2_hires
   real phi_wgt(lev_nbr_max)
   real prs_bar(levp_nbr_max)
   real psi_wgt(lev_nbr_max)
+  real qst_H2O_ice ! [kg kg-1] Saturation mixing ratio w/r/t ice H2O
+  real qst_H2O_lqd ! [kg kg-1] Saturation mixing ratio w/r/t liquid H2O
+  real sat_vpr_ice ! [Pa] Saturation vapor pressure w/r/t ice H2O
+  real sat_vpr_lqd ! [Pa] Saturation vapor pressure w/r/t liquid H2O
   real sca_cff_mss_Ray(lev_nbr_max)
-  real sca_frc_Ray(lev_nbr_max) ! [frc] Scattering fraction treated with Rayleigh phase function
   real sca_frc_HG(lev_nbr_max) ! [frc] Scattering fraction treated with HG phase function
   real sca_frc_Mie(lev_nbr_max) ! [frc] Scattering fraction treated with Mie phase function
+  real sca_frc_Ray(lev_nbr_max) ! [frc] Scattering fraction treated with Rayleigh phase function
   real slr_cst
   real slr_cst_cmd_ln
   real slr_cst_xnt_fac
   real tpt_dlt_Mlk(lev_nbr_max)
   real tpt_dlt_Mlk_sqr(lev_nbr_max)
-  real trn_ALT_CO2
-  real trn_LT_CO2_hires(lev_nbr_max,2)
+  real tpt_vrt_sfc ! [K] Virtual temperature at surface
   real trn_ALT_CH4
+  real trn_ALT_CO2
   real trn_LT_CH4_hires(lev_nbr_max,2)
+  real trn_LT_CO2_hires(lev_nbr_max,2)
   real u_bar(levp_nbr_max)
   real wvl_Planck
   
@@ -1755,7 +1770,6 @@ program swnb2
   real     rfldir( maxulv ), rfldn( maxulv ), flup( maxulv ), &
        dfdt( maxulv ), uavg( maxulv ), u0u( maxumu, maxulv ), &
        uu( maxumu, maxulv, maxphi ), albmed( maxumu ), & 
-!       uu( maxumu, 0:maxulv, maxphi ), albmed( maxumu ), & ! dbg fxm 20160517
        trnmed( maxumu )
   
   ! Main code
@@ -1800,6 +1814,7 @@ program swnb2
   cmd_ln_dpt_snw=.false.
   cmd_ln_lat_dgr=.false.
   cmd_ln_lcl_yr_day=.false.
+  cmd_ln_lmn_TOA=.false.
   cmd_ln_mmr_mpr_snw=.false.
   cmd_ln_mpc_CWP=.false.
   cmd_ln_odxc_obs_aer=.false.
@@ -1839,7 +1854,7 @@ program swnb2
   flg_sat_cld=.false. ! [flg] Force saturated layers to be cloudy
   flg_sct_lqd=.false. ! [flg] Liquid cloud droplets are pure scatterers
   flg_snw=.true. ! [flg] Snow grains are optically active in snow model
-  ! flg_toa_isot=.false. ! [flg] TOA isotropic flux as sky brightness in nL?
+  ! flg_toa_isot=.false. ! [flg] TOA isotropic flux as sky brightness in nL? fxm
   flg_vpr_H2O_abs_cld=.true. ! [flg] H2O vapor absorption in cloud allowed
   flg_xtr_aer_snw=.false. ! [flg] Extrapolate surface aerosol into snowpack
   float_foo=0.0
@@ -1849,9 +1864,12 @@ program swnb2
   force_ice_phz=.false.
   force_lqd_phz=.false.
   lamber=.true.
-  lat_dgr_cmd_ln=mss_val  ! [dgr] Latitude
+  lat_dgr_cmd_ln=mss_val ! [dgr] Latitude
   lcl_yr_day_cmd_ln=mss_val ! [day] Local year day
-  mode_std=.true. ! Standard run mode (non-Fillmore, i.e., no ocean mask or wind speeds or channels)
+  lmn_TOA=0.0 ! [lm m-2 sr-1] Isotropic downwelling luminance at TOA
+  lmn_TOA_cmd_ln=mss_val ! [lm m-2 sr-1] Isotropic downwelling luminance at TOA
+  mode_chn=.false. ! [flg] Channel-run mode (David Fillmore modification with ocean mask, wind speeds, and channels)
+  mode_ngt=.false. ! [flg] Night-mode assumptions
   odxc_obs_mpr=0.0 ! [frc] Column impurity extinction optical depth 
   odxc_obs_snw=0.0 ! [frc] Column snow extinction optical depth 
   pi=4.0*atan(1.0)
@@ -1959,8 +1977,13 @@ program swnb2
         else if (opt_sng == 'lcl_yr_day' .or. opt_sng == 'doy') then ! [day] Local year day
            cmd_ln_lcl_yr_day=.not.cmd_ln_lcl_yr_day
            call ftn_arg_get(arg_idx,arg_val,lcl_yr_day_cmd_ln)
-        else if (opt_sng == 'mode_std' .or. opt_sng == 'std') then
-           mode_std=.not.mode_std
+        else if (opt_sng == 'lmn_TOA') then
+           cmd_ln_lmn_TOA=.not.cmd_ln_lmn_TOA
+           call ftn_arg_get(arg_idx,arg_val,lmn_TOA_cmd_ln)
+        else if (opt_sng == 'mode_chn' .or. opt_sng == 'chn') then
+           mode_chn=.not.mode_chn
+        else if (opt_sng == 'mode_ngt' .or. opt_sng == 'ngt') then
+           mode_ngt=.not.mode_ngt
         else if (opt_sng == 'mpc_CWP' .or. opt_sng == 'CWP') then
            cmd_ln_mpc_CWP=.not.cmd_ln_mpc_CWP
            call ftn_arg_get(arg_idx,arg_val,mpc_CWP_cmd_ln) ! [kg m-2] Condensed Water Path
@@ -2154,6 +2177,14 @@ program swnb2
   if (sv_cmp_plr_ngl) then
      plr_nbr=str_nbr
   endif
+  if (plr_nbr /= str_nbr) then
+     write (6,'(a,a,a,a)') prg_nm(1:ftn_strlen(prg_nm)), &
+          ': ERROR plr_nbr /= str_nbr. Option not supported until all DISORT output arrays carefully examined and re-dimensioned', &
+          ' to distingguish between different numbers of streams, computational angles, user angles. swnb2 might return ', &
+          'corrrect fluxes, and will return incorrect intensities in such a configuration.'
+     call abort
+  endif
+
   ! Set permanent indices to avoid barenaked constants like '1'
   plr_ndr=1
   plr_zen=plr_nbr
@@ -2543,7 +2574,7 @@ program swnb2
      rcd=nf90_wrp_inq_varid(nc_id,'foo_snw',foo_snw_id)
   endif ! !flg_msm
   
-  if (.not.mode_std) then
+  if (mode_chn) then
      rcd=nf90_wrp_inq_varid(nc_id,'sea_mask',ocn_msk_id)
      rcd=nf90_wrp_inq_varid(nc_id,'wnd_spd',wnd_spd_id)
   endif
@@ -2637,7 +2668,7 @@ program swnb2
         enddo ! end loop over levp_snw
      endif ! !cmd_ln_dpt_snw)
   endif ! !flg_msm
-  if (.not.mode_std) then
+  if (mode_chn) then
      rcd=nf90_wrp(nf90_get_var(nc_id,ocn_msk_id,ocn_msk),"gv ocn_msk")
      rcd=nf90_wrp(nf90_get_var(nc_id,wnd_spd_id,wnd_spd),"gv wnd_spd")
   else
@@ -3531,11 +3562,9 @@ program swnb2
   ! Close file
   rcd=nf90_wrp_close(nc_id,fl_nst,'Ingested') ! [fnc] Close file
   
-  if (mode_std) then
-     ! Do not read in ocean mask and wind speeds
-     ! Set channel dimension size to one for convenience/safety
-     chn_nbr=1
-  else 
+  ! Set channel dimension size to default one for convenience/safety
+  chn_nbr=1
+  if (mode_chn) then
      ! Ingest fl_chn
      rcd=nf90_wrp_open(fl_chn,nf90_nowrite,nc_id)
      ! Get dimension IDs
@@ -3562,7 +3591,7 @@ program swnb2
      rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_nst_id,wvl_ctr_nst,srt_one,cnt_chn),"gv wvl_ctr_nst")
      ! Close file
      rcd=nf90_wrp_close(nc_id,fl_chn,'Ingested') ! [fnc] Close file
-  endif ! !mode_std
+  endif ! !mode_chn
   
   ! if (.not.lamber) then
   if (.false.) then         ! Do not read brdf file for now
@@ -3594,8 +3623,8 @@ program swnb2
      rcd=nf90_wrp_close(nc_id,fl_brdf,'Ingested') ! [fnc] Close file
   endif                     ! end if not lamber
   
-  if (.not.mode_std) then
-     if (ocn_msk < 1.0) then
+  if(mode_chn) then
+     if(ocn_msk < 1.0) then
         print *, 'ocn_msk < 1.0', ocn_msk
         stop
      endif
@@ -3648,6 +3677,8 @@ program swnb2
   if(rcd /= 0) stop "allocate() failed for ilm_dwn"
   allocate(ilm_upw(levp_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for ilm_upw"
+  allocate(lmn_bb_aa_ndr(levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for lmn_bb_aa_ndr"
   ! Array dimensions: plr
   allocate(plr(plr_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for plr"
@@ -3655,6 +3686,10 @@ program swnb2
   if(rcd /= 0) stop "allocate() failed for plr_cos"
   allocate(plr_dgr(plr_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for plr_dgr"
+  allocate(lmn_bb_aa_TOA(plr_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for lmn_bb_aa_TOA"
+  allocate(lmn_bb_aa_sfc(plr_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for lmn_bb_aa_sfc"
   ! Array dimensions: tau (still unknown, see below)
   ! Array dimensions: bnd,lev (still unknown, see below)
   ! Array dimensions: bnd,levp (still unknown, see below)
@@ -3812,6 +3847,9 @@ program swnb2
   if (alb_sfc>1.0.or.alb_sfc<0.0) stop 'alb_sfc>1.0.or.alb_sfc<0.0 in swnb2()'
   if (cmd_ln_slr_cst) then
      slr_cst=slr_cst_cmd_ln
+  endif                     ! end if overriding solar constant
+  if (cmd_ln_lmn_TOA) then
+     lmn_TOA=lmn_TOA_cmd_ln
   endif                     ! end if overriding solar constant
   
   ! There is no easier way to turn off Herzberg continuum
@@ -4673,7 +4711,7 @@ program swnb2
   enddo                  ! end loop over bnd
   
   chn_SRF_msk(:)=0 ! CEWI lf95
-  if (.not.mode_std) then
+  if(mode_chn) then
      do bnd_idx=1,bnd_nbr
         do chn_idx=1,chn_nbr
            if (chn_SRF(bnd_idx,chn_idx) > 0.0) then
@@ -4681,7 +4719,7 @@ program swnb2
            endif
         enddo
      enddo
-  endif ! endif mode_std
+  endif ! mode_chn
   
   ! If necessary, make user-specified extinction optical depth
   ! consistent with particle optical properties
@@ -4746,7 +4784,7 @@ program swnb2
   !$omp$shared(hb,br,f_iso,f_vol,f_geo,nrm_cff_CM,idx_rfr_sfc,b0,hh,w,nrm_rfl_M,k_cff_M,nrm_cff_RP,k_cff_RP,g_phs,nrm_rfl_LS)
   !$omp$shared(wvl_ctr,wvl_dlt,wvl_min,wvl_max,wvn_min,wvn_max,bnd_dbg,tst_case_Rayleigh,tst_case_HG)
   !$omp$shared(flg_Rayleigh,flg_ice,flg_lqd,flg_aer,flg_bga,flg_H2O,flg_H2OH2O,flg_OH,flg_CH4,flg_O2,flg_CO2)
-  !$omp$shared(flg_O3,flg_O2O2,flg_O2N2,flg_NO2,bnd_obs_aer,bnd_obs_bga,flg_Planck,wvl_Planck,mode_std)
+  !$omp$shared(flg_O3,flg_O2O2,flg_O2N2,flg_NO2,bnd_obs_aer,bnd_obs_bga,flg_Planck,wvl_Planck,mode_chn)
   !$omp$shared(prs,prs_ntf,tpt,mmw_mst_air,mpl_mst_air,grv,pi,ocn_msk)
   !$omp$shared(odal_obs_aer,odsl_obs_aer,odxl_obs_aer,odal_obs_bga,odsl_obs_bga,odxl_obs_bga)
   !$omp$shared(slr_zen_ngl_cos,alb_sfc_vsb_drc,alb_sfc_vsb_dff,alb_sfc_NIR_drc,alb_sfc_NIR_dff)
@@ -4785,7 +4823,7 @@ program swnb2
   do bnd_idx=1,bnd_nbr
      
      ! Skip calculation if band is outside of all instrument channels
-     if (.not.mode_std.and.chn_SRF_msk(bnd_idx) /= 1) then
+     if(mode_chn.and.chn_SRF_msk(bnd_idx) /= 1) then
         goto 999
      endif
      
@@ -5874,6 +5912,14 @@ program swnb2
         plank=.false.
      endif
      
+     ! As of 20160518, swnb2 runs in two modes, day and night
+     ! Daylight is traditional mode where sun above horizon
+     ! Night is new mode where sun is presumably beneath horizon
+
+     ! In day-mode, direct and diffuse incident fluxes are coupled
+     ! User provides total power in slr_cst and additional parameter
+     ! flx_frc_drc_TOA partitions that between direct and diffuse fields
+
      ! Intensity of incident collimated beam at top boundary
      ! Units are arbitrary though must match fisot in solar case
      ! Must be in W m-2 if there is any thermal emission (plank=.true.)
@@ -5903,9 +5949,17 @@ program swnb2
      if (fisot < 0.0) then
         call abort
      endif
-     ! test for JGG 20080925
-     ! fisot=0.2*fbeam
-  
+     if(mode_ngt) then
+        ! In night-mode, direct and diffuse are uncoupled
+        ! User separately inputs direct in slr_cst and diffuse in lmn_TOA
+        ! slr_cst may be starlight, so it is not multiplied by xnt_fac
+        ! Moreover, in night-mode lmn_TOA is assumed to be in nL
+        ! lmn_TOA is already a "radiance" so does not need
+        fbeam=slr_cst*flx_slr_frc(bnd_idx)
+        lmn_TOA=lmn_TOA*1.0e-9*10000.0/pi ! [nL]->[lm m-2 s-1] fxm
+        ! fisot=
+     endif ! mode_ngt
+        
      ! Give details about lower boundary reflectance
      ! When lamber is true, albedo specifies isotropic reflectance
      ! Otherwise hl array must be specified to give BRDF of bottom boundary
@@ -5931,7 +5985,7 @@ program swnb2
         endif
      endif ! !flg_rfl
      ! Ocean albedo
-     if (.not. mode_std .and. ocn_msk == 1.0) then
+     if(mode_chn .and. ocn_msk == 1.0) then
         albedo = 0.026 / (slr_zen_ngl_cos**1.7 + 0.065) + &
              0.15 * (slr_zen_ngl_cos - 0.1) * (slr_zen_ngl_cos - 0.5) &
              * (slr_zen_ngl_cos - 1.0)
@@ -5956,7 +6010,7 @@ program swnb2
            if (tst_case_Rayleigh) then
               ! Pure Rayleigh scattering
               ! swnb2 -A -B -C -G -H -I -J -K -L -O -U -W -X -Y -t -s 16 -D 1 -r 0.0 -E -e 1 -p ${DATA}/aca/mls_clr.nc -d ~/swnb.nc
-              ! Answer: Albedo = 0.796920
+              ! Answer: Albedo = 0.796920 at 0.5 um
               fbeam=pi
               fisot=0.0
               albedo=0.0
@@ -5970,7 +6024,7 @@ program swnb2
            endif            ! end if tst_case_Rayleigh
            if (tst_case_HG) then
               ! Pure Henyey-Greenstein scattering
-              ! Answers: Albedo = 0.123420, Atmospheric absorptance = 0.360522
+              ! Answers: Albedo = 0.123420, Atmospheric absorptance = 0.360522 at 0.5 um
               ! swnb2 -A -B -C -G -H -I -J -K -L -O -R -U -W -X -Y -P -s 16 -D 1 -r 0.0 -E -e 1 -p ${DATA}/aca/mls_clr.nc -d ~/swnb.nc
               ! Check answers with:
               ! ncks -F -C -d bnd,1 -H -v abs_spc_atm,rfl_spc_SAS,rfl_spc_sfc,trn_spc_atm_ttl ~/swnb.nc
@@ -6407,8 +6461,7 @@ program swnb2
      enddo                  ! end loop over plr
      lmn_spc_aa_ndr_TOA(bnd_idx)=lmn_spc_aa_ndr(bnd_idx,levp_TOA)
      lmn_spc_aa_ndr_sfc(bnd_idx)=lmn_spc_aa_sfc(plr_ndr,bnd_idx)
-     ntn_spc_aa_ndr_TOA(bnd_idx)=ntn_spc_aa_ndr(bnd_idx,levp_TOA) ! dbg fxm 20160517 these can be negative
-     !      ntn_spc_aa_ndr_TOA(bnd_idx)=ntn_spc_aa_ndr(bnd_idx,2) ! dbg fxm 20160517 these are positive-definite
+     ntn_spc_aa_ndr_TOA(bnd_idx)=ntn_spc_aa_ndr(bnd_idx,levp_TOA)
      ntn_spc_aa_ndr_sfc(bnd_idx)=ntn_spc_aa_sfc(plr_ndr,bnd_idx)
      ntn_spc_aa_zen_sfc(bnd_idx)=ntn_spc_aa_sfc(plr_zen,bnd_idx)
      if (.false.) then
@@ -6479,7 +6532,17 @@ program swnb2
              ntn_bb_aa(plr_idx,levp_idx)/azi_nbr
      enddo            ! end loop over azi
   enddo               ! end loop over plr
-        
+
+  do levp_idx=1,levp_nbr
+     lmn_bb_aa_ndr(levp_idx)=lmn_bb_aa(plr_ndr,levp_idx)
+  enddo               ! end loop over plr
+  do plr_idx=1,plr_nbr
+     lmn_bb_aa_sfc(plr_idx)=lmn_bb_aa(plr_idx,levp_sfc)
+     lmn_bb_aa_TOA(plr_idx)=lmn_bb_aa(plr_idx,levp_TOA)
+  enddo            ! end loop over azi
+  lmn_bb_aa_ndr_sfc=lmn_bb_aa(plr_ndr,levp_sfc)
+  lmn_bb_aa_ndr_TOA=lmn_bb_aa(plr_ndr,levp_TOA)
+
   ! call t_prf(0)
   
   !$omp end do
@@ -6648,7 +6711,7 @@ program swnb2
   flx_nst_dwn_sfc=flx_nst_dwn(levp_sfc)
   ! End instrument computations
   ! Multi-channel instrument computations
-  if (.not.mode_std) then
+  if(mode_chn) then
      do chn_idx=1,chn_nbr
         ! do bnd_idx=1,bnd_nbr
         ! bnd_idx_nst=bnd_nbr_nst
@@ -6826,7 +6889,7 @@ program swnb2
   enddo                     ! end loop over bnd
   flx_frc_dwn_sfc_blr(bnd_nbr)=0.0
 
-  if (mode_std) then
+  if(.not.mode_chn) then
      ! Begin netCDF output routines
 #ifdef ENABLE_NETCDF4
      if (fl_out_fmt == nco_format_undefined) fl_out_fmt=nf90_format_classic ! [enm] Output file format
@@ -6953,9 +7016,14 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_SRF',nf90_float,bnd_dmn_id,lmn_SRF_id),sbr_nm//': dv lmn_SRF')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ilm_dwn',nf90_float,levp_dmn_id,ilm_dwn_id),sbr_nm//': dv ilm_dwn')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ilm_upw',nf90_float,levp_dmn_id,ilm_upw_id),sbr_nm//': dv ilm_upw')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa',nf90_double,dim_plr_levp,lmn_bb_aa_id),sbr_nm//': dv lmn_bb_aa')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_spc_aa_ndr',nf90_double,dim_bnd_levp,lmn_spc_aa_ndr_id),sbr_nm//': dv lmn_spc_aa_ndr')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_spc_aa_sfc',nf90_double,dim_plr_bnd,lmn_spc_aa_sfc_id),sbr_nm//': dv lmn_spc_aa_sfc')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa',nf90_float,dim_plr_levp,lmn_bb_aa_id),sbr_nm//': dv lmn_bb_aa')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_ndr',nf90_float,levp_dmn_id,lmn_bb_aa_ndr_id),sbr_nm//': dv lmn_bb_aa_ndr')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_ndr_TOA',nf90_float,lmn_bb_aa_ndr_TOA_id),sbr_nm//': dv lmn_bb_aa_ndr_TOA')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_ndr_sfc',nf90_float,lmn_bb_aa_ndr_sfc_id),sbr_nm//': dv lmn_bb_aa_ndr_sfc')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_TOA',nf90_float,plr_dmn_id,lmn_bb_aa_TOA_id),sbr_nm//': dv lmn_bb_aa_TOA')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_sfc',nf90_float,plr_dmn_id,lmn_bb_aa_sfc_id),sbr_nm//': dv lmn_bb_aa_sfc')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_spc_aa_ndr',nf90_float,dim_bnd_levp,lmn_spc_aa_ndr_id),sbr_nm//': dv lmn_spc_aa_ndr')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_spc_aa_sfc',nf90_float,dim_plr_bnd,lmn_spc_aa_sfc_id),sbr_nm//': dv lmn_spc_aa_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'nrg_pht',nf90_float,bnd_dmn_id,nrg_pht_id),sbr_nm//': dv nrg_pht')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ntn_bb_aa',nf90_float,dim_plr_levp,ntn_bb_aa_id),sbr_nm//': dv ntn_bb_aa')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ntn_bb_mean',nf90_float,lev_dmn_id,ntn_bb_mean_id),sbr_nm//': dv ntn_bb_mean')
@@ -7431,17 +7499,23 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ilm_upw_id,'long_name','Upwelling illuminance'), &
           sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_SRF_id,'long_name','Luminosity spectral response function'), &
-          sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_id,'long_name','Spectral luminance of nadir radiation'), &
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_SRF_id,'long_name','Luminous Efficiency'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_id,'long_name','Broadband azimuthally averaged luminance'), &
           sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_TOA_id,'long_name','Spectral luminance of nadir radiation at TOA'), &
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_ndr_id,'long_name','Broadband azimuthally averaged nadir luminance'), &
           sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_sfc_id,'long_name','Spectral luminance of nadir radiation at surface'), &
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_ndr_TOA_id,'long_name','Broadband azimuthally averaged nadir luminance at TOA'), &
           sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_sfc_id,'long_name','Spectral luminance of radiation at surface'), &
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_TOA_id,'long_name','Broadband azimuthally averaged luminance at TOA'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_sfc_id,'long_name','Broadband azimuthally averaged luminance at surface'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_id,'long_name','Spectral luminance of nadir radiation'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_TOA_id,'long_name','Spectral azimuthally averaged nadir luminance at TOA'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_sfc_id,'long_name','Spectral azimuthally averaged luminance at surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CWP_id,'long_name','Total column Condensed Water Path'), &
           sbr_nm//': pa long_name in '//__FILE__)
@@ -7661,6 +7735,13 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,wvn_min_id,'long_name','Minimum wavenumber in band'), &
           sbr_nm//': pa long_name in '//__FILE__)
+     ! Wrap
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_ndr_sfc_id,'long_name', &
+          'Broadband azimuthally averaged nadir luminance at surface'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_sfc_id,'long_name', &
+          'Spectral azimuthally averaged nadir luminance at surface'), &
+          sbr_nm//': pa long_name in '//__FILE__)
      
      ! Add units
      if (flg_mie) then
@@ -7770,6 +7851,9 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,levp_id,'units','pascal'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_SRF_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_ndr_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_TOA_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_sfc_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CWP_id,'units','kilogram meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,nrg_pht_id,'units','joule photon-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_bb_aa_id,'units','watt meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
@@ -7877,6 +7961,10 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_act_pht_sfc_id,'units','photon meter-2 second-1 meter-1'), &
           sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_pht_dwn_sfc_id,'units','photon meter-2 second-1 meter-1'), &
+          sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_ndr_TOA_id,'units','lumen meter-2 sterradian-1'), &
+          sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_ndr_sfc_id,'units','lumen meter-2 sterradian-1'), &
           sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_id,'units','lumen meter-2 meter-1 sterradian-1'), &
           sbr_nm//': pa units in '//__FILE__)
@@ -8032,6 +8120,11 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,levp_id,levp),sbr_nm//': pv levp in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,lmn_SRF_id,lmn_SRF),sbr_nm//': pv lmn_SRF in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,lmn_bb_aa_id,lmn_bb_aa),sbr_nm//': pv lmn_bb_aa in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,lmn_bb_aa_ndr_id,lmn_bb_aa_ndr),sbr_nm//': pv lmn_bb_aa_ndr in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,lmn_bb_aa_ndr_TOA_id,lmn_bb_aa_ndr_TOA),sbr_nm//': pv lmn_bb_aa_ndr_TOA in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,lmn_bb_aa_ndr_sfc_id,lmn_bb_aa_ndr_sfc),sbr_nm//': pv lmn_bb_aa_ndr_sfc in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,lmn_bb_aa_TOA_id,lmn_bb_aa_TOA),sbr_nm//': pv lmn_bb_aa_TOA in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,lmn_bb_aa_sfc_id,lmn_bb_aa_sfc),sbr_nm//': pv lmn_bb_aa_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,lmn_spc_aa_ndr_id,lmn_spc_aa_ndr),sbr_nm//': pv lmn_spc_aa_ndr in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,lmn_spc_aa_sfc_id,lmn_spc_aa_sfc),sbr_nm//': pv lmn_spc_aa_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,mpc_CWP_id,mpc_CWP),sbr_nm//': pv mpc_CWP in '//__FILE__)
@@ -8102,7 +8195,6 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,trn_bb_snw_id,trn_bb_snw),sbr_nm//': pv trn_bb_snw in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,rfl_spc_sfc_id,rfl_spc_sfc),sbr_nm//': pv rfl_spc_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,slr_zen_ngl_cos_id,slr_zen_ngl_cos),sbr_nm//': pv slr_zen_ngl_cos in '//__FILE__)
-     if (dbg_lvl == 3) write(6,*) 'fxm gfortran tau = ',tau ! fxm gfortran
      rcd=nf90_wrp(nf90_put_var(nc_id,tau_id,tau),sbr_nm//': pv tau in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,tau_prs_id,tau_prs),sbr_nm//': pv tau_prs in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,tpt_id,tpt),sbr_nm//': pv tpt in '//__FILE__)
@@ -8141,8 +8233,8 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,wvn_max_id,wvn_max),sbr_nm//': pv wvn_max in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,wvn_min_id,wvn_min),sbr_nm//': pv wvn_min in '//__FILE__)
      ! Wrap
-     ! fxm g95 test character and line counting
 #if 0
+     ! Test compiler character and line counting (would fail on g95)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_frc_dwn_sfc_blr_id,flx_frc_dwn_sfc_blr),sbr_nm//': pv flx_frc_dwn_sfc_blr in this big old hanging line')
 #endif /* !0 */
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_spc_dwn_dff_sfc_id,flx_spc_dwn_dff_sfc), &
@@ -8183,9 +8275,9 @@ program swnb2
      ! Close file
      rcd=nf90_wrp_close(nc_id,fl_out,'Wrote results to') ! [fnc] Close file
      
-  endif                     ! end if mode_std
+  endif                     ! end if mode_chn
   
-  if (.not. mode_std) then
+  if(mode_chn) then
      rcd=nf90_wrp_create(fl_out,nf90_clobber,nc_id,sbr_nm=sbr_nm)
      rcd=nf90_wrp(nf90_def_dim(nc_id,'azi',azi_nbr,azi_dmn_id),sbr_nm//': def_dim azi in '//__FILE__)
      rcd=nf90_wrp(nf90_def_dim(nc_id,'plr',plr_nbr,plr_dmn_id),sbr_nm//': def_dim plr in '//__FILE__)
@@ -8223,12 +8315,11 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,rfl_chn_TOA_id,rfl_chn_TOA),sbr_nm//': pv rfl_chn_TOA in '//__FILE__)
      ! Close file
      rcd=nf90_wrp_close(nc_id,fl_out,'Wrote results to')
-  endif                     ! end if not mode_std
+  endif                     ! end if mode_chn
   
-  if (rcd /= nf90_noerr) write (6,'(a,a,i4,a)') prg_nm(1:ftn_strlen(prg_nm)),': ERROR rcd = ',rcd,' on exit'
+  if(rcd /= nf90_noerr) write (6,'(a,a,i4,a)') prg_nm(1:ftn_strlen(prg_nm)),': ERROR rcd = ',rcd,' on exit'
   
-  if (dbg_lvl==dbg_crr) then
-     ! fxm:
+  if(dbg_lvl==dbg_crr) then
      ! ncks -v ntn_spc_chn -F -C -m -H ${DATA}/aca/swnb.nc | m
      ! rcd=nf90_wrp_close(nc_id,fl_out,'Wrote results to')
      write (6,'(a,3i2)') 'azi_nbr, plr_nbr, levp_nbr = ',azi_nbr,plr_nbr,levp_nbr
@@ -8250,7 +8341,7 @@ program swnb2
      call vec_set(ntn_spc_chn,azi_nbr*plr_nbr*levp_nbr,0.0)
      write (6,'(a)') 'Reading ntn_spc_chn...'
      rcd=nf90_wrp(nf90_get_var(nc_id,ntn_spc_chn_id,ntn_spc_chn),'gv ntn_spc_chn')
-     write (6,'(a,es10.2)') 'ntn_spc_chn(1,4,2) = ',ntn_spc_chn(1,4,2) ! fxm
+     write (6,'(a,es10.2)') 'ntn_spc_chn(1,4,2) = ',ntn_spc_chn(1,4,2)
      rcd=nf90_wrp_close(nc_id,fl_out,'Read something from')
      goto 1000              ! Goto exit with error status
   endif                     ! endif dbg

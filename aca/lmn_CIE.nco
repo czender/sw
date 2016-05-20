@@ -38,9 +38,9 @@ wvl_grd(0:wvl_nbr-1)=wvl_min;
 wvl_grd(wvl_nbr)=wvl_max(wvl_nbr-1);
 
 lmn_SRF[wvl]=0.0f;
-lmn_SRF@long_name="Photopic luminosity";
+lmn_SRF@long_name="Photopic luminous efficiency";
 lmn_SRF@units="fraction";
-lmn_SRF@units_long="Fractional sensitivity relative to 555 nm";
+lmn_SRF@units_long="Fractional luminous sensitivity relative to 100% at 555 nm";
 lmn_SRF@provenance="ybar(lamda) column from CIE 1931 standard colorimetric observer";
 lmn_SRF={ // [frc] 10 sensitivities per line, 81 total
 0.000039,0.000064,0.000120,0.000217,0.000396,0.000640,0.001210,0.002180,0.004000,0.007300,
@@ -54,9 +54,9 @@ lmn_SRF={ // [frc] 10 sensitivities per line, 81 total
 0.000015};
 
 lmn_SRF_spl[wvl]=0.0f;
-lmn_SRF_spl@long_name="Supplementary (scotopic?) luminosity";
+lmn_SRF_spl@long_name="Supplementary photopic luminous efficiency";
 lmn_SRF_spl@units="fraction";
-lmn_SRF_spl@units_long="Fractional sensitivity relative to 555 nm?";
+lmn_SRF_spl@units_long="Fractional luminous sensitivity relative to 100% at 555 nm";
 lmn_SRF_spl@provenance="ybar_10(lamda) column from CIE 1964 supplementary standard colorimetric observer";
 lmn_SRF_spl={ // [frc] 10 sensitivities per line, 81 total
 0.000039,0.000064,0.000120,0.000217,0.000396,0.000640,0.001210,0.002180,0.004000,0.007300,
@@ -105,9 +105,9 @@ wvl_1988_ctr=array(380.0,1.0,$wvl_1988); // [nm]
 wvl_1988_ctr*=1.0e-9;
 
 lmn_1988_SRF[wvl_1988]=0.0f;
-lmn_1988_SRF@long_name="Photopic luminosity";
+lmn_1988_SRF@long_name="Photopic luminous efficiency";
 lmn_1988_SRF@units="fraction";
-lmn_1988_SRF@units_long="Fractional sensitivity relative to 555 nm";
+lmn_1988_SRF@units_long="Fractional luminous sensitivity relative to 100% at 555 nm";
 lmn_1988_SRF@provenance="1988 C.I.E. Photopic Luminous Efficiency Function from http://donklipstein.com/photopic.html";
 lmn_1988_SRF={ // [frc] 10 sensitivities per line, 401 total
 0.0002000,0.0002280,0.0002610,0.0002990,0.0003440,0.0003960,0.0004550,0.0005250,0.0006040,0.0006960,
@@ -175,9 +175,9 @@ wvl_1951_ctr=array(380.0,1.0,$wvl_1951); // [nm]
 wvl_1951_ctr*=1.0e-9;
 
 lmn_1951_SRF[wvl_1951]=0.0f;
-lmn_1951_SRF@long_name="Scotopic luminosity";
+lmn_1951_SRF@long_name="Scotopic luminous efficiency";
 lmn_1951_SRF@units="fraction";
-lmn_1951_SRF@units_long="Fractional sensitivity relative to 507 nm";
+lmn_1951_SRF@units_long="Fractional luminous sensitivity relative to 100% at 507 nm";
 lmn_1951_SRF@provenance="1951 C.I.E. Scotopic Luminous Efficiency Function from http://donklipstein.com/photopic.html";
 lmn_1951_SRF={ // [frc] 10 sensitivities per line, 401 total
 0.0005890000,0.0006650000,0.0007520000,0.0008540000,0.0009720000,0.0011080000,0.0012680000,0.0014530000,0.0016680000,0.0019180000,
