@@ -1,3 +1,10 @@
+2016-05-20  Charlie Zender  <zender@uci.edu>
+
+	* Verify everything works when str_nbr=plr_nbr. Yay!
+	Fixes bug (negative reflectances and radiances) spotted by Xianwei Wang in ~2010
+	It might fix the ~2008 bug comparing Adding/Doubling with DISORT reflectances
+	Not sure, need to check
+
 2016-05-16  Charlie Zender  <zender@uci.edu>
 
 	* Add CIE 1951 Scotopic and 1988 revised Photopic luminosity curves
@@ -98,10 +105,10 @@
 	I remember this problem from years ago, not the solution
 	CCM3/Bri92 solar zenith angle routines seem to require [0.0,365.0)
 	Yet CCM CRM input format (that I wrote!) asks for [1.0,366.0)
-	Perhaps lcl_yr_day=calday+1.0 and 
+	Perhaps lcl_yr_day=calday+1.0 and
 	CRM wants lcl_yr_day and CCM3/Bri92 wants calday?
 	In that case calday=t_local in CCM3/Bri92
-	
+
 2008-07-03  Charlie Zender  <zender@uci.edu>
 
 	* Allow command line to set visible and NIR albedos two at a time
@@ -112,8 +119,8 @@
 	However at least the code now makes sense
 	In particular, CCY83 D/E computations all occur before DISORT
 
-	* Discrepancy: DISORT albedo is 0.89 and two-stream D/E approx. is 0.98 
-	
+	* Discrepancy: DISORT albedo is 0.89 and two-stream D/E approx. is 0.98
+
 	* Finish adding direct beam reflectance, transmittance properties
 
 2008-05-04  Charlie Zender  <zender@uci.edu>
@@ -122,7 +129,7 @@
 
 2008-05-03  Charlie Zender  <zender@uci.edu>
 
-	* Discrepancy: DISORT albedo is 0.89 and two-stream D/E approx. is 0.98 
+	* Discrepancy: DISORT albedo is 0.89 and two-stream D/E approx. is 0.98
 
 	* Determine R and T for adding/doubling from CCY83 two stream technique
 

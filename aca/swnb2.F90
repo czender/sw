@@ -690,19 +690,20 @@ program swnb2
   integer flx_bb_abs_sfc_id
   integer flx_bb_abs_ttl_id
   integer flx_bb_dwn_TOA_id
-  integer flx_bb_upw_TOA_id
   integer flx_bb_dwn_dff_id
-  integer flx_bb_dwn_drc_id
   integer flx_bb_dwn_dff_sfc_id
+  integer flx_bb_dwn_drc_id
   integer flx_bb_dwn_drc_sfc_id
   integer flx_bb_dwn_id
   integer flx_bb_dwn_sfc_id
   integer flx_bb_net_id
+  integer flx_bb_upw_TOA_id
   integer flx_bb_upw_id
   integer flx_chn_dwn_TOA_id
   integer flx_chn_upw_TOA_id
   integer flx_frc_dwn_sfc_blr_id
   integer flx_frc_dwn_sfc_id
+  integer flx_ngt_TOA_id
   integer flx_nst_abs_atm_id
   integer flx_nst_abs_id
   integer flx_nst_abs_sfc_id
@@ -712,6 +713,7 @@ program swnb2
   integer flx_nst_dwn_sfc_id
   integer flx_nst_net_id
   integer flx_nst_upw_id
+  integer flx_slr_frc_id
   integer flx_spc_abs_SAS_id
   integer flx_spc_abs_atm_id
   integer flx_spc_abs_id
@@ -720,14 +722,13 @@ program swnb2
   integer flx_spc_act_pht_sfc_id
   integer flx_spc_dwn_TOA_id
   integer flx_spc_dwn_dff_id
-  integer flx_spc_dwn_drc_id
   integer flx_spc_dwn_dff_sfc_id
+  integer flx_spc_dwn_drc_id
   integer flx_spc_dwn_drc_sfc_id
   integer flx_spc_dwn_id
   integer flx_spc_dwn_sfc_id
   integer flx_spc_pht_dwn_sfc_id
   integer flx_spc_upw_id
-  integer flx_slr_frc_id
   integer htg_rate_bb_id
   integer ilm_dwn_TOA_id
   integer ilm_dwn_id
@@ -735,14 +736,15 @@ program swnb2
   integer ilm_upw_id
   integer j_NO2_id
   integer j_spc_NO2_sfc_id
-  integer lmn_bb_aa_id
-  integer lmn_bb_aa_ndr_id
-  integer lmn_bb_aa_ndr_TOA_id
-  integer lmn_bb_aa_ndr_sfc_id
   integer lmn_bb_aa_TOA_id
+  integer lmn_bb_aa_id
+  integer lmn_bb_aa_ndr_TOA_id
+  integer lmn_bb_aa_ndr_id
+  integer lmn_bb_aa_ndr_sfc_id
   integer lmn_bb_aa_sfc_id
-  integer lmn_spc_aa_ndr_id
+  integer lmn_ngt_TOA_id
   integer lmn_spc_aa_ndr_TOA_id
+  integer lmn_spc_aa_ndr_id
   integer lmn_spc_aa_ndr_sfc_id
   integer lmn_spc_aa_sfc_id
   integer ntn_bb_aa_id
@@ -1638,6 +1640,7 @@ program swnb2
   integer xtr_typ_LHS
   integer xtr_typ_RHS
   
+  ! Snow block
   real xpn_arg ! [frc] Bri92 limit
   real xpn_val ! [frc] Bri92 limit
   real mu_CCY83 ! [frc] Cosine solar zenith angle D/E CCY83
@@ -1680,7 +1683,7 @@ program swnb2
   real idx_rfr_air_STP(bnd_nbr_max)
   real j_spc_NO2
   real lmn_TOA_cmd_ln ! [lm m-2 sr-1] Isotropic downwelling luminance at TOA
-  real lmn_TOA ! [lm m-2 sr-1] Isotropic downwelling luminance at TOA
+  real lmn_ngt_TOA ! [lm m-2 sr-1] Isotropic downwelling luminance at TOA
   real lmn_TOA_nL ! [nL] Isotropic downwelling luminance at TOA
   real mmr_mpr_snw_cmd_ln
   real mpc_CWP_cmd_ln
@@ -1724,10 +1727,12 @@ program swnb2
   real sca_frc_Mie(lev_nbr_max) ! [frc] Scattering fraction treated with Mie phase function
   real sca_frc_Ray(lev_nbr_max) ! [frc] Scattering fraction treated with Rayleigh phase function
   real slr_cst
+  real flx_ngt_TOA ! [W m-2]
   real slr_cst_cmd_ln
   real slr_cst_xnt_fac
   real tpt_dlt_Mlk(lev_nbr_max)
   real tpt_dlt_Mlk_sqr(lev_nbr_max)
+  real sum_fsf_srf ! [frc] Inner product of flx_slr_frc*lmn_SRF
   real tpt_vrt_sfc ! [K] Virtual temperature at surface
   real trn_ALT_CH4
   real trn_ALT_CO2
@@ -1867,7 +1872,7 @@ program swnb2
   lamber=.true.
   lat_dgr_cmd_ln=mss_val ! [dgr] Latitude
   lcl_yr_day_cmd_ln=mss_val ! [day] Local year day
-  lmn_TOA=0.0 ! [lm m-2 sr-1] Isotropic downwelling luminance at TOA
+  lmn_TOA_nL=0.0 ! [nL] Isotropic downwelling luminance at TOA
   lmn_TOA_cmd_ln=mss_val ! [nL] Isotropic downwelling luminance at TOA
   mode_chn=.false. ! [flg] Channel-run mode (David Fillmore modification with ocean mask, wind speeds, and channels)
   mode_ngt=.false. ! [flg] Night-mode assumptions
@@ -3851,8 +3856,12 @@ program swnb2
   endif                     ! end if overriding solar constant
   if (cmd_ln_lmn_TOA) then
      lmn_TOA_nL=lmn_TOA_cmd_ln
+     mode_ngt=.true.
   endif                     ! end if overriding solar constant
-  
+  ! In night-mode lmn_TOA_nL is assumed to be stored/entered in nL
+  ! lmn_ngt_TOA is a broadband "radiance"-like quantity in sr-1
+  lmn_ngt_TOA=lmn_TOA_nL*1.0e-9*10000.0/pi ! [nL]->[lm m-2 sr-1]
+
   ! There is no easier way to turn off Herzberg continuum
   ! but keep O2 line absorption on than to zero absorption cross-sections here.
   if (.not.flg_Herzberg) then
@@ -4740,6 +4749,22 @@ program swnb2
      enddo                  ! end loop over lev
   endif                     ! end if overriding CLM profile odxc_obs_aer
 
+  ! Convert photometric lmn_ngt_TOA [lm m-2 sr-1] to equivalent energetic night-time irradiance flx_ngt_TOA [W m-2]
+  ! Requires assumptions for spectral and angular distribution of luminance
+  ! Assume angular distribution is isotropic
+  ! This is reasonable for extragalactic light, not so for Milky Way
+  ! Approximate spectral distribution of extraterrestrial luminance source as T ~ 5800 K blackbody
+  ! This is reasonable for zodiacal light, and ~20% of stars are class M (Roa64)
+  ! Unreasonable for airglow, which has numerous discrete transitions
+  ! Based on this approximation we use flx_slr_frc from Kur95
+  ! lmn_ngt_TOA = lumens_per_Watt_555nm * (flx_ngt_TOA / pi) * sum (flx_slr_frc*lmn_srf)
+  ! flx_ngt_TOA = pi * lmn_ngt_TOA * sum (flx_slr_frc*lmn_SRF) / lumens_per_Watt_555nm
+  sum_fsf_srf=0.0 ! [frc]
+  do bnd_idx=1,bnd_nbr
+     sum_fsf_srf=sum_fsf_srf+flx_slr_frc(bnd_idx)*lmn_SRF(bnd_idx)
+  enddo                     ! end loop over bnd
+  flx_ngt_TOA=pi*lmn_ngt_TOA*sum_fsf_srf/lumens_per_Watt_555nm ! [W m-2]
+  
   ! End section 1: Initialization
   ! Begin section 2: Main computation loop over all bands
   ! begin main loop over bands
@@ -5928,7 +5953,7 @@ program swnb2
      ! Spectral integral of fbeam at TOA is "solar constant", ~1367 W m-2
      ! DISORT interally adjusts incoming flux for zenith angle
      ! DO NOT pre-multiply fbeam by solar zenith angle cosine
-     fbeam=slr_cst_xnt_fac*flx_slr_frc(bnd_idx)*flx_frc_drc_TOA
+     fbeam=slr_cst_xnt_fac*flx_slr_frc(bnd_idx)*flx_frc_drc_TOA ! [W m-2]
      
      ! Incident isotropic intensity at top boundary
      ! DISORT does not (and should not) apply zenith angle corrections to fisot
@@ -5946,22 +5971,20 @@ program swnb2
      ! 1. Units are described as "intensity"
      ! 2. Instruction to multiply by pi to convert isotropic fisot to horizontal flux
      ! Next line converts horizontal diffuse flux to isotropic radiance with 1/pi
-     fisot=slr_cst_xnt_fac*flx_slr_frc(bnd_idx)*(1.0-flx_frc_drc_TOA)/pi
-     if (fisot < 0.0) then
-        call abort
-     endif
+     fisot=slr_cst_xnt_fac*flx_slr_frc(bnd_idx)*(1.0-flx_frc_drc_TOA)/pi ! [W m-2 sr-1]
      if(mode_ngt) then
+        ! Overwrite boundary conditions with fluxes for night-mode
         ! In night-mode, direct and diffuse are uncoupled
         ! User separately inputs direct in slr_cst and diffuse in lmn_TOA
-        ! slr_cst may be starlight, so it is not multiplied by xnt_fac
-        ! Moreover, in night-mode lmn_TOA is assumed to be in nL
-        ! lmn_TOA is a broadband "radiance"-like quantity in sr-1
-        ! Partition this into discrete bands using luminous efficiency
-        fbeam=slr_cst*flx_slr_frc(bnd_idx)
-        lmn_TOA=lmn_TOA_nL*1.0e-9*10000.0/pi ! [nL]->[lm m-2 s-1] fxm
-        ! Convert lmn to equivalent source in W m-2
+        ! slr_cst may be starlight, so eliminate xnt_fac
+        ! flx_ngt_TOA [W m-2] is irradiance whereas DISORT wants for fisot an isotropic radiance [W m-2 sr-1]
+        fbeam=slr_cst*flx_slr_frc(bnd_idx) ! [W m-2]
+        fisot=flx_ngt_TOA*flx_slr_frc(bnd_idx)/pi ! [W m-2 sr-1]
         ! fisot=
      endif ! mode_ngt
+     if (fisot < 0.0) then
+        call abort
+     endif 
         
      ! Give details about lower boundary reflectance
      ! When lamber is true, albedo specifies isotropic reflectance
@@ -7025,6 +7048,7 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_ndr_sfc',nf90_float,lmn_bb_aa_ndr_sfc_id),sbr_nm//': dv lmn_bb_aa_ndr_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_TOA',nf90_float,plr_dmn_id,lmn_bb_aa_TOA_id),sbr_nm//': dv lmn_bb_aa_TOA')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_sfc',nf90_float,plr_dmn_id,lmn_bb_aa_sfc_id),sbr_nm//': dv lmn_bb_aa_sfc')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_ngt_TOA',nf90_float,lmn_ngt_TOA_id),sbr_nm//': dv lmn_ngt_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_spc_aa_ndr',nf90_float,dim_bnd_levp,lmn_spc_aa_ndr_id),sbr_nm//': dv lmn_spc_aa_ndr')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_spc_aa_sfc',nf90_float,dim_plr_bnd,lmn_spc_aa_sfc_id),sbr_nm//': dv lmn_spc_aa_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'nrg_pht',nf90_float,bnd_dmn_id,nrg_pht_id),sbr_nm//': dv nrg_pht')
@@ -7129,6 +7153,7 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_abs_ttl',nf90_float,flx_bb_abs_ttl_id),sbr_nm//': dv flx_bb_abs_ttl in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_dwn_TOA',nf90_float,flx_bb_dwn_TOA_id),sbr_nm//': dv flx_bb_dwn_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_upw_TOA',nf90_float,flx_bb_upw_TOA_id),sbr_nm//': dv flx_bb_upw_TOA in '//__FILE__)
+     rcd=nf90_wrp(nf90_def_var(nc_id,'flx_ngt_TOA',nf90_float,flx_ngt_TOA_id),sbr_nm//': dv flx_ngt_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'frc_ice_ttl',nf90_float,frc_ice_ttl_id),sbr_nm//': dv frc_ice_ttl in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'lat_dgr',nf90_double,lat_dgr_id),sbr_nm//': dv lat_dgr in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'lcl_time_hr',nf90_double,lcl_time_hr_id),sbr_nm//': dv lcl_time_hr in '//__FILE__)
@@ -7426,6 +7451,8 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_frc_dwn_sfc_id,'long_name','Fraction of insolation at surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_ngt_TOA_id,'long_name','Broadband incoming isotropic nighttime flux at TOA'), &
+          sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_nst_abs_atm_id,'long_name','FSBR flux absorbed by atmospheric column only'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_nst_abs_id,'long_name','FSBR flux absorbed by layer'), &
@@ -7513,6 +7540,8 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_TOA_id,'long_name','Broadband azimuthally averaged luminance at TOA'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_sfc_id,'long_name','Broadband azimuthally averaged luminance at surface'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_ngt_TOA_id,'long_name','Broadband incoming isotropic luminance at TOA'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_id,'long_name','Spectral luminance of nadir radiation'), &
           sbr_nm//': pa long_name in '//__FILE__)
@@ -7817,6 +7846,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_upw_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_frc_dwn_sfc_blr_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_frc_dwn_sfc_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_ngt_TOA_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_nst_abs_atm_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_nst_abs_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_nst_abs_sfc_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
@@ -7857,6 +7887,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_ndr_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_TOA_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_sfc_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_ngt_TOA_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CWP_id,'units','kilogram meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,nrg_pht_id,'units','joule photon-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_bb_aa_id,'units','watt meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
@@ -8078,6 +8109,8 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_abs_sfc_id,flx_bb_abs_sfc),sbr_nm//': pv flx_bb_abs_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_abs_ttl_id,flx_bb_abs_ttl),sbr_nm//': pv flx_bb_abs_ttl in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_TOA_id,flx_bb_dwn_TOA),sbr_nm//': pv flx_bb_dwn_TOA in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,flx_ngt_TOA_id,flx_ngt_TOA),sbr_nm//': pv flx_ngt_TOA in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,lmn_ngt_TOA_id,lmn_ngt_TOA),sbr_nm//': pv lmn_ngt_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_upw_TOA_id,flx_bb_upw_TOA),sbr_nm//': pv flx_bb_upw_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_dff_id,flx_bb_dwn_dff),sbr_nm//': pv flx_bb_dwn_dff in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_drc_id,flx_bb_dwn_drc),sbr_nm//': pv flx_bb_dwn_drc in '//__FILE__)
