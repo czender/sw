@@ -1681,6 +1681,7 @@ program swnb2
   real j_spc_NO2
   real lmn_TOA_cmd_ln ! [lm m-2 sr-1] Isotropic downwelling luminance at TOA
   real lmn_TOA ! [lm m-2 sr-1] Isotropic downwelling luminance at TOA
+  real lmn_TOA_nL ! [nL] Isotropic downwelling luminance at TOA
   real mmr_mpr_snw_cmd_ln
   real mpc_CWP_cmd_ln
   real mpc_IWP
@@ -1867,7 +1868,7 @@ program swnb2
   lat_dgr_cmd_ln=mss_val ! [dgr] Latitude
   lcl_yr_day_cmd_ln=mss_val ! [day] Local year day
   lmn_TOA=0.0 ! [lm m-2 sr-1] Isotropic downwelling luminance at TOA
-  lmn_TOA_cmd_ln=mss_val ! [lm m-2 sr-1] Isotropic downwelling luminance at TOA
+  lmn_TOA_cmd_ln=mss_val ! [nL] Isotropic downwelling luminance at TOA
   mode_chn=.false. ! [flg] Channel-run mode (David Fillmore modification with ocean mask, wind speeds, and channels)
   mode_ngt=.false. ! [flg] Night-mode assumptions
   odxc_obs_mpr=0.0 ! [frc] Column impurity extinction optical depth 
@@ -3849,7 +3850,7 @@ program swnb2
      slr_cst=slr_cst_cmd_ln
   endif                     ! end if overriding solar constant
   if (cmd_ln_lmn_TOA) then
-     lmn_TOA=lmn_TOA_cmd_ln
+     lmn_TOA_nL=lmn_TOA_cmd_ln
   endif                     ! end if overriding solar constant
   
   ! There is no easier way to turn off Herzberg continuum
@@ -5954,9 +5955,11 @@ program swnb2
         ! User separately inputs direct in slr_cst and diffuse in lmn_TOA
         ! slr_cst may be starlight, so it is not multiplied by xnt_fac
         ! Moreover, in night-mode lmn_TOA is assumed to be in nL
-        ! lmn_TOA is already a "radiance" so does not need
+        ! lmn_TOA is a broadband "radiance"-like quantity in sr-1
+        ! Partition this into discrete bands using luminous efficiency
         fbeam=slr_cst*flx_slr_frc(bnd_idx)
-        lmn_TOA=lmn_TOA*1.0e-9*10000.0/pi ! [nL]->[lm m-2 s-1] fxm
+        lmn_TOA=lmn_TOA_nL*1.0e-9*10000.0/pi ! [nL]->[lm m-2 s-1] fxm
+        ! Convert lmn to equivalent source in W m-2
         ! fisot=
      endif ! mode_ngt
         
