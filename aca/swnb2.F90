@@ -1765,7 +1765,7 @@ program swnb2
   logical  lamber, plank, onlyfl, prnt(5), usrang, usrtau
   integer  ibcnd, nlyr, numu, nstr, nphi, ntau
   integer nmom              ! for DISORT2
-  real accur, albedo, btemp, dtauc( maxcly ), fbeam, fisot, &
+  real accur, albedo, btemp, bemis, dtauc( maxcly ), fbeam, fisot, &
        ! swnb2 does not use hl()
        !       hl( 0:maxcmu ), phi( maxphi ), pmom( 0:maxmom, maxcly ), & ! DISORT2
        phi( maxphi ), pmom( 0:maxmom, maxcly ), & ! DISORT2
@@ -3949,7 +3949,6 @@ program swnb2
   
   ! Specify bottom boundary temperature btemp
   ! Btemp for atmosphere is skin temperature in CCM/CAM parlance
-  ! Bottom boundary emissivity is derived from albedo above
   ! Top boundary temperature and emissivity must also be specified
   ! Of course these are only used when plank is .true.
   if (flg_msm) then 
@@ -3959,6 +3958,7 @@ program swnb2
   endif ! !flg_msm
   ttemp=tpt_ntf(1)
   temis=0.0 ! 20160513: Emissivity of upper boundary is usually 0.0
+  bemis=1.0 ! 20160526: Emissivity of lower boundary was always 1.0 until 20160526
   
   ! Set control flags:
   ! Set deltam=.true. unless looking at radiances within 10 degrees of forward peak
@@ -4803,7 +4803,7 @@ program swnb2
   !$omp$shared(nlyr,nmom,temper)
   !$omp$shared(usrtau,ntau,nstr,usrang,numu)
   !$omp$shared(umu,nphi,phi,ibcnd,umu0,phi0)
-  !$omp$shared(fisot,lamber,btemp,ttemp,temis)
+  !$omp$shared(fisot,lamber,btemp,bemis,ttemp,temis)
   !$omp$shared(onlyfl,accur,prnt)
   !$omp$shared(dbg_lvl,thr_nbr,brdf_typ)
   !$omp$shared(idx_rfr_air_STP,prg_nm,sv_ntn,sv_cmp_tau,single_bnd_computation)
@@ -6352,7 +6352,8 @@ program swnb2
         call DISORT( nlyr, dtauc, ssalb, nmom, pmom, temper, wvnmlo, &
              wvnmhi, usrtau, ntau, utau, nstr, usrang, numu, &
              umu, nphi, phi, ibcnd, fbeam, umu0, phi0, &
-             fisot, lamber, albedo, btemp, ttemp, temis, &
+             !             fisot, lamber, albedo, btemp, ttemp, temis, & ! Added bemis argument 20160526
+             fisot, lamber, albedo, btemp, bemis, ttemp, temis, &
              plank, onlyfl, accur, prnt, header, maxcly, &
              maxulv, maxumu, maxphi, maxmom, rfldir, rfldn, &
              flup, dfdt, uavg, uu, albmed, trnmed )
