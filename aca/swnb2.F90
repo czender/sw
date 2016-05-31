@@ -502,6 +502,8 @@ program swnb2
   logical cmd_ln_mpc_CWP
   logical cmd_ln_odxc_obs_aer
   logical cmd_ln_odxc_obs_snw
+  logical cmd_ln_sfc_msv
+  logical cmd_ln_sfc_tpt
   logical cmd_ln_slr_cst
   logical cmd_ln_slr_zen_ngl_cos
   logical flg_CO2
@@ -681,6 +683,8 @@ program swnb2
   integer abs_spc_atm_id
   integer abs_spc_sfc_id
   integer alb_sfc_id
+  integer alt_id
+  integer alt_ntf_id
   integer azi_dgr_id          
   integer azi_id            ! coordinate ID
   integer bnd_id            ! coordinate ID
@@ -696,6 +700,7 @@ program swnb2
   integer flx_bb_dwn_drc_sfc_id
   integer flx_bb_dwn_id
   integer flx_bb_dwn_sfc_id
+  integer flx_bb_upw_sfc_id
   integer flx_bb_net_id
   integer flx_bb_upw_TOA_id
   integer flx_bb_upw_id
@@ -747,50 +752,87 @@ program swnb2
   integer lmn_spc_aa_ndr_id
   integer lmn_spc_aa_ndr_sfc_id
   integer lmn_spc_aa_sfc_id
+  integer nrg_pht_id
   integer ntn_bb_aa_id
   integer ntn_bb_mean_id
-  integer rfl_chn_TOA_id
-  integer ntn_spc_aa_ndr_id
   integer ntn_spc_aa_ndr_TOA_id
+  integer ntn_spc_aa_ndr_id
   integer ntn_spc_aa_ndr_sfc_id
   integer ntn_spc_aa_sfc_id
   integer ntn_spc_aa_zen_id
   integer ntn_spc_aa_zen_sfc_id
   integer ntn_spc_chn_id
   integer ntn_spc_mean_id
+  integer odac_spc_aer_id
+  integer odac_spc_bga_id
+  integer odac_spc_ice_id
+  integer odac_spc_lqd_id
+  integer odac_spc_mpr_id
+  integer odac_spc_snw_id
+  integer odxc_spc_CH4_id
   integer odxc_spc_CO2_id
   integer odxc_spc_H2OH2O_id
   integer odxc_spc_H2O_id
   integer odxc_spc_NO2_id
+  integer odxc_spc_O2N2_id
+  integer odxc_spc_O2O2_id
   integer odxc_spc_O2_id
   integer odxc_spc_O3_id
-  integer odxc_spc_O2O2_id
-  integer odxc_spc_O2N2_id
   integer odxc_spc_OH_id
-  integer odxc_spc_CH4_id
   integer odxc_spc_Ray_id
-  integer odac_spc_ice_id
-  integer odac_spc_lqd_id
-  integer odac_spc_aer_id
-  integer odac_spc_mpr_id
-  integer odac_spc_snw_id
-  integer odac_spc_bga_id
   integer odxc_spc_aer_id
-  integer odxc_spc_mpr_id
-  integer odxc_spc_snw_id
   integer odxc_spc_bga_id
   integer odxc_spc_ice_id
   integer odxc_spc_lqd_id
+  integer odxc_spc_mpr_id
+  integer odxc_spc_snw_id
   integer odxc_spc_ttl_id
-  integer nrg_pht_id
   integer plr_cos_id          
   integer plr_dgr_id          
   integer plr_id            ! coordinate ID
   integer rfl_bb_SAS_id
   integer rfl_bb_sfc_id
+  integer rfl_chn_TOA_id
   integer rfl_nst_SAS_id
   integer rfl_nst_sfc_id
   integer rfl_spc_SAS_id
+  integer rfl_spc_sfc_id
+  integer sfc_msv_id
+  integer sfc_tpt_id
+  integer tau_id            ! coordinate ID
+  integer tau_prs_id          
+  integer trn_bb_atm_id
+  integer trn_nst_atm_id
+  integer trn_spc_atm_CH4_id
+  integer trn_spc_atm_CO2_id
+  integer trn_spc_atm_H2OH2O_id
+  integer trn_spc_atm_H2O_id
+  integer trn_spc_atm_NO2_id
+  integer trn_spc_atm_O2N2_id
+  integer trn_spc_atm_O2O2_id
+  integer trn_spc_atm_O2_id
+  integer trn_spc_atm_O3_id
+  integer trn_spc_atm_OH_id
+  integer trn_spc_atm_Ray_id
+  integer trn_spc_atm_aer_id
+  integer trn_spc_atm_bga_id
+  integer trn_spc_atm_ice_id
+  integer trn_spc_atm_lqd_id
+  integer trn_spc_atm_mpr_id
+  integer trn_spc_atm_snw_id
+  integer trn_spc_atm_ttl_id
+  integer wvl_ctr_id
+  integer wvl_dlt_id
+  integer wvl_grd_id
+  integer wvl_id
+  integer wvl_max_id
+  integer wvl_min_id
+  integer wvn_ctr_id
+  integer wvn_dlt_id
+  integer wvn_max_id
+  integer wvn_min_id
+
+  ! Snow
   integer rfl_ddm_spc_snw_id
   integer trn_ddm_spc_snw_id
   integer rfl_dff_spc_snw_id
@@ -815,42 +857,7 @@ program swnb2
   integer rfl_bb_snw_id
   integer abs_bb_snw_id
   integer trn_bb_snw_id
-  integer rfl_spc_sfc_id
-  integer tau_id            ! coordinate ID
-  integer tau_prs_id          
-  integer trn_bb_atm_id
-  integer trn_nst_atm_id
-  integer trn_spc_atm_CO2_id
-  integer trn_spc_atm_H2OH2O_id
-  integer trn_spc_atm_H2O_id
-  integer trn_spc_atm_NO2_id
-  integer trn_spc_atm_O2_id
-  integer trn_spc_atm_O3_id
-  integer trn_spc_atm_O2O2_id
-  integer trn_spc_atm_O2N2_id
-  integer trn_spc_atm_OH_id
-  integer trn_spc_atm_CH4_id
-  integer trn_spc_atm_Ray_id
-  integer trn_spc_atm_aer_id
-  integer trn_spc_atm_mpr_id
-  integer trn_spc_atm_snw_id
-  integer trn_spc_atm_bga_id
-  integer trn_spc_atm_ice_id
-  integer trn_spc_atm_lqd_id
-  integer trn_spc_atm_ttl_id
-  integer wvl_id
-  integer wvl_ctr_id
-  integer wvl_grd_id
-  integer wvl_max_id
-  integer wvl_min_id
-  integer wvl_dlt_id
-  integer wvn_ctr_id
-  integer wvn_max_id
-  integer wvn_min_id
-  integer wvn_dlt_id
-  integer alt_id
-  integer alt_ntf_id
-  
+
   ! WMO input variables
   integer abs_xsx_O2_id
   integer abs_xsx_O3_id
@@ -1098,6 +1105,7 @@ program swnb2
   real flx_bb_dwn_TOA
   real flx_bb_upw_TOA
   real flx_bb_dwn_sfc
+  real flx_bb_upw_sfc
   real flx_bb_dwn_dff_sfc
   real flx_bb_dwn_drc_sfc
   real flx_nst_abs_atm
@@ -1687,6 +1695,8 @@ program swnb2
   real lmn_TOA_nL ! [nL] Isotropic downwelling luminance at TOA
   real mmr_mpr_snw_cmd_ln
   real mpc_CWP_cmd_ln
+  real sfc_msv_cmd_ln
+  real sfc_tpt_cmd_ln
   real mpc_IWP
   real mpl_tmp ! [kg m-2] Temporary optical depth
   real odal_CH4(lev_nbr_max)
@@ -1726,8 +1736,10 @@ program swnb2
   real sca_frc_HG(lev_nbr_max) ! [frc] Scattering fraction treated with HG phase function
   real sca_frc_Mie(lev_nbr_max) ! [frc] Scattering fraction treated with Mie phase function
   real sca_frc_Ray(lev_nbr_max) ! [frc] Scattering fraction treated with Rayleigh phase function
-  real slr_cst
+  real sfc_msv
+  real sfc_tpt
   real flx_ngt_TOA ! [W m-2]
+  real slr_cst
   real slr_cst_cmd_ln
   real slr_cst_xnt_fac
   real tpt_dlt_Mlk(lev_nbr_max)
@@ -1825,6 +1837,8 @@ program swnb2
   cmd_ln_mpc_CWP=.false.
   cmd_ln_odxc_obs_aer=.false.
   cmd_ln_odxc_obs_snw=.false.
+  cmd_ln_sfc_msv=.false.
+  cmd_ln_sfc_tpt=.false.
   cmd_ln_slr_cst=.false.
   cmd_ln_slr_zen_ngl_cos=.false.
   exit_status=0             ! [enm] Program exit status
@@ -1882,6 +1896,8 @@ program swnb2
   plr_nbr=4
   rcd=nf90_noerr              ! nf90_noerr == 0
   single_bnd_computation=.false.
+  sfc_msv=1.0 ! [frc] Surface emissivity
+  sfc_tpt=mss_val ! [K] Surface temperature
   slr_cst=slr_cst_CCM
   slr_zen_ngl_cos_cmd_ln=mss_val ! [frc] Cosine solar zenith angle
   str_nbr=4
@@ -1990,12 +2006,12 @@ program swnb2
            mode_chn=.not.mode_chn
         else if (opt_sng == 'mode_ngt' .or. opt_sng == 'ngt') then
            mode_ngt=.not.mode_ngt
-        else if (opt_sng == 'mpc_CWP' .or. opt_sng == 'CWP') then
-           cmd_ln_mpc_CWP=.not.cmd_ln_mpc_CWP
-           call ftn_arg_get(arg_idx,arg_val,mpc_CWP_cmd_ln) ! [kg m-2] Condensed Water Path
         else if (opt_sng == 'mmr_mpr_snw' .or. opt_sng == 'mmr_mpr') then
            cmd_ln_mmr_mpr_snw=.not.cmd_ln_mmr_mpr_snw
            call ftn_arg_get(arg_idx,arg_val,mmr_mpr_snw_cmd_ln) ! [kg kg-1] Impurity mass mixing ratio in snow
+        else if (opt_sng == 'mpc_CWP' .or. opt_sng == 'CWP') then
+           cmd_ln_mpc_CWP=.not.cmd_ln_mpc_CWP
+           call ftn_arg_get(arg_idx,arg_val,mpc_CWP_cmd_ln) ! [kg m-2] Condensed Water Path
         else if (opt_sng == 'odxc_snw') then
            cmd_ln_odxc_obs_snw=.not.cmd_ln_odxc_obs_snw
            call ftn_arg_get(arg_idx,arg_val,odxc_obs_snw_cmd_ln)
@@ -2009,6 +2025,12 @@ program swnb2
            flg_sat_cld=.true. ! [flg] Force saturated layers to be cloudy
         else if (opt_sng == 'sct_lqd') then
            call ftn_arg_get(arg_idx,arg_val,flg_sct_lqd) ! [flg] Liquid cloud droplets are pure scatterers
+        else if (opt_sng == 'sfc_msv') then
+           cmd_ln_sfc_msv=.not.cmd_ln_sfc_msv
+           call ftn_arg_get(arg_idx,arg_val,sfc_msv_cmd_ln) ! [frc] Surface emissivity
+        else if (opt_sng == 'sfc_tpt') then
+           cmd_ln_sfc_tpt=.not.cmd_ln_sfc_tpt
+           call ftn_arg_get(arg_idx,arg_val,sfc_tpt_cmd_ln) ! [K] Surface temperature
         else if (opt_sng == 'slr_cst') then
            cmd_ln_slr_cst=.not.cmd_ln_slr_cst
            call ftn_arg_get(arg_idx,arg_val,slr_cst_cmd_ln)
@@ -3854,6 +3876,13 @@ program swnb2
   if (cmd_ln_slr_cst) then
      slr_cst=slr_cst_cmd_ln
   endif                     ! end if overriding solar constant
+  if (sfc_msv>1.0.or.sfc_msv<0.0) stop 'sfc_msv>1.0.or.sfc_msv<0.0 in swnb2()'
+  if (cmd_ln_sfc_msv) then
+     sfc_msv=sfc_msv_cmd_ln
+  endif                     ! end if overriding surface emissivity
+  if (cmd_ln_sfc_tpt) then
+     sfc_tpt=sfc_tpt_cmd_ln
+  endif                     ! end if overriding surface temperature
   if (cmd_ln_lmn_TOA) then
      lmn_TOA_nL=lmn_TOA_cmd_ln
      mode_ngt=.true.
@@ -3956,9 +3985,18 @@ program swnb2
   else ! !flg_msm
      btemp=tpt_skn 
   endif ! !flg_msm
-  ttemp=tpt_ntf(1)
+  ttemp=tpt_ntf(levp_TOA)
   temis=0.0 ! 20160513: Emissivity of upper boundary is usually 0.0
   bemis=1.0 ! 20160526: Emissivity of lower boundary was always 1.0 until 20160526
+  if(mode_ngt) then
+     ! In night mode, bottom BCs from command-line (if any) ...
+     if(sfc_tpt.ne.mss_val) then
+        ! ...supersede surface temperature from profile
+        btemp=sfc_tpt
+     endif ! sfc_tpt
+     ! Replace emissivity
+     bemis=sfc_msv
+  endif ! mode_ngt
   
   ! Set control flags:
   ! Set deltam=.true. unless looking at radiances within 10 degrees of forward peak
@@ -5926,15 +5964,15 @@ program swnb2
         end do              ! end loop over tau
      endif                  ! end if setting user defined levels
      
-     ! Set wavenumbers for this spectral interval.
+     ! Set wavenumbers for this spectral interval
      wvnmlo=wvn_min(bnd_idx)
      wvnmhi=wvn_max(bnd_idx)
      
      ! Set plank=.true. whenever considering thermal emission
-     ! Computing thermal source function generates underflows in single precision when lambda < XXX um
-     if (wvl_ctr(bnd_idx)>wvl_Planck) then
+     ! Computing thermal source function for T ~ 300 K blackbody generates underflows in single precision when lambda <~ 2.0 um
+     if (wvl_ctr(bnd_idx)>wvl_Planck.or.btemp>1000.0) then
         plank=flg_Planck
-     else 
+     else
         plank=.false.
      endif
      
@@ -5943,13 +5981,13 @@ program swnb2
      ! Night is new mode where sun is presumably beneath horizon
 
      ! In day-mode, direct and diffuse incident fluxes are coupled
-     ! User provides total power in slr_cst and additional parameter
+     ! User provides total power in slr_cst and optional parameter
      ! flx_frc_drc_TOA partitions that between direct and diffuse fields
 
      ! Intensity of incident collimated beam at top boundary
      ! Units are arbitrary though must match fisot in solar case
      ! Must be in W m-2 if there is any thermal emission (plank=.true.)
-     ! fbeam is flux normal to earth-sun path, not normal to ground!
+     ! fbeam is flux normal to Earth-Sun path, not normal to ground!
      ! Spectral integral of fbeam at TOA is "solar constant", ~1367 W m-2
      ! DISORT interally adjusts incoming flux for zenith angle
      ! DO NOT pre-multiply fbeam by solar zenith angle cosine
@@ -5975,12 +6013,12 @@ program swnb2
      if(mode_ngt) then
         ! Overwrite boundary conditions with fluxes for night-mode
         ! In night-mode, direct and diffuse are uncoupled
-        ! User separately inputs direct in slr_cst and diffuse in lmn_TOA
-        ! slr_cst may be starlight, so eliminate xnt_fac
+        ! User separately inputs direct beam in slr_cst and diffuse field in lmn_TOA
+        ! slr_cst may be starlight, so ignore xnt_fac 
         ! flx_ngt_TOA [W m-2] is irradiance whereas DISORT wants for fisot an isotropic radiance [W m-2 sr-1]
         fbeam=slr_cst*flx_slr_frc(bnd_idx) ! [W m-2]
         fisot=flx_ngt_TOA*flx_slr_frc(bnd_idx)/pi ! [W m-2 sr-1]
-        ! fisot=
+        
      endif ! mode_ngt
      if (fisot < 0.0) then
         call abort
@@ -6021,7 +6059,7 @@ program swnb2
      
      if (single_bnd_computation) then
         
-        ! Set header which DISORT will use printing results
+        ! Set header which DISORT uses to print results
         ! If header has length greater than zero, DISORT() prints
         ! annoying header message on each call.
         write (header,'(a,i4,a,f6.4,a,es8.1,a,es8.1)') &
@@ -6671,7 +6709,7 @@ program swnb2
                 wvl_dlt(bnd_idx)*bnd_wgt_lmn(bnd_idx)
         enddo                  ! end loop over levp
      enddo                     ! end loop over bnd
-     ilm_dwn_TOA=ilm_dwn(1)
+     ilm_dwn_TOA=ilm_dwn(levp_TOA)
      ilm_dwn_sfc=ilm_dwn(levp_sfc)
   endif ! endif flt_lmn
 
@@ -6716,13 +6754,13 @@ program swnb2
   do lev_idx=1,lev_nbr
      flx_nst_abs(lev_idx)=flx_nst_net(lev_idx)-flx_nst_net(lev_idx+1)
   enddo                     ! end loop over lev
-  if (flx_nst_dwn(1)>0.0) then 
-     abs_nst_SAS=flx_nst_net(1)/flx_nst_dwn(1)
-     abs_nst_atm=(flx_nst_net(1)-flx_nst_net(levp_sfc))/flx_nst_dwn(1)
-     abs_nst_sfc=flx_nst_net(levp_sfc)/flx_nst_dwn(1)
-     rfl_nst_SAS=flx_nst_upw(1)/flx_nst_dwn(1)
+  if (flx_nst_dwn(levp_TOA)>0.0) then 
+     abs_nst_SAS=flx_nst_net(levp_TOA)/flx_nst_dwn(levp_TOA)
+     abs_nst_atm=(flx_nst_net(levp_TOA)-flx_nst_net(levp_sfc))/flx_nst_dwn(levp_TOA)
+     abs_nst_sfc=flx_nst_net(levp_sfc)/flx_nst_dwn(levp_TOA)
+     rfl_nst_SAS=flx_nst_upw(levp_TOA)/flx_nst_dwn(levp_TOA)
      rfl_nst_sfc=flx_nst_upw(levp_sfc)/flx_nst_dwn(levp_sfc)
-     trn_nst_atm=flx_nst_dwn(levp_sfc)/flx_nst_dwn(1)
+     trn_nst_atm=flx_nst_dwn(levp_sfc)/flx_nst_dwn(levp_TOA)
   else
      abs_nst_SAS=0.0
      abs_nst_atm=0.0
@@ -6731,10 +6769,10 @@ program swnb2
      rfl_nst_sfc=0.0
      trn_nst_atm=0.0
   endif
-  flx_nst_abs_atm=flx_nst_net(1)-flx_nst_net(levp_sfc)
+  flx_nst_abs_atm=flx_nst_net(levp_TOA)-flx_nst_net(levp_sfc)
   flx_nst_abs_sfc=flx_nst_net(levp_sfc)
-  flx_nst_abs_ttl=flx_nst_net(1)
-  flx_nst_dwn_TOA=flx_nst_dwn(1)
+  flx_nst_abs_ttl=flx_nst_net(levp_TOA)
+  flx_nst_dwn_TOA=flx_nst_dwn(levp_TOA)
   flx_nst_dwn_sfc=flx_nst_dwn(levp_sfc)
   ! End instrument computations
   ! Multi-channel instrument computations
@@ -6877,22 +6915,23 @@ program swnb2
   ! NB: Somewhat strange definitions here---
   ! Atmospheric quantities normalized by TOA insolation
   ! Snowpack quantities normalized by snowpack insolation
-  abs_bb_SAS=flx_bb_net(1)/max(flx_bb_dwn(1),real_tiny)
-  abs_bb_atm=(flx_bb_net(1)-flx_bb_net(levp_sfc))/max(flx_bb_dwn(1),real_tiny)
-  abs_bb_sfc=flx_bb_net(levp_sfc)/max(flx_bb_dwn(1),real_tiny)
+  abs_bb_SAS=flx_bb_net(levp_TOA)/max(flx_bb_dwn(levp_TOA),real_tiny)
+  abs_bb_atm=(flx_bb_net(levp_TOA)-flx_bb_net(levp_sfc))/max(flx_bb_dwn(levp_TOA),real_tiny)
+  abs_bb_sfc=flx_bb_net(levp_sfc)/max(flx_bb_dwn(levp_TOA),real_tiny)
   abs_bb_snw=flx_bb_net(levp_atm_nbr)/max(flx_bb_dwn(levp_atm_nbr),real_tiny)
-  rfl_bb_SAS=flx_bb_upw(1)/max(flx_bb_dwn(1),real_tiny)
+  rfl_bb_SAS=flx_bb_upw(levp_TOA)/max(flx_bb_dwn(levp_TOA),real_tiny)
   rfl_bb_sfc=flx_bb_upw(levp_sfc)/max(flx_bb_dwn(levp_sfc),real_tiny)
   rfl_bb_snw=flx_bb_upw(levp_atm_nbr)/max(flx_bb_dwn(levp_atm_nbr),real_tiny)
-  trn_bb_atm=flx_bb_dwn(levp_sfc)/max(flx_bb_dwn(1),real_tiny)
+  trn_bb_atm=flx_bb_dwn(levp_sfc)/max(flx_bb_dwn(levp_TOA),real_tiny)
   trn_bb_snw=flx_bb_dwn(levp_sfc)/max(flx_bb_dwn(levp_atm_nbr),real_tiny)
-  flx_bb_abs_ttl=flx_bb_net(1)
+  flx_bb_abs_ttl=flx_bb_net(levp_TOA)
   flx_bb_abs_sfc=flx_bb_net(levp_sfc)
-  flx_bb_abs_atm=flx_bb_net(1)-flx_bb_net(levp_sfc)
+  flx_bb_abs_atm=flx_bb_net(levp_TOA)-flx_bb_net(levp_sfc)
   flx_bb_abs_snw=flx_bb_net(levp_atm_nbr)-flx_bb_net(levp_sfc)
-  flx_bb_dwn_TOA=flx_bb_dwn(1)
-  flx_bb_upw_TOA=flx_bb_upw(1)
+  flx_bb_dwn_TOA=flx_bb_dwn(levp_TOA)
+  flx_bb_upw_TOA=flx_bb_upw(levp_TOA)
   flx_bb_dwn_sfc=flx_bb_dwn(levp_sfc)
+  flx_bb_upw_sfc=flx_bb_upw(levp_sfc)
   flx_bb_dwn_dff_sfc=flx_bb_dwn_dff(levp_sfc)
   flx_bb_dwn_drc_sfc=flx_bb_dwn_drc(levp_sfc)
   flx_bb_dwn_snw=flx_bb_dwn(levp_atm_nbr)
@@ -6910,7 +6949,7 @@ program swnb2
   do bnd_idx=1,bnd_nbr
      flx_frc_dwn_sfc(bnd_idx)=flx_spc_dwn_sfc(bnd_idx)*wvl_dlt(bnd_idx)/max(flx_bb_dwn_sfc,real_tiny)
   enddo                     ! end loop over bnd
-  flx_frc_dwn_sfc_blr(1)=1.0
+  flx_frc_dwn_sfc_blr(levp_TOA)=1.0
   do bnd_idx=2,bnd_nbr
      flx_frc_dwn_sfc_blr(bnd_idx)=flx_frc_dwn_sfc_blr(bnd_idx-1)-flx_frc_dwn_sfc(bnd_idx)
   enddo                     ! end loop over bnd
@@ -7040,9 +7079,9 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'j_spc_NO2_sfc',nf90_float,bnd_dmn_id,j_spc_NO2_sfc_id),sbr_nm//': dv j_spc_NO2_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lev',nf90_double,lev_dmn_id,lev_id),sbr_nm//': dv lev')
      rcd=nf90_wrp(nf90_def_var(nc_id,'levp',nf90_double,levp_dmn_id,levp_id),sbr_nm//': dv levp')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_SRF',nf90_float,bnd_dmn_id,lmn_SRF_id),sbr_nm//': dv lmn_SRF')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ilm_dwn',nf90_float,levp_dmn_id,ilm_dwn_id),sbr_nm//': dv ilm_dwn')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ilm_upw',nf90_float,levp_dmn_id,ilm_upw_id),sbr_nm//': dv ilm_upw')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_SRF',nf90_float,bnd_dmn_id,lmn_SRF_id),sbr_nm//': dv lmn_SRF')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa',nf90_float,dim_plr_levp,lmn_bb_aa_id),sbr_nm//': dv lmn_bb_aa')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_ndr',nf90_float,levp_dmn_id,lmn_bb_aa_ndr_id),sbr_nm//': dv lmn_bb_aa_ndr')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_ndr_TOA',nf90_float,lmn_bb_aa_ndr_TOA_id),sbr_nm//': dv lmn_bb_aa_ndr_TOA')
@@ -7050,6 +7089,8 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_TOA',nf90_float,plr_dmn_id,lmn_bb_aa_TOA_id),sbr_nm//': dv lmn_bb_aa_TOA')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_sfc',nf90_float,plr_dmn_id,lmn_bb_aa_sfc_id),sbr_nm//': dv lmn_bb_aa_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_ngt_TOA',nf90_float,lmn_ngt_TOA_id),sbr_nm//': dv lmn_ngt_TOA in '//__FILE__)
+     rcd=nf90_wrp(nf90_def_var(nc_id,'sfc_msv',nf90_float,sfc_msv_id),sbr_nm//': dv sfc_msv in '//__FILE__)
+     rcd=nf90_wrp(nf90_def_var(nc_id,'sfc_tpt',nf90_float,sfc_tpt_id),sbr_nm//': dv sfc_tpt in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_spc_aa_ndr',nf90_float,dim_bnd_levp,lmn_spc_aa_ndr_id),sbr_nm//': dv lmn_spc_aa_ndr')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_spc_aa_sfc',nf90_float,dim_plr_bnd,lmn_spc_aa_sfc_id),sbr_nm//': dv lmn_spc_aa_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'nrg_pht',nf90_float,bnd_dmn_id,nrg_pht_id),sbr_nm//': dv nrg_pht')
@@ -7220,6 +7261,8 @@ program swnb2
           sbr_nm//': dv ntn_spc_aa_zen_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_dwn_sfc',nf90_float,flx_bb_dwn_sfc_id), &
           sbr_nm//': dv flx_bb_dwn_sfc in '//__FILE__)
+     rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_upw_sfc',nf90_float,flx_bb_upw_sfc_id), &
+          sbr_nm//': dv flx_bb_upw_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_dwn_dff_sfc',nf90_float,flx_bb_dwn_dff_sfc_id), &
           sbr_nm//': dv flx_bb_dwn_dff_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_dwn_drc_sfc',nf90_float,flx_bb_dwn_drc_sfc_id), &
@@ -7440,6 +7483,8 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_sfc_id,'long_name','Broadband downwelling flux at surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_upw_sfc_id,'long_name','Broadband upwelling flux at surface'), &
+          sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_dff_sfc_id,'long_name','Broadband downwelling diffuse flux at surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_drc_sfc_id,'long_name','Broadband downwelling direct flux at surface'), &
@@ -7543,6 +7588,10 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_sfc_id,'long_name','Broadband azimuthally averaged luminance at surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_ngt_TOA_id,'long_name','Broadband incoming isotropic luminance at TOA'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,sfc_msv_id,'long_name','Surface emissivity'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,sfc_tpt_id,'long_name','Surface temperature'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_id,'long_name','Spectral luminance of nadir radiation'), &
           sbr_nm//': pa long_name in '//__FILE__)
@@ -7841,6 +7890,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_drc_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_sfc_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_upw_sfc_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_dff_sfc_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_drc_sfc_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_net_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
@@ -7889,6 +7939,8 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_TOA_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_sfc_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_ngt_TOA_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,sfc_msv_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,sfc_tpt_id,'units','kelvin'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CWP_id,'units','kilogram meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,nrg_pht_id,'units','joule photon-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ntn_bb_aa_id,'units','watt meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
@@ -8112,11 +8164,14 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_TOA_id,flx_bb_dwn_TOA),sbr_nm//': pv flx_bb_dwn_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_ngt_TOA_id,flx_ngt_TOA),sbr_nm//': pv flx_ngt_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,lmn_ngt_TOA_id,lmn_ngt_TOA),sbr_nm//': pv lmn_ngt_TOA in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,sfc_msv_id,sfc_msv),sbr_nm//': pv sfc_msv in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,sfc_tpt_id,sfc_tpt),sbr_nm//': pv sfc_tpt in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_upw_TOA_id,flx_bb_upw_TOA),sbr_nm//': pv flx_bb_upw_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_dff_id,flx_bb_dwn_dff),sbr_nm//': pv flx_bb_dwn_dff in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_drc_id,flx_bb_dwn_drc),sbr_nm//': pv flx_bb_dwn_drc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_id,flx_bb_dwn),sbr_nm//': pv flx_bb_dwn in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_sfc_id,flx_bb_dwn_sfc),sbr_nm//': pv flx_bb_dwn_sfc in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_upw_sfc_id,flx_bb_upw_sfc),sbr_nm//': pv flx_bb_upw_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_dff_sfc_id,flx_bb_dwn_dff_sfc),sbr_nm//': pv flx_bb_dwn_dff_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_drc_sfc_id,flx_bb_dwn_drc_sfc),sbr_nm//': pv flx_bb_dwn_drc_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_net_id,flx_bb_net),sbr_nm//': pv flx_bb_net in '//__FILE__)

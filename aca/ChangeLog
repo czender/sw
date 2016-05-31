@@ -1,6 +1,10 @@
+2016-05-27  Charlie Zender  <zender@uci.edu>
+
+	* Allow command-line input of sfc_tpt and sfc_msv
+
 2016-05-26  Charlie Zender  <zender@uci.edu>
 
-	* Add bottom surface emissivity BEMIS to DISORT and SWNB2
+	* Add bottom surface emissivity (default 1.0) BEMIS to DISORT and SWNB2
 
 2016-05-20  Charlie Zender  <zender@uci.edu>
 
