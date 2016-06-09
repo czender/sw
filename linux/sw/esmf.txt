@@ -321,6 +321,7 @@ ncl 'wgtfile=""' 'srcfile="${DATA}/b1850c5_clm.nc"' regridfile.ncl
 
 # Grid files in SCRIP format:
 # https://acme-svn2.ornl.gov/acme-repo/acme/mapping/grids
+# 20160609 SE "_pentagons" grids are best for regridding, "_latlon" grids intended for CAM's interpic_new and paraview
 ne30np4_091226_pentagons.nc  # 1.0 degree CAM-SE grid
 ne120np4_pentagons_100310.nc # 1/4 degree CAM-SE grid
 129x256_SCRIP.nc  # Like T85, but equally spaced (1.4 degrees) in latitude/longitude, including points at both poles
@@ -390,6 +391,11 @@ ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_t42_to_fv129x256_aave.20150901.
 
 ESMF_RegridWeightGen -s ${DATA}/grids/129x256_SCRIP.20150901.nc -d ${DATA}/grids/257x512_SCRIP.20150901.nc -w map_fv129x256_to_fv257x512_aave.20150901.nc --method conserve
 ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_fv129x256_to_fv257x512_aave.20150901.nc ${DATA}/ne30/rgr/famipc5_ne30_v0.3_00003.cam.h0.1979-01.nco.nc ${DATA}/ne30/rgr/dogfood.nc
+
+ncremap -a conserve -s ${DATA}/grids/ne16np4_110512_pentagons.nc -g ${DATA}/grids/ne30np4_pentagons.091226.nc -m ${DATA}/maps/map_ne16np4_to_ne30np4_aave.20160601.nc
+ncremap -a conserve -s ${DATA}/grids/ne30np4_pentagons.091226.nc -g ${DATA}/grids/ne16np4_110512_pentagons.nc -m ${DATA}/maps/map_ne30np4_to_ne16np4_aave.20160601.nc
+ncremap -a conserve -s ${DATA}/grids/ne11np4_pentagons_c150930.nc -g ${DATA}/grids/ne30np4_pentagons.091226.nc -m ${DATA}/maps/map_ne11np4_to_ne30np4_aave.20160601.nc
+ncremap -a conserve -s ${DATA}/grids/ne30np4_pentagons.091226.nc -g ${DATA}/grids/ne11np4_pentagons_c150930.nc -m ${DATA}/maps/map_ne30np4_to_ne11np4_aave.20160601.nc
 
 RRM:
 GenerateOverlapMesh --a ${DATA}/rgr/msh_180x360.g --b ${DATA}/grids/california_25km.nc --out ${DATA}/rgr/msh_ovr_180x360_to_ca25km.g
