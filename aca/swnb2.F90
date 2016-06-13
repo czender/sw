@@ -4795,13 +4795,13 @@ program swnb2
   ! This is reasonable for zodiacal light, and ~20% of stars are class M (Roa64)
   ! Unreasonable for airglow, which has numerous discrete transitions
   ! Based on this approximation we use flx_slr_frc from Kur95
-  ! lmn_ngt_TOA = lumens_per_Watt_555nm * (flx_ngt_TOA / pi) * sum (flx_slr_frc*lmn_srf)
-  ! flx_ngt_TOA = pi * lmn_ngt_TOA * sum (flx_slr_frc*lmn_SRF) / lumens_per_Watt_555nm
+  ! lmn_ngt_TOA = lumens_per_Watt_555nm * (flx_ngt_TOA / pi) * sum (flx_slr_frc*lmn_SRF)
+  ! flx_ngt_TOA = pi * lmn_ngt_TOA / [ sum (flx_slr_frc*lmn_SRF) * lumens_per_Watt_555nm ]
   sum_fsf_srf=0.0 ! [frc]
   do bnd_idx=1,bnd_nbr
      sum_fsf_srf=sum_fsf_srf+flx_slr_frc(bnd_idx)*lmn_SRF(bnd_idx)
   enddo                     ! end loop over bnd
-  flx_ngt_TOA=pi*lmn_ngt_TOA*sum_fsf_srf/lumens_per_Watt_555nm ! [W m-2]
+  flx_ngt_TOA=pi*lmn_ngt_TOA/(sum_fsf_srf*lumens_per_Watt_555nm) ! [W m-2]
   
   ! End section 1: Initialization
   ! Begin section 2: Main computation loop over all bands
@@ -6018,7 +6018,6 @@ program swnb2
         ! flx_ngt_TOA [W m-2] is irradiance whereas DISORT wants for fisot an isotropic radiance [W m-2 sr-1]
         fbeam=slr_cst*flx_slr_frc(bnd_idx) ! [W m-2]
         fisot=flx_ngt_TOA*flx_slr_frc(bnd_idx)/pi ! [W m-2 sr-1]
-        
      endif ! mode_ngt
      if (fisot < 0.0) then
         call abort

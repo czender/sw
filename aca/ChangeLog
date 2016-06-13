@@ -1,3 +1,7 @@
+2016-06-13  Charlie Zender  <zender@uci.edu>
+
+	* Fix bug in normalization of flx_ngt_TOA. Now lmn_ngt_TOA == lmn_bb_aa_ndr_TOA.
+
 2016-05-27  Charlie Zender  <zender@uci.edu>
 
 	* Allow command-line input of sfc_tpt and sfc_msv
