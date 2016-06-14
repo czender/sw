@@ -394,6 +394,19 @@ program swnb2
   real,parameter::real_tiny=1.0e-10 ! Tiny value to avoid divide-by-zero errors
   ! integer,parameter::bnd_nbr_nst_max=235 ! FSBR resolution
   
+  ! Skyglow parameters
+  ! Garstang model parameters Gar00 p. 84 (3), CFE01 p. 37 (19)
+  real,parameter::cst_one=3.451e-9 ! 
+  real,parameter::cst_two=4.276e-8 ! 
+  real,parameter::kst_one=0.109 ! 
+  real,parameter::kst_two=1.51e-3 ! 
+  real,parameter::yyy_one=2.0e-5 ! 
+  real,parameter::yyy_two=1.29e-3 ! 
+  real,parameter::zzz_one=0.174 ! 
+  real,parameter::zzz_two=0.0587 ! 
+  real,parameter::alpha_one=2.35e-4 ! 
+  real,parameter::alpha_two=5.81e-3 ! 
+
   ! Derived parameters
   integer,parameter::asm_prm_mmn_idx=1 ! [idx] Asymmetry parameter Legendre index
   integer,parameter::mmn_nbr_max=str_nbr_max ! # phase function moments
@@ -738,6 +751,13 @@ program swnb2
   integer ilm_dwn_TOA_id
   integer ilm_dwn_id
   integer ilm_dwn_sfc_id
+  integer ilm_thr_id
+  integer ilm_thr_prc_id
+!  integer ilm_thr_zen_id
+!  integer ilm_thr_pht_id
+!  integer ilm_thr_pht_zen_id
+!  integer ilm_thr_sct_id
+!  integer ilm_thr_sct_zen_id
   integer ilm_upw_id
   integer j_NO2_id
   integer j_spc_NO2_sfc_id
@@ -1278,6 +1298,9 @@ program swnb2
   real,dimension(:),allocatable::flx_nst_upw !
   real,dimension(:),allocatable::ilm_dwn !
   real,dimension(:),allocatable::ilm_upw !
+!  real,dimension(:),allocatable::ilm_thr_zen
+!  real,dimension(:),allocatable::ilm_thr_pht_zen
+!  real,dimension(:),allocatable::ilm_thr_sct_zen
   real,dimension(:),allocatable::lmn_bb_aa_ndr !
 
   ! Array dimensions: plr
@@ -1315,7 +1338,15 @@ program swnb2
   real,dimension(:,:),allocatable::ntn_spc_aa_sfc
 
   ! Array dimensions: plr,levp
+  real,dimension(:,:),allocatable::ilm_thr !
+  real,dimension(:,:),allocatable::ilm_thr_pht !
+  real,dimension(:,:),allocatable::ilm_thr_sct !
+  real,dimension(:,:),allocatable::ilm_thr_prc !
+  real,dimension(:,:),allocatable::ilm_thr_pht_prc !
+  real,dimension(:,:),allocatable::ilm_thr_sct_prc !
   real,dimension(:,:),allocatable::lmn_bb_aa
+  real,dimension(:,:),allocatable::lmn_bb_aa_nL
+  real,dimension(:,:),allocatable::lmn_bb_aa_nL_obs
   real,dimension(:,:),allocatable::ntn_bb_aa
 
   ! Array dimensions: azi,plr,bnd
@@ -3703,6 +3734,12 @@ program swnb2
   if(rcd /= 0) stop "allocate() failed for flx_nst_upw"
   allocate(ilm_dwn(levp_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for ilm_dwn"
+  allocate(ilm_thr_zen(levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for ilm_thr_zen"
+  allocate(ilm_thr_pht_zen(levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for ilm_thr_pht_zen"
+  allocate(ilm_thr_sct_zen(levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for ilm_thr_sct_zen"
   allocate(ilm_upw(levp_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for ilm_upw"
   allocate(lmn_bb_aa_ndr(levp_nbr),stat=rcd)
@@ -3723,8 +3760,18 @@ program swnb2
   ! Array dimensions: bnd,levp (still unknown, see below)
   ! Array dimensions: plr,bnd (still unknown, see below)
   ! Array dimensions: plr,levp
+  allocate(ilm_thr(plr_nbr,levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for ilm_thr"
+  allocate(ilm_thr_pht(plr_nbr,levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for ilm_thr_pht"
+  allocate(ilm_thr_sct(plr_nbr,levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for ilm_thr_sct"
   allocate(lmn_bb_aa(plr_nbr,levp_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for lmn_bb_aa"
+  allocate(lmn_bb_aa_nL(plr_nbr,levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for lmn_bb_aa_nL"
+  allocate(lmn_bb_aa_nL_obs(plr_nbr,levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for lmn_bb_aa_nL_obs"
   allocate(ntn_bb_aa(plr_nbr,levp_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for ntn_bb_aa"
   ! Array dimensions: azi,plr,bnd (still unknown, see below)
@@ -6594,6 +6641,21 @@ program swnb2
              lmn_bb_aa(plr_idx,levp_idx)/azi_nbr
         ntn_bb_aa(plr_idx,levp_idx)= &
              ntn_bb_aa(plr_idx,levp_idx)/azi_nbr
+        lmn_bb_aa_nL(plr_idx,levp_idx)=pi*1.0e9*lmn_bb_aa(plr_idx,levp_idx)/10000.0 ! [lm m-2 sr-1] -> [nL]
+        ! Garstang model Gar00 p. 84 (3), CFE01 p. 37 (19)
+        ! Observed background depends on actual background luminance
+        lmn_bb_aa_nL_obs(plr_idx,levp_idx)=lmn_bb_aa_nL(plr_idx,levp_idx)
+        ! Perceived threshold illumination depends on observed background brightness
+        ilm_thr_sct_prc(plr_idx,levp_idx)=cst_one* &
+             (1.0+kst_one*sqrt(lmn_bb_aa_nL_obs(plr_idx,levp_idx)))* &
+             (1.0+kst_one*sqrt(lmn_bb_aa_nL_obs(plr_idx,levp_idx)))
+        ilm_thr_pht_prc(plr_idx,levp_idx)=cst_two* &
+             (1.0+kst_two*sqrt(lmn_bb_aa_nL_obs(plr_idx,levp_idx)))* &
+             (1.0+kst_two*sqrt(lmn_bb_aa_nL_obs(plr_idx,levp_idx)))
+        ilm_thr_prc(plr_idx,levp_idx)= &
+             ilm_thr_pht(plr_idx,levp_idx)*ilm_thr_sct(plr_idx,levp_idx)/ &
+             (ilm_thr_pht(plr_idx,levp_idx)+ilm_thr_sct(plr_idx,levp_idx))
+        ilm_thr_sct(plr_idx,levp_idx)=ilm_thr_sct_prc(plr_idx,levp_idx)
      enddo            ! end loop over azi
   enddo               ! end loop over plr
 
@@ -7079,6 +7141,7 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'lev',nf90_double,lev_dmn_id,lev_id),sbr_nm//': dv lev')
      rcd=nf90_wrp(nf90_def_var(nc_id,'levp',nf90_double,levp_dmn_id,levp_id),sbr_nm//': dv levp')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ilm_dwn',nf90_float,levp_dmn_id,ilm_dwn_id),sbr_nm//': dv ilm_dwn')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'ilm_thr',nf90_float,dim_plr_levp,ilm_thr_id),sbr_nm//': dv ilm_thr')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ilm_upw',nf90_float,levp_dmn_id,ilm_upw_id),sbr_nm//': dv ilm_upw')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_SRF',nf90_float,bnd_dmn_id,lmn_SRF_id),sbr_nm//': dv lmn_SRF')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa',nf90_float,dim_plr_levp,lmn_bb_aa_id),sbr_nm//': dv lmn_bb_aa')
@@ -7572,6 +7635,8 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ilm_dwn_sfc_id,'long_name','Downwelling illuminance at surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,ilm_thr_id,'long_name','Threshold illuminance against background brightness'), &
+          sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ilm_upw_id,'long_name','Upwelling illuminance'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_SRF_id,'long_name','Luminous Efficiency'), &
@@ -7924,6 +7989,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,ilm_dwn_TOA_id,'units','lumen meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ilm_dwn_id,'units','lumen meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ilm_dwn_sfc_id,'units','lumen meter-2'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,ilm_thr_id,'units','lumen meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ilm_upw_id,'units','lumen meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,j_NO2_id,'units','second-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,j_spc_NO2_sfc_id,'units','second-1 meter-1'),sbr_nm//': pa units in '//__FILE__)
@@ -8201,6 +8267,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,ilm_dwn_TOA_id,ilm_dwn_TOA),sbr_nm//': pv ilm_dwn_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ilm_dwn_id,ilm_dwn),sbr_nm//': pv ilm_dwn in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ilm_dwn_sfc_id,ilm_dwn_sfc),sbr_nm//': pv ilm_dwn_sfc in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,ilm_thr_id,ilm_thr),sbr_nm//': pv ilm_thr in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ilm_upw_id,ilm_upw),sbr_nm//': pv ilm_upw in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,j_NO2_id,j_NO2),sbr_nm//': pv j_NO2 in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,j_spc_NO2_sfc_id,j_spc_NO2_sfc),sbr_nm//': pv j_spc_NO2_sfc in '//__FILE__)
