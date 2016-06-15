@@ -1715,6 +1715,9 @@ program swnb2
   real dns_snw_cmd_ln ! [kg m-3] Snow density
   real dpt_snw_cmd_ln ! [m] Snowpack thickness
   real float_foo
+  real fct_a ! [frc] Apparent background brightness alteration by pupil area
+  real fct_SC ! [frc] Apparent background brightness alteration by Stiles-Crawford effect (off-axis viewing)
+  real fct_c ! [frc] Apparent background brightness alteration by color calibration
   real flx_frc_drc_TOA ! [frc] TOA insolation fraction in direct beam
   real flx_spc_act
   real flx_spc_act_pht
@@ -4849,6 +4852,8 @@ program swnb2
      sum_fsf_srf=sum_fsf_srf+flx_slr_frc(bnd_idx)*lmn_SRF(bnd_idx)
   enddo                     ! end loop over bnd
   flx_ngt_TOA=pi*lmn_ngt_TOA/(sum_fsf_srf*lumens_per_Watt_555nm) ! [W m-2]
+  ! [frc] Apparent background brightness alteration by pupil area
+  fct_a=
   
   ! End section 1: Initialization
   ! Begin section 2: Main computation loop over all bands
