@@ -344,6 +344,7 @@ program swnb2
   use nf90_utl ! [mdl] netCDF utilities
   use phys_cst_mdl ! [mdl] Fundamental and derived physical constants
   use rt_mdl ! [mdl] Radiative transfer utilities
+  use skg_mdl ! [mdl] Skyglow parameters
   use sng_mdl ! [mdl] String manipulation
   use tdy_mdl,only:svp_H2O_lqd_PrK78,svp_H2O_ice_PrK78 ! [mdl] Thermodynamics
   use utl_mdl ! [mdl] Utility functions (date_time_get,mnt_chk...)
@@ -394,19 +395,6 @@ program swnb2
   real,parameter::real_tiny=1.0e-10 ! Tiny value to avoid divide-by-zero errors
   ! integer,parameter::bnd_nbr_nst_max=235 ! FSBR resolution
   
-  ! Skyglow parameters
-  ! Garstang model parameters Gar00 p. 84 (3), CFE01 p. 37 (19)
-  real,parameter::cst_one=3.451e-9 ! 
-  real,parameter::cst_two=4.276e-8 ! 
-  real,parameter::kst_one=0.109 ! 
-  real,parameter::kst_two=1.51e-3 ! 
-  real,parameter::yyy_one=2.0e-5 ! 
-  real,parameter::yyy_two=1.29e-3 ! 
-  real,parameter::zzz_one=0.174 ! 
-  real,parameter::zzz_two=0.0587 ! 
-  real,parameter::alpha_one=2.35e-4 ! 
-  real,parameter::alpha_two=5.81e-3 ! 
-
   ! Derived parameters
   integer,parameter::asm_prm_mmn_idx=1 ! [idx] Asymmetry parameter Legendre index
   integer,parameter::mmn_nbr_max=str_nbr_max ! # phase function moments
@@ -1298,9 +1286,9 @@ program swnb2
   real,dimension(:),allocatable::flx_nst_upw !
   real,dimension(:),allocatable::ilm_dwn !
   real,dimension(:),allocatable::ilm_upw !
-!  real,dimension(:),allocatable::ilm_thr_zen
-!  real,dimension(:),allocatable::ilm_thr_pht_zen
-!  real,dimension(:),allocatable::ilm_thr_sct_zen
+  real,dimension(:),allocatable::ilm_thr_zen
+  real,dimension(:),allocatable::ilm_thr_pht_zen
+  real,dimension(:),allocatable::ilm_thr_sct_zen
   real,dimension(:),allocatable::lmn_bb_aa_ndr !
 
   ! Array dimensions: plr
@@ -1716,6 +1704,8 @@ program swnb2
   real dpt_snw_cmd_ln ! [m] Snowpack thickness
   real float_foo
   real fct_a ! [frc] Apparent background brightness alteration by pupil area
+  real fct_a_scl_cmp ! [frc] Pupil area factor scalar component
+  real fct_a_arr_cmp ! [frc] Pupil area factor array component
   real fct_SC ! [frc] Apparent background brightness alteration by Stiles-Crawford effect (off-axis viewing)
   real fct_c ! [frc] Apparent background brightness alteration by color calibration
   real flx_frc_drc_TOA ! [frc] TOA insolation fraction in direct beam
@@ -4853,7 +4843,11 @@ program swnb2
   enddo                     ! end loop over bnd
   flx_ngt_TOA=pi*lmn_ngt_TOA/(sum_fsf_srf*lumens_per_Watt_555nm) ! [W m-2]
   ! [frc] Apparent background brightness alteration by pupil area
-  fct_a=
+  ! CFE01 p. 37 (28), Gar00
+  fct_a_scl_cmp=0.534−0.00211*ppl_age_yr−(0.236−0.00127*ppl_age_yr)
+  b_obs=b_vis/(fct_a*fct_sc*fct_cb) ! CFE01 p. 37 (22)
+  fct_a_arr_cmp=tanh(0.40*log(b_obs_nL)−2.20)
+  fct_a=fct_a_scl_cmp*fct_a_arr_cmp
   
   ! End section 1: Initialization
   ! Begin section 2: Main computation loop over all bands
@@ -6649,7 +6643,7 @@ program swnb2
         lmn_bb_aa_nL(plr_idx,levp_idx)=pi*1.0e9*lmn_bb_aa(plr_idx,levp_idx)/10000.0 ! [lm m-2 sr-1] -> [nL]
         ! Garstang model Gar00 p. 84 (3), CFE01 p. 37 (19)
         ! Observed background depends on actual background luminance
-        lmn_bb_aa_nL_obs(plr_idx,levp_idx)=lmn_bb_aa_nL(plr_idx,levp_idx)
+        lmn_bb_aa_nL_obs(plr_idx,levp_idx)=lmn_bb_aa_nL(plr_idx,levp_idx) ! CFE01 p. 37 (22)
         ! Perceived threshold illumination depends on observed background brightness
         ilm_thr_sct_prc(plr_idx,levp_idx)=cst_one* &
              (1.0+kst_one*sqrt(lmn_bb_aa_nL_obs(plr_idx,levp_idx)))* &

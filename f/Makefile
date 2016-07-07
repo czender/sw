@@ -255,7 +255,7 @@ MDL_SRC := fff.F90 fff_mdl.F90 hello.f90 sng.F90 # Non-library
 MDL_SRC += dbg_mdl.F90 erf_mdl.F90 gmm_mdl.F90 mmr_mdl.F90 nf90_utl.F90 shr_kind_mod.F90 prn_mdl.F90 sng_mdl.F90 utl_mdl.F90 vec_mdl.F90 xtr_mdl.F90 # libcsz_f90
 MDL_SRC += clm_mdl.F90 dmr_mdl.F90 flx_slr_mdl.F90 nf90_utl.F90 phys_cst_mdl.F90 rt_mdl.F90 slr_crd_mdl.F90 tdy_mdl.F90 wvl_mdl.F90 # libcsm_f90
 MDL_SRC += abl_trb_mdl.F90 abl_typ_mdl.F90 cape_mdl.F90 flx_gnd_mdl.F90 flx_ocn_mdl.F90 wnd_pdf_mdl.F90 # libcsm_f90
-MDL_SRC += drv_cst_mdl.F90 fnd_cst_mdl.F90 htrn_mdl.F90 # libcsm_f90
+MDL_SRC += drv_cst_mdl.F90 fnd_cst_mdl.F90 htrn_mdl.F90 skg_mdl.F90 # libcsm_f90
 # Directories to search for source files
 MDL_PTH := . ${HOME}/include
 # Dependency list for executable
@@ -1134,6 +1134,7 @@ $(libcsm_f90).a : $(libcsm_f90).a(${MY_OBJ_DIR}/abl_trb_mdl.o) \
 	$(libcsm_f90).a(${MY_OBJ_DIR}/flx_slr_mdl.o) \
 	$(libcsm_f90).a(${MY_OBJ_DIR}/fnd_cst_mdl.o) \
 	$(libcsm_f90).a(${MY_OBJ_DIR}/htrn_mdl.o) \
+	$(libcsm_f90).a(${MY_OBJ_DIR}/skg_mdl.o) \
 	$(libcsm_f90).a(${MY_OBJ_DIR}/phys_cst_mdl.o) \
 	$(libcsm_f90).a(${MY_OBJ_DIR}/slr_crd_mdl.o) \
 	$(libcsm_f90).a(${MY_OBJ_DIR}/rt_mdl.o) \
