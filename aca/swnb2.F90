@@ -689,6 +689,7 @@ program swnb2
   integer azi_dgr_id          
   integer azi_id            ! coordinate ID
   integer bnd_id            ! coordinate ID
+  integer dmt_ppl_obs_id
   integer flx_abs_atm_rdr_id
   integer flx_bb_abs_atm_id
   integer flx_bb_abs_id
@@ -740,7 +741,7 @@ program swnb2
   integer ilm_dwn_id
   integer ilm_dwn_sfc_id
   integer ilm_thr_id
-  integer ilm_thr_prc_id
+!  integer ilm_thr_prc_id
 !  integer ilm_thr_zen_id
 !  integer ilm_thr_pht_id
 !  integer ilm_thr_pht_zen_id
@@ -1699,13 +1700,14 @@ program swnb2
   real alb_cmd_ln
   real bnd_wgt(bnd_nbr_max)
   real bnd_wgt_lmn(bnd_nbr_max)
+  real dmt_ppl_std ! [mm] Pupil diameter of mean-aged participant in threshold brightness tests
+  real dmt_ppl_obs ! [mm] Pupil diameter of observer
   real dns_mst_air_sfc ! [kg m-3] Density of moist air at surface
   real dns_snw_cmd_ln ! [kg m-3] Snow density
   real dpt_snw_cmd_ln ! [m] Snowpack thickness
   real float_foo
   real fct_a ! [frc] Apparent background brightness alteration by pupil area
-  real fct_a_scl_cmp ! [frc] Pupil area factor scalar component
-  real fct_a_arr_cmp ! [frc] Pupil area factor array component
+  real dmt_ppl_crc_bry ! [mm] Pupil diameter correction factor for brightness
   real fct_SC ! [frc] Apparent background brightness alteration by Stiles-Crawford effect (off-axis viewing)
   real fct_c ! [frc] Apparent background brightness alteration by color calibration
   real flx_frc_drc_TOA ! [frc] TOA insolation fraction in direct beam
@@ -4842,12 +4844,6 @@ program swnb2
      sum_fsf_srf=sum_fsf_srf+flx_slr_frc(bnd_idx)*lmn_SRF(bnd_idx)
   enddo                     ! end loop over bnd
   flx_ngt_TOA=pi*lmn_ngt_TOA/(sum_fsf_srf*lumens_per_Watt_555nm) ! [W m-2]
-  ! [frc] Apparent background brightness alteration by pupil area
-  ! CFE01 p. 37 (28), Gar00
-  fct_a_scl_cmp=0.534−0.00211*ppl_age_yr−(0.236−0.00127*ppl_age_yr)
-  b_obs=b_vis/(fct_a*fct_sc*fct_cb) ! CFE01 p. 37 (22)
-  fct_a_arr_cmp=tanh(0.40*log(b_obs_nL)−2.20)
-  fct_a=fct_a_scl_cmp*fct_a_arr_cmp
   
   ! End section 1: Initialization
   ! Begin section 2: Main computation loop over all bands
@@ -6640,11 +6636,43 @@ program swnb2
              lmn_bb_aa(plr_idx,levp_idx)/azi_nbr
         ntn_bb_aa(plr_idx,levp_idx)= &
              ntn_bb_aa(plr_idx,levp_idx)/azi_nbr
+     enddo            ! end loop over plr
+  enddo               ! end loop over levp
+
+  ! Derive threshold illumination from absolute sky luminance
+  ! Only skyglow applications need to execute this block
+  do levp_idx=1,levp_nbr
+     do plr_idx=1,plr_nbr
+        ! Garstang model relies on brightness in nL not SI
         lmn_bb_aa_nL(plr_idx,levp_idx)=pi*1.0e9*lmn_bb_aa(plr_idx,levp_idx)/10000.0 ! [lm m-2 sr-1] -> [nL]
-        ! Garstang model Gar00 p. 84 (3), CFE01 p. 37 (19)
-        ! Observed background depends on actual background luminance
-        lmn_bb_aa_nL_obs(plr_idx,levp_idx)=lmn_bb_aa_nL(plr_idx,levp_idx) ! CFE01 p. 37 (22)
-        ! Perceived threshold illumination depends on observed background brightness
+        ! Observed background luminance depends on absolute (actual) background luminance
+        ! fxm: relation is complex and depends on aperture size, etc.
+        ! Setting all optical factors = 1.0 makes approximation that b_obs=b_vis
+        !fct_a=1.0
+        ! [frc] fct_a, factor by which actual pupil (or telescope) area exceeds pupil area of
+        ! test subjects used in threshold brightness experiments, depends on age and absolute (actual) luminance
+        ! However, CFE01 p. 37 (22) has b_obs=f(fct_a) and fct_a=f(b_obs) which is recursive and impossible
+        ! Careful reading of Gar00 shows CFE01 is mistaken
+        ! CFE01 p. 37 (29) should have b=b_vis not b_obs on RHS
+        ! Then it agrees with Gar00 p. 86 (6)
+        ! 20160707: "log" in Gar00+CFE01 brightness corrections means log10 ("log" for log10 also used in magnitude formulae)
+        dmt_ppl_crc_bry=tanh(0.40*log10(lmn_bb_aa_nL(plr_idx,levp_idx))-2.20) 
+        dmt_ppl_std=0.534-0.00211*ppl_age_yr_std-(0.236-0.00127*ppl_age_yr_std)*dmt_ppl_crc_bry
+        dmt_ppl_obs=0.534-0.00211*ppl_age_yr_obs-(0.236-0.00127*ppl_age_yr_obs)*dmt_ppl_crc_bry
+        ! A(std) > A(obs) means standard aperture (for threshold study) larger than current observing aperture
+        ! Divide brightness by this area factor to convert true brightness into brightness that mean participant
+        ! in threshold brightness study would have observed
+        fct_a=dmt_ppl_std*dmt_ppl_std/(dmt_ppl_obs*dmt_ppl_obs)
+        fct_SC=1.0
+        fct_c=1.0
+        ! CFE01 p. 37 (28), Gar00
+        lmn_bb_aa_nL_obs(plr_idx,levp_idx)=lmn_bb_aa_nL(plr_idx,levp_idx)/(fct_a*fct_SC*fct_c) ! CFE01 p. 37 (22)
+        ! Garstang model Gar00 p. 84 (3), CFE01 p. 37 (19-21) 
+        ! NB: CFE01 p. 37 (19-21) contain two symbols (b and b_obs) for background luminance whereas
+        ! Gar00 p. 85 (4a-4c) has only one symbol (b) for background luminance
+        ! Based on this it appears CFE01 meant to use b_obs (not b) in all RHS terms of (19-21), and
+        ! that CFE01 uses b_vis for absolute (actual) background luminance (uncorrected for aperture etc.)
+        ! Perceived threshold illumination depends on observed background luminance
         ilm_thr_sct_prc(plr_idx,levp_idx)=cst_one* &
              (1.0+kst_one*sqrt(lmn_bb_aa_nL_obs(plr_idx,levp_idx)))* &
              (1.0+kst_one*sqrt(lmn_bb_aa_nL_obs(plr_idx,levp_idx)))
@@ -6655,8 +6683,8 @@ program swnb2
              ilm_thr_pht(plr_idx,levp_idx)*ilm_thr_sct(plr_idx,levp_idx)/ &
              (ilm_thr_pht(plr_idx,levp_idx)+ilm_thr_sct(plr_idx,levp_idx))
         ilm_thr_sct(plr_idx,levp_idx)=ilm_thr_sct_prc(plr_idx,levp_idx)
-     enddo            ! end loop over azi
-  enddo               ! end loop over plr
+     enddo            ! end loop over plr
+  enddo               ! end loop over levp
 
   do levp_idx=1,levp_nbr
      lmn_bb_aa_ndr(levp_idx)=lmn_bb_aa(plr_ndr,levp_idx)
@@ -7150,6 +7178,7 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_TOA',nf90_float,plr_dmn_id,lmn_bb_aa_TOA_id),sbr_nm//': dv lmn_bb_aa_TOA')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_sfc',nf90_float,plr_dmn_id,lmn_bb_aa_sfc_id),sbr_nm//': dv lmn_bb_aa_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_ngt_TOA',nf90_float,lmn_ngt_TOA_id),sbr_nm//': dv lmn_ngt_TOA in '//__FILE__)
+     rcd=nf90_wrp(nf90_def_var(nc_id,'dmt_ppl_obs',nf90_float,dmt_ppl_obs_id),sbr_nm//': dv dmt_ppl_obs in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'sfc_msv',nf90_float,sfc_msv_id),sbr_nm//': dv sfc_msv in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'sfc_tpt',nf90_float,sfc_tpt_id),sbr_nm//': dv sfc_tpt in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_spc_aa_ndr',nf90_float,dim_bnd_levp,lmn_spc_aa_ndr_id),sbr_nm//': dv lmn_spc_aa_ndr')
@@ -7652,6 +7681,8 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_ngt_TOA_id,'long_name','Broadband incoming isotropic luminance at TOA'), &
           sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,dmt_ppl_obs_id,'long_name','Pupil diameter of observer'), &
+          sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,sfc_msv_id,'long_name','Surface emissivity'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,sfc_tpt_id,'long_name','Surface temperature'), &
@@ -8003,6 +8034,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_TOA_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_sfc_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_ngt_TOA_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,dmt_ppl_obs_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,sfc_msv_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,sfc_tpt_id,'units','kelvin'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CWP_id,'units','kilogram meter-2'),sbr_nm//': pa units in '//__FILE__)
@@ -8228,6 +8260,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_TOA_id,flx_bb_dwn_TOA),sbr_nm//': pv flx_bb_dwn_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_ngt_TOA_id,flx_ngt_TOA),sbr_nm//': pv flx_ngt_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,lmn_ngt_TOA_id,lmn_ngt_TOA),sbr_nm//': pv lmn_ngt_TOA in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,dmt_ppl_obs_id,dmt_ppl_obs),sbr_nm//': pv dmt_ppl_obs in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,sfc_msv_id,sfc_msv),sbr_nm//': pv sfc_msv in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,sfc_tpt_id,sfc_tpt),sbr_nm//': pv sfc_tpt in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_upw_TOA_id,flx_bb_upw_TOA),sbr_nm//': pv flx_bb_upw_TOA in '//__FILE__)
