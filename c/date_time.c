@@ -198,7 +198,8 @@ FNC_C2F(gmt2unix)
     /*    if(tz_set_cmd != NULL) (void)free(tz_set_cmd); tz_set_cmd=NULL;*/
   } /* endif TZ exists */
 
-  if(tz_lcl != NULL) (void)free(tz_lcl); tz_lcl=NULL; /* [sng] Local copy of TZ environment variable */
+  if(tz_lcl != NULL) (void)free(tz_lcl);
+  tz_lcl=NULL; /* [sng] Local copy of TZ environment variable */
 
   return;
 } /* end gmt2unix() */ 
@@ -390,7 +391,8 @@ FNC_C2F(unix2gmt_sng)
     /*    if(tz_set_cmd != NULL) (void)free(tz_set_cmd); tz_set_cmd=NULL;*/
   } /* endif TZ exists */
 
-  if(tz_lcl != NULL) (void)free(tz_lcl); tz_lcl=NULL; /* [sng] Local copy of TZ environment variable */
+  if(tz_lcl != NULL) (void)free(tz_lcl);
+  tz_lcl=NULL; /* [sng] Local copy of TZ environment variable */
 
   /* Standard mnemonics are not used so comment out 
   int mth; // [mth] 1-based month of year [1..12]
