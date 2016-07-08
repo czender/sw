@@ -6665,6 +6665,9 @@ program swnb2
         fct_a=dmt_ppl_std*dmt_ppl_std/(dmt_ppl_obs*dmt_ppl_obs)
         fct_SC=1.0
         fct_c=1.0
+        if (dbg_lvl>=dbg_scl) then
+           write (6,'(2(a,f15.12))') 'dmt_ppl_obs = ',dmt_ppl_obs,', fct_a = ',fct_a
+        endif ! endif dbg
         ! CFE01 p. 37 (28), Gar00
         lmn_bb_aa_nL_obs(plr_idx,levp_idx)=lmn_bb_aa_nL(plr_idx,levp_idx)/(fct_a*fct_SC*fct_c) ! CFE01 p. 37 (22)
         ! Garstang model Gar00 p. 84 (3), CFE01 p. 37 (19-21) 
