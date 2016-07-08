@@ -3767,6 +3767,12 @@ program swnb2
   if(rcd /= 0) stop "allocate() failed for lmn_bb_aa_nL"
   allocate(lmn_bb_aa_nL_obs(plr_nbr,levp_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for lmn_bb_aa_nL_obs"
+  allocate(ilm_thr_prc(plr_nbr,levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for ilm_thr_prc"
+  allocate(ilm_thr_pht_prc(plr_nbr,levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for ilm_thr_pht_prc"
+  allocate(ilm_thr_sct_prc(plr_nbr,levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for ilm_thr_sct_prc"
   allocate(ntn_bb_aa(plr_nbr,levp_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for ntn_bb_aa"
   ! Array dimensions: azi,plr,bnd (still unknown, see below)
@@ -6665,7 +6671,7 @@ program swnb2
         fct_a=dmt_ppl_std*dmt_ppl_std/(dmt_ppl_obs*dmt_ppl_obs)
         fct_SC=1.0
         fct_c=1.0
-        if (dbg_lvl>=dbg_scl) then
+        if (dbg_lvl>=dbg_vec) then
            write (6,'(2(a,f15.12))') 'dmt_ppl_obs = ',dmt_ppl_obs,', fct_a = ',fct_a
         endif ! endif dbg
         ! CFE01 p. 37 (28), Gar00
@@ -6675,6 +6681,9 @@ program swnb2
         ! Gar00 p. 85 (4a-4c) has only one symbol (b) for background luminance
         ! Based on this it appears CFE01 meant to use b_obs (not b) in all RHS terms of (19-21), and
         ! that CFE01 uses b_vis for absolute (actual) background luminance (uncorrected for aperture etc.)
+        ! Gar00 treats i and b fields symetrically, to be corrected by F and G factors, respectively
+        ! CFE01 "builds-in" G factor to b_obs, and then only requires correction of i to iprime
+        ! CFE01 expects sky brightness b_vis = f(V [mag arcsec-2]), and then corrects b_vis to b_obs
         ! Perceived threshold illumination depends on observed background luminance
         ilm_thr_sct_prc(plr_idx,levp_idx)=cst_one* &
              (1.0+kst_one*sqrt(lmn_bb_aa_nL_obs(plr_idx,levp_idx)))* &
