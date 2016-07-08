@@ -1710,9 +1710,11 @@ program swnb2
   real float_foo
   real fct_a ! [frc] Apparent background brightness and perceived illumination alteration by pupil area
   real dmt_ppl_crc_bry ! [mm] Pupil diameter correction factor for brightness
-  real fct_SC ! [frc] Apparent background brightness and perceived illumination alteration by Stiles-Crawford effect (off-axis viewing)
+  real fct_SC_sct ! [frc] Apparent background brightness and perceived illumination alteration by Stiles-Crawford effect (off-axis viewing), scotopic
+  real fct_SC_pht ! [frc] Apparent background brightness and perceived illumination alteration by Stiles-Crawford effect (off-axis viewing), photopic
   real fct_cb ! [frc] Apparent background brightness alteration due to difference between laboratory and background color
   real fct_cs ! [frc] Threshold illumination alteration due to difference between laboratory and star color 
+  real fct_mgn ! [frc] Magnification power of optics
   real fct_e ! [frc] Threshold illumination alteration due to atmospheric extinction
   real fct_s ! [frc] Threshold illumination alteration due to observer sensitivity
   real flx_frc_drc_TOA ! [frc] TOA insolation fraction in direct beam
@@ -6670,16 +6672,34 @@ program swnb2
         ! Then it agrees with Gar00 p. 86 (6)
         ! 20160707: "log" in Gar00+CFE01 brightness corrections means log10 ("log" for log10 also used in magnitude formulae)
         dmt_ppl_crc_bry=tanh(0.40*log10(lmn_bb_aa_nL(plr_idx,levp_idx))-2.20) 
-        dmt_ppl_std=0.534-0.00211*ppl_age_yr_std-(0.236-0.00127*ppl_age_yr_std)*dmt_ppl_crc_bry
-        dmt_ppl_obs=0.534-0.00211*ppl_age_yr_obs-(0.236-0.00127*ppl_age_yr_obs)*dmt_ppl_crc_bry
+        dmt_ppl_std=0.534-0.00211*ppl_age_yr_std-(0.236-0.00127*ppl_age_yr_std)*dmt_ppl_crc_bry ! [cm]
+        dmt_ppl_obs=0.534-0.00211*ppl_age_yr_obs-(0.236-0.00127*ppl_age_yr_obs)*dmt_ppl_crc_bry ! [cm]
         ! fct_a = Apparent background brightness and perceived illumination alteration by pupil area
         ! A(std) > A(obs) means standard aperture (for threshold study) larger than current observing aperture
         ! Divide brightness by this area factor to convert true brightness into brightness that mean participant
         ! in threshold brightness study would have observed
         fct_a=dmt_ppl_std*dmt_ppl_std/(dmt_ppl_obs*dmt_ppl_obs)
         ! fct_SC = Apparent background brightness and perceived illumination alteration by Stiles-Crawford effect (off-axis viewing)
-        fct_SC=1.0
+        ! Sch90: "light that enters the eye near the outer edge of the pupil will be less efficiently used than light that enters near the middle of the pupil. This Stiles-Crawford effect is caused by the photon-detection efficiency falling with distance from the center of the eye..."
+        ! Neither Gar00 nor CFE01 reprints fct_SC parameterization
+        ! Both Gar00 and CFE01 refer reader to Sch90, as modified in Sch93, and point-out that fct_SC in Sch90 (and Sch93?) is actually fct_SCˆ{-1}
+        ! Sch90 p. 214 (9) shows ... and is superceded by Sch93
+        ! Sch93 p. 327 (31i) shows fct_SC depends on D (aperture = pupil diameter = dmt_ppl_obs [cm]), M (magnification), and P_st (standard pupil size = dmt_ppl_std [cm])
+        ! fct_mgn = Magnification power of optics
+        ! Magnification is 1 for naked-eye observations
+        fct_mgn=1.0 
+        ! fxm: verify this is correct and not inverse of correct
+        fct_SC_sct=min(1.0, &
+             (1.0-pow(dmt_ppl_std/12.44,4.0))/ & ! [cm]
+             (1.0-pow(dmt_ppl_obs/(12.44*fct_mgn),4.0)) ! [cm]
+             )
+        fct_SC_pht=min(1.0, &
+             (dmt_ppl_obs*dmt_ppl_obs/(dmt_ppl_std*dmt_ppl_std*fct_mgn*fct_mgn))* &
+             (1.0-exp(-dmt_ppl_std*dmt_ppl_std/(0.62*0.62)))/ & ! [cm]
+             (1.0-exp(-dmt_ppl_obs*dmt_ppl_obs/(0.62*0.62*fct_mgn*fct_mgn))) & ! [cm]
+             )
         ! fct_cb = Apparent background brightness alteration due to difference between laboratory and background color
+        
         fct_cb=1.0
         ! fct_cs = Threshold illumination alteration due to difference between laboratory and star color
         fct_cs=1.0
@@ -6687,11 +6707,12 @@ program swnb2
         fct_e=1.0
         ! fct_s = Threshold illumination alteration due to observer sensitivity
         fct_s=1.0
-        if (dbg_lvl>=dbg_vec) then
-           write (6,'(2(a,f15.12))') 'dmt_ppl_obs = ',dmt_ppl_obs,', fct_a = ',fct_a
+        if (dbg_lvl>=dbg_scl) then
+           write (6,'(3(a,f15.12))') 'dmt_ppl_obs = ',dmt_ppl_obs,' [cm], fct_a = ',fct_a,', fct_SC = ',fct_SC
         endif ! endif dbg
         ! CFE01 p. 37 (28), Gar00
-        lmn_bb_aa_nL_obs(plr_idx,levp_idx)=lmn_bb_aa_nL(plr_idx,levp_idx)/(fct_a*fct_SC*fct_cb) ! CFE01 p. 37 (22)
+        ! fxm: use fct_SC_sct or fct_SC_pht here? presumably use scotopic for artificial skyglow problems
+        lmn_bb_aa_nL_obs(plr_idx,levp_idx)=lmn_bb_aa_nL(plr_idx,levp_idx)/(fct_a*fct_SC_sct*fct_cb) ! CFE01 p. 37 (22)
         ! Garstang model Gar00 p. 84 (3), CFE01 p. 37 (19-21) 
         ! NB: CFE01 p. 37 (19-21) contain two symbols (b and b_obs) for background luminance whereas
         ! Gar00 p. 85 (4a-4c) has only one symbol (b) for background luminance
@@ -6713,14 +6734,15 @@ program swnb2
              (ilm_thr_sct(plr_idx,levp_idx)+ilm_thr_pht(plr_idx,levp_idx))
         ! Create "perceived" arrays from non-prime arrays
         ilm_thr_sct_prc(plr_idx,levp_idx)=ilm_thr_sct(plr_idx,levp_idx)* &
-             fct_a*fct_SC*fct_cs*fct_e*fct_s
+             fct_a*fct_SC_sct*fct_cs*fct_e*fct_s
         ilm_thr_pht_prc(plr_idx,levp_idx)=ilm_thr_pht(plr_idx,levp_idx)* &
-             fct_a*fct_SC*fct_cs*fct_e*fct_s
+             fct_a*fct_SC_pht*fct_cs*fct_e*fct_s
         ilm_thr_prc(plr_idx,levp_idx)= &
              ilm_thr_sct_prc(plr_idx,levp_idx)*ilm_thr_pht_prc(plr_idx,levp_idx)/ &
              (ilm_thr_sct_prc(plr_idx,levp_idx)+ilm_thr_pht_prc(plr_idx,levp_idx))
         ! Switcheroo until I finalize naming
         ilm_thr(plr_idx,levp_idx)=ilm_thr_prc(plr_idx,levp_idx)
+        ! CFE01 p. 37 (27)
         mgn_thr(plr_idx,levp_idx)=-13.98-2.5*log10(ilm_thr_prc(plr_idx,levp_idx))
      enddo            ! end loop over plr
   enddo               ! end loop over levp
@@ -8077,7 +8099,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_sfc_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_ngt_TOA_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,mgn_thr_id,'units','magnitude'),sbr_nm//': pa units in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,dmt_ppl_obs_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,dmt_ppl_obs_id,'units','centimeter'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,sfc_msv_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,sfc_tpt_id,'units','kelvin'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CWP_id,'units','kilogram meter-2'),sbr_nm//': pa units in '//__FILE__)
