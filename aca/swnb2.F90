@@ -761,6 +761,7 @@ program swnb2
   integer lmn_spc_aa_ndr_id
   integer lmn_spc_aa_ndr_sfc_id
   integer lmn_spc_aa_sfc_id
+  integer mgn_thr_id
   integer nrg_pht_id
   integer ntn_bb_aa_id
   integer ntn_bb_mean_id
@@ -1336,6 +1337,7 @@ program swnb2
   real,dimension(:,:),allocatable::lmn_bb_aa
   real,dimension(:,:),allocatable::lmn_bb_aa_nL
   real,dimension(:,:),allocatable::lmn_bb_aa_nL_obs
+  real,dimension(:,:),allocatable::mgn_thr !
   real,dimension(:,:),allocatable::ntn_bb_aa
 
   ! Array dimensions: azi,plr,bnd
@@ -1706,10 +1708,13 @@ program swnb2
   real dns_snw_cmd_ln ! [kg m-3] Snow density
   real dpt_snw_cmd_ln ! [m] Snowpack thickness
   real float_foo
-  real fct_a ! [frc] Apparent background brightness alteration by pupil area
+  real fct_a ! [frc] Apparent background brightness and perceived illumination alteration by pupil area
   real dmt_ppl_crc_bry ! [mm] Pupil diameter correction factor for brightness
-  real fct_SC ! [frc] Apparent background brightness alteration by Stiles-Crawford effect (off-axis viewing)
-  real fct_c ! [frc] Apparent background brightness alteration by color calibration
+  real fct_SC ! [frc] Apparent background brightness and perceived illumination alteration by Stiles-Crawford effect (off-axis viewing)
+  real fct_cb ! [frc] Apparent background brightness alteration due to difference between laboratory and background color
+  real fct_cs ! [frc] Threshold illumination alteration due to difference between laboratory and star color 
+  real fct_e ! [frc] Threshold illumination alteration due to atmospheric extinction
+  real fct_s ! [frc] Threshold illumination alteration due to observer sensitivity
   real flx_frc_drc_TOA ! [frc] TOA insolation fraction in direct beam
   real flx_spc_act
   real flx_spc_act_pht
@@ -3773,6 +3778,8 @@ program swnb2
   if(rcd /= 0) stop "allocate() failed for ilm_thr_pht_prc"
   allocate(ilm_thr_sct_prc(plr_nbr,levp_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for ilm_thr_sct_prc"
+  allocate(mgn_thr(plr_nbr,levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for mgn_thr"
   allocate(ntn_bb_aa(plr_nbr,levp_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for ntn_bb_aa"
   ! Array dimensions: azi,plr,bnd (still unknown, see below)
@@ -6665,36 +6672,56 @@ program swnb2
         dmt_ppl_crc_bry=tanh(0.40*log10(lmn_bb_aa_nL(plr_idx,levp_idx))-2.20) 
         dmt_ppl_std=0.534-0.00211*ppl_age_yr_std-(0.236-0.00127*ppl_age_yr_std)*dmt_ppl_crc_bry
         dmt_ppl_obs=0.534-0.00211*ppl_age_yr_obs-(0.236-0.00127*ppl_age_yr_obs)*dmt_ppl_crc_bry
+        ! fct_a = Apparent background brightness and perceived illumination alteration by pupil area
         ! A(std) > A(obs) means standard aperture (for threshold study) larger than current observing aperture
         ! Divide brightness by this area factor to convert true brightness into brightness that mean participant
         ! in threshold brightness study would have observed
         fct_a=dmt_ppl_std*dmt_ppl_std/(dmt_ppl_obs*dmt_ppl_obs)
+        ! fct_SC = Apparent background brightness and perceived illumination alteration by Stiles-Crawford effect (off-axis viewing)
         fct_SC=1.0
-        fct_c=1.0
+        ! fct_cb = Apparent background brightness alteration due to difference between laboratory and background color
+        fct_cb=1.0
+        ! fct_cs = Threshold illumination alteration due to difference between laboratory and star color
+        fct_cs=1.0
+        ! fct_e = Threshold illumination alteration due to atmospheric extinction
+        fct_e=1.0
+        ! fct_s = Threshold illumination alteration due to observer sensitivity
+        fct_s=1.0
         if (dbg_lvl>=dbg_vec) then
            write (6,'(2(a,f15.12))') 'dmt_ppl_obs = ',dmt_ppl_obs,', fct_a = ',fct_a
         endif ! endif dbg
         ! CFE01 p. 37 (28), Gar00
-        lmn_bb_aa_nL_obs(plr_idx,levp_idx)=lmn_bb_aa_nL(plr_idx,levp_idx)/(fct_a*fct_SC*fct_c) ! CFE01 p. 37 (22)
+        lmn_bb_aa_nL_obs(plr_idx,levp_idx)=lmn_bb_aa_nL(plr_idx,levp_idx)/(fct_a*fct_SC*fct_cb) ! CFE01 p. 37 (22)
         ! Garstang model Gar00 p. 84 (3), CFE01 p. 37 (19-21) 
         ! NB: CFE01 p. 37 (19-21) contain two symbols (b and b_obs) for background luminance whereas
         ! Gar00 p. 85 (4a-4c) has only one symbol (b) for background luminance
         ! Based on this it appears CFE01 meant to use b_obs (not b) in all RHS terms of (19-21), and
         ! that CFE01 uses b_vis for absolute (actual) background luminance (uncorrected for aperture etc.)
         ! Gar00 treats i and b fields symetrically, to be corrected by F and G factors, respectively
+        ! CFE01 expects sky brightness b_vis [nL] = f(V [mag arcsec-2]), and then corrects b_vis to b_obs
         ! CFE01 "builds-in" G factor to b_obs, and then only requires correction of i to iprime
-        ! CFE01 expects sky brightness b_vis = f(V [mag arcsec-2]), and then corrects b_vis to b_obs
-        ! Perceived threshold illumination depends on observed background luminance
-        ilm_thr_sct_prc(plr_idx,levp_idx)=cst_one* &
+        ! CFE01 uses subscripts 1 and 2 in i->iprime conversion to refer to scotopic and photopic regimes, respectively
+        ! Threshold illumination depends on observed background luminance:
+        ilm_thr_sct(plr_idx,levp_idx)=cst_one* &
              (1.0+kst_one*sqrt(lmn_bb_aa_nL_obs(plr_idx,levp_idx)))* &
              (1.0+kst_one*sqrt(lmn_bb_aa_nL_obs(plr_idx,levp_idx)))
-        ilm_thr_pht_prc(plr_idx,levp_idx)=cst_two* &
+        ilm_thr_pht(plr_idx,levp_idx)=cst_two* &
              (1.0+kst_two*sqrt(lmn_bb_aa_nL_obs(plr_idx,levp_idx)))* &
              (1.0+kst_two*sqrt(lmn_bb_aa_nL_obs(plr_idx,levp_idx)))
+        ilm_thr(plr_idx,levp_idx)= &
+             ilm_thr_sct(plr_idx,levp_idx)*ilm_thr_pht(plr_idx,levp_idx)/ &
+             (ilm_thr_sct(plr_idx,levp_idx)+ilm_thr_pht(plr_idx,levp_idx))
+        ! Create "perceived" arrays from non-prime arrays
+        ilm_thr_sct_prc(plr_idx,levp_idx)=ilm_thr_sct(plr_idx,levp_idx)* &
+             fct_a*fct_SC*fct_cs*fct_e*fct_s
+        ilm_thr_pht_prc(plr_idx,levp_idx)=ilm_thr_pht(plr_idx,levp_idx)* &
+             fct_a*fct_SC*fct_cs*fct_e*fct_s
         ilm_thr_prc(plr_idx,levp_idx)= &
-             ilm_thr_pht(plr_idx,levp_idx)*ilm_thr_sct(plr_idx,levp_idx)/ &
-             (ilm_thr_pht(plr_idx,levp_idx)+ilm_thr_sct(plr_idx,levp_idx))
-        ilm_thr_sct(plr_idx,levp_idx)=ilm_thr_sct_prc(plr_idx,levp_idx)
+             ilm_thr_sct_prc(plr_idx,levp_idx)*ilm_thr_pht_prc(plr_idx,levp_idx)/ &
+             (ilm_thr_sct_prc(plr_idx,levp_idx)+ilm_thr_pht_prc(plr_idx,levp_idx))
+        ! Switcheroo until I finalize naming
+        ilm_thr(plr_idx,levp_idx)=ilm_thr_prc(plr_idx,levp_idx)
+        mgn_thr(plr_idx,levp_idx)=-13.98-2.5*log10(ilm_thr_prc(plr_idx,levp_idx))
      enddo            ! end loop over plr
   enddo               ! end loop over levp
 
@@ -7190,6 +7217,7 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_TOA',nf90_float,plr_dmn_id,lmn_bb_aa_TOA_id),sbr_nm//': dv lmn_bb_aa_TOA')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_sfc',nf90_float,plr_dmn_id,lmn_bb_aa_sfc_id),sbr_nm//': dv lmn_bb_aa_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_ngt_TOA',nf90_float,lmn_ngt_TOA_id),sbr_nm//': dv lmn_ngt_TOA in '//__FILE__)
+     rcd=nf90_wrp(nf90_def_var(nc_id,'mgn_thr',nf90_float,dim_plr_levp,mgn_thr_id),sbr_nm//': dv mgn_thr')
      rcd=nf90_wrp(nf90_def_var(nc_id,'dmt_ppl_obs',nf90_float,dmt_ppl_obs_id),sbr_nm//': dv dmt_ppl_obs in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'sfc_msv',nf90_float,sfc_msv_id),sbr_nm//': dv sfc_msv in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'sfc_tpt',nf90_float,sfc_tpt_id),sbr_nm//': dv sfc_tpt in '//__FILE__)
@@ -7693,6 +7721,8 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_ngt_TOA_id,'long_name','Broadband incoming isotropic luminance at TOA'), &
           sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,mgn_thr_id,'long_name','Threshold magnitude against background brightness'), &
+          sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,dmt_ppl_obs_id,'long_name','Pupil diameter of observer'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,sfc_msv_id,'long_name','Surface emissivity'), &
@@ -8046,6 +8076,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_TOA_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_sfc_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_ngt_TOA_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,mgn_thr_id,'units','magnitude'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,dmt_ppl_obs_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,sfc_msv_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,sfc_tpt_id,'units','kelvin'),sbr_nm//': pa units in '//__FILE__)
@@ -8329,6 +8360,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,lmn_bb_aa_sfc_id,lmn_bb_aa_sfc),sbr_nm//': pv lmn_bb_aa_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,lmn_spc_aa_ndr_id,lmn_spc_aa_ndr),sbr_nm//': pv lmn_spc_aa_ndr in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,lmn_spc_aa_sfc_id,lmn_spc_aa_sfc),sbr_nm//': pv lmn_spc_aa_sfc in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,mgn_thr_id,mgn_thr),sbr_nm//': pv mgn_thr in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,mpc_CWP_id,mpc_CWP),sbr_nm//': pv mpc_CWP in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,nrg_pht_id,nrg_pht),sbr_nm//': pv nrg_pht in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ntn_bb_aa_id,ntn_bb_aa),sbr_nm//': pv ntn_bb_aa in '//__FILE__)
