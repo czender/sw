@@ -13,7 +13,6 @@ module skg_mdl ! [mdl] Physical constants and anthropogenic parameters/assumptio
 
   ! Pupil factor parameters
   real,parameter::ppl_age_yr_std=23.0 ! [yr] Mean age of participants in threshold brightness tests
-  real,parameter::ppl_age_yr_obs=23.0 ! [yr] Observer age to use in parameterization of pupil diameter
 
   ! Garstang model parameters Gar00 p. 84 (3), CFE01 p. 37 (19)
   real,parameter::cst_one=3.451e-9 ! 

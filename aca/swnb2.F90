@@ -689,7 +689,6 @@ program swnb2
   integer azi_dgr_id          
   integer azi_id            ! coordinate ID
   integer bnd_id            ! coordinate ID
-  integer dmt_ppl_obs_id
   integer flx_abs_atm_rdr_id
   integer flx_bb_abs_atm_id
   integer flx_bb_abs_id
@@ -807,6 +806,8 @@ program swnb2
   integer rfl_nst_sfc_id
   integer rfl_spc_SAS_id
   integer rfl_spc_sfc_id
+  integer ppl_age_yr_obs_id
+  integer ppl_dmt_obs_id
   integer sfc_msv_id
   integer sfc_tpt_id
   integer tau_id            ! coordinate ID
@@ -1702,14 +1703,12 @@ program swnb2
   real alb_cmd_ln
   real bnd_wgt(bnd_nbr_max)
   real bnd_wgt_lmn(bnd_nbr_max)
-  real dmt_ppl_std ! [mm] Pupil diameter of mean-aged participant in threshold brightness tests
-  real dmt_ppl_obs ! [mm] Pupil diameter of observer
   real dns_mst_air_sfc ! [kg m-3] Density of moist air at surface
   real dns_snw_cmd_ln ! [kg m-3] Snow density
   real dpt_snw_cmd_ln ! [m] Snowpack thickness
   real float_foo
   real fct_a ! [frc] Apparent background brightness and perceived illumination alteration by pupil area
-  real dmt_ppl_crc_bry ! [mm] Pupil diameter correction factor for brightness
+  real ppl_dmt_crc_bry ! [mm] Pupil diameter correction factor for brightness
   real fct_SC_sct ! [frc] Apparent background brightness and perceived illumination alteration by Stiles-Crawford effect (off-axis viewing), scotopic
   real fct_SC_pht ! [frc] Apparent background brightness and perceived illumination alteration by Stiles-Crawford effect (off-axis viewing), photopic
   real fct_cb ! [frc] Apparent background brightness alteration due to difference between laboratory and background color
@@ -1760,6 +1759,9 @@ program swnb2
   real opt_dep_LTOD_CO2_hires
   real phi_wgt(lev_nbr_max)
   real prs_bar(levp_nbr_max)
+  real ppl_age_yr_obs ! [yr] Observer age to use in parameterization of pupil diameter
+  real ppl_dmt_std ! [cm] Pupil diameter of mean-aged participant in threshold brightness tests
+  real ppl_dmt_obs ! [cm] Pupil diameter of observer
   real psi_wgt(lev_nbr_max)
   real qst_H2O_ice ! [kg kg-1] Saturation mixing ratio w/r/t ice H2O
   real qst_H2O_lqd ! [kg kg-1] Saturation mixing ratio w/r/t liquid H2O
@@ -1927,6 +1929,7 @@ program swnb2
   odxc_obs_snw=0.0 ! [frc] Column snow extinction optical depth 
   pi=4.0*atan(1.0)
   plr_nbr=4
+  ppl_age_yr_obs=23.0 ! [yr] Observer age to use in parameterization of pupil diameter
   rcd=nf90_noerr              ! nf90_noerr == 0
   single_bnd_computation=.false.
   sfc_msv=1.0 ! [frc] Surface emissivity
@@ -2035,6 +2038,8 @@ program swnb2
         else if (opt_sng == 'lmn_TOA') then
            cmd_ln_lmn_TOA=.not.cmd_ln_lmn_TOA
            call ftn_arg_get(arg_idx,arg_val,lmn_TOA_cmd_ln)
+        else if (opt_sng == 'ppl_age_yr_obs' .or. opt_sng == 'age' ) then
+           call ftn_arg_get(arg_idx,arg_val,ppl_age_yr_obs) ! [yr] Observer age to use in parameterization of pupil diameter
         else if (opt_sng == 'mode_chn' .or. opt_sng == 'chn') then
            mode_chn=.not.mode_chn
         else if (opt_sng == 'mode_ngt' .or. opt_sng == 'ngt') then
@@ -6671,35 +6676,34 @@ program swnb2
         ! CFE01 p. 37 (29) should have b=b_vis not b_obs on RHS
         ! Then it agrees with Gar00 p. 86 (6)
         ! 20160707: "log" in Gar00+CFE01 brightness corrections means log10 ("log" for log10 also used in magnitude formulae)
-        dmt_ppl_crc_bry=tanh(0.40*log10(lmn_bb_aa_nL(plr_idx,levp_idx))-2.20) 
-        dmt_ppl_std=0.534-0.00211*ppl_age_yr_std-(0.236-0.00127*ppl_age_yr_std)*dmt_ppl_crc_bry ! [cm]
-        dmt_ppl_obs=0.534-0.00211*ppl_age_yr_obs-(0.236-0.00127*ppl_age_yr_obs)*dmt_ppl_crc_bry ! [cm]
+        ppl_dmt_crc_bry=tanh(0.40*log10(lmn_bb_aa_nL(plr_idx,levp_idx))-2.20) 
+        ppl_dmt_std=0.534-0.00211*ppl_age_yr_std-(0.236-0.00127*ppl_age_yr_std)*ppl_dmt_crc_bry ! [cm]
+        ppl_dmt_obs=0.534-0.00211*ppl_age_yr_obs-(0.236-0.00127*ppl_age_yr_obs)*ppl_dmt_crc_bry ! [cm]
         ! fct_a = Apparent background brightness and perceived illumination alteration by pupil area
         ! A(std) > A(obs) means standard aperture (for threshold study) larger than current observing aperture
         ! Divide brightness by this area factor to convert true brightness into brightness that mean participant
         ! in threshold brightness study would have observed
-        fct_a=dmt_ppl_std*dmt_ppl_std/(dmt_ppl_obs*dmt_ppl_obs)
+        fct_a=ppl_dmt_std*ppl_dmt_std/(ppl_dmt_obs*ppl_dmt_obs)
         ! fct_SC = Apparent background brightness and perceived illumination alteration by Stiles-Crawford effect (off-axis viewing)
         ! Sch90: "light that enters the eye near the outer edge of the pupil will be less efficiently used than light that enters near the middle of the pupil. This Stiles-Crawford effect is caused by the photon-detection efficiency falling with distance from the center of the eye..."
         ! Neither Gar00 nor CFE01 reprints fct_SC parameterization
-        ! Both Gar00 and CFE01 refer reader to Sch90, as modified in Sch93, and point-out that fct_SC in Sch90 (and Sch93?) is actually fct_SCˆ{-1}
+        ! Both Gar00 and CFE01 refer reader to Sch90, as modified in Sch93, and point-out that fct_SC in Sch90 (and Sch93?) is actually fct_SC^{-1}
         ! Sch90 p. 214 (9) shows ... and is superceded by Sch93
-        ! Sch93 p. 327 (31i) shows fct_SC depends on D (aperture = pupil diameter = dmt_ppl_obs [cm]), M (magnification), and P_st (standard pupil size = dmt_ppl_std [cm])
+        ! Sch93 p. 327 (31i) shows fct_SC depends on D (aperture = pupil diameter = ppl_dmt_obs [cm]), M (magnification), and P_st (standard pupil size = ppl_dmt_std [cm])
         ! fct_mgn = Magnification power of optics
         ! Magnification is 1 for naked-eye observations
         fct_mgn=1.0 
-        ! fxm: verify this is correct and not inverse of correct
-        fct_SC_sct=min(1.0, &
-             (1.0-pow(dmt_ppl_std/12.44,4.0))/ & ! [cm]
-             (1.0-pow(dmt_ppl_obs/(12.44*fct_mgn),4.0)) ! [cm]
+        ! fxm: verify fct_SC is correct and not inverse of correct
+        fct_SC_sct=min(1.0, & ! Sch93 p. 327 (31i)
+             (1.0-(ppl_dmt_std/12.44)**4.0)/ & ! [cm]
+             (1.0-(ppl_dmt_obs/(12.44*fct_mgn))**4.0) & ! [cm]
              )
-        fct_SC_pht=min(1.0, &
-             (dmt_ppl_obs*dmt_ppl_obs/(dmt_ppl_std*dmt_ppl_std*fct_mgn*fct_mgn))* &
-             (1.0-exp(-dmt_ppl_std*dmt_ppl_std/(0.62*0.62)))/ & ! [cm]
-             (1.0-exp(-dmt_ppl_obs*dmt_ppl_obs/(0.62*0.62*fct_mgn*fct_mgn))) & ! [cm]
+        fct_SC_pht=min(1.0, & ! Sch93 p. 327 (31l)
+             ((ppl_dmt_obs/(ppl_dmt_std*fct_mgn))**2.0)* &
+             (1.0-exp(-(ppl_dmt_std/0.62)**2.0))/ & ! [cm]
+             (1.0-exp(-(ppl_dmt_obs/(0.62*fct_mgn))**2.0)) & ! [cm]
              )
         ! fct_cb = Apparent background brightness alteration due to difference between laboratory and background color
-        
         fct_cb=1.0
         ! fct_cs = Threshold illumination alteration due to difference between laboratory and star color
         fct_cs=1.0
@@ -6708,7 +6712,8 @@ program swnb2
         ! fct_s = Threshold illumination alteration due to observer sensitivity
         fct_s=1.0
         if (dbg_lvl>=dbg_scl) then
-           write (6,'(3(a,f15.12))') 'dmt_ppl_obs = ',dmt_ppl_obs,' [cm], fct_a = ',fct_a,', fct_SC = ',fct_SC
+           write (6,'(4(a,f15.12))') 'ppl_dmt_obs = ',ppl_dmt_obs,' [cm], fct_a = ',fct_a, &
+                ', fct_SC_sct = ',fct_SC_sct,', fct_SC_pht = ',fct_SC_pht
         endif ! endif dbg
         ! CFE01 p. 37 (28), Gar00
         ! fxm: use fct_SC_sct or fct_SC_pht here? presumably use scotopic for artificial skyglow problems
@@ -6989,13 +6994,13 @@ program swnb2
              flx_spc_dwn_sfc(bnd_idx)/ &
              flx_spc_dwn_TOA(bnd_idx)
         rfl_spc_SAS(bnd_idx)= &
-             flx_spc_upw(bnd_idx,1)/ &
+             flx_spc_upw(bnd_idx,levp_TOA)/ &
              flx_spc_dwn_TOA(bnd_idx)
         ! Layer absorptance is absorbed flux normalized by flux entering layer
         ! Define absorptance so surface + atmospheric absorptances sum to total SAS absorptance,
         ! i.e., as fraction of insolation absorbed by atmosphere, surface, and SAS, respectively.
         abs_spc_SAS(bnd_idx)= &
-             flx_spc_net(bnd_idx,1)/flx_spc_dwn_TOA(bnd_idx)
+             flx_spc_net(bnd_idx,levp_TOA)/flx_spc_dwn_TOA(bnd_idx)
         abs_spc_sfc(bnd_idx)= &
              flx_spc_net(bnd_idx,levp_sfc)/flx_spc_dwn_TOA(bnd_idx)
      else ! flx_spc_dwn_TOA<=0
@@ -7240,7 +7245,8 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_sfc',nf90_float,plr_dmn_id,lmn_bb_aa_sfc_id),sbr_nm//': dv lmn_bb_aa_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_ngt_TOA',nf90_float,lmn_ngt_TOA_id),sbr_nm//': dv lmn_ngt_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'mgn_thr',nf90_float,dim_plr_levp,mgn_thr_id),sbr_nm//': dv mgn_thr')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'dmt_ppl_obs',nf90_float,dmt_ppl_obs_id),sbr_nm//': dv dmt_ppl_obs in '//__FILE__)
+     rcd=nf90_wrp(nf90_def_var(nc_id,'ppl_age_yr_obs',nf90_float,ppl_age_yr_obs_id),sbr_nm//': dv ppl_age_yr_obs in '//__FILE__)
+     rcd=nf90_wrp(nf90_def_var(nc_id,'ppl_dmt_obs',nf90_float,ppl_dmt_obs_id),sbr_nm//': dv ppl_dmt_obs in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'sfc_msv',nf90_float,sfc_msv_id),sbr_nm//': dv sfc_msv in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'sfc_tpt',nf90_float,sfc_tpt_id),sbr_nm//': dv sfc_tpt in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_spc_aa_ndr',nf90_float,dim_bnd_levp,lmn_spc_aa_ndr_id),sbr_nm//': dv lmn_spc_aa_ndr')
@@ -7745,7 +7751,9 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,mgn_thr_id,'long_name','Threshold magnitude against background brightness'), &
           sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,dmt_ppl_obs_id,'long_name','Pupil diameter of observer'), &
+     rcd=nf90_wrp(nf90_put_att(nc_id,ppl_age_yr_obs_id,'long_name','Pupil diameter of observer'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,ppl_dmt_obs_id,'long_name','Pupil diameter of observer'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,sfc_msv_id,'long_name','Surface emissivity'), &
           sbr_nm//': pa long_name in '//__FILE__)
@@ -8099,7 +8107,8 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_sfc_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_ngt_TOA_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,mgn_thr_id,'units','magnitude'),sbr_nm//': pa units in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,dmt_ppl_obs_id,'units','centimeter'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,ppl_age_yr_obs_id,'units','centimeter'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,ppl_dmt_obs_id,'units','centimeter'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,sfc_msv_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,sfc_tpt_id,'units','kelvin'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CWP_id,'units','kilogram meter-2'),sbr_nm//': pa units in '//__FILE__)
@@ -8303,8 +8312,8 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_nst_atm_id,abs_nst_atm),sbr_nm//': pv abs_nst_atm in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_nst_sfc_id,abs_nst_sfc),sbr_nm//': pv abs_nst_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_SAS_id,abs_spc_SAS),sbr_nm//': pv abs_spc_SAS in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_atm_id,abs_spc_atm),sbr_nm//': pv abs_spc_atm in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_sfc_id,abs_spc_sfc),sbr_nm//': pv abs_spc_sfc in '//__FILE__)
+!      rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_atm_id,abs_spc_atm),sbr_nm//': pv abs_spc_atm in '//__FILE__)
+!     rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_sfc_id,abs_spc_sfc),sbr_nm//': pv abs_spc_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,alb_sfc_id,alb_sfc),sbr_nm//': pv alb_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,alb_sfc_NIR_dff_id,alb_sfc_NIR_dff),sbr_nm//': pv alb_sfc_NIR_dff in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,alb_sfc_NIR_drc_id,alb_sfc_NIR_drc),sbr_nm//': pv alb_sfc_NIR_drc in '//__FILE__)
@@ -8325,7 +8334,8 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_TOA_id,flx_bb_dwn_TOA),sbr_nm//': pv flx_bb_dwn_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_ngt_TOA_id,flx_ngt_TOA),sbr_nm//': pv flx_ngt_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,lmn_ngt_TOA_id,lmn_ngt_TOA),sbr_nm//': pv lmn_ngt_TOA in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_var(nc_id,dmt_ppl_obs_id,dmt_ppl_obs),sbr_nm//': pv dmt_ppl_obs in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,ppl_age_yr_obs_id,ppl_age_yr_obs),sbr_nm//': pv ppl_age_yr_obs in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,ppl_dmt_obs_id,ppl_dmt_obs),sbr_nm//': pv ppl_dmt_obs in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,sfc_msv_id,sfc_msv),sbr_nm//': pv sfc_msv in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,sfc_tpt_id,sfc_tpt),sbr_nm//': pv sfc_tpt in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_upw_TOA_id,flx_bb_upw_TOA),sbr_nm//': pv flx_bb_upw_TOA in '//__FILE__)
