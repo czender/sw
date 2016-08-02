@@ -1,3 +1,7 @@
+2016-08-02  Charlie Zender  <zender@uci.edu>
+
+	* Change real_tiny from 1.0e-10 to 1.0e-20
+
 2016-06-13  Charlie Zender  <zender@uci.edu>
 
 	* Fix bug in normalization of flx_ngt_TOA. Now lmn_ngt_TOA == lmn_bb_aa_ndr_TOA.

@@ -392,7 +392,7 @@ program swnb2
   integer,parameter::sng_lng_dfl_stt=200 ! [nbr] Default statement string length
   real,parameter::tpt_Malkmus_fit=250.0 ! reference temperature for Malkmus parameters
   real,parameter::mss_val=1.0e36 ! Missing value = missing_value and/or _FillValue
-  real,parameter::real_tiny=1.0e-10 ! Tiny value to avoid divide-by-zero errors
+  real,parameter::real_tiny=1.0e-20 ! Tiny value to avoid divide-by-zero errors
   ! integer,parameter::bnd_nbr_nst_max=235 ! FSBR resolution
   
   ! Derived parameters
@@ -6989,7 +6989,8 @@ program swnb2
   ! These definitions must be made in a conditional clause because
   ! they are all normalized by insolation, which may be zero.
   do bnd_idx=1,bnd_nbr
-     if (flx_spc_dwn_TOA(bnd_idx)>0.0) then
+!     if (flx_spc_dwn_TOA(bnd_idx)>0.0) then
+     if (flx_spc_dwn_TOA(bnd_idx)>real_tiny) then
         trn_spc_atm_ttl(bnd_idx)= &
              flx_spc_dwn_sfc(bnd_idx)/ &
              flx_spc_dwn_TOA(bnd_idx)
@@ -8312,8 +8313,8 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_nst_atm_id,abs_nst_atm),sbr_nm//': pv abs_nst_atm in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_nst_sfc_id,abs_nst_sfc),sbr_nm//': pv abs_nst_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_SAS_id,abs_spc_SAS),sbr_nm//': pv abs_spc_SAS in '//__FILE__)
-!      rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_atm_id,abs_spc_atm),sbr_nm//': pv abs_spc_atm in '//__FILE__)
-!     rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_sfc_id,abs_spc_sfc),sbr_nm//': pv abs_spc_sfc in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_atm_id,abs_spc_atm),sbr_nm//': pv abs_spc_atm in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_sfc_id,abs_spc_sfc),sbr_nm//': pv abs_spc_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,alb_sfc_id,alb_sfc),sbr_nm//': pv alb_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,alb_sfc_NIR_dff_id,alb_sfc_NIR_dff),sbr_nm//': pv alb_sfc_NIR_dff in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,alb_sfc_NIR_drc_id,alb_sfc_NIR_drc),sbr_nm//': pv alb_sfc_NIR_drc in '//__FILE__)
