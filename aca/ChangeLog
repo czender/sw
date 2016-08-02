@@ -18,7 +18,7 @@
 
 	* Verify everything works when str_nbr=plr_nbr. Yay!
 	Fixes bug (negative reflectances and radiances) spotted by Xianwei Wang in ~2010
-	It might fix the ~2008 bug comparing Adding/Doubling with DISORT reflectances
+	It may also afix ~2008 bug comparing Adding/Doubling with DISORT reflectances
 	Not sure, need to check
 
 2016-05-16  Charlie Zender  <zender@uci.edu>
