@@ -1708,6 +1708,7 @@ program swnb2
   real dpt_snw_cmd_ln ! [m] Snowpack thickness
   real float_foo
   real fct_a ! [frc] Apparent background brightness and perceived illumination alteration by pupil area
+  real fct_b ! [frc] Correction factor for monocular (telescope) viewing
   real ppl_dmt_crc_bry ! [mm] Pupil diameter correction factor for brightness
   real fct_SC_sct ! [frc] Apparent background brightness and perceived illumination alteration by Stiles-Crawford effect (off-axis viewing), scotopic
   real fct_SC_pht ! [frc] Apparent background brightness and perceived illumination alteration by Stiles-Crawford effect (off-axis viewing), photopic
@@ -6666,7 +6667,31 @@ program swnb2
         ! Garstang model relies on brightness in nL not SI
         lmn_bb_aa_nL(plr_idx,levp_idx)=pi*1.0e9*lmn_bb_aa(plr_idx,levp_idx)/10000.0 ! [lm m-2 sr-1] -> [nL]
         ! Observed background luminance depends on absolute (actual) background luminance
-        ! fxm: relation is complex and depends on aperture size, etc.
+        ! Relation is complex and depends on aperture size, etc.
+        ! Sch90 introduced formalism of correction factors (F_x) that account for pupil characteristics, magnification, etc.
+        ! Factors are defined as multipliers of threshold contrast illuminances measured by KTH46 and Bla46,
+        ! parameterized in form originally proposed by Hec34, as improved by Wea47, and post-processed by Hur48 (cf. Gar00 p. 84).
+        ! Bla46 measured ~2 million binocular experiments, and Gar00 used summary results from ~90k of these
+        ! Experiments determined threshold contrast for seeing disk of varying (including point) diameter against background of 10^1--10^9 nL
+        ! Factors greater/less than unity increase/decrease threshold illuminance required for detection
+        ! Large pupils (younger than 23-yr average participant, or  darker  background) collect more light, and reduce   threshold illuminance
+        ! Small pupils ( older  than 23-yr average participant, or brighter background) collect less light, and increase threshold illuminance
+        ! Thus correction factor for aperature size, Fa, is Fa < 1 for age < 23 and Fa > 1 for age > 23 and Fa < 1 if dark, Fa > 1 if bright
+        ! Most factors apply twice to RHS of threshold contrast illuminance function, first as coefficient (designated as "Fx" factor)
+        ! multiplying whole RHS (and thus linearly proportional to threshold illuminance), second as coefficient (designated as "Gx" factor)
+        ! that multiplies and converts background brightness ("b") into equivalent brightness to use in Wea47/Hur48 parameterization.
+        ! For those factors (like Fa) that do apply twice, Gx is inverse of Fx factor, e.g., Ga=1/Fa
+        ! Consider, for example, Fa in case of younger observer and/or darker background:
+        ! Fa < 1 collects more light, and linearly reduces threshold illuminance parameterized by Wea47/Hur48
+        ! Same Ga=1/Fa so if Fa < 1, Ga > 1
+        ! In this case Ga multiplies and increases effective background brightness b
+        ! Threshold illuminance depends non-linearly on b---increasing b by Ga does not cancel threshold illumination reduction by Fa
+        ! Fx factors account for increase in available illuminance (and thus reduction in threshold illumination)
+        ! from observed (usually point-) source relative to KTH46/Bla46 experimental conditions.
+        ! Fx factors vary linearly with illuminance (e.g., Fa for aperature), and therefore linearly change threshold illuminance
+        ! Gx factors account for increase in collected background luminance elative to KTH46/Bla46 experimental conditions
+        ! More observed background luminance increases threshold illumination by reducing source/background contrast
+        
         ! Setting all optical factors = 1.0 makes approximation that b_obs=b_vis
         !fct_a=1.0
         ! [frc] fct_a, factor by which actual pupil (or telescope) area exceeds pupil area of
@@ -6709,6 +6734,11 @@ program swnb2
         fct_cs=1.0
         ! fct_e = Threshold illumination alteration due to atmospheric extinction
         fct_e=1.0
+        ! fct_b = Threshold illumination alteration due to binocular->monocular viewing
+        ! KHT46 and Bla46 data taken for, and parameterizations based on, binocular viewing
+        ! Monocular viewing (e.g., through a telescope) blinds an eye, and increases threshold illumination by sqrt(2) (Sch90 p. 213)
+        fct_b=1.0
+        if(.false.) fct_b=sqrt(2.0) ! [frc] Correction factor for monocular (telescope) viewing
         ! fct_s = Threshold illumination alteration due to observer sensitivity
         fct_s=1.0
         if (dbg_lvl>=dbg_scl) then
@@ -6726,7 +6756,7 @@ program swnb2
         ! Gar00 treats i and b fields symetrically, to be corrected by F and G factors, respectively
         ! CFE01 expects sky brightness b_vis [nL] = f(V [mag arcsec-2]), and then corrects b_vis to b_obs
         ! CFE01 "builds-in" G factor to b_obs, and then only requires correction of i to iprime
-        ! CFE01 uses subscripts 1 and 2 in i->iprime conversion to refer to scotopic and photopic regimes, respectively
+        ! Gar00 and CFE01 use subscripts 1 and 2 in i->iprime conversion to refer to scotopic and photopic regimes, respectively
         ! Threshold illumination depends on observed background luminance:
         ilm_thr_sct(plr_idx,levp_idx)=cst_one* &
              (1.0+kst_one*sqrt(lmn_bb_aa_nL_obs(plr_idx,levp_idx)))* &
