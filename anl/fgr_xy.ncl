@@ -12,33 +12,33 @@
 ; ncks -A -v area /data/zender/essgcm01/essgcm01.clm2.h0.0000-09-01-00000.nc ~/foo.nc
 ; scp greenplanet.ps.uci.edu:/data/zender/essgcm01/essgcm01.cam2.h0.0000-09-01-00000.nc ~/foo.nc
 ; ncks -A -v area greenplanet.ps.uci.edu:/data/zender/essgcm01/essgcm01.clm2.h0.0000-09-01-00000.nc ~/foo.nc
-; cd ~/anl;ncl 'fl_in_nm="/home/zender/foo.nc"' 'fld_nm="TREFHT"' 'dvc="x11"' fgr_xy.ncl
+; cd ~/sw/anl;ncl 'fl_in_nm="/home/zender/foo.nc"' 'fld_nm="TREFHT"' 'dvc="x11"' fgr_xy.ncl
 
-; cd ~/anl;ncl 'fl_in_nm="/data/zender/anl/essgcm14_clm.nc"' 'fld_nm="TREFHT"' 'dvc="x11"' fgr_xy.ncl
-; cd ~/anl;ncl 'xpt="essgcm15"' 'ctl="essgcm14"' 'fld_nm="TREFHT"' 'fl_sfx="clm"' 'dvc="x11"' fgr_xy.ncl
-; cd ~/anl;ncl  'lps=False' 'map_prj="CylindricalEquidistant"' 'xpt="essgcm15"' 'ctl="essgcm14"' 'fld_nm="TREFHT"' 'fl_sfx="clm"' 'dvc="x11"' fgr_xy.ncl
-; cd ~/anl;ncl 'fl_in_nm="/data/zender/anl/essgcm15_mns_essgcm14_clm.nc"' lat_min=30.0 lat_max=90.0 plr=True 'fld_nm="TREFHT"' 'dvc="x11"' fgr_xy.ncl
-; cd ~/anl;ncl 'xpt="essgcm15"' 'ctl="essgcm14"' lat_min=30.0 lat_max=90.0 plr=True 'fld_nm="TREFHT"' 'fl_sfx="clm"' 'dvc="x11"' fgr_xy.ncl
-; cd ~/anl;ncl  'lps=False' 'map_prj="CylindricalEquidistant"' 'xpt="essgcm15"' 'ctl="essgcm14"' 'fld_nm="TREFHT"' 'fl_sfx="clm"' 'dvc="x11"' lat_min=20.0 lat_max=50.0 lon_min=60 lon_max=100.0 fgr_xy.ncl
+; cd ~/sw/anl;ncl 'fl_in_nm="/data/zender/anl/essgcm14_clm.nc"' 'fld_nm="TREFHT"' 'dvc="x11"' fgr_xy.ncl
+; cd ~/sw/anl;ncl 'xpt="essgcm15"' 'ctl="essgcm14"' 'fld_nm="TREFHT"' 'fl_sfx="clm"' 'dvc="x11"' fgr_xy.ncl
+; cd ~/sw/anl;ncl  'lps=False' 'map_prj="CylindricalEquidistant"' 'xpt="essgcm15"' 'ctl="essgcm14"' 'fld_nm="TREFHT"' 'fl_sfx="clm"' 'dvc="x11"' fgr_xy.ncl
+; cd ~/sw/anl;ncl 'fl_in_nm="/data/zender/anl/essgcm15_mns_essgcm14_clm.nc"' lat_min=30.0 lat_max=90.0 plr=True 'fld_nm="TREFHT"' 'dvc="x11"' fgr_xy.ncl
+; cd ~/sw/anl;ncl 'xpt="essgcm15"' 'ctl="essgcm14"' lat_min=30.0 lat_max=90.0 plr=True 'fld_nm="TREFHT"' 'fl_sfx="clm"' 'dvc="x11"' fgr_xy.ncl
+; cd ~/sw/anl;ncl  'lps=False' 'map_prj="CylindricalEquidistant"' 'xpt="essgcm15"' 'ctl="essgcm14"' 'fld_nm="TREFHT"' 'fl_sfx="clm"' 'dvc="x11"' lat_min=20.0 lat_max=50.0 lon_min=60 lon_max=100.0 fgr_xy.ncl
 
-; cd ~/anl;ncl 'xpt="essgcm15"' 'ctl="essgcm14"' 'fld_nm="PRECT"' 'fl_sfx="clm"' 'dvc="x11"' fgr_xy.ncl
-; cd ~/anl;ncl 'xpt="essgcm15"' 'ctl="essgcm14"' 'fld_nm="PRECT"' 'fl_sfx="clm"' 'dvc="x11"' scl=86400000 fgr_xy.ncl
+; cd ~/sw/anl;ncl 'xpt="essgcm15"' 'ctl="essgcm14"' 'fld_nm="PRECT"' 'fl_sfx="clm"' 'dvc="x11"' fgr_xy.ncl
+; cd ~/sw/anl;ncl 'xpt="essgcm15"' 'ctl="essgcm14"' 'fld_nm="PRECT"' 'fl_sfx="clm"' 'dvc="x11"' scl=86400000 fgr_xy.ncl
 
 ; SNICAR
-; cd ~/anl;ncl 'xpt="snclgm05"' 'ctl="sncpd05"' 'fld_nm="SNOAERFRC"' 'fl_sfx="clm"' 'dvc="x11"' fgr_xy.ncl
-; cd ~/anl;ncl 'xpt="sncpd05"' 'ctl="sncpd06"' 'fld_nm="TREFHT"' 'fl_sfx="clm"' 'dvc="x11"' fgr_xy.ncl
-; cd ~/anl;ncl 'xpt="sncpd05"' 'ctl="sncpd06"' 'fld_nm="TREFHT"' 'fl_sfx="ts_ANN"' 'dvc="x11"' fgr_xy.ncl
-; cd ~/anl;ncl 'xpt="sncpd05"' dff=False 'fld_nm="TREFHT"' 'fl_sfx="clm"' 'dvc="x11"' fgr_xy.ncl
-; cd ~/anl;ncl 'xpt="sncpd05"' lat_min=30.0 lat_max=90.0 plr=True 'fld_nm="TREFHT"' 'dvc="x11"' fgr_xy.ncl
-; cd ~/anl;ncl 'xpt="sncpd05"' 'ctl="sncpd06"' 'fld_nm="SNOAERFRC"' 'dvc="x11"' fgr_xy.ncl
-; cd ~/anl;ncl 'xpt="sncpd05"' 'ctl="sncpd06"' 'fld_nm="SNORDS"' 'dvc="x11"' fgr_xy.ncl
-; cd ~/anl;ncl 'lps=False' 'map_prj="CylindricalEquidistant"' 'xpt="sncpd05"' 'ctl="sncpd06"' 'fld_nm="SNOWDP"' 'dvc="x11"' lat_min=20.0 lat_max=50.0 lon_min=60 lon_max=100.0 fgr_xy.ncl
-; cd ~/anl;ncl dff=False plr=True lps=True 'xpt="sncpd05"' 'ctl="sncpd06"' 'fld_nm="SNODSTC"' 'dvc="x11"' lat_min=0.0 fgr_xy.ncl
-; cd ~/anl;ncl dff=False lps=False 'map_prj="CylindricalEquidistant"' 'xpt="sncpd05"' 'ctl="sncpd06"' 'fld_nm="SNODSTC"' 'dvc="x11"' lat_min=0.0 fgr_xy.ncl
-; cd ~/anl;ncl dff=False lps=False 'map_prj="CylindricalEquidistant"' 'xpt="sncpd05"' 'ctl="sncpd06"' 'fld_nm="SNOBCC"' 'dvc="x11"' lat_min=0.0 fgr_xy.ncl
+; cd ~/sw/anl;ncl 'xpt="snclgm05"' 'ctl="sncpd05"' 'fld_nm="SNOAERFRC"' 'fl_sfx="clm"' 'dvc="x11"' fgr_xy.ncl
+; cd ~/sw/anl;ncl 'xpt="sncpd05"' 'ctl="sncpd06"' 'fld_nm="TREFHT"' 'fl_sfx="clm"' 'dvc="x11"' fgr_xy.ncl
+; cd ~/sw/anl;ncl 'xpt="sncpd05"' 'ctl="sncpd06"' 'fld_nm="TREFHT"' 'fl_sfx="ts_ANN"' 'dvc="x11"' fgr_xy.ncl
+; cd ~/sw/anl;ncl 'xpt="sncpd05"' dff=False 'fld_nm="TREFHT"' 'fl_sfx="clm"' 'dvc="x11"' fgr_xy.ncl
+; cd ~/sw/anl;ncl 'xpt="sncpd05"' lat_min=30.0 lat_max=90.0 plr=True 'fld_nm="TREFHT"' 'dvc="x11"' fgr_xy.ncl
+; cd ~/sw/anl;ncl 'xpt="sncpd05"' 'ctl="sncpd06"' 'fld_nm="SNOAERFRC"' 'dvc="x11"' fgr_xy.ncl
+; cd ~/sw/anl;ncl 'xpt="sncpd05"' 'ctl="sncpd06"' 'fld_nm="SNORDS"' 'dvc="x11"' fgr_xy.ncl
+; cd ~/sw/anl;ncl 'lps=False' 'map_prj="CylindricalEquidistant"' 'xpt="sncpd05"' 'ctl="sncpd06"' 'fld_nm="SNOWDP"' 'dvc="x11"' lat_min=20.0 lat_max=50.0 lon_min=60 lon_max=100.0 fgr_xy.ncl
+; cd ~/sw/anl;ncl dff=False plr=True lps=True 'xpt="sncpd05"' 'ctl="sncpd06"' 'fld_nm="SNODSTC"' 'dvc="x11"' lat_min=0.0 fgr_xy.ncl
+; cd ~/sw/anl;ncl dff=False lps=False 'map_prj="CylindricalEquidistant"' 'xpt="sncpd05"' 'ctl="sncpd06"' 'fld_nm="SNODSTC"' 'dvc="x11"' lat_min=0.0 fgr_xy.ncl
+; cd ~/sw/anl;ncl dff=False lps=False 'map_prj="CylindricalEquidistant"' 'xpt="sncpd05"' 'ctl="sncpd06"' 'fld_nm="SNOBCC"' 'dvc="x11"' lat_min=0.0 fgr_xy.ncl
 
-; cd ~/anl;ncl 'lps=False' 'map_prj="CylindricalEquidistant"' 'xpt="sncpd05"' 'ctl="sncpd06"' 'fld_nm="FSNT_RF"' 'dvc="x11"' lat_min=20.0 lat_max=50.0 lon_min=60 lon_max=100.0 fgr_xy.ncl
-; cd ~/anl;ncl 'xpt="snclgm05"' 'ctl="snclgm06"' 'dvc="x11"' fgr_xy.ncl
+; cd ~/sw/anl;ncl 'lps=False' 'map_prj="CylindricalEquidistant"' 'xpt="sncpd05"' 'ctl="sncpd06"' 'fld_nm="FSNT_RF"' 'dvc="x11"' lat_min=20.0 lat_max=50.0 lon_min=60 lon_max=100.0 fgr_xy.ncl
+; cd ~/sw/anl;ncl 'xpt="snclgm05"' 'ctl="snclgm06"' 'dvc="x11"' fgr_xy.ncl
 
 ; Color tables:
 ; http://www.ncl.ucar.edu/Document/Graphics/color_table_gallery.shtml
@@ -51,7 +51,7 @@ load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_code.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/shea_util.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/contributed.ncl"
-load "$HOME/ncl/csz.ncl" ; Personal NCL constants and functions
+load "$HOME/sw/ncl/csz.ncl" ; Personal NCL constants and functions
 
 begin
 
@@ -196,7 +196,7 @@ if(.not.isvar("cnt_xtr_xpt_ctl")) then cnt_xtr_xpt_ctl=False end if
 ; Plot information for ctl and xpt
 if(.not.isvar("cnt_min_xpt_ctl")) then cnt_min_xpt_ctl=min((/min_xpt,min_ctl/)) end if
 if(.not.isvar("cnt_max_xpt_ctl")) then cnt_max_xpt_ctl=max((/max_xpt,max_ctl/)) end if
-load "$HOME/ncl/fld_prp.ncl" ; Set fld_sng, units_sng, and, maybe, cnt_lvl, scl_fct
+load "$HOME/sw/ncl/fld_prp.ncl" ; Set fld_sng, units_sng, and, maybe, cnt_lvl, scl_fct
 if(.not.isvar("fld_sng")) then fld_sng=fld_nm end if
 if(isvar("ttl_plt")) then ttl_sng=ttl_plt end if
 

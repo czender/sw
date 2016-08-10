@@ -4,8 +4,8 @@
 
 ; Example usage:
 
-; ncl < $HOME/ncl/odxc.ncl
-; load "/home/zender/ncl/odxc.ncl"
+; ncl < ${HOME}/sw/ncl/odxc.ncl
+; load "${HOME}/sw/ncl/odxc.ncl"
 
 begin ; begin odxc()
 
@@ -22,18 +22,18 @@ mss_val=1.e36
 
 ; Get data
 ;ttl_sng="Extinction Optical Depth for Mid-Latitude Summer"
-;fl_in=addfile("/data/zender/tmp/swnb_mls_O2O2_O2N2.nc","r")
+;fl_in=addfile("${DATA}/tmp/swnb_mls_O2O2_O2N2.nc","r")
 ;ttl_sng="Extinction Optical Depth 1200 TST October 11, 1995"
-;fl_in=addfile("/data/zender/arese/mdl/951011_1200_arese_mdl_clr_aer.nc","r")
+;fl_in=addfile("${DATA}/arese/mdl/951011_1200_arese_mdl_clr_aer.nc","r")
 ;ttl_sng="Sub-Arctic Summer"
-;fl_in=addfile("/data/zender/tmp/swnb_sas_O2O2_O2N2.nc","r")
+;fl_in=addfile("${DATA}/tmp/swnb_sas_O2O2_O2N2.nc","r")
 ;ttl_sng="Sub-Arctic Winter"
-;fl_in=addfile("/data/zender/tmp/swnb_saw_O2O2_O2N2.nc","r")
+;fl_in=addfile("${DATA}/tmp/swnb_saw_O2O2_O2N2.nc","r")
 ;ttl_sng="Extinction Optical Depth 1200 TST October 30, 1995"
-;fl_in=addfile("/data/zender/arese/mdl/951030_1200_arese_mdl_cld_aer.nc","r")
+;fl_in=addfile("${DATA}/arese/mdl/951030_1200_arese_mdl_cld_aer.nc","r")
 ttl_sng="Absorption Optical Depth" ; Use in OdX paper
-fl_in=addfile("/data/zender/arese/mdl/951015_1200_arese_mdl_clr_aer.nc","r")
-;fl_in=addfile("/data/zender/arese/mdl/951015_1200_arese_mdl_clr_aer_nbm.nc","r")
+fl_in=addfile("${DATA}/arese/mdl/951015_1200_arese_mdl_clr_aer.nc","r")
+;fl_in=addfile("${DATA}/arese/mdl/951015_1200_arese_mdl_clr_aer_nbm.nc","r")
 bnd_nbr=dimsizes(fl_in->bnd)
 var_nm=(/\
 	"odxc_spc_H2O",\
@@ -81,7 +81,7 @@ bnd_mcr=1.0e6*fl_in->bnd
 ; Application name determines name of resource file ("odxc.res")
 app_id = create "tst" appClass defaultapp
    "appDefaultParent": "True"
-   "appUsrDir": "/home/zender/ncl"
+   "appUsrDir": "${HOME}/sw/ncl"
 end create
 
 ; NCAR Graphics commands
@@ -121,7 +121,7 @@ end do; end loop over cst_idx
 ;print(clr_map)
 ;print(clr)
 
-fl_out="/data/zender/ps/odxc"
+fl_out="${DATA}/ps/odxc"
 wks=gsn_open_wks(dvc,fl_out)
 setvalues wks
 ;	"wkColorMap": "default"

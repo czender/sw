@@ -3,18 +3,18 @@
 ; Purpose: Spectral line plots for optical effects
 ; NB: Intended for use with defaults set in ~/.hluresfile
 
-; /bin/rm ~/ppr_ZFM07/fgr/idx_rfr_clr.pdf ~/ppr_ZFM07/fgr/ssa_clr.pdf
+; /bin/rm ~/pnp/ppr_ZFM07/fgr/idx_rfr_clr.pdf ~/pnp/ppr_ZFM07/fgr/ssa_clr.pdf
 ; /bin/rm ${DATA}/ps/dst_idx_rfr.pdf
 ; /bin/rm ${DATA}/ps/dst_ssa.pdf
 
 ; Example usage:
-; cd ~/anl;ncl < spc_ln.ncl &
-; cd ~/anl;ncl 'dvc="x11"' spc_ln.ncl &
-; cd ~/anl;ncl 'dvc="eps"' spc_ln.ncl &
-; cd ~/anl;ncl 'dvc="x11"' 'fl_in_stb="idx_rfr_mlt.nc"' spc_ln.ncl &
-; cd ~/anl;ncl 'dvc="x11"' 'bln="20060621"' spc_ln.ncl &
-; cd ~/anl;ncl 'dvc="x11"' 'fl_in_stb="idx_rfr_bln_wlk1.nc"' 'bln="20060904"' spc_ln.ncl &
-; cd ~/anl;ncl flg_clr="True" spc_ln.ncl &
+; cd ~/sw/anl;ncl < spc_ln.ncl &
+; cd ~/sw/anl;ncl 'dvc="x11"' spc_ln.ncl &
+; cd ~/sw/anl;ncl 'dvc="eps"' spc_ln.ncl &
+; cd ~/sw/anl;ncl 'dvc="x11"' 'fl_in_stb="idx_rfr_mlt.nc"' spc_ln.ncl &
+; cd ~/sw/anl;ncl 'dvc="x11"' 'bln="20060621"' spc_ln.ncl &
+; cd ~/sw/anl;ncl 'dvc="x11"' 'fl_in_stb="idx_rfr_bln_wlk1.nc"' 'bln="20060904"' spc_ln.ncl &
+; cd ~/sw/anl;ncl flg_clr="True" spc_ln.ncl &
 
 begin
 
@@ -311,7 +311,7 @@ rsr@xyExplicitLegendLabels=dat_sng ; Legend labels
 ;res@gsnFrame          = False
 
 ; Open workstation and plot data
-drc_out="/data/zender/ps"
+drc_out="${DATA}/ps"
 ;fl_out=drc_out+"/dst_idx_rfr"+fl_sfx_clr
 fl_out=drc_out+"/dst_idx_rfr"
 if (dvc.ne."x11") then print("Output will go to "+fl_out+"."+dvc) end if
@@ -596,7 +596,7 @@ rsr@xyExplicitLegendLabels=dat_sng ; Legend labels
 ;res@gsnFrame          = False
 
 ; Open workstation and plot data
-drc_out="/data/zender/ps"
+drc_out="${DATA}/ps"
 ;fl_out=drc_out+"/dst_ssa"+fl_sfx_clr
 fl_out=drc_out+"/dst_ssa"
 if (dvc.ne."x11") then print("Output will go to "+fl_out+"."+dvc) end if

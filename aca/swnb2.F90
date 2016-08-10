@@ -6736,7 +6736,7 @@ program swnb2
         fct_e=1.0
         ! fct_b = Threshold illumination alteration due to binocular->monocular viewing
         ! KHT46 and Bla46 data taken for, and parameterizations based on, binocular viewing
-        ! Monocular viewing (e.g., through a telescope) blinds an eye, and increases threshold illumination by sqrt(2) (Sch90 p. 213)
+        ! Monocular viewing (e.g., through a telescope) blinds an eye, increases threshold illumination by sqrt(2) (Sch90 p. 213)
         fct_b=1.0
         if(.false.) fct_b=sqrt(2.0) ! [frc] Correction factor for monocular (telescope) viewing
         ! fct_s = Threshold illumination alteration due to observer sensitivity

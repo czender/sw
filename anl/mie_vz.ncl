@@ -1,18 +1,18 @@
 ; $Id$ -*-f90-*-
 
 ; Purpose: Plot line figures, generally vertical figures from swnb2 output
-; Based on ~/anl/mie_xv.ncl
+; Based on ~/sw/anl/mie_xv.ncl
 ; NB: Intended for use with defaults set in ~/.hluresfile
 
 ; Example usage:
-; cd ~/anl;ncl < mie_vz.ncl
-; cd ~/anl;ncl 'dvc="x11"' mie_vz.ncl
-; cd ~/anl;ncl 'dvc="x11"' 'fld_nm="j_NO2"' mie_vz.ncl
-; cd ~/anl;ncl 'fl_in_nm="/home/zender/foo.nc"' 'fl_out_nm="/data/zender/ps/mie_vz"' 'fld_nm="j_NO2"' 'dvc="x11"' mie_vz.ncl
-; cd ~/anl;ncl abc_max=0.0 flg_log_y=True 'fl_in_nm="/home/zender/foo.nc"' 'fl_out_nm="/data/zender/ps/mie_vz"' 'fld_nm="j_NO2"' 'dvc="x11"' mie_vz.ncl
-; cd ~/anl;ncl 'fl_in_nm="/home/zender/foo.nc"' 'fl_out_nm="/data/zender/ps/mie_vz"' 'fld_nm="lev"' 'dvc="x11"' mie_vz.ncl
-; cd ~/anl;ncl dff=True 'dvc="x11"' mie_vz.ncl
-; cd ~/anl;ncl flg_clr="False" mie_vz.ncl
+; cd ~/sw/anl;ncl < mie_vz.ncl
+; cd ~/sw/anl;ncl 'dvc="x11"' mie_vz.ncl
+; cd ~/sw/anl;ncl 'dvc="x11"' 'fld_nm="j_NO2"' mie_vz.ncl
+; cd ~/sw/anl;ncl 'fl_in_nm="/home/zender/foo.nc"' 'fl_out_nm="/data/zender/ps/mie_vz"' 'fld_nm="j_NO2"' 'dvc="x11"' mie_vz.ncl
+; cd ~/sw/anl;ncl abc_max=0.0 flg_log_y=True 'fl_in_nm="/home/zender/foo.nc"' 'fl_out_nm="/data/zender/ps/mie_vz"' 'fld_nm="j_NO2"' 'dvc="x11"' mie_vz.ncl
+; cd ~/sw/anl;ncl 'fl_in_nm="/home/zender/foo.nc"' 'fl_out_nm="/data/zender/ps/mie_vz"' 'fld_nm="lev"' 'dvc="x11"' mie_vz.ncl
+; cd ~/sw/anl;ncl dff=True 'dvc="x11"' mie_vz.ncl
+; cd ~/sw/anl;ncl flg_clr="False" mie_vz.ncl
 
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_code.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl"
@@ -74,7 +74,7 @@ idx_mrk_tri_up=07 ; Triangle up
 ; Plot defaults that may be over-ridden for specific variables
 sym_sng=""
 units_sng=""
-load "$HOME/ncl/fld_prp.ncl" ; Set fld_sng, units_sng, and, maybe, cnt_lvl, scl_fct
+load "${HOME}/sw/ncl/fld_prp.ncl" ; Set fld_sng, units_sng, and, maybe, cnt_lvl, scl_fct
 if(.not.isvar("fld_sng")) then fld_sng=fld_nm end if
 if(.not.isvar("ttl_sng")) then ttl_sng=fld_sng end if
 if(.not.isvar("y_ttl_sng")) then y_ttl_sng="Height z [m]" end if

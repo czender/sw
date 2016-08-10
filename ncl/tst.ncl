@@ -4,8 +4,8 @@
 
 ; Example usage:
 
-; ncl < /home/zender/ncl/odxc.ncl
-; load "/home/zender/ncl/odxc.ncl"
+; ncl < ~/sw/ncl/odxc.ncl
+; load "${HOME}/sw/ncl/odxc.ncl"
 ; tst("x11")
 
 begin ; begin tst()
@@ -18,11 +18,11 @@ end if
 mss_val=1.e36
 
 ; Get data
-fl_in=addfile("/data/zender/tmp/951011_1200_arese_mdl_clr_aer.nc","r")
+fl_in=addfile("${DATA}/tmp/951011_1200_arese_mdl_clr_aer.nc","r")
 ttl_sng="Extinction Optical Depth 1200 TST October 11, 1995"
-;fl_in=addfile("/data/zender/tmp/951015_1200_arese_mdl_clr_aer.nc","r")
+;fl_in=addfile("${DATA}/tmp/951015_1200_arese_mdl_clr_aer.nc","r")
 ;ttl_sng="Extinction Optical Depth 1200 TST October 15, 1995"
-;fl_in=addfile("/data/zender/tmp/951030_1200_arese_mdl_cld_aer.nc","r")
+;fl_in=addfile("${DATA}/tmp/951030_1200_arese_mdl_cld_aer.nc","r")
 ;ttl_sng="Extinction Optical Depth 1200 TST October 30, 1995"
 
 bnd_nbr=dimsizes(fl_in->bnd)
@@ -72,7 +72,7 @@ bnd_mcr=1.e6*fl_in->bnd
 ; Application name determines name of resource file ("odxc.res")
 app_id = create "tst" appClass defaultapp
    "appDefaultParent": "True"
-   "appUsrDir": "/home/zender/ncl"
+   "appUsrDir": "${HOME}/sw/ncl"
 end create
 
 ; NCAR Graphics commands

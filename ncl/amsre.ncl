@@ -6,7 +6,7 @@
 
 ; Example usage:
 
-; ncl < ~/ncl/amsre.ncl
+; ncl < ~/sw/ncl/amsre.ncl
 ; ncview ${DATA}/amsre/amsre_200406_1x1.nc &
 ; load "/home/zender/ncl/amsre.ncl"
 ; tst("x11")

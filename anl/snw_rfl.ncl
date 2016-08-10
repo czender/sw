@@ -8,7 +8,7 @@
 ; if(.not.isvar("snw_rfl_ncl")) then load "$HOME/anl/snw_rfl.ncl" end if
 
 ; Personal headers
-;if(.not.isvar("csz_ncl")) then load "$HOME/ncl/csz.ncl" end if
+;if(.not.isvar("csz_ncl")) then load "${HOME}/sw/ncl/csz.ncl" end if
 
 ; Indicate to host program that header has been loaded
 snw_rfl_ncl=True

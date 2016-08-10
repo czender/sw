@@ -4,11 +4,11 @@
 
 ; Usage:
 ; Insert following at top of NCL script
-; if(.not.isvar("csz_ncl")) then load "$HOME/ncl/csz.ncl" end if
+; if(.not.isvar("csz_ncl")) then load "${HOME}/sw/ncl/csz.ncl" end if
 
 ; Indicate to host program that header has been loaded
 csz_ncl=True
-print("dbg: Loading $HOME/ncl/csz.ncl")
+print("dbg: Loading ${HOME}/sw/ncl/csz.ncl")
 
 undef("clr_map_nm_2_clr_nbr")
 undef("clr_map_nm_2_clr_srt")

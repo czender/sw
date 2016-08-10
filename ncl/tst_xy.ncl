@@ -3,7 +3,7 @@
 ; Purpose: Test NCL XY plots
 
 ; Usage:
-; cd ~/ncl;ncl < tst.ncl
+; cd ~/sw/ncl;ncl < tst.ncl
 
 begin
 

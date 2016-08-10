@@ -3,7 +3,7 @@
 ; Pupose: Compute TDDR band average absorption
 
 ; Usage:
-; ncl < /home/zender/ncl/tddr_abs.ncl
+; ncl < ~/sw/ncl/tddr_abs.ncl
 
 begin ; begin tddr_abs()
 
@@ -38,9 +38,9 @@ prs_top_sng=floattochar(prs_top)
 prs_btm_sng=floattochar(prs_btm)
 
 ; Get data
-;fl_nm="/data2/zender/arese/mdl/951011_1200_arese_mdl_clr_aer.nc"
-;drc_sng="/data2/zender/arese/mdl/"
-drc_sng="/data/zender/tmp/"
+;fl_nm="${DATA}/arese/mdl/951011_1200_arese_mdl_clr_aer.nc"
+;drc_sng="${DATA}/arese/mdl/"
+drc_sng="${DATA}/tmp/"
 if(day.gt.31) then 
 	day_sng=inttochar(day)
 	if(day.eq.83) then ss_alb_sng="083" end if
@@ -150,8 +150,8 @@ if(day.gt.31) then
 fl_out_nm="/data2/zender/arese/arese_951011_w_"+ss_alb_sng+"_trn_abs.nc"
 system("/bin/rm -f "+fl_out_nm)
 fl_out=addfile(fl_out_nm,"c")
-fl_out@history="Created by /home/zender/ncl/tddr_abs.ncl"
-fl_out@usage="File is intended as input to /home/zender/idl/mie.pro:trn_abs_gph()"
+fl_out@history="Created by ~/sw/ncl/tddr_abs.ncl"
+fl_out@usage="File is intended as input to ~/sw/idl/mie.pro:trn_abs_gph()"
 ss_alb=stringtofloat(ss_alb_sng)/100.0
 ss_alb@long_name="Aerosol single scattering albedo at 0.525 um"
 odxc_aer!0="odxc_aer"

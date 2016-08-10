@@ -4,14 +4,14 @@
 ; NB: Intended for use with defaults set in ~/.hluresfile
 
 ; Example usage:
-; cd ~/anl;ncl < fgr_vy.ncl
-; cd ~/anl;ncl 'dvc="x11"' fgr_vy.ncl
-; cd ~/anl;ncl 'dvc="x11"' 'fld_nm="SNOAERFRC"' fgr_vy.ncl
-; cd ~/anl;ncl dff=True 'dvc="x11"' fgr_vy.ncl
-; cd ~/anl;ncl dff=True 'dvc="x11"' 'fld_nm="FSNO"' fgr_vy.ncl
-; cd ~/anl;ncl dff=True 'dvc="x11"' 'fld_nm="SNORDS"' fgr_vy.ncl
-; cd ~/anl;ncl dff=True 'dvc="x11"' 'fld_nm="TREFHT"' fgr_vy.ncl
-; cd ~/anl;ncl flg_clr="False" fgr_vy.ncl
+; cd ~/sw/anl;ncl < fgr_vy.ncl
+; cd ~/sw/anl;ncl 'dvc="x11"' fgr_vy.ncl
+; cd ~/sw/anl;ncl 'dvc="x11"' 'fld_nm="SNOAERFRC"' fgr_vy.ncl
+; cd ~/sw/anl;ncl dff=True 'dvc="x11"' fgr_vy.ncl
+; cd ~/sw/anl;ncl dff=True 'dvc="x11"' 'fld_nm="FSNO"' fgr_vy.ncl
+; cd ~/sw/anl;ncl dff=True 'dvc="x11"' 'fld_nm="SNORDS"' fgr_vy.ncl
+; cd ~/sw/anl;ncl dff=True 'dvc="x11"' 'fld_nm="TREFHT"' fgr_vy.ncl
+; cd ~/sw/anl;ncl flg_clr="False" fgr_vy.ncl
 
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_code.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl"
@@ -69,7 +69,7 @@ idx_mrk_tri_up=07 ; Triangle up
 ; Plot defaults that may be over-ridden for specific variables
 sym_sng=""
 units_sng=""
-load "$HOME/ncl/fld_prp.ncl" ; Set fld_sng, units_sng, and, maybe, cnt_lvl, scl_fct
+load "$HOME/sw/ncl/fld_prp.ncl" ; Set fld_sng, units_sng, and, maybe, cnt_lvl, scl_fct
 if(.not.isvar("fld_sng")) then fld_sng=fld_nm end if
 if(.not.isvar("ttl_sng")) then ttl_sng=fld_sng end if
 if(.not.isvar("x_ttl_sng")) then x_ttl_sng=fld_sng+" "+sym_sng end if

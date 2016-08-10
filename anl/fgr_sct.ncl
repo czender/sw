@@ -10,14 +10,14 @@
 ; NB: Intended for use with defaults set in ~/.hluresfile
 
 ; Example usage:
-; cd ~/anl;ncl < fgr_sct.ncl
-; cd ~/anl;ncl 'dvc="x11"' fgr_sct.ncl
-; cd ~/anl;ncl flg_ZGD09=True fgr_sct.ncl
-; cd ~/anl;ncl flg_crc=True flg_ZGD09=True fgr_sct.ncl
-; cd ~/anl;ncl flg_crc=True flg_ZGD09=True 'dvc="x11"' fgr_sct.ncl
-; cd ~/anl;ncl flg_crc=True flg_ZGD09=True flg_ssa=True 'dvc="x11"' fgr_sct.ncl
-; cd ~/anl;ncl flg_crc=True flg_ZGD09=True flg_shp_wvl=False abc_min=0.75 ord_min=0.75 abc_max=0.90 ord_max=0.90 'dvc="x11"' fgr_sct.ncl
-; cd ~/anl;ncl flg_crc=True flg_ZGD09=True 'fl_in_nm="/data/zender/icr/swnb_lgge_bee_nsm_mpr.nc"' 'dvc="x11"' fgr_sct.ncl
+; cd ~/sw/anl;ncl < fgr_sct.ncl
+; cd ~/sw/anl;ncl 'dvc="x11"' fgr_sct.ncl
+; cd ~/sw/anl;ncl flg_ZGD09=True fgr_sct.ncl
+; cd ~/sw/anl;ncl flg_crc=True flg_ZGD09=True fgr_sct.ncl
+; cd ~/sw/anl;ncl flg_crc=True flg_ZGD09=True 'dvc="x11"' fgr_sct.ncl
+; cd ~/sw/anl;ncl flg_crc=True flg_ZGD09=True flg_ssa=True 'dvc="x11"' fgr_sct.ncl
+; cd ~/sw/anl;ncl flg_crc=True flg_ZGD09=True flg_shp_wvl=False abc_min=0.75 ord_min=0.75 abc_max=0.90 ord_max=0.90 'dvc="x11"' fgr_sct.ncl
+; cd ~/sw/anl;ncl flg_crc=True flg_ZGD09=True 'fl_in_nm="/data/zender/icr/swnb_lgge_bee_nsm_mpr.nc"' 'dvc="x11"' fgr_sct.ncl
 
 begin
 
@@ -25,7 +25,7 @@ load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_code.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl"
 
 ; Personal headers
-if(.not.isvar("csz_ncl")) then load "$HOME/ncl/csz.ncl" end if
+if(.not.isvar("csz_ncl")) then load "${HOME}/sw/ncl/csz.ncl" end if
 
 ; Initialize some fields
 prg_nm="fgr_sct" ; [sng] Program name

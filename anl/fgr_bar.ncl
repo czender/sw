@@ -7,11 +7,11 @@
 ; NB: Intended for use with defaults set in ~/.hluresfile
 
 ; Example usage:
-; cd ~/anl;ncl < fgr_bar.ncl
-; cd ~/anl;ncl 'dvc="x11"' fgr_bar.ncl
-; cd ~/anl;ncl flg_clr=False fgr_bar.ncl
-; cd ~/anl;ncl abc_nbr_plt=3 ord_max=0.18 'dvc="x11"' fgr_bar.ncl
-; cd ~/anl;ncl abc_nbr_plt=3 ord_nbr_plt=3 ord_max=0.18 'dvc="x11"' fgr_bar.ncl
+; cd ~/sw/anl;ncl < fgr_bar.ncl
+; cd ~/sw/anl;ncl 'dvc="x11"' fgr_bar.ncl
+; cd ~/sw/anl;ncl flg_clr=False fgr_bar.ncl
+; cd ~/sw/anl;ncl abc_nbr_plt=3 ord_max=0.18 'dvc="x11"' fgr_bar.ncl
+; cd ~/sw/anl;ncl abc_nbr_plt=3 ord_nbr_plt=3 ord_max=0.18 'dvc="x11"' fgr_bar.ncl
 
 begin
 

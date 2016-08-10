@@ -4,8 +4,8 @@
 
 ; Example usage:
 
-; ncl < /home/zender/ncl/slr_spc.ncl
-; load "/home/zender/ncl/slr_spc.ncl"
+; ncl < ${HOME}/sw/ncl/slr_spc.ncl
+; load "${HOME}/sw/ncl/slr_spc.ncl"
 ; spc("x11")
 
 begin ; begin spc()
@@ -20,7 +20,7 @@ end if
 ; Application name determines name of resource file ("slr_spc.res")
 app_id = create "spc" appClass defaultapp
    "appDefaultParent": "True"
-   "appUsrDir": "/home/zender/ncl"
+   "appUsrDir": "${HOME}/sw/ncl"
 end create
 
 mss_val=1.e36
@@ -36,7 +36,7 @@ fl_nm=new((/cst_nbr/),string)
 data_id=new(cst_nbr,graphic)
 ;fl_in=new((/cst_nbr/),file)
 do idx=0,cst_nbr-1
-	fl_nm(idx)="/data/zender/aca/spc_"+spc_nm(idx)+".nc"
+	fl_nm(idx)="${DATA}/aca/spc_"+spc_nm(idx)+".nc"
 ;	fl_in(idx)=addfile(fl_nm(idx),"r")
 	fl_in=addfile(fl_nm(idx),"r")
 ; ID of data object becomes resource value for "xyCoordData".

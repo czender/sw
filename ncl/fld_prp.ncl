@@ -4,11 +4,11 @@
 ; Sets fld_sng, units_sng, and, maybe, cnt_lvl, scl_fct
 
 ; Usage:
-; if(.not.isvar("fld_prp_ncl")) then load "$HOME/ncl/fld_prp.ncl" end if
+; if(.not.isvar("fld_prp_ncl")) then load "${HOME}/sw/ncl/fld_prp.ncl" end if
 
 ; Indicate to host program that header has been loaded
 fld_prp_ncl=True
-print("dbg: Loading $HOME/ncl/fld_prp.ncl")
+print("dbg: Loading ${HOME}/sw/ncl/fld_prp.ncl")
 
 if (fld_nm.eq."AERAFRC_TOP") then 
    if(.not.isvar("fld_sng")) then fld_sng="Soot+Dust TOA Forcing" end if

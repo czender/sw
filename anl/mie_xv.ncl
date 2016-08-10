@@ -1,19 +1,19 @@
 ; $Id$ -*-f90-*-
 
 ; Purpose: Plot line figures, generally spectral figures from mie/swnb2 output
-; Based on zonal average plots in ~/anl/fgr_vy.ncl
+; Based on zonal average plots in ~/sw/anl/fgr_vy.ncl
 ; NB: Intended for use with defaults set in ~/.hluresfile
 
 ; Example usage:
-; cd ~/anl;ncl < mie_xv.ncl
-; cd ~/anl;ncl 'dvc="x11"' mie_xv.ncl
-; cd ~/anl;ncl 'dvc="x11"' 'fld_nm="alb_spc_snw"' mie_xv.ncl
-; cd ~/anl;ncl 'fl_in_nm="/data/zender/aca/aer_h2o_ice_snw.nc"' 'fl_out_nm="/data/zender/ps/mie_xv"' 'fld_nm="alb_spc_snw"' 'dvc="x11"' mie_xv.ncl
-; cd ~/anl;ncl flg_GWM94="True" 'fl_out_nm="/data/zender/ps/mie_xv"' 'fld_nm="alb_spc_snw"' 'dvc="x11"' mie_xv.ncl
-; cd ~/anl;ncl flg_crc=False flg_ZGD09=True 'fl_out_nm="/data/zender/ps/mie_xv"' 'fld_nm="alb_spc_snw"' 'ttl_sng="Measured + Modeled Snow Albedo"' 'y_ttl_sng="Lab Snow Diffuse Albedo"' 'dvc="x11"' mie_xv.ncl
-; cd ~/anl;ncl 'fl_in_nm="/data/zender/aca/aer_h2o_ice_snw.nc"' 'fl_out_nm="/data/zender/ps/mie_xv"' 'fld_nm="alb_spc_snw"' 'dvc="x11"' mie_xv.ncl
-; cd ~/anl;ncl dff=True 'dvc="x11"' mie_xv.ncl
-; cd ~/anl;ncl flg_clr="False" mie_xv.ncl
+; cd ~/sw/anl;ncl < mie_xv.ncl
+; cd ~/sw/anl;ncl 'dvc="x11"' mie_xv.ncl
+; cd ~/sw/anl;ncl 'dvc="x11"' 'fld_nm="alb_spc_snw"' mie_xv.ncl
+; cd ~/sw/anl;ncl 'fl_in_nm="/data/zender/aca/aer_h2o_ice_snw.nc"' 'fl_out_nm="/data/zender/ps/mie_xv"' 'fld_nm="alb_spc_snw"' 'dvc="x11"' mie_xv.ncl
+; cd ~/sw/anl;ncl flg_GWM94="True" 'fl_out_nm="/data/zender/ps/mie_xv"' 'fld_nm="alb_spc_snw"' 'dvc="x11"' mie_xv.ncl
+; cd ~/sw/anl;ncl flg_crc=False flg_ZGD09=True 'fl_out_nm="/data/zender/ps/mie_xv"' 'fld_nm="alb_spc_snw"' 'ttl_sng="Measured + Modeled Snow Albedo"' 'y_ttl_sng="Lab Snow Diffuse Albedo"' 'dvc="x11"' mie_xv.ncl
+; cd ~/sw/anl;ncl 'fl_in_nm="/data/zender/aca/aer_h2o_ice_snw.nc"' 'fl_out_nm="/data/zender/ps/mie_xv"' 'fld_nm="alb_spc_snw"' 'dvc="x11"' mie_xv.ncl
+; cd ~/sw/anl;ncl dff=True 'dvc="x11"' mie_xv.ncl
+; cd ~/sw/anl;ncl flg_clr="False" mie_xv.ncl
 
 ; scp ${DATA}/ps/mie_xv.pdf sand.ess.uci.edu:/var/www/html/tmp
 
@@ -22,7 +22,7 @@ load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/contributed.ncl"
 
 ; Personal headers
-if(.not.isvar("csz_ncl")) then load "$HOME/ncl/csz.ncl" end if
+if(.not.isvar("csz_ncl")) then load "${HOME}/sw/ncl/csz.ncl" end if
 
 ; Initialize some fields
 prg_nm="mie_xv" ; [sng] Program name
@@ -73,7 +73,7 @@ end if; !flg_ZGD09
 sym_sng=""
 units_sng=""
 ; Set fld_sng, units_sng, and, maybe, cnt_lvl, scl_fct
-if(.not.isvar("fld_prp_ncl")) then load "$HOME/ncl/fld_prp.ncl" end if
+if(.not.isvar("fld_prp_ncl")) then load "${HOME}/sw/ncl/fld_prp.ncl" end if
 if(.not.isvar("fld_sng")) then fld_sng=fld_nm end if
 if(.not.isvar("ttl_sng")) then ttl_sng=fld_sng end if
 if(.not.isvar("y_ttl_sng")) then y_ttl_sng=fld_sng+" "+sym_sng end if

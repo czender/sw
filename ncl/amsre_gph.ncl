@@ -4,7 +4,7 @@
 
 ; Example usage:
 
-; ncl < ~/ncl/amsre_gph.ncl
+; ncl < ~/sw/ncl/amsre_gph.ncl
 ; gv ${DATA}/ps/amsre_200406_mdl_obs_dlt_vwc_sfc.ps &
 ; kpdf ${DATA}/ps/amsre_200406_mdl_obs_dlt_vwc_sfc.pdf &
 ; load "/home/zender/ncl/amsre_gph.ncl"

@@ -4,9 +4,9 @@
 ; NB: Intended for use with defaults set in ~/.hluresfile
 
 ; Example usage:
-; cd ~/anl;ncl < fgr_xv.ncl
-; cd ~/anl;ncl 'dvc="x11"' fgr_xv.ncl
-; cd ~/anl;ncl flg_clr="False" fgr_xv.ncl
+; cd ~/sw/anl;ncl < fgr_xv.ncl
+; cd ~/sw/anl;ncl 'dvc="x11"' fgr_xv.ncl
+; cd ~/sw/anl;ncl flg_clr="False" fgr_xv.ncl
 ; load "/home/zender/anl/fgr_xv.ncl"
 
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_code.ncl"
