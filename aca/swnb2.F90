@@ -1707,16 +1707,16 @@ program swnb2
   real dns_snw_cmd_ln ! [kg m-3] Snow density
   real dpt_snw_cmd_ln ! [m] Snowpack thickness
   real float_foo
+  real ppl_dmt_crc_bry ! [mm] Pupil diameter correction factor for brightness
   real fct_a ! [frc] Apparent background brightness and perceived illumination alteration by pupil area
   real fct_b ! [frc] Correction factor for monocular (telescope) viewing
-  real ppl_dmt_crc_bry ! [mm] Pupil diameter correction factor for brightness
-  real fct_SC_sct ! [frc] Apparent background brightness and perceived illumination alteration by Stiles-Crawford effect (off-axis viewing), scotopic
-  real fct_SC_pht ! [frc] Apparent background brightness and perceived illumination alteration by Stiles-Crawford effect (off-axis viewing), photopic
   real fct_cb ! [frc] Apparent background brightness alteration due to difference between laboratory and background color
   real fct_cs ! [frc] Threshold illumination alteration due to difference between laboratory and star color 
-  real fct_mgn ! [frc] Magnification power of optics
   real fct_e ! [frc] Threshold illumination alteration due to atmospheric extinction
   real fct_s ! [frc] Threshold illumination alteration due to observer sensitivity
+  real fct_SC_sct ! [frc] Apparent background brightness and perceived illumination alteration by Stiles-Crawford effect (off-axis viewing), scotopic
+  real fct_SC_pht ! [frc] Apparent background brightness and perceived illumination alteration by Stiles-Crawford effect (off-axis viewing), photopic
+  real fct_mgn ! [frc] Magnification power of optics
   real flx_frc_drc_TOA ! [frc] TOA insolation fraction in direct beam
   real flx_spc_act
   real flx_spc_act_pht
@@ -6077,7 +6077,7 @@ program swnb2
         ! Overwrite boundary conditions with fluxes for night-mode
         ! In night-mode, direct and diffuse are uncoupled
         ! User separately inputs direct beam in slr_cst and diffuse field in lmn_TOA
-        ! slr_cst may be starlight, so ignore xnt_fac 
+        ! slr_cst may be starlight, so ignore Sun-Earth orbital eccentricity factor (xnt_fac)
         ! flx_ngt_TOA [W m-2] is irradiance whereas DISORT wants for fisot an isotropic radiance [W m-2 sr-1]
         fbeam=slr_cst*flx_slr_frc(bnd_idx) ! [W m-2]
         fisot=flx_ngt_TOA*flx_slr_frc(bnd_idx)/pi ! [W m-2 sr-1]
@@ -6709,15 +6709,23 @@ program swnb2
         ! Divide brightness by this area factor to convert true brightness into brightness that mean participant
         ! in threshold brightness study would have observed
         fct_a=ppl_dmt_std*ppl_dmt_std/(ppl_dmt_obs*ppl_dmt_obs)
+
+        ! fct_b = Threshold illumination alteration due to binocular->monocular viewing
+        ! KHT46 and Bla46 data taken for, and parameterizations based on, binocular viewing
+        ! Monocular viewing (e.g., through a telescope) blinds an eye, increases threshold illumination by sqrt(2) (Sch90 p. 213)
+        fct_b=1.0
+        if(.false.) fct_b=sqrt(2.0) ! [frc] Correction factor for monocular (telescope) viewing
+        ! fct_mgn = Magnification power of optics
+        ! Magnification is 1 for naked-eye observations
+        fct_mgn=1.0 
+
         ! fct_SC = Apparent background brightness and perceived illumination alteration by Stiles-Crawford effect (off-axis viewing)
         ! Sch90: "light that enters the eye near the outer edge of the pupil will be less efficiently used than light that enters near the middle of the pupil. This Stiles-Crawford effect is caused by the photon-detection efficiency falling with distance from the center of the eye..."
         ! Neither Gar00 nor CFE01 reprints fct_SC parameterization
         ! Both Gar00 and CFE01 refer reader to Sch90, as modified in Sch93, and point-out that fct_SC in Sch90 (and Sch93?) is actually fct_SC^{-1}
         ! Sch90 p. 214 (9) shows ... and is superceded by Sch93
         ! Sch93 p. 327 (31i) shows fct_SC depends on D (aperture = pupil diameter = ppl_dmt_obs [cm]), M (magnification), and P_st (standard pupil size = ppl_dmt_std [cm])
-        ! fct_mgn = Magnification power of optics
-        ! Magnification is 1 for naked-eye observations
-        fct_mgn=1.0 
+
         ! fxm: verify fct_SC is correct and not inverse of correct
         fct_SC_sct=min(1.0, & ! Sch93 p. 327 (31i)
              (1.0-(ppl_dmt_std/12.44)**4.0)/ & ! [cm]
@@ -6734,11 +6742,7 @@ program swnb2
         fct_cs=1.0
         ! fct_e = Threshold illumination alteration due to atmospheric extinction
         fct_e=1.0
-        ! fct_b = Threshold illumination alteration due to binocular->monocular viewing
-        ! KHT46 and Bla46 data taken for, and parameterizations based on, binocular viewing
-        ! Monocular viewing (e.g., through a telescope) blinds an eye, increases threshold illumination by sqrt(2) (Sch90 p. 213)
-        fct_b=1.0
-        if(.false.) fct_b=sqrt(2.0) ! [frc] Correction factor for monocular (telescope) viewing
+
         ! fct_s = Threshold illumination alteration due to observer sensitivity
         fct_s=1.0
         if (dbg_lvl>=dbg_scl) then
