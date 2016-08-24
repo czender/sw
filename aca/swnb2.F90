@@ -1783,7 +1783,7 @@ program swnb2
   real sca_frc_Mie(lev_nbr_max) ! [frc] Scattering fraction treated with Mie phase function
   real sca_frc_Ray(lev_nbr_max) ! [frc] Scattering fraction treated with Rayleigh phase function
   real sfc_msv
-  real sfc_tpt
+  real sfc_tpt ! [K] Surface temperature (used for bottom boundary emission in night mode)
   real flx_ngt_TOA ! [W m-2]
   real slr_cst
   real slr_cst_cmd_ln
@@ -1944,7 +1944,7 @@ program swnb2
   rcd=nf90_noerr              ! nf90_noerr == 0
   single_bnd_computation=.false.
   sfc_msv=1.0 ! [frc] Surface emissivity
-  sfc_tpt=mss_val ! [K] Surface temperature
+  sfc_tpt=3000.0 ! [K] Surface temperature (used only for bottom boundary emission in night mode)
   slr_cst=slr_cst_CCM
   slr_zen_ngl_cos_cmd_ln=mss_val ! [frc] Cosine solar zenith angle
   str_nbr=4
@@ -2079,7 +2079,7 @@ program swnb2
            call ftn_arg_get(arg_idx,arg_val,sfc_msv_cmd_ln) ! [frc] Surface emissivity
         else if (opt_sng == 'sfc_tpt') then
            cmd_ln_sfc_tpt=.not.cmd_ln_sfc_tpt
-           call ftn_arg_get(arg_idx,arg_val,sfc_tpt_cmd_ln) ! [K] Surface temperature
+           call ftn_arg_get(arg_idx,arg_val,sfc_tpt_cmd_ln) ! [K] Surface temperature (used for bottom boundary emission in night mode)
         else if (opt_sng == 'slr_cst') then
            cmd_ln_slr_cst=.not.cmd_ln_slr_cst
            call ftn_arg_get(arg_idx,arg_val,slr_cst_cmd_ln)
@@ -4067,6 +4067,19 @@ program swnb2
      ! In night mode, bottom BCs from command-line (if any) ...
      if(sfc_tpt.ne.mss_val) then
         ! ...supersede surface temperature from profile
+        ! Correlated Color Temperature (CCT) unless otherwise indicated
+        ! Low Pressure Sodium (LPS) ~ 1700 K (Wikipedia)
+        ! High Pressure Sodium (HPS) ~ 2200 K
+        ! Soft white CFL and LED ~ 2700 K
+        ! Incandescent 60W T ~ 2700 K (Wikipedia) (incandescent is only type that has true blackbody distribution)
+        ! Halogen ~ 3000 K
+        ! Warm Metal Halide ~ 3200 K
+        ! CFL ~ 3500--5500 K (Wikipedia)
+        ! Cool White Fluorescent ~ 4000 K
+        ! Standard Metal Halide ~ 4000 K
+        ! White LED light ~ 4000 K (FCD16 p. 7)
+        ! Daylight clear sky ~ 5000--6000 K
+        ! Daylight overcast sky ~ 6500 K
         btemp=sfc_tpt
      endif ! sfc_tpt
      ! Replace emissivity
@@ -7824,7 +7837,7 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,sfc_msv_id,'long_name','Surface emissivity'), &
           sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,sfc_tpt_id,'long_name','Surface temperature'), &
+     rcd=nf90_wrp(nf90_put_att(nc_id,sfc_tpt_id,'long_name','Surface temperature for bottom boundary emission'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_id,'long_name','Spectral luminance of nadir radiation'), &
           sbr_nm//': pa long_name in '//__FILE__)

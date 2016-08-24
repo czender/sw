@@ -1516,7 +1516,9 @@ alias spotz "Bill Spotz <spotz@ncar.ucar.edu>"
 alias srinivasan "Shyam Srinivasan <shyams@es.oit.uci.edu>"
 alias srinivasan_j "J. Srinivasan <jayes@caos.iisc.ernet.in>" # Indian Institute of Science, Bangalore (invited visit at Asilomar)
 alias ssp "Summer Science Program <info@summerscience.org>"
-alias stamnes "Knut Stamnes <knut@gi.alaska.edu>"
+#alias stamnes "Knut Stamnes <knut@gi.alaska.edu>"
+alias stamnes "Knut Stamnes <kstamnes@stevens.edu>"
+alias stamnes_s "Snorre Stamnes <snorre.a.stamnes@nasa.gov>"
 alias starke "Patrick Stärke <patrick.staerke@avh.de>" # Kavli GAFOS organizer
 alias starr "Dave Starr <starr@climate.gsfc.nasa.gov>"
 alias stefanska "Joanne Stefanska <joanne.stefanska@ucop.edu>"
