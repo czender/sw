@@ -1636,6 +1636,15 @@ program swnb2
   common /brdf_LiSparse_prm/ hb, br
   real hb                   ! height to vertical radius ratio
   real br                   ! vertical radius to horizontal radius ratio
+  ! Gar86 parameters
+  common /brdf_Gar86_prm/ fff, ggg
+  real fff
+  real ggg
+  ! CiF12 parameters
+  common /brdf_CiF12_prm/ u1, u2, u3
+  real u1
+  real u2
+  real u3
   
   ! Local arrays
   real(selected_real_kind(p=12))::lat_dgr_cmd_ln
@@ -2257,7 +2266,7 @@ program swnb2
   if (plr_nbr /= str_nbr) then
      write (6,'(a,a,a,a)') prg_nm(1:ftn_strlen(prg_nm)), &
           ': ERROR plr_nbr /= str_nbr. Option not supported until all DISORT output arrays carefully examined and re-dimensioned', &
-          ' to distingguish between different numbers of streams, computational angles, user angles. swnb2 might return ', &
+          ' to distinguish between different numbers of streams, computational angles, user angles. swnb2 might return ', &
           'corrrect fluxes, and will return incorrect intensities in such a configuration.'
      call abort
   endif
@@ -5017,6 +5026,17 @@ program swnb2
      ! LommelSeeliger
      if (brdf_typ == 5) then
         nrm_rfl_LS=0.1
+     endif
+     ! Gar86
+     if (brdf_typ == 6) then
+        fff=0.15
+        ggg=0.15
+     endif
+     ! CiF12
+     if (brdf_typ == 7) then
+        u1=1.0
+        u2=1.176
+        u3=0.0
      endif
      
      if (dbg_lvl>dbg_off) write (6,'(a1)',advance="no") '.'

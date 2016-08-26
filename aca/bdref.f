@@ -37,16 +37,20 @@ c       local variables
           bdref = f_iso * pi
      &          + f_vol * brdf_RossThick(mu, mup, dphi)
      &          + f_geo * brdf_LiSparse(mu, mup, dphi)
-        elseif (brdf_typ .eq. 1) then
+       elseif (brdf_typ .eq. 1) then
           bdref = brdf_CoxMunk(mu, mup, dphi)
-        elseif (brdf_typ .eq. 2) then
+       elseif (brdf_typ .eq. 2) then
           bdref = brdf_Hapke(mu, mup, dphi)
-        elseif (brdf_typ .eq. 3) then
+       elseif (brdf_typ .eq. 3) then
           bdref = brdf_Minnaert(mu, mup)
-        elseif (brdf_typ .eq. 4) then
+       elseif (brdf_typ .eq. 4) then
           bdref = brdf_RahmanPinty(mu, mup, dphi)
-        elseif (brdf_typ .eq. 5) then
+       elseif (brdf_typ .eq. 5) then
           bdref = brdf_LommelSeeliger(mu, mup)
+       elseif (brdf_typ .eq. 6) then
+          bdref = brdf_Gar86(mu)
+       elseif (brdf_typ .eq. 7) then
+          bdref = brdf_CiF12(mu)
        else
           stop 'Invalid brdf_typ in BDREF()'
         endif
@@ -266,3 +270,50 @@ c       see equations cited above
      &                 + 0.5 * pi * (1.0 + cosxi) / (cs * csp)
         return
       end
+
+      real function brdf_Gar86(mu)
+        implicit none
+c       Gar86 light pollution emission
+c       input variables
+        real mu
+        common /brdf_Gar86_prm/ fff, ggg
+        real fff
+        real ggg
+c       local variables
+        real pi
+        real theta
+        real theta_sqr
+        parameter(pi = 3.141592741)
+        theta=acos(mu)
+        theta_sqr=theta*theta
+        brdf_Gar86 = 2.0*ggg*(1.0-fff)*mu+0.554*fff*theta_sqr*theta_sqr
+        return
+      end ! Gar86
+
+      real function brdf_CiF12(mu)
+        implicit none
+c       CiF12 p. 3349 (61) light pollution emission
+c       input variables
+        real mu
+c     CiF12 parameters
+        common /brdf_CiF12_prm/ u1, u2, u3
+        real u1
+        real u2
+        real u3
+c       local variables
+        real q
+        real pi
+        real theta
+        real theta_sqr
+        parameter(pi = 3.141592741)
+        theta=acos(mu)
+        theta_sqr=theta*theta
+        if(theta < pi/6.0) then
+           q=0.0
+        else 
+           q=1.0
+        endif
+        brdf_CiF12=2.0*mu+0.5543*u2*theta_sqr*theta_sqr+1.778*q*u3*cos(3.0*theta-pi)/(2.0*pi*(1.0+u2+u3))
+        return
+      end ! CiF12
+      
