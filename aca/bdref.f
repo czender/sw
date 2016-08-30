@@ -313,6 +313,14 @@ c     local variables
       else 
          q=1.0
       endif
+!     Received from Fabio Falchi 20160827
+!     thank you for your appreciation of our work.
+!     Yes, q=1 for theta>30°
+!     Here is the upward function obtained from the calibration:
+!     http://www.wolframalpha.com/input/?i=polarplot+%5B+%7B(2.*190+Cos%5Bx%5D+%2B+52*0.5543155+x%5E4+%2B+1.777777*7.6*((sqrt((x+-+%5C%5BPi%5D%2F6.)*(x+-+%5C%5BPi%5D%2F6.))%2B(x+-+%5C%5BPi%5D%2F6.))%2F(2.*(x+-+%5C%5BPi%5D%2F6.)))*+Cos%5B3.+(x+-+%5C%5BPi%5D%2F3.)%5D)%2F(2+%5C%5BPi%5D)%7D,++%7Bx,+0,+%5BPi%5D%2F2.%7D%5D
+!     I multiplied the parameters (Wa = 1.9 × 10−3, Wb = 5.2 × 10−4, Wc = 7.6 × 10−5) by 10^5 in the equation, but the function's shape is the correct one.
+!     Best regards,
+!     Fabio
       brdf_CiF12=2.0*mu+0.5543*u2*theta_sqr*theta_sqr+1.778*q*u3*cos(3.0*theta-pi)/(2.0*pi*(1.0+u2+u3))
       return
       end ! CiF12
