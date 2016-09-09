@@ -1138,8 +1138,8 @@ alias xwininfo='xwininfo -int'
 # Begin section not yet merged with cshrc 
 alias x16='startx -- -bpp 16 :1' # Start 16 bpp display acessible as Ctl-Alt-F8
 # End section not yet merged with cshrc
-alias gtc='for rps in acd diwg nco pnp prv PreAndPostProcessingScripts terraref/computing-pipeline terraref/documentation rsr sw; do cd ~/${rps};git commit -am "lazy commit";echo "Pushing ${rps}...";git push;done;cd'
-alias gtp='for rps in acd diwg nco pnp prv PreAndPostProcessingScripts rsr sw terraref/computing-pipeline terraref/documentation; do cd ~/${rps};echo "Pulling ${rps}...";git pull;done;cd'
+alias gtc='for rps in acd cf2 diwg nco pnp prv PreAndPostProcessingScripts terraref/computing-pipeline terraref/documentation rsr sw; do cd ~/${rps};git commit -am "lazy commit";echo "Pushing ${rps}...";git push;done;cd'
+alias gtp='for rps in acd cf2 diwg nco pnp prv PreAndPostProcessingScripts rsr sw terraref/computing-pipeline terraref/documentation; do cd ~/${rps};echo "Pulling ${rps}...";git pull;done;cd'
 function gtm { for rps in acd diwg nco pnp prv PreAndPostProcessingScripts rsr sw; do cd ~/${rps};git commit -am "${1}";echo "Pushing ${rps}...";git push;done;cd - ; }
 function bin_obj_rm { rm "${HOME}/bin/${1} ${HOME}/obj/${1}.o ${HOME}/obj/${1}.d" ; }
 function dotgrep { 'egrep ${1} .[a-zA-Z]*' ; }
