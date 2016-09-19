@@ -101,7 +101,7 @@ alias goldenson "Naomi Goldenson <naomi.goldenson@gmail.com>" # Vienna 2008
 
 # ESMF lists handled by mailman on www.ess.uci.edu
 alias cie "CIE Faculty Liasons <cie-fac@uci.edu>"
-alias diwg "ESDSWG DIWG <esdswg-interoperability@lists.nasa.gov>"
+alias diwg "Dataset Interoperability Working Group <esdswg-interoperability@lists.nasa.gov>"
 alias access "NASA ACCESS List <roses-access@lists.nasa.gov>"
 alias dead "Dust Entrainment And Deposition Mail List <dead@uci.edu>"
 alias esmf "ESMF User Mail List <esmf@uci.edu>"
@@ -543,7 +543,6 @@ alias cf "CF Metadata Mail List <cf-metadata@cgd.ucar.edu>"
 alias cf-satellite "CF-Satellite <cf-satellite@unidata.ucar.edu>"
 alias esdswg-opensource "ESDSWG Open Source WG Mail List <esdswg-opensource@lists.nasa.gov>"
 alias esdswg-hdfwg "ESDSWG HDF5 Conventions WG Mail List <esdswg-hdf5wg@lists.nasa.gov>"
-alias esdswg-diwg "ESDSWG Dataset Interoperability WG Mail List <esdswg-diwg@lists.nasa.gov>"
 alias debian "Debian User Mail List <debian-user@lists.debian.org>"
 alias debian-amd64 "Debian AMD64 Mail List <debian-amd64@lists.debian.org>"
 alias debianqa "Debian QA <debian-qa@lists.debian.org>"
