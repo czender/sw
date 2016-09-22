@@ -23,8 +23,8 @@
 % Standard packages
 \usepackage{ifpdf} % Define \ifpdf
 \ifpdf % PDFLaTeX
-\usepackage[pdftex]{graphicx} % Defines \includegraphics*
-\pdfcompresslevel=9
+%\usepackage[pdftex]{graphicx} % Defines \includegraphics*
+%\pdfcompresslevel=9
 \usepackage{thumbpdf} % Generate thumbnails
 \usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
 \else % !PDFLaTeX
@@ -55,7 +55,7 @@
 % pdftex        Conform to pdftex conventions
 \ifpdf % PDFLaTeX
 \usepackage[backref,breaklinks,colorlinks,citecolor=blue,linkcolor=blue,urlcolor=blue,hyperindex,plainpages=false,pdftex]{hyperref} % Hyper-references
-\pdfcompresslevel=9
+%\pdfcompresslevel=9
 \else % !PDFLaTeX
 \usepackage[backref,breaklinks,colorlinks,citecolor=blue,linkcolor=blue,urlcolor=blue,hyperindex,plainpages=false]{hyperref} % Hyper-references
 \fi % !PDFLaTeX
