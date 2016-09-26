@@ -1086,6 +1086,7 @@ alias ess_sco='ssh -X 42350w13@eee.uci.edu'
 alias gbsh="/bin/cp ${HOME}/sw/dot/bashrc.greenplanet ${HOME}/.bashrc;source ${HOME}/.bashrc"
 alias firn='ssh -X firn.ess.uci.edu'
 alias frazil='ssh -X frazil.ess.uci.edu'
+alias skyglow='ssh -X skyglow.ess.uci.edu'
 alias givre='ssh -X givre.ess.uci.edu'
 alias roulee='ssh -X roulee.ess.uci.edu'
 alias aerosol='ssh -X aerosol.ess.uci.edu'
