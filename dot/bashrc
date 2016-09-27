@@ -405,7 +405,6 @@ case "${PVM_ARCH}" in
 	    gplogin* ) PKG_ROOT='/sopt' ; ;; # endif EMT64 Rocks Cluster
 	    mirage* ) PKG_ROOT='/fs/local' ; ;; # endif NCAR cluster
 	    hpc* ) PKG_ROOT='/software' ; ;; # endif Torque machines
-	    virga* ) PKG_ROOT='/usr/local' ; ;; # endif Ubuntu-stock
 	    * ) PKG_ROOT='/usr/local' ; ;; # endif default
 	esac # endcase ${HOST}
 	export NETCDF_ROOT="${PKG_ROOT}"
@@ -428,9 +427,9 @@ case "${PVM_ARCH}" in
 
 # OpenMP
 	case "${HOST}" in 
-		ashes* | ess1* ) export OMP_NUM_THREADS='1' ; ;; # endif uniprocessor
-		neige* | virga* ) export OMP_NUM_THREADS='2' ; ;; # endif dual processor
-		aerosol* | firn* | frazil* | givre* | hpc* ) export OMP_NUM_THREADS='4' ; ;; # endif quad processor
+		ess1* ) export OMP_NUM_THREADS='1' ; ;; # endif uniprocessor
+		neige* ) export OMP_NUM_THREADS='2' ; ;; # endif dual processor
+		aerosol* | firn* | frazil* | givre* | hpc* | skyglow* ) export OMP_NUM_THREADS='4' ; ;; # endif quad processor
 		glace* | gplogin* | grele* | roulee* | snow* ) export OMP_NUM_THREADS='8' ; ;; # endif dual-quad processor
 		aims4* | mirage* | pileus* | rhea* | ys* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-octet processor
 	esac # endcase ${HOST}
@@ -501,7 +500,7 @@ case "${PVM_ARCH}" in
 	    aims4* ) PATH=${PATH}\:/usr/local/uvcdat/2016-01-21/bin:/usr/local/uvcdat/2016-01-21/Externals/bin ; ;; # endif LLNL
 	    gplogin* | mirage* ) # x86-64
 		PATH=${PATH}\:${ICC_ROOT}/bin/intel64 ; ;; # endif greenplanet
-#	    frazil* | givre* | neige* | roulee* ) 
+#	    frazil* | givre* | neige* | roulee* | skyglow ) 
 #		PATH=${PATH}\:/usr/local/cuda/bin ; ;; # endif CUDA
 	    pileus* ) PATH=${PATH}\:/opt/ACME/bin ; ;; # endif CADES
 	    *) # Default
@@ -545,7 +544,7 @@ case "${PVM_ARCH}" in
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${NETCDF4_ROOT}/lib
 	case "${HOST}" in 
-	    frazil* | givre* | roulee* ) # Fedora uses LIB64 directory
+	    frazil* | givre* | roulee* | skyglow* ) # Fedora uses LIB64 directory
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib64
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/lib64
 		;; # endif LIB64
@@ -806,12 +805,12 @@ FC_pgf95='pgf95'
 case "${HOST}" in 
 #    aerosol* | firn* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif clang/clang/macports
     aerosol* | firn* ) export LINUX_CC=${CC_gcc_macports} ; export LINUX_CXX=${CXX_gxx_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif all MacPorts
-    ashes* | glace* | gplogin* | grele* | mirage* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC="${LINUX_CC} -I/usr/include/mpich2" ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK -I/usr/include/mpich2" ;; # endif gcc/g++/gfortran MPICH2
+    glace* | gplogin* | grele* | mirage* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC="${LINUX_CC} -I/usr/include/mpich2" ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK -I/usr/include/mpich2" ;; # endif gcc/g++/gfortran MPICH2
     gplogin* ) export LINUX_CC=${CC_icc/icc/mpicc} ; export LINUX_CXX=${CXX_icpc/icpc/mpiCC} ; export LINUX_FC=${FC_ifort/ifort/mpif90} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort OpenMPI	
     gplogin* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort OpenMPI GreenPlanet is special because it has a parallel filesystem, lustre, and hence can take advantage of MPI I/O when compiler is MPI-aware. However, compiler switches in all of my custom Makefiles are triggered by vendor-compiler names, e.g., gfortran, ifort, and xlf90, rather than the generic mpicc/mpiCC/mpif90, which are ambiguous. Hence we use this method to designate the invocation command (e.g., "mpif90" or "pgf90") together with the underlying compiler (e.g., "gfortran" or "pgf90"): MPI=Y tells Makefile to invoke compiler with 'mpicc', 'mpif90', etc., but LINUX_CC/CXX/FC point to underlying compilers. Makefile sets compiler-specific switches and options using LINUX_CC/CXX/FC, then, afterwards, sets CC/CXX/FC to 'mpicc/mpiCC/mpif90'. Alternate method, shown in preceding line, sets LINUX_CC/CXX/FC directly to 'mpicc/mpiCC/mpif90' here in bashrc, but then compiler-specific switches in Makefile are missed.
     hpc* ) export LINUX_CC=${CC_pgcc} ; export LINUX_CXX=${CXX_pgCC} ; export LINUX_FC=${FC_pgf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # endif pgcc/pgCC/pgf95 MPICH2
 #   soot* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_g95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX=${LINUX_CXX} ;; # endif icc/icpc/g95 MPICH
-    frazil* | givre* | neige* | roulee* | silt* | snow* | virga* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # endif gcc/g++/gfortran OpenMPI
+    frazil* | givre* | neige* | roulee* | skyglow* | snow* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # endif gcc/g++/gfortran OpenMPI
     cooley* | mira* | rhea* | titan* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif gcc/g++/gfortran OpenMPI
     cori* | edison* | ys* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # endif gcc/g++/g95 MPICH 
@@ -827,7 +826,7 @@ case "${HOST}" in
     ashes* ) export GCC_RCH_ARG='-march=pentium4' ; export ICC_RCH_ARG='-axW -mtune=pentium4' ; ;; # endif Pentium4-M
     aerosol* | firn* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='' ; ;; # endif Intel Core i7
     esqf* ) export GCC_RCH_ARG='-mtune=power4' ; export ICC_RCH_ARG='' ; ;; # endif Power4
-    frazil* | givre* | glace* | grele* | neige* | roulee* | snow* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-axP -mcpu=pentium4 -msse3' ; ;; # endif Core2 Extreme EMT64
+    frazil* | givre* | glace* | grele* | neige* | roulee* | skyglow* | snow* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-axP -mcpu=pentium4 -msse3' ; ;; # endif Core2 Extreme EMT64
     gplogin* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-ipo -no-prec-div -Wl,-z,muldefs' ; ;; # endif Core2 Extreme EMT64
     mirage* | ys* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='-ipo -no-prec-div -Wl,-z,muldefs' ; ;; # endif Core2 Extreme EMT64
     lanina* ) export GCC_RCH_ARG='-march=k6-2' ; export ICC_RCH_ARG='' ; ;; # endif AMD K6-2
@@ -836,8 +835,7 @@ esac # endcase ${HOST}
 # Set ICC_ROOT, IFC_ROOT
 case "${HOST}" in
     aerosol* | firn* ) export ICC_ROOT='' ; export IFC_ROOT='' ; ;; # endif IA32
-    ashes* | virga* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # endif IA32
-    frazil* | givre* | glace* | grele* | neige* | roulee* | snow* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # endif IA64
+    frazil* | givre* | glace* | grele* | neige* | roulee* | skyglow* | snow* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # endif IA64
     gplogin* ) export ICC_ROOT='/sopt/intel/Compiler/11.0/081' ; export IFC_ROOT='/sopt/intel/Compiler/11.0/081' ; ;; # endif EMT64 Rocks Cluster
     ipcc* ) export ICC_ROOT='/opt/intel/cce/9.1.038' ; export IFC_ROOT='/opt/intel/fce/9.1.032' ; ;; # endif IPCC
     hpc* ) export ICC_ROOT='/software/intel/cc' ; export IFC_ROOT='/software/intel/fc' ; ;; # endif HPC
@@ -967,9 +965,9 @@ case ${PVM_ARCH} in
 	#export PRINTER='hp4050' # UCI croul
 	#export PRINTER='hp4250' # LGGE office
 	case ${HOST} in
-	    aerosol* | ashes* | roulee* | virga* ) export PRINTER='dell5130' ; ;; # Irvine home office
-#	    frazil* | givre* | glace* | gplogin* | grele* ) export PRINTER='hp4700' ; ;; # UCI Croul 3323 (my office)
-	    firn* | frazil* | givre* | glace* | gplogin* | grele* | neige* ) export PRINTER='hpm600' ; ;; # UCI Croul mail room
+	    aerosol* | roulee* ) export PRINTER='dell5130' ; ;; # Irvine home office
+#	    frazil* | givre* | glace* | gplogin* | grele* | skyglow* ) export PRINTER='hp4700' ; ;; # UCI Croul 3323 (my office)
+	    firn* | frazil* | givre* | glace* | gplogin* | grele* | neige* | skyglow* ) export PRINTER='hpm600' ; ;; # UCI Croul mail room
 	esac # endcase ${HOST}
 	#export PRINTER='hp4350' # UCI Croul 3242 (common area)
 	#export PRINTER='hpm600' # UCI Croul mail room
@@ -1045,7 +1043,6 @@ fi # endif
 # Universal aliases
 #alias m="${PAGER}"
 #alias ncbrowse='java ncBrowse.Browser' # netCDF file browser
-alias ashes='ssh -X -p 264 68.109.196.84' # Forward to 192.168.1.75:22 (to ashes from outside)
 alias bc='bc -l' # -l = defines standard math library and sets scale to 20
 alias beepoff='xset b off' # Turn beep sound off for quiet work envionments
 alias yellowstone='ssh -X yellowstone.ucar.edu' # Yubikey 5573
@@ -1127,7 +1124,6 @@ alias temperature='finger temperature@atd.ucar.edu'
 alias topz='top -U${USER}' # -Uusername
 alias uncompress='gunzip'
 alias vg='echo "valgrind --leak-check=yes --show-reachable=yes --suppressions=${HOME}/nco/doc/valgrind.txt --tool=memcheck ncks -D 5 -O ${HOME}/nco/data/in.nc ~/foo.nc > ~/foo 2>&1"'
-alias virga='ssh -X -p 265 68.109.196.84' # Forward to 192.168.1.76:22 (to virga from outside)
 alias visad='java -Xmx128m -jar /usr/local/visad/visad.jar' # visad file browser
 alias weather='finger weather@unidata.ucar.edu'
 alias xclock='xclock -digital -chime -update 1 -face Times-32' # For timing
@@ -1267,7 +1263,7 @@ case ${PVM_ARCH} in
 #    export FER_PALETTE=". ${FER_DIR}/ppl ${HOME}/ferret/ppl" # palettes
 
     case ${HOST} in
-    aerosol* | ashes* | firn* | frazil* | givre* | glace* | grele* | neige* | roulee* | virga* )
+    aerosol* | firn* | frazil* | givre* | glace* | grele* | neige* | roulee* | skyglow* )
 	export INTEL_LICENSE_FILE='/opt/intel/cc/9.0/licenses:/opt/intel/fc/9.0/licenses'
 	export LM_LICENSE_FILE='1700@ess1.ess.uci.edu'
     ;; # endif using network licenses
