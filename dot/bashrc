@@ -573,7 +573,7 @@ case "${PVM_ARCH}" in
     MACOSX* ) # MACOSX on PowerPC and (beginning 20140529), x86_64 machines
 	export DATA=/Users/${USER}/data
 	export INFOPATH=./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/share/info
-	export NCARG_ROOT='/opt/local/lib/ncarg' # Port-installed
+	export NCARG_ROOT='/opt/local' # Port-installed
 	export NETCDF_ROOT=/opt/local
 #	export NETCDF_INC=/opt/local/include
 #	export NETCDF_LIB=/opt/local/lib
