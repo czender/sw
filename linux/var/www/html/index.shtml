@@ -60,7 +60,7 @@ scp -p ~/sw/linux/var/www/html/index.shtml dust.ess.uci.edu:Sites/index.shtml
 <li><a href="http://dust.ess.uci.edu/xianweiw">Group Webspace: Wang, Xianwei</a></li>
 -->
 <li><a href="http://nco.sf.net">netCDF Operators (NCO) Homepage</a></li>
-<li><a href="http://dust.ess.uci.edu/20120917">Temporary files</a></li>
+<li><a href="http://dust.ess.uci.edu/tmp">Temporary files</a></li>
 </ul>
 <hr>
 
@@ -163,8 +163,9 @@ the BDUC cluster running gluster over RDMA/Infiniband.
 </p>
 
 On October&nbsp;12, 2015, <tt>firn.ess.uci.edu</tt> became <tt>dust</tt>.
-<tt>firn</tt> is a MacBook Pro with 16&nbsp;GB RAM and running, right
-now, OS X 10.11, Mountain Lion.
+<tt>firn</tt> is a MacBook Pro with 16&nbsp;GB RAM that originally ran
+OS X 10.11, Mountain Lion, and then ran 10.12, Yosemite, and now runs
+MacOS Sierra.
 </p>
 
 <hr>
