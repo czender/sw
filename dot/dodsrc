@@ -1,6 +1,5 @@
-HTTP.VERBOSE=0
-HTTP.COOKIEJAR=/ccs/home/zender/.esg/.dods_cookies
+HTTP.COOKIEJAR=/Users/zender/.esg/dods_cookies
 HTTP.SSL.VALIDATE=0
-HTTP.SSL.CERTIFICATE=/ccs/home/zender/.esg/credentials.pem
-HTTP.SSL.KEY=/ccs/home/zender/.esg/credentials.pem
-HTTP.SSL.CAPATH=/ccs/home/zender/.esg/certificates
+HTTP.SSL.CERTIFICATE=/Users/zender/.esg/credentials.pem
+HTTP.SSL.KEY=/Users/zender/.esg/credentials.pem
+HTTP.SSL.CAPATH=/Users/zender/.esg/credentials.pem
