@@ -38,9 +38,9 @@ prs_top_sng=floattochar(prs_top)
 prs_btm_sng=floattochar(prs_btm)
 
 ; Get data
-;fl_nm="${DATA}/arese/mdl/951011_1200_arese_mdl_clr_aer.nc"
-;drc_sng="${DATA}/arese/mdl/"
-drc_sng="${DATA}/tmp/"
+;fl_nm="$DATA/arese/mdl/951011_1200_arese_mdl_clr_aer.nc"
+;drc_sng="$DATA/arese/mdl/"
+drc_sng="$DATA/tmp/"
 if(day.gt.31) then 
 	day_sng=inttochar(day)
 	if(day.eq.83) then ss_alb_sng="083" end if

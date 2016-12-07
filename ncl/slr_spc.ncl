@@ -36,7 +36,7 @@ fl_nm=new((/cst_nbr/),string)
 data_id=new(cst_nbr,graphic)
 ;fl_in=new((/cst_nbr/),file)
 do idx=0,cst_nbr-1
-	fl_nm(idx)="${DATA}/aca/spc_"+spc_nm(idx)+".nc"
+	fl_nm(idx)="$DATA/aca/spc_"+spc_nm(idx)+".nc"
 ;	fl_in(idx)=addfile(fl_nm(idx),"r")
 	fl_in=addfile(fl_nm(idx),"r")
 ; ID of data object becomes resource value for "xyCoordData".

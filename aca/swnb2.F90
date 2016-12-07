@@ -43,9 +43,10 @@ program swnb2
   ! Short term solution is do not trap underflows in single precision
 
   ! Graphics: 
-  ! IDL procedure ~/idl/mie.pro:odx_htg_gph() plots heating profiles
-  ! NCL procedure ~/ncl/odxc.ncl: plots spectral optical depths
-  ! IDL procedure ~/idl/mie.pro:trn_abs_gph() plots transmission vs. absorption
+  ! IDL procedure ~/sw/idl/mie.pro:odx_htg_gph() plots heating profiles
+  ! NCL procedure ~/sw/anl/mie_xv.ncl: plots vertical figures
+  ! NCL procedure ~/sw/ncl/odxc.ncl: plots spectral optical depths
+  ! IDL procedure ~/sw/idl/mie.pro:trn_abs_gph() plots transmission vs. absorption
   ! Execution scripts:
   ! ~/dst/swnb.sh: Run swnb2 for comparison to crm aerosol radiative forcing
   ! ~/aca/aca.pl: Run swnb2 forced with ARESE and IOP data
@@ -7835,13 +7836,9 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_id,'long_name','Broadband azimuthally averaged luminance'), &
           sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_ndr_id,'long_name','Broadband azimuthally averaged nadir luminance'), &
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_ndr_id,'long_name','Broadband azimuthally averaged luminance towards nadir'), &
           sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_ndr_TOA_id,'long_name','Broadband azimuthally averaged nadir luminance at TOA'), &
-          sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_zen_id,'long_name','Broadband azimuthally averaged zenith luminance'), &
-          sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_zen_TOA_id,'long_name','Broadband azimuthally averaged zenith luminance at TOA'), &
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_zen_id,'long_name','Broadband azimuthally averaged luminance towards zenith'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_TOA_id,'long_name','Broadband azimuthally averaged luminance at TOA'), &
           sbr_nm//': pa long_name in '//__FILE__)
@@ -7860,8 +7857,6 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,sfc_tpt_id,'long_name','Surface temperature for bottom boundary emission'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_id,'long_name','Spectral luminance of nadir radiation'), &
-          sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_TOA_id,'long_name','Spectral azimuthally averaged nadir luminance at TOA'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_sfc_id,'long_name','Spectral azimuthally averaged luminance at surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
@@ -8084,14 +8079,23 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,wvn_min_id,'long_name','Minimum wavenumber in band'), &
           sbr_nm//': pa long_name in '//__FILE__)
      ! Wrap
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_ndr_TOA_id,'long_name', &
+       	  'Broadband azimuthally averaged luminance towards nadir at TOA'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_zen_TOA_id,'long_name', &
+     'Broadband azimuthally averaged luminance towards zenith at TOA'), &
+     sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_ndr_sfc_id,'long_name', &
-          'Broadband azimuthally averaged nadir luminance at surface'), &
+          'Broadband azimuthally averaged luminance towards nadir at surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_zen_sfc_id,'long_name', &
-          'Broadband azimuthally averaged zenith luminance at surface'), &
+          'Broadband azimuthally averaged luminance towards zenith at surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_sfc_id,'long_name', &
-          'Spectral azimuthally averaged nadir luminance at surface'), &
+          'Spectral azimuthally averaged luminance towards nadir at surface'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_spc_aa_ndr_TOA_id,'long_name', &
+          'Spectral azimuthally averaged luminance towards nadir at TOA'), &
           sbr_nm//': pa long_name in '//__FILE__)
      
      ! Add units
@@ -8359,10 +8363,10 @@ program swnb2
           sbr_nm//': pa units in '//__FILE__)
 
      ! Axis attributes
-     rcd=nf90_wrp(nf90_put_att(nc_id,alt_id,'axis','Z'),sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,alt_ntf_id,'axis','Z'),sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,lev_id,'axis','Z'),sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,levp_id,'axis','Z'),sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,alt_id,'axis','Y'),sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,alt_ntf_id,'axis','Y'),sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lev_id,'axis','Y'),sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,levp_id,'axis','Y'),sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,alt_id,'positive','up'),sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,alt_ntf_id,'positive','up'),sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lev_id,'positive','down'),sbr_nm//': pa long_name in '//__FILE__)

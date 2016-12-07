@@ -45,6 +45,10 @@ if (fld_nm.eq."j_NO2") then
    if(.not.isvar("fld_sng")) then fld_sng="NO~B~2~N~ Photolysis Rate" end if
    units_sng="s~S~-1~N~"
 end if; !j_NO2
+if (fld_nm.eq."lmn_bb_aa_ndr") then 
+   if(.not.isvar("fld_sng")) then fld_sng="Luminance towards Nadir" end if
+   units_sng="lm m~S~-2~N~ sr~S~-1~N~"
+end if; !j_NO2
 if (fld_nm.eq."QMELT") then 
    if(.not.isvar("fld_sng")) then fld_sng="Snow Melt" end if
    units_sng="mm day~S~-1~N~"

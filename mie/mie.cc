@@ -15,14 +15,14 @@
    Irvine, CA 92697-3100 */
 
 // Editing, Compilation:
-// etags ~/aer/*.F ~/aer/*.h ~/c++/*.cc ~/c++/*.hh ~/mie/*.cc ~/mie/*.hh ~/slr_spc/*.cc ~/slr_spc/*.hh
-/* cd ~/mie;make OPTS=D VRS_SNG=3.4.2 mie;cd -
-   cd ~/mie;make OPTS=D NETCDF4=Y mie;cd -
-   cd ~/c++;make OMP=N OPTS=D NETCDF4=Y UDUNITS2=Y;cd ~/mie;make OMP=N OPTS=D NETCDF4=Y UDUNITS2=Y
-   cd ~/c++;make OMP=N OPTS=D NETCDF4=N UDUNITS2=N;cd ~/mie;make OMP=N OPTS=D NETCDF4=N UDUNITS2=N
-   cd ~/c++;make dst_cln;cd ~/nco/src/nco_c++;make -f Makefile.old dst_cln;cd ~/mie;make dst_cln;make OPTS=X mie
-   unset LM_LICENSE_FILE;${HOME}/bin/sh/cmp_chg.sh icc;cd ~/nco/src/nco_c++;make -f Makefile.old dst_cln all;cd ~/c++;make dst_cln;cd ~/mie;make dst_cln;make --jobs=1 OPTS=X OMP=Y mie 
-   cd ~/c++;make dst_cln;cd ~/nco/src/nco_c++;make -f Makefile.old dst_cln;cd ~/mie;make dst_cln;make --jobs=1 OPTS=D mie */
+// etags ~/sw/aer/*.F ~/sw/aer/*.h ~/sw/c++/*.cc ~/sw/c++/*.hh ~/sw/mie/*.cc ~/sw/mie/*.hh ~/sw/slr_spc/*.cc ~/sw/slr_spc/*.hh
+/* cd ~/sw/mie;make OPTS=D VRS_SNG=3.4.2 mie;cd -
+   cd ~/sw/mie;make OPTS=D NETCDF4=Y mie;cd -
+   cd ~/sw/c++;make OMP=N OPTS=D NETCDF4=Y UDUNITS2=Y;cd ~/sw/mie;make OMP=N OPTS=D NETCDF4=Y UDUNITS2=Y
+   cd ~/sw/c++;make OMP=N OPTS=D NETCDF4=N UDUNITS2=N;cd ~/sw/mie;make OMP=N OPTS=D NETCDF4=N UDUNITS2=N
+   cd ~/sw/c++;make dst_cln;cd ~/nco/src/nco_c++;make -f Makefile.old dst_cln;cd ~/sw/mie;make dst_cln;make OPTS=X mie
+   unset LM_LICENSE_FILE;${HOME}/bin/sh/cmp_chg.sh icc;cd ~/nco/src/nco_c++;make -f Makefile.old dst_cln all;cd ~/sw/c++;make dst_cln;cd ~/sw/mie;make dst_cln;make --jobs=1 OPTS=X OMP=Y mie 
+   cd ~/sw/c++;make dst_cln;cd ~/nco/src/nco_c++;make -f Makefile.old dst_cln;cd ~/sw/mie;make dst_cln;make --jobs=1 OPTS=D mie */
 
 /* Scripts and Documentation:
    Documentation of command line switches: ${HOME}/crr/psd.tex
@@ -47,7 +47,7 @@
    mie -dbg --sz_mnm=0.0 --sz_mxm=10.0 --sz_nbr=10 --bnd_nbr=1 --wvl_nbr=1 --sz_grd=lin
    mie -dbg --wvl_nbr=1 --bnd_nbr=1 --sz_nbr=1 --ngl_nbr=91 foo.nc
    mie -dbg --wvl_nbr=1 --bnd_nbr=1 --sz_nbr=1 foo.nc
-   scp ~/mie/mie.cc esmf.ess.uci.edu:mie
+   scp ~/sw/mie/mie.cc esmf.ess.uci.edu:mie
 
 // Validations:
 // BoH83 p. 482 test case for mie_sph_BoH83()

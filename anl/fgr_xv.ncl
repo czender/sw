@@ -20,7 +20,8 @@ fgr_stb="fgr_xv" ; [sng] Figure name stub
 dbg_lvl=0
 mss_val_flt=1.0e36
 
-if(.not.isvar("dvc")) then dvc="eps" end if
+;if(.not.isvar("dvc")) then dvc="eps" end if
+if(.not.isvar("dvc")) then dvc="pdf" end if
 if(.not.isvar("flg_clr")) then flg_clr=True end if
 if(.not.isvar("flg_rng")) then flg_rng=False end if
 if(.not.isvar("fld_nm")) then fld_nm="frc_tpt" end if
@@ -155,7 +156,8 @@ rsr@pmLegendWidthF=0.15 ; Change legend width
 rsr@xyExplicitLegendLabels=dat_sng ; Legend labels
 
 ; Begin plot information
-drc_out=getenv("HOME")+"/ppr_ZFM07/fgr"
+;drc_out=getenv("HOME")+"/pnp/ppr_ZFM07/fgr"
+drc_out=getenv("DATA")+"/ps"
 fl_out=drc_out+"/"+fgr_stb+"_"+fld_nm+fl_sfx_clr
 print("Print output will go to "+fl_out+"."+dvc)
    
