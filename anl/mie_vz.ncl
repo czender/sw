@@ -35,10 +35,10 @@ if(.not.isvar("flg_log_y")) then flg_log_y=False end if
 if(.not.isvar("flg_clr")) then flg_clr=True end if
 if(.not.isvar("flg_rng")) then flg_rng=False end if
 if(.not.isvar("fld_nm")) then fld_nm="j_NO2" end if
-if(.not.isvar("crd_min")) then crd_min=100.0 end if ; Coordinate minimum
+if(.not.isvar("crd_min")) then crd_min=1.0e4 end if ; Coordinate minimum
 if(.not.isvar("crd_max")) then crd_max=1.0e5 end if ; Coordinate maximum
-if(.not.isvar("abc_min")) then abc_min=1.0e5 end if ; Abscissa minimum
-if(.not.isvar("abc_max")) then abc_max=100 end if ; Abscissa maximum
+if(.not.isvar("abc_min")) then abc_min=100 end if ; Abscissa minimum
+if(.not.isvar("abc_max")) then abc_max=1000 end if ; Abscissa maximum
 if(.not.isvar("ord_min")) then ord_min=0.0 end if
 if(.not.isvar("ord_max")) then ord_max=1.0e-2 end if
 
@@ -150,19 +150,18 @@ print("Print output will go to "+fl_out+"."+dvc)
 
 ; Determine grid size for data
 fl_inq_ptr=addfile(fl_in(0),"r")
-alt=fl_inq_ptr->alt({abc_min:abc_max}) ; [m] Height
-;prs=fl_inq_ptr->levp({crd_min:crd_max}) ; [mb] Pressure
-prs=fl_inq_ptr->levp ; [mb] Pressure
-;abc=alt*1.0; [m]->[m] ; Ordinate means dependent variable not vertical axis
-abc=prs*0.01; [Pa]->[mb] ; Ordinate means dependent variable not vertical axis
+prs=fl_inq_ptr->levp({crd_min:crd_max}) ; [mb] Pressure
+;prs=fl_inq_ptr->levp ; [mb] Pressure
+;abc=1.0*alt; [m]->[m] ; Ordinate means dependent variable not vertical axis
+abc=0.01*prs({crd_min:crd_max}); [Pa]->[mb] ; Ordinate means dependent variable not vertical axis
 abc_nbr=dimsizes(abc)
 time_nbr=1
 fld_typ=typeof(fl_inq_ptr->$fld_nm$)
 
 fl_lst_ptr=addfiles(fl_in,"r") ; Note plural "addfiles"
 ListSetType(fl_lst_ptr,"join") ; "join" for ensembles, "cat" for timeseries
-;data=fl_lst_ptr[:]->$fld_nm$({crd_min:crd_max}) ; Read fld from all files
-data=fl_lst_ptr[:]->$fld_nm$ ; Read fld from all files
+data=fl_lst_ptr[:]->$fld_nm$({crd_min:crd_max}) ; Read fld from all files
+;data=fl_lst_ptr[:]->$fld_nm$ ; Read fld from all files
 printVarSummary(data)
 if (fld_typ.eq."double") then
    data_flt=new((/ord_nbr,abc_nbr/),float,mss_val_flt)
