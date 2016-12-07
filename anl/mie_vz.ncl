@@ -202,6 +202,7 @@ if (flg_log_y) then
 end if ; end if flg_log_y
 if (flg_log_y) then rsr@trYLog=True end if; set Y-Axis coordinate system logarithmic
 ;rsr@trXMinF=1.0
+rsr@trYReverse=True
 rsr@xyDashPatterns=ln_sty(0:ord_nbr_plt-1)
 rsr@xyLineColors=clr_sng(0:ord_nbr_plt-1)
 rsr@xyLineThicknesses=ln_thk(0:ord_nbr_plt-1)
