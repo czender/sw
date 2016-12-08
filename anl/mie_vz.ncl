@@ -1,5 +1,3 @@
-; $Id$ -*-f90-*-
-
 ; Purpose: Plot line figures, generally vertical figures from swnb2 output
 ; Based on ~/sw/anl/mie_xv.ncl
 ; NB: Intended for use with defaults set in ~/.hluresfile
@@ -8,16 +6,16 @@
 ; cd ~/sw/anl;ncl < mie_vz.ncl
 ; cd ~/sw/anl;ncl 'dvc="x11"' mie_vz.ncl
 ; cd ~/sw/anl;ncl 'dvc="x11"' 'fld_nm="j_NO2"' mie_vz.ncl
-; cd ~/sw/anl;ncl 'fl_in_nm="$DATA/skg/skg_swnb_ctl.nc"' 'fl_out_nm="$DATA/ps/mie_vz"' 'fld_nm="lmn_bb_aa_ndr"' 'ttl_sng="Luminance"' 'ord_nbr_plt=2' 'dvc="x11"' mie_vz.ncl
+; cd ~/sw/anl;ncl 'fl_out_nm="$DATA/ps/mie_vz"' 'fld_nm="lmn_bb_aa_ndr"' 'ttl_sng="Luminance"' 'dvc="x11"' mie_vz.ncl
 ; cd ~/sw/anl;ncl 'fl_in_nm="$HOME/foo.nc"' 'fl_out_nm="$DATA/ps/mie_vz"' 'fld_nm="j_NO2"' 'dvc="x11"' mie_vz.ncl
 ; cd ~/sw/anl;ncl abc_max=0.0 flg_log_y=True 'fl_in_nm="$HOME/foo.nc"' 'fl_out_nm="$DATA/ps/mie_vz"' 'fld_nm="j_NO2"' 'dvc="x11"' mie_vz.ncl
 ; cd ~/sw/anl;ncl 'fl_in_nm="$HOME/foo.nc"' 'fl_out_nm="$DATA/ps/mie_vz"' 'fld_nm="lev"' 'dvc="x11"' mie_vz.ncl
 ; cd ~/sw/anl;ncl dff=True 'dvc="x11"' mie_vz.ncl
-; cd ~/sw/anl;ncl flg_clr="False" mie_vz.ncl
 
-load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_code.ncl"
-load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl"
-load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/contributed.ncl"
+; These files are loaded by default in NCL V6.2.0 and newer
+;load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_code.ncl"
+;load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl"
+;load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/contributed.ncl"
 
 ; Initialize some fields
 prg_nm="mie_vz" ; [sng] Program name
@@ -27,14 +25,13 @@ mss_val_flt=1.0e36
 mss_val_dbl=1.0d36
 
 if(.not.isvar("dff")) then dff=False end if
-if(.not.isvar("dvc")) then dvc="eps" end if
+if(.not.isvar("dvc")) then dvc="eps" end if ; "x11", "ps", or "ncgm"
 if(.not.isvar("fl_in_nm")) then fl_in_flg=False else fl_in_flg=True end if
 if(.not.isvar("fl_out_nm")) then fl_out_flg=False else fl_out_flg=True end if
 if(.not.isvar("flg_log_x")) then flg_log_x=False end if
 if(.not.isvar("flg_log_y")) then flg_log_y=False end if
-if(.not.isvar("flg_clr")) then flg_clr=True end if
 if(.not.isvar("flg_rng")) then flg_rng=False end if
-if(.not.isvar("fld_nm")) then fld_nm="j_NO2" end if
+if(.not.isvar("fld_nm")) then fld_nm="lmn_bb_aa_ndr" end if
 if(.not.isvar("crd_min")) then crd_min=1.0e3 end if ; Coordinate minimum
 if(.not.isvar("crd_max")) then crd_max=1.0e5 end if ; Coordinate maximum
 if(.not.isvar("abc_min")) then abc_min=10 end if ; Abscissa minimum
@@ -42,18 +39,9 @@ if(.not.isvar("abc_max")) then abc_max=1000 end if ; Abscissa maximum
 if(.not.isvar("ord_min")) then ord_min=0.0 end if
 if(.not.isvar("ord_max")) then ord_max=1.0e-2 end if
 
-if (.not.isvar("flg_clr")) then ; is flg_clr on command line?
-   flg_clr = True
-end if
 if (.not.isvar("flg_rng")) then ; is flg_rng on command line?
    flg_rng = False
 end if
-
-if (flg_clr) then
-   fl_sfx_clr="_clr"
-else ; !flg_clr
-   fl_sfx_clr="_bw"
-end if; !flg_clr
 
 ; Markers: http://www.ncl.ucar.edu/Document/Graphics/Images/markers.gif
 idx_mrk_ast=03 ; Asterisk
@@ -99,10 +87,8 @@ dat_sng(idx_xpt)="  Geoengineered"
 
 clr_sng=new((/ord_nbr/),string)
 clr_sng(:)="black"
-if (flg_clr) then
-   clr_sng(idx_ctl)="green"
-   clr_sng(idx_xpt)="blue"
-end if; !flg_clr
+clr_sng(idx_ctl)="green"
+clr_sng(idx_xpt)="blue"
 
 ; Line properties
 ; NB: 0*new(nbr,typ) behaves strangely due to _FillValue
@@ -142,11 +128,10 @@ if (fl_out_flg) then
    fl_out=fl_out_nm
 else 
    drc_out=getenv("DATA")+"/ps"
-   fl_out=drc_out+"/"+fgr_stb+"_lmn_"
-   if(dff) then fl_out=fl_out+"dff_" end if
-   fl_out=fl_out+fld_nm+fl_sfx_clr
+   fl_out=drc_out+"/"+fgr_stb+"_"+fld_nm
+   if(dff) then fl_out=fl_out+"_dff" end if
 end if
-print("Print output will go to "+fl_out+"."+dvc)
+print("Output will go to "+fl_out+"."+dvc)
 
 ; Determine grid size for data
 fl_inq_ptr=addfile(fl_in(0),"r")
@@ -163,7 +148,6 @@ ListSetType(fl_lst_ptr,"join") ; "join" for ensembles, "cat" for timeseries
 ;data=fl_lst_ptr[:]->$fld_nm$({crd_min:crd_max}) ; Read fld from all files
 data_raw=fl_lst_ptr[:]->$fld_nm$ ; Read fld from all files
 data=data_raw(:,{crd_min:crd_max}) ; Hyperslab
-printVarSummary(data)
 if (fld_typ.eq."double") then
    data_flt=new((/ord_nbr,abc_nbr/),float,mss_val_flt)
    data_flt=doubletofloat(data)
@@ -244,4 +228,4 @@ delete(rsr)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; End Figure mie_vz
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-end
+end ; end mie_vz

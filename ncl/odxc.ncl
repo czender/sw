@@ -1,5 +1,3 @@
-; $Id$
-
 ; Purpose: Plot extinction optical depth from swnb model
 
 ; Example usage:
@@ -14,11 +12,6 @@ begin ; begin odxc()
 ;load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl"
 
 ; Initialize some fields
-if(.not.isvar("dvc")) then
-;	dvc="x11"; "x11", "ps", or "ncgm"
-;	dvc="ps"; "x11", "ps", or "ncgm"
-	dvc="eps"; "x11", "ps", or "ncgm"
-end if
 mss_val=1.e36
 
 ; Get data
