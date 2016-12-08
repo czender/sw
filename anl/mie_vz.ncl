@@ -6,11 +6,8 @@
 ; cd ~/sw/anl;ncl < mie_vz.ncl
 ; cd ~/sw/anl;ncl 'dvc="x11"' mie_vz.ncl
 ; cd ~/sw/anl;ncl 'dvc="x11"' 'fld_nm="j_NO2"' mie_vz.ncl
-; cd ~/sw/anl;ncl 'fl_out_nm="$DATA/ps/mie_vz"' 'fld_nm="lmn_bb_aa_ndr"' 'ttl_sng="Luminance"' 'dvc="x11"' mie_vz.ncl
-; cd ~/sw/anl;ncl 'fl_in_nm="$HOME/foo.nc"' 'fl_out_nm="$DATA/ps/mie_vz"' 'fld_nm="j_NO2"' 'dvc="x11"' mie_vz.ncl
-; cd ~/sw/anl;ncl abc_max=0.0 flg_log_y=True 'fl_in_nm="$HOME/foo.nc"' 'fl_out_nm="$DATA/ps/mie_vz"' 'fld_nm="j_NO2"' 'dvc="x11"' mie_vz.ncl
-; cd ~/sw/anl;ncl 'fl_in_nm="$HOME/foo.nc"' 'fl_out_nm="$DATA/ps/mie_vz"' 'fld_nm="lev"' 'dvc="x11"' mie_vz.ncl
-; cd ~/sw/anl;ncl dff=True 'dvc="x11"' mie_vz.ncl
+; cd ~/sw/anl;ncl 'ctl_nm="skg_swnb_ctl"' 'xpt_nm="skg_swnb_xpt"' 'ttl_sng="Zenith Luminance"' 'dvc="x11"' mie_vz.ncl
+; cd ~/sw/anl;ncl 'fl_out_nm="$DATA/ps/swnb_vz"' 'fld_nm="lmn_bb_aa_ndr"' 'ttl_sng="Zenith Luminance"' 'dvc="x11"' mie_vz.ncl
 
 ; These files are loaded by default in NCL V6.2.0 and newer
 ;load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_code.ncl"
@@ -65,6 +62,8 @@ idx_mrk_tri_up=07 ; Triangle up
 sym_sng=""
 units_sng=""
 load "$HOME/sw/ncl/fld_prp.ncl" ; Set fld_sng, units_sng, and, maybe, cnt_lvl, scl_fct
+if(.not.isvar("ctl_nm")) then ctl_nm="skg_swnb_ctl" end if
+if(.not.isvar("xpt_nm")) then xpt_nm="skg_swnb_xpt" end if
 if(.not.isvar("fld_sng")) then fld_sng=fld_nm end if
 if(.not.isvar("ttl_sng")) then ttl_sng=fld_sng end if
 ;if(.not.isvar("y_ttl_sng")) then y_ttl_sng="Height z [m]" end if
@@ -77,12 +76,10 @@ ord_nbr=2 ; Number of files to read
 if(.not.isvar("ord_nbr_plt")) then ord_nbr_plt=ord_nbr end if
 ; Legend places lines in reverse order
 idx_ctl=1 ; [idx] Ctl index
-idx_xpt=0 ; [idx] Xpt1 index
-ctl_nm="skg_swnb_ctl"
-xpt_nm="skg_swnb_xpt"
+idx_xpt=0 ; [idx] Xpt index
 
 dat_sng=new((/ord_nbr/),string)
-dat_sng(idx_ctl)="  Control"
+dat_sng(idx_ctl)="  Present Day"
 dat_sng(idx_xpt)="  Geoengineered"
 
 clr_sng=new((/ord_nbr/),string)
@@ -210,7 +207,7 @@ rsr@xyExplicitLegendLabels=dat_sng(0:ord_nbr_plt-1) ; Legend labels
 wks=gsn_open_wks(dvc,fl_out)
 plot=gsn_csm_xy(wks,data(0:ord_nbr_plt-1,:),abc,rsr)
 draw(plot)
-frame(wks) 
+;frame(wks) 
 
 ; Clean up for next plot
 delete(fl_in)

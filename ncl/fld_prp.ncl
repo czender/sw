@@ -46,8 +46,9 @@ if (fld_nm.eq."j_NO2") then
    units_sng="s~S~-1~N~"
 end if; !j_NO2
 if (fld_nm.eq."lmn_bb_aa_ndr") then 
-   if(.not.isvar("fld_sng")) then fld_sng="Luminance towards Nadir" end if
-   units_sng="mlm m~S~-2~N~ sr~S~-1~N~"
+   if(.not.isvar("fld_sng")) then fld_sng="Zenith-viewing Luminance" end if
+;   units_sng="mlm m~S~-2~N~ sr~S~-1~N~"
+    units_sng="mcd m~S~-2~N~"
    scl_fct=1.0e3 ; lm m-2 sr-1 -> mlm m-2 sr-1
 end if; !j_NO2
 if (fld_nm.eq."QMELT") then 
