@@ -3,11 +3,14 @@
 ; NB: Intended for use with defaults set in ~/.hluresfile
 
 ; Example usage:
-; cd ~/sw/anl;ncl < mie_vz.ncl
-; cd ~/sw/anl;ncl 'dvc="x11"' mie_vz.ncl
-; cd ~/sw/anl;ncl 'dvc="x11"' 'fld_nm="j_NO2"' mie_vz.ncl
-; cd ~/sw/anl;ncl 'ctl_nm="skg_swnb_ctl"' 'xpt_nm="skg_swnb_xpt"' 'ttl_sng="Zenith Luminance"' 'dvc="x11"' mie_vz.ncl
-; cd ~/sw/anl;ncl 'fl_out_nm="$DATA/ps/swnb_vz"' 'fld_nm="lmn_bb_aa_ndr"' 'ttl_sng="Zenith Luminance"' 'dvc="x11"' mie_vz.ncl
+; cd ~/sw/anl;ncl < swnb_vz.ncl
+; cd ~/sw/anl;ncl 'dvc="x11"' swnb_vz.ncl
+; cd ~/sw/anl;ncl 'dvc="x11"' 'fld_nm="j_NO2"' swnb_vz.ncl
+; cd ~/sw/anl;ncl 'ctl_nm="skg_swnb_ctl"' 'xpt_nm="skg_swnb_xpt"' 'ttl_sng="Urban Night Sky Brightness"' 'fl_out_nm="$DATA/ps/skg_swnb_lnd_urb"' 'dvc="x11"' swnb_vz.ncl
+; cd ~/sw/anl;ncl 'ctl_nm="skg_swnb_ctl_lnd_rmt"' 'xpt_nm="skg_swnb_xpt_lnd_rmt"' 'ttl_sng="Remote Night Sky Brightness"' 'fl_out_nm="$DATA/ps/skg_swnb_lnd_rmt"' 'dvc="x11"' swnb_vz.ncl
+; cd ~/sw/anl;ncl 'ctl_nm="skg_swnb_ctl_ocn"' 'xpt_nm="skg_swnb_xpt_ocn"' 'ttl_sng="Ocean Night Sky Brightness"' 'fl_out_nm="$DATA/ps/skg_swnb_ocn_urb"' 'dvc="x11"' swnb_vz.ncl
+; cd ~/sw/anl;ncl 'ctl_nm="skg_swnb_ctl_ocn_noart"' 'xpt_nm="skg_swnb_xpt_ocn_noart"' 'ttl_sng="Remote Ocean Night Sky Brightness"' 'fl_out_nm="$DATA/ps/skg_swnb_ocn_rmt"' 'dvc="x11"' swnb_vz.ncl
+; cd ~/sw/anl;ncl 'fl_out_nm="$DATA/ps/swnb_vz"' 'fld_nm="lmn_bb_aa_ndr"' 'ttl_sng="Zenith Luminance"' 'dvc="x11"' swnb_vz.ncl
 
 ; These files are loaded by default in NCL V6.2.0 and newer
 ;load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_code.ncl"
@@ -15,7 +18,7 @@
 ;load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/contributed.ncl"
 
 ; Initialize some fields
-prg_nm="mie_vz" ; [sng] Program name
+prg_nm="swnb_vz" ; [sng] Program name
 fgr_stb="swnb_vz" ; [sng] Figure name stub
 dbg_lvl=0
 mss_val_flt=1.0e36
@@ -56,7 +59,7 @@ idx_mrk_tri_dwn=08 ; Triangle down
 idx_mrk_tri_up=07 ; Triangle up
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Begin Figure mie_vz
+; Begin Figure swnb_vz
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Plot defaults that may be over-ridden for specific variables
 sym_sng=""
@@ -128,7 +131,7 @@ else
    fl_out=drc_out+"/"+fgr_stb+"_"+fld_nm
    if(dff) then fl_out=fl_out+"_dff" end if
 end if
-print("Output will go to "+fl_out+"."+dvc)
+print("Output to "+fl_out+"."+dvc)
 
 ; Determine grid size for data
 fl_inq_ptr=addfile(fl_in(0),"r")
@@ -140,7 +143,7 @@ abc_nbr=dimsizes(abc)
 time_nbr=1
 fld_typ=typeof(fl_inq_ptr->$fld_nm$)
 
-fl_lst_ptr=addfiles(fl_in,"r") ; Note plural "addfiles"
+fl_lst_ptr=addfiles(fl_in,"r") ; Note plural "addfiles()"
 ListSetType(fl_lst_ptr,"join") ; "join" for ensembles, "cat" for timeseries
 ;data=fl_lst_ptr[:]->$fld_nm$({crd_min:crd_max}) ; Read fld from all files
 data_raw=fl_lst_ptr[:]->$fld_nm$ ; Read fld from all files
@@ -199,6 +202,7 @@ rsr@pmLegendDisplayMode="Always" ; Turn on legend
 rsr@pmLegendHeightF=0.15 ; Change legend height
 rsr@pmLegendOrthogonalPosF=-0.4 ; Move legend down NDC units
 rsr@pmLegendParallelPosF=0.7 ; Move legend right NDC units
+;rsr@pmLegendParallelPosF=0.3 ; Move legend right NDC units
 rsr@pmLegendSide="Top" ; Change legend location
 rsr@pmLegendWidthF=0.15 ; Change legend width 
 rsr@xyExplicitLegendLabels=dat_sng(0:ord_nbr_plt-1) ; Legend labels
@@ -207,7 +211,7 @@ rsr@xyExplicitLegendLabels=dat_sng(0:ord_nbr_plt-1) ; Legend labels
 wks=gsn_open_wks(dvc,fl_out)
 plot=gsn_csm_xy(wks,data(0:ord_nbr_plt-1,:),abc,rsr)
 draw(plot)
-;frame(wks) 
+frame(wks) 
 
 ; Clean up for next plot
 delete(fl_in)
@@ -222,6 +226,6 @@ delete(mrk_sz)
 delete(mrk_typ)
 delete(rsr)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; End Figure mie_vz
+; End Figure swnb_vz
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-end ; end mie_vz
+end ; end swnb_vz
