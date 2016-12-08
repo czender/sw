@@ -25,7 +25,7 @@ mss_val_flt=1.0e36
 mss_val_dbl=1.0d36
 
 if(.not.isvar("dff")) then dff=False end if
-if(.not.isvar("dvc")) then dvc="eps" end if ; "x11", "ps", or "ncgm"
+if(.not.isvar("dvc")) then dvc="eps" end if ; "ncgm", "png", "ps", or "x11"
 if(.not.isvar("fl_in_nm")) then fl_in_flg=False else fl_in_flg=True end if
 if(.not.isvar("fl_out_nm")) then fl_out_flg=False else fl_out_flg=True end if
 if(.not.isvar("flg_log_x")) then flg_log_x=False end if
@@ -208,7 +208,6 @@ rsr@xyExplicitLegendLabels=dat_sng(0:ord_nbr_plt-1) ; Legend labels
 
 ; Open workstation and plot data
 wks=gsn_open_wks(dvc,fl_out)
-;plot=gsn_csm_xy(wks,abc,data(0:ord_nbr_plt-1,:),rsr)
 plot=gsn_csm_xy(wks,data(0:ord_nbr_plt-1,:),abc,rsr)
 draw(plot)
 frame(wks) 
