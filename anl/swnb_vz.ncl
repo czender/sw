@@ -148,6 +148,8 @@ ListSetType(fl_lst_ptr,"join") ; "join" for ensembles, "cat" for timeseries
 ;data=fl_lst_ptr[:]->$fld_nm$({crd_min:crd_max}) ; Read fld from all files
 data_raw=fl_lst_ptr[:]->$fld_nm$ ; Read fld from all files
 data=data_raw(:,{crd_min:crd_max}) ; Hyperslab
+;data_raw=fl_lst_ptr[:]->lmn_bb_aa ; Read fld from all files
+;data=data_raw(:,2,{crd_min:crd_max}) ; Hyperslab
 if (fld_typ.eq."double") then
    data_flt=new((/ord_nbr,abc_nbr/),float,mss_val_flt)
    data_flt=doubletofloat(data)
