@@ -72,7 +72,7 @@ if(.not.isvar("ttl_sng")) then ttl_sng=fld_sng end if
 ;if(.not.isvar("y_ttl_sng")) then y_ttl_sng="Height z [m]" end if
 if(.not.isvar("y_ttl_sng")) then y_ttl_sng="Pressure [mb]" end if
 if(.not.isvar("x_ttl_sng")) then x_ttl_sng=fld_sng+" "+sym_sng end if
-x_ttl_sng=x_ttl_sng+" ["+units_sng+"]"
+if(units_sng.ne."") then x_ttl_sng=x_ttl_sng+" ["+units_sng+"]" end if
 
 ord_nbr=2 ; Number of files to read
 ; Actual number of ordinates to plot: ord_nbr_plt <= ord_nbr
@@ -156,7 +156,7 @@ if (fld_typ.eq."double") then
    delete(data)
    data=data_flt
    delete(data_flt)
-end if ; endif double
+end if ; !double
 
 ; Scale data
 if(isvar("scl_fct")) then data=scl_fct*data end if
@@ -211,6 +211,14 @@ rsr@xyExplicitLegendLabels=dat_sng(0:ord_nbr_plt-1) ; Legend labels
 
 ; Open workstation and plot data
 wks=gsn_open_wks(dvc,fl_out)
+
+; Workstation
+; 20161208 transparency does not work!
+rsr@wkBackgroundOpacityF=0.0 ; Default is 1.0 (opaque)
+setvalues wks 
+      "wkBackgroundColor" : "transparent" 
+end setvalues 
+
 plot=gsn_csm_xy(wks,data(0:ord_nbr_plt-1,:),abc,rsr)
 draw(plot)
 frame(wks) 

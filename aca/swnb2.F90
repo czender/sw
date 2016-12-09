@@ -696,6 +696,8 @@ program swnb2
   integer flx_bb_abs_sfc_id
   integer flx_bb_abs_ttl_id
   integer flx_bb_dwn_TOA_id
+  integer flx_frc_dwn_dff_id
+  integer flx_bb_dwn_rat_id
   integer flx_bb_dwn_dff_id
   integer flx_bb_dwn_dff_sfc_id
   integer flx_bb_dwn_drc_id
@@ -1290,6 +1292,8 @@ program swnb2
 
   ! Array dimensions: levp
   real,dimension(:),allocatable::flx_bb_dwn !
+  real,dimension(:),allocatable::flx_frc_dwn_dff !
+  real,dimension(:),allocatable::flx_bb_dwn_rat !
   real,dimension(:),allocatable::flx_bb_dwn_dff !
   real,dimension(:),allocatable::flx_bb_dwn_drc !
   real,dimension(:),allocatable::flx_bb_net !
@@ -1867,8 +1871,11 @@ program swnb2
   fl_lmn='lmn_CIE.nc'//nlc
   fl_nst='nst_FSBR.nc'//nlc
   fl_chn='epic.nc'//nlc
-  fl_aer='aer_sulfate.nc'//nlc
-  fl_bga='aer_sulfate.nc'//nlc
+  ! 20161208: Change default from aer_sulfate.nc (r_e ~0.12 um) to aer_h2so4_215K.nc (r_e ~0.25 um)
+  ! fl_aer='aer_sulfate.nc'//nlc
+  ! fl_bga='aer_sulfate.nc'//nlc
+  fl_aer='aer_h2so4_215K.nc'//nlc
+  fl_bga='aer_h2so4_215K.nc'//nlc
   fl_rfl='rfl_spc_sfc.nc'//nlc
   fl_mpr='aer_lac_phb_ctr_FZR07.nc'//nlc
   fl_snw='aer_snw_rds_ffc_100um.nc'//nlc
@@ -3746,6 +3753,10 @@ program swnb2
   ! Array dimensions: levp
   allocate(flx_bb_dwn(levp_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for flx_bb_dwn"
+  allocate(flx_frc_dwn_dff(levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for flx_frc_dwn_dff"
+  allocate(flx_bb_dwn_rat(levp_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for flx_bb_dwn_rat"
   allocate(flx_bb_dwn_dff(levp_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for flx_bb_dwn_dff"
   allocate(flx_bb_dwn_drc(levp_nbr),stat=rcd)
@@ -4617,6 +4628,8 @@ program swnb2
         ntn_bb_aa(plr_idx,levp_idx)=0.0
      enddo                  ! end loop over plr
      flx_bb_dwn_drc(levp_idx)=0.0
+     flx_frc_dwn_dff(levp_idx)=0.0
+     flx_bb_dwn_rat(levp_idx)=0.0
      flx_bb_dwn_dff(levp_idx)=0.0
      flx_bb_upw(levp_idx)=0.0
   enddo                     ! end loop over levp
@@ -7149,6 +7162,12 @@ program swnb2
   do levp_idx=1,levp_nbr
      flx_bb_dwn(levp_idx)=flx_bb_dwn_drc(levp_idx)+flx_bb_dwn_dff(levp_idx)
      flx_bb_net(levp_idx)=flx_bb_dwn(levp_idx)-flx_bb_upw(levp_idx)
+     flx_frc_dwn_dff(levp_idx)=flx_bb_dwn_dff(levp_idx)/flx_bb_dwn(levp_idx)
+     if(flx_bb_dwn_dff(levp_idx) /= 0.0) then
+        flx_bb_dwn_rat(levp_idx)=flx_bb_dwn_drc(levp_idx)/flx_bb_dwn_dff(levp_idx)
+     else
+        flx_bb_dwn_rat(levp_idx)=mss_val
+     endif ! endif mss_val	       
   enddo                     ! end loop over levp
   
   ! Compute scalar diagnostics
@@ -7302,6 +7321,8 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'bnd',nf90_double,bnd_dmn_id,bnd_id),sbr_nm//': dv bnd')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_abs',nf90_float,lev_dmn_id,flx_bb_abs_id),sbr_nm//': dv flx_bb_abs')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_dwn',nf90_float,levp_dmn_id,flx_bb_dwn_id),sbr_nm//': dv flx_bb_dwn')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'flx_frc_dwn_dff',nf90_float,levp_dmn_id,flx_frc_dwn_dff_id),sbr_nm//': dv flx_frc_dwn_dff')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_dwn_rat',nf90_float,levp_dmn_id,flx_bb_dwn_rat_id),sbr_nm//': dv flx_bb_dwn_rat')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_dwn_dff',nf90_float,levp_dmn_id,flx_bb_dwn_dff_id),sbr_nm//': dv flx_bb_dwn_dff')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_dwn_drc',nf90_float,levp_dmn_id,flx_bb_dwn_drc_id),sbr_nm//': dv flx_bb_dwn_drc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_net',nf90_float,levp_dmn_id,flx_bb_net_id),sbr_nm//': dv flx_bb_net')
@@ -7725,6 +7746,10 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_TOA_id,'long_name','Broadband incoming flux at TOA (total insolation)'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_upw_TOA_id,'long_name','Broadband upwelling flux at TOA'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_frc_dwn_dff_id,'long_name','Diffuse fraction of downwelling broadband flux'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_rat_id,'long_name','Direct-to-Diffuse downwelling broadband flux ratio'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_dff_id,'long_name','Diffuse downwelling broadband flux'), &
           sbr_nm//': pa long_name in '//__FILE__)
@@ -8159,6 +8184,8 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_abs_ttl_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_TOA_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_upw_TOA_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_frc_dwn_dff_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_rat_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_dff_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_drc_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_dwn_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
@@ -8453,6 +8480,8 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,sfc_msv_id,sfc_msv),sbr_nm//': pv sfc_msv in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,sfc_tpt_id,sfc_tpt),sbr_nm//': pv sfc_tpt in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_upw_TOA_id,flx_bb_upw_TOA),sbr_nm//': pv flx_bb_upw_TOA in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,flx_frc_dwn_dff_id,flx_frc_dwn_dff),sbr_nm//': pv flx_frc_dwn_dff in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_rat_id,flx_bb_dwn_rat),sbr_nm//': pv flx_bb_dwn_rat in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_dff_id,flx_bb_dwn_dff),sbr_nm//': pv flx_bb_dwn_dff in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_drc_id,flx_bb_dwn_drc),sbr_nm//': pv flx_bb_dwn_drc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_id,flx_bb_dwn),sbr_nm//': pv flx_bb_dwn in '//__FILE__)
@@ -8960,6 +8989,10 @@ program swnb2
   ! Array dimensions: levp
   if (allocated(alt_ntf)) deallocate(alt_ntf,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for alt_ntf'
+  if (allocated(flx_frc_dwn_dff)) deallocate(flx_frc_dwn_dff,stat=rcd)
+  if(rcd /= 0) stop 'deallocate() failed for flx_frc_dwn_dff'
+  if (allocated(flx_bb_dwn_rat)) deallocate(flx_bb_dwn_rat,stat=rcd)
+  if(rcd /= 0) stop 'deallocate() failed for flx_bb_dwn_rat'
   if (allocated(flx_bb_dwn_dff)) deallocate(flx_bb_dwn_dff,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for flx_bb_dwn_dff'
   if (allocated(flx_bb_dwn_drc)) deallocate(flx_bb_dwn_drc,stat=rcd)

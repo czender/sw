@@ -33,6 +33,10 @@ if (fld_nm.eq."DUSTOD_v") then
    cnt_lvl=(/0,0.05,0.10,0.15,0.20,0.25,0.30,0.35,0.40,0.45,0.5,0.75,1.0,1.5/) ; Used in ZBN03
    cnt_nbr_xpt_ctl=dimsizes(cnt_lvl)
 end if; !DUSTOD_v
+if (fld_nm.eq."flx_frc_dwn_dff") then 
+   if(.not.isvar("fld_sng")) then fld_sng="Diffuse Fraction of Downwelling Irradiance" end if
+   units_sng=""
+end if; !flx_frc_dwn_dff
 if (fld_nm.eq."FSNO") then 
    if(.not.isvar("fld_sng")) then fld_sng="Snow Cover" end if
    units_sng="fraction"
@@ -50,7 +54,13 @@ if (fld_nm.eq."lmn_bb_aa_ndr") then
 ;   units_sng="mlm m~S~-2~N~ sr~S~-1~N~"
     units_sng="mcd m~S~-2~N~"
    scl_fct=1.0e3 ; lm m-2 sr-1 -> mlm m-2 sr-1
-end if; !j_NO2
+end if; !lmn_bb_aa_ndr
+if (fld_nm.eq."ilm_dwn") then 
+   if(.not.isvar("fld_sng")) then fld_sng="Downwelling Illuminance" end if
+;   units_sng="lm m~S~-2~N~"
+    units_sng="mlux"
+   scl_fct=1.0e3 ; lm m-2 -> mlm m-2
+end if; !ilm_dwn
 if (fld_nm.eq."QMELT") then 
    if(.not.isvar("fld_sng")) then fld_sng="Snow Melt" end if
    units_sng="mm day~S~-1~N~"
