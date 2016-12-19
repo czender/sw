@@ -22,6 +22,7 @@
 # scp -p ${HOME}/sw/dot/bashrc ipcc.ess.uci.edu:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc rhea.ccs.ornl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc cooley.alcf.anl.gov:.bashrc
+# scp -p ${HOME}/sw/dot/bashrc blues.lcrc.anl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc roger-login.ncsa.illinois.edu:.bashrc
 
 # RedHat Linux 7.x does not define PS1 in /etc/bashrc
@@ -1052,6 +1053,7 @@ alias titan='ssh -X titan.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
 alias acmetest='ssh -X acmetest.ornl.gov' # then leapfrog to pileus
 alias pileus='ssh -X pileus-login01.ornl.gov' # then leapfrog to pileus
 alias aims4='ssh -X zender1@aims4.llnl.gov' # pw_hgh source /usr/local/uvcdat/latest/bin/setup_runtime.sh
+alias blues='ssh -X blues.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias cooley='ssh -X cooley.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
 alias cori='ssh -X cori.nersc.gov' # pw_hgh
 alias hopper='ssh -X hopper.nersc.gov' # pw_hgh
