@@ -93,7 +93,7 @@ clr_sng(idx_xpt)="blue"
 ; Line properties
 ; NB: 0*new(nbr,typ) behaves strangely due to _FillValue
 ln_sty=0*new(ord_nbr,integer,"No_FillValue")
-ln_thk=2+0*new(ord_nbr,integer,"No_FillValue")
+ln_thk=4+0*new(ord_nbr,integer,"No_FillValue")
 
 ; Marker properties
 mrk_clr=clr_sng ; Marker color
