@@ -7,7 +7,8 @@ MY_DOT_DIR := ${HOME}
 MY_SSH_DIR := ${HOME}/.ssh
 
 # Variables having to do with header files created by module
-MDL_DOT_TRG := ChangeLog cshrc mailrc README fvwm2rc rhosts login xinitrc.old signature crontab emacs mwmrc twmrc fvwmrc hluresfile idl idle latex2html-init lightning lightningmask logout mailcap whale xmodmaprc profile.old fvwm95rc plan gnus bashrc bash_profile bash_logout dbxrc gdbinit pgdbgrc cvDebugger Xdefaults cvsignore inputrc forward netrc mpd.conf dupload.conf rpmmacros pbuilderrc wgetrc dput.cf daprc gitconfig soft
+MDL_DOT_TRG := ChangeLog cshrc mailrc README fvwm2rc rhosts login xinitrc.old signature crontab emacs mwmrc twmrc fvwmrc hluresfile idl idle latex2html-init lightning lightningmask logout mailcap whale xmodmaprc profile.old fvwm95rc plan gnus bashrc bash_profile bash_logout dbxrc gdbinit pgdbgrc cvDebugger Xdefaults cvsignore inputrc forward netrc mpd.conf dupload.conf rpmmacros pbuilderrc wgetrc dput.cf gitconfig soft
+# 20161222 deprecate daprc and dodsrc until working
 # Dot targets
 MDL_DOT_SYM_LNK := # Symbolic links
 MDL_DOT_STB := ${MDL_DOT_TRG} ${MDL_DOT_SYM_LNK} # All header files in MY_DOT_DIR

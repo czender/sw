@@ -356,16 +356,16 @@ c     ** Version 3: Added NAZZ = MXCMU - 1
       INTEGER   MXCLY, MXULV, MXCMU, MXUMU, MXPHI, MI, MI9M2, NNLYRI,
      &          MXSQT
 c++csz
-c     Parameters used in swnb2 for normal tropical atmospheres
-c      PARAMETER ( MXCLY = 92, MXULV = 93, MXCMU = 16, MXUMU = 16,
-c     Parameters used in swnb2 for ARESE
+c     Parameters used in swnb3 and in swnb2 for ARESE
       PARAMETER ( MXCLY = 110, MXULV = 111, MXCMU = 16, MXUMU = 16,
      &          MXPHI = 16, MI = MXCMU / 2, MI9M2 = 9*MI - 2,
      &          NNLYRI = MXCMU*MXCLY, MXSQT = 1000, NAZZ = MXCMU - 1)
-c     DISORT3 defaults:
-c     PARAMETER ( MXCLY = 6, MXULV = 5, MXCMU = 48, MXUMU = 10,
+cc     DISORT3 defaults:
+c      PARAMETER ( MXCLY = 6, MXULV = 5, MXCMU = 48, MXUMU = 10,
 c     &          MXPHI = 3, MI = MXCMU / 2, MI9M2 = 9*MI - 2,
 c     &          NNLYRI = MXCMU*MXCLY, MXSQT = 1000, NAZZ = MXCMU - 1)
+c     Parameters used in swnb2 for normal tropical atmospheres
+c      PARAMETER ( MXCLY = 92, MXULV = 93, MXCMU = 16, MXUMU = 16,
 c     Parameters used in swnb2 by David Fillmore:
 c      PARAMETER ( MXCLY = 20, MXULV = 21, MXCMU = 48, MXUMU = 16,
 c     Parameters used in swnb1:
@@ -505,10 +505,12 @@ c++csz         CALL SLFTST( CORINT, ACCUR, ALBEDO, BTEMP, DELTAM, DTAUC( 1 ),
 
 c     IF( .NOT.PASS1 .AND. LEN( HEADER ).NE.0 )
 c++csz
-c     Print some useful diagnostics if array bounds need to be reset
-      if (nmom .gt. mxcmu) stop 'Increase mxcmu in disort3.f'
-      if(nlyr .gt. mxcly) stop 'Increase mxcly, mxulv in disort3.f'
-c      IF( .NOT.PASS1 .AND. LEN( HEADER ).NE.0 ) THEN
+      if (nlyr .gt. 6) then ! fewer layers means may be running disotest not swnb
+c     Print diagnostics if array bounds need to be reset
+         if (nmom .gt. mxcmu) stop 'Increase mxcmu in disort3.f'
+         if(nlyr .gt. mxcly) stop 'Increase mxcly, mxulv in disort3.f'
+      endif
+c     IF( .NOT.PASS1 .AND. LEN( HEADER ).NE.0 ) THEN
 c         WRITE( *,'(//,1X,100(''*''),/,A,/,1X,100(''*''))' )
 c     &    ' DISORT: '//HEADER
 c      ENDIF

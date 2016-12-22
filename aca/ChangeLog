@@ -1,5 +1,7 @@
 2016-12-22  Charlie Zender  <zender@uci.edu>
 
+	* disotest3 all tests pass when compiled with PRC=S
+
 	* Copy swnb2.F90 to swnb3.F90 to migrate to DISORT3
 
 2016-08-02  Charlie Zender  <zender@uci.edu>

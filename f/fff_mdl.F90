@@ -269,6 +269,7 @@ contains
     integer,parameter::r8=selected_real_kind(p=12) ! r8: 8B (C double) default, 4B (C float) possible
     integer,parameter::i8=selected_int_kind(13) ! i8: 8B (C long long) default, 4B (C int) possible
     integer,parameter::DBLKIND=selected_real_kind(p=12) ! DBLKIND: Fixed 8B (double precision) always
+    integer,parameter::r_ntv=kind(1.0) ! Native real kind
     ! Parameters
     ! Commons
     ! Input
@@ -278,6 +279,9 @@ contains
 #ifdef PRC_FLT
     real(r4),intent(in)::cmp_prc_foo ! [frc] Computational precision
 #endif /* !PRC_FLT */
+#ifdef PRC_NTV
+    real(r_ntv),intent(in)::cmp_prc_foo ! [frc] Computational precision
+#endif /* !PRC_NTV */
     real(DBLKIND),intent(in)::dbl_foo ! [frc] Double
     real(r4),intent(in)::flt_foo ! [frc] Float
     integer,intent(in)::int_foo ! [nbr] Integer

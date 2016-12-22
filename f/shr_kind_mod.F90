@@ -31,12 +31,15 @@ module shr_kind_mod
   ! Real numbers
   integer,parameter::shr_kind_r16=selected_real_kind(p=24) ! r16: 16B (C long double)
   integer,parameter::shr_kind_r4=selected_real_kind(p=6) ! r4: 4B (C float) default, 8B (C double) possible
-#if defined(PRC_DBL) || !defined(PRC_FLT)
+#ifdef PRC_DBL
   integer,parameter::shr_kind_r8=selected_real_kind(p=12) ! r8: 8B (C double) default, 4B (C float) possible
 #endif /* !PRC_DBL */
 #ifdef PRC_FLT
   integer,parameter::shr_kind_r8=selected_real_kind(p=6) ! r8: 8B (C double) default, 4B (C float) possible
 #endif /* !PRC_FLT */
+#ifdef PRC_NTV
+  integer,parameter::shr_kind_r8=kind(1.0) ! Native real kind
+#endif /* !neither */
   integer,parameter::r_ntv=kind(1.0) ! r_ntv: Native real kind
   ! Michael Metcalf's recommendation in comp.lang.fortran 20040824
   integer, parameter::d_ntv=selected_real_kind(2*precision(1.0_r_ntv)) ! d_ntv: double native real kind precision, i.e., double precision

@@ -19,16 +19,16 @@ program swnb2
   ! Irvine, CA 92697-3100
   
   ! Compilation:
-  ! cd ${HOME}/aca; make -W swnb2.F90 OMP=N OPTS=D NETCDF4=Y swnb2; cd - # grele, neige, virga
+  ! cd ${HOME}/sw/aca; make -W swnb2.F90 OMP=N OPTS=D NETCDF4=Y swnb2; cd - # grele, neige, virga
   ! cd ~/aca;NETCDF_ROOT='/usr' NETCDF_INC='/usr/include' NETCDF_LIB='/usr/lib' make NETCDF4=N NETCDFF=Y; cd - # netCDF3 givre, neige
-  ! cd ${HOME}/aca; make -W swnb2.F90 MPI=Y OMP=N OPTS=D NETCDF4=Y swnb2; cd - # greenplanet
-  ! cd ${HOME}/aca; make -W swnb2.F90 OMP=N OPTS=D NETCDF4=N swnb2; cd - # sand
+  ! cd ${HOME}/sw/aca; make -W swnb2.F90 MPI=Y OMP=N OPTS=D NETCDF4=Y swnb2; cd - # greenplanet
+  ! cd ${HOME}/sw/aca; make -W swnb2.F90 OMP=N OPTS=D NETCDF4=N swnb2; cd - # sand
   ! Debugging compilation:
-  ! cd ${HOME}/f  ;make cln;make OMP=N OPTS=X NETCDF4=Y
-  ! cd ${HOME}/aca;make cln;make OMP=N OPTS=X NETCDF4=Y
+  ! cd ${HOME}/sw/f  ;make cln;make OMP=N OPTS=X NETCDF4=Y
+  ! cd ${HOME}/sw/aca;make cln;make OMP=N OPTS=X NETCDF4=Y
   ! Production compilation:
-  ! cd ${HOME}/f  ;make cln;make OMP=Y OPTS=O
-  ! cd ${HOME}/aca;make cln;make OMP=N OPTS=O
+  ! cd ${HOME}/sw/f  ;make cln;make OMP=Y OPTS=O PRC=D
+  ! cd ${HOME}/sw/aca;make cln;make OMP=N OPTS=O PRC=D
   ! scp ~/aca/swnb2.F90 esmf.ess.uci.edu:aca
   ! scp esmf.ess.uci.edu:aca/swnb2.F90 ~/aca
 

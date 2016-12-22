@@ -94,8 +94,8 @@ ifndef OPTS
  OPTS := O
 endif
 ifndef ${PRC}
-# Precision token D=Double (default) S=Single
- PRC := D
+# Precision token D=Double S=Single N=Native (default)
+ PRC := N
 endif # endif PRC
 ifndef PVM_ARCH
  PVM_ARCH := $(shell ${HOME}/sh/pvmgetarch)
@@ -124,13 +124,16 @@ endif # endif NETCDF4
 # These tokens should not be altered by hand
 ifeq (${PRC},D)
  USR_TKN := -DPRC_DBL ${USR_TKN}
-else
+endif # !PRC
 ifeq (${PRC},L)
  USR_TKN := -DPRC_LDB ${USR_TKN}
-else
+endif # !PRC
+ifeq (${PRC},F)
  USR_TKN := -DPRC_FLT ${USR_TKN}
-endif # endif PRC
-endif # endif PRC
+endif # !PRC
+ifeq (${PRC},N)
+ USR_TKN := -DPRC_NTV ${USR_TKN}
+endif # !PRC
 
 # NB: CPP_TKN is recursively expanded variable, define only when components are ready
 CPP_TKN = ${USR_TKN} -D${PVM_ARCH} -DHOSTNAME='${HOST}' -DUSER='${USER}'
