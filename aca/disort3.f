@@ -698,7 +698,7 @@ c         ** and LAPACK.
      &                   NN, MI, MAZIM,
      &                   MXCMU, CMU, DELM0, FBEAM, 
      &                   GL(0,LC), YLM0, YLMC, PI, UMU0DI,
-     o                   ZJ, ZZ( 1,LC) )
+     &                   ZJ, ZZ( 1,LC) )
           ENDIF
 
 c         ** Calculate particular solutions of Eq. SS(15), STWL(25) for

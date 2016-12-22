@@ -225,7 +225,7 @@ comma := ,
 newline := \n
 
 # Source file names with directories removed
-MDL_SRC := H2OH2O.F90 NO2.F90 O2X.F90 O3.F90 clm.F90 htrn2nb.F machine.F mie2nc.F nbm.F swnb2.F90 swnb3.F90 bdref.f d1mach.f disort.f disort2.f linpak.f r1mach.f rdhtrn.f disort3.f disobrdf3.f bdref3.f errpack3.f lapack3.f linpak3.f rdi1mach3.f
+MDL_SRC := H2OH2O.F90 NO2.F90 O2X.F90 O3.F90 clm.F90 htrn2nb.F machine.F mie2nc.F nbm.F swnb2.F90 swnb3.F90 bdref.f d1mach.f disort.f disort2.f linpak.f r1mach.f rdhtrn.f disort3.f disobrdf3.f bdref3.f errpack3.f lapack3.f linpak3.f rdi1mach3.f disotest3.f disobrdf3.f
 # Directories to search for source files
 MDL_PTH := . ${HOME}/include ${HOME}/sw/f
 # Dependency list for executable
@@ -238,7 +238,7 @@ VPATH := $(subst ${space},:,${MDL_PTH})
 CPP_PTH := $(foreach dir,${MDL_PTH},-I${dir})
 
 # Variables having to do with binary executables created by module
-MDL_BIN_TRG := swnb2 swnb3 htrn2nb O3 NO2 H2OH2O O2X clm # Binary targets
+MDL_BIN_TRG := swnb2 swnb3 disotest3 htrn2nb O3 NO2 H2OH2O O2X clm # Binary targets
 MDL_BIN_SYM_LNK := # Symbolic links
 MDL_BIN_STB := ${MDL_BIN_TRG} ${MDL_BIN_SYM_LNK} # All executables in MY_BIN_DIR
 MDL_BIN := $(addprefix ${MY_BIN_DIR}/,${MDL_BIN_STB}) # dst_cln removes these files
@@ -1028,6 +1028,12 @@ SWNB3_OBJ := ${MY_OBJ_DIR}/swnb3.o ${MY_OBJ_DIR}/disort3.o ${MY_OBJ_DIR}/rdi1mac
 swnb3:	${MY_BIN_DIR}/swnb3
 ${MY_BIN_DIR}/swnb3:	lib $(SWNB3_OBJ) 
 	${FC} -o $@ $(SWNB3_OBJ) ${LDFLAGS}
+	chmod 755 $@
+
+DISOTEST3_OBJ := ${MY_OBJ_DIR}/disotest3.o ${MY_OBJ_DIR}/disort3.o ${MY_OBJ_DIR}/rdi1mach3.o ${MY_OBJ_DIR}/lapack3.o ${MY_OBJ_DIR}/linpak3.o ${MY_OBJ_DIR}/bdref3.o ${MY_OBJ_DIR}/errpack3.o ${MY_OBJ_DIR}/disobrdf3.o
+disotest3:	${MY_BIN_DIR}/disotest3
+${MY_BIN_DIR}/disotest3:	lib $(DISOTEST3_OBJ) 
+	${FC} -o $@ $(DISOTEST3_OBJ) ${LDFLAGS}
 	chmod 755 $@
 
 NBM_OBJ := ${MY_OBJ_DIR}/nbm.o ${MY_OBJ_DIR}/disort.o ${MY_OBJ_DIR}/d1mach.o ${MY_OBJ_DIR}/r1mach.o ${MY_OBJ_DIR}/linpak.o

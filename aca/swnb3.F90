@@ -6527,6 +6527,7 @@ program swnb2
      ! call t_startf('disort')
      
      if (slr_zen_ngl_cos > 0.0) then ! daytime
+        ! DISORT2
         !        call DISORT( nlyr, dtauc, ssalb, nmom, pmom, temper, wvnmlo, &
         !             wvnmhi, usrtau, ntau, utau, nstr, usrang, numu, &
         !             umu, nphi, phi, ibcnd, fbeam, umu0, phi0, &
@@ -6536,6 +6537,7 @@ program swnb2
         !             maxulv, maxumu, maxphi, maxmom, rfldir, rfldn, &
         !             flup, dfdt, uavg, uu, albmed, trnmed )
 
+        ! DISORT3
         call DISORT( nlyr, dtauc, ssalb, nmom, pmom, temper, wvnmlo, &
              wvnmhi, usrtau, ntau, utau, nstr, usrang, numu, &
              umu, nphi, phi, ibcnd, fbeam, umu0, phi0, &
