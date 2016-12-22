@@ -6,4 +6,5 @@
 #   about this file, do a "man softenv".
 #
 @default
++netcdf-4.3.3.1-gnu5.2-serial
 +nco-4.6.1

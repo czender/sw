@@ -1,3 +1,7 @@
+2016-12-22  Charlie Zender  <zender@uci.edu>
+
+	* Copy swnb2.F90 to swnb3.F90 to migrate to DISORT3
+
 2016-08-02  Charlie Zender  <zender@uci.edu>
 
 	* Change real_tiny from 1.0e-10 to 1.0e-20
