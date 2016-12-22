@@ -43,13 +43,14 @@ program swnb2
   ! Short term solution is do not trap underflows in single precision
 
   ! Graphics: 
-  ! IDL procedure ~/sw/idl/mie.pro:odx_htg_gph() plots heating profiles
-  ! NCL procedure ~/sw/anl/mie_xv.ncl: plots vertical figures
-  ! NCL procedure ~/sw/ncl/odxc.ncl: plots spectral optical depths
-  ! IDL procedure ~/sw/idl/mie.pro:trn_abs_gph() plots transmission vs. absorption
+  ! IDL procedures ~/sw/idl/mie.pro:odx_htg_gph() plots heating profiles
+  ! NCL procedures ~/sw/anl/swnb_vz.ncl: plots vertical figures
+  ! NCL procedures ~/sw/ncl/odxc.ncl: plots spectral optical depths
+  ! IDL procedures ~/sw/idl/mie.pro:trn_abs_gph() plots transmission vs. absorption
   ! Execution scripts:
-  ! ~/dst/swnb.sh: Run swnb2 for comparison to crm aerosol radiative forcing
-  ! ~/aca/aca.pl: Run swnb2 forced with ARESE and IOP data
+  ! ~/rsr/dst/swnb.sh: Run swnb2 for comparison to crm aerosol radiative forcing
+  ! ~/sw/aca/aca.pl: Run swnb2 forced with ARESE and IOP data
+  ! ~/pnp/ppr_skg/skg.sh: Run swnb2 for skyglow
   
   ! Nomenclature:
   ! Introducing snow causes some semantic difficulties
@@ -1824,14 +1825,18 @@ program swnb2
   integer maxphi            ! [nbr] Maximum number of output azimuthal angles
   integer maxulv            ! [nbr] Maximum number of output layers
   integer maxumu            ! [nbr] Maximum number of output polar angles
-  integer maxmom            ! [nbr] Maximum number of moments? for DISORT2
+  integer maxmom            ! [nbr] Maximum number of moments? (DISORT2)
+  integer mi                ! [nbr] Half maximum number of computational polar angles (DISORT3)
+  integer nazz              ! [nbr] One less thant number of computational polar angles (DISORT3)
   parameter(maxcly=tau_nbr_max, &
        maxcmu = str_nbr_max, &
        maxphi = azi_nbr_max, &
        maxulv = tau_nbr_max, &
        maxumu = plr_nbr_max, &
-       maxmom = str_nbr_max) ! for DISORT2
-  
+       maxmom = str_nbr_max, & ! DISORT2
+       mi = maxcmu/2, & ! DISORT3
+       nazz = maxcmu-1 ) ! DISORT3
+
   ! DISORT() input variables:
   character  header*127
   logical  lamber, plank, onlyfl, prnt(5), usrang, usrtau
@@ -1844,6 +1849,10 @@ program swnb2
        phi0, ssalb( maxcly ), temper( 0:maxcly ), temis, ttemp, &
        wvnmlo, wvnmhi, umu( maxumu ), umu0, utau( maxulv )
   
+  ! DISORT3 input (?) variables
+  real bemst(mi), emust(maxumu), rhoq(mi,0:mi,0:nazz), rhou(maxumu,0:mi,0:nazz), &
+       rho_accurate(maxumu,maxphi)
+
   ! DISORT() output variables:
   real     rfldir( maxulv ), rfldn( maxulv ), flup( maxulv ), &
        dfdt( maxulv ), uavg( maxulv ), u0u( maxumu, maxulv ), &
@@ -6483,6 +6492,7 @@ program swnb2
 
      end if if_flg_msm ! !flg_msm pre-processing
      
+     ! Call DISORT1
      ! call DISORT( nlyr, dtauc, ssalb, pmom, temper, wvnmlo, &
      !         wvnmhi, usrtau, ntau, utau, nstr, usrang, &
      !         numu, umu, nphi, phi, ibcnd, fbeam, umu0, &
@@ -6497,6 +6507,15 @@ program swnb2
      ! obsolete arguments: hl, deltam, maxcmu, u0u
      u0u(:,:)=0.0 ! disort1 u0u held azimuthal average intensity at user angles
      
+     ! Call DISORT3
+     ! new arguments: bemst, emust, rhoq, rhou, rho_accurate
+     ! obsolete arguments: none?
+     bemst(:)=0.0
+     emust(:)=0.0
+     rhoq(:,:,:)=0.0
+     rhou(:,:,:)=0.0
+     rho_accurate(:,:)=0.0
+
      ! disort1 (output) u0u held azimuthal average intensity at user angles
      ! disort2 (output) uavg holds mean intensity (azimuthal-and-polar-averaged) including the direct beam
      ! disort2 (internal) u0c: azimuthal average intensity at computational angles
@@ -6508,14 +6527,26 @@ program swnb2
      ! call t_startf('disort')
      
      if (slr_zen_ngl_cos > 0.0) then ! daytime
+        !        call DISORT( nlyr, dtauc, ssalb, nmom, pmom, temper, wvnmlo, &
+        !             wvnmhi, usrtau, ntau, utau, nstr, usrang, numu, &
+        !             umu, nphi, phi, ibcnd, fbeam, umu0, phi0, &
+        !!             fisot, lamber, albedo, btemp, ttemp, temis, & ! Added bemis argument 20160526
+        !             fisot, lamber, albedo, btemp, bemis, ttemp, temis, &
+        !             plank, onlyfl, accur, prnt, header, maxcly, &
+        !             maxulv, maxumu, maxphi, maxmom, rfldir, rfldn, &
+        !             flup, dfdt, uavg, uu, albmed, trnmed )
+
         call DISORT( nlyr, dtauc, ssalb, nmom, pmom, temper, wvnmlo, &
              wvnmhi, usrtau, ntau, utau, nstr, usrang, numu, &
              umu, nphi, phi, ibcnd, fbeam, umu0, phi0, &
-             !             fisot, lamber, albedo, btemp, ttemp, temis, & ! Added bemis argument 20160526
+             !           fisot, lamber, albedo, btemp, ttemp, temis, & ! Added bemis argument 20160526
              fisot, lamber, albedo, btemp, bemis, ttemp, temis, &
              plank, onlyfl, accur, prnt, header, maxcly, &
              maxulv, maxumu, maxphi, maxmom, rfldir, rfldn, &
-             flup, dfdt, uavg, uu, albmed, trnmed )
+             flup, dfdt, uavg, uu, albmed, trnmed, &
+             bemst, emust, rhoq, rhou, &
+             rho_accurate )
+
      else ! night-time
         ! Initialize outputs with netCDF-writable numbers
 

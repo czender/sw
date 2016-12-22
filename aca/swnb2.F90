@@ -43,13 +43,14 @@ program swnb2
   ! Short term solution is do not trap underflows in single precision
 
   ! Graphics: 
-  ! IDL procedure ~/sw/idl/mie.pro:odx_htg_gph() plots heating profiles
-  ! NCL procedure ~/sw/anl/mie_xv.ncl: plots vertical figures
-  ! NCL procedure ~/sw/ncl/odxc.ncl: plots spectral optical depths
-  ! IDL procedure ~/sw/idl/mie.pro:trn_abs_gph() plots transmission vs. absorption
+  ! IDL procedures ~/sw/idl/mie.pro:odx_htg_gph() plots heating profiles
+  ! NCL procedures ~/sw/anl/swnb_vz.ncl: plots vertical figures
+  ! NCL procedures ~/sw/ncl/odxc.ncl: plots spectral optical depths
+  ! IDL procedures ~/sw/idl/mie.pro:trn_abs_gph() plots transmission vs. absorption
   ! Execution scripts:
-  ! ~/dst/swnb.sh: Run swnb2 for comparison to crm aerosol radiative forcing
-  ! ~/aca/aca.pl: Run swnb2 forced with ARESE and IOP data
+  ! ~/rsr/dst/swnb.sh: Run swnb2 for comparison to crm aerosol radiative forcing
+  ! ~/sw/aca/aca.pl: Run swnb2 forced with ARESE and IOP data
+  ! ~/pnp/ppr_skg/skg.sh: Run swnb2 for skyglow
   
   ! Nomenclature:
   ! Introducing snow causes some semantic difficulties

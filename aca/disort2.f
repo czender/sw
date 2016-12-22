@@ -6365,7 +6365,7 @@ c                                     ** Save user input values
          WVNMLS = WVNMLO
          WVNMHS = WVNMHI
          BTEMPS = BTEMP
-         BEMISS = BEMIS
+         BEMISS = BEMIS ! csz
          TTEMPS = TTEMP
          TEMISS = TEMIS
          TEMPES( 0 ) = TEMPER( 0 )
@@ -6414,7 +6414,7 @@ c                          ** Haze L moments
          WVNMLO = 0.0
          WVNMHI = 50000.
          BTEMP  = 300.0
-         BEMIS  = 1.0
+         BEMIS  = 1.0 ! csz
          TTEMP  = 100.0
          TEMIS  = 0.8
          TEMPER( 0 ) = 210.0

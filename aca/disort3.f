@@ -5,7 +5,8 @@ c ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       SUBROUTINE DISORT( NLYR, DTAUC, SSALB, NMOM, PMOM, TEMPER, WVNMLO,
      &                   WVNMHI, USRTAU, NTAU, UTAU, NSTR, USRANG, NUMU,
      &                   UMU, NPHI, PHI, IBCND, FBEAM, UMU0, PHI0,
-     &                   FISOT, LAMBER, ALBEDO, BTEMP, TTEMP, TEMIS,
+c++csz     &                   FISOT, LAMBER, ALBEDO, BTEMP, TTEMP, TEMIS,
+     &                   FISOT, LAMBER, ALBEDO, BTEMP, BEMIS, TTEMP, TEMIS,
      &                   PLANK, ONLYFL, ACCUR, PRNT, HEADER, MAXCLY,
      &                   MAXULV, MAXUMU, MAXPHI, MAXMOM, RFLDIR, RFLDN,
      &                   FLUP, DFDT, UAVG, UU, ALBMED, TRNMED,
@@ -354,9 +355,24 @@ c     .. Parameters ..
 c     ** Version 3: Added NAZZ = MXCMU - 1
       INTEGER   MXCLY, MXULV, MXCMU, MXUMU, MXPHI, MI, MI9M2, NNLYRI,
      &          MXSQT
-      PARAMETER ( MXCLY = 6, MXULV = 5, MXCMU = 48, MXUMU = 10,
-     &          MXPHI = 3, MI = MXCMU / 2, MI9M2 = 9*MI - 2,
+c++csz
+c     Parameters used in swnb2 for normal tropical atmospheres
+c      PARAMETER ( MXCLY = 92, MXULV = 93, MXCMU = 16, MXUMU = 16,
+c     Parameters used in swnb2 for ARESE
+      PARAMETER ( MXCLY = 110, MXULV = 111, MXCMU = 16, MXUMU = 16,
+     &          MXPHI = 16, MI = MXCMU / 2, MI9M2 = 9*MI - 2,
      &          NNLYRI = MXCMU*MXCLY, MXSQT = 1000, NAZZ = MXCMU - 1)
+c     DISORT3 defaults:
+c     PARAMETER ( MXCLY = 6, MXULV = 5, MXCMU = 48, MXUMU = 10,
+c     &          MXPHI = 3, MI = MXCMU / 2, MI9M2 = 9*MI - 2,
+c     &          NNLYRI = MXCMU*MXCLY, MXSQT = 1000, NAZZ = MXCMU - 1)
+c     Parameters used in swnb2 by David Fillmore:
+c      PARAMETER ( MXCLY = 20, MXULV = 21, MXCMU = 48, MXUMU = 16,
+c     Parameters used in swnb1:
+c      PARAMETER ( MXCLY = 110, MXULV = 111, MXCMU = 16, MXUMU = 16,
+c     &          MXPHI = 16, MI = MXCMU / 2, MI9M2 = 9*MI - 2,
+c     &          NNLYRI = MXCMU*MXCLY )
+c--csz
 
 c     ..
 c     .. Scalar Arguments ..
@@ -364,7 +380,8 @@ c     .. Scalar Arguments ..
       LOGICAL   LAMBER, ONLYFL, PLANK, USRANG, USRTAU
       INTEGER   IBCND, MAXCLY, MAXMOM, MAXPHI, MAXULV, MAXUMU, NLYR,
      &          NMOM, NPHI, NSTR, NTAU, NUMU
-      REAL      ACCUR, ALBEDO, BTEMP, FBEAM, FISOT, PHI0, TEMIS, TTEMP,
+c++csz      REAL      ACCUR, ALBEDO, BTEMP, FBEAM, FISOT, PHI0, TEMIS, TTEMP,
+      REAL      ACCUR, ALBEDO, BTEMP, BEMIS, FBEAM, FISOT, PHI0, TEMIS, TTEMP,
      &          UMU0, WVNMHI, WVNMLO
 
 c     ..
@@ -473,7 +490,8 @@ c       ** Set input values for self-test
 c       ** Ensure that SLFTST sets all print flags off
         COMPAR = .FALSE.
 
-        CALL SLFTST( CORINT, ACCUR, ALBEDO, BTEMP, DELTAM, DTAUC( 1 ),
+c++csz         CALL SLFTST( CORINT, ACCUR, ALBEDO, BTEMP, DELTAM, DTAUC( 1 ),
+         CALL SLFTST( CORINT, ACCUR, ALBEDO, BTEMP, BEMIS, DELTAM, DTAUC( 1 ),
      &               FBEAM, FISOT, IBCND, LAMBER, NLYR, PLANK, NPHI,
      &               NUMU, NSTR, NTAU, ONLYFL, PHI( 1 ), PHI0, NMOM,
      &               PMOM( 0,1 ), PRNT, PRNTU0, SSALB( 1 ), TEMIS,
@@ -485,10 +503,16 @@ c       ** Ensure that SLFTST sets all print flags off
 
    20 CONTINUE
 
-      IF( .NOT.PASS1 .AND. LEN( HEADER ).NE.0 ) THEN
-         WRITE( *,'(//,1X,100(''*''),/,A,/,1X,100(''*''))' )
-     &    ' DISORT: '//HEADER
-      ENDIF
+c     IF( .NOT.PASS1 .AND. LEN( HEADER ).NE.0 )
+c++csz
+c     Print some useful diagnostics if array bounds need to be reset
+      if (nmom .gt. mxcmu) stop 'Increase mxcmu in disort3.f'
+      if(nlyr .gt. mxcly) stop 'Increase mxcly, mxulv in disort3.f'
+c      IF( .NOT.PASS1 .AND. LEN( HEADER ).NE.0 ) THEN
+c         WRITE( *,'(//,1X,100(''*''),/,A,/,1X,100(''*''))' )
+c     &    ' DISORT: '//HEADER
+c      ENDIF
+c--csz
 
 c     ** Calculate cumulative optical depth and dither single-scatter albedo
 c     ** to improve numerical behavior of eigenvalue/vector computation.
@@ -505,7 +529,8 @@ c     ** Check input dimensions and variables
       CALL CHEKIN( NLYR, DTAUC, SSALB, NMOM, PMOM, TEMPER, WVNMLO,
      &             WVNMHI, USRTAU, NTAU, UTAU, NSTR, USRANG,
      &             NUMU, UMU, NPHI, PHI, IBCND, FBEAM, UMU0,
-     &             PHI0, FISOT, LAMBER, ALBEDO, BTEMP, TTEMP,
+c++csz     &             PHI0, FISOT, LAMBER, ALBEDO, BTEMP, TTEMP,
+     &             PHI0, FISOT, LAMBER, ALBEDO, BTEMP, BEMIS, TTEMP,
      &             TEMIS, PLANK, ONLYFL, DELTAM, CORINT, ACCUR,
      &             TAUC, MAXCLY, MAXULV, MAXUMU, MAXPHI, MAXMOM,
      &             MXCLY, MXULV, MXUMU, MXCMU, MXPHI, MXSQT )
@@ -544,7 +569,8 @@ c     ** Print input information
         CALL PRTINP( NLYR, DTAUC, DTAUCP, SSALB, NMOM, PMOM, TEMPER,
      &               WVNMLO, WVNMHI, NTAU, UTAU, NSTR, NUMU, UMU,
      &               NPHI, PHI, IBCND, FBEAM, UMU0, PHI0, FISOT,
-     &               LAMBER, ALBEDO, BTEMP, TTEMP, TEMIS, DELTAM,
+csz++     &                 LAMBER, ALBEDO, BTEMP, TTEMP, TEMIS, DELTAM,
+     &                 LAMBER, ALBEDO, BTEMP, BEMIS, TTEMP, TEMIS, DELTAM,
      &               PLANK, ONLYFL, CORINT, ACCUR, FLYR, LYRCUT,
      &               OPRIM, TAUC, TAUCPR, MAXMOM, PRNT( 5 ) )
       ENDIF
@@ -568,7 +594,11 @@ c     ** Calculate Planck functions
         CALL ZEROIT( PKAG,  MXCLY + 1 )
       ELSE
         TPLANK = TEMIS*PLKAVG( WVNMLO, WVNMHI, TTEMP )
-        BPLANK =       PLKAVG( WVNMLO, WVNMHI, BTEMP )
+c     csz++ 20160526
+c     Add emissivity of bottom boundary to simulate skyglow stimulated by anthropogenic light
+c         BPLANK =    PLKAVG( WVNMLO, WVNMHI, BTEMP )
+             BPLANK =    BEMIS*PLKAVG( WVNMLO, WVNMHI, BTEMP )
+c     csz-- 20160526
         DO 40 LEV = 0, NLYR
           PKAG( LEV ) = PLKAVG( WVNMLO, WVNMHI, TEMPER( LEV ) )
    40   CONTINUE
@@ -853,7 +883,8 @@ c     ** Print intensities
       IF( PASS1 ) THEN
 c       ** Compare test case results with correct answers and abort if bad
          COMPAR = .TRUE.
-         CALL SLFTST( CORINT, ACCUR, ALBEDO, BTEMP, DELTAM, DTAUC( 1 ),
+c++csz         CALL SLFTST( CORINT, ACCUR, ALBEDO, BTEMP, DELTAM, DTAUC( 1 ),
+         CALL SLFTST( CORINT, ACCUR, ALBEDO, BTEMP, BEMIS, DELTAM, DTAUC( 1 ),
      &                FBEAM, FISOT, IBCND, LAMBER, NLYR, PLANK, NPHI,
      &                NUMU, NSTR, NTAU, ONLYFL, PHI( 1 ), PHI0, NMOM,
      &                PMOM( 0,1 ), PRNT, PRNTU0, SSALB( 1 ), TEMIS,
@@ -5090,7 +5121,8 @@ c ---------------------------------------------------------------------
       SUBROUTINE CHEKIN( NLYR, DTAUC, SSALB, NMOM, PMOM, TEMPER, WVNMLO,
      &                   WVNMHI, USRTAU, NTAU, UTAU, NSTR, USRANG,
      &                   NUMU, UMU, NPHI, PHI, IBCND, FBEAM, UMU0,
-     &                   PHI0, FISOT, LAMBER, ALBEDO, BTEMP, TTEMP,
+c++csz     &                   PHI0, FISOT, LAMBER, ALBEDO, BTEMP, TTEMP,
+     &                   PHI0, FISOT, LAMBER, ALBEDO, BTEMP, BEMIS, TTEMP,
      &                   TEMIS, PLANK, ONLYFL, DELTAM, CORINT, ACCUR,
      &                   TAUC, MAXCLY, MAXULV, MAXUMU, MAXPHI, MAXMOM,
      &                   MXCLY, MXULV, MXUMU, MXCMU, MXPHI, MXSQT )
@@ -5107,7 +5139,8 @@ c     .. Scalar Arguments ..
       INTEGER   IBCND, MAXCLY, MAXMOM, MAXPHI, MAXULV, MAXUMU, MXCLY,
      &          MXCMU, MXPHI, MXSQT, MXULV, MXUMU, NLYR, NMOM, NPHI,
      &          NSTR, NTAU, NUMU
-      REAL      ACCUR, ALBEDO, BTEMP, FBEAM, FISOT, PHI0, TEMIS, TTEMP,
+c++csz      REAL      ACCUR, ALBEDO, BTEMP, FBEAM, FISOT, PHI0, TEMIS, TTEMP,
+      REAL      ACCUR, ALBEDO, BTEMP, BEMIS, FBEAM, FISOT, PHI0, TEMIS, TTEMP,
      &          UMU0, WVNMHI, WVNMLO
 c     ..
 c     .. Array Arguments ..
@@ -5325,6 +5358,9 @@ c               FLXALB = DREF( WVNMLO, WVNMHI, RMU )
 
          IF( TEMIS.LT.0.0 .OR. TEMIS.GT.1.0 ) INPERR = WRTBAD( 'TEMIS' )
 
+c++csz
+         IF( BEMIS.LT.0.0 .OR. BEMIS.GT.1.0 ) INPERR = WRTBAD( 'BEMIS' )
+
          IF( BTEMP.LT.0.0 ) INPERR = WRTBAD( 'BTEMP' )
 
          IF( TTEMP.LT.0.0 ) INPERR = WRTBAD( 'TTEMP' )
@@ -5373,7 +5409,12 @@ c               FLXALB = DREF( WVNMLO, WVNMHI, RMU )
 
          DO 80 LC = 1, NLYR
 
-            IF( ABS( TEMPER( LC )-TEMPER( LC-1 ) ).GT.10.0 )
+c     csz++ This warning is often triggered by low vertical resolution atmospheres
+c     I've changed temperature jump for warnings from DISORT-default 10 K to 20 K
+c     because stratospheric temperature jumps in 18 level atmospheres are just under 20 K
+c     Feel free to change this if necessary
+
+            IF( ABS( TEMPER( LC )-TEMPER( LC-1 ) ).GT.20.0 )
      &          CALL ERRMSG('CHEKIN--vertical temperature step may'
      &                      //' be too large for good accuracy',
      &                      .False. )
@@ -5946,7 +5987,8 @@ c ---------------------------------------------------------------------
       SUBROUTINE PRTINP( NLYR, DTAUC, DTAUCP, SSALB, NMOM, PMOM, TEMPER,
      &                   WVNMLO, WVNMHI, NTAU, UTAU, NSTR, NUMU, UMU,
      &                   NPHI, PHI, IBCND, FBEAM, UMU0, PHI0, FISOT,
-     &                   LAMBER, ALBEDO, BTEMP, TTEMP, TEMIS, DELTAM,
+c++csz     &                   LAMBER, ALBEDO, BTEMP, TTEMP, TEMIS, DELTAM,
+     &                   LAMBER, ALBEDO, BTEMP, BEMIS, TTEMP, TEMIS, DELTAM,
      &                   PLANK, ONLYFL, CORINT, ACCUR, FLYR, LYRCUT,
      &                   OPRIM, TAUC, TAUCPR, MAXMOM, PRTMOM )
 
@@ -5959,7 +6001,8 @@ c     .. Scalar Arguments ..
 
       LOGICAL   CORINT, DELTAM, LAMBER, LYRCUT, ONLYFL, PLANK, PRTMOM
       INTEGER   IBCND, MAXMOM, NLYR, NMOM, NPHI, NSTR, NTAU, NUMU
-      REAL      ACCUR, ALBEDO, BTEMP, FBEAM, FISOT, PHI0, TEMIS, TTEMP,
+c++csz      REAL      ACCUR, ALBEDO, BTEMP, FBEAM, FISOT, PHI0, TEMIS, TTEMP,
+      REAL      ACCUR, ALBEDO, BTEMP, BEMIS, FBEAM, FISOT, PHI0, TEMIS, TTEMP,
      &          UMU0, WVNMHI, WVNMLO
 c     ..
 c     .. Array Arguments ..
@@ -6008,10 +6051,12 @@ c     ..
          IF( .NOT.LAMBER ) WRITE( *, '(A)' )
      &       '    Bidirectional reflectivity at bottom'
 
-         IF( PLANK ) WRITE( *, '(A,2F14.4,/,A,F10.2,A,F10.2,A,F8.4)' )
+c++csz         IF( PLANK ) WRITE( *, '(A,2F14.4,/,A,F10.2,A,F10.2,A,F8.4)' )
+         IF( PLANK ) WRITE( *, '(A,2F14.4,/,A,F10.2,A,F8.4,A,F10.2,A,F8.4)' )
      &       '    Thermal emission in wavenumber interval :', WVNMLO,
      &       WVNMHI,
      &       '    Bottom temperature =', BTEMP,
+     &       '    Bottom emissivity =', BEMIS,
      &       '    Top temperature =', TTEMP,
      &       '    Top emissivity =', TEMIS
 
@@ -6473,7 +6518,8 @@ c                      ** from A*B because A*B may (over/under)flow
 c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 c ---------------------------------------------------------------------
-      SUBROUTINE SLFTST( CORINT, ACCUR, ALBEDO, BTEMP, DELTAM, DTAUC,
+c++csz      SUBROUTINE SLFTST( CORINT, ACCUR, ALBEDO, BTEMP, DELTAM, DTAUC,
+      SUBROUTINE SLFTST( CORINT, ACCUR, ALBEDO, BTEMP, BEMIS, DELTAM, DTAUC,
      &                   FBEAM, FISOT, IBCND, LAMBER, NLYR, PLANK, NPHI,
      &                   NUMU, NSTR, NTAU, ONLYFL, PHI, PHI0, NMOM,
      &                   PMOM, PRNT, PRNTU0, SSALB, TEMIS, TEMPER,
@@ -6507,7 +6553,8 @@ c     .. Scalar Arguments ..
       LOGICAL   COMPAR, CORINT, DELTAM, LAMBER, ONLYFL, PLANK, USRANG,
      &          USRTAU
       INTEGER   IBCND, NLYR, NMOM, NPHI, NSTR, NTAU, NUMU
-      REAL      ACCUR, ALBEDO, BTEMP, DTAUC, FBEAM, FISOT, FLUP, PHI,
+c++csz      REAL      ACCUR, ALBEDO, BTEMP, DTAUC, FBEAM, FISOT, FLUP, PHI,
+      REAL      ACCUR, ALBEDO, BTEMP, BEMIS, DTAUC, FBEAM, FISOT, FLUP, PHI,
      &          PHI0, RFLDIR, RFLDN, SSALB, TEMIS, TTEMP, UMU, UMU0,
      &          UTAU, UU, WVNMHI, WVNMLO
 c     ..
@@ -6521,7 +6568,8 @@ c     .. Local Scalars ..
       LOGICAL   CORINS, DELTAS, LAMBES, OK, ONLYFS, PLANKS, USRANS,
      &          USRTAS
       INTEGER   I, IBCNDS, N, NLYRS, NMOMS, NPHIS, NSTRS, NTAUS, NUMUS
-      REAL      ACC, ACCURS, ALBEDS, BTEMPS, DTAUCS, ERROR1, ERROR2,
+c++csz      REAL      ACC, ACCURS, ALBEDS, BTEMPS, DTAUCS, ERROR1, ERROR2,
+      REAL      ACC, ACCURS, ALBEDS, BTEMPS, BEMISS, DTAUCS, ERROR1, ERROR2,
      &          ERROR3, ERROR4, FBEAMS, FISOTS, PHI0S, PHIS, SSALBS,
      &          TEMISS, TTEMPS, UMU0S, UMUS, UTAUS, WVNMHS, WVNMLS
 c     ..
@@ -6582,6 +6630,7 @@ c                                     ** Save user input values
          WVNMLS = WVNMLO
          WVNMHS = WVNMHI
          BTEMPS = BTEMP
+         BEMISS = BEMIS ! csz
          TTEMPS = TTEMP
          TEMISS = TEMIS
          TEMPES( 0 ) = TEMPER( 0 )
@@ -6630,6 +6679,7 @@ c                          ** Haze L moments
          WVNMLO = 0.0
          WVNMHI = 50000.
          BTEMP  = 300.0
+         BEMIS  = 1.0 ! csz
          TTEMP  = 100.0
          TEMIS  = 0.8
          TEMPER( 0 ) = 210.0

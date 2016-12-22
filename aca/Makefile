@@ -1024,7 +1024,7 @@ ${MY_BIN_DIR}/swnb2:	lib $(SWNB2_OBJ)
 	${FC} -o $@ $(SWNB2_OBJ) ${LDFLAGS}
 	chmod 755 $@
 
-SWNB3_OBJ := ${MY_OBJ_DIR}/swnb3.o ${MY_OBJ_DIR}/disort3.o ${MY_OBJ_DIR}/rdi1mach3.o ${MY_OBJ_DIR}/lapack3.o ${MY_OBJ_DIR}/bdref3.o
+SWNB3_OBJ := ${MY_OBJ_DIR}/swnb3.o ${MY_OBJ_DIR}/disort3.o ${MY_OBJ_DIR}/rdi1mach3.o ${MY_OBJ_DIR}/lapack3.o ${MY_OBJ_DIR}/linpak3.o ${MY_OBJ_DIR}/bdref3.o ${MY_OBJ_DIR}/errpack3.o
 swnb3:	${MY_BIN_DIR}/swnb3
 ${MY_BIN_DIR}/swnb3:	lib $(SWNB3_OBJ) 
 	${FC} -o $@ $(SWNB3_OBJ) ${LDFLAGS}
