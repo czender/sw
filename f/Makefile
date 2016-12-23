@@ -120,8 +120,8 @@ ifndef OPTS
  OPTS := O
 endif
 ifndef ${PRC}
-# Precision token D=Double S=Single N=Native (default)
- PRC := N
+# Precision token D=Double S=Single N=Native
+ PRC := D
 endif # endif PRC
 ifndef PVM_ARCH
  PVM_ARCH := $(shell ${HOME}/sh/pvmgetarch)
@@ -154,7 +154,7 @@ endif # !PRC
 ifeq (${PRC},L)
  USR_TKN := -DPRC_LDB ${USR_TKN}
 endif # !PRC
-ifeq (${PRC},F)
+ifeq (${PRC},S)
  USR_TKN := -DPRC_FLT ${USR_TKN}
 endif # !PRC
 ifeq (${PRC},N)
