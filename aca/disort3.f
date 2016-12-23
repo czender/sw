@@ -356,14 +356,14 @@ c     ** Version 3: Added NAZZ = MXCMU - 1
       INTEGER   MXCLY, MXULV, MXCMU, MXUMU, MXPHI, MI, MI9M2, NNLYRI,
      &          MXSQT
 c++csz
-c     Parameters used in swnb3 and in swnb2 for ARESE
-      PARAMETER ( MXCLY = 110, MXULV = 111, MXCMU = 16, MXUMU = 16,
-     &          MXPHI = 16, MI = MXCMU / 2, MI9M2 = 9*MI - 2,
-     &          NNLYRI = MXCMU*MXCLY, MXSQT = 1000, NAZZ = MXCMU - 1)
-cc     DISORT3 defaults:
-c      PARAMETER ( MXCLY = 6, MXULV = 5, MXCMU = 48, MXUMU = 10,
-c     &          MXPHI = 3, MI = MXCMU / 2, MI9M2 = 9*MI - 2,
+cc     Parameters used in swnb3 and in swnb2 for ARESE
+c      PARAMETER ( MXCLY = 110, MXULV = 111, MXCMU = 16, MXUMU = 16,
+c     &          MXPHI = 16, MI = MXCMU / 2, MI9M2 = 9*MI - 2,
 c     &          NNLYRI = MXCMU*MXCLY, MXSQT = 1000, NAZZ = MXCMU - 1)
+c     DISORT3 defaults:
+      PARAMETER ( MXCLY = 6, MXULV = 5, MXCMU = 48, MXUMU = 10,
+     &          MXPHI = 3, MI = MXCMU / 2, MI9M2 = 9*MI - 2,
+     &          NNLYRI = MXCMU*MXCLY, MXSQT = 1000, NAZZ = MXCMU - 1)
 c     Parameters used in swnb2 for normal tropical atmospheres
 c      PARAMETER ( MXCLY = 92, MXULV = 93, MXCMU = 16, MXUMU = 16,
 c     Parameters used in swnb2 by David Fillmore:
