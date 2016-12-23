@@ -1,6 +1,6 @@
 ! $Id$
 
-program swnb2
+program swnb3
   
   ! Purpose: Narrow band model employing Malkmus random line approximation
   ! Effective monochromatic optical depth from gaseous line absorption is combined  
@@ -19,21 +19,21 @@ program swnb2
   ! Irvine, CA 92697-3100
   
   ! Compilation:
-  ! cd ${HOME}/sw/aca; make -W swnb2.F90 OMP=N OPTS=D NETCDF4=Y swnb2; cd - # grele, neige, virga
+  ! cd ${HOME}/sw/aca; make -W swnb3.F90 OMP=N OPTS=D NETCDF4=Y swnb3; cd - # grele, neige, virga
   ! cd ~/aca;NETCDF_ROOT='/usr' NETCDF_INC='/usr/include' NETCDF_LIB='/usr/lib' make NETCDF4=N NETCDFF=Y; cd - # netCDF3 givre, neige
-  ! cd ${HOME}/sw/aca; make -W swnb2.F90 MPI=Y OMP=N OPTS=D NETCDF4=Y swnb2; cd - # greenplanet
-  ! cd ${HOME}/sw/aca; make -W swnb2.F90 OMP=N OPTS=D NETCDF4=N swnb2; cd - # sand
+  ! cd ${HOME}/sw/aca; make -W swnb3.F90 MPI=Y OMP=N OPTS=D NETCDF4=Y swnb3; cd - # greenplanet
+  ! cd ${HOME}/sw/aca; make -W swnb3.F90 OMP=N OPTS=D NETCDF4=N swnb3; cd - # sand
   ! Debugging compilation:
   ! cd ${HOME}/sw/f  ;make cln;make OMP=N OPTS=X NETCDF4=Y
   ! cd ${HOME}/sw/aca;make cln;make OMP=N OPTS=X NETCDF4=Y
   ! Production compilation:
   ! cd ${HOME}/sw/f  ;make cln;make OMP=Y OPTS=O PRC=D
   ! cd ${HOME}/sw/aca;make cln;make OMP=N OPTS=O PRC=D
-  ! scp ~/aca/swnb2.F90 esmf.ess.uci.edu:aca
-  ! scp esmf.ess.uci.edu:aca/swnb2.F90 ~/aca
+  ! scp ~/aca/swnb3.F90 esmf.ess.uci.edu:aca
+  ! scp esmf.ess.uci.edu:aca/swnb3.F90 ~/aca
 
-  ! NB: Compile and run swnb2 in double precision
-  ! swnb2 is intimately linked to fortran library libcsz_f90
+  ! NB: Compile and run swnb3 in double precision
+  ! swnb3 is intimately linked to fortran library libcsz_f90
   ! Compile these two pieces with same intrinsic precision
   ! AIX/xlf underflows on attempts to read small O(10^-40) abs_xsx_O2O2
   ! (produced by O2X) into single-precision variable
@@ -48,9 +48,9 @@ program swnb2
   ! NCL procedures ~/sw/ncl/odxc.ncl: plots spectral optical depths
   ! IDL procedures ~/sw/idl/mie.pro:trn_abs_gph() plots transmission vs. absorption
   ! Execution scripts:
-  ! ~/rsr/dst/swnb.sh: Run swnb2 for comparison to crm aerosol radiative forcing
-  ! ~/sw/aca/aca.pl: Run swnb2 forced with ARESE and IOP data
-  ! ~/pnp/ppr_skg/skg.sh: Run swnb2 for skyglow
+  ! ~/rsr/dst/swnb.sh: Run swnb3 for comparison to crm aerosol radiative forcing
+  ! ~/sw/aca/aca.pl: Run swnb3 forced with ARESE and IOP data
+  ! ~/pnp/ppr_skg/skg.sh: Run swnb3 for skyglow
   
   ! Nomenclature:
   ! Introducing snow causes some semantic difficulties
@@ -165,22 +165,22 @@ program swnb2
   
   ! Debugging usage:
   ! Perform full setup for all bands but only call DISORT() for #1603:
-  ! swnb2 --drc_in=${DATA}/aca -D 1 -E -e 1603 -d ~/foo.nc 
+  ! swnb3 --drc_in=${DATA}/aca -D 1 -E -e 1603 -d ~/foo.nc 
   ! Intercompare model on different machines:
-  ! swnb2 --drc_in=${DATA}/aca -d ~/foo.nc;ncks -H -v flx_bb_dwn_sfc ~/foo.nc
+  ! swnb3 --drc_in=${DATA}/aca -d ~/foo.nc;ncks -H -v flx_bb_dwn_sfc ~/foo.nc
   
   ! Production usage:
   ! ncks command to print out diagnostic fields, for many test cases, is
   ! ncks -H -C -v flx_bb_abs_atm,flx_bb_dwn_sfc ${DATA}/aca/swnb.nc
-  ! swnb2 --drc_in=${DATA}/aca --drc_out=${DATA}/aca -D 1 -d ~/foo.nc 
+  ! swnb3 --drc_in=${DATA}/aca --drc_out=${DATA}/aca -D 1 -d ~/foo.nc 
   ! Snow:
-  ! swnb2 -p ${DATA}/aca/mls_snw_JRI.nc -d ${DATA}/aca/swnb_snw.nc
-  ! swnb2 --thermal=false -s 4 -p ${DATA}/aca/mls_snw_JRI.nc -d ~/foo.nc > ~/foo_snw 2>&1 &
-  ! swnb2 --thermal=false -s 4 -p ${DATA}/aca/mls_snw_JRI.nc --fl_snw=aer_snw_rds_ffc_100um.nc -d ~/foo.nc > ~/foo_snw 2>&1 &
+  ! swnb3 -p ${DATA}/aca/mls_snw_JRI.nc -d ${DATA}/aca/swnb_snw.nc
+  ! swnb3 --thermal=false -s 4 -p ${DATA}/aca/mls_snw_JRI.nc -d ~/foo.nc > ~/foo_snw 2>&1 &
+  ! swnb3 --thermal=false -s 4 -p ${DATA}/aca/mls_snw_JRI.nc --fl_snw=aer_snw_rds_ffc_100um.nc -d ~/foo.nc > ~/foo_snw 2>&1 &
   ! ncks -F -H -C -v '.snw' ~/foo.nc | m
 
   ! Zenith angles:
-  ! swnb2 ${crd_arg} -d ~/foo.nc
+  ! swnb3 ${crd_arg} -d ~/foo.nc
   ! crd_arg='--lat=+23.44 --doy=172.5' # Summer solstice NH
   ! crd_arg='--lat=-23.44 --doy=355.5' # Summer solstice SH
   ! crd_arg='--lat=+00.00 --doy=083.5' # Spring equinox  NH
@@ -192,111 +192,111 @@ program swnb2
   ! NB: Thermal emission (flg_Planck) does not work with SK test cases
   ! This is because AFGL temperature gradients are too large at TOA
   ! All gases, no aerosol, cloud, or thermal emission, in MLS, TRP atm with cos theta=0.8660,0.2588 alb=0.2,
-  ! swnb2 -z 0.8660 -r 0.2 -s 4 -p ${DATA}/aca/mls_afgl_73lvl.nc -d ${DATA}/tmp/sk_01.nc > ~/foo_1 2>&1 &
-  ! swnb2 -z 0.2588 -r 0.2 -s 4 -p ${DATA}/aca/mls_afgl_73lvl.nc -d ${DATA}/tmp/sk_02.nc > ~/foo_2 2>&1 &
-  ! swnb2 -z 0.8660 -r 0.2 -s 4 -p ${DATA}/aca/trp_afgl_73lvl.nc -d ${DATA}/tmp/sk_03.nc > ~/foo_3 2>&1 &
-  ! swnb2 -z 0.2588 -r 0.2 -s 4 -p ${DATA}/aca/trp_afgl_73lvl.nc -d ${DATA}/tmp/sk_04.nc > ~/foo_4 2>&1 &
-  ! swnb2 -z 0.8660 -r 0.2 -s 4 -p ${DATA}/aca/sas_afgl_73lvl.nc -d ${DATA}/tmp/sk_05.nc > ~/foo_5 2>&1 &
+  ! swnb3 -z 0.8660 -r 0.2 -s 4 -p ${DATA}/aca/mls_afgl_73lvl.nc -d ${DATA}/tmp/sk_01.nc > ~/foo_1 2>&1 &
+  ! swnb3 -z 0.2588 -r 0.2 -s 4 -p ${DATA}/aca/mls_afgl_73lvl.nc -d ${DATA}/tmp/sk_02.nc > ~/foo_2 2>&1 &
+  ! swnb3 -z 0.8660 -r 0.2 -s 4 -p ${DATA}/aca/trp_afgl_73lvl.nc -d ${DATA}/tmp/sk_03.nc > ~/foo_3 2>&1 &
+  ! swnb3 -z 0.2588 -r 0.2 -s 4 -p ${DATA}/aca/trp_afgl_73lvl.nc -d ${DATA}/tmp/sk_04.nc > ~/foo_4 2>&1 &
+  ! swnb3 -z 0.8660 -r 0.2 -s 4 -p ${DATA}/aca/sas_afgl_73lvl.nc -d ${DATA}/tmp/sk_05.nc > ~/foo_5 2>&1 &
   ! ncks -H -C -d bnd,0.7e-6 -v flx_bb_dwn_sfc ${DATA}/tmp/sk_01.nc
   
   ! Test cases: Set CO2 vmr to 300 ppm for most of these!
   ! NB: BPB used only most common isotope of each species for these
   
   ! O2 absorption only:
-  ! swnb2 -A -B -C -G -H -I -J -K -L -R -U -W -X -Y -D 1 -r 0.1 -z 0.5 -S 1370.0 -p ${DATA}/aca/mls_clr.nc -o ${DATA}/aca/swnb_16O2.nc
+  ! swnb3 -A -B -C -G -H -I -J -K -L -R -U -W -X -Y -D 1 -r 0.1 -z 0.5 -S 1370.0 -p ${DATA}/aca/mls_clr.nc -o ${DATA}/aca/swnb_16O2.nc
   
   ! CO2 absorption only:
-  ! swnb2 -A -B -G -H -I -J -K -L -O -R -U -W -X -Y -D 1 -r 0.1 -z 0.5 -S 1370.0 -p ${DATA}/aca/mls_clr.nc -c ${DATA}/aca/swnb_12C_16O2.nc
+  ! swnb3 -A -B -G -H -I -J -K -L -O -R -U -W -X -Y -D 1 -r 0.1 -z 0.5 -S 1370.0 -p ${DATA}/aca/mls_clr.nc -c ${DATA}/aca/swnb_12C_16O2.nc
   
   ! H2O absorption only:
-  ! swnb2 -A -B -C -G -I -J -K -L -O -R -U -W -X -Y -D 1 -r 0.0 -z 0.5 -S 1370.0 -p ${DATA}/aca/mls_clr.nc -h ${DATA}/aca/swnb_1H2_16O.nc
-  ! swnb2 -A -B -C -G -I -J -K -L -O -R -U -W -X -Y -D 1 -r 0.0 -z 0.8660254 -S 1370.0 -p ${DATA}/aca/mls_clr.nc -h ${DATA}/aca/swnb_1H2_16O.nc
-  ! swnb2 -A -B -C -G -I -J -K -L -O -R -U -W -X -Y -D 1 -r 0.0 -z 0.8660254 -S 1370.0 -p ${DATA}/aca/mls_icrccm_92lvl.nc -h ${DATA}/aca/swnb_H2O.nc
+  ! swnb3 -A -B -C -G -I -J -K -L -O -R -U -W -X -Y -D 1 -r 0.0 -z 0.5 -S 1370.0 -p ${DATA}/aca/mls_clr.nc -h ${DATA}/aca/swnb_1H2_16O.nc
+  ! swnb3 -A -B -C -G -I -J -K -L -O -R -U -W -X -Y -D 1 -r 0.0 -z 0.8660254 -S 1370.0 -p ${DATA}/aca/mls_clr.nc -h ${DATA}/aca/swnb_1H2_16O.nc
+  ! swnb3 -A -B -C -G -I -J -K -L -O -R -U -W -X -Y -D 1 -r 0.0 -z 0.8660254 -S 1370.0 -p ${DATA}/aca/mls_icrccm_92lvl.nc -h ${DATA}/aca/swnb_H2O.nc
   
   ! O3 absorption only:
-  ! swnb2 -A -B -C -G -H -I -J -K -L -O -R -U -X -Y -D 1 -r 0.0 -z 0.5 -S 1370.0 -p ${DATA}/aca/mls_clr.nc -d ~/swnb.nc 
+  ! swnb3 -A -B -C -G -H -I -J -K -L -O -R -U -X -Y -D 1 -r 0.0 -z 0.5 -S 1370.0 -p ${DATA}/aca/mls_clr.nc -d ~/swnb.nc 
   
   ! Rayleigh scattering only:
-  ! swnb2 -A -B -C -G -H -I -J -K -L -O -U -W -X -Y -r 0.0 -z 0.5 -d ~/swnb.nc
+  ! swnb3 -A -B -C -G -H -I -J -K -L -O -U -W -X -Y -r 0.0 -z 0.5 -d ~/swnb.nc
   
   ! Mie scattering/absorption only:
-  ! swnb2 -C -G -H -J -K -O -R -U -W -X -Y -r 0.0 -z 0.5 -m 0.1 -d ~/swnb.nc
+  ! swnb3 -C -G -H -J -K -O -R -U -W -X -Y -r 0.0 -z 0.5 -m 0.1 -d ~/swnb.nc
   
   ! Full physics: 18 layer MLS, cos theta=.5, A=.2, CWP=100
-  ! swnb2 -z 0.5 -r 0.2 -m 0.1 -s 4 -d ~/swnb.nc
+  ! swnb3 -z 0.5 -r 0.2 -m 0.1 -s 4 -d ~/swnb.nc
   ! ncks -C -H -d bnd,1.26e-6 -v flx_bb_dwn_sfc,odxc_spc_O2O2,odxc_spc_O2N2 ${DATA}/aca/swnb.nc
   
   ! Sensitivity studies: Everything except given process, then that process alone
   ! Control:
-  ! swnb2 -r 0.1 -z 0.5 -m 0.0 -d ~/swnb.nc
+  ! swnb3 -r 0.1 -z 0.5 -m 0.0 -d ~/swnb.nc
   ! ncks -C -H -v flx_bb_dwn_sfc,flx_bb_abs_atm ~/swnb.nc
   
   ! H2OH2O absorption:
-  ! swnb2 -Q -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_H2OH2O.nc
-  ! swnb2 -A -B -C -G -H -I -J -K -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_H2OH2O.nc
+  ! swnb3 -Q -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_H2OH2O.nc
+  ! swnb3 -A -B -C -G -H -I -J -K -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_H2OH2O.nc
   
   ! O2-O2 absorption:
-  ! swnb2 -K -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_O2O2.nc
-  ! swnb2 -A -B -C -G -H -I -J -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_O2O2.nc
+  ! swnb3 -K -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_O2O2.nc
+  ! swnb3 -A -B -C -G -H -I -J -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_O2O2.nc
   
   ! O2-N2 absorption:
-  ! swnb2 -U -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_O2N2.nc
-  ! swnb2 -A -B -C -G -H -I -J -K -L -O -R -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_O2N2.nc
+  ! swnb3 -U -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_O2N2.nc
+  ! swnb3 -A -B -C -G -H -I -J -K -L -O -R -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_O2N2.nc
   
   ! O2 absorption:
-  ! swnb2 -O -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_O2.nc
-  ! swnb2 -A -B -C -G -H -I -J -K -L -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_O2.nc
+  ! swnb3 -O -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_O2.nc
+  ! swnb3 -A -B -C -G -H -I -J -K -L -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_O2.nc
   
   ! O3 absorption:
-  ! swnb2 -W -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_O3.nc
-  ! swnb2 -A -B -C -G -H -I -J -K -L -O -R -U -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_O3.nc
+  ! swnb3 -W -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_O3.nc
+  ! swnb3 -A -B -C -G -H -I -J -K -L -O -R -U -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_O3.nc
   
   ! OH absorption:
-  ! swnb2 -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_OH.nc
-  ! swnb2 -A -B -C -G -H -I -J -K -L -O -R -U -W -X -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_OH.nc
+  ! swnb3 -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_OH.nc
+  ! swnb3 -A -B -C -G -H -I -J -K -L -O -R -U -W -X -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_OH.nc
   
   ! CH4 absorption:
-  ! swnb2 -G -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_CH4.nc
-  ! swnb2 -A -B -C -H -I -J -K -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_CH4.nc
+  ! swnb3 -G -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_CH4.nc
+  ! swnb3 -A -B -C -H -I -J -K -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_CH4.nc
   
   ! NO2 absorption:
-  ! swnb2 -X -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_NO2.nc
-  ! swnb2 -A -B -C -G -H -I -J -K -L -O -R -U -W -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_NO2.nc
+  ! swnb3 -X -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_NO2.nc
+  ! swnb3 -A -B -C -G -H -I -J -K -L -O -R -U -W -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_NO2.nc
   
   ! CO2 absorption:
-  ! swnb2 -C -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_CO2.nc
-  ! swnb2 -A -B -G -H -I -J -K -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_CO2.nc
+  ! swnb3 -C -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_CO2.nc
+  ! swnb3 -A -B -G -H -I -J -K -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_CO2.nc
   
   ! H2O absorption:
-  ! swnb2 -H -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_H2O.nc
-  ! swnb2 -A -B -C -G -I -J -K -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_H2O.nc
+  ! swnb3 -H -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_H2O.nc
+  ! swnb3 -A -B -C -G -I -J -K -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_H2O.nc
   
   ! Rayleigh scattering:
-  ! swnb2 -R -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_Ray.nc
-  ! swnb2 -A -B -C -G -H -I -J -K -L -O -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_Ray.nc
+  ! swnb3 -R -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_Ray.nc
+  ! swnb3 -A -B -C -G -H -I -J -K -L -O -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_Ray.nc
   
   ! Thermal absorption/emission:
-  ! swnb2 -J -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_Plk.nc
-  ! swnb2 -A -B -C -G -H -I -K -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_Plk.nc
+  ! swnb3 -J -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_Plk.nc
+  ! swnb3 -A -B -C -G -H -I -K -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_Plk.nc
   
   ! Aerosol scattering/absorption:
-  ! swnb2 -A -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_aer.nc
-  ! swnb2 -B -C -G -H -I -J -K -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_aer.nc
+  ! swnb3 -A -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_aer.nc
+  ! swnb3 -B -C -G -H -I -J -K -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_aer.nc
   
   ! Background aerosol scattering/absorption:
-  ! swnb2 -B -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_bga.nc
-  ! swnb2 -A -C -G -H -I -J -K -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_bga.nc
+  ! swnb3 -B -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_bga.nc
+  ! swnb3 -A -C -G -H -I -J -K -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.0 -d ~/swnb_bga.nc
   
   ! Liquid scattering/absorption:
-  ! swnb2 -L -r 0.1 -z 0.5 -m 0.01 -f -d ~/swnb_lqd.nc
-  ! swnb2 -A -B -C -G -H -I -J -K -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.01 -f -d ~/swnb_lqd.nc
+  ! swnb3 -L -r 0.1 -z 0.5 -m 0.01 -f -d ~/swnb_lqd.nc
+  ! swnb3 -A -B -C -G -H -I -J -K -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.01 -f -d ~/swnb_lqd.nc
   
   ! Ice scattering/absorption:
-  ! swnb2 -I -r 0.1 -z 0.5 -m 0.01 -F -d ~/swnb_ice.nc
-  ! swnb2 -A -B -C -G -H -J -K -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.01 -F -d ~/swnb_ice.nc
+  ! swnb3 -I -r 0.1 -z 0.5 -m 0.01 -F -d ~/swnb_ice.nc
+  ! swnb3 -A -B -C -G -H -J -K -L -O -R -U -W -X -Y -r 0.1 -z 0.5 -m 0.01 -F -d ~/swnb_ice.nc
   
   ! ARESE simulations: 
-  ! swnb2 -p ${DATA}/arese/clm/951011_1200_arese_clm.nc -d ~/foo.nc
+  ! swnb3 -p ${DATA}/arese/clm/951011_1200_arese_clm.nc -d ~/foo.nc
   ! ncks -C -H -v flx_bb_dwn_sfc,flx_bb_abs_atm ~/foo.nc
   ! ncks -C -H -d bnd,0.5e-6 -v wvl_obs_aer,wvl_obs_bga,odxc_obs_aer,odxc_obs_bga,odxc_spc_aer,odxc_spc_bga ~/foo.nc
   ! ncks -C -H -d bnd,0.413e-6 -v wvl_obs_aer,wvl_obs_bga,odxc_obs_aer,odxc_obs_bga,odxc_spc_aer,odxc_spc_bga ~/foo.nc
@@ -304,14 +304,14 @@ program swnb2
   
   ! Dust simulations
   ! j_NO2
-  ! swnb2 -A -z 0.866 -p ${DATA}/swnb2/arese_951011_1200_clm_clr_aer_dst.nc -d ${DATA}/swnb2/arese_951011_1200_mdl_clr_cln.nc > ~/foo.cln 2>&1 &
-  ! swnb2 -z 0.866 -a ${DATA}/aca/aer_mineral_dust.nc -p ${DATA}/swnb2/arese_951011_1200_clm_clr_aer_dst.nc -d ${DATA}/swnb2/arese_951011_1200_mdl_clr_aer_dst.nc > ~/foo.dst 2>&1 &
-  ! swnb2 -z 0.866 -a ${DATA}/aca/aer_h2so4_300K.nc -p ${DATA}/swnb2/arese_951011_1200_clm_clr_aer_slf.nc -d ${DATA}/swnb2/arese_951011_1200_mdl_clr_aer_slf.nc > ~/foo.slf 2>&1 &
-  ! ncdiff -v j_NO2,lev,z,bnd,wvl_ctr,flx_spc_act_pht_TOA,flx_spc_act_pht_sfc ${DATA}/swnb2/arese_951011_1200_mdl_clr_aer_dst.nc ${DATA}/swnb2/arese_951011_1200_mdl_clr_cln.nc ${DATA}/swnb2/arese_951011_1200_mdl_clr_dstmcln.nc
-  ! ncks -O -v j_NO2,lev,z,bnd,wvl_ctr,flx_spc_act_pht_TOA,flx_spc_act_pht_sfc -u ${DATA}/swnb2/arese_951011_1200_mdl_clr_cln.nc ${DATA}/swnb2/arese_951011_1200_mdl_clr_cln.nc
-  ! ncks -O -v j_NO2,lev,z,bnd,wvl_ctr,flx_spc_act_pht_TOA,flx_spc_act_pht_sfc -u ${DATA}/swnb2/arese_951011_1200_mdl_clr_aer_dst.nc ${DATA}/swnb2/arese_951011_1200_mdl_clr_aer_dst.nc 
-  ! ncks -O -v j_NO2,lev,z,bnd,wvl_ctr,flx_spc_act_pht_TOA,flx_spc_act_pht_sfc -u ${DATA}/swnb2/arese_951011_1200_mdl_clr_aer_slf.nc ${DATA}/swnb2/arese_951011_1200_mdl_clr_aer_slf.nc
-  ! ncks -O -v j_NO2,lev,z,bnd,wvl_ctr,flx_spc_act_pht_TOA,flx_spc_act_pht_sfc -u ${DATA}/swnb2/arese_951011_1200_mdl_clr_dstmcln.nc ${DATA}/swnb2/arese_951011_1200_mdl_clr_dstmcln.nc
+  ! swnb3 -A -z 0.866 -p ${DATA}/swnb/arese_951011_1200_clm_clr_aer_dst.nc -d ${DATA}/swnb/arese_951011_1200_mdl_clr_cln.nc > ~/foo.cln 2>&1 &
+  ! swnb3 -z 0.866 -a ${DATA}/aca/aer_mineral_dust.nc -p ${DATA}/swnb/arese_951011_1200_clm_clr_aer_dst.nc -d ${DATA}/swnb/arese_951011_1200_mdl_clr_aer_dst.nc > ~/foo.dst 2>&1 &
+  ! swnb3 -z 0.866 -a ${DATA}/aca/aer_h2so4_300K.nc -p ${DATA}/swnb/arese_951011_1200_clm_clr_aer_slf.nc -d ${DATA}/swnb/arese_951011_1200_mdl_clr_aer_slf.nc > ~/foo.slf 2>&1 &
+  ! ncdiff -v j_NO2,lev,z,bnd,wvl_ctr,flx_spc_act_pht_TOA,flx_spc_act_pht_sfc ${DATA}/swnb/arese_951011_1200_mdl_clr_aer_dst.nc ${DATA}/swnb/arese_951011_1200_mdl_clr_cln.nc ${DATA}/swnb/arese_951011_1200_mdl_clr_dstmcln.nc
+  ! ncks -O -v j_NO2,lev,z,bnd,wvl_ctr,flx_spc_act_pht_TOA,flx_spc_act_pht_sfc -u ${DATA}/swnb/arese_951011_1200_mdl_clr_cln.nc ${DATA}/swnb/arese_951011_1200_mdl_clr_cln.nc
+  ! ncks -O -v j_NO2,lev,z,bnd,wvl_ctr,flx_spc_act_pht_TOA,flx_spc_act_pht_sfc -u ${DATA}/swnb/arese_951011_1200_mdl_clr_aer_dst.nc ${DATA}/swnb/arese_951011_1200_mdl_clr_aer_dst.nc 
+  ! ncks -O -v j_NO2,lev,z,bnd,wvl_ctr,flx_spc_act_pht_TOA,flx_spc_act_pht_sfc -u ${DATA}/swnb/arese_951011_1200_mdl_clr_aer_slf.nc ${DATA}/swnb/arese_951011_1200_mdl_clr_aer_slf.nc
+  ! ncks -O -v j_NO2,lev,z,bnd,wvl_ctr,flx_spc_act_pht_TOA,flx_spc_act_pht_sfc -u ${DATA}/swnb/arese_951011_1200_mdl_clr_dstmcln.nc ${DATA}/swnb/arese_951011_1200_mdl_clr_dstmcln.nc
   
   ! New Options for DISORT2
   ! -j use non-Lambertian surface
@@ -356,7 +356,7 @@ program swnb2
   implicit none
   ! Parameters
   ! NB: DISORT uses fortran unit 99 for its own purposes.
-  character(*),parameter::sbr_nm='swnb2' ! [sng] Subroutine name
+  character(*),parameter::sbr_nm='swnb3' ! [sng] Subroutine name
   character(*),parameter::CVS_Date='$Date$' ! [sng] Date string
   character(*),parameter::CVS_Header='$Id$' ! [sng] Full CVS Header
   character(*),parameter::CVS_Id='$Id$' ! [sng] CVS Identification
@@ -2283,7 +2283,7 @@ program swnb2
   if (plr_nbr /= str_nbr) then
      write (6,'(a,a,a,a)') prg_nm(1:ftn_strlen(prg_nm)), &
           ': ERROR plr_nbr /= str_nbr. Option not supported until all DISORT output arrays carefully examined and re-dimensioned', &
-          ' to distinguish between different numbers of streams, computational angles, user angles. swnb2 might return ', &
+          ' to distinguish between different numbers of streams, computational angles, user angles. swnb3 might return ', &
           'corrrect fluxes, and will return incorrect intensities in such a configuration.'
      call abort
   endif
@@ -2830,7 +2830,7 @@ program swnb2
         grv(lev_idx)=grv(lev_atm_nbr)
         spc_heat_mst_air(lev_idx)=spc_heat_mst_air(lev_atm_nbr)
         mmw_mst_air(lev_idx)=mmw_mst_air(lev_atm_nbr)
-        ! Following are mass paths that SWNB2 uses for RT
+        ! Following are mass paths that SWNB3 uses for RT
         ! Copy appropriate fraction of lowest atmospheric level into snow pores
         ! Extrapolating surface-layer gases into snowpack seems always appropriate
         mpl_CO2(lev_idx)=frc_sfc_snw(lev_snw_idx)*mpl_CO2(lev_atm_nbr)
@@ -3918,7 +3918,7 @@ program swnb2
      enddo                  ! end loop over lev
      ! Force snowy layers to be saturated with respect to ice
      ! fxm: not yet implemented because program architecture makes it hard
-     ! swnb2 does not use q_H2O. swnb2 relies on/extrapolates from mpl_H2O.
+     ! swnb3 does not use q_H2O. swnb3 relies on/extrapolates from mpl_H2O.
      ! clm does not yet keep track of q_H2O in snow grid
      if (flg_cld_sat) then
         do lev_snw_idx=1,lev_snw_nbr
@@ -3930,7 +3930,7 @@ program swnb2
      endif
   endif ! endif flg_cld_sat
   if (flg_sat_cld) then
-     ! Force saturated layers to be cloudy (currently implemented by clm not swnb2)
+     ! Force saturated layers to be cloudy (currently implemented by clm not swnb3)
   endif ! endif flg_sat_cld
   if (cmd_ln_lcl_yr_day) then
      ! Derive solar geometry based on command-line input year of day
@@ -3977,11 +3977,11 @@ program swnb2
      alb_sfc=0.5*(alb_sfc_vsb_drc+alb_sfc_NIR_drc)
   endif                     ! end if overriding CLM profile albedo
   ! Sanity check
-  if (alb_sfc>1.0.or.alb_sfc<0.0) stop 'alb_sfc>1.0.or.alb_sfc<0.0 in swnb2()'
+  if (alb_sfc>1.0.or.alb_sfc<0.0) stop 'alb_sfc>1.0.or.alb_sfc<0.0 in swnb3()'
   if (cmd_ln_slr_cst) then
      slr_cst=slr_cst_cmd_ln
   endif                     ! end if overriding solar constant
-  if (sfc_msv>1.0.or.sfc_msv<0.0) stop 'sfc_msv>1.0.or.sfc_msv<0.0 in swnb2()'
+  if (sfc_msv>1.0.or.sfc_msv<0.0) stop 'sfc_msv>1.0.or.sfc_msv<0.0 in swnb3()'
   if (cmd_ln_sfc_msv) then
      sfc_msv=sfc_msv_cmd_ln
   endif                     ! end if overriding surface emissivity
@@ -6107,7 +6107,7 @@ program swnb2
         plank=.false.
      endif
      
-     ! As of 20160518, swnb2 runs in two modes, day and night
+     ! As of 20160518, swnb3 runs in two modes, day and night
      ! Daylight is traditional mode where sun above horizon
      ! Night is new mode where sun is presumably beneath horizon
 
@@ -6203,8 +6203,12 @@ program swnb2
            ! Hardcode numbers to test radiative code against benchmark values
            if (tst_case_Rayleigh) then
               ! Pure Rayleigh scattering
-              ! swnb2 -A -B -C -G -H -I -J -K -L -O -U -W -X -Y -t -s 16 -D 1 -r 0.0 -E -e 1 -p ${DATA}/aca/mls_clr.nc -d ~/swnb.nc
-              ! Answer: Albedo = 0.796920 at 0.5 um
+              ! swnb3 -A -B -C -G -H -I -J -K -L -O -U -W -X -Y -t -s 16 -u 16 -D 1 -r 0.0 -E -e 1 -p ${DATA}/aca/mls_clr.nc -d ~/swnb.nc
+              ! Check answers with:
+              ! ncks -F -C -d bnd,1 -H -v abs_spc_atm,rfl_spc_SAS,rfl_spc_sfc,trn_spc_atm_ttl ~/swnb.nc
+              ! Answer: Albedo = rfl_spc_SAS = 0.796920 (Exact?)
+              ! Answer: Albedo = rfl_spc_SAS = 0.796905 (swnb2 20161223)
+              ! Answer: Albedo = rfl_spc_SAS = 0.796911 (swnb3 20161223)
               fbeam=pi
               fisot=0.0
               albedo=0.0
@@ -6219,9 +6223,12 @@ program swnb2
            if (tst_case_HG) then
               ! Pure Henyey-Greenstein scattering
               ! Answers: Albedo = 0.123420, Atmospheric absorptance = 0.360522 at 0.5 um
-              ! swnb2 -A -B -C -G -H -I -J -K -L -O -R -U -W -X -Y -P -s 16 -D 1 -r 0.0 -E -e 1 -p ${DATA}/aca/mls_clr.nc -d ~/swnb.nc
+              ! swnb3 -A -B -C -G -H -I -J -K -L -O -R -U -W -X -Y -P -s 16 -u 16 -D 1 -r 0.0 -E -e 1 -p ${DATA}/aca/mls_clr.nc -d ~/swnb.nc
               ! Check answers with:
               ! ncks -F -C -d bnd,1 -H -v abs_spc_atm,rfl_spc_SAS,rfl_spc_sfc,trn_spc_atm_ttl ~/swnb.nc
+              ! Answer: Albedo = rfl_spc_SAS = 0.123420 at 0.5 um (Exact?)
+              ! Answer: Albedo = rfl_spc_SAS = 0.12342 (swnb2 20161223)
+              ! Answer: Albedo = rfl_spc_SAS = 0.12342 (swnb3 20161223)
               fbeam=pi
               fisot=0.0
               albedo=0.0
@@ -9175,4 +9182,4 @@ program swnb2
   end if ! !flg_mie
 
   call exit(exit_status)
-end program swnb2 ! end swnb2()
+end program swnb3 ! end swnb3()

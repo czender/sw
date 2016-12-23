@@ -4413,12 +4413,11 @@ c     .. Local Scalars ..
 
 !     csz++
 !     20161223: disort3.f dies here when compiled with PRC=D
-!     Perhaps GNU gfortran -fdefault-real-8 switch conflicts with "REAL*8" (which DISORT uses nowhere else)?
+!     GNU gfortran -fdefault-real-8 switch conflicts with "REAL*8" (which DISORT uses nowhere else)
+!     Solution is to compile with -fdefault-real-8 -fdefault-double-8 
+!     csz--
       REAL*8    LEFT_MAT(NN,NN),  ZZP(NN), ZZM(NN) 
       REAL*8    SUM, SUM1, SUM2, ZJM(MI), ZJP(MI), FACTOR
-!      REAL    LEFT_MAT(NN,NN),  ZZP(NN), ZZM(NN) 
-!      REAL    SUM, SUM1, SUM2, ZJM(MI), ZJP(MI), FACTOR
-!     csz--
       INTEGER   INFO
 
 c     ..
@@ -4429,9 +4428,6 @@ c     ..
 
 c     ** Pass argument, avoid contamination to array
 
-!     csz++
-!     20161223: Replacing all fifteen instances of REAL(foo,8) with REAL(foo) does not help
-!     csz--
 c      LEFT_MAT = ARRAY*UMU0**2
       LEFT_MAT = REAL(ARRAY,8)
 
@@ -5861,6 +5857,7 @@ c                          ** by iterating Simpson rule to convergence.
 
    20    CONTINUE
 
+!     csz 20161223 skyglow simulations trigger this warning
          CALL ERRMSG( 'PLKAVG--Simpson rule didnt converge',.FALSE.)
 
    30    CONTINUE
