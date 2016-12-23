@@ -381,8 +381,9 @@ case "${PVM_ARCH}" in
 	export X11='/usr/X11R6'
 	case "${HOST}" in 
 	    aims4* ) export DATA="/export/${USER}/data" ; ;; # endif LLNL
+	    blues* | blogin* ) export DATA="/home/${USER}/data" ; ;; # endif ANL LCRC
 	    cg-gpu* ) export DATA="/home/${USER}/data" ; ;; # endif NCSA roger
-	    cooley* | cc* ) export DATA="/projects/HiRes_EarthSys/${USER}" ; ;; # endif ALCF
+	    cooley* | cc* ) export DATA="/projects/HiRes_EarthSys/${USER}" ; ;; # endif ANL ALCF 
 	    cori* | edison* | hopper* | nid* ) export DATA="${HOME}/data" ; ;; # endif NERSC
 	    gplogin* ) export DATA="/data/${USER}" ; ;; # endif EMT64 Rocks Cluster
 	    hpc* ) export DATA="/data/users/${USER}" ; ;; # endif hpc

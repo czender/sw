@@ -5,6 +5,14 @@
 #   setting up variables such as PATH and MANPATH.  To learn more
 #   about this file, do a "man softenv".
 #
+# csz++
+# My .bashrc overwrites PATH, LD_LIBRARY_PATH, and MANPATH and thus loses SoftEnv paths
+# To restore, do
+# soft add +softenv
+# man softenv
+# csz--
 @default
+# 20161223: Following packages good on blues.lcrc.anl.gov:
 +netcdf-4.3.3.1-gnu5.2-serial
 +nco-4.6.1
+# 20161223: Following packages good on cooley.alcf.anl.gov:
