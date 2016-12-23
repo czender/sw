@@ -595,7 +595,8 @@ ifeq (${OMP},Y)
  LDFLAGS += -lgomp -lpthread
 endif # endif OMP
 ifeq (${PRC},D)
- FFLAGS += -fdefault-real-8
+# FFLAGS += -fdefault-real-8
+ FFLAGS += -fdefault-real-8 -fdefault-double-8
 else
  FFLAGS += 
 endif

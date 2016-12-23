@@ -6537,7 +6537,7 @@ program swnb2
         !             maxulv, maxumu, maxphi, maxmom, rfldir, rfldn, &
         !             flup, dfdt, uavg, uu, albmed, trnmed )
 
-        ! DISORT3
+        ! DISORT 3.0 rev55 from http://lllab.phy.stevens.edu/disort 
         call DISORT( nlyr, dtauc, ssalb, nmom, pmom, temper, wvnmlo, &
              wvnmhi, usrtau, ntau, utau, nstr, usrang, numu, &
              umu, nphi, phi, ibcnd, fbeam, umu0, phi0, &

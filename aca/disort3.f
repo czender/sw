@@ -2,6 +2,7 @@ c ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 c $Rev: 54 $ $Date: 2014-12-31 12:05:49 -0500 (Wed, 31 Dec 2014) $
 c FORTRAN 77
 c ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!     csz 20161223 DISORT 3.0 rev55 from http://lllab.phy.stevens.edu/disort 
       SUBROUTINE DISORT( NLYR, DTAUC, SSALB, NMOM, PMOM, TEMPER, WVNMLO,
      &                   WVNMHI, USRTAU, NTAU, UTAU, NSTR, USRANG, NUMU,
      &                   UMU, NPHI, PHI, IBCND, FBEAM, UMU0, PHI0,
@@ -356,14 +357,14 @@ c     ** Version 3: Added NAZZ = MXCMU - 1
       INTEGER   MXCLY, MXULV, MXCMU, MXUMU, MXPHI, MI, MI9M2, NNLYRI,
      &          MXSQT
 c++csz
-cc     Parameters used in swnb3 and in swnb2 for ARESE
-c      PARAMETER ( MXCLY = 110, MXULV = 111, MXCMU = 16, MXUMU = 16,
-c     &          MXPHI = 16, MI = MXCMU / 2, MI9M2 = 9*MI - 2,
-c     &          NNLYRI = MXCMU*MXCLY, MXSQT = 1000, NAZZ = MXCMU - 1)
-c     DISORT3 defaults:
-      PARAMETER ( MXCLY = 6, MXULV = 5, MXCMU = 48, MXUMU = 10,
-     &          MXPHI = 3, MI = MXCMU / 2, MI9M2 = 9*MI - 2,
+c     Parameters used in swnb3 and in swnb2 for ARESE
+      PARAMETER ( MXCLY = 110, MXULV = 111, MXCMU = 16, MXUMU = 16,
+     &          MXPHI = 16, MI = MXCMU / 2, MI9M2 = 9*MI - 2,
      &          NNLYRI = MXCMU*MXCLY, MXSQT = 1000, NAZZ = MXCMU - 1)
+cc     DISORT3 defaults:
+c      PARAMETER ( MXCLY = 6, MXULV = 5, MXCMU = 48, MXUMU = 10,
+c     &          MXPHI = 3, MI = MXCMU / 2, MI9M2 = 9*MI - 2,
+c     &          NNLYRI = MXCMU*MXCLY, MXSQT = 1000, NAZZ = MXCMU - 1)
 c     Parameters used in swnb2 for normal tropical atmospheres
 c      PARAMETER ( MXCLY = 92, MXULV = 93, MXCMU = 16, MXUMU = 16,
 c     Parameters used in swnb2 by David Fillmore:
@@ -4413,10 +4414,10 @@ c     .. Local Scalars ..
 !     csz++
 !     20161223: disort3.f dies here when compiled with PRC=D
 !     Perhaps GNU gfortran -fdefault-real-8 switch conflicts with "REAL*8" (which DISORT uses nowhere else)?
-!      REAL*8    LEFT_MAT(NN,NN),  ZZP(NN), ZZM(NN) 
-!      REAL*8    SUM, SUM1, SUM2, ZJM(MI), ZJP(MI), FACTOR
-      REAL    LEFT_MAT(NN,NN),  ZZP(NN), ZZM(NN) 
-      REAL    SUM, SUM1, SUM2, ZJM(MI), ZJP(MI), FACTOR
+      REAL*8    LEFT_MAT(NN,NN),  ZZP(NN), ZZM(NN) 
+      REAL*8    SUM, SUM1, SUM2, ZJM(MI), ZJP(MI), FACTOR
+!      REAL    LEFT_MAT(NN,NN),  ZZP(NN), ZZM(NN) 
+!      REAL    SUM, SUM1, SUM2, ZJM(MI), ZJP(MI), FACTOR
 !     csz--
       INTEGER   INFO
 
@@ -4428,17 +4429,18 @@ c     ..
 
 c     ** Pass argument, avoid contamination to array
 
-c      LEFT_MAT = ARRAY*UMU0**2
 !     csz++
-!     20161223: Replace all instances of REAL(foo,8) with REAL(foo)
-      LEFT_MAT = REAL(ARRAY)
+!     20161223: Replacing all fifteen instances of REAL(foo,8) with REAL(foo) does not help
+!     csz--
+c      LEFT_MAT = ARRAY*UMU0**2
+      LEFT_MAT = REAL(ARRAY,8)
 
       DO 50 IQ = 1, NN
 
 c     .. Left Matrix
 
 c         LEFT_MAT(IQ,IQ) = LEFT_MAT(IQ,IQ) - 1.
-         LEFT_MAT(IQ,IQ) = LEFT_MAT(IQ,IQ) - 1d0/REAL(UMU0)**2
+         LEFT_MAT(IQ,IQ) = LEFT_MAT(IQ,IQ) - 1d0/REAL(UMU0,8)**2
 
 c     .. Right Vector
        
@@ -4446,15 +4448,15 @@ c     .. Right Vector
          SUM2 = 0d0
          DO 60 K = MAZIM, 2*NN-1
             SUM1  = SUM1 +
-     &        REAL(GL(K))*REAL(YLMC(K,IQ))   *REAL(YLM0(K))
+     &        REAL(GL(K),8)*REAL(YLMC(K,IQ),8)   *REAL(YLM0(K),8)
             SUM2  = SUM2 + 
-     &        REAL(GL(K))*REAL(YLMC(K,IQ+NN))*REAL(YLM0(K))
+     &        REAL(GL(K),8)*REAL(YLMC(K,IQ+NN),8)*REAL(YLM0(K),8)
    60    CONTINUE
 
-         FACTOR = ( 2d0-REAL(DELM0) )*REAL(FBEAM)/( 4d0*REAL(PI) )
+         FACTOR = ( 2d0-REAL(DELM0,8) )*REAL(FBEAM,8)/( 4d0*REAL(PI,8) )
 
-         ZJP(IQ) = FACTOR*(SUM1+SUM2)/REAL(CMU(IQ))
-         ZJM(IQ) = FACTOR*(SUM1-SUM2)/REAL(CMU(IQ))
+         ZJP(IQ) = FACTOR*(SUM1+SUM2)/REAL(CMU(IQ),8)
+         ZJM(IQ) = FACTOR*(SUM1-SUM2)/REAL(CMU(IQ),8)
 
    50 CONTINUE
          
@@ -4462,11 +4464,10 @@ c     .. Right Vector
       DO 70 IQ = 1, NN
          SUM = 0d0
          DO 80 KQ = 1, NN
-            SUM = SUM + REAL(APB(IQ,KQ))*ZJM(KQ)
+            SUM = SUM + REAL(APB(IQ,KQ),8)*ZJM(KQ)
    80    CONTINUE
 c         ZZM(IQ) = -SUM*UMU0**2- ZJP(IQ)*UMU0
-         ZZM(IQ) = -SUM - ZJP(IQ)/REAL(UMU0)
-!     csz--
+         ZZM(IQ) = -SUM - ZJP(IQ)/REAL(UMU0,8)
 
    70 CONTINUE
 
