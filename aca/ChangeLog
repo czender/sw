@@ -1,5 +1,9 @@
 2016-12-23  Charlie Zender  <zender@uci.edu>
 
+	* Verified swnb3 passes tst_case_Rayleigh and tst_case_HG
+
+	* Verified swnb3 is BFB with swnb2 for daytime runs
+
 	* Makefile: PRC=D compiles with -fdefault-real-8 -fdefault-double-8 (required for DISORT3)
 
 	* disotest and swnb3 work with above compile switch!
