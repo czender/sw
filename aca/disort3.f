@@ -4410,8 +4410,14 @@ c     .. Local Scalars ..
 
       INTEGER   IQ, KQ, JOB
 
-      REAL*8    LEFT_MAT(NN,NN),  ZZP(NN), ZZM(NN) 
-      REAL*8    SUM, SUM1, SUM2, ZJM(MI), ZJP(MI), FACTOR
+!     csz++
+!     20161223: disort3.f dies here when compiled with PRC=D
+!     Perhaps GNU gfortran -fdefault-real-8 switch conflicts with "REAL*8" (which DISORT uses nowhere else)?
+!      REAL*8    LEFT_MAT(NN,NN),  ZZP(NN), ZZM(NN) 
+!      REAL*8    SUM, SUM1, SUM2, ZJM(MI), ZJP(MI), FACTOR
+      REAL    LEFT_MAT(NN,NN),  ZZP(NN), ZZM(NN) 
+      REAL    SUM, SUM1, SUM2, ZJM(MI), ZJP(MI), FACTOR
+!     csz--
       INTEGER   INFO
 
 c     ..
@@ -4423,14 +4429,16 @@ c     ..
 c     ** Pass argument, avoid contamination to array
 
 c      LEFT_MAT = ARRAY*UMU0**2
-      LEFT_MAT = REAL(ARRAY,8)
+!     csz++
+!     20161223: Replace all instances of REAL(foo,8) with REAL(foo)
+      LEFT_MAT = REAL(ARRAY)
 
       DO 50 IQ = 1, NN
 
 c     .. Left Matrix
 
 c         LEFT_MAT(IQ,IQ) = LEFT_MAT(IQ,IQ) - 1.
-         LEFT_MAT(IQ,IQ) = LEFT_MAT(IQ,IQ) - 1d0/REAL(UMU0,8)**2
+         LEFT_MAT(IQ,IQ) = LEFT_MAT(IQ,IQ) - 1d0/REAL(UMU0)**2
 
 c     .. Right Vector
        
@@ -4438,15 +4446,15 @@ c     .. Right Vector
          SUM2 = 0d0
          DO 60 K = MAZIM, 2*NN-1
             SUM1  = SUM1 +
-     &        REAL(GL(K),8)*REAL(YLMC(K,IQ),8)   *REAL(YLM0(K),8)
+     &        REAL(GL(K))*REAL(YLMC(K,IQ))   *REAL(YLM0(K))
             SUM2  = SUM2 + 
-     &        REAL(GL(K),8)*REAL(YLMC(K,IQ+NN),8)*REAL(YLM0(K),8)
+     &        REAL(GL(K))*REAL(YLMC(K,IQ+NN))*REAL(YLM0(K))
    60    CONTINUE
 
-         FACTOR = ( 2d0-REAL(DELM0,8) )*REAL(FBEAM,8)/( 4d0*REAL(PI,8) )
+         FACTOR = ( 2d0-REAL(DELM0) )*REAL(FBEAM)/( 4d0*REAL(PI) )
 
-         ZJP(IQ) = FACTOR*(SUM1+SUM2)/REAL(CMU(IQ),8)
-         ZJM(IQ) = FACTOR*(SUM1-SUM2)/REAL(CMU(IQ),8)
+         ZJP(IQ) = FACTOR*(SUM1+SUM2)/REAL(CMU(IQ))
+         ZJM(IQ) = FACTOR*(SUM1-SUM2)/REAL(CMU(IQ))
 
    50 CONTINUE
          
@@ -4454,10 +4462,11 @@ c     .. Right Vector
       DO 70 IQ = 1, NN
          SUM = 0d0
          DO 80 KQ = 1, NN
-            SUM = SUM + REAL(APB(IQ,KQ),8)*ZJM(KQ)
+            SUM = SUM + REAL(APB(IQ,KQ))*ZJM(KQ)
    80    CONTINUE
 c         ZZM(IQ) = -SUM*UMU0**2- ZJP(IQ)*UMU0
-         ZZM(IQ) = -SUM - ZJP(IQ)/REAL(UMU0,8)
+         ZZM(IQ) = -SUM - ZJP(IQ)/REAL(UMU0)
+!     csz--
 
    70 CONTINUE
 
