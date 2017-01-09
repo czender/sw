@@ -10,9 +10,13 @@
 # To restore, do
 # soft add +softenv
 # man softenv
+# To add packages, do
+# soft add +nco-4.6.3
+# To remove packages, do
+# soft delete +nco-4.6.3
 # csz--
 @default
 # 20161223: Following packages good on blues.lcrc.anl.gov:
 +netcdf-4.3.3.1-gnu5.2-serial
-+nco-4.6.1
++nco-4.6.3
 # 20161223: Following packages good on cooley.alcf.anl.gov:
