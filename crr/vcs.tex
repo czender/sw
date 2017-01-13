@@ -1525,6 +1525,18 @@ git rebase master # Retains false history, inferior solution
 git commit -a -m ``Rebased rgr branch to master''
 \end{verbatim}
 
+\subsection{Workflow}\label{sxn:git_wrk}
+Use this workflow on projects like Terraref that require pull-requests
+(PRs) to merge to master. 
+\begin{verbatim}
+# Create new branch
+git checkout -b newfeature
+# Make local changes
+git commit -am 'foo'
+# Push local changes
+git push origin newfeature
+\end{verbatim}
+
 \subsection{Renaming}\label{sxn:git_rnm}
 
 Rename local and remote branches
