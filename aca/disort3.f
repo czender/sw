@@ -5841,7 +5841,9 @@ c                          ** by iterating Simpson rule to convergence.
          OLDVAL = 0.0
          VAL0   = PLKF( V( 1 ) ) + PLKF( V( 2 ) )
 
-         DO 20 N = 1, 10
+!     csz 20170117 increase terms from original 10 to new 12 to solve convergence warnings
+!         DO 20 N = 1, 10
+         DO 20 N = 1, 12
 
             DEL  = HH / ( 2*N )
             VAL  = VAL0
@@ -5857,9 +5859,12 @@ c                          ** by iterating Simpson rule to convergence.
 
    20    CONTINUE
 
-!     csz 20161223 skyglow simulations trigger this warning
+!     csz 20161223 skyglow simulations trigger this warning when only 10 terms used in series
          CALL ERRMSG( 'PLKAVG--Simpson rule didnt converge',.FALSE.)
-
+!     csz 20170117 diagnose convergence problems
+         write(*,'(A,F10.2,A,F10.2,A,F8.4)') 
+     &        'wvnmlo = ',WNUMLO,', wvnmhi = ',WNUMHI,', T=',T
+         
    30    CONTINUE
 
          PLKAVG = SIGDPI * T**4 * CONC * VAL

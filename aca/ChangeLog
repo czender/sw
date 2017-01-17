@@ -1,5 +1,7 @@
 2017-01-17  Charlie Zender  <zender@uci.edu>
 
+	* Increase terms to convergence from original 10 to new 12 in disort3 plkavg()
+
 	* Change lmn_TOA_cmd_ln from nL to ulm m-2 sr-1
 
 2016-12-23  Charlie Zender  <zender@uci.edu>
