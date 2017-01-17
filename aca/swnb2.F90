@@ -765,6 +765,7 @@ program swnb2
   integer lmn_bb_aa_zen_sfc_id
   integer lmn_bb_aa_sfc_id
   integer lmn_ngt_TOA_id
+  integer lmn_TOA_nL_id
   integer lmn_spc_aa_ndr_TOA_id
   integer lmn_spc_aa_ndr_id
   integer lmn_spc_aa_ndr_sfc_id
@@ -1748,8 +1749,9 @@ program swnb2
   real flx_spc_net(bnd_nbr_max,levp_nbr_max)
   real idx_rfr_air_STP(bnd_nbr_max)
   real j_spc_NO2
-  real lmn_TOA_cmd_ln ! [lm m-2 sr-1] Isotropic downwelling luminance at TOA
+  real lmn_TOA_cmd_ln ! [ulm m-2 sr-1] Isotropic downwelling luminance at TOA
   real lmn_ngt_TOA ! [lm m-2 sr-1] Isotropic downwelling luminance at TOA
+  real lmn_TOA_ulx ! [ulm m-2 sr-1] Isotropic downwelling luminance at TOA
   real lmn_TOA_nL ! [nL] Isotropic downwelling luminance at TOA
   real mmr_mpr_snw_cmd_ln
   real mpc_CWP_cmd_ln
@@ -1951,7 +1953,8 @@ program swnb2
   lat_dgr_cmd_ln=mss_val ! [dgr] Latitude
   lcl_yr_day_cmd_ln=mss_val ! [day] Local year day
   lmn_TOA_nL=0.0 ! [nL] Isotropic downwelling luminance at TOA
-  lmn_TOA_cmd_ln=mss_val ! [nL] Isotropic downwelling luminance at TOA
+  lmn_TOA_ulx=0.0 ! [ulx] Isotropic downwelling luminance at TOA
+  lmn_TOA_cmd_ln=mss_val ! [ulm m-2 sr-1] Isotropic downwelling luminance at TOA
   mode_chn=.false. ! [flg] Channel-run mode (David Fillmore modification with ocean mask, wind speeds, and channels)
   mode_ngt=.false. ! [flg] Night-mode assumptions
   odxc_obs_mpr=0.0 ! [frc] Column impurity extinction optical depth 
@@ -3981,12 +3984,15 @@ program swnb2
      sfc_tpt=sfc_tpt_cmd_ln
   endif                     ! end if overriding surface temperature
   if (cmd_ln_lmn_TOA) then
-     lmn_TOA_nL=lmn_TOA_cmd_ln
+     lmn_TOA_ulx=lmn_TOA_cmd_ln
      mode_ngt=.true.
   endif                     ! end if overriding solar constant
-  ! In night-mode lmn_TOA_nL is assumed to be stored/entered in nL
+  ! Before 20170117, in night-mode lmn_TOA_cmd_ln was assumed to entered in nL
+  ! After  20170117, in night-mode lmn_TOA_cmd_ln was assumed to be entered in ulm m-2 sr-1
   ! lmn_ngt_TOA is a broadband "radiance"-like quantity in sr-1
-  lmn_ngt_TOA=lmn_TOA_nL*1.0e-9*10000.0/pi ! [nL]->[lm m-2 sr-1]
+  ! lmn_ngt_TOA=lmn_TOA_nL*1.0e-9*10000.0/pi ! [nL]->[lm m-2 sr-1]
+  lmn_ngt_TOA=lmn_TOA_ulx*1.0e-6 ! [ulm m-2 sr-1]->[lm m-2 sr-1]
+  lmn_TOA_nL=lmn_ngt_TOA*pi/(1.0e-9*10000.0) ! [lm m-2 sr-1]->[nL]
 
   ! There is no easier way to turn off Herzberg continuum
   ! but keep O2 line absorption on than to zero absorption cross-sections here.
@@ -7355,6 +7361,7 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_TOA',nf90_float,plr_dmn_id,lmn_bb_aa_TOA_id),sbr_nm//': dv lmn_bb_aa_TOA')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_bb_aa_sfc',nf90_float,plr_dmn_id,lmn_bb_aa_sfc_id),sbr_nm//': dv lmn_bb_aa_sfc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_ngt_TOA',nf90_float,lmn_ngt_TOA_id),sbr_nm//': dv lmn_ngt_TOA in '//__FILE__)
+     rcd=nf90_wrp(nf90_def_var(nc_id,'lmn_TOA_nL',nf90_float,lmn_TOA_nL_id),sbr_nm//': dv lmn_TOA_nL in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'mgn_thr',nf90_float,dim_plr_levp,mgn_thr_id),sbr_nm//': dv mgn_thr')
      rcd=nf90_wrp(nf90_def_var(nc_id,'ppl_age_yr_obs',nf90_float,ppl_age_yr_obs_id),sbr_nm//': dv ppl_age_yr_obs in '//__FILE__)
      rcd=nf90_wrp(nf90_def_var(nc_id,'ppl_dmt_obs',nf90_float,ppl_dmt_obs_id),sbr_nm//': dv ppl_dmt_obs in '//__FILE__)
@@ -7872,6 +7879,8 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_ngt_TOA_id,'long_name','Broadband incoming isotropic luminance at TOA'), &
           sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_TOA_nL_id,'long_name','Broadband incoming isotropic luminance at TOA'), &
+          sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,mgn_thr_id,'long_name','Threshold magnitude against background brightness'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ppl_age_yr_obs_id,'long_name','Pupil diameter of observer'), &
@@ -8244,6 +8253,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_TOA_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_bb_aa_sfc_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,lmn_ngt_TOA_id,'units','lumen meter-2 sterradian-1'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,lmn_TOA_nL_id,'units','nanolambert'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,mgn_thr_id,'units','magnitude'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ppl_age_yr_obs_id,'units','centimeter'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,ppl_dmt_obs_id,'units','centimeter'),sbr_nm//': pa units in '//__FILE__)
@@ -8476,6 +8486,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_dwn_TOA_id,flx_bb_dwn_TOA),sbr_nm//': pv flx_bb_dwn_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_ngt_TOA_id,flx_ngt_TOA),sbr_nm//': pv flx_ngt_TOA in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,lmn_ngt_TOA_id,lmn_ngt_TOA),sbr_nm//': pv lmn_ngt_TOA in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,lmn_TOA_nL_id,lmn_TOA_nL),sbr_nm//': pv lmn_TOA_nL in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ppl_age_yr_obs_id,ppl_age_yr_obs),sbr_nm//': pv ppl_age_yr_obs in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,ppl_dmt_obs_id,ppl_dmt_obs),sbr_nm//': pv ppl_dmt_obs in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,sfc_msv_id,sfc_msv),sbr_nm//': pv sfc_msv in '//__FILE__)
