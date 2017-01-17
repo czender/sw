@@ -6,7 +6,7 @@ program clm
   ! or NWS radiosonde input files, or AFGL standard atmosphere files, 
   ! into netCDF CLM output files. 
 
-  ! Copyright (C) 1994--2016 Charlie Zender
+  ! Copyright (C) 1994--2017 Charlie Zender
   ! License: GNU General Public License (GPL) Version 3
   ! See http://www.gnu.org/copyleft/gpl.html for full license text
   ! The original author of this software, Charlie Zender, seeks to improve

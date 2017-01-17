@@ -2,7 +2,7 @@
 
 // Purpose: Implementation of memory management namspace functions
 
-/* Copyright (C) 1997--2014 Charlie Zender
+/* Copyright (C) 1997--2017 Charlie Zender
    License: GNU General Public License (GPL) Version 3
    See http://www.gnu.org/copyleft/gpl.html for full license text */
 

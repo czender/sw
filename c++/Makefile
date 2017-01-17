@@ -2,7 +2,7 @@
 
 # Purpose: Makefile for C++ module c++
 
-# Copyright (C) 1994--2014 Charlie Zender
+# Copyright (C) 1994--2017 Charlie Zender
 # License: GNU General Public License (GPL) Version 3
 # See http://www.gnu.org/copyleft/gpl.html for full license text
 

@@ -2,7 +2,7 @@
 
 // Purpose: Implementation (declaration) of HITRAN classes
 
-/* Copyright (C) 1997--2014 Charlie Zender
+/* Copyright (C) 1997--2017 Charlie Zender
    This software is distributed under the terms of the GNU General Public License (GPL) Version 3
    See http://www.gnu.org/copyleft/gpl.html for full license text */
 

@@ -4,7 +4,7 @@ program fff
 
   ! Purpose: Provide a standard template for developing Fortran programs
 
-  ! Copyright (C) 1994--2014 Charlie Zender
+  ! Copyright (C) 1994--2017 Charlie Zender
   ! This software is distributed under the terms of the GNU General Public License
   ! See http://www.gnu.org/copyleft/gpl.html for full license text
   ! The original author of this software, Charlie Zender, seeks to improve

@@ -2,7 +2,7 @@
 
 ! Purpose: Portable precision definitions for floating point and integer variables
 
-! Copyright (C) 1994--2016 Charlie Zender
+! Copyright (C) 1994--2017 Charlie Zender
 ! License: GNU General Public License (GPL) Version 3
 ! See http://www.gnu.org/copyleft/gpl.html for full license text
 

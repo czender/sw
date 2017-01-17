@@ -4,7 +4,7 @@
 ! SGI and AIX machines both have problematic implementations of erf
 ! in some versions of their mathematical libraries. 
 
-! Copyright (C) 1994--2014 Charlie Zender
+! Copyright (C) 1994--2017 Charlie Zender
 ! You may copy, distribute, and/or modify this software under the terms of the GNU General Public License (GPL) Version 2
 ! See http://www.gnu.org/copyleft/gpl.html for full license text
 

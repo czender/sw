@@ -2,7 +2,7 @@
 
 // Purpose: Description (definition) of Wiscombe (1979, 1980, 1996) Mie scattering solutions and utilities 
 
-/* Copyright (C) 2004--2014 Charlie Zender, Jorge Talamantes, Warren Wiscombe
+/* Copyright (C) 2004--2017 Charlie Zender, Jorge Talamantes, Warren Wiscombe
    License: GNU General Public License (GPL) Version 3
    See http://www.gnu.org/copyleft/gpl.html for full license text */
 
