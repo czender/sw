@@ -1048,18 +1048,18 @@ fi # endif
 #alias ncbrowse='java ncBrowse.Browser' # netCDF file browser
 alias bc='bc -l' # -l = defines standard math library and sets scale to 20
 alias beepoff='xset b off' # Turn beep sound off for quiet work envionments
-alias yellowstone='ssh -X yellowstone.ucar.edu' # Yubikey 5573
-alias mira='ssh -X mira.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
-alias rhea='ssh -X rhea.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
-alias titan='ssh -X titan.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
-alias acmetest='ssh -X acmetest.ornl.gov' # then leapfrog to pileus
-alias pileus='ssh -X pileus-login01.ornl.gov' # then leapfrog to pileus
-alias aims4='ssh -X zender1@aims4.llnl.gov' # pw_hgh source /usr/local/uvcdat/latest/bin/setup_runtime.sh
-alias blues='ssh -X blues.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
-alias cooley='ssh -X cooley.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
-alias cori='ssh -X cori.nersc.gov' # pw_hgh
-alias hopper='ssh -X hopper.nersc.gov' # pw_hgh
-alias edison='ssh -X edison.nersc.gov' # pw_hgh
+alias yellowstone='ssh -Y yellowstone.ucar.edu' # Yubikey 5573
+alias mira='ssh -Y mira.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
+alias rhea='ssh -Y rhea.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
+alias titan='ssh -Y titan.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
+alias acmetest='ssh -Y acmetest.ornl.gov' # then leapfrog to pileus
+alias pileus='ssh -Y pileus-login01.ornl.gov' # then leapfrog to pileus
+alias aims4='ssh -Y zender1@aims4.llnl.gov' # pw_hgh source /usr/local/uvcdat/latest/bin/setup_runtime.sh
+alias blues='ssh -Y blues.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
+alias cooley='ssh -Y cooley.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
+alias cori='ssh -Y cori.nersc.gov' # pw_hgh
+alias hopper='ssh -Y hopper.nersc.gov' # pw_hgh
+alias edison='ssh -Y edison.nersc.gov' # pw_hgh
 alias bsrc="source ${HOME}/.bashrc"
 alias chm='chmod 644 *.*' # Make readable
 alias cln='rm *~ .[a-zA-Z]~ \#\*\# core core.* *.tmp *foo foo* *.o *.bak *.trace gmeta aaaa* thumb???.png thumbdta.tex *-t.tex* *.bbl *.blg *.log *.glo *.aux *.dlog *.cp *.cps *.fn *.fns *.ky *.pg *.toc *.tp *.vr *.lof *.lot *.dvi *.ttt *.fff *.stackdump PET0.*'
@@ -1076,24 +1076,24 @@ alias df='df -k' # -k = units are kB rather than 512 B
 alias diff='diff -c -w' # -c = print 3 lines around diff, -w = ignore whitespace diffs
 alias dir='ls -laF | more'
 alias du='du -k' # -k = units are kB rather than 512 B
-alias dust='ssh -X dust.ess.uci.edu'
+alias dust='ssh -Y dust.ess.uci.edu'
 alias egrep='egrep -i' # -i = case insensitive
 alias en='export LANG=en_GB.utf8;export LANGUAGE=en_GB:en:fr_FR:fr;export LC_ALL=en_GB.utf8'
 alias es='export LANG=es'
 alias fr='export LANG=fr_FR.utf8;export LANGUAGE=fr_FR:fr:en_GB:en;export LC_ALL=fr_FR.utf8'
-alias ess_gng='ssh -X 42080s12@eee.uci.edu'
-alias ess_cnt='ssh -X 42100s12@eee.uci.edu'
-alias ess_sco='ssh -X 42350w13@eee.uci.edu'
+alias ess_gng='ssh -Y 42080s12@eee.uci.edu'
+alias ess_cnt='ssh -Y 42100s12@eee.uci.edu'
+alias ess_sco='ssh -Y 42350w13@eee.uci.edu'
 alias gbsh="/bin/cp ${HOME}/sw/dot/bashrc.greenplanet ${HOME}/.bashrc;source ${HOME}/.bashrc"
-alias firn='ssh -X firn.ess.uci.edu'
-alias frazil='ssh -X frazil.ess.uci.edu'
-alias skyglow='ssh -X skyglow.ess.uci.edu'
-alias givre='ssh -X givre.ess.uci.edu'
-alias roulee='ssh -X roulee.ess.uci.edu'
-alias aerosol='ssh -X aerosol.ess.uci.edu'
-alias glace='ssh -X glace.ess.uci.edu'
-alias greenplanet='ssh -X gplogin2.ps.uci.edu'
-alias grele='ssh -X grele.ess.uci.edu'
+alias firn='ssh -Y firn.ess.uci.edu'
+alias frazil='ssh -Y frazil.ess.uci.edu'
+alias skyglow='ssh -Y skyglow.ess.uci.edu'
+alias givre='ssh -Y givre.ess.uci.edu'
+alias roulee='ssh -Y roulee.ess.uci.edu'
+alias aerosol='ssh -Y aerosol.ess.uci.edu'
+alias glace='ssh -Y glace.ess.uci.edu'
+alias greenplanet='ssh -Y gplogin2.ps.uci.edu'
+alias grele='ssh -Y grele.ess.uci.edu'
 alias grep='egrep -i' # -i = case insensitive
 alias gv='gv -watch' # --watch = Check file periodically
 alias h='history'
@@ -1101,10 +1101,10 @@ alias hdfview='env LD_LIBRARY_PATH=/usr/lib hdfview'
 alias idv='/usr/local/idv/runIDV'
 alias ksrc="source ${HOME}/.profile"
 alias ls='ls -F' # -F = mark directories with /, links with @, etc.
-alias mirage='ssh -X mirage0.ucar.edu'
-alias hpc='ssh -X hpc.oit.uci.edu'
+alias mirage='ssh -Y mirage0.ucar.edu'
+alias hpc='ssh -Y hpc.oit.uci.edu'
 alias mv='mv -i' # -i = inquire
-alias neige='ssh -X -p 267 68.109.196.84' # Forward to 192.168.1.77:22 (to neige from outside)
+alias neige='ssh -Y -p 267 68.109.196.84' # Forward to 192.168.1.77:22 (to neige from outside)
 alias nvr='env | sort | more'
 alias panoply='java -jar /data/zender/tmp/PanoplyJ/jars/Panoply.jar'
 alias toolsui='java -jar /data/zender/tmp/toolsUI-4.3.jar'
@@ -1114,11 +1114,11 @@ alias psz="ps -f -U ${USER}" # -f = Full listing -U username
 alias qz="qstat -u ${USER} -rn" # -u username -rn nodelist
 alias rcp='rcp -p' # -p = preserve mode, time
 alias rm='rm -i' # -i = inquire
-alias roger='ssh -X roger-login.ncsa.illinois.edu'
+alias roger='ssh -Y roger-login.ncsa.illinois.edu'
 alias rst='set noglob; eval `resize`; unset noglob'
 alias rsync='rsync -av' # -p = preserve mode, time, -C = enable compression
 alias scp='scp -p -C' # -p = preserve mode, time, -C = enable compression
-alias snow='ssh -X snow.engin.umich.edu'
+alias snow='ssh -Y snow.engin.umich.edu'
 # Enable X11 forwarding on remote machine
 # ssh -X foo.domain.com will forward X displays from foo to localhost. Great for ncview data from remote HPC centers
 # However, ssh -X also completely bogs-down 1 core on local MacBookPro regardless of whether or not any X windows displaying
