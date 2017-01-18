@@ -934,6 +934,7 @@ export CVSROOT=":ext:${USER}@dust.ess.uci.edu:${HOME}/cvs"
 export CVSUMASK='002'   # Default file permissions for CVS
 export CVS_RSH='ssh'    # Needed for ssh access to NCAR CGD CVS
 export DATA_RT="${DATA}/aca" # Input data for mie, ccc, swnb2, clm
+#export DISPLAY=":0.0" # 20170117 Trying to get remote X to display on MacOS
 export EDITOR='emacs'	# Default editor
 export EMAIL="${USER}@uci.edu" # Email address (for dch)
 export ESHELL='/bin/sh' # Shell to use from Emacs (Emacs does not like tcsh)
@@ -1122,7 +1123,8 @@ alias snow='ssh -X snow.engin.umich.edu'
 # ssh -X foo.domain.com will forward X displays from foo to localhost. Great for ncview data from remote HPC centers
 # However, ssh -X also completely bogs-down 1 core on local MacBookPro regardless of whether or not any X windows displaying
 # After killing X on MBP, remote clients cannot serve X windows locally, must instead re-connect with ssh -X. Conundrum!
-alias ssh='ssh -X' # -X = enable X11 forwarding on remote machine
+#alias ssh='ssh -X' # -X = enable X11 forwarding on remote machine
+alias ssh='ssh -Y' # -Y = enable trusted X11 forwarding on remote machine, required for MacOSX connections
 alias temperature='finger temperature@atd.ucar.edu'
 alias topz='top -U${USER}' # -Uusername
 alias uncompress='gunzip'
