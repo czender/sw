@@ -1979,7 +1979,9 @@ Some example regular expression search and replaces that work, and
 what they do
 Special literal characters that must always be protected (preceded by
 backslashes) in \cmdidx{Emacs} buffers include the asterisk
-\kbdprn{*}.
+\kbdprn{*} and the square brackets \kbdprn{[} and \kbdprn{]}.
+Literal characters that do not require protection include braces
+and parentheses.
 NB: typing directly into the \cmdidx{Emacs} command buffer requires
 and extra protection (backslash) relative to reading in the command
 from a macro file, e.g., \flidx{my\_macros.el}.
@@ -1987,6 +1989,8 @@ NB: Use either \cmdidx{query-replace-regexp} or
 \cmdidx{tags-query-replace}.
 There is no \cmdidx{tags-query-replace-regexp} command.
 \begin{verbatim}
+; Replace "{"cll_mth",no_argument,0,0}, /* [flg] Foo */" by "{"no_cll_mth",no_argument,0,0}, /* [flg] Foo */"
+; (tags-query-replace "{"cll_mth",no_argument,0,0}, /\\* \\[flg\\] Foo \\*/" "{"no_cll_mth",no_argument,0,0}, /* [flg] Foo */" nil)
 ; Replace "strtol(optarg,(char **)NULL" by "strtol(optarg,&sng_cnv_rcd"
 ; (tags-query-replace "strtol(optarg,(char \\*\\*)NULL" "strtol(optarg,&sng_cnv_rcd" nil)
 ; Replace "!foo" by "! foo"
