@@ -1128,7 +1128,7 @@ alias ssh='ssh -Y' # -Y = enable trusted X11 forwarding on remote machine, requi
 alias temperature='finger temperature@atd.ucar.edu'
 alias topz='top -U${USER}' # -Uusername
 alias uncompress='gunzip'
-alias vg='echo "valgrind --leak-check=yes --show-reachable=yes --suppressions=${HOME}/nco/doc/valgrind.txt --tool=memcheck ncks -D 5 -O ${HOME}/nco/data/in.nc ~/foo.nc > ~/foo 2>&1"'
+alias vg='echo "valgrind --leak-check=yes --show-reachable=yes --track-origins=yes --suppressions=${HOME}/nco/doc/valgrind.txt --tool=memcheck ncks -D 5 -O ${HOME}/nco/data/in.nc ~/foo.nc > ~/foo 2>&1"'
 alias visad='java -Xmx128m -jar /usr/local/visad/visad.jar' # visad file browser
 alias weather='finger weather@unidata.ucar.edu'
 alias xclock='xclock -digital -chime -update 1 -face Times-32' # For timing
