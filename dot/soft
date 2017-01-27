@@ -15,8 +15,15 @@
 # To remove packages, do
 # soft delete +nco-4.6.3
 # csz--
-@default
 # 20161223: Following packages good on blues.lcrc.anl.gov:
+# Blues suggested setup at https://acme-climate.atlassian.net/wiki/pages/viewpage.action?pageId=98992379
+#@default
++python-2.7
++git-2.5.0
++softenv
++lcrc-utils
++os_paths
++user_paths
 +netcdf-4.3.3.1-gnu5.2-serial
 +nco-4.6.3
 # 20161223: Following packages good on cooley.alcf.anl.gov:
