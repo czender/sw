@@ -14,10 +14,13 @@
 # soft add +nco-4.6.3
 # To remove packages, do
 # soft delete +nco-4.6.3
+# To list packages, do
+# softenv
 # csz--
 # 20161223: Following packages good on blues.lcrc.anl.gov:
 # Blues suggested setup at https://acme-climate.atlassian.net/wiki/pages/viewpage.action?pageId=98992379
-#@default
+@default
+@openmpi-gcc
 +python-2.7
 +git-2.5.0
 +softenv
