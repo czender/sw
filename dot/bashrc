@@ -221,10 +221,17 @@ esac # endcase ${HOST}
 # Put /usr/local/man last
 
 # Initalize all paths to current directory (insecure, but frequently useful)
-LD_LIBRARY_PATH='./'
-MANPATH='./'
-PATH='./'
-
+case "${HOST}" in 
+    blues* | blogin* | b590 ) # ALCF blues compute nodes named bNNN, 16|64 cores|GB/node 
+	# Append to paths if in soft environment
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:'./'
+	MANPATH=${MANPATH}\:'./'
+	PATH=${PATH}\:'./' ; ;;
+    * ) # Reset paths if not in soft environment
+	LD_LIBRARY_PATH='./'
+	MANPATH='./'
+	PATH='./' ; ;;
+esac # !HOST
 # My executables 
 PATH=${PATH}\:${HOME}/sh
 PATH=${PATH}\:${MY_BIN_DIR}
