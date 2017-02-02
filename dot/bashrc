@@ -1148,7 +1148,7 @@ alias xwininfo='xwininfo -int'
 alias x16='startx -- -bpp 16 :1' # Start 16 bpp display acessible as Ctl-Alt-F8
 # End section not yet merged with cshrc
 alias gtc='for rps in acd cf2 diwg nco pnp prv terraref/extractors-hyperspectral terraref/documentation rsr sw; do cd ~/${rps};git commit -am "lazy commit";echo "Pushing ${rps}...";git push;done;cd'
-alias gtp='for rps in acd cf2 diwg nco pnp prv PreAndPostProcessingScripts rsr sw terraref/computing-pipeline terraref/documentation; do cd ~/${rps};echo "Pulling ${rps}...";git pull;done;cd'
+alias gtp='for rps in acd cf2 diwg nco pnp prv rsr sw terraref/extractors-hyperspectral terraref/documentation; do cd ~/${rps};echo "Pulling ${rps}...";git pull;done;cd'
 alias gtr='git reset --hard origin/master'
 
 function gtm { for rps in acd diwg nco pnp prv PreAndPostProcessingScripts rsr sw; do cd ~/${rps};git commit -am "${1}";echo "Pushing ${rps}...";git push;done;cd - ; }
