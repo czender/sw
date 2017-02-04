@@ -26,8 +26,9 @@
 % Standard packages
 \usepackage{ifpdf} % Define \ifpdf
 \ifpdf % PDFLaTeX
-\usepackage[pdftex]{graphicx} % Defines \includegraphics*
-\pdfcompresslevel=9
+\usepackage{graphicx} % Defines \includegraphics*
+%\usepackage[pdftex]{graphicx} % Defines \includegraphics*
+%\pdfcompresslevel=9
 \usepackage{thumbpdf} % Generate thumbnails
 \usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
 \graphicspath{/Users/zender/data/ps} % Help epstopdf find .eps figures to convert
@@ -68,6 +69,7 @@
 %\usepackage[Symbolsmallscale]{upgreek} % Upright Greek letters [Euler,Symbol,Symbolsmallscale]
 \usepackage{ulem} % Strikeout text
 \usepackage{url} % Typeset URLs and e-mail addresses
+\usepackage{verbatim} % comment environment
 % \usepackage{yfonts,color} % Causes \gothfamily already defined errors
 % fxm: 20001028 ${TEXMFDIR}/tex/latex/base/showidx.sty breaks hyperref
 %\usepackage{showidx} % Print index entries as marginal notes
@@ -123,7 +125,7 @@
 \ifpdf % PDFLaTeX
 %\usepackage[colorlinks,linkcolor=blue,urlcolor=blue,pdftex]{hyperref}
 \usepackage[backref,breaklinks,colorlinks,hyperindex,citecolor=blue,linkcolor=blue,urlcolor=blue,plainpages=false,pdftex]{hyperref} % Hyper-references
-\pdfcompresslevel=9
+%\pdfcompresslevel=9
 \else % !PDFLaTeX
 %\usepackage[colorlinks,linkcolor=blue,urlcolor=blue]{hyperref}
 \usepackage[backref,breaklinks,colorlinks=false,plainpages=false]{hyperref} % Hyper-references
@@ -1345,13 +1347,13 @@ tracked, i.e., the \verb'.tex' file, rather than a style file.
 Otherwise the version information will reflect the evolution of the 
 style file and not the document being tracked.
 Unfortunately this contributes to preamble bloat.
-\csznote{
+\begin{comment}
 Following this procedure in the present document leads to
 \CVS$Revision$
 \CVS$Date$
 The date and CVS info are \cmdltxidx{\CVSDate} = \CVSDate and
 \cmdltxidx{\CVSRevision} = \CVSRevision.
-} % end \csznote
+\end{comment}
 
 \subsection[Strikeout]{Strikeout}\label{sxn:strikeout}
 Collaboratively revising text documents is prone to be difficult.
@@ -1443,7 +1445,7 @@ for \textsc{pdf}\TeX, and \verb'\textsc{pdf}\LaTeX' for
 %Other symbols of interest are shown in Table~\ref{tbl:sym2}
 % fxm: Must install txfonts and remove symbolname clashes between
 % wasysym and dchem packages, e.g., \saturn
-\csznote{ 
+\begin{comment} 
 \begin{table}
 \begin{minipage}{\hsize} % Minipage necessary for footnotes KoD95 p. 110 (4.10.4)
 \renewcommand{\footnoterule}{\rule{\hsize}{0.0cm}\vspace{-0.0cm}} % KoD95 p. 111
@@ -1476,7 +1478,7 @@ Symbol & Command & Package \\[0.0ex]
 \end{center}
 \end{minipage}
 \end{table}
-} % csznote
+\end{comment}
 Often a font is named after its creator, whether a person or a
 company.
 Thus learning the names of font creators is a good mnemonic for the
@@ -1519,7 +1521,7 @@ The location of the float is an optional argument to the \verb'figure'
 environment, e.g., \verb'\begin{figure*}[b]' to place the float at the
 bottom of the current or the next page.
 
-\csznote{
+\begin{comment}
 Subfigures may be explicitly accounted for when using the
 \verb'subfigure' package.
 \begin{figure}
@@ -1530,7 +1532,7 @@ Subfigures may be explicitly accounted for when using the
 \subfigure[January]{\includegraphics[width=0.5\hsize]{/Users/zender/data/ps/erbe_b_sld012d_8589_01_x_SWCF}\label{fgr:SWCF_x_01}}
 \subfigure[July]{\includegraphics[width=0.5\hsize]{/Users/zender/data/ps/erbe_b_sld012d_8589_07_x_SWCF}\label{fgr:SWCF_x_07}}
 \end{figure}
-} % subfigure breaks htlatex
+\end{comment}
 
 It is not straightforward to import other graphics types.
 Raster graphics such as \GIFacr\ and \JPEGacr\ must first be converted 
@@ -1756,14 +1758,14 @@ scheme, \acr{nfss} (\S\ref{sxn:nfss}).
 \item Yannis Initial: \verb'\usefont{U}{yinit}{m}{n}'
 \usefont{U}{yinit}{m}{n} Hello, World. \normalfont
 \end{itemize}
-\csznote{ % Lettrine options:
+\begin{comment} % Lettrine options:
 lines: Number of lines the drop cap spans
 findent: Controls the horizontal gap between the drop cap and the text
 nindent: Shifts indented lines starting with the second
 slope: Adapts the slope of the text lines to match letters like A, V, etc.
 ante: Produces text before the drop cap
 image=true: Loads an image (requires graphicx) as drop cap
-} % end Lettrine
+\end{comment} % Lettrine options
 % 20140531 Absolute path /home/zender incompatible with Mac OS X directory structure
 % Need working relative pathnames
 %\lettrine[image=true,lines=3,findent=3pt,nindent=0pt]{/home/zender/texmf/fonts/csz/saints_initial_O.jpg}{nce} 
@@ -2128,7 +2130,7 @@ typesetting techniques.
 \printindex % Requires makeidx KoD95 p. 221
 \addcontentsline{toc}{section}{Index}
 
-\csznote{
+\begin{comment}
 % Transfer required figures to local machine
 for fl_stb in \
 erbe_b_sld012d_8589_01_x_SWCF \
@@ -2139,10 +2141,10 @@ sld012d_8589_07_x_SWCF \
 scp 'dust.ess.uci.edu:${DATA}/ps/'${fl_stb}'.eps' ${DATA}/ps
 epstopdf ${DATA}/ps/${fl_stb}.eps
 done
-} % end csznote
+\end{comment}
 % $: rebalance syntax highlighting
 
-\csznote{ 
+\begin{comment} 
 % Usage: Place usage here at end of file so comment character % not needed
 cd ~/tex;make -W ltx.tex ltx.dvi ltx.ps ltx.pdf ltx.txt;cd -
 
@@ -2162,6 +2164,6 @@ scp ltx*.css ltx*.html dust.ess.uci.edu:/var/www/html/doc/ltx
 # NB: tex4moz chokes on ltx.tex
 cd ${HOME}/tex;/usr/share/tex4ht/mzlatex ltx.tex
 scp ltx*.css ltx*.html ltx*.xml dust.ess.uci.edu:/var/www/html/doc/ltx
-} % end csznote on usage
+\end{comment}
 
 \end{document}
