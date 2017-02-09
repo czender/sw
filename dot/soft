@@ -29,5 +29,5 @@
 +os_paths
 +user_paths
 +netcdf-4.3.3.1-gnu5.2-serial
-+nco-4.6.3
++nco-4.6.4
 # 20161223: Following packages good on cooley.alcf.anl.gov:
