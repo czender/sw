@@ -83,7 +83,8 @@ idx_xpt=0 ; [idx] Xpt index
 
 dat_sng=new((/ord_nbr/),string)
 dat_sng(idx_ctl)="  Present Day"
-dat_sng(idx_xpt)="  Geoengineered"
+;dat_sng(idx_xpt)="  Geoengineered"
+dat_sng(idx_xpt)="  Urban Lighting"
 
 clr_sng=new((/ord_nbr/),string)
 clr_sng(:)="black"
