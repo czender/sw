@@ -72,7 +72,7 @@
 # Renato Pajarola <pajarola@acm.org>, Barbara Pajarola <bpajarola@sunrise.ch>, Brad Sutton <brad@gcal.org>, Brad Dalton <dr.lizard@lacertilia.org>, Andrea Reinkensmeier <reinken@fastmail.fm>, Scott Redeker and Gregg Williams <scottandgregg@verizon.net>, Steve and Carol Raby <sjrabys@earthlink.net>, Debbie and Gilberto Guerra <gg401@prodigy.net>, Franny Eanet <franny.eanet@gmail.com>, Suzanne Morse <srm@ecology.coa.edu>, Sarita Sidhu <sarita@fair-trade-products.com>, Ron Miller <rmiller@giss.nasa.gov>
 
 # ESS Zender group:
-# Henry Butowsky <henryb@hush.com>, Bob Allen <robert.allen@ucr.edu>, Scott Capps <scapps@atmos.ucla.edu>, Qin Han <qhanqhan@gmail.com>, Mike Tosca <mtosca@uci.edu>, Xianwei Wang <xianweiw@uci.edu>, Charlie Zender <zender@uci.edu> 
+# Henry Butowsky <henryb@hush.com>, Bob Allen <robert.allen@ucr.edu>, Scott Capps <scapps@atmos.ucla.edu>, Qin Han <qhanqhan@gmail.com>, Mick Tosca <mtosca1@saic.edu>, Xianwei Wang <xianweiw@uci.edu>, Charlie Zender <zender@uci.edu> 
 # CC: Isabella Velicogna <isabella.velicogna@gmail.com>
 # CC: Steve Jenks <sjenks@uci.edu>, Mark Flanner <flanner@umich.edu>, Daniel Wang <danielw@slac.stanford.edu>
 
@@ -257,7 +257,7 @@ alias simoni_t "Troy Simoni <troy.simoni@cornell.edu>" # (0)476 72 07 82 (H), (0
 # General list
 alias leonard "Peter Leonard <pleonard@sesda3.com>" # NASA
 alias baron "Jeff Baron <jeff@baronanddangelo.org>" # marathoner HR86
-alias vicente "Pedro Vicente <pvicente@uci.edu>" # programmer
+alias vicente "Pedro Vicente <pedro.vicente@space-research.org>" # programmer
 alias ferrell "Wanda Ferrell <wanda.ferrell@science.doe.gov>"
 #alias hansen "Elaine Hansen <hansen%vega.colorado.edu@spot.colorado.edu>"
 alias abatzoglou "John Abatzoglou <jabatzog@uci.edu>"
@@ -1584,7 +1584,7 @@ alias toomre "Juri Toomre <JToomre@Jila.colorado.edu>"
 alias toon "Brian Toon <toon@lasp.colorado.edu>"
 alias torrelas "Carol Torrelas <cptorrel@uci.edu>"
 alias torres "Omar Torres <torres@qhearts.gsfc.nasa.gov>"
-alias tosca "Mike Tosca <mtosca@uci.edu>" # (860) 306-9211
+alias tosca "Mick Tosca <mtosca1@saic.edu>" # (860) 306-9211
 alias town "Mike Town <mstown@u.washington.edu>"
 alias tramp "emacs-tramp Mailing List <emacs-rcp@ls6.cs.uni-dortmund.de>"
 alias treseder "Kathleen Treseder <treseder@uci.edu>"
