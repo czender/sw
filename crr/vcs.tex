@@ -17,19 +17,19 @@
 % Irvine, CA 92697-3100
 
 % Usage: 
-% cd ${HOME}/crr;make -W vcs.tex vcs.txt vcs.dvi vcs.ps vcs.pdf;cd -
-% scp ${HOME}/crr/vcs.tex ${HOME}/crr/vcs.txt ${DATA}/ps/vcs.ps ${DATA}/ps/vcs.pdf ${HOME}/crr/vcs.dvi dust.ess.uci.edu:/var/www/html/doc/vcs
+% cd ${HOME}/sw/crr;make -W vcs.tex vcs.pdf;cd -
+% scp ${HOME}/sw/crr/vcs.tex ${DATA}/ps/vcs.pdf dust.ess.uci.edu:Sites/doc/vcs
 
 % # NB: latex2html chokes on vcs.tex
 % latex2html -dir /var/www/html/doc/vcs vcs.tex
 % # NB: tth works well on vcs.tex
-% cd ${HOME}/crr;tth -a -Lcvs -p${TEXINPUTS} < vcs.tex > vcs.html
+% cd ${HOME}/sw/crr;tth -a -Lcvs -p${TEXINPUTS} < vcs.tex > vcs.html
 % scp vcs.html dust.ess.uci.edu:/var/www/html/doc/vcs
 % # NB: tex4ht works well on vcs.tex
-% cd ${HOME}/crr;htlatex vcs.tex
+% cd ${HOME}/sw/crr;htlatex vcs.tex
 % scp cvs*.css cvs*.html dust.ess.uci.edu:/var/www/html/doc/vcs
 % # NB: tex4moz works well on vcs.tex
-% cd ${HOME}/crr;/usr/share/tex4ht/mzlatex vcs.tex
+% cd ${HOME}/sw/crr;/usr/share/tex4ht/mzlatex vcs.tex
 % scp cvs*.css cvs*.html cvs*.xml dust.ess.uci.edu:/var/www/html/doc/vcs
 
 \documentclass[12pt,twoside]{article}
@@ -37,14 +37,15 @@
 % Standard packages
 \usepackage{ifpdf} % Define \ifpdf
 \ifpdf % PDFLaTeX
-\usepackage[pdftex]{graphicx} % Defines \includegraphics*
-\pdfcompresslevel=9
+\usepackage{graphicx} % Defines \includegraphics*
+%\pdfcompresslevel=9
 \usepackage{thumbpdf} % Generate thumbnails
 \usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
 \else % !PDFLaTeX
 \usepackage{graphicx} % Defines \includegraphics*
 \fi % !PDFLaTeX
 \usepackage{array} % Table and array extensions, e.g., column formatting
+\usepackage{etoolbox} % \newbool, \setbool, \ifxxx
 \usepackage{lscape} % Landscape environment
 \usepackage{makeidx} % Index keyword processor: \printindex and \see
 \usepackage{natbib} % \cite commands from aguplus
@@ -71,7 +72,7 @@
 % urlcolor      Color for linked URLs
 \ifpdf % PDFLaTeX
 \usepackage[backref,breaklinks,colorlinks,citecolor=blue,linkcolor=blue,urlcolor=blue,hyperindex,plainpages=false,pdftex]{hyperref} % Hyper-references
-\pdfcompresslevel=9
+%\pdfcompresslevel=9
 \else % !PDFLaTeX
 \usepackage[backref=false,breaklinks,colorlinks=false,hyperindex,plainpages=false]{hyperref} % Hyper-references
 \fi % !PDFLaTeX
@@ -1526,8 +1527,8 @@ git commit -a -m ``Rebased rgr branch to master''
 \end{verbatim}
 
 \subsection{Workflow}\label{sxn:git_wrk}
-Use this workflow on projects like Terraref that require pull-requests
-(PRs) to merge to master. 
+Use this workflow on projects like Terraref that want one pull-request
+(PR) per feature to merge to master. 
 \begin{verbatim}
 # Create new branch
 git checkout -b newfeature
