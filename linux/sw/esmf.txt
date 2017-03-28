@@ -392,6 +392,11 @@ ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_t42_to_fv129x256_aave.20150901.
 ESMF_RegridWeightGen -s ${DATA}/grids/129x256_SCRIP.20150901.nc -d ${DATA}/grids/257x512_SCRIP.20150901.nc -w map_fv129x256_to_fv257x512_aave.20150901.nc --method conserve
 ncks -D 6 -L 1 -4 -t 8 -O --map=${DATA}/maps/map_fv129x256_to_fv257x512_aave.20150901.nc ${DATA}/ne30/rgr/famipc5_ne30_v0.3_00003.cam.h0.1979-01.nco.nc ${DATA}/ne30/rgr/dogfood.nc
 
+ncremap -a conserve -s ${DATA}/grids/ne16np4_110512_pentagons.nc -g ${DATA}/grids/91x180_SCRIP.20170401.nc -m ${DATA}/maps/map_ne16np4_to_fv91x180_aave.20170401.nc
+ncremap -a conserve -s ${DATA}/grids/ne4np4-pentagons_c100308.nc -g ${DATA}/grids/25x48_SCRIP.20170401.nc -m ${DATA}/maps/map_ne4np4_to_fv25x48_aave.20170401.nc
+ncremap -a bilinear -s ${DATA}/grids/ne16np4_110512_pentagons.nc -g ${DATA}/grids/91x180_SCRIP.20170401.nc -m ${DATA}/maps/map_ne16np4_to_fv91x180_bilin.20170401.nc
+ncremap -a bilinear -s ${DATA}/grids/ne4np4-pentagons_c100308.nc -g ${DATA}/grids/25x48_SCRIP.20170401.nc -m ${DATA}/maps/map_ne4np4_to_fv25x48_bilin.20170401.nc
+
 ncremap -a conserve -s ${DATA}/grids/ne16np4_110512_pentagons.nc -g ${DATA}/grids/ne30np4_pentagons.091226.nc -m ${DATA}/maps/map_ne16np4_to_ne30np4_aave.20160601.nc
 ncremap -a conserve -s ${DATA}/grids/ne30np4_pentagons.091226.nc -g ${DATA}/grids/ne16np4_110512_pentagons.nc -m ${DATA}/maps/map_ne30np4_to_ne16np4_aave.20160601.nc
 ncremap -a conserve -s ${DATA}/grids/ne11np4_pentagons_c150930.nc -g ${DATA}/grids/ne30np4_pentagons.091226.nc -m ${DATA}/maps/map_ne11np4_to_ne30np4_aave.20160601.nc
