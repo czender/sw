@@ -32,20 +32,6 @@ make
 # 20160209: grele.ess.uci.edu x86_64/EMT64 Ubuntu Trusty gcc/gfortran 4.8.4 netcdf-4.3.3.1
 #***********************************************************************
 # Tempest
-# First install netcdf-cxx from source the old-fashioned way
-cd ${DATA}/tmp
-git clone https://github.com/ClimateGlobalChange/tempestremap.git
-cd ${DATA}/tmp/tempestremap
-make
-# Needed to manually add -std=c++11 to two compile commands because of old compiler (gcc 4.8.4)
-#***********************************************************************
-# 20160209: grele.ess.uci.edu x86_64/EMT64 Ubuntu Trusty gcc/gfortran 4.8.4 netcdf-4.3.3.1
-#***********************************************************************
-
-#***********************************************************************
-# 20160209: grele.ess.uci.edu x86_64/EMT64 Ubuntu Trusty gcc/gfortran 4.8.4 netcdf-4.3.3.1
-#***********************************************************************
-# Tempest
 # Install netcdf-cxx from source the old-fashioned way
 cd ${DATA}/tmp
 wget ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-cxx-4.2.tar.gz
@@ -62,9 +48,37 @@ cd ${DATA}/tmp
 git clone https://github.com/ClimateGlobalChange/tempestremap.git
 cd ${DATA}/tmp/tempestremap
 make
-# Needed to manually add -std=c++11 to two compile commands because of old compiler (gcc 4.8.4)
+# Manually add -std=c++11 to two compile commands because of old compiler (gcc 4.8.4)
 #***********************************************************************
 # 20160209: grele.ess.uci.edu x86_64/EMT64 Ubuntu Trusty gcc/gfortran 4.8.4 netcdf-4.3.3.1
+#***********************************************************************
+
+#***********************************************************************
+# 20170417: firn.ess.uci.edu x86_64-apple-darwin16.5.0 MacOSX 10.12.4 Sierra llvm/clang 8.1.0 netcdf-4.4.1
+#***********************************************************************
+# Tempest
+# Only one additional port needed for tempestremap on MACOSX. Everything (blas, lapack) already installed by XTools.
+sudo port install netcdf-cxx
+cd ${DATA}/tmp
+git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+# No Makefile modifications needed, but must overwrite compiler defaults with command-line arguments:
+# Same command works on grele
+make MPICXX=g++ CXX=g++
+#***********************************************************************
+# 20170417: firn.ess.uci.edu x86_64-apple-darwin16.5.0 MacOSX 10.12.4 Sierra llvm/clang 8.1.0 netcdf-4.4.1
+#***********************************************************************
+
+#***********************************************************************
+# 20170417: grele.ess.uci.edu x86_64/EMT64 Ubuntu Xenial gcc/gfortran 5.4 netcdf-4.3.3.1
+#***********************************************************************
+cd ${DATA}/tmp
+git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+# No Makefile modifications needed, but must overwrite compiler defaults with command-line arguments:
+make MPICXX=g++ CXX=g++
+#***********************************************************************
+# 20170417: grele.ess.uci.edu x86_64/EMT64 Ubuntu Xenial gcc/gfortran 5.4 netcdf-4.3.3.1
 #***********************************************************************
 
 ************************************************************************

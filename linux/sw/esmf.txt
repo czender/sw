@@ -193,7 +193,9 @@ SQuadGen
 # Put links in /usr/local/bin
 sudo ln -s ${DATA}/tmp/tempestremap/bin/ApplyOfflineMap /usr/local/bin/ApplyOfflineMap
 sudo ln -s ${DATA}/tmp/tempestremap/bin/CalculateDiffNorms /usr/local/bin/CalculateDiffNorms
+sudo ln -s ${DATA}/tmp/tempestremap/bin/CoarsenRectilinearData /usr/local/bin/CoarsenRectilinearData
 sudo ln -s ${DATA}/tmp/tempestremap/bin/GenerateCSMesh /usr/local/bin/GenerateCSMesh 
+sudo ln -s ${DATA}/tmp/tempestremap/bin/GenerateConnectivityFile /usr/local/bin/GenerateConnectivityFile
 sudo ln -s ${DATA}/tmp/tempestremap/bin/GenerateGLLMetaData /usr/local/bin/GenerateGLLMetaData
 sudo ln -s ${DATA}/tmp/tempestremap/bin/GenerateICOMesh /usr/local/bin/GenerateICOMesh 
 sudo ln -s ${DATA}/tmp/tempestremap/bin/GenerateLambertConfConicMesh /usr/local/bin/GenerateLambertConfConicMesh
@@ -201,7 +203,9 @@ sudo ln -s ${DATA}/tmp/tempestremap/bin/GenerateOfflineMap /usr/local/bin/Genera
 sudo ln -s ${DATA}/tmp/tempestremap/bin/GenerateOverlapMesh /usr/local/bin/GenerateOverlapMesh
 sudo ln -s ${DATA}/tmp/tempestremap/bin/GenerateRLLMesh /usr/local/bin/GenerateRLLMesh
 sudo ln -s ${DATA}/tmp/tempestremap/bin/GenerateTestData /usr/local/bin/GenerateTestData
+sudo ln -s ${DATA}/tmp/tempestremap/bin/GenerateVolumetricMesh /usr/local/bin/GenerateVolumetricMesh
 sudo ln -s ${DATA}/tmp/tempestremap/bin/MeshToTxt /usr/local/bin/MeshToTxt
+sudo ln -s ${DATA}/tmp/tempestremap/bin/ShpToMesh /usr/local/bin/ShpToMesh
 sudo ln -s ${DATA}/tmp/SQuadGen/SQuadGen /usr/local/bin/SQuadGen
 
 # ESMF vocabulary
