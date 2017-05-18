@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-04 15:05-0700\n"
+"POT-Creation-Date: 2017-05-18 10:55-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,14 +22,14 @@ msgstr ""
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # , fuzzy
-#: i18n.cc:60 i18n.cc:62 i18n.cc:65 i18n.cc:66 i18n.cc:67 i18n.cc:68
-#: i18n.cc:70 i18n.cc:71 i18n.cc:72 i18n.cc:74 i18n.cc:80 i18n.cc:81
-#: i18n.cc:83 i18n.cc:87 i18n.cc:91
+#: i18n.cc:60 i18n.cc:62 i18n.cc:65 i18n.cc:66 i18n.cc:67 i18n.cc:68 i18n.cc:70
+#: i18n.cc:71 i18n.cc:72 i18n.cc:74 i18n.cc:80 i18n.cc:81 i18n.cc:83 i18n.cc:87
+#: i18n.cc:91
 msgid "The tree is green"
 msgstr "El arbol es verde"
 
-#: i18n.cc:61 i18n.cc:63 i18n.cc:66 i18n.cc:67 i18n.cc:68 i18n.cc:69
-#: i18n.cc:71 i18n.cc:72 i18n.cc:73 i18n.cc:75 i18n.cc:81 i18n.cc:82
-#: i18n.cc:84 i18n.cc:88 i18n.cc:92
+#: i18n.cc:61 i18n.cc:63 i18n.cc:66 i18n.cc:67 i18n.cc:68 i18n.cc:69 i18n.cc:71
+#: i18n.cc:72 i18n.cc:73 i18n.cc:75 i18n.cc:81 i18n.cc:82 i18n.cc:84 i18n.cc:88
+#: i18n.cc:92
 msgid "I thought we were friends"
 msgstr "Yo pienso que somos amigos"

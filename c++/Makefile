@@ -7,9 +7,9 @@
 # See http://www.gnu.org/copyleft/gpl.html for full license text
 
 # Quickie test copies:
-# scp ~/c++/Makefile esmf.ess.uci.edu:c++
-# scp ~/c++/Makefile goldhill.cgd.ucar.edu:c++
-# scp ~/c++/Makefile soot.ess.uci.edu:c++
+# scp ~/sw/c++/Makefile esmf.ess.uci.edu:sw/c++
+# scp ~/sw/c++/Makefile goldhill.cgd.ucar.edu:sw/c++
+# scp ~/sw/c++/Makefile soot.ess.uci.edu:sw/c++
 
 # Usage (testing):
 # NB: CPP token controls OpenMP activation so ccache may use non-OpenMP objects
@@ -19,15 +19,15 @@
 # make --warn-undefined-variables <-- Fail if Makefile attempts to use undefined variables
 
 # Usage (Compilation):
-# cd ~/c++;make;cd -                  # Default build
-# cd ~/c++;make OPTS=D NETCDF4=Y;cd - # Build with netCDF4
-# cd ~/c++;make OPTS=D NETCDF4=Y SZ=Y;cd - # Build with netCDF4 and Szip
+# cd ~/sw/c++;make;cd -                  # Default build
+# cd ~/sw/c++;make OPTS=D NETCDF4=Y;cd - # Build with netCDF4
+# cd ~/sw/c++;make OPTS=D NETCDF4=Y SZ=Y;cd - # Build with netCDF4 and Szip
 # 32-bit ABI on NCAR AIX systems:
 # NETCDF_LIB=/usr/local/lib32/r4i4 make --jobs=1 ABI=32 OPTS=D;cd -
 # 64-bit ABI netCDF3 on NCAR AIX systems (bluefire):
-# cd ~/c++;GSL_INC='/contrib/gsl-1.12/include' GSL_LIB='/contrib/gsl-1.12/lib -lgsl' NETCDF_LIB='/usr/local/lib64/r4i4'  make --jobs=1 OPTS=D ABI=64 all;cd -
+# cd ~/sw/c++;GSL_INC='/contrib/gsl-1.12/include' GSL_LIB='/contrib/gsl-1.12/lib -lgsl' NETCDF_LIB='/usr/local/lib64/r4i4'  make --jobs=1 OPTS=D ABI=64 all;cd -
 # 64-bit ABI netCDF4 on NCAR AIX systems (bluefire):
-# cd ~/c++;CURL_LIB='/contrib/curl/7.21.2/lib' GSL_INC='/contrib/gsl-1.12/include' GSL_LIB='/contrib/gsl-1.12/lib -lgsl' HDF5_ROOT='/contrib/hdf5-1.8.7_seq' NETCDF_ROOT='/contrib/netcdf/4.1.3_seq' SZ_LIB='/contrib/szip/lib' make --jobs=1 ABI=64 NETCDF4=Y OPTS=D SZ=Y all;cd -
+# cd ~/sw/c++;CURL_LIB='/contrib/curl/7.21.2/lib' GSL_INC='/contrib/gsl-1.12/include' GSL_LIB='/contrib/gsl-1.12/lib -lgsl' HDF5_ROOT='/contrib/hdf5-1.8.7_seq' NETCDF_ROOT='/contrib/netcdf/4.1.3_seq' SZ_LIB='/contrib/szip/lib' make --jobs=1 ABI=64 NETCDF4=Y OPTS=D SZ=Y all;cd -
 
 # Makefile conventions for optimization levels (OPTS levels)
 # OPTS=O: Optimize: Produce symbol tables, use architecture-specific speed-ups
@@ -1233,6 +1233,7 @@ ${MY_BIN_DIR}/gsl:	lib $(GSL_OBJ)
 
 # i18n needs only -lintl and ABI flags
 I18N_OBJ := ${MY_OBJ_DIR}/i18n.o
+I18N_LDFLAGS := -L${NETCDF_ROOT}/lib -lintl
 ifneq (${null},$(findstring AIX,${PVM_ARCH}))
  I18N_LDFLAGS := -L/usr/local/lib -lintl -qsuppress=1501-245
 endif # endif AIX
