@@ -183,3 +183,21 @@ make distclean
 ************************************************************************
 20091007: ncview-1.93g greenplanet.ess.uci.edu
 ************************************************************************
+
+************************************************************************
+20170706: ncview roger-login.ncsa.illinois.edu
+************************************************************************
+To use, please do the following:
+On your computer:
+ssh -Y youraccount@roger-login.ncsa.illinois.edu
+
+On ROGER:
+module purge; module load gdal2-stack udunits ncview
+ncview ~/nco/data/in.nc
+
+On mac, you need XQuartz to set up X b/w mac and remote X on ROGER; on
+Windows, you need an ssh client with X support. 
+************************************************************************
+20170706: ncview roger-login.ncsa.illinois.edu
+************************************************************************
+
