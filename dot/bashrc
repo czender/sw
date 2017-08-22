@@ -22,6 +22,7 @@
 # scp -p ${HOME}/sw/dot/bashrc ipcc.ess.uci.edu:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc rhea.ccs.ornl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc cooley.alcf.anl.gov:.bashrc
+# scp -p ${HOME}/sw/dot/bashrc bebop.lcrc.anl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc blues.lcrc.anl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc roger-login.ncsa.illinois.edu:.bashrc
 
@@ -222,7 +223,7 @@ esac # endcase ${HOST}
 
 # Initalize all paths to current directory (insecure, but frequently useful)
 case "${HOST}" in 
-    blues* | blogin* | b590 ) # ALCF blues compute nodes named bNNN, 16|64 cores|GB/node 
+    bebop* | blues* | blogin* | b590 ) # ALCF LCRC blues compute nodes named bNNN, 16|64 cores|GB/node 
 	# Append to paths if in soft environment
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:'./'
 	MANPATH=${MANPATH}\:'./'
@@ -388,7 +389,7 @@ case "${PVM_ARCH}" in
 	export X11='/usr/X11R6'
 	case "${HOST}" in 
 	    aims4* ) export DATA="/export/${USER}/data" ; ;; # endif LLNL
-	    blues* | blogin* ) export DATA="/home/${USER}/data" ; ;; # endif ANL LCRC
+	    bebop* | blues* | blogin* ) export DATA="/home/${USER}/data" ; ;; # endif ANL LCRC
 	    cg-gpu* ) export DATA="/home/${USER}/data" ; ;; # endif NCSA roger
 	    cooley* | cc* ) export DATA="/projects/HiRes_EarthSys/${USER}" ; ;; # endif ANL ALCF 
 	    cori* | edison* | hopper* | nid* ) export DATA="${HOME}/data" ; ;; # endif NERSC
@@ -1063,6 +1064,7 @@ alias titan='ssh -Y titan.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
 alias acmetest='ssh -Y acmetest.ornl.gov' # then leapfrog to pileus
 alias pileus='ssh -Y pileus-login01.ornl.gov' # then leapfrog to pileus
 alias aims4='ssh -Y zender1@aims4.llnl.gov' # pw_hgh source /usr/local/uvcdat/latest/bin/setup_runtime.sh
+alias bebop='ssh -Y bebop.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias blues='ssh -Y blues.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias cooley='ssh -Y cooley.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
 alias cori='ssh -Y cori.nersc.gov' # pw_hgh
