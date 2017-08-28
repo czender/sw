@@ -16,18 +16,26 @@
 # soft delete +nco-4.6.3
 # To list packages, do
 # softenv
+# To fix errors, edit .soft then do
+# resoft
 # csz--
 # 20161223: Following packages good on blues.lcrc.anl.gov:
 # Blues suggested setup at https://acme-climate.atlassian.net/wiki/pages/viewpage.action?pageId=98992379
 # scp ~/sw/dot/soft blues.lcrc.anl.gov:.soft
-#@default
-@openmpi-gcc
-+python-2.7
-+git-2.5.0
-+softenv
-+lcrc-utils
-+os_paths
-+user_paths
-+netcdf-4.3.3.1-gnu5.2-serial
-+nco-4.6.4
+##@default
+#@openmpi-gcc
+#+python-2.7
+#+git-2.5.0
+#+softenv
+#+lcrc-utils
+#+os_paths
+#+user_paths
+#+netcdf-4.3.3.1-gnu5.2-serial
+#+nco-4.6.4
 # 20161223: Following packages good on cooley.alcf.anl.gov:
+# Cooley suggested setup at ~wlin/.soft.cooley
+# +mvapich2
+# +netcdf-4.3.2
+# +hdf5-1.8.9
+# +ncl_ncarg-6.1.2
+##@default
