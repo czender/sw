@@ -17,8 +17,10 @@ int main(int argc, char *argv[])
   size_t i, cnt[1],srt[1];
   double *buf, avg=0.0;
   
-  err = nc_create("cdf5.nc", NC_CLOBBER|NC_CDF5, &ncid); ERR
-  err = nc_def_dim(ncid, "dim", DIM, &dimid); ERR
+  err = nc_create("cdf5.nc", NC_CLOBBER|NC_CDF5, &ncid); ERR;
+  //  err = nc_def_dim(ncid, "dim", DIM, &dimid); ERR;
+  // csz 20170830 test record dimension
+  err = nc_def_dim(ncid, "dim", NC_UNLIMITED, &dimid); ERR;
   err = nc_def_var(ncid, "one", NC_INT, 0, NULL, &varid[1]); ERR
   err = nc_def_var(ncid, "var", NC_DOUBLE, 1, &dimid, &varid[0]); ERR
   err = nc_def_var(ncid, "two", NC_INT, 0, NULL, &varid[2]); ERR
@@ -29,11 +31,15 @@ int main(int argc, char *argv[])
   err = nc_put_var_int(ncid, varid[1], &int_buf1); ERR
 
   buf = (double*) malloc(DIM * sizeof(double));
-  for (i=0; i<DIM; i++) buf[i] = 1.0;
-  //err = nc_put_var_double(ncid, varid[0], buf); ERR
+  //  for (i=0; i<DIM; i++) buf[i] = 1.0;
+  // 20170831 Write asymmetric values into array so truncation does not yield false-negative answer
+  for (i=0; i<DIM/2; i++) buf[i] = 1.0;
+  for (i=DIM/2; i<DIM; i++) buf[i] = 2.0;
+  //err = nc_put_var_double(ncid, varid[0], buf); ERR;
+  // csz 20170830 use vara() not var() routines
   srt[0]=0;
   cnt[0]=DIM;
-  err = nc_put_vara_double(ncid,varid[0],srt,cnt, buf); ERR
+  err = nc_put_vara_double(ncid,varid[0],srt,cnt, buf); ERR;
 
   int_buf2 = 2;
   err = nc_put_var_int(ncid, varid[2], &int_buf2); ERR
