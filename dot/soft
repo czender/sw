@@ -35,7 +35,7 @@
 # 20161223: Following packages good on cooley.alcf.anl.gov:
 # Cooley suggested setup at ~wlin/.soft.cooley
 # +mvapich2
-# +netcdf-4.3.2
+# +netcdf-4.4.1.1
 # +hdf5-1.8.9
 # +ncl_ncarg-6.1.2
 ##@default
