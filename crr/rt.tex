@@ -193,7 +193,7 @@ Table~\ref{tbl:fact}.
 \vspace{\cpthdrhlnskp}
 \begin{tabular}{ r l }
 \hline \rule{0.0ex}{\hlntblhdrskp}% 
-Format & \acr{url} Location \\[0.0ex]
+Format & \acr{URL} Location \\[0.0ex]
 \hline \rule{0.0ex}{\hlntblntrskp}%
 & \\[-1.0ex]
 \multicolumn{2}{c}{\centering{Radiative Transfer in the Earth System}} \\[-0.5ex]
@@ -4577,18 +4577,18 @@ In this form, the solutions may appear to depend only on the
 distance from the lower boundary ($\taustr - \tau$) but notice that
 the $\slndnm$ term (\ref{eqn:sln_dnm_dfn}) depends on the absolute
 layer thickness ($\taustr$) as well.
-However these forms are not recommended for computational
-implementation because the positive exponentials are difficult to
-handle for large optical depths.
-Moreover, the difference between the exponential terms will quickly
-lead to a loss of numerical precision as $\tau \rightarrow \infty$.
+This solution form is not recommended for computational implementation
+because the positive exponentials are difficult to handle for large
+optical depths. 
+Moreover, the difference between the exponential terms quickly
+leads to a loss of numerical precision as $\tau \rightarrow \infty$.
 
 The final forms on the RHS of (\ref{eqn:ntn_sln}) contain only
 negative exponentials and are numerically well-behaved as 
 $\tau \rightarrow \infty$.
 Since $0 < \tau < \taustr$, it is clear that all exponentials in
 (\ref{eqn:ntn_sln}) and (\ref{eqn:sln_dnm_dfn}) are negative
-exponentials and thus well conditioned for computational
+exponentials and thus well-conditioned for computational
 applications. 
 There are no physical processes which would lead to positive
 exponential terms in the solutions, so it is always worthwhile 
