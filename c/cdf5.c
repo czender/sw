@@ -8,7 +8,12 @@
 #include <stdlib.h>
 #include <netcdf.h>
 
-#define DIM 1073741824
+//Test 8 GiB per variable, result: netCDF 4.4.x CDF5 is buggy
+//#define DIM 1073741824
+//Test 5 GiB per variable, result: netCDF 4.4.x CDF5 is buggy
+#define DIM 671088640LL
+//Test 3 GiB per variable, result: netCDF 4.4.x CDF5 is fine
+//#define DIM 402653184LL
 
 #define ERR {if(err!=NC_NOERR){printf("Error at line %d in %s: %s\n", __LINE__,__FILE__, nc_strerror(err));nerrs++;}}
 
@@ -34,7 +39,7 @@ int main(int argc, char *argv[])
   buf1 = (long long *) malloc(DIM * sizeof(long long));
   buf2 = (long long *) malloc(DIM * sizeof(long long));
   // 20170831 Write index-dependent values into array so truncation does not yield false-negative answer
-  for (i=0; i<DIM; i++) buf1[i] = buf2[i] = i;
+  for (long long i=0; i<DIM; i++) buf1[i] = buf2[i] = i;
   err = nc_put_var_longlong(ncid, varid[0], buf1); ERR;
   err = nc_put_var_longlong(ncid, varid[1], buf2); ERR;
 
@@ -43,13 +48,13 @@ int main(int argc, char *argv[])
   err = nc_open("cdf5.nc", NC_NOWRITE, &ncid); ERR
   err = nc_inq_varid(ncid, "var1", &varid[0]); ERR
   err = nc_inq_varid(ncid, "var2", &varid[1]); ERR
-  for (i=0; i<DIM; i++) buf1[i] = buf2[i] = 0LL;;
+  for (long long i=0; i<DIM; i++) buf1[i] = buf2[i] = 0LL;;
   err = nc_get_var_longlong(ncid, varid[0], buf1); ERR
   err = nc_get_var_longlong(ncid, varid[1], buf2); ERR
   err = nc_close(ncid); ERR
 
-  for (i=0; i<DIM; i++) avg1 += buf1[i];
-  for (i=0; i<DIM; i++) avg2 += buf2[i];
+  for (long long i=0; i<DIM; i++) avg1 += buf1[i];
+  for (long long i=0; i<DIM; i++) avg2 += buf2[i];
   printf("total1 = %lld, expected1 = %lld\n",avg1,(DIM-1LL)*DIM/2LL);
   printf("total2 = %lld, expected2 = %lld\n",avg2,(DIM-1LL)*DIM/2LL);
   printf("avg1 = %f\n",avg1*1.0/DIM);
