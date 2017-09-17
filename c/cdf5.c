@@ -8,12 +8,15 @@
 #include <stdlib.h>
 #include <netcdf.h>
 
-//Test 8 GiB per variable, result: netCDF 4.4.x CDF5 is buggy
-//#define DIM 1073741824
-//Test 5 GiB per variable, result: netCDF 4.4.x CDF5 is buggy
-#define DIM 671088640LL
-//Test 3 GiB per variable, result: netCDF 4.4.x CDF5 is fine
-//#define DIM 402653184LL
+#define BYT_PER_GiB 1073741824LL
+
+// Test 8 GiB per variable, result: netCDF 4.4.x CDF5 is buggy
+//#define DIM (BYT_PER_GiB*8/8)
+// Test 5 GiB per variable, result: netCDF 4.4.x CDF5 is buggy
+#define DIM (BYT_PER_GiB*5/8)
+// Test 3 GiB per variable, result: netCDF 4.4.x CDF5 is fine
+//#define DIM (BYT_PER_GiB*3/8)
+#define FILENAME "cdf5.nc"
 
 #define ERR {if(err!=NC_NOERR){printf("Error at line %d in %s: %s\n", __LINE__,__FILE__, nc_strerror(err));nerrs++;}}
 
@@ -25,16 +28,15 @@ int main(int argc, char *argv[])
   long long avg1,avg2;
   avg1=avg2=0LL;
   
-  err = nc_create("cdf5.nc", NC_CLOBBER|NC_CDF5, &ncid); ERR;
-  //err = nc_create("cdf5.nc", NC_CLOBBER|NC_64BIT_DATA, &ncid); ERR;
-  //err = nc_create("cdf5.nc", NC_CLOBBER|NC_NETCDF4, &ncid); ERR;
+  err = nc_create(FILENAME, NC_CLOBBER|NC_64BIT_DATA, &ncid); ERR;
+  //err = nc_create(FILENAME, NC_CLOBBER|NC_NETCDF4, &ncid); ERR;
   err = nc_def_dim(ncid, "dim", DIM, &dimid); ERR;
   // csz 20170830 test record dimension
   // err = nc_def_dim(ncid, "dim", NC_UNLIMITED, &dimid); ERR;
-  err = nc_def_var(ncid, "var1", NC_INT64, 1, &dimid, &varid[0]); ERR
-  err = nc_def_var(ncid, "var2", NC_INT64, 1, &dimid, &varid[1]); ERR
-  err = nc_set_fill(ncid, NC_NOFILL, NULL); ERR
-  err = nc_enddef(ncid); ERR
+  err = nc_def_var(ncid, "var1", NC_INT64, 1, &dimid, &varid[0]); ERR;
+  err = nc_def_var(ncid, "var2", NC_INT64, 1, &dimid, &varid[1]); ERR;
+  err = nc_set_fill(ncid, NC_NOFILL, NULL); ERR;
+  err = nc_enddef(ncid); ERR;
 
   buf1 = (long long *) malloc(DIM * sizeof(long long));
   buf2 = (long long *) malloc(DIM * sizeof(long long));
@@ -43,15 +45,15 @@ int main(int argc, char *argv[])
   err = nc_put_var_longlong(ncid, varid[0], buf1); ERR;
   err = nc_put_var_longlong(ncid, varid[1], buf2); ERR;
 
-  err = nc_close(ncid); ERR
+  err = nc_close(ncid); ERR;
 
-  err = nc_open("cdf5.nc", NC_NOWRITE, &ncid); ERR
-  err = nc_inq_varid(ncid, "var1", &varid[0]); ERR
-  err = nc_inq_varid(ncid, "var2", &varid[1]); ERR
+  err = nc_open(FILENAME, NC_NOWRITE, &ncid); ERR;
+  err = nc_inq_varid(ncid, "var1", &varid[0]); ERR;
+  err = nc_inq_varid(ncid, "var2", &varid[1]); ERR;
   for (long long i=0; i<DIM; i++) buf1[i] = buf2[i] = 0LL;;
-  err = nc_get_var_longlong(ncid, varid[0], buf1); ERR
-  err = nc_get_var_longlong(ncid, varid[1], buf2); ERR
-  err = nc_close(ncid); ERR
+  err = nc_get_var_longlong(ncid, varid[0], buf1); ERR;
+  err = nc_get_var_longlong(ncid, varid[1], buf2); ERR;
+  err = nc_close(ncid); ERR;
 
   for (long long i=0; i<DIM; i++) avg1 += buf1[i];
   for (long long i=0; i<DIM; i++) avg2 += buf2[i];
