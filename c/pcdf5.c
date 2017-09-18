@@ -72,7 +72,6 @@ int write(int ncid, int parallel)
   return NC_NOERR;
 } /* !write() */
 
-int
 int read(int ncid, int parallel)
 {
   int err, nerrs=0, cmode, varid[2], dimid, rcd;
