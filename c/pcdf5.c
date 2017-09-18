@@ -3,10 +3,9 @@
 // 20170909: Rewritten to expose CDF5 bug by Charlie Zender
 // 20170918: Rewritten with PnetCDF to further test CDF5 bug
 
-// mpicc -std=c99 -I/opt/local/include -o ~/bin/pcdf5 ~/sw/c/pcdf5.c -L/opt/local/lib -lnetcdf -lhdf5_hl -lhdf5 -lcurl
-// gcc -std=c99 -I/usr/local/include -o ~/bin/pcdf5 ~/sw/c/pcdf5.c -L/usr/local/lib -lnetcdf -lhdf5_hl -lhdf5 -lcurl
+// scp ~/sw/c/pcdf5.c skyglow.ess.uci.edu:sw/c
+
 // mpicc -std=c99 -I/usr/local/parallel/include -o ~/bin/pcdf5 ~/sw/c/pcdf5.c -L/usr/local/parallel/lib -L/usr/local/parallel/lib -L/usr/lib64/hdf -lnetcdf -lpnetcdf -ljpeg -lmfhdf -ldf -lhdf5_hl -lhdf5 -ldl -lm -lz -lcurl -ljpeg # Skyglow
-// /usr/include/openmpi-x86_64/mpi.h
   
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,14 +20,12 @@
 
 #define FILENAME "pcdf5.nc"
 
-#define ERR {if(err!=NC_NOERR){printf("Error at line %d in %s: %s\n",__LINE__,__FILE__,nc_strerror(err));nerrs++;}}
-
 static void 
 report(int rcd, char* file, int line){
   fflush(stdout); /* Make sure our stdout is synced with stderr.*/
   if(rcd != 0) fprintf(stderr, "Sorry! Unexpected result, %s, line: %d: status=%d\n",__FILE__,__LINE__,rcd);
 }
-#define Error(rcd) {if(err!=NC_NOERR){report(rcd,__FILE__,__LINE__);nerrs++;}}
+#define Error(rcd) {if(rcd!=NC_NOERR){report(rcd,__FILE__,__LINE__);nerrs++;}}
 
 int write(int ncid, int parallel)
 {
@@ -76,7 +73,7 @@ int write(int ncid, int parallel)
 } /* !write() */
 
 int
-read(int ncid)
+int read(int ncid, int parallel)
 {
   int err, nerrs=0, cmode, varid[2], dimid, rcd;
   size_t start[10], count[10];
@@ -122,51 +119,51 @@ read(int ncid)
 
 int main(int argc, char* argv[])
 {
-    int rank, nprocs, ncid, cmode, rcd;
-
-    MPI_Comm comm=MPI_COMM_SELF;
-    MPI_Info info=MPI_INFO_NULL;
-
-    MPI_Init(&argc,&argv);
-    MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    if(nprocs > 1 && rank == 0) printf("This test program is intended to run on ONE process\n");
-    if(rank > 0) goto fn_exit;
-
+  int rank, nprocs, nerrs=0, ncid, cmode, rcd;
+  
+  MPI_Comm comm=MPI_COMM_SELF;
+  MPI_Info info=MPI_INFO_NULL;
+  
+  MPI_Init(&argc,&argv);
+  MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  if(nprocs > 1 && rank == 0) printf("This test program is intended to run on ONE process\n");
+  if(rank > 0) goto fn_exit;
+  
 #ifdef DISABLE_PNETCDF_ALIGNMENT
-    MPI_Info_create(&info);
-    MPI_Info_set(info, "nc_header_align_size", "1");
-    MPI_Info_set(info, "nc_var_align_size",    "1");
+  MPI_Info_create(&info);
+  MPI_Info_set(info, "nc_header_align_size", "1");
+  MPI_Info_set(info, "nc_var_align_size",    "1");
 #endif
-
-    /* PnetCDF->CDF5 */
-    printf("\nWrite using PnetCDF; Read using CDF5\n");
-    cmode = NC_PNETCDF | NC_CLOBBER;
-    rcd=nc_create_par(FILENAME, cmode, comm, info, &ncid); Error(rcd);
-    rcd=write(ncid,1); Error(rcd);
-    rcd=nc_close(ncid); Error(rcd);
-
-    cmode = NC_CDF5 | NC_NOCLOBBER;
-    rcd=nc_open(FILENAME, cmode, &ncid); Error(rcd);
-    rcd=read(ncid); Error(rcd);
-    rcd=nc_close(ncid); Error(rcd);
-
-    /* CDF5->PnetCDF */
-    printf("\nWrite using CDF5; Read using PnetCDF\n");
-    cmode = NC_CDF5 | NC_CLOBBER;
-    rcd=nc_create(FILENAME, cmode, &ncid); Error(rcd);
-    rcd=write(ncid,0); Error(rcd);
-    rcd=nc_close(ncid); Error(rcd);
-
-    cmode = NC_PNETCDF | NC_NOCLOBBER;
-    rcd=nc_open_par(FILENAME, cmode, comm, info, &ncid); Error(rcd);
-    rcd=read(ncid); Error(rcd);
-    rcd=nc_close(ncid); Error(rcd);
-
-    if (info != MPI_INFO_NULL) MPI_Info_free(&info);
-
+  
+  /* PnetCDF->CDF5 */
+  printf("\nWrite using PnetCDF; Read using CDF5\n");
+  cmode = NC_PNETCDF | NC_CLOBBER;
+  rcd=nc_create_par(FILENAME, cmode, comm, info, &ncid); Error(rcd);
+  rcd=write(ncid,1); Error(rcd);
+  rcd=nc_close(ncid); Error(rcd);
+  
+  cmode = NC_CDF5 | NC_NOCLOBBER;
+  rcd=nc_open(FILENAME, cmode, &ncid); Error(rcd);
+  rcd=read(ncid,0); Error(rcd);
+  rcd=nc_close(ncid); Error(rcd);
+  
+  /* CDF5->PnetCDF */
+  printf("\nWrite using CDF5; Read using PnetCDF\n");
+  cmode = NC_CDF5 | NC_CLOBBER;
+  rcd=nc_create(FILENAME, cmode, &ncid); Error(rcd);
+  rcd=write(ncid,0); Error(rcd);
+  rcd=nc_close(ncid); Error(rcd);
+  
+  cmode = NC_PNETCDF | NC_NOCLOBBER;
+  rcd=nc_open_par(FILENAME, cmode, comm, info, &ncid); Error(rcd);
+  rcd=read(ncid,1); Error(rcd);
+  rcd=nc_close(ncid); Error(rcd);
+  
+  if (info != MPI_INFO_NULL) MPI_Info_free(&info);
+  
  fn_exit:
-    MPI_Finalize();
-    return 0;
+  MPI_Finalize();
+  return 0;
 } /* !main() */
 
