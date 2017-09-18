@@ -4,7 +4,10 @@
 // 20170918: Rewritten with PnetCDF to further test CDF5 bug
 
 // mpicc -std=c99 -I/opt/local/include -o ~/bin/pcdf5 ~/sw/c/pcdf5.c -L/opt/local/lib -lnetcdf -lhdf5_hl -lhdf5 -lcurl
-
+// gcc -std=c99 -I/usr/local/include -o ~/bin/pcdf5 ~/sw/c/pcdf5.c -L/usr/local/lib -lnetcdf -lhdf5_hl -lhdf5 -lcurl
+// mpicc -std=c99 -I/usr/local/parallel/include -o ~/bin/pcdf5 ~/sw/c/pcdf5.c -L/usr/local/parallel/lib -L/usr/local/parallel/lib -L/usr/lib64/hdf -lnetcdf -lpnetcdf -ljpeg -lmfhdf -ldf -lhdf5_hl -lhdf5 -ldl -lm -lz -lcurl -ljpeg # Skyglow
+// /usr/include/openmpi-x86_64/mpi.h
+  
 #include <stdio.h>
 #include <stdlib.h>
 #include <netcdf.h>
@@ -29,7 +32,7 @@ report(int rcd, char* file, int line){
 
 int write(int ncid, int parallel)
 {
-  int err, nerrs=0, cmode, varid[2], dimid;
+  int err, nerrs=0, cmode, varid[2], dimid, rcd;
   size_t start[10], count[10];
   long long *buf1,*buf2;
   
@@ -75,7 +78,7 @@ int write(int ncid, int parallel)
 int
 read(int ncid)
 {
-  int err, nerrs=0, cmode, varid[2], dimid;
+  int err, nerrs=0, cmode, varid[2], dimid, rcd;
   size_t start[10], count[10];
   long long *buf1,*buf2;
   long long avg1,avg2;
@@ -119,7 +122,7 @@ read(int ncid)
 
 int main(int argc, char* argv[])
 {
-    int rank, nprocs, ncid, cmode, stat;
+    int rank, nprocs, ncid, cmode, rcd;
 
     MPI_Comm comm=MPI_COMM_SELF;
     MPI_Info info=MPI_INFO_NULL;
