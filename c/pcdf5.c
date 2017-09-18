@@ -23,7 +23,7 @@
 static void 
 report(int rcd, char* file, int line){
   fflush(stdout); /* Make sure our stdout is synced with stderr.*/
-  if(rcd != 0) fprintf(stderr, "Sorry! Unexpected result, %s, line: %d: status=%d\n",__FILE__,__LINE__,rcd);
+  if(rcd != 0) fprintf(stderr, "Sorry! Unexpected result, %s, line: %d: status=%d\n",file,line,rcd);
 }
 #define Error(rcd) {if(rcd!=NC_NOERR){report(rcd,__FILE__,__LINE__);nerrs++;}}
 
