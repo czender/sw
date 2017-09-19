@@ -356,10 +356,10 @@ DirectoryIndex index.shtml index.html index.php
 <Directory "/Users/zender/Sites/prp">
     Options Indexes
 </Directory>
-<Directory "/Users/zender/Sites/smn">
+<Directory "/Users/zender/Sites/skg">
     Options Indexes
 </Directory>
-<Directory "/Users/zender/Sites/swnb2">
+<Directory "/Users/zender/Sites/smn">
     Options Indexes
 </Directory>
 <Directory "/Users/zender/Sites/terraref">

@@ -6721,6 +6721,9 @@ export HDF5_ROOT=${NETCDF4_ROOT}
 make > hdf5.make.${GNU_TRP}.foo 2>&1
 # make check > hdf5.check.${GNU_TRP}.foo 2>&1
 scp hdf5.*.foo dust.ess.uci.edu:Sites/tmp
+# 20170919 Manually link openmpi mpif90 to /bin so sudo make install finds it and succeeds:
+cd /bin;sudo ln -s /usr/lib64/openmpi/bin/mpif90 mpif90
+cd /bin;sudo ln -s /usr/lib64/openmpi/bin/mpif77 mpif77
 sudo make install
 
 # pnetCDF
@@ -6741,7 +6744,7 @@ cd ${DATA}/tmp/netcdf-fortran
 make distclean
 git pull
 autoreconf -i -f
-LDFLAGS='-L/usr/local/lib' ./configure --prefix=/usr/local > netcdff.configure.${GNU_TRP}.foo 2>&1
+LDFLAGS='-L/usr/local/lib' ./configure --prefix=/usr/local/parallel --enable-parallel-tests > netcdff.configure.${GNU_TRP}.foo 2>&1
 mv -f config.log netcdff.config.log.${GNU_TRP}.foo
 make > netcdff.make.${GNU_TRP}.foo 2>&1
 make check > netcdff.check.${GNU_TRP}.foo 2>&1
