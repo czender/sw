@@ -117,18 +117,20 @@ endif
 %.ind: .itmp
 	@if [ -f $*.idx ]; then ${MAKEINDEX} $*; touch .rerun; touch .itmp; fi
 
-%.dvi: %.aux %.ind %.bbl
-# Make sure DVI file exists; if not then recompile
-	@if [ ! -f $*.dvi ]; then touch .rerun; fi
-	@if [ -f .rerun ]; then rm .rerun; ${LATEX} \\input{$*}; else ${MAKE} $*.aux; fi
-# While references et al. are changed then recompile
-	@while ( grep Rerun $*.log > /dev/null ); do ${LATEX} \\input{$*}; done
-	@if [ -f $*.ind ]; then touch $*.ind; fi
+# DVI method until 20170926
+#%.dvi: %.aux %.ind %.bbl
+## Make sure DVI file exists; if not then recompile
+#	@if [ ! -f $*.dvi ]; then touch .rerun; fi
+#	@if [ -f .rerun ]; then rm .rerun; ${LUALATEX} \\input{$*}; else ${MAKE} $*.aux; fi
+## While references et al. are changed then recompile
+#	@while ( grep Rerun $*.log > /dev/null ); do ${LUALATEX} \\input{$*}; done
+#	@if [ -f $*.ind ]; then touch $*.ind; fi
 
-# %.dvi : %.tex
-# 	-${LATEX} $*.tex
-# 	-${BIBTEX} $*
-# 	-${MAKEINDEX} $*
+# DVI method after 20170926
+%.dvi : %.tex
+ 	-${LUALATEX} $*.tex
+ 	-${BIBTEX} $*
+ 	-${MAKEINDEX} $*
 
 %.html : %.tex
 	-mkdir ${HOME}/public_html/$*
