@@ -128,9 +128,9 @@ endif
 
 # DVI method after 20170926
 %.dvi : %.tex
- 	-${LUALATEX} $*.tex
- 	-${BIBTEX} $*
- 	-${MAKEINDEX} $*
+	-${LUALATEX} $*.tex
+	-${BIBTEX} $*
+	-${MAKEINDEX} $*
 
 %.html : %.tex
 	-mkdir ${HOME}/public_html/$*
