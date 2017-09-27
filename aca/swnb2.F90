@@ -6605,7 +6605,6 @@ program swnb2
      ! i.e., from downwelling radiance to upwelling radiance. 
      
      ! NB: Possible bug in current DISORT() documentation
-     ! Intensities are returned in arrays in order of descending cosine of polar angle
      ! ndr = nadir  = travelling towards nadir  = downwelling
      ! zen = zenith = travelling towards zenith = upwelling
      ! 20160515: Recover azimuthally averaged intensites from DISORT2 quantities
