@@ -29,8 +29,8 @@
 \usepackage{graphicx} % Defines \includegraphics*
 %\usepackage[pdftex]{graphicx} % Defines \includegraphics*
 %\pdfcompresslevel=9
-\usepackage{thumbpdf} % Generate thumbnails
-\usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
+%\usepackage{thumbpdf} % Generate thumbnails
+%\usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
 \graphicspath{/Users/zender/data/ps} % Help epstopdf find .eps figures to convert
 \else % !PDFLaTeX
 \usepackage{graphicx} % Defines \includegraphics*
@@ -62,6 +62,7 @@
 \usepackage{subfigure} % \subfigure for panel labeling within figure environment
 %\usepackage{texnames} % Typeset AMSTeX, METAFONT, BiBTeX (poorly coded)
 \usepackage[safe]{tipa} % International Phonetic Alphabet
+% \usepackage{times} % Postscript Times-Roman font KoD99 p. 375 20170927: prevents non-Times fonts with LuaLaTex
 \usepackage{tocbibind} % Add Bibliography and Index to Table of Contents
 \usepackage{type1cm} % Type 1 fonts are scalable
 %\usepackage[Euler]{upgreek} % Upright Greek letters [Euler,Symbol,Symbolsmallscale]
@@ -181,12 +182,13 @@
 \begin{document} % End preamble
 
 \ifpdf % PDFLaTeX
-\pdfinfo{ % A command provided by PDFLaTeX
-/Title (Template for LaTeX files)
-/Subject (Template for LaTeX files)
-/Author (Charlie Zender)
-/Keywords (ltx)
-} % end \pdfinfo
+% 20170927: LuaLaTex does not have \pdfinfo{}
+%\pdfinfo{ % A command provided by PDFLaTeX
+%/Title (Template for LaTeX files)
+%/Subject (Template for LaTeX files)
+%/Author (Charlie Zender)
+%/Keywords (ltx)
+%} % end \pdfinfo
 % \pdfcatalog{ % A command provided by PDFLaTeX
 % /URI (http://www.ess.uci.edu/zender/ltx) % Base URL of document
 % } % end \pdfcatalog
