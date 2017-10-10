@@ -28,8 +28,8 @@
 % Standard packages
 \usepackage{ifpdf} % Define \ifpdf
 \ifpdf % PDFLaTeX
-\usepackage[pdftex]{graphicx} % Defines \includegraphics*
-\pdfcompresslevel=9
+%\usepackage[pdftex]{graphicx} % Defines \includegraphics*
+%\pdfcompresslevel=9
 \usepackage{thumbpdf} % Generate thumbnails
 \usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
 \else % !PDFLaTeX
@@ -40,7 +40,7 @@
 \usepackage{longtable} % Multi-page tables, e.g., acronyms and symbols
 \usepackage{makeidx} % Index keyword processor: \printindex and \see
 \usepackage{natbib} % \cite commands from aguplus
-\usepackage{times} % Postscript Times-Roman font KoD99 p. 375
+% \usepackage{times} % Postscript Times-Roman font KoD99 p. 375 20170927: prevents non-Times fonts with LuaLaTex
 \usepackage{url} % Typeset URLs and e-mail addresses
 
 % hyperref is last package since it redefines other packages' commands
@@ -62,8 +62,8 @@
 % pagecolor     Color for links to other pages
 % urlcolor      Color for linked URLs
 \ifpdf % PDFLaTeX
-\usepackage[backref,breaklinks,colorlinks,citecolor=blue,linkcolor=blue,urlcolor=blue,hyperindex,plainpages=false,pdftex]{hyperref} % Hyper-references
-\pdfcompresslevel=9
+\usepackage[backref,breaklinks,colorlinks,citecolor=blue,linkcolor=blue,urlcolor=blue,hyperindex,plainpages=false]{hyperref} % Hyper-references
+%\pdfcompresslevel=9
 \else % !PDFLaTeX
 \usepackage[backref=false,breaklinks,colorlinks=false,hyperindex,plainpages=false]{hyperref} % Hyper-references
 \fi % !PDFLaTeX
