@@ -12,6 +12,7 @@
 # Usage:
 # chmod a+x ~/anl/acme_eqm.sh
 # cd ~/anl;./acme_eqm.sh
+# cd ~/anl;./acme_eqm.sh essgcm14 0006 0020
 # cd ~/anl;./acme_eqm.sh sncpd02 0000 0020
 # cd ~/anl;./acme_eqm.sh ne30_gx1.B1850c5d 0005 0007
 
@@ -56,13 +57,14 @@ fi # !$3
 
 # 1. Primary variables
 #drc_in="${DATA}/${caseid}" # [sng] Directory for input files
-#drc_out="${DATA}/anl" # [sng] Directory for output files
-drc_in="${MY_PROJWORK}/ne30/raw" # [sng] Directory for input files
-drc_out="${MY_PROJWORK}/ne30/clm" # [sng] Directory for output files
+drc_out="${DATA}/anl" # [sng] Directory for output files
+#drc_in="${MY_PROJWORK}/ne30/raw" # [sng] Directory for input files
+#drc_out="${MY_PROJWORK}/ne30/clm" # [sng] Directory for output files
 
 mkdir -p ${drc_out}
 cd ${drc_out}
 
+#fld_lst='FSNT,FLNT,LANDFRAC,OCNFRAC,PRECC,PRECL,TREFHT,gw' # Standard variables
 fld_lst='FSNT,FLNT,LANDFRAC,OCNFRAC,PRECC,PRECL,TREFHT,gw' # Standard variables
 for yr in `seq $yr_srt $yr_end` ; do
     yyyy=`printf "%04d" ${yr}`

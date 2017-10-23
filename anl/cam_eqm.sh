@@ -67,9 +67,9 @@ drc_out="${DATA}/anl" # [sng] Directory for output files
 mkdir -p ${drc_out}
 cd ${drc_out}
 
-# fld_lst='FSNT,FLNT,SNODSTCI,SNODSTMCI,SNOBCCI,SNOBCMCI,TREFHT,gw' # SNICAR runs
-#fld_lst='FSNT,FLNT,LANDFRAC,OCNFRAC,PRECC,PRECL,TREFHT,gw' # Standard CAM runs
-fld_lst='FSNT,FLNT,LANDFRAC,OCNFRAC,PRECC,PRECL,PRECSL,PRECSC,TREFHT,BCDEPDRY,BCDEPWET,BCPHISF,BCPHOSF,gw' # BC runs
+#fld_lst='FSNT,FLNT,SNODSTCI,SNODSTMCI,SNOBCCI,SNOBCMCI,TREFHT,gw' # SNICAR runs
+fld_lst='FSNT,FLNT,LANDFRAC,OCNFRAC,PRECC,PRECL,TREFHT,gw' # Standard CAM runs
+#fld_lst='FSNT,FLNT,LANDFRAC,OCNFRAC,PRECC,PRECL,PRECSL,PRECSC,TREFHT,BCDEPDRY,BCDEPWET,BCPHISF,BCPHOSF,gw' # BC runs
 for yr in `seq $yr_srt $yr_end` ; do
     yyyy=`printf "%04d" ${yr}`
     printf "Averaging ${caseid} data for year ${yyyy}...\n"
@@ -77,7 +77,7 @@ for yr in `seq $yr_srt $yr_end` ; do
     if ! ncra -O -v ${fld_lst} -n 12,2,1 -p ${drc_in} ${caseid}.cam2.h0.${yyyy}-01.nc ${drc_out}/${caseid}_${yyyy}.nc ; then
 	echo "${0}: ncra-averaging failed for year ${yr}, aborting..." && exit 1
     fi # endif
-    if ! ncks -A -v area -p ${drc_in} ${caseid}.clm2.h0.${yyyy}-01.nc ${drc_out}/${caseid}_${yyyy}.nc ; then
+    if ! ncks -A -C -v area -p ${drc_in} ${caseid}.clm2.h0.${yyyy}-01.nc ${drc_out}/${caseid}_${yyyy}.nc ; then
 	echo "${0}: Adding area field failed for year ${yr}, aborting..." && exit 1
     fi # endif
 #    if ! ncap2 -O -s 'FTNT=FSNT-FLNT;PRECT=PRECC+PRECL' ${drc_out}/${caseid}_${yyyy}.nc ${drc_out}/${caseid}_${yyyy}.nc ; then
