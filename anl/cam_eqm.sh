@@ -80,8 +80,8 @@ for yr in `seq $yr_srt $yr_end` ; do
     if ! ncks -A -C -v area -p ${drc_in} ${caseid}.clm2.h0.${yyyy}-01.nc ${drc_out}/${caseid}_${yyyy}.nc ; then
 	echo "${0}: Adding area field failed for year ${yr}, aborting..." && exit 1
     fi # endif
-#    if ! ncap2 -O -s 'FTNT=FSNT-FLNT;PRECT=PRECC+PRECL' ${drc_out}/${caseid}_${yyyy}.nc ${drc_out}/${caseid}_${yyyy}.nc ; then
-    if ! ncap2 -O -s 'FTNT=FSNT-FLNT;PRECT=PRECC+PRECL;PRECS=PRECSL+PRECSC;SOTDEP=-(BCDEPDRY+BCDEPWET)' ${drc_out}/${caseid}_${yyyy}.nc ${drc_out}/${caseid}_${yyyy}.nc ; then
+    if ! ncap2 -O -s 'FTNT=FSNT-FLNT;PRECT=PRECC+PRECL' ${drc_out}/${caseid}_${yyyy}.nc ${drc_out}/${caseid}_${yyyy}.nc ; then
+#    if ! ncap2 -O -s 'FTNT=FSNT-FLNT;PRECT=PRECC+PRECL;PRECS=PRECSL+PRECSC;SOTDEP=-(BCDEPDRY+BCDEPWET)' ${drc_out}/${caseid}_${yyyy}.nc ${drc_out}/${caseid}_${yyyy}.nc ; then
     echo "${0}: ncap2 processing failed, aborting..." && exit 1
     fi # endif
 done # end loop over yr
@@ -103,15 +103,15 @@ fi # endif
 if ! ncra -O ${drc_out}/${caseid}_${yyyy_srt}_${yyyy_end}.nc ${drc_out}/${caseid}_clm.nc ; then
     echo "${0}: ncra temporal averaging failed, aborting..." && exit 1
 fi # endif
-if ! ncwa -O -a lat,lon -w gw ${drc_out}/${caseid}_${yyyy_srt}_${yyyy_end}.nc ${drc_out}/${caseid}_${yyyy_srt}_${yyyy_end}_xy.nc ; then
+if ! ncwa -O -a lat,lon -w gw ${drc_out}/${caseid}_${yyyy_srt}_${yyyy_end}.nc ${drc_out}/${caseid}_${yyyy_srt}_${yyyy_end}_txy.nc ; then
     echo "${0}: ncwa spatial averaging failed, aborting..." && exit 1
 fi # endif
-if ! ncwa -O -a time ${drc_out}/${caseid}_${yyyy_srt}_${yyyy_end}_xy.nc ${drc_out}/${caseid}_clm_xy.nc ; then
+if ! ncwa -O -a time ${drc_out}/${caseid}_${yyyy_srt}_${yyyy_end}_txy.nc ${drc_out}/${caseid}_clm_txy.nc ; then
     echo "${0}: ncwa time averaging failed, aborting..." && exit 1
 fi # endif
 
 printf "Annual timeseries of global-mean TREFHT, F^N_R(TOA) complete.\n"
 printf "Computed ${yr_nbr} annual means from year ${yr_srt_rth} to year ${yr_end_rth}.\n"
 printf "View timeseries and spatial data, respectively, with:\n"
-printf "ncview ${drc_out}/${caseid}_${yyyy_srt}_${yyyy_end}_xy.nc &\n"
+printf "ncview ${drc_out}/${caseid}_${yyyy_srt}_${yyyy_end}_txy.nc &\n"
 printf "ncview ${drc_out}/${caseid}_${yyyy_srt}_${yyyy_end}.nc &\n"
