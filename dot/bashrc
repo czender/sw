@@ -1059,6 +1059,7 @@ fi # endif
 alias bc='bc -l' # -l = defines standard math library and sets scale to 20
 alias beepoff='xset b off' # Turn beep sound off for quiet work envionments
 alias yellowstone='ssh -Y yellowstone.ucar.edu' # Yubikey 5573
+alias cheyenne='ssh -Y cheyenne.ucar.edu' # Yubikey 5573
 alias mira='ssh -Y mira.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
 alias rhea='ssh -Y rhea.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
 alias titan='ssh -Y titan.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
@@ -1069,7 +1070,6 @@ alias bebop='ssh -Y bebop.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias blues='ssh -Y blues.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias cooley='ssh -Y cooley.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
 alias cori='ssh -Y cori.nersc.gov' # pw_hgh
-alias hopper='ssh -Y hopper.nersc.gov' # pw_hgh
 alias edison='ssh -Y edison.nersc.gov' # pw_hgh
 alias bsrc="source ${HOME}/.bashrc"
 alias chm='chmod 644 *.*' # Make readable
