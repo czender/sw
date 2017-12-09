@@ -107,6 +107,30 @@ CPPFLAGS=${MY_INC_DIR} make MPICXX=g++ CXX=g++
 # 20170825: rhea.ccs.ornl.gov x86_64/EMT64 Ubuntu Xenial gcc/gfortran 5.4 netcdf-4.3.3.1
 #***********************************************************************
 
+#***********************************************************************
+# 20171208: firn.ess.uci.edu x86_64-apple-darwin16.5.0 MacOSX 10.13.1 High Sierra llvm/clang 9.0.0 netcdf-4.4.1.1
+#***********************************************************************
+# Tempest 2.0
+# Only one additional port needed for tempestremap on MACOSX. Everything (blas, lapack) already installed by XTools.
+sudo port install netcdf-cxx
+cd ${DATA}/tmp
+git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+autoreconf -fi
+mkdir -p build && cd build
+../configure --prefix=/usr/local --with-blas=/opt/local --with-lapack=/opt/local --with-netcdf=/opt/local --with-hdf5=/opt/local
+../configure --prefix=/usr/local --with-netcdf=/opt/local/lib/libnetcdf_c++.a --with-hdf5=/opt/local
+#../configure --prefix=/usr/local --with-blas=/opt/local --with-lapack=/opt/local --with-netcdf=/opt/local --with-hdf5=/opt/local --enable-linkable-library
+make all
+make install
+
+# No Makefile modifications needed, but must overwrite compiler defaults with command-line arguments:
+# Same command works on grele
+make MPICXX=g++ CXX=g++
+#***********************************************************************
+# 20171208: firn.ess.uci.edu x86_64-apple-darwin16.5.0 MacOSX 10.13.1 Sierra llvm/clang 8.1.0 netcdf-4.4.1
+#***********************************************************************
+
 ************************************************************************
 20160322: Begin Mark Taylor script via Jon Wolfe
 ************************************************************************
