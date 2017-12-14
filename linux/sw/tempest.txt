@@ -116,6 +116,7 @@ sudo port install netcdf-cxx
 cd ${DATA}/tmp
 git clone https://github.com/ClimateGlobalChange/tempestremap.git
 cd ${DATA}/tmp/tempestremap
+git reset --hard origin/master
 autoreconf -fi
 mkdir -p build && cd build
 ../configure --prefix=/usr/local --with-blas=/opt/local --with-lapack=/opt/local --with-netcdf=/opt/local --with-hdf5=/opt/local
