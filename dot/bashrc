@@ -430,8 +430,8 @@ case "${PVM_ARCH}" in
 	export NETCDF_INC="${NETCDF_ROOT}/include"
 	export NETCDF_LIB="${NETCDF_ROOT}/lib"
 	case "${HOST}" in 
-	    # 20130214: Support NCAR modules on cheyenne by removing custom environment variables
-	    cheyenne* | rhea* ) unset NETCDF_ROOT ; unset NETCDF4_ROOT ; unset NETCDF_INC ; unset NETCDF_LIB ; ;; # endif NCAR, ORNL
+	    # 20130214: Support NCAR modules on cheyenne by removing custom environment variables?
+	    rhea* ) unset NETCDF_ROOT ; unset NETCDF4_ROOT ; unset NETCDF_INC ; unset NETCDF_LIB ; ;; # endif NCAR, ORNL
 	esac # endcase ${HOST}
 
 # OpenMP
