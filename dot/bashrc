@@ -391,6 +391,7 @@ case "${PVM_ARCH}" in
 	    aims4* ) export DATA="/export/${USER}/data" ; ;; # endif LLNL
 	    bebop* | blues* | blogin* ) export DATA="/home/${USER}/data" ; ;; # endif ANL LCRC
 	    cg-gpu* ) export DATA="/home/${USER}/data" ; ;; # endif NCSA roger
+	    cheyenne* ) export DATA="/glade/p/work/${USER}" ; ;; # endif NCAR
 	    cooley* | cc* ) export DATA="/projects/HiRes_EarthSys/${USER}" ; ;; # endif ANL ALCF 
 	    cori* | edison* | hopper* | nid* ) export DATA="${HOME}/data" ; ;; # endif NERSC
 	    gplogin* ) export DATA="/data/${USER}" ; ;; # endif EMT64 Rocks Cluster
@@ -399,7 +400,6 @@ case "${PVM_ARCH}" in
 	    mira* ) export DATA="/glade/scratch/${USER}" ; ;; # endif OLCF mira
 	    pileus* ) export DATA="/home/${USER}/data" ; ;; # endif CADES
 	    rhea* | titan* ) export DATA="/lustre/atlas/world-shared/cli115/${USER}" ; ;; # endif OLCF
-	    ys* ) export DATA="/glade/p/work/${USER}" ; ;; # endif NCAR
 	    * ) export DATA="/data/${USER}" ; ;; # endif default
 	esac # endcase ${HOST}
 # PKG_ROOT is where non-default sysadmin-installed packages reside
@@ -430,8 +430,8 @@ case "${PVM_ARCH}" in
 	export NETCDF_INC="${NETCDF_ROOT}/include"
 	export NETCDF_LIB="${NETCDF_ROOT}/lib"
 	case "${HOST}" in 
-	    # 20130214: Support NCAR modules on yellowstone by removing custom environment variables
-	    ys* | rhea* ) unset NETCDF_ROOT ; unset NETCDF4_ROOT ; unset NETCDF_INC ; unset NETCDF_LIB ; ;; # endif NCAR, ORNL
+	    # 20130214: Support NCAR modules on cheyenne by removing custom environment variables
+	    cheyenne* | rhea* ) unset NETCDF_ROOT ; unset NETCDF4_ROOT ; unset NETCDF_INC ; unset NETCDF_LIB ; ;; # endif NCAR, ORNL
 	esac # endcase ${HOST}
 
 # OpenMP
@@ -440,7 +440,8 @@ case "${PVM_ARCH}" in
 		neige* ) export OMP_NUM_THREADS='2' ; ;; # endif dual processor
 		aerosol* | firn* | frazil* | givre* | hpc* | jaws* | katabatic* | skyglow* ) export OMP_NUM_THREADS='4' ; ;; # endif quad processor
 		glace* | gplogin* | grele* | roulee* | snow* ) export OMP_NUM_THREADS='8' ; ;; # endif dual-quad processor
-		aims4* | mirage* | pileus* | rhea* | ys* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-octet processor
+		aims4* | mirage* | pileus* | rhea* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-octet processor
+		cheyenne* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-hexadecimal processor
 	esac # endcase ${HOST}
 
 	# Set MPI
@@ -561,12 +562,11 @@ case "${PVM_ARCH}" in
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${NCARG_ROOT}/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
 	case "${HOST}" in 
-	    # 20130916: Support NCAR modules on yellowstone by removing custom environment variables
+	    # 20130916: Support NCAR modules on cheyenne by removing custom environment variables
 	    aims4* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/uvcdat/2016-01-21/lib:/usr/local/uvcdat/2016-01-21/Externals/lib64:/usr/local/uvcdat/2016-01-21/Externals/lib; ;; # endif LLNL
+	    # cheyenne* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/apps/opt/udunits/2.1.24/intel/12.1.4/lib; ;; # endif NCAR
 	    pileus* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/ACME/lib\:/opt/ACME/uvcdat-2.2-build/install/Externals/lib; ;; # endif CADES
 	    rhea* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/sw/redhat6/udunits/2.1.24/rhel6.4_intel13.1.3/lib; ;; # endif ORNL
-#	    ys* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/apps/opt/udunits/2.1.24/gnu/default/lib; ;; # endif NCAR
-	    ys* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/apps/opt/udunits/2.1.24/intel/12.1.4/lib; ;; # endif NCAR
 	esac # endcase ${HOST}
 	if [ -n "${MPI_ROOT}" ]; then
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MPI_ROOT}/lib # OpenMPI
@@ -785,6 +785,9 @@ case "${PVM_ARCH}" in
 esac # endcase ${PVM_ARCH}
 
 # Default compilers
+# NB: Activating real gcc, g++, and gfortran on MacPorts requires something like:
+# port select --list gcc
+# sudo port select --set gcc mp-gcc7
 AR='ar'
 #AR_macports='gcc-ar-mp-4.9'
 #AR_macports='gcc-ar-mp-5'
@@ -793,19 +796,19 @@ CC_clang='clang'
 # 20150109: Introduce -D_DEFAULT_SOURCE in place of deprecated (as of gcc 4.9.2) -D_BSD_SOURCE -D_POSIX_SOURCE
 CC_gcc='gcc -std=c99 -pedantic -D_DEFAULT_SOURCE'
 CC_gcc_pre_4_9='gcc -std=c99 -pedantic -D_BSD_SOURCE -D_POSIX_SOURCE'
-CC_gcc_macports='gcc-mp-6 -std=c99 -pedantic -D_DEFAULT_SOURCE'
+CC_gcc_macports='gcc-mp-7 -std=c99 -pedantic -D_DEFAULT_SOURCE'
 CC_icc='icc -std=c99 -D_DEFAULT_SOURCE'
 CC_pathcc='pathcc -std=c99 -D_DEFAULT_SOURCE'
 CC_pgcc='pgcc -c9x -D_DEFAULT_SOURCE'
 CXX_clang='clang -std=c++11'
 CXX_gxx='g++ -std=c++11'
-CXX_gxx_macports='g++-mp-6 -std=c++11'
+CXX_gxx_macports='g++-mp-7 -std=c++11'
 CXX_icpc='icpc'
 CXX_pathCC='pathCC'
 CXX_pgCC='pgCC'
 FC_g95='g95'
 FC_gfortran='gfortran'
-FC_gfortran_macports='gfortran-mp-6'
+FC_gfortran_macports='gfortran-mp-7'
 FC_ifort='ifort'
 FC_pathf95='pathf95'
 FC_pgf95='pgf95'
@@ -824,7 +827,7 @@ case "${HOST}" in
     frazil* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran} ; ;; # endif clang/clang/gfortran
     givre* | neige* | roulee* | skyglow* | snow* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # endif gcc/g++/gfortran OpenMPI
     cooley* | mira* | rhea* | titan* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif gcc/g++/gfortran OpenMPI
-    cori* | edison* | ys* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
+    cheyenne* | cori* | edison* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # endif gcc/g++/g95 MPICH 
 esac # endcase ${HOST}
 # LAMMPICC and LAMPICXX are OS-independent
@@ -840,7 +843,7 @@ case "${HOST}" in
     esqf* ) export GCC_RCH_ARG='-mtune=power4' ; export ICC_RCH_ARG='' ; ;; # endif Power4
     frazil* | givre* | glace* | grele* | neige* | roulee* | skyglow* | snow* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-axP -mcpu=pentium4 -msse3' ; ;; # endif Core2 Extreme EMT64
     gplogin* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-ipo -no-prec-div -Wl,-z,muldefs' ; ;; # endif Core2 Extreme EMT64
-    mirage* | ys* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='-ipo -no-prec-div -Wl,-z,muldefs' ; ;; # endif Core2 Extreme EMT64
+    mirage* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='-ipo -no-prec-div -Wl,-z,muldefs' ; ;; # endif Core2 Extreme EMT64
     lanina* ) export GCC_RCH_ARG='-march=k6-2' ; export ICC_RCH_ARG='' ; ;; # endif AMD K6-2
     virga* ) export GCC_RCH_ARG='-march=pentium4' ; export ICC_RCH_ARG='-axP -mcpu=pentium4 -msse3' ; ;; # endif Core Duo
 esac # endcase ${HOST}
@@ -1058,7 +1061,6 @@ fi # endif
 #alias ncbrowse='java ncBrowse.Browser' # netCDF file browser
 alias bc='bc -l' # -l = defines standard math library and sets scale to 20
 alias beepoff='xset b off' # Turn beep sound off for quiet work envionments
-alias yellowstone='ssh -Y yellowstone.ucar.edu' # Yubikey 5573
 alias cheyenne='ssh -Y cheyenne.ucar.edu' # Yubikey 5573
 alias mira='ssh -Y mira.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
 alias rhea='ssh -Y rhea.ccs.ornl.gov' # pyn_mdm + 6-digit fob code

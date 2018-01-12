@@ -4831,18 +4831,11 @@ sudo port install p7zip # 7z compression decompression
 
 sudo port install gmake
 sudo port install -t ddd # Installation sudo
-#failed port install gcc48 # Unnecessary and causes conflicts with other packages
 
-# https://wiki.helsinki.fi/display/HUGG/Installing+the+GNU+compilers+on+Mac+OS+X
-# Install command_line_tools_for_osx_mavericks_april_2014.dmg
-# Install latest GCC including gfortran into /usr/local/bin
-# Problem is that gcc-4.9 incompatible with gcc-4.8 objects from MacPorts
-# Leads to massive problems compiling C++ code
-wget http://prdownloads.sourceforge.net/hpc/gcc-4.9-bin.tar.gz
-cd ~/Downloads
-gunzip gcc-4.9-bin.tar.gz
-sudo tar xvf gcc-4.9-bin.tar -C /
-echo 'export PATH=/usr/local/bin:$PATH' >> ~/.bash_profile
+# NB: Activating real gcc, g++, and gfortran on MacPorts requires something like:
+# https://stackoverflow.com/questions/8361002/how-to-use-the-gcc-installed-in-macports
+# port select --list gcc
+# sudo port select --set gcc mp-gcc7
 
 sudo port selfupdate
 sudo port upgrade outdated

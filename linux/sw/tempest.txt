@@ -108,34 +108,6 @@ CPPFLAGS=${MY_INC_DIR} make MPICXX=g++ CXX=g++
 #***********************************************************************
 
 #***********************************************************************
-# 20171218: firn.ess.uci.edu x86_64-apple-darwin17.3.0 MacOSX 10.13.2 High Sierra llvm/clang 9.0.0 netcdf-4.4.1.1
-#***********************************************************************
-# Tempest 2.0
-# 20180104: Recipe still fails (on MacOS)
-# Only one additional port needed for tempestremap on MACOSX. Everything (blas, lapack) already installed by XTools.
-sudo port install netcdf-cxx
-cd ${DATA}/tmp
-# git clone https://github.com/ClimateGlobalChange/tempestremap.git
-cd ${DATA}/tmp/tempestremap
-git pull
-git reset --hard origin/master
-autoreconf -fi
-mkdir -p build
-cd ${DATA}/tmp/tempestremap/build
-../configure --prefix=/usr/local --with-blas=/opt/local --with-lapack=/opt/local --with-netcdf=/opt/local --with-hdf5=/opt/local
-../configure --prefix=/usr/local --with-netcdf=/opt/local/lib/libnetcdf_c++.a --with-hdf5=/opt/local
-#../configure --prefix=/usr/local --with-blas=/opt/local --with-lapack=/opt/local --with-netcdf=/opt/local --with-hdf5=/opt/local --enable-linkable-library
-make all
-make install
-
-# No Makefile modifications needed, but must overwrite compiler defaults with command-line arguments:
-# Same command works on grele
-make MPICXX=g++ CXX=g++
-#***********************************************************************
-# 20171218: firn.ess.uci.edu x86_64-apple-darwin17.3.0 MacOSX 10.13.2 Sierra llvm/clang 8.1.0 netcdf-4.4.1
-#***********************************************************************
-
-#***********************************************************************
 # 20180104: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.1.1 netcdf-4.5.1 HDF4 git
 #***********************************************************************
 # Tempest 2.0
@@ -158,3 +130,33 @@ sudo make install
 #***********************************************************************
 # 20180104: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.1.1 netcdf-4.5.1 HDF4 git
 #***********************************************************************
+#***********************************************************************
+# 20180112: firn.ess.uci.edu x86_64-apple-darwin17.3.0 MacOSX 10.13.2 High Sierra llvm/clang 9.0.0 netcdf-4.4.1.1
+#***********************************************************************
+# Tempest 2.0
+# 20180112: Recipe works!
+# Only one additional port needed for tempestremap on MACOSX. Everything (blas, lapack) already installed by XTools
+sudo port install netcdf-cxx
+# 20180112: configure fails on Mac unless gfortran is found
+# https://stackoverflow.com/questions/8361002/how-to-use-the-gcc-installed-in-macports
+port select --list gcc
+sudo port select --set gcc mp-gcc7
+hash -r
+
+cd ${DATA}/tmp
+# git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+git pull
+git reset --hard origin/master
+autoreconf -fi
+mkdir -p build
+cd ${DATA}/tmp/tempestremap/build
+../configure --prefix=/usr/local --with-blas=/opt/local --with-lapack=/opt/local --with-netcdf=/opt/local --with-hdf5=/opt/local
+make all
+sudo make install
+sudo port select --set gcc none
+hash -r
+#***********************************************************************
+# 20180112: firn.ess.uci.edu x86_64-apple-darwin17.3.0 MacOSX 10.13.2 Sierra llvm/clang 8.1.0 netcdf-4.4.1
+#***********************************************************************
+
