@@ -3,7 +3,7 @@
 # Purpose: Universal .bashrc file, executed at start of any sub-shell
 
 # Source: Translation of ~/dot/cshrc v. 1.106 of 20000103
-# 20000103: Function definitions are not allowed inside if statements in Bash 2.x
+# 20000103: Function definitions are not allowed inside 'if' statements in Bash 2.x
 
 # Bash login shells execute one of (in order) .bash_profile, .bash_login, .profile
 # .bashrc is executed at start of any subshell
@@ -18,8 +18,8 @@
 
 # Usage: 
 # /bin/cp -f ${HOME}/.bashrc /fs/cgd/home0/${USER}
+# scp -p ${HOME}/sw/dot/bashrc cheyenne.ucar.edu:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc dust.ess.uci.edu:.bashrc
-# scp -p ${HOME}/sw/dot/bashrc ipcc.ess.uci.edu:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc rhea.ccs.ornl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc cooley.alcf.anl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc bebop.lcrc.anl.gov:.bashrc
@@ -513,10 +513,6 @@ case "${PVM_ARCH}" in
 #	    frazil* | givre* | neige* | roulee* | skyglow ) 
 #		PATH=${PATH}\:/usr/local/cuda/bin ; ;; # endif CUDA
 	    pileus* ) PATH=${PATH}\:/opt/ACME/bin ; ;; # endif CADES
-	    *) # Default
-		PATH=${PATH}\:${ICC_ROOT}/bin
-		PATH=${PATH}\:${IFC_ROOT}/bin
-		;; # endif default
 	esac # endcase ${HOST}
 	
 	MANPATH=${MANPATH}\:${HOME}/nco/man
@@ -541,14 +537,9 @@ case "${PVM_ARCH}" in
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${ICC_ROOT}/lib/intel64
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/home/pvicente/install/udunits-2.1.24/lib
 		;; # endif greenplanet
-	    *) # Default
-		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${ICC_ROOT}/lib
-		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${IFC_ROOT}/lib
-		;; # endif default
 	esac # endcase ${HOST}
 	case "${HOST}" in 
 	    gplogin* ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PGI}/linux86-64/7.2-3/lib ; ;;
-	    ipcc* ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PGI}/linux86-64/7.1-5/lib ; ;;
 	    hpc* ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PGI}/linux86-64/7.2-3/lib ; ;;
 	esac # endcase ${HOST}
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
