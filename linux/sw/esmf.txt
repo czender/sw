@@ -232,6 +232,8 @@ GLL Gauss-Lobatto-Legendre
 CGLL Gauss-Lobatto-Legendre ?
 RLL Rectangular Latitude Longitude
 RRM Regionally Refined Model
+ne = number of edges?
+np = degree of polynomial?
 
 # OLCF environment
 PE Programming Environment
