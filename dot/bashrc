@@ -391,7 +391,7 @@ case "${PVM_ARCH}" in
 	    aims4* ) export DATA="/export/${USER}/data" ; ;; # endif LLNL
 	    bebop* | blues* | blogin* ) export DATA="/home/${USER}/data" ; ;; # endif ANL LCRC
 	    cg-gpu* ) export DATA="/home/${USER}/data" ; ;; # endif NCSA roger
-	    cheyenne* ) export DATA="/glade/p/work/${USER}" ; ;; # endif NCAR
+	    cheyenne* | r8i0n* ) export DATA="/glade/p/work/${USER}" ; ;; # endif NCAR
 	    cooley* | cc* ) export DATA="/projects/HiRes_EarthSys/${USER}" ; ;; # endif ANL ALCF 
 	    cori* | edison* | hopper* | nid* ) export DATA="${HOME}/data" ; ;; # endif NERSC
 	    gplogin* ) export DATA="/data/${USER}" ; ;; # endif EMT64 Rocks Cluster
@@ -441,7 +441,7 @@ case "${PVM_ARCH}" in
 		aerosol* | firn* | frazil* | givre* | hpc* | jaws* | katabatic* | skyglow* ) export OMP_NUM_THREADS='4' ; ;; # endif quad processor
 		glace* | gplogin* | grele* | roulee* | snow* ) export OMP_NUM_THREADS='8' ; ;; # endif dual-quad processor
 		aims4* | mirage* | pileus* | rhea* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-octet processor
-		cheyenne* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-hexadecimal processor
+		cheyenne* | r8i0n* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-hexadecimal processor
 	esac # endcase ${HOST}
 
 	# Set MPI
@@ -555,7 +555,7 @@ case "${PVM_ARCH}" in
 	case "${HOST}" in 
 	    # 20130916: Support NCAR modules on cheyenne by removing custom environment variables
 	    aims4* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/uvcdat/2016-01-21/lib:/usr/local/uvcdat/2016-01-21/Externals/lib64:/usr/local/uvcdat/2016-01-21/Externals/lib; ;; # endif LLNL
-	    cheyenne* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/u/apps/ch/opt/udunits/2.2.20/gnu/4.8.2/lib; ;; # endif NCAR
+	    cheyenne* | r8i0n* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/u/apps/ch/opt/udunits/2.2.20/gnu/4.8.2/lib; ;; # endif NCAR
 	    pileus* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/ACME/lib\:/opt/ACME/uvcdat-2.2-build/install/Externals/lib; ;; # endif CADES
 	    rhea* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/sw/redhat6/udunits/2.1.24/rhel6.4_intel13.1.3/lib; ;; # endif ORNL
 	esac # endcase ${HOST}
@@ -818,7 +818,7 @@ case "${HOST}" in
     frazil* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran} ; ;; # endif clang/clang/gfortran
     givre* | neige* | roulee* | skyglow* | snow* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # endif gcc/g++/gfortran OpenMPI
     cooley* | mira* | rhea* | titan* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif gcc/g++/gfortran OpenMPI
-    cheyenne* | cori* | edison* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
+    cheyenne* | r8i0n* | cori* | edison* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # endif gcc/g++/g95 MPICH 
 esac # endcase ${HOST}
 # LAMMPICC and LAMPICXX are OS-independent
