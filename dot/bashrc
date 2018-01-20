@@ -195,6 +195,7 @@ case "${HOST}" in
     edison* ) export MY_BIN_DIR="${HOME}/bin_edison" ; MY_LIB_DIR="${HOME}/lib_edison" ; MY_OBJ_DIR="${HOME}/obj_edison" ; ;;
     mira* ) export MY_BIN_DIR="${HOME}/bin_mira" ; MY_LIB_DIR="${HOME}/lib_mira" ; MY_OBJ_DIR="${HOME}/obj_mira" ; ;;
     rhea* ) export MY_BIN_DIR="${HOME}/bin_rhea" ; MY_LIB_DIR="${HOME}/lib_rhea" ; MY_OBJ_DIR="${HOME}/obj_rhea" ; ;;
+    theta* ) export MY_BIN_DIR="${HOME}/bin_theta" ; MY_LIB_DIR="${HOME}/lib_theta" ; MY_OBJ_DIR="${HOME}/obj_theta" ; ;;
     titan* ) export MY_BIN_DIR="${HOME}/bin_titan" ; MY_LIB_DIR="${HOME}/lib_titan" ; MY_OBJ_DIR="${HOME}/obj_titan" ; ;;
 esac # endcase ${HOST}
 
@@ -387,17 +388,18 @@ case "${PVM_ARCH}" in
 #	export TEXMFDIR='/usr/share/texlive' # One level above bibtex, tex,
 	export TEXMFDIR='/usr/share/texmf-texlive' # One level above bibtex, tex,
 	export X11='/usr/X11R6'
+# https://stackoverflow.com/questions/4554718/how-to-use-patterns-in-the-case-statement-in-bash-scripting
 	case "${HOST}" in 
 	    aims4* ) export DATA="/export/${USER}/data" ; ;; # endif LLNL
 	    bebop* | blues* | blogin* ) export DATA="/home/${USER}/data" ; ;; # endif ANL LCRC
 	    cg-gpu* ) export DATA="/home/${USER}/data" ; ;; # endif NCSA roger
-	    cheyenne* | r8i0n* ) export DATA="/glade/p/work/${USER}" ; ;; # endif NCAR
+	    *cheyenne* ) export DATA="/glade/p/work/${USER}" ; ;; # endif NCAR
 	    cooley* | cc* ) export DATA="/projects/HiRes_EarthSys/${USER}" ; ;; # endif ANL ALCF 
 	    cori* | edison* | hopper* | nid* ) export DATA="${HOME}/data" ; ;; # endif NERSC
 	    gplogin* ) export DATA="/data/${USER}" ; ;; # endif EMT64 Rocks Cluster
 	    hpc* ) export DATA="/data/users/${USER}" ; ;; # endif hpc
 	    mirage* ) export DATA="/glade/scratch/${USER}" ; ;; # endif NCAR mirage
-	    mira* ) export DATA="/glade/scratch/${USER}" ; ;; # endif OLCF mira
+	    mira* | theta* ) export DATA="/projects/HiRes_EarthSys/${USER}" ; ;; # endif ANL ALCF
 	    pileus* ) export DATA="/home/${USER}/data" ; ;; # endif CADES
 	    rhea* | titan* ) export DATA="/lustre/atlas/world-shared/cli115/${USER}" ; ;; # endif OLCF
 	    * ) export DATA="/data/${USER}" ; ;; # endif default
@@ -441,7 +443,7 @@ case "${PVM_ARCH}" in
 		aerosol* | firn* | frazil* | givre* | hpc* | jaws* | katabatic* | skyglow* ) export OMP_NUM_THREADS='4' ; ;; # endif quad processor
 		glace* | gplogin* | grele* | roulee* | snow* ) export OMP_NUM_THREADS='8' ; ;; # endif dual-quad processor
 		aims4* | mirage* | pileus* | rhea* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-octet processor
-		cheyenne* | r8i0n* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-hexadecimal processor
+		*cheyenne* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-hexadecimal processor
 	esac # endcase ${HOST}
 
 	# Set MPI
@@ -508,6 +510,7 @@ case "${PVM_ARCH}" in
 	esac # endcase ${HOST}
 	case "${HOST}" in 
 	    aims4* ) PATH=${PATH}\:/usr/local/uvcdat/2016-01-21/bin:/usr/local/uvcdat/2016-01-21/Externals/bin ; ;; # endif LLNL
+	    *cheyenne* ) PATH=${PATH}\:/opt/pbs/bin ; ;; # NCAR cheyenne
 	    gplogin* | mirage* ) # x86-64
 		PATH=${PATH}\:${ICC_ROOT}/bin/intel64 ; ;; # endif greenplanet
 #	    frazil* | givre* | neige* | roulee* | skyglow ) 
@@ -555,7 +558,7 @@ case "${PVM_ARCH}" in
 	case "${HOST}" in 
 	    # 20130916: Support NCAR modules on cheyenne by removing custom environment variables
 	    aims4* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/uvcdat/2016-01-21/lib:/usr/local/uvcdat/2016-01-21/Externals/lib64:/usr/local/uvcdat/2016-01-21/Externals/lib; ;; # endif LLNL
-	    cheyenne* | r8i0n* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/u/apps/ch/opt/udunits/2.2.20/gnu/4.8.2/lib; ;; # endif NCAR
+	    *cheyenne* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/u/apps/ch/opt/udunits/2.2.20/gnu/4.8.2/lib; ;; # endif NCAR
 	    pileus* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/ACME/lib\:/opt/ACME/uvcdat-2.2-build/install/Externals/lib; ;; # endif CADES
 	    rhea* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/sw/redhat6/udunits/2.1.24/rhel6.4_intel13.1.3/lib; ;; # endif ORNL
 	esac # endcase ${HOST}
@@ -817,8 +820,8 @@ case "${HOST}" in
 #   soot* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_g95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX=${LINUX_CXX} ;; # endif icc/icpc/g95 MPICH
     frazil* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran} ; ;; # endif clang/clang/gfortran
     givre* | neige* | roulee* | skyglow* | snow* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # endif gcc/g++/gfortran OpenMPI
-    cooley* | mira* | rhea* | titan* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif gcc/g++/gfortran OpenMPI
-    cheyenne* | r8i0n* | cori* | edison* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
+    cooley* | mira* | rhea* | theta* | titan* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif gcc/g++/gfortran OpenMPI
+    *cheyenne* | cori* | edison* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # endif gcc/g++/g95 MPICH 
 esac # endcase ${HOST}
 # LAMMPICC and LAMPICXX are OS-independent
@@ -860,7 +863,7 @@ fi # endif hostname
 
 # System-specific environments
 case "${HOST}" in
-    cooley* | cc* | mira* ) export PROJID='HiRes_EarthSys' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
+    cooley* | cc* | mira* | theta* ) export PROJID='HiRes_EarthSys' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
     cori* | edison* | hopper* | nid* ) export PROJID='acme' ; export DATA="${HOME}/data" ; ;;
     rhea* | titan* ) export PROJID='cli115' ; export DATA="/lustre/atlas/world-shared/${PROJID}/${USER}" ; ;; # endif OLCF
 esac # endcase ${HOST}
@@ -1062,6 +1065,7 @@ alias aims4='ssh -Y zender1@aims4.llnl.gov' # pw_hgh source /usr/local/uvcdat/la
 alias bebop='ssh -Y bebop.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias blues='ssh -Y blues.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias cooley='ssh -Y cooley.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
+alias theta='ssh -Y theta.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
 alias cori='ssh -Y cori.nersc.gov' # pw_hgh
 alias edison='ssh -Y edison.nersc.gov' # pw_hgh
 alias bsrc="source ${HOME}/.bashrc"
