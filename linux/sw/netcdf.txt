@@ -7115,3 +7115,23 @@ http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
 # 20180125: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.1.1 netcdf-4.6.0 HDF4 git
 #***********************************************************************
 
+#***********************************************************************
+# 20180201: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.1.1 netcdf-4.6.0 HDF4 git ed hartnett branch
+#***********************************************************************
+cd ${DATA}/tmp
+git clone https://github.com/NetCDF-World-Domination-Council/netcdf-c.git netcdf-ejh
+cd ${DATA}/tmp/netcdf-ejh
+git checkout ejh_rename_is_here
+
+make distclean
+git pull
+autoreconf -i -f
+CPPFLAGS='-I/usr/local/include -I/usr/include/hdf' LDFLAGS='-L/usr/local/lib -L/usr/lib64/hdf' LIBS='-ljpeg' ./configure --prefix=/usr/local --enable-shared --enable-cdf5 --enable-dap --enable-hdf4 --enable-logging --enable-netcdf4 --enable-v2 > netcdf.configure.${GNU_TRP}.foo 2>&1
+mv -f config.log netcdf.config.log.${GNU_TRP}.foo
+make > netcdf.make.${GNU_TRP}.foo 2>&1
+make check > netcdf.check.${GNU_TRP}.foo 2>&1
+sudo make install
+#***********************************************************************
+# 20180201: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.1.1 netcdf-4.5.1 HDF4 git ed hartnett branch
+#***********************************************************************
+
