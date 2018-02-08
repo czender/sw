@@ -12,11 +12,11 @@
 
 #define BYT_PER_GiB 1073741824LL
 
-// Test 8 GiB per variable, result: netCDF 4.4.x CDF5 is buggy
+// Test 8 GiB per variable, result: netCDF 4.4.x-4.6.0 CDF5 is buggy
 //#define DIM (BYT_PER_GiB*8/8)
-// Test 5 GiB per variable, result: netCDF 4.4.x CDF5 is buggy
+// Test 5 GiB per variable, result: netCDF 4.4.x-4.6.0 CDF5 is buggy
 #define DIM (BYT_PER_GiB*5/8)
-// Test 3 GiB per variable, result: netCDF 4.4.x CDF5 is fine
+// Test 3 GiB per variable, result: netCDF 4.4.x-4.6.0 CDF5 is fine
 //#define DIM (BYT_PER_GiB*3/8)
 #define FILENAME "cdf5.nc"
 

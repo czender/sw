@@ -411,7 +411,7 @@ case "${PVM_ARCH}" in
 	    gplogin* | mirage* | hpc* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # endif EMT64 Rocks Cluster
 	esac # endcase ${HOST}
 	case "${HOST}" in 
-	    aerosol* | firn* | jaws* | katabatic* ) PKG_ROOT='/opt/local' ; ;; # endif MAC OS X
+	    aerosol* | firn* | jaws* | katabatic* | rigb* ) PKG_ROOT='/opt/local' ; ;; # endif MAC OS X
 	    cg-gpu* ) PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # endif NCSA roger cluster
 	    gplogin* ) PKG_ROOT='/sopt' ; ;; # endif EMT64 Rocks Cluster
 	    mirage* ) PKG_ROOT='/fs/local' ; ;; # endif NCAR cluster
@@ -440,7 +440,7 @@ case "${PVM_ARCH}" in
 	case "${HOST}" in 
 		ess1* ) export OMP_NUM_THREADS='1' ; ;; # endif uniprocessor
 		neige* ) export OMP_NUM_THREADS='2' ; ;; # endif dual processor
-		aerosol* | firn* | frazil* | givre* | hpc* | jaws* | katabatic* | skyglow* ) export OMP_NUM_THREADS='4' ; ;; # endif quad processor
+		aerosol* | firn* | frazil* | givre* | hpc* | jaws* | katabatic* | rigb* | skyglow* ) export OMP_NUM_THREADS='4' ; ;; # endif quad processor
 		glace* | gplogin* | grele* | roulee* | snow* ) export OMP_NUM_THREADS='8' ; ;; # endif dual-quad processor
 		aims4* | mirage* | pileus* | rhea* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-octet processor
 		*cheyenne* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-hexadecimal processor
@@ -585,7 +585,7 @@ case "${PVM_ARCH}" in
 #	export NETCDF_LIB=${HOME}/lib
 	export UDUNITS_INC=/opt/local/include/udunits2 # MacPorts location
 	case "${HOST}" in 
-	    aerosol* | firn* | jaws* | katabatic* ) export OMP_NUM_THREADS=4 ; ;; # endif aerosol*
+	    aerosol* | firn* | jaws* | katabatic* | rigb* ) export OMP_NUM_THREADS=4 ; ;; # endif aerosol*
 	    cg1* ) export OMP_NUM_THREADS=2 ; ;; # endif cg1*
 	       * ) export OMP_NUM_THREADS=1 ; ;; # endif *
 	esac # endcase ${HOST}
@@ -812,7 +812,7 @@ FC_pgf95='pgf95'
 # and, sometimes, compiler (icc finds mpi.h automatically, gcc needs help)
 case "${HOST}" in 
 #    aerosol* | firn* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif clang/clang/macports
-    aerosol* | firn* | jaws* | katabatic* ) export LINUX_CC=${CC_gcc_macports} ; export LINUX_CXX=${CXX_gxx_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif all MacPorts
+    aerosol* | firn* | jaws* | katabatic* | rigb* ) export LINUX_CC=${CC_gcc_macports} ; export LINUX_CXX=${CXX_gxx_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif all MacPorts
     glace* | gplogin* | grele* | mirage* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC="${LINUX_CC} -I/usr/include/mpich2" ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK -I/usr/include/mpich2" ;; # endif gcc/g++/gfortran MPICH2
     gplogin* ) export LINUX_CC=${CC_icc/icc/mpicc} ; export LINUX_CXX=${CXX_icpc/icpc/mpiCC} ; export LINUX_FC=${FC_ifort/ifort/mpif90} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort OpenMPI	
     gplogin* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort OpenMPI GreenPlanet is special because it has a parallel filesystem, lustre, and hence can take advantage of MPI I/O when compiler is MPI-aware. However, compiler switches in all of my custom Makefiles are triggered by vendor-compiler names, e.g., gfortran, ifort, and xlf90, rather than the generic mpicc/mpiCC/mpif90, which are ambiguous. Hence we use this method to designate the invocation command (e.g., "mpif90" or "pgf90") together with the underlying compiler (e.g., "gfortran" or "pgf90"): MPI=Y tells Makefile to invoke compiler with 'mpicc', 'mpif90', etc., but LINUX_CC/CXX/FC point to underlying compilers. Makefile sets compiler-specific switches and options using LINUX_CC/CXX/FC, then, afterwards, sets CC/CXX/FC to 'mpicc/mpiCC/mpif90'. Alternate method, shown in preceding line, sets LINUX_CC/CXX/FC directly to 'mpicc/mpiCC/mpif90' here in bashrc, but then compiler-specific switches in Makefile are missed.
@@ -833,7 +833,7 @@ export LAMMPICXX=${LINUX_CXX}
 # NB: Pathscale documents extensive set of PSC_* flags on User's Guide p. 149--151
 case "${HOST}" in 
     ashes* ) export GCC_RCH_ARG='-march=pentium4' ; export ICC_RCH_ARG='-axW -mtune=pentium4' ; ;; # endif Pentium4-M
-    aerosol* | firn* | jaws* | katabatic* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='' ; ;; # endif Intel Core i7
+    aerosol* | firn* | jaws* | katabatic* | rigb* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='' ; ;; # endif Intel Core i7
     esqf* ) export GCC_RCH_ARG='-mtune=power4' ; export ICC_RCH_ARG='' ; ;; # endif Power4
     frazil* | givre* | glace* | grele* | neige* | roulee* | skyglow* | snow* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-axP -mcpu=pentium4 -msse3' ; ;; # endif Core2 Extreme EMT64
     gplogin* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-ipo -no-prec-div -Wl,-z,muldefs' ; ;; # endif Core2 Extreme EMT64
@@ -843,7 +843,7 @@ case "${HOST}" in
 esac # endcase ${HOST}
 # Set ICC_ROOT, IFC_ROOT
 case "${HOST}" in
-    aerosol* | firn* | jaws* | katabatic* ) export ICC_ROOT='' ; export IFC_ROOT='' ; ;; # endif IA32
+    aerosol* | firn* | jaws* | katabatic* | rigb* ) export ICC_ROOT='' ; export IFC_ROOT='' ; ;; # endif IA32
     frazil* | givre* | glace* | grele* | neige* | roulee* | skyglow* | snow* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # endif IA64
     gplogin* ) export ICC_ROOT='/sopt/intel/Compiler/11.0/081' ; export IFC_ROOT='/sopt/intel/Compiler/11.0/081' ; ;; # endif EMT64 Rocks Cluster
     ipcc* ) export ICC_ROOT='/opt/intel/cce/9.1.038' ; export IFC_ROOT='/opt/intel/fce/9.1.032' ; ;; # endif IPCC
@@ -1101,6 +1101,7 @@ alias roulee='ssh -Y roulee.ess.uci.edu'
 alias aerosol='ssh -Y aerosol.ess.uci.edu'
 alias jaws='ssh -Y jaws.ess.uci.edu'
 alias katabatic='ssh -Y katabatic.ess.uci.edu'
+alias rigb='ssh -Y rigb.ess.uci.edu'
 alias glace='ssh -Y glace.ess.uci.edu'
 alias greenplanet='ssh -Y gplogin2.ps.uci.edu'
 alias grele='ssh -Y grele.ess.uci.edu'
@@ -1281,7 +1282,7 @@ case ${PVM_ARCH} in
 #    export FER_PALETTE=". ${FER_DIR}/ppl ${HOME}/ferret/ppl" # palettes
 
     case ${HOST} in
-    aerosol* | firn* | frazil* | givre* | glace* | grele* | jaws* | katabatic* | neige* | roulee* | skyglow* )
+    aerosol* | firn* | frazil* | givre* | glace* | grele* | jaws* | katabatic* | rigb* | neige* | roulee* | skyglow* )
 	export INTEL_LICENSE_FILE='/opt/intel/cc/9.0/licenses:/opt/intel/fc/9.0/licenses'
 	export LM_LICENSE_FILE='1700@ess1.ess.uci.edu'
     ;; # endif using network licenses
