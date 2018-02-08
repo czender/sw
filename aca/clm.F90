@@ -1050,6 +1050,12 @@ program clm
         else if (opt_sng == 'lev_atm') then ! [nbr] Number of atmosphere layers
            call ftn_arg_get(arg_idx,arg_val,lev_nbr)
            if (lev_nbr > lev_nbr_max) stop 'lev_nbr > lev_nbr_max'
+        else if (opt_sng == 'odxc_aer') then
+           cmd_ln_odxc_obs_aer=.true.
+           call ftn_arg_get(arg_idx,arg_val,odxc_obs_aer_cmd_ln)
+        else if (opt_sng == 'odxc_bga') then
+           cmd_ln_odxc_obs_bga=.true.
+           call ftn_arg_get(arg_idx,arg_val,odxc_obs_bga_cmd_ln)
         else if (opt_sng == 'prs_top') then ! [Pa] Pressure at top of "atmosphere"
            call ftn_arg_get(arg_idx,arg_val,prs_top) 
         else if (opt_sng == 'snw') then ! [flg] Multi-layer snow model
@@ -1097,10 +1103,10 @@ program clm
      else if(dsh_key == '-i') then
         call ftn_arg_get(arg_idx,arg_val,fl_in)
      else if(dsh_key == '-J') then
-        cmd_ln_odxc_obs_aer=.not.cmd_ln_odxc_obs_aer
+        cmd_ln_odxc_obs_aer=.true.
         call ftn_arg_get(arg_idx,arg_val,odxc_obs_aer_cmd_ln)
      else if(dsh_key == '-j') then
-        cmd_ln_odxc_obs_bga=.not.cmd_ln_odxc_obs_bga
+        cmd_ln_odxc_obs_bga=.true.
         call ftn_arg_get(arg_idx,arg_val,odxc_obs_bga_cmd_ln)
      else if(dsh_key == '-l') then
         call ftn_arg_get(arg_idx,arg_val,lev_nbr)

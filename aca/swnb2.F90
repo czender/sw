@@ -1998,32 +1998,32 @@ program swnb2
         else if (opt_sng == 'fl_aer' .or. opt_sng == 'aer') then
            call ftn_arg_get(arg_idx,arg_val,fl_aer) ! [sng] Aerosol file
         else if (opt_sng == 'alb' .or. opt_sng == 'alb_sfc') then
-           cmd_ln_alb=.not.cmd_ln_alb
+           cmd_ln_alb=.true.
            call ftn_arg_get(arg_idx,arg_val,alb_cmd_ln) ! [frc] Surface albedo
         else if (opt_sng == 'alb_sfc_NIR') then ! [frc] Direct+diffuse NIR albedo
-           cmd_ln_alb_sfc_NIR_dff=.not.cmd_ln_alb_sfc_NIR_dff
-           cmd_ln_alb_sfc_NIR_drc=.not.cmd_ln_alb_sfc_NIR_drc
+           cmd_ln_alb_sfc_NIR_dff=.true.
+           cmd_ln_alb_sfc_NIR_drc=.true.
            call ftn_arg_get(arg_idx,arg_val,alb_sfc_NIR_dff) ! [frc] 
            alb_sfc_NIR_drc=alb_sfc_NIR_dff ! [frc] 
         else if (opt_sng == 'alb_sfc_NIR_dff') then ! [frc] Diffuse NIR albedo
-           cmd_ln_alb_sfc_NIR_dff=.not.cmd_ln_alb_sfc_NIR_dff
+           cmd_ln_alb_sfc_NIR_dff=.true.
            call ftn_arg_get(arg_idx,arg_val,alb_sfc_NIR_dff) ! [frc] 
         else if (opt_sng == 'alb_sfc_NIR_drc') then ! [frc] Direct NIR albedo
-           cmd_ln_alb_sfc_NIR_drc=.not.cmd_ln_alb_sfc_NIR_drc
+           cmd_ln_alb_sfc_NIR_drc=.true.
            call ftn_arg_get(arg_idx,arg_val,alb_sfc_NIR_drc) ! [frc] 
         else if (opt_sng == 'alb_sfc_vsb') then ! [frc] Direct+diffuse visible albedo
-           cmd_ln_alb_sfc_vsb_dff=.not.cmd_ln_alb_sfc_vsb_dff
-           cmd_ln_alb_sfc_vsb_drc=.not.cmd_ln_alb_sfc_vsb_drc
+           cmd_ln_alb_sfc_vsb_dff=.true.
+           cmd_ln_alb_sfc_vsb_drc=.true.
            call ftn_arg_get(arg_idx,arg_val,alb_sfc_vsb_dff) ! [frc] 
            alb_sfc_vsb_drc=alb_sfc_vsb_dff ! [frc] 
         else if (opt_sng == 'alb_sfc_vsb_dff') then ! [frc] Diffuse visible albedo
-           cmd_ln_alb_sfc_vsb_dff=.not.cmd_ln_alb_sfc_vsb_dff
+           cmd_ln_alb_sfc_vsb_dff=.true.
            call ftn_arg_get(arg_idx,arg_val,alb_sfc_vsb_dff) ! [frc] 
         else if (opt_sng == 'alb_sfc_vsb_drc') then ! [frc] Direct visible albedo
-           cmd_ln_alb_sfc_vsb_drc=.not.cmd_ln_alb_sfc_vsb_drc
+           cmd_ln_alb_sfc_vsb_drc=.true.
            call ftn_arg_get(arg_idx,arg_val,alb_sfc_vsb_drc) ! [frc] 
         else if (opt_sng == 'dns_snw' .or. opt_sng == 'snw_dns') then
-           cmd_ln_dns_snw=.not.cmd_ln_dns_snw
+           cmd_ln_dns_snw=.true.
            call ftn_arg_get(arg_idx,arg_val,dns_snw_cmd_ln) ! [kg m-3] Snow density
         else if (opt_sng == 'dpt_snw' .or. opt_sng == 'snw_dpt') then
            cmd_ln_dpt_snw=.not.cmd_ln_dpt_snw
@@ -2041,47 +2041,80 @@ program swnb2
         else if (opt_sng == 'fl_mpr' .or. opt_sng == 'mpr') then
            call ftn_arg_get(arg_idx,arg_val,fl_mpr) ! [sng] Impurity file
         else if (opt_sng == 'fl_rfl' .or. opt_sng == 'rfl') then
-           flg_rfl=.not.flg_rfl
+           flg_rfl=.true.
            call ftn_arg_get(arg_idx,arg_val,fl_rfl) ! [sng] Spectral reflectance file
         else if (opt_sng == 'fl_snw' .or. opt_sng == 'snw') then
            call ftn_arg_get(arg_idx,arg_val,fl_snw) ! [sng] Snow file
         else if (opt_sng == 'flg_bfb') then
-           flg_bfb=.not.flg_bfb ! [flg] Produce bit-for-bit output
+           flg_bfb=.true. ! [flg] Produce bit-for-bit output
         else if (opt_sng == 'flt_lmn') then
-           flt_lmn=.not.flt_lmn ! [flg] Use luminosity filter
+           flt_lmn=.false. ! [flg] Use luminosity filter
         else if (opt_sng == 'flg_mie') then
-           flg_mie=.not.flg_mie ! [flg] Use phase function expansion where available
+           flg_mie=.true. ! [flg] Use phase function expansion where available
         else if (opt_sng == 'flg_mpr') then
-           flg_mpr=.not.flg_mpr ! [flg] Snow grain impurities are optically active
+           flg_mpr=.false. ! [flg] Snow grain impurities are optically active
         else if (opt_sng == 'flg_msm') then
-           flg_msm=.not.flg_msm ! [flg] Use multi-layer snow model if snow structure present
+           flg_msm=.false. ! [flg] Use multi-layer snow model if snow structure present
         else if (opt_sng == 'flg_snw') then
-           flg_snw=.not.flg_snw ! [flg] Snow grains are optically active within snow model
+           flg_snw=.false. ! [flg] Snow grains are optically active within snow model
         else if (opt_sng == 'flg_xtr_aer_snw') then
            flg_xtr_aer_snw=.true. ! [flg] Extrapolate surface aerosol into snowpack
         else if (opt_sng == 'force_lqd_phz' .or. opt_sng == 'frc_lqd') then
-           force_lqd_phz=.not.force_lqd_phz ! [flg] Force liquid phase
+           force_lqd_phz=.true. ! [flg] Force liquid phase
         else if (opt_sng == 'lat_dgr' .or. opt_sng == 'lat') then ! [dgr] Latitude
-           cmd_ln_lat_dgr=.not.cmd_ln_lat_dgr
+           cmd_ln_lat_dgr=.true.
            call ftn_arg_get(arg_idx,arg_val,lat_dgr_cmd_ln)
         else if (opt_sng == 'lcl_yr_day' .or. opt_sng == 'doy') then ! [day] Local year day
-           cmd_ln_lcl_yr_day=.not.cmd_ln_lcl_yr_day
+           cmd_ln_lcl_yr_day=.true.
            call ftn_arg_get(arg_idx,arg_val,lcl_yr_day_cmd_ln)
         else if (opt_sng == 'lmn_TOA') then
-           cmd_ln_lmn_TOA=.not.cmd_ln_lmn_TOA
+           cmd_ln_lmn_TOA=.true.
            call ftn_arg_get(arg_idx,arg_val,lmn_TOA_cmd_ln)
         else if (opt_sng == 'ppl_age_yr_obs' .or. opt_sng == 'age' ) then
            call ftn_arg_get(arg_idx,arg_val,ppl_age_yr_obs) ! [yr] Observer age to use in parameterization of pupil diameter
         else if (opt_sng == 'mode_chn' .or. opt_sng == 'chn') then
-           mode_chn=.not.mode_chn
+           mode_chn=.true.
         else if (opt_sng == 'mode_ngt' .or. opt_sng == 'ngt') then
-           mode_ngt=.not.mode_ngt
+           mode_ngt=.true.
         else if (opt_sng == 'mmr_mpr_snw' .or. opt_sng == 'mmr_mpr') then
-           cmd_ln_mmr_mpr_snw=.not.cmd_ln_mmr_mpr_snw
+           cmd_ln_mmr_mpr_snw=.true.
            call ftn_arg_get(arg_idx,arg_val,mmr_mpr_snw_cmd_ln) ! [kg kg-1] Impurity mass mixing ratio in snow
         else if (opt_sng == 'mpc_CWP' .or. opt_sng == 'CWP') then
-           cmd_ln_mpc_CWP=.not.cmd_ln_mpc_CWP
+           cmd_ln_mpc_CWP=.true.
            call ftn_arg_get(arg_idx,arg_val,mpc_CWP_cmd_ln) ! [kg m-2] Condensed Water Path
+        call ftn_arg_get(arg_idx,arg_val,mpc_CWP_cmd_ln)
+        else if (opt_sng == 'no_aer') then
+           flg_aer=.false.
+        else if (opt_sng == 'no_bga') then
+           flg_bga=.false.
+        else if (opt_sng == 'no_CH4') then
+           flg_CH4=.false.
+        else if (opt_sng == 'no_CO2') then
+           flg_CO2=.false.
+        else if (opt_sng == 'no_H2O') then
+           flg_H2O=.false.
+        else if (opt_sng == 'use_H2OH2O') then
+           flg_H2OH2O=.true.
+        else if (opt_sng == 'no_ice') then
+           flg_ice=.false.
+        else if (opt_sng == 'no_lqd') then
+           flg_lqd=.false.
+        else if (opt_sng == 'no_Planck') then
+           flg_Planck=.false.
+        else if (opt_sng == 'no_NO2') then
+           flg_NO2=.false.
+        else if (opt_sng == 'no_O2') then
+           flg_O2=.false.
+        else if (opt_sng == 'no_O2O2') then
+           flg_O2O2=.false.
+        else if (opt_sng == 'no_O2N2') then
+           flg_O2N2=.false.
+        else if (opt_sng == 'no_O3') then
+           flg_O3=.false.
+        else if (opt_sng == 'no_OH') then
+           flg_OH=.false.
+        else if (opt_sng == 'no_Rayleigh') then
+           flg_Rayleigh=.false.
         else if (opt_sng == 'odxc_snw') then
            cmd_ln_odxc_obs_snw=.not.cmd_ln_odxc_obs_snw
            call ftn_arg_get(arg_idx,arg_val,odxc_obs_snw_cmd_ln)
@@ -2096,16 +2129,16 @@ program swnb2
         else if (opt_sng == 'sct_lqd') then
            call ftn_arg_get(arg_idx,arg_val,flg_sct_lqd) ! [flg] Liquid cloud droplets are pure scatterers
         else if (opt_sng == 'sfc_msv') then
-           cmd_ln_sfc_msv=.not.cmd_ln_sfc_msv
+           cmd_ln_sfc_msv=.true.
            call ftn_arg_get(arg_idx,arg_val,sfc_msv_cmd_ln) ! [frc] Surface emissivity
         else if (opt_sng == 'sfc_tpt') then
-           cmd_ln_sfc_tpt=.not.cmd_ln_sfc_tpt
+           cmd_ln_sfc_tpt=.true.
            call ftn_arg_get(arg_idx,arg_val,sfc_tpt_cmd_ln) ! [K] Surface temperature (used for bottom boundary emission in night mode)
         else if (opt_sng == 'slr_cst') then
-           cmd_ln_slr_cst=.not.cmd_ln_slr_cst
+           cmd_ln_slr_cst=.true.
            call ftn_arg_get(arg_idx,arg_val,slr_cst_cmd_ln)
-        else if (opt_sng == 'slr_zen_ngl_cos') then
-           cmd_ln_slr_zen_ngl_cos=.not.cmd_ln_slr_zen_ngl_cos
+        else if (opt_sng == 'slr_zen_ngl_cos' .or. opt_sng == 'szac') then
+           cmd_ln_slr_zen_ngl_cos=.true.
            call ftn_arg_get(arg_idx,arg_val,slr_zen_ngl_cos_cmd_ln) ! [frc] Cosine solar zenith angle
         else if (opt_sng == 'srm' .or. opt_sng == 'streams') then
            call ftn_arg_get(arg_idx,arg_val,str_nbr)
@@ -2127,15 +2160,15 @@ program swnb2
      else if (dsh_key == '-4') then
         fl_out_fmt=nf90_format_netcdf4 ! [enm] Output file format
      else if (dsh_key == '-A') then
-        flg_aer=.not.flg_aer
+        flg_aer=.false.
      else if (dsh_key == '-a') then
         call ftn_arg_get(arg_idx,arg_val,fl_aer)
      else if (dsh_key == '-B') then
-        flg_bga=.not.flg_bga
+        flg_bga=.false.
      else if (dsh_key == '-b') then
         call ftn_arg_get(arg_idx,arg_val,fl_bga)
      else if (dsh_key == '-C') then
-        flg_CO2=.not.flg_CO2
+        flg_CO2=.false.
      else if (dsh_key == '-c') then
         call ftn_arg_get(arg_idx,arg_val,fl_CO2)
      else if (dsh_key == '-D') then
@@ -2143,28 +2176,28 @@ program swnb2
      else if (dsh_key == '-d') then
         call ftn_arg_get(arg_idx,arg_val,fl_out)
      else if (dsh_key == '-E') then
-        single_bnd_computation=.not.single_bnd_computation
+        single_bnd_computation=.true.
      else if (dsh_key == '-e') then
         call ftn_getarg_wrp(arg_idx,arg_val)
         read (arg_val,'(i4)') bnd_dbg
      else if (dsh_key == '-F') then
-        force_ice_phz=.not.force_ice_phz
+        force_ice_phz=.true.
      else if (dsh_key == '-f') then
-        force_lqd_phz=.not.force_lqd_phz
+        force_lqd_phz=.true.
      else if (dsh_key == '-G') then
-        flg_CH4=.not.flg_CH4
+        flg_CH4=.false.
      else if (dsh_key == '-g') then
         call ftn_arg_get(arg_idx,arg_val,fl_CH4)
      else if (dsh_key == '-H') then
-        flg_H2O=.not.flg_H2O
+        flg_H2O=.false.
      else if (dsh_key == '-h') then
         call ftn_arg_get(arg_idx,arg_val,fl_H2O)
      else if (dsh_key == '-I') then
-        flg_ice=.not.flg_ice
+        flg_ice=.false.
      else if (dsh_key == '-i') then
         call ftn_arg_get(arg_idx,arg_val,fl_ice)
      else if (dsh_key == '-J') then
-        flg_Planck=.not.flg_Planck
+        flg_Planck=.false.
      else if (dsh_key == '-j') then
         lamber=.false.      ! DISORT --> DISORT2
      else if (dsh_key == '-K') then
@@ -2176,42 +2209,42 @@ program swnb2
      else if (dsh_key == '-l') then
         call ftn_arg_get(arg_idx,arg_val,fl_lqd)
      else if (dsh_key == '-M') then
-        cmd_ln_odxc_obs_aer=.not.cmd_ln_odxc_obs_aer
+        cmd_ln_odxc_obs_aer=.true.
         call ftn_arg_get(arg_idx,arg_val,odxc_obs_aer_cmd_ln)
      else if (dsh_key == '-m') then
-        cmd_ln_mpc_CWP=.not.cmd_ln_mpc_CWP
+        cmd_ln_mpc_CWP=.true.
         call ftn_arg_get(arg_idx,arg_val,mpc_CWP_cmd_ln)
      else if (dsh_key == '-N') then
-        flt_nst=.not.flt_nst
+        flt_nst=.false.
      else if (dsh_key == '-n') then
         call ftn_arg_get(arg_idx,arg_val,fl_nst)
      else if (dsh_key == '-O') then
-        flg_O2=.not.flg_O2
+        flg_O2=.false.
      else if (dsh_key == '-o') then
         call ftn_arg_get(arg_idx,arg_val,fl_O2)
      else if (dsh_key == '-P') then
-        tst_case_HG=.not.tst_case_HG
+        tst_case_HG=.true.
      else if (dsh_key == '-p') then
         call ftn_arg_get(arg_idx,arg_val,fl_clm)
      else if (dsh_key == '-Q') then
-        flg_H2OH2O=.not.flg_H2OH2O
+        flg_H2OH2O=.true.
         ! else if (dsh_key == '-q') then
      else if (dsh_key == '-R') then
-        flg_Rayleigh=.not.flg_Rayleigh
+        flg_Rayleigh=.false.
      else if (dsh_key == '-r') then
-        cmd_ln_alb=.not.cmd_ln_alb
+        cmd_ln_alb=.true.
         call ftn_arg_get(arg_idx,arg_val,alb_cmd_ln)
      else if (dsh_key == '-S') then
-        cmd_ln_slr_cst=.not.cmd_ln_slr_cst
+        cmd_ln_slr_cst=.true.
         call ftn_arg_get(arg_idx,arg_val,slr_cst_cmd_ln)
      else if (dsh_key == '-s') then
         call ftn_arg_get(arg_idx,arg_val,str_nbr)
      else if (dsh_key == '-T') then
         call ftn_arg_get(arg_idx,arg_val,fl_slr)
      else if (dsh_key == '-t') then
-        tst_case_Rayleigh=.not.tst_case_Rayleigh
+        tst_case_Rayleigh=.true.
      else if (dsh_key == '-U') then
-        flg_O2N2=.not.flg_O2N2
+        flg_O2N2=.false.
      else if (dsh_key == '-u') then
         call ftn_arg_get(arg_idx,arg_val,plr_nbr)
         sv_cmp_plr_ngl=.false.
@@ -2220,21 +2253,21 @@ program swnb2
      else if (dsh_key == '-v') then
         call ftn_arg_get(arg_idx,arg_val,fl_brdf) ! BRDF file
      else if (dsh_key == '-W') then
-        flg_O3=.not.flg_O3
+        flg_O3=.false.
      else if (dsh_key == '-w') then
         call ftn_arg_get(arg_idx,arg_val,fl_O3)
      else if (dsh_key == '-X') then
-        flg_NO2=.not.flg_NO2
+        flg_NO2=.false.
      else if (dsh_key == '-x') then
         call ftn_arg_get(arg_idx,arg_val,fl_NO2)
      else if (dsh_key == '-Y') then
-        flg_OH=.not.flg_OH
+        flg_OH=.false.
      else if (dsh_key == '-y') then
         call ftn_arg_get(arg_idx,arg_val,fl_OH)
      else if (dsh_key == '-Z') then
         call ftn_arg_get(arg_idx,arg_val,azi_nbr)
      else if (dsh_key == '-z') then
-        cmd_ln_slr_zen_ngl_cos=.not.cmd_ln_slr_zen_ngl_cos
+        cmd_ln_slr_zen_ngl_cos=.true.
         call ftn_arg_get(arg_idx,arg_val,slr_zen_ngl_cos_cmd_ln)
      else                   ! Option not recognized
         arg_idx=arg_idx-1   ! [idx] Counting index
