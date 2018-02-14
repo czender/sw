@@ -2115,6 +2115,9 @@ program swnb2
            flg_OH=.false.
         else if (opt_sng == 'no_Rayleigh') then
            flg_Rayleigh=.false.
+        else if (opt_sng == 'odxc_aer') then
+           cmd_ln_odxc_obs_aer=.true.
+           call ftn_arg_get(arg_idx,arg_val,odxc_obs_aer_cmd_ln)
         else if (opt_sng == 'odxc_snw') then
            cmd_ln_odxc_obs_snw=.not.cmd_ln_odxc_obs_snw
            call ftn_arg_get(arg_idx,arg_val,odxc_obs_snw_cmd_ln)
@@ -4932,7 +4935,7 @@ program swnb2
               call abort
            endif            ! endif
            mpl_aer(lev_idx)=odxl_obs_aer(lev_idx)/ext_cff_mss_aer(bnd_obs_aer)
-           write (6,'(a,a,i4,a,e9.2,a,e9.2,a)') prg_nm(1:ftn_strlen(prg_nm)), &
+           write (6,'(a,a,i4,a,e11.4,a,e11.4,a)') prg_nm(1:ftn_strlen(prg_nm)), &
                 ': WARNING changing mpl_aer(',lev_idx,') from = ',mpl_tmp,' to ',mpl_aer(lev_idx),' kg m-2'
         endif               ! endif adjusting mass path
      enddo                  ! end loop over lev
@@ -7358,6 +7361,7 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'azi',nf90_double,azi_dmn_id,azi_id),sbr_nm//': dv azi')
      rcd=nf90_wrp(nf90_def_var(nc_id,'azi_dgr',nf90_double,azi_dmn_id,azi_dgr_id),sbr_nm//': dv azi_dgr')
      rcd=nf90_wrp(nf90_def_var(nc_id,'bnd',nf90_double,bnd_dmn_id,bnd_id),sbr_nm//': dv bnd')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'ext_cff_mss_aer',nf90_float,bnd_dmn_id,ext_cff_mss_aer_id),sbr_nm//': dv ext_cff_mss_aer')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_abs',nf90_float,lev_dmn_id,flx_bb_abs_id),sbr_nm//': dv flx_bb_abs')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bb_dwn',nf90_float,levp_dmn_id,flx_bb_dwn_id),sbr_nm//': dv flx_bb_dwn')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_frc_dwn_dff',nf90_float,levp_dmn_id,flx_frc_dwn_dff_id),sbr_nm//': dv flx_frc_dwn_dff')
@@ -7773,6 +7777,8 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,bnd_id,'long_name','Midpoint wavelength'), &
           sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,ext_cff_mss_aer_id,'long_name','Aerosol mass extinction coefficient'), &
+          sbr_nm//": pa long_name in "//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_abs_atm_rdr_id,'long_name','Flux absorbed in atmosphere at longer wavelengths'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_abs_atm_id,'long_name','Broadband flux absorbed by atmospheric column only'), &
@@ -8219,6 +8225,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,azi_dgr_id,'units','degree'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,azi_id,'units','radian'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,bnd_id,'units','meter'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,ext_cff_mss_aer_id,'units','meter2 kilogram-1'),sbr_nm//": pa units in "//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_abs_atm_rdr_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_abs_atm_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_bb_abs_id,'units','watt meter-2'),sbr_nm//': pa units in '//__FILE__)
@@ -8510,6 +8517,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,azi_dgr_id,azi_dgr),sbr_nm//': pv azi_dgr in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,azi_id,azi),sbr_nm//': pv azi in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,bnd_id,bnd),sbr_nm//': pv bnd in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,ext_cff_mss_aer_id,ext_cff_mss_aer),sbr_nm//": pv ext_cff_mss_aer"//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_abs_atm_rdr_id,flx_abs_atm_rdr),sbr_nm//': pv flx_abs_atm_rdr in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_abs_atm_id,flx_bb_abs_atm),sbr_nm//': pv flx_bb_abs_atm in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_bb_abs_id,flx_bb_abs),sbr_nm//': pv flx_bb_abs in '//__FILE__)

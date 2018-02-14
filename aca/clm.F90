@@ -1039,6 +1039,10 @@ program clm
         opt_sng=arg_val(3:2+opt_lng) ! [sng] Option string
         if (opt_sng == 'dbg' .or. opt_sng == 'dbg_lvl' ) then
            call ftn_arg_get(arg_idx,arg_val,dbg_lvl) ! [enm] Debugging level
+        else if (opt_sng == 'aer' .or. opt_sng == 'txt_has_aer' ) then
+           flg_aer=.true.
+        else if (opt_sng == 'bga' .or. opt_sng == 'txt_has_bga' ) then
+           flg_bga=.true.
         else if (opt_sng == 'drc_in') then
            call ftn_arg_get(arg_idx,arg_val,drc_in) ! [sng] Input directory
         else if (opt_sng == 'drc_out') then
@@ -1050,6 +1054,10 @@ program clm
         else if (opt_sng == 'lev_atm') then ! [nbr] Number of atmosphere layers
            call ftn_arg_get(arg_idx,arg_val,lev_nbr)
            if (lev_nbr > lev_nbr_max) stop 'lev_nbr > lev_nbr_max'
+        else if (opt_sng == 'netcdf' .or. opt_sng == 'nc_in') then
+           CLM_NC_INPUT=.true.
+           AFGL_TXT_INPUT=.false.
+           CLM_TXT_INPUT=.false.
         else if (opt_sng == 'odxc_aer') then
            cmd_ln_odxc_obs_aer=.true.
            call ftn_arg_get(arg_idx,arg_val,odxc_obs_aer_cmd_ln)
@@ -1066,6 +1074,10 @@ program clm
            call ftn_arg_get(arg_idx,arg_val,PDF_bin_nbr) !
         else if (opt_sng == 'wnd_znl_mdp') then
            call ftn_arg_get(arg_idx,arg_val,PDF_avg_wnd_spd) !
+        else if (opt_sng == 'wvl_aer') then
+           call ftn_arg_get(arg_idx,arg_val,wvl_obs_aer)
+        else if (opt_sng == 'wvl_bga') then
+        call ftn_arg_get(arg_idx,arg_val,wvl_obs_bga)
         else                ! Option not recognized
            arg_idx=arg_idx-1 ! [idx] Counting index
            call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
@@ -1079,11 +1091,11 @@ program clm
      else if (dsh_key == '-4') then
         fl_out_fmt=nf90_format_netcdf4 ! [enm] Output file format
      else if (dsh_key == '-A') then
-        flg_aer=.not.flg_aer
+        flg_aer=.true.
      else if(dsh_key == '-a') then
         call ftn_arg_get(arg_idx,arg_val,fl_aer)
      else if(dsh_key == '-B') then
-        flg_bga=.not.flg_bga
+        flg_bga=.true.
      else if(dsh_key == '-b') then
         call ftn_arg_get(arg_idx,arg_val,fl_bga)
      else if(dsh_key == '-C') then
