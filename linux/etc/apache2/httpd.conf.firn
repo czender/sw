@@ -346,6 +346,9 @@ DirectoryIndex index.shtml index.html index.php
 <Directory "/Users/zender/Sites/nco">
     Options Indexes FollowSymLinks Multiviews
 </Directory>
+<Directory "/Users/zender/Sites/noria">
+    Options Indexes
+</Directory>
 <Directory "/Users/zender/Sites/poetry">
     Options Indexes
 </Directory>
