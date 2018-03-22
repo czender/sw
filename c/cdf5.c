@@ -2,6 +2,7 @@
 // 20170821: Original test by Wei-keng Liou 
 // 20170909: Rewritten to expose CDF5 bug by Charlie Zender
 // 20170909: A modified version of this has been added to netCDF 
+// 20180321: Verified that netCDF 4.6.1 fixes this issue
 
 // gcc -std=c99 -I/opt/local/include -o ~/bin/cdf5 ~/sw/c/cdf5.c -L/opt/local/lib -lnetcdf -lhdf5_hl -lhdf5 -lcurl
 // gcc -std=c99 -I/usr/local/include -o ~/bin/cdf5 ~/sw/c/cdf5.c -L/usr/local/lib -lnetcdf -lhdf5_hl -lhdf5 -lcurl
