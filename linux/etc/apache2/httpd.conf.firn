@@ -4,6 +4,7 @@
 
 # Usage:
 # diff ~/sw/linux/etc/apache2/httpd.conf.firn /etc/apache2/httpd.conf
+# scp ~/sw/linux/etc/apache2/httpd.conf.firn firn.ess.uci.edu:sw/linux/etc/apache2
 # sudo cp ~/sw/linux/etc/apache2/httpd.conf.firn /etc/apache2/httpd.conf
 # sudo scp ~/sw/linux/etc/apache2/httpd.conf.firn firn.ess.uci.edu:/etc/apache2/httpd.conf
 # sudo apachectl start # Start web server
@@ -328,7 +329,7 @@ DirectoryIndex index.shtml index.html index.php
 <Directory "/Users/zender/Sites/essgcm15">
     Options Indexes
 </Directory>
-<Directory "/Users/zender/Sites/ess_gcc">
+<Directory "/Users/zender/Sites/ess_eat">
     Options Indexes
 </Directory>
 <Directory "/Users/zender/Sites/f">
