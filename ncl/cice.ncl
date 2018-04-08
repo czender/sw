@@ -36,8 +36,9 @@ if (PLOT)
 
   plots = new(2,graphic)
 
-  fname = "rgr_hi_nco"
-  wks = gsn_open_wks("x11", fname)
+  fname = "cice_out.pdf"
+;  wks = gsn_open_wks("x11", fname)
+  wks = gsn_open_wks("pdf", fname)
   gsn_define_colormap(wks,"MPL_RdYlBu")
   gsn_reverse_colormap(wks)
 
