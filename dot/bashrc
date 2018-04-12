@@ -394,12 +394,12 @@ case "${PVM_ARCH}" in
 	    bebop* | blues* | blogin* ) export DATA="/home/${USER}/data" ; ;; # endif ANL LCRC
 	    cg-gpu* ) export DATA="/home/${USER}/data" ; ;; # endif NCSA roger
 	    *cheyenne* ) export DATA="/glade/p/work/${USER}" ; ;; # endif NCAR
-	    cooley* | cc* ) export DATA="/projects/HiRes_EarthSys/${USER}" ; ;; # endif ANL ALCF 
+	    cooley* | cc* ) export DATA="/projects/ClimateEnergy_2/${USER}" ; ;; # endif ANL ALCF 
 	    cori* | edison* | hopper* | nid* ) export DATA="${HOME}/data" ; ;; # endif NERSC
 	    gplogin* ) export DATA="/data/${USER}" ; ;; # endif EMT64 Rocks Cluster
 	    hpc* ) export DATA="/data/users/${USER}" ; ;; # endif hpc
 	    mirage* ) export DATA="/glade/scratch/${USER}" ; ;; # endif NCAR mirage
-	    mira* | theta* ) export DATA="/projects/HiRes_EarthSys/${USER}" ; ;; # endif ANL ALCF
+	    mira* | theta* ) export DATA="/projects/ClimateEnergy_2/${USER}" ; ;; # endif ANL ALCF
 	    pileus* ) export DATA="/home/${USER}/data" ; ;; # endif CADES
 	    rhea* | titan* ) export DATA="/lustre/atlas/world-shared/cli115/${USER}" ; ;; # endif OLCF
 	    * ) export DATA="/data/${USER}" ; ;; # endif default
