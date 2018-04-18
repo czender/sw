@@ -4874,6 +4874,15 @@ sudo port install -t ddd # Installation sudo
 
 sudo port selfupdate
 sudo port upgrade outdated
+sudo port uninstall nco
+sudo port upgrade nco
+
+cd ~/anaconda/bin
+conda update libnetcdf
+conda update nco
+# 20180418 ocefpaf suggests this, which activates and "environment":
+conda create --name NCO --channel conda-forge nco
+conda activate NCO  # if your conda is old you may need to source activate NCO instead.
 
 # Webserver
 # Ensure port 80 is open
