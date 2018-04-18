@@ -1153,11 +1153,10 @@ alias xwininfo='xwininfo -int'
 alias x16='startx -- -bpp 16 :1' # Start 16 bpp display acessible as Ctl-Alt-F8
 # End section not yet merged with cshrc
 # 20180103: Omit these dirs pending new funding: terraref/extractors-environmental terraref/extractors-hyperspectral terraref/documentation
-alias gtc='for rps in acd diwg jaws nco pnp prv rsr sw; do cd ~/${rps};git commit -am "lazy commit";echo "Pushing ${rps}...";git push;done;cd'
-alias gtp='for rps in acd diwg jaws nco pnp prv rsr sw; do cd ~/${rps};echo "Pulling ${rps}...";git pull;done;cd'
+alias gtc='for rps in acd diwg EC-netCDF-CF jaws nco pnp prv rsr sw valleyfeverdata; do cd ~/${rps};git commit -am "lazy commit";echo "Pushing ${rps}...";git push;done;cd'
+alias gtp='for rps in acd diwg EC-netCDF-CF jaws nco pnp prv rsr sw valleyfeverdata; do cd ~/${rps};echo "Pulling ${rps}...";git pull;done;cd'
 alias gtr='git reset --hard origin/master'
 
-function gtm { for rps in acd diwg nco pnp prv PreAndPostProcessingScripts rsr sw; do cd ~/${rps};git commit -am "${1}";echo "Pushing ${rps}...";git push;done;cd - ; }
 function bin_obj_rm { rm "${HOME}/bin/${1} ${HOME}/obj/${1}.o ${HOME}/obj/${1}.d" ; }
 function dotgrep { 'egrep ${1} .[a-zA-Z]*' ; }
 function difffunc { diff -c -w ${1} ${2} | more ; } # -c = print 3 lines around diff, -w = ignore whitespace diffs
