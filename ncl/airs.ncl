@@ -13,8 +13,8 @@ begin
 var = "TSurfAir"
 
 fname = "airs_out.pdf"
-wks = gsn_open_wks("x11", fname)
-;wks = gsn_open_wks("pdf", fname)
+;wks = gsn_open_wks("x11", fname)
+wks = gsn_open_wks("pdf", fname)
 gsn_define_colormap(wks,"MPL_RdYlBu")
 gsn_reverse_colormap(wks)
 
@@ -34,7 +34,8 @@ res@mpMaxLonF             = -90       ; max lon
 
   ;- contour
 res@cnFillOn             = True               ; turns on the color
-res@cnFillMode = "RasterFill"
+;res@cnFillMode = "RasterFill" ; Make blobby contours
+res@cnFillMode = "CellFill" ; Exactly fill cells
 res@cnLinesOn = False
 res@cnFillDrawOrder = "Predraw"
 res@cnLineLabelsOn = False
@@ -83,7 +84,7 @@ fn = "~/airs_out.nc"
 fin = addfile(fn,"r")
 din = fin->$var$
 
-res@gsnLeftString = "b) 180x360 SCRIP rectilinear grid"
+res@gsnLeftString = "b) E3SM (CAM) analysis grid"
 plots(1) = gsn_csm_contour_map(wks,din,res)
 
 ;- raw
@@ -93,12 +94,13 @@ lat2 = fin->Latitude
 lon2 = fin->Longitude
 
 res@trGridType            = "TriangularMesh"   ; faster graphic rendering
-res@cnFillMode = "RasterFill"
+;res@cnFillMode = "RasterFill" ; Make blobby contours
+res@cnFillMode = "CellFill" ; Exactly fill cells
 res@sfYArray = lat2
 res@sfXArray = lon2
 
 din2 = fin->TSurfAir
-res@gsnLeftString = "a) Native AIRS curvilinear grid"
+res@gsnLeftString = "a) Native (AIRS) curvilinear grid"
 plots(0) = gsn_csm_contour_map(wks,din2,res)
 
 resp = True

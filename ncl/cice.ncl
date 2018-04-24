@@ -77,7 +77,8 @@ if (PLOT)
 
   ;- contour
   res@cnFillOn             = True               ; turns on the color
-  res@cnFillMode = "RasterFill"
+;res@cnFillMode = "RasterFill" ; Make blobby contours
+  res@cnFillMode = "CellFill" ; Exactly fill cells
   res@cnLinesOn = False
 ;  res@cnLevelSelectionMode = "ExplicitLevels"     ; set manual contour levels
   res@cnFillDrawOrder = "Predraw"
@@ -140,7 +141,8 @@ if (PLOT)
 
   ;- contour
   res2@cnFillOn             = True               ; turns on the color
-  res2@cnFillMode = "RasterFill"
+;res@cnFillMode = "RasterFill" ; Make blobby contours
+  res@cnFillMode = "CellFill" ; Exactly fill cells
   res2@cnLinesOn = False ; turn off contour lines
   res2@cnLineLabelsOn =  False; turn off contour line labels
   res2@cnLineColor = "grey"
