@@ -3,8 +3,8 @@
 program clm
   
   ! Purpose: Turn atmospheric profile input files (CRM text or netCDF CLM),   
-  ! or NWS radiosonde input files, or AFGL standard atmosphere files, 
-  ! into netCDF CLM output files. 
+  ! or NWS radiosonde input files, or AFGL standard atmosphere files,
+  ! or RFM ATM input files, into netCDF CLM output files. 
 
   ! Copyright (C) 1994--2017 Charlie Zender
   ! License: GNU General Public License (GPL) Version 3
@@ -397,9 +397,12 @@ program clm
   real,dimension(:),allocatable::O3_vmr_ntf
   real,dimension(:),allocatable::cnc_air
   real,dimension(:),allocatable::cnc_air_ntf
+
+  ! Local variables for RFM_TXT_INPUT only
   
   ! Local
   logical AFGL_TXT_INPUT
+  logical RFM_TXT_INPUT
   logical CLM_NC_INPUT
   logical CLM_TXT_INPUT
   logical CRM2              ! Does CRM text file have CRM 2.x fields?
@@ -987,6 +990,7 @@ program clm
   
   ! Initialize default values
   AFGL_TXT_INPUT=.false.
+  RFM_TXT_INPUT=.false.
   CLM_NC_INPUT=.false.
   CLM_TXT_INPUT=.true.
   CRM2=.true.               ! Does CRM text file have CRM 2.x fields?
@@ -1057,6 +1061,7 @@ program clm
         else if (opt_sng == 'netcdf' .or. opt_sng == 'nc_in') then
            CLM_NC_INPUT=.true.
            AFGL_TXT_INPUT=.false.
+           RFM_TXT_INPUT=.false.
            CLM_TXT_INPUT=.false.
         else if (opt_sng == 'odxc_aer') then
            cmd_ln_odxc_obs_aer=.true.
@@ -1110,6 +1115,7 @@ program clm
         call ftn_arg_get(arg_idx,arg_val,OH_vmr)
      else if(dsh_key == '-I') then
         AFGL_TXT_INPUT=.true.
+        RFM_TXT_INPUT=.true.
         CLM_NC_INPUT=.false.
         CLM_TXT_INPUT=.false.
      else if(dsh_key == '-i') then
@@ -1133,6 +1139,7 @@ program clm
      else if(dsh_key == '-n') then
         CLM_NC_INPUT=.true.
         AFGL_TXT_INPUT=.false.
+        RFM_TXT_INPUT=.false.
         CLM_TXT_INPUT=.false.
      else if(dsh_key == '-o') then
         call ftn_arg_get(arg_idx,arg_val,fl_out)
@@ -1141,6 +1148,11 @@ program clm
      else if(dsh_key == '-s') then
         ! force_cld_lvl_2b_sat and force_sat_lvl_2b_cld must not both be true
         force_cld_lvl_2b_sat=.true.
+     else if(dsh_key == '-R') then
+        RFM_TXT_INPUT=.true.
+        CLM_NC_INPUT=.false.
+        AFGL_TXT_INPUT=.false.
+        CLM_TXT_INPUT=.false.
      else if(dsh_key == '-S') then
         force_sat_lvl_2b_cld=.true.
      else if(dsh_key == '-t') then
@@ -1405,6 +1417,8 @@ program clm
      write(0,'(a)') 'Input presumed to be CLM file in netCDF format'
   else if (AFGL_TXT_INPUT) then
      write(0,'(a)') 'Input presumed to be AFGL file in ASCII format'
+  else if (RFM_TXT_INPUT) then
+     write(0,'(a)') 'Input presumed to be RFM file in ASCII .atm format'
   endif                     ! not CLM_NC_INPUT
   
   if (cmd_ln_odxc_obs_bga) then 
@@ -1429,6 +1443,7 @@ program clm
   ! CRM 1.x input files overwrite most of these
   ! CRM 2.x input files overwrite all of these
   ! AFGL 2.x input files overwrite a few of these
+  ! RFM 2.x input files overwrite a few of these
   ! netCDF CLM input files overwrite some of these, depending on the origin of the netCDF CLM file 
   prf_sng='Default profile string'//char(0)
   prf_snw_sng='Default snow profile string'//char(0)
@@ -1678,6 +1693,113 @@ program clm
      tpt_skn=tpt_sfc
      
      ! Set non-AFGL fields to defaults
+     do idx=1,lev_nbr
+        cld_frc(idx)=0.0
+        mpl_CWP(idx)=0.0
+        odxl_obs_aer(idx)=0.0
+        odxl_obs_bga(idx)=0.0
+     enddo
+     
+     ! De-allocate dynamic variables
+     if (allocated(CH4_vmr)) deallocate(CH4_vmr,stat=rcd)
+     if (allocated(CH4_vmr_ntf)) deallocate(CH4_vmr_ntf,stat=rcd)
+     if (allocated(CO_vmr)) deallocate(CO_vmr,stat=rcd)
+     if (allocated(CO_vmr_ntf)) deallocate(CO_vmr_ntf,stat=rcd)
+     if (allocated(H2O_vmr)) deallocate(H2O_vmr,stat=rcd)
+     if (allocated(H2O_vmr_ntf)) deallocate(H2O_vmr_ntf,stat=rcd)
+     if (allocated(N2O_vmr)) deallocate(N2O_vmr,stat=rcd)
+     if (allocated(N2O_vmr_ntf)) deallocate(N2O_vmr_ntf,stat=rcd)
+     if (allocated(O3_vmr)) deallocate(O3_vmr,stat=rcd)
+     if (allocated(O3_vmr_ntf)) deallocate(O3_vmr_ntf,stat=rcd)
+     if (allocated(cnc_air)) deallocate(cnc_air,stat=rcd)
+     if (allocated(cnc_air_ntf)) deallocate(cnc_air_ntf,stat=rcd)
+     
+  else if (RFM_TXT_INPUT) then ! input file is in RFM_TXT_INPUT format
+     
+     ! Allocate space for dynamic arrays
+     allocate(CH4_vmr(lev_nbr),stat=rcd)
+     allocate(CH4_vmr_ntf(levp_nbr),stat=rcd)
+     allocate(CO_vmr(lev_nbr),stat=rcd)
+     allocate(CO_vmr_ntf(levp_nbr),stat=rcd)
+     allocate(H2O_vmr(lev_nbr),stat=rcd)
+     allocate(H2O_vmr_ntf(levp_nbr),stat=rcd)
+     allocate(N2O_vmr(lev_nbr),stat=rcd)
+     allocate(N2O_vmr_ntf(levp_nbr),stat=rcd)
+     allocate(O3_vmr(lev_nbr),stat=rcd)
+     allocate(O3_vmr_ntf(levp_nbr),stat=rcd)
+     allocate(cnc_air(lev_nbr),stat=rcd)
+     allocate(cnc_air_ntf(levp_nbr),stat=rcd)
+     
+     ! Read input quantities
+     open (fl_in_unit,file=fl_in,status='old',iostat=rcd)
+     
+     call ftn_strini(prf_sng) ! [sng] sng(1:len)=NUL
+     read (fl_in_unit,'(a2,a)') lbl,prf_sng
+     call ftn_strnul(prf_sng) ! [sbr] NUL-initialize all characters after LSC
+     write (6,*) prf_sng
+     read (fl_in_unit,'(a80)') lbl
+     write (6,*) lbl
+     read (fl_in_unit,*) levp_nbr
+     write (6,'(a,i4)') 'RFM quark levp_nbr = ',levp_nbr
+
+     lev_nbr=levp_nbr-1 ! [nbr] dimension size
+     read (fl_in_unit,'(a80)') lbl
+     write (6,'(a)') lbl
+     do levp_idx=1,levp_nbr
+        int_foo=levp_nbr-levp_idx+1
+        read (fl_in_unit,*) alt_ntf(int_foo)
+        write (6,*) alt_ntf(int_foo)
+     enddo
+     
+     do levp_idx=1,levp_nbr
+        int_foo=levp_nbr-levp_idx+1
+        write (6,*) alt_ntf(int_foo)
+     enddo
+
+     close (fl_in_unit)
+     write (0,'(a20,1x,a)') 'Read input data from',fl_in(1:ftn_strlen(fl_in))
+     
+     ! Convert input data to SI units where necessary
+     do idx=1,levp_nbr
+        alt_ntf(idx)=alt_ntf(idx)*1000.0 ! [km] -> [m]
+        prs_ntf(idx)=prs_ntf(idx)*100.0 ! [mb] -> [Pa]
+        cnc_air_ntf(idx)=cnc_air_ntf(idx)/1.0e6 ! [cm-3] -> [m-3]
+        H2O_vmr_ntf(idx)=H2O_vmr_ntf(idx)*1.0e-6 ! [ppmv] -> [vmr]
+        O3_vmr_ntf(idx)=O3_vmr_ntf(idx)*1.0e-6 ! [ppmv] -> [vmr]
+        N2O_vmr_ntf(idx)=N2O_vmr_ntf(idx)*1.0e-6 ! [ppmv] -> [vmr]
+        CO_vmr_ntf(idx)=CO_vmr_ntf(idx)*1.0e-6 ! [ppmv] -> [vmr]
+        CH4_vmr_ntf(idx)=CH4_vmr_ntf(idx)*1.0e-6 ! [ppmv] -> [vmr]
+     enddo                  ! end loop over levp
+     
+     ! Place input data on layer midpoint surfaces by linear interpolation
+     do idx=1,lev_nbr
+        alt(idx)=0.5*(alt_ntf(idx)+alt_ntf(idx+1)) ! [m]
+        tpt(idx)=0.5*(tpt_ntf(idx)+tpt_ntf(idx+1)) ! [K]
+        prs(idx)=0.5*(prs_ntf(idx)+prs_ntf(idx+1)) ! [Pa]
+        cnc_air(idx)=0.5*(cnc_air(idx)+cnc_air(idx+1)) ! [# m-3]
+        H2O_vmr(idx)=0.5*(H2O_vmr_ntf(idx)+H2O_vmr_ntf(idx+1)) ! [mlc mlc-1]
+        O3_vmr(idx)=0.5*(O3_vmr_ntf(idx)+O3_vmr_ntf(idx+1)) ! [mlc mlc-1]
+        N2O_vmr(idx)=0.5*(N2O_vmr_ntf(idx)+N2O_vmr_ntf(idx+1)) ! [mlc mlc-1]
+        CO_vmr(idx)=0.5*(CO_vmr_ntf(idx)+CO_vmr_ntf(idx+1)) ! [mlc mlc-1]
+        CH4_vmr(idx)=0.5*(CH4_vmr_ntf(idx)+CH4_vmr_ntf(idx+1)) ! [mlc mlc-1]
+     enddo                  ! end loop over lev
+     
+     ! Derive required CLM fields from RFM input
+     do idx=1,lev_nbr
+        q_H2O(idx)=H2O_vmr(idx)*(mmw_H2O/mmw_dry_air) ! [kg kg-1]
+        q_O3(idx)=O3_vmr(idx)*(mmw_O3/mmw_dry_air) ! [kg kg-1]
+     enddo                  ! end loop over lev
+     
+     prf_sng='RFM ' // prf_sng(1:len(prf_sng)-5)
+     call ftn_strnul(prf_sng) ! [sbr] NUL-initialize all characters after LSC
+     prs_sfc=prs_ntf(levp_nbr)
+     tpt_sfc=tpt_ntf(levp_nbr)
+     ! tpt_sfc is temperature at aerodynamic roughness height
+     ! tpt_skn is skin (emitting) temperature
+     ! It is possible for there to be a discontinuity between tpt_sfc and tpt_skn
+     tpt_skn=tpt_sfc
+     
+     ! Set non-RFM fields to defaults
      do idx=1,lev_nbr
         cld_frc(idx)=0.0
         mpl_CWP(idx)=0.0
