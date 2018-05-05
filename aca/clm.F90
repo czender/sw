@@ -399,6 +399,9 @@ program clm
   real,dimension(:),allocatable::cnc_air_ntf
 
   ! Local variables for RFM_TXT_INPUT only
+  character(len=128)::rfm_datnam ! [sng] Buffer into which each line is read
+  integer,parameter::rfm_max_val_per_line=15 ! [nbr] Maximum number of values per line
+  real::rfm_val(rfm_max_val_per_line)
   
   ! Local
   logical AFGL_TXT_INPUT

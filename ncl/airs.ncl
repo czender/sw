@@ -84,7 +84,7 @@ fn = "~/airs_out.nc"
 fin = addfile(fn,"r")
 din = fin->$var$
 
-res@gsnLeftString = "b) E3SM (CAM) analysis grid"
+res@gsnLeftString = "b) Model (E3SM) analysis grid"
 plots(1) = gsn_csm_contour_map(wks,din,res)
 
 ;- raw
@@ -100,7 +100,7 @@ res@sfYArray = lat2
 res@sfXArray = lon2
 
 din2 = fin->TSurfAir
-res@gsnLeftString = "a) Native (AIRS) curvilinear grid"
+res@gsnLeftString = "a) Satellite (AIRS) curvilinear grid"
 plots(0) = gsn_csm_contour_map(wks,din2,res)
 
 resp = True
