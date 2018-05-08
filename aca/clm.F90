@@ -399,12 +399,15 @@ program clm
   real,dimension(:),allocatable::cnc_air_ntf
 
   ! Local variables for RFM_TXT_INPUT only
-  character(len=128)::rfm_datnam ! [sng] Buffer into which each line is read
+  character(len=128)::rfm_ln ! [sng] Buffer into which each RFM line is read
   integer,parameter::rfm_max_val_per_line=15 ! [nbr] Maximum number of values per line
   integer,parameter::rfm_clm_nbr=5 ! [nbr] Number of values/columns per row
   real::rfm_val(rfm_max_val_per_line)
   integer rfm_row_nbr
-  integer rfm_rph
+  integer rfm_rph_nbr
+  integer rfm_row_idx
+  integer rfm_clm_idx
+  integer rfm_idx
   
   ! Local
   logical AFGL_TXT_INPUT
@@ -1749,16 +1752,32 @@ program clm
      write (6,'(a,i4)') 'RFM quark levp_nbr = ',levp_nbr
 
      lev_nbr=levp_nbr-1 ! [nbr] dimension size
-     rfm_row_nbr=levp_nbr/rfm_clm_nbr)
-     rfm_rph=mod(levp_nbr,rfm_clm_nbr)
+     rfm_row_nbr=levp_nbr/rfm_clm_nbr
+     rfm_rph_nbr=mod(levp_nbr,rfm_clm_nbr)
+     if (rfm_rph_nbr /= 0) rfm_row_nbr=rfm_row_nbr+1
      
-     read (fl_in_unit,'(a80)') lbl
+     read (fl_in_unit,'(a)') lbl
      write (6,'(a)') lbl
      
+     write (6,*) 'rfm_row_nbr = ',rfm_row_nbr,', rfm_clm_nbr = ',rfm_clm_nbr,', rfm_rph_nbr = ',rfm_rph_nbr
+     do rfm_row_idx=1,rfm_row_nbr
+        write (6,*) 'rfm_row_idx = ',rfm_row_idx
+        read (fl_in_unit,'(a)') rfm_ln
+        write (6,*) rfm_ln
+        if (rfm_row_idx < rfm_row_nbr) then
+           read (rfm_ln,*) (rfm_val(rfm_idx),rfm_idx=(rfm_row_idx-1)*rfm_clm_nbr,rfm_row_idx*rfm_clm_nbr-1)
+           write (6,*) (rfm_val(rfm_idx),rfm_idx=(rfm_row_idx-1)*rfm_clm_nbr,rfm_row_idx*rfm_clm_nbr-1)
+        else
+           read (rfm_ln,*) (rfm_val(rfm_idx),rfm_idx=(rfm_row_idx-1)*rfm_clm_nbr,(rfm_row_idx-1)*rfm_clm_nbr+rfm_rph_nbr)
+           write (6,*) (rfm_val(rfm_idx),rfm_idx=(rfm_row_idx-1)*rfm_clm_nbr,(rfm_row_idx-1)*rfm_clm_nbr+rfm_rph_nbr)
+        endif
+     enddo ! rfm_row_idx
+
      do levp_idx=1,levp_nbr
         int_foo=levp_nbr-levp_idx+1
-        read (fl_in_unit,*) alt_ntf(int_foo)
-        write (6,*) alt_ntf(int_foo)
+        !        read (fl_in_unit,*) alt_ntf(int_foo)
+        ! write (6,*) alt_ntf(int_foo)
+        write (6,*) rfm_val(levp_idx)
      enddo
      
      do levp_idx=1,levp_nbr
