@@ -17,6 +17,43 @@ module clm_mdl ! [mdl] Column (CLM) processing
   
 contains 
   
+  subroutine rfm_read( &
+       levp_nbr, & ! I []
+       rfm_clm_nbr, & ! I []
+       rfm_val, &
+       )
+    implicit none
+    ! Parameters
+    ! Commons
+    ! Input Arguments
+    ! Input/Output Arguments
+    ! Output Arguments
+    ! Local workspace
+    character(len=128)::rfm_ln ! [sng] Buffer into which each RFM line is read
+    
+    integer rfm_row_nbr
+    integer rfm_rph_nbr
+    integer rfm_row_idx
+    integer rfm_idx
+    ! Main code
+    lev_nbr=levp_nbr-1 ! [nbr] dimension size
+    rfm_row_nbr=levp_nbr/rfm_clm_nbr
+    rfm_rph_nbr=mod(levp_nbr,rfm_clm_nbr)
+    if (rfm_rph_nbr /= 0) rfm_row_nbr=rfm_row_nbr+1
+    write (6,*) 'rfm_row_nbr = ',rfm_row_nbr,', rfm_clm_nbr = ',rfm_clm_nbr,', rfm_rph_nbr = ',rfm_rph_nbr
+    
+    do rfm_row_idx=1,rfm_row_nbr
+       read (fl_in_unit,'(a)') rfm_ln
+       if (rfm_row_idx < rfm_row_nbr) then
+          read (rfm_ln,*) (rfm_val(rfm_idx),rfm_idx=(rfm_row_idx-1)*rfm_clm_nbr,rfm_row_idx*rfm_clm_nbr-1)
+       else
+          read (rfm_ln,*) (rfm_val(rfm_idx),rfm_idx=(rfm_row_idx-1)*rfm_clm_nbr,(rfm_row_idx-1)*rfm_clm_nbr+rfm_rph_nbr)
+       endif
+    enddo ! rfm_row_idx
+    
+    return
+  end subroutine rfm_read ! end rfm_read()
+  
   subroutine slr_crd_Bri92( &
        lat,                 & ! I [rdn] Latitude
        lcl_yr_day,          & ! I [day] Local year day
