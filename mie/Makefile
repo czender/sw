@@ -7,7 +7,7 @@
 # See http://www.gnu.org/copyleft/gpl.html for full license text
 
 # Usage:
-# scp ~/mie/Makefile esmf.ess.uci.edu:mie
+# scp ~/sw/mie/Makefile esmf.ess.uci.edu:mie
 # 32-bit ABI on NCAR AIX systems:
 # NETCDF_LIB=/usr/local/lib32/r4i4 make --jobs=1 ABI=32 OPTS=D;cd -
 
@@ -1260,7 +1260,7 @@ distclean : dst_cln
 dst_cln : cln bld_cln
 install : inc 
 tags : 
-	etags *.cc *.hh *.sh ~/c++/*.cc ~/c++/*.hh ~/mie/psd.pl ~/aca/*.sh ~/arese/*.sh ~/crr/*.tex Makefile
+	etags *.cc *.hh *.sh ~/sw/c++/*.cc ~/sw/c++/*.hh ~/sw/sw/mie/psd.pl ~/sw/aca/*.sh ~/sw/arese/*.sh ~/sw/crr/*.tex Makefile
 #	etags *.cc *.c *.com *.F *.F90 *.hh *.h Makefile
 test : tst
 tst :
