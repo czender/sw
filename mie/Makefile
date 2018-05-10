@@ -1281,7 +1281,7 @@ inc_cln :
 	rm -f ${MDL_INC}
 # Targets in lib
 lib : ${libcsz_c++}.a ${libcsm_c++}.a ${libnco_c++}.a
-	-cd ${HOME}/c++; ${MAKE} $@
+	-cd ${HOME}/sw/c++; ${MAKE} $@
 lib_cln :
 	-cd ${MY_LIB_DIR};
 # Targets in obj
