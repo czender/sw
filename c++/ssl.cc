@@ -261,7 +261,7 @@ flx_vrt_nbr_ssl_VDB01_get // [fnc] Sea salt generation function of VDB01
   //  const prc_cmp gsd[3]={1.9,2.0,3.0}; // [frc] Geometric standard deviation
 
   // Most sea salt parameterizations, including VDB01, want radius in microns
-  const prc_cmp rds_prt_mcr(rds_prt*1.0e6); // [um] Size at bin center
+  //  const prc_cmp rds_prt_mcr(rds_prt*1.0e6); // [um] Size at bin center
   // Note: VDB01 parameterized in terms of r(RH = 80%)
   // And98 suggest r(RH = 80%) = 0.518*r^0.976
   //  const prc_cmp rds_RH80pct_mcr(0.518*std::pow(rds_prt_mcr,PRC_CMP(0.976))); // [um] Particle radius at 80% RH And98 p. 2180 (3.4)
