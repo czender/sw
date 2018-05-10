@@ -182,7 +182,7 @@ private:
   prc_cmp dns; // [kg m-3] Density
   prc_cmp mmw; // [kg mol-1] Mean molecular weight
   prc_cmp spc_heat; // [J kg-1 K-1] Specific heat capacity
-  prc_cmp tpt; // [K] Temperature
+  //  prc_cmp tpt; // [K] Temperature
   std::string abb; // [sng] Abbreviation
   std::string dsc; // [sng] Description
 

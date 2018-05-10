@@ -251,20 +251,20 @@ flx_vrt_nbr_ssl_VDB01_get // [fnc] Sea salt generation function of VDB01
      Input is particle radius at 80% relative humidity and wind speed at 10 m */
 
   // Output
-  int rcd(0); // O [rcd] Return success code
+  //  int rcd(0); // O [rcd] Return success code
   // Local
   using mth::cst_M_PIl; // (3.1415926535897932384626433832795029L) [frc] 3
   const std::string sbr_nm("flx_vrt_nbr_ssl_VDB01_get"); // Subroutine name
 
   // Set invariant constants used in VDB01
-  const prc_cmp rds_nma_mcr[3]={0.2,2.0,12.0}; // [um] Number median radius analytic 
-  const prc_cmp gsd[3]={1.9,2.0,3.0}; // [frc] Geometric standard deviation
+  //  const prc_cmp rds_nma_mcr[3]={0.2,2.0,12.0}; // [um] Number median radius analytic 
+  //  const prc_cmp gsd[3]={1.9,2.0,3.0}; // [frc] Geometric standard deviation
 
   // Most sea salt parameterizations, including VDB01, want radius in microns
   const prc_cmp rds_prt_mcr(rds_prt*1.0e6); // [um] Size at bin center
   // Note: VDB01 parameterized in terms of r(RH = 80%)
   // And98 suggest r(RH = 80%) = 0.518*r^0.976
-  const prc_cmp rds_RH80pct_mcr(0.518*std::pow(rds_prt_mcr,PRC_CMP(0.976))); // [um] Particle radius at 80% RH And98 p. 2180 (3.4)
+  //  const prc_cmp rds_RH80pct_mcr(0.518*std::pow(rds_prt_mcr,PRC_CMP(0.976))); // [um] Particle radius at 80% RH And98 p. 2180 (3.4)
 
   prc_cmp flx_nbr_vrt_ssl_VDB01(0.0); // [# m-2 s-1 m-1] Direct sea-salt production VDB01
   prc_cmp cnc_ttl[3]; // [# cm-3] Number concentration in each mode

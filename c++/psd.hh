@@ -102,7 +102,7 @@ public:
 private:
   // Private members
   bool rcm_flg; // [flg] Invoke recompute() on set() calls
-  bool usr_mss_flg; // [flg] Mass flag
+  //  bool usr_mss_flg; // [flg] Mass flag
   bool mss_frc_anl_set_flg; // [flg] Mass fraction analytic has been set
   prc_cmp mss_frc_anl; // [frc] Mass fraction analytic
   int rcd; // [enm] Return success code
