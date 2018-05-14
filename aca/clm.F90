@@ -95,7 +95,7 @@ program clm
   ! Print all information about a gas:
   ! ncks -a -u -F -C -H -d lev,100000.0 -v cnc_N2O,dns_N2O,mpc_N2O,mpl_N2O,npc_N2O,npl_N2O,ppr_N2O,q_N2O,r_N2O,vmr_N2O ${DATA}/aca/mls_clr.nc
   
-  use clm_mdl,only:aer_odxc_get,aer_info_get,q_o3_ntp,q_no2_ntp,q_oh_ntp,slr_crd_Bri92 ! [mdl] Column (CLM) processing
+  use clm_mdl,only:aer_odxc_get,aer_info_get,q_o3_ntp,q_no2_ntp,q_oh_ntp,rfm_read,slr_crd_Bri92 ! [mdl] Column (CLM) processing
   use dbg_mdl ! [mdl] Debugging constants, prg_nm, dbg_lvl
   use dmr_mdl ! [mdl] Dimers, collision complexes
   use netcdf ! [mdl] netCDF interface
@@ -1747,22 +1747,17 @@ program clm
      read (fl_in_unit,'(a)') lbl
      write (6,'(a)') lbl
      
-     call rfm_read( &
-          levp_nbr, & ! I []
-          rfm_clm_nbr_max, & ! I []
-          rfm_val, &
-          )
+     call rfm_read(fl_in_unit,levp_nbr,rfm_clm_nbr_max,rfm_val)
 
-    do levp_idx=1,levp_nbr
+     do levp_idx=1,levp_nbr
         int_foo=levp_nbr-levp_idx+1
-        !        read (fl_in_unit,*) alt_ntf(int_foo)
-        ! write (6,*) alt_ntf(int_foo)
         write (6,*) rfm_val(levp_idx)
      enddo
      
      do levp_idx=1,levp_nbr
         int_foo=levp_nbr-levp_idx+1
-        write (6,*) alt_ntf(int_foo)
+        alt_ntf(int_foo)=rfm_val(levp_idx)
+        write (6,*) 'idx = ',int_foo,', alt_ntf = ',
      enddo
 
      close (fl_in_unit)

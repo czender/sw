@@ -18,23 +18,27 @@ module clm_mdl ! [mdl] Column (CLM) processing
 contains 
   
   subroutine rfm_read( &
+       fl_in_unit, & ! I []
        levp_nbr, & ! I []
        rfm_clm_nbr, & ! I []
-       rfm_val, &
+       rfm_val &
        )
     implicit none
     ! Parameters
     ! Commons
     ! Input Arguments
+    integer,intent(in)::fl_in_unit,levp_nbr,rfm_clm_nbr
+    real,intent(out)::rfm_val
     ! Input/Output Arguments
     ! Output Arguments
     ! Local workspace
     character(len=128)::rfm_ln ! [sng] Buffer into which each RFM line is read
-    
     integer rfm_row_nbr
     integer rfm_rph_nbr
     integer rfm_row_idx
     integer rfm_idx
+    integer lev_nbr
+    integer lev_nbr_idx
     ! Main code
     lev_nbr=levp_nbr-1 ! [nbr] dimension size
     rfm_row_nbr=levp_nbr/rfm_clm_nbr
