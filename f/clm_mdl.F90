@@ -21,14 +21,14 @@ contains
        fl_in_unit, & ! I []
        levp_nbr, & ! I []
        rfm_clm_nbr, & ! I []
-       rfm_val &
+       rfm_val & ! O []
        )
     implicit none
     ! Parameters
     ! Commons
     ! Input Arguments
     integer,intent(in)::fl_in_unit,levp_nbr,rfm_clm_nbr
-    real,intent(out)::rfm_val
+    real,dimension(:),intent(inout)::rfm_val
     ! Input/Output Arguments
     ! Output Arguments
     ! Local workspace
@@ -37,8 +37,10 @@ contains
     integer rfm_rph_nbr
     integer rfm_row_idx
     integer rfm_idx
+    integer int_foo           ! [nbr] Integer
     integer lev_nbr
     integer lev_nbr_idx
+    integer levp_idx
     ! Main code
     lev_nbr=levp_nbr-1 ! [nbr] dimension size
     rfm_row_nbr=levp_nbr/rfm_clm_nbr
@@ -55,6 +57,13 @@ contains
        endif
     enddo ! rfm_row_idx
     
+    do levp_idx=1,levp_nbr
+       int_foo=levp_nbr-levp_idx+1
+       swap=rfm_val(levp_idx)
+       
+       write (6,*) 'idx = ',int_foo,', alt_ntf = ',alt_ntf(int_foo)
+    enddo
+
     return
   end subroutine rfm_read ! end rfm_read()
   

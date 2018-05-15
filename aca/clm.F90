@@ -1747,7 +1747,9 @@ program clm
      read (fl_in_unit,'(a)') lbl
      write (6,'(a)') lbl
      
-     call rfm_read(fl_in_unit,levp_nbr,rfm_clm_nbr_max,rfm_val)
+     write (6,'(a)') 'Acquiring height...'
+     call rfm_read(fl_in_unit,levp_nbr,rfm_clm_nbr_max,alt_ntf)
+     write (6,'(a)') 'Acquiring pressure...'
 
      do levp_idx=1,levp_nbr
         int_foo=levp_nbr-levp_idx+1
