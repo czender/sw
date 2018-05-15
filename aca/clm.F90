@@ -399,8 +399,6 @@ program clm
   real,dimension(:),allocatable::cnc_air_ntf
 
   ! Local variables for RFM_TXT_INPUT only
-  integer,parameter::rfm_clm_nbr=5 ! [nbr] Number of values/columns per row
-  real::rfm_val(levp_nbr_max)
 
   ! Local
   logical AFGL_TXT_INPUT
@@ -1748,19 +1746,11 @@ program clm
      write (6,'(a)') lbl
      
      write (6,'(a)') 'Acquiring height...'
-     call rfm_read(fl_in_unit,levp_nbr,rfm_clm_nbr_max,alt_ntf)
+     call rfm_read(fl_in_unit,levp_nbr,alt_ntf)
+     do levp_idx=1,levp_nbr
+        write (6,*) 'idx = ',levp_idx,', alt_ntf = ',alt_ntf(levp_idx)
+     enddo
      write (6,'(a)') 'Acquiring pressure...'
-
-     do levp_idx=1,levp_nbr
-        int_foo=levp_nbr-levp_idx+1
-        write (6,*) rfm_val(levp_idx)
-     enddo
-     
-     do levp_idx=1,levp_nbr
-        int_foo=levp_nbr-levp_idx+1
-        alt_ntf(int_foo)=rfm_val(levp_idx)
-        write (6,*) 'idx = ',int_foo,', alt_ntf = ',
-     enddo
 
      close (fl_in_unit)
      write (0,'(a20,1x,a)') 'Read input data from',fl_in(1:ftn_strlen(fl_in))

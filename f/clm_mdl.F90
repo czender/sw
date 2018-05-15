@@ -20,15 +20,16 @@ contains
   subroutine rfm_read( &
        fl_in_unit, & ! I []
        levp_nbr, & ! I []
-       rfm_clm_nbr, & ! I []
        rfm_val & ! O []
        )
     implicit none
     ! Parameters
+    integer,parameter::rfm_clm_nbr=5 ! [nbr] Number of values/columns per row
     ! Commons
     ! Input Arguments
-    integer,intent(in)::fl_in_unit,levp_nbr,rfm_clm_nbr
-    real,dimension(:),intent(inout)::rfm_val
+    integer,intent(in)::fl_in_unit,levp_nbr
+    real,dimension(:),allocatable::rfm_raw
+    real,dimension(:),intent(out)::rfm_val
     ! Input/Output Arguments
     ! Output Arguments
     ! Local workspace
@@ -39,9 +40,12 @@ contains
     integer rfm_idx
     integer int_foo           ! [nbr] Integer
     integer lev_nbr
-    integer lev_nbr_idx
     integer levp_idx
+    integer rcd               ! [rcd] Return success code
     ! Main code
+
+    allocate(rfm_raw(levp_nbr),stat=rcd)
+
     lev_nbr=levp_nbr-1 ! [nbr] dimension size
     rfm_row_nbr=levp_nbr/rfm_clm_nbr
     rfm_rph_nbr=mod(levp_nbr,rfm_clm_nbr)
@@ -51,18 +55,18 @@ contains
     do rfm_row_idx=1,rfm_row_nbr
        read (fl_in_unit,'(a)') rfm_ln
        if (rfm_row_idx < rfm_row_nbr) then
-          read (rfm_ln,*) (rfm_val(rfm_idx),rfm_idx=(rfm_row_idx-1)*rfm_clm_nbr,rfm_row_idx*rfm_clm_nbr-1)
+          read (rfm_ln,*) (rfm_raw(rfm_idx),rfm_idx=(rfm_row_idx-1)*rfm_clm_nbr,rfm_row_idx*rfm_clm_nbr-1)
        else
-          read (rfm_ln,*) (rfm_val(rfm_idx),rfm_idx=(rfm_row_idx-1)*rfm_clm_nbr,(rfm_row_idx-1)*rfm_clm_nbr+rfm_rph_nbr)
+          read (rfm_ln,*) (rfm_raw(rfm_idx),rfm_idx=(rfm_row_idx-1)*rfm_clm_nbr,(rfm_row_idx-1)*rfm_clm_nbr+rfm_rph_nbr)
        endif
     enddo ! rfm_row_idx
     
     do levp_idx=1,levp_nbr
        int_foo=levp_nbr-levp_idx+1
-       swap=rfm_val(levp_idx)
-       
-       write (6,*) 'idx = ',int_foo,', alt_ntf = ',alt_ntf(int_foo)
+       rfm_val(int_foo)=rfm_raw(levp_idx)
     enddo
+
+    !    if (allocated(rfm_raw)) deallocate(rfm_raw,stat=rcd)
 
     return
   end subroutine rfm_read ! end rfm_read()
