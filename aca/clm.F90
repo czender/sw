@@ -1745,6 +1745,9 @@ program clm
      read (fl_in_unit,'(a)') lbl
      write (6,'(a)') lbl
      
+     if (allocated(alt_ntf)) deallocate(alt_ntf,stat=rcd)
+     allocate(alt_ntf(levp_nbr),stat=rcd)
+     
      write (6,'(a)') 'Acquiring height...'
      call rfm_read(fl_in_unit,levp_nbr,alt_ntf)
      do levp_idx=1,levp_nbr

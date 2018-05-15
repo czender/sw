@@ -25,10 +25,14 @@ contains
     implicit none
     ! Parameters
     integer,parameter::rfm_clm_nbr=5 ! [nbr] Number of values/columns per row
+    integer,parameter::levp_nbr_max=150 ! [nbr] Number of values/columns per row
     ! Commons
     ! Input Arguments
     integer,intent(in)::fl_in_unit,levp_nbr
-    real,dimension(:),allocatable::rfm_raw
+    !    real,dimension(:),allocatable::rfm_raw
+    !real,dimension(:),allocatable::rfm_raw
+    !real,dimension(levp_nbr_max)::rfm_raw
+    real::rfm_raw(levp_nbr_max)
     real,dimension(:),intent(out)::rfm_val
     ! Input/Output Arguments
     ! Output Arguments
@@ -43,8 +47,9 @@ contains
     integer levp_idx
     integer rcd               ! [rcd] Return success code
     ! Main code
+    rcd=0
 
-    allocate(rfm_raw(levp_nbr),stat=rcd)
+    !allocate(rfm_raw(levp_nbr),stat=rcd)
 
     lev_nbr=levp_nbr-1 ! [nbr] dimension size
     rfm_row_nbr=levp_nbr/rfm_clm_nbr
@@ -62,10 +67,15 @@ contains
     enddo ! rfm_row_idx
     
     do levp_idx=1,levp_nbr
+       write (6,*) 'idx = ',levp_idx,', rfm_raw = ',rfm_raw(levp_idx)
+    enddo
+
+    do levp_idx=1,levp_nbr
        int_foo=levp_nbr-levp_idx+1
        rfm_val(int_foo)=rfm_raw(levp_idx)
     enddo
 
+    if (rcd /= 0 ) write (6,*) 'ERROR in rfm_read()'
     !    if (allocated(rfm_raw)) deallocate(rfm_raw,stat=rcd)
 
     return
