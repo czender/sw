@@ -384,21 +384,23 @@ program clm
   real :: tau             ! [N/m2] Surface stress
   real :: kappa
   ! !sbc
-  ! Local variables for AFGL_TXT_INPUT only
+  ! Local variables for AFGL_TXT_INPUT and/or RFM_TXT_INPUT
   real,dimension(:),allocatable::CH4_vmr
   real,dimension(:),allocatable::CH4_vmr_ntf
   real,dimension(:),allocatable::CO_vmr
   real,dimension(:),allocatable::CO_vmr_ntf
+  real,dimension(:),allocatable::CO2_vmr
+  real,dimension(:),allocatable::CO2_vmr_ntf
   real,dimension(:),allocatable::H2O_vmr
   real,dimension(:),allocatable::H2O_vmr_ntf
   real,dimension(:),allocatable::N2O_vmr
   real,dimension(:),allocatable::N2O_vmr_ntf
   real,dimension(:),allocatable::O3_vmr
   real,dimension(:),allocatable::O3_vmr_ntf
+  real,dimension(:),allocatable::O2_vmr
+  real,dimension(:),allocatable::O2_vmr_ntf
   real,dimension(:),allocatable::cnc_air
   real,dimension(:),allocatable::cnc_air_ntf
-
-  ! Local variables for RFM_TXT_INPUT only
 
   ! Local
   logical AFGL_TXT_INPUT
@@ -1186,6 +1188,22 @@ program clm
      rcd=nf90_wrp(nf90_inquire_dimension(nc_id,lev_dmn_id,len=lev_nbr),sbr_nm//": inquire_dim lev")
   end if ! !CLM_NC_INPUT
 
+  if (RFM_TXT_INPUT) then ! input file is in RFM_TXT_INPUT format
+     ! RFM Reference Forward Model Atmospheric Profiles at http://eodg.atm.ox.ac.uk/RFM/atm
+     ! Read input quantities
+     open (fl_in_unit,file=fl_in,status='old',iostat=rcd)
+     
+     call ftn_strini(prf_sng) ! [sng] sng(1:len)=NUL
+     read (fl_in_unit,'(a2,a)') lbl,prf_sng
+     call ftn_strnul(prf_sng) ! [sbr] NUL-initialize all characters after LSC
+     write (6,*) prf_sng(1:ftn_strlen(prf_sng))
+     read (fl_in_unit,'(a80)') lbl
+     !write (6,*) lbl
+     read (fl_in_unit,*) levp_nbr
+     !write (6,'(a,i4)') 'RFM quark levp_nbr = ',levp_nbr
+     lev_nbr=levp_nbr-1
+  end if ! !RFM_TXT_INPUT
+
   ! Compute any quantities that might depend on command line input
   levp_nbr=lev_nbr+1 ! [nbr] dimension size
   levp_snw_nbr=lev_snw_nbr+1 ! [nbr] dimension size
@@ -1714,46 +1732,36 @@ program clm
      if (allocated(cnc_air)) deallocate(cnc_air,stat=rcd)
      if (allocated(cnc_air_ntf)) deallocate(cnc_air_ntf,stat=rcd)
      
+     ! end AFGL section
   else if (RFM_TXT_INPUT) then ! input file is in RFM_TXT_INPUT format
-     
+     ! File is already open because we opened it to obtain lev_nbr
+
      ! Allocate space for dynamic arrays
      allocate(CH4_vmr(lev_nbr),stat=rcd)
      allocate(CH4_vmr_ntf(levp_nbr),stat=rcd)
      allocate(CO_vmr(lev_nbr),stat=rcd)
      allocate(CO_vmr_ntf(levp_nbr),stat=rcd)
+     allocate(CO2_vmr(lev_nbr),stat=rcd)
+     allocate(CO2_vmr_ntf(levp_nbr),stat=rcd)
      allocate(H2O_vmr(lev_nbr),stat=rcd)
      allocate(H2O_vmr_ntf(levp_nbr),stat=rcd)
      allocate(N2O_vmr(lev_nbr),stat=rcd)
      allocate(N2O_vmr_ntf(levp_nbr),stat=rcd)
      allocate(O3_vmr(lev_nbr),stat=rcd)
      allocate(O3_vmr_ntf(levp_nbr),stat=rcd)
-     allocate(cnc_air(lev_nbr),stat=rcd)
-     allocate(cnc_air_ntf(levp_nbr),stat=rcd)
+     allocate(O2_vmr(lev_nbr),stat=rcd)
+     allocate(O2_vmr_ntf(levp_nbr),stat=rcd)
      
-     ! Read input quantities
-     open (fl_in_unit,file=fl_in,status='old',iostat=rcd)
-     
-     call ftn_strini(prf_sng) ! [sng] sng(1:len)=NUL
-     read (fl_in_unit,'(a2,a)') lbl,prf_sng
-     call ftn_strnul(prf_sng) ! [sbr] NUL-initialize all characters after LSC
-     write (6,*) prf_sng
-     read (fl_in_unit,'(a80)') lbl
-     write (6,*) lbl
-     read (fl_in_unit,*) levp_nbr
-     write (6,'(a,i4)') 'RFM quark levp_nbr = ',levp_nbr
-
-     read (fl_in_unit,'(a)') lbl
-     write (6,'(a)') lbl
-     
-     if (allocated(alt_ntf)) deallocate(alt_ntf,stat=rcd)
-     allocate(alt_ntf(levp_nbr),stat=rcd)
-     
-     write (6,'(a)') 'Acquiring height...'
      call rfm_read(fl_in_unit,levp_nbr,alt_ntf)
-     do levp_idx=1,levp_nbr
-        write (6,*) 'idx = ',levp_idx,', alt_ntf = ',alt_ntf(levp_idx)
-     enddo
-     write (6,'(a)') 'Acquiring pressure...'
+     call rfm_read(fl_in_unit,levp_nbr,prs_ntf)
+     call rfm_read(fl_in_unit,levp_nbr,tpt_ntf)
+     call rfm_read(fl_in_unit,levp_nbr,H2O_vmr_ntf)
+     call rfm_read(fl_in_unit,levp_nbr,CO2_vmr_ntf)
+     call rfm_read(fl_in_unit,levp_nbr,O3_vmr_ntf)
+     call rfm_read(fl_in_unit,levp_nbr,N2O_vmr_ntf)
+     call rfm_read(fl_in_unit,levp_nbr,CO_vmr_ntf)
+     call rfm_read(fl_in_unit,levp_nbr,CH4_vmr_ntf)
+     call rfm_read(fl_in_unit,levp_nbr,O2_vmr_ntf)
 
      close (fl_in_unit)
      write (0,'(a20,1x,a)') 'Read input data from',fl_in(1:ftn_strlen(fl_in))
@@ -1762,12 +1770,13 @@ program clm
      do idx=1,levp_nbr
         alt_ntf(idx)=alt_ntf(idx)*1000.0 ! [km] -> [m]
         prs_ntf(idx)=prs_ntf(idx)*100.0 ! [mb] -> [Pa]
-        cnc_air_ntf(idx)=cnc_air_ntf(idx)/1.0e6 ! [cm-3] -> [m-3]
         H2O_vmr_ntf(idx)=H2O_vmr_ntf(idx)*1.0e-6 ! [ppmv] -> [vmr]
+        CO2_vmr_ntf(idx)=CO2_vmr_ntf(idx)*1.0e-6 ! [ppmv] -> [vmr]
         O3_vmr_ntf(idx)=O3_vmr_ntf(idx)*1.0e-6 ! [ppmv] -> [vmr]
         N2O_vmr_ntf(idx)=N2O_vmr_ntf(idx)*1.0e-6 ! [ppmv] -> [vmr]
         CO_vmr_ntf(idx)=CO_vmr_ntf(idx)*1.0e-6 ! [ppmv] -> [vmr]
         CH4_vmr_ntf(idx)=CH4_vmr_ntf(idx)*1.0e-6 ! [ppmv] -> [vmr]
+        O2_vmr_ntf(idx)=O2_vmr_ntf(idx)*1.0e-6 ! [ppmv] -> [vmr]
      enddo                  ! end loop over levp
      
      ! Place input data on layer midpoint surfaces by linear interpolation
@@ -1775,12 +1784,13 @@ program clm
         alt(idx)=0.5*(alt_ntf(idx)+alt_ntf(idx+1)) ! [m]
         tpt(idx)=0.5*(tpt_ntf(idx)+tpt_ntf(idx+1)) ! [K]
         prs(idx)=0.5*(prs_ntf(idx)+prs_ntf(idx+1)) ! [Pa]
-        cnc_air(idx)=0.5*(cnc_air(idx)+cnc_air(idx+1)) ! [# m-3]
         H2O_vmr(idx)=0.5*(H2O_vmr_ntf(idx)+H2O_vmr_ntf(idx+1)) ! [mlc mlc-1]
+        CO2_vmr(idx)=0.5*(CO2_vmr_ntf(idx)+CO2_vmr_ntf(idx+1)) ! [mlc mlc-1]
         O3_vmr(idx)=0.5*(O3_vmr_ntf(idx)+O3_vmr_ntf(idx+1)) ! [mlc mlc-1]
         N2O_vmr(idx)=0.5*(N2O_vmr_ntf(idx)+N2O_vmr_ntf(idx+1)) ! [mlc mlc-1]
         CO_vmr(idx)=0.5*(CO_vmr_ntf(idx)+CO_vmr_ntf(idx+1)) ! [mlc mlc-1]
         CH4_vmr(idx)=0.5*(CH4_vmr_ntf(idx)+CH4_vmr_ntf(idx+1)) ! [mlc mlc-1]
+        O2_vmr(idx)=0.5*(O2_vmr_ntf(idx)+O2_vmr_ntf(idx+1)) ! [mlc mlc-1]
      enddo                  ! end loop over lev
      
      ! Derive required CLM fields from RFM input
@@ -1811,15 +1821,18 @@ program clm
      if (allocated(CH4_vmr_ntf)) deallocate(CH4_vmr_ntf,stat=rcd)
      if (allocated(CO_vmr)) deallocate(CO_vmr,stat=rcd)
      if (allocated(CO_vmr_ntf)) deallocate(CO_vmr_ntf,stat=rcd)
+     if (allocated(CO2_vmr)) deallocate(CO2_vmr,stat=rcd)
+     if (allocated(CO2_vmr_ntf)) deallocate(CO2_vmr_ntf,stat=rcd)
      if (allocated(H2O_vmr)) deallocate(H2O_vmr,stat=rcd)
      if (allocated(H2O_vmr_ntf)) deallocate(H2O_vmr_ntf,stat=rcd)
      if (allocated(N2O_vmr)) deallocate(N2O_vmr,stat=rcd)
      if (allocated(N2O_vmr_ntf)) deallocate(N2O_vmr_ntf,stat=rcd)
      if (allocated(O3_vmr)) deallocate(O3_vmr,stat=rcd)
      if (allocated(O3_vmr_ntf)) deallocate(O3_vmr_ntf,stat=rcd)
-     if (allocated(cnc_air)) deallocate(cnc_air,stat=rcd)
-     if (allocated(cnc_air_ntf)) deallocate(cnc_air_ntf,stat=rcd)
-     
+     if (allocated(O2_vmr)) deallocate(O2_vmr,stat=rcd)
+     if (allocated(O2_vmr_ntf)) deallocate(O2_vmr_ntf,stat=rcd)
+
+     ! end RFM_TXT_INPUT
   else if (CLM_NC_INPUT) then ! Input file is in CLM_NC_INPUT format
      
      ! Assume lev,prs,T,q_H2O are available in input file in SI units

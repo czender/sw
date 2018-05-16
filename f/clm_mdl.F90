@@ -22,6 +22,7 @@ contains
        levp_nbr, & ! I []
        rfm_val & ! O []
        )
+    use sng_mdl ! [mdl] String manipulation
     implicit none
     ! Parameters
     integer,parameter::rfm_clm_nbr=5 ! [nbr] Number of values/columns per row
@@ -29,14 +30,11 @@ contains
     ! Commons
     ! Input Arguments
     integer,intent(in)::fl_in_unit,levp_nbr
-    !    real,dimension(:),allocatable::rfm_raw
-    !real,dimension(:),allocatable::rfm_raw
-    !real,dimension(levp_nbr_max)::rfm_raw
-    real::rfm_raw(levp_nbr_max)
-    real,dimension(:),intent(out)::rfm_val
     ! Input/Output Arguments
     ! Output Arguments
+    real,intent(out)::rfm_val(levp_nbr)
     ! Local workspace
+    character(80) lbl
     character(len=128)::rfm_ln ! [sng] Buffer into which each RFM line is read
     integer rfm_row_nbr
     integer rfm_rph_nbr
@@ -46,37 +44,45 @@ contains
     integer lev_nbr
     integer levp_idx
     integer rcd               ! [rcd] Return success code
+    real,dimension(:),allocatable::rfm_raw
+    !real,dimension(levp_nbr_max)::rfm_raw
+    !real::rfm_raw(levp_nbr_max)
     ! Main code
-    rcd=0
+    allocate(rfm_raw(levp_nbr),stat=rcd)
 
-    !allocate(rfm_raw(levp_nbr),stat=rcd)
+    call ftn_strini(lbl) ! [sng] sng(1:len)=NUL
+    read (fl_in_unit,'(a)') lbl
+    write (6,*) lbl(1:ftn_strlen(lbl))
 
     lev_nbr=levp_nbr-1 ! [nbr] dimension size
     rfm_row_nbr=levp_nbr/rfm_clm_nbr
     rfm_rph_nbr=mod(levp_nbr,rfm_clm_nbr)
     if (rfm_rph_nbr /= 0) rfm_row_nbr=rfm_row_nbr+1
-    write (6,*) 'rfm_row_nbr = ',rfm_row_nbr,', rfm_clm_nbr = ',rfm_clm_nbr,', rfm_rph_nbr = ',rfm_rph_nbr
+    ! write (6,*) 'rfm_row_nbr = ',rfm_row_nbr,', rfm_clm_nbr = ',rfm_clm_nbr,', rfm_rph_nbr = ',rfm_rph_nbr
     
     do rfm_row_idx=1,rfm_row_nbr
        read (fl_in_unit,'(a)') rfm_ln
+       !write (6,*) 'rfm_ln = ',rfm_ln
        if (rfm_row_idx < rfm_row_nbr) then
-          read (rfm_ln,*) (rfm_raw(rfm_idx),rfm_idx=(rfm_row_idx-1)*rfm_clm_nbr,rfm_row_idx*rfm_clm_nbr-1)
-       else
-          read (rfm_ln,*) (rfm_raw(rfm_idx),rfm_idx=(rfm_row_idx-1)*rfm_clm_nbr,(rfm_row_idx-1)*rfm_clm_nbr+rfm_rph_nbr)
+          read (rfm_ln,*) (rfm_raw(rfm_idx),rfm_idx=(rfm_row_idx-1)*rfm_clm_nbr+1,rfm_row_idx*rfm_clm_nbr)
+       endif
+       if (rfm_row_idx == rfm_row_nbr) then
+          if (rfm_rph_nbr == 0) then
+             read (rfm_ln,*) (rfm_raw(rfm_idx),rfm_idx=(rfm_row_idx-1)*rfm_clm_nbr+1,rfm_row_idx*rfm_clm_nbr)
+          else
+             read (rfm_ln,*) (rfm_raw(rfm_idx),rfm_idx=(rfm_row_idx-1)*rfm_clm_nbr+1,(rfm_row_idx-1)*rfm_clm_nbr+rfm_rph_nbr)
+          endif
        endif
     enddo ! rfm_row_idx
     
     do levp_idx=1,levp_nbr
-       write (6,*) 'idx = ',levp_idx,', rfm_raw = ',rfm_raw(levp_idx)
-    enddo
-
-    do levp_idx=1,levp_nbr
        int_foo=levp_nbr-levp_idx+1
        rfm_val(int_foo)=rfm_raw(levp_idx)
+       ! write (6,*) 'idx = ',levp_idx,', rfm_raw = ',rfm_raw(levp_idx)
     enddo
 
     if (rcd /= 0 ) write (6,*) 'ERROR in rfm_read()'
-    !    if (allocated(rfm_raw)) deallocate(rfm_raw,stat=rcd)
+    if (allocated(rfm_raw)) deallocate(rfm_raw,stat=rcd)
 
     return
   end subroutine rfm_read ! end rfm_read()
