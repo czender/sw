@@ -85,8 +85,8 @@ program swnb2
   ! 3. Use snp (as distinct from snw) to refer to vertically extensive snowpack
   ! 4. Use snw to refer top snow interface when present, ground when not
   ! In thinking through future nomenclature changes, priorities are:
-  ! 1. Meaning of _atm does not extend into snowpack. _atm refers to above-snowpack.
-  ! 2. Meaning of _atm does not extend into snowpack. _atm refers to above-snowpack.
+  ! 1. Meaning of _atm does not extend into snowpack. _atm refers to above-snowpack
+  ! 2. Meaning of _atm does not extend into snowpack. _atm refers to above-snowpack
 
   ! Command line options:
   ! -a aerosol file

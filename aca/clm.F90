@@ -1900,7 +1900,6 @@ program clm
         if (rcd == nf90_noerr) rcd=nf90_wrp(nf90_get_var(nc_id,mmr_mpr_snw_id,mmr_mpr_snw),sbr_nm//": gv mmr_mpr_snw")
         rcd=nf90_wrp_inq_varid(nc_id,'rds_ffc_snw',rds_ffc_snw_id,rcd_opt=NF90_ENOTVAR)
         if (rcd == nf90_noerr) rcd=nf90_wrp(nf90_get_var(nc_id,rds_ffc_snw_id,rds_ffc_snw),sbr_nm//": gv rds_ffc_snw")
-        
      endif ! !flg_snw
      
      ! Get scalars

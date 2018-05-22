@@ -1120,7 +1120,7 @@ alias mv='mv -i' # -i = inquire
 alias neige='ssh -Y -p 267 68.109.196.84' # Forward to 192.168.1.77:22 (to neige from outside)
 alias nvr='env | sort | more'
 alias panoply='java -jar /data/zender/tmp/PanoplyJ/jars/Panoply.jar'
-alias toolsui='java -jar /data/zender/tmp/toolsUI-4.3.jar'
+alias toolsui='java -jar /data/zender/tmp/toolsUI-4.6.11.jar'
 alias ps2pdf='ps2pdf -dMaxSubsetPct=100 -dCompatibilityLevel=1.2 -dSubsetFonts=true -dEmbedAllFonts=true -sAutoRotatePages=PageByPage -sColorConversionStrategy=LeaveColorUnchanged'
 alias pslz="ps -l -U ${USER}" # -f = Full listing -U username
 alias psz="ps -f -U ${USER}" # -f = Full listing -U username
