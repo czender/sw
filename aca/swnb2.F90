@@ -509,6 +509,7 @@ program swnb2
   logical cmd_ln_sfc_tpt
   logical cmd_ln_slr_cst
   logical cmd_ln_slr_zen_ngl_cos
+  logical cmd_ln_slr_zen_ngl_dgr
   logical flg_CO2
   logical flg_H2OH2O
   logical flg_H2O
@@ -1657,6 +1658,7 @@ program swnb2
   real(selected_real_kind(p=12))::lat_dgr_cmd_ln
   real(selected_real_kind(p=12))::lcl_yr_day_cmd_ln
   real(selected_real_kind(p=12))::slr_zen_ngl_cos_cmd_ln
+  real(selected_real_kind(p=12))::slr_zen_ngl_dgr_cmd_ln
   real(selected_real_kind(p=12))::pi
 
   ! Allocatable local arrays
@@ -1907,6 +1909,7 @@ program swnb2
   cmd_ln_sfc_tpt=.false.
   cmd_ln_slr_cst=.false.
   cmd_ln_slr_zen_ngl_cos=.false.
+  cmd_ln_slr_zen_ngl_dgr=.false.
   exit_status=0             ! [enm] Program exit status
   flg_CH4=.true.
   flg_CO2=.true.
@@ -1967,7 +1970,8 @@ program swnb2
   sfc_msv=1.0 ! [frc] Surface emissivity
   sfc_tpt=3000.0 ! [K] Surface temperature (used only for bottom boundary emission in night mode)
   slr_cst=slr_cst_CCM
-  slr_zen_ngl_cos_cmd_ln=mss_val ! [frc] Cosine solar zenith angle
+  slr_zen_ngl_cos_cmd_ln=mss_val ! [frc] Solar zenith angle cosine
+  slr_zen_ngl_dgr_cmd_ln=mss_val ! [dgr] Solar zenith angle degrees
   str_nbr=4
   sv_cmp_plr_ngl=.false.
   sv_cmp_tau=.false.
@@ -2142,7 +2146,10 @@ program swnb2
            call ftn_arg_get(arg_idx,arg_val,slr_cst_cmd_ln)
         else if (opt_sng == 'slr_zen_ngl_cos' .or. opt_sng == 'szac') then
            cmd_ln_slr_zen_ngl_cos=.true.
-           call ftn_arg_get(arg_idx,arg_val,slr_zen_ngl_cos_cmd_ln) ! [frc] Cosine solar zenith angle
+           call ftn_arg_get(arg_idx,arg_val,slr_zen_ngl_cos_cmd_ln) ! [frc] Solar zenith angle cosine 
+        else if (opt_sng == 'slr_zen_ngl_dgr' .or. opt_sng == 'szad') then
+           cmd_ln_slr_zen_ngl_dgr=.true.
+           call ftn_arg_get(arg_idx,arg_val,slr_zen_ngl_dgr_cmd_ln) ! [dgr] Solar zenith angle degrees
         else if (opt_sng == 'srm' .or. opt_sng == 'streams') then
            call ftn_arg_get(arg_idx,arg_val,str_nbr)
         else if (opt_sng == 'vpr_H2O_abs_cld') then
@@ -3992,6 +3999,11 @@ program swnb2
   endif ! end if overriding CLM profile local year day
   if (cmd_ln_slr_zen_ngl_cos) then
      slr_zen_ngl_cos=slr_zen_ngl_cos_cmd_ln
+     ! Set eccentricity factor to one to ease intercomparison with other RT models
+     xnt_fac=1.0
+  endif                     ! end if overriding CLM profile zen ang
+  if (cmd_ln_slr_zen_ngl_dgr) then
+     slr_zen_ngl_cos=cos(slr_zen_ngl_dgr_cmd_ln*pi/180.0)
      ! Set eccentricity factor to one to ease intercomparison with other RT models
      xnt_fac=1.0
   endif                     ! end if overriding CLM profile zen ang
