@@ -4869,6 +4869,8 @@ sudo port install -t ddd # Installation sudo
 
 # NB: Activating real gcc, g++, and gfortran on MacPorts requires something like:
 # https://stackoverflow.com/questions/8361002/how-to-use-the-gcc-installed-in-macports
+# Compiler selection must be re-done after each OS upgrade (even minor ones)
+# This usually works fine for C-code, though causes link failure with C++ code (like antlr)
 # port select --list gcc
 # sudo port select --set gcc mp-gcc7
 
