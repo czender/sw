@@ -4735,6 +4735,9 @@ program swnb2
      if(rcd /= 0) stop "deallocate() failed for wvl_grd_aer"
      if (allocated(lgn_xpn_cff_aer_dsk)) deallocate(lgn_xpn_cff_aer_dsk,stat=rcd) !
      if(rcd /= 0) stop "deallocate() failed for lgn_xpn_cff_aer_dsk"
+  else ! !flg_aer
+     ! Initialize unused variables to prevent triggering IEEE write exceptions
+     ext_cff_mss_aer(:)=0.0
   endif ! !flg_aer
   if (flg_bga) then
      call rbn_vec(bnd_nbr_bga,wvl_grd_bga,abs_cff_mss_bga_dsk, &

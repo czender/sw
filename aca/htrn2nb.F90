@@ -46,6 +46,9 @@ program htrn2nb
   ! htrn2nb -l 2000.0 -h 17900.0 -b 1590 -i ${DATA}/hitran/1H2_18O.nc -o ${DATA}/aca/mlk_1H2_18O.nc
   ! htrn2nb -l 2000.0 -h 17900.0 -b 1590 -i ${DATA}/hitran/1H_2H_16O.nc -o ${DATA}/aca/mlk_1H_2H_16O.nc
   
+  ! Carbon dioxide:
+  ! htrn2nb -l 2000.0 -h 17900.0 -b 3180 -i ${DATA}/hitran/CO2.nc -o ${DATA}/aca/mlk_CO2.nc
+
   use dbg_mdl ! [mdl] Debugging constants, prg_nm, dbg_lvl
   use drv_cst_mdl ! [mdl] Derived physical constants
   use flx_slr_mdl ! [mdl] Solar spectral fluxes
