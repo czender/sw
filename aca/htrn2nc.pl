@@ -5,30 +5,30 @@
 # Usage:
 
 # Production:
-# Shell script $HOME/aca/htrn2nc.sh processes most useful gases
+# Shell script $HOME/sw/aca/htrn2nc.sh processes most useful gases
 
 # Debugging:
-# head -50 ${DATA}/hitran/hitran12.txt > ${DATA}/hitran/foo.txt
-# $HOME/aca/htrn2nc.pl --mlc={1,7} --dbg=1 ${DATA}/hitran/foo.txt ${DATA}/hitran/foo.nc
-# $HOME/aca/htrn2nc.pl --mlc=7 --iso=1 --dbg=1 ${DATA}/hitran/foo.txt ${DATA}/hitran/foo.nc
-# $HOME/aca/htrn2nc.pl --dbg=1 --wvn_min=17900.0 --wvn_max=30000.0 ${DATA}/hitran/hitran12.txt ${DATA}/hitran/foo.nc
-# $HOME/aca/htrn2nc.pl --dbg=1 --wvn_min=1931.0 --wvn_max=1939.0 ${DATA}/hitran/hitran12.txt ${DATA}/hitran/foo.nc
+# head -50 ${DATA}/hitran/hitran16.txt > ${DATA}/hitran/foo.txt
+# $HOME/sw/aca/htrn2nc.pl --mlc={1,7} --dbg=1 ${DATA}/hitran/foo.txt ${DATA}/hitran/foo.nc
+# $HOME/sw/aca/htrn2nc.pl --mlc=7 --iso=1 --dbg=1 ${DATA}/hitran/foo.txt ${DATA}/hitran/foo.nc
+# $HOME/sw/aca/htrn2nc.pl --dbg=1 --wvn_min=17900.0 --wvn_max=30000.0 ${DATA}/hitran/hitran16.txt ${DATA}/hitran/foo.nc
+# $HOME/sw/aca/htrn2nc.pl --dbg=1 --wvn_min=1931.0 --wvn_max=1939.0 ${DATA}/hitran/hitran16.txt ${DATA}/hitran/foo.nc
 
 # LBL validation:
 # GoY89 p. 120 fig 3.25, the Q-branch of the 3v2 band of CO2:
-# $HOME/aca/htrn2nc.pl --mlc=2 --wvn_min=1931.0 --wvn_max=1939.0 ${DATA}/hitran/hitran12.txt ${DATA}/hitran/lbl_CO2_1931_1939.nc
+# $HOME/sw/aca/htrn2nc.pl --mlc=2 --wvn_min=1931.0 --wvn_max=1939.0 ${DATA}/hitran/hitran16.txt ${DATA}/hitran/lbl_CO2_1931_1939.nc
 
 # Water Vapor
-# $HOME/aca/htrn2nc.pl --mlc=1 --wvn_min=2000.0 --wvn_max=17900.0 ${DATA}/hitran/hitran12.txt ${DATA}/hitran/H2O.nc
-# $HOME/aca/htrn2nc.pl --mlc=1 --wvn_min=1.0e-4 --wvn_max=50000.0 /cdrom/hitran96/hitran96.par ${DATA}/hitran/H2O_all.nc
-# $HOME/aca/htrn2nc.pl --mlc=1 --iso=1 --wvn_min=2000.0 --wvn_max=17900.0 ${DATA}/hitran/hitran12.txt ${DATA}/hitran/1H2_16O.nc
-# $HOME/aca/htrn2nc.pl --mlc=1 --iso=2 --wvn_min=2000.0 --wvn_max=17900.0 ${DATA}/hitran/hitran12.txt ${DATA}/hitran/1H2_18O.nc
-# $HOME/aca/htrn2nc.pl --mlc=1 --iso=3 --wvn_min=2000.0 --wvn_max=17900.0 ${DATA}/hitran/hitran12.txt ${DATA}/hitran/1H2_17O.nc
-# $HOME/aca/htrn2nc.pl --mlc=1 --iso=4 --wvn_min=2000.0 --wvn_max=17900.0 ${DATA}/hitran/hitran12.txt ${DATA}/hitran/1H_2H_16O.nc
+# $HOME/sw/aca/htrn2nc.pl --mlc=1 --wvn_min=2000.0 --wvn_max=17900.0 ${DATA}/hitran/hitran16.txt ${DATA}/hitran/H2O.nc
+# $HOME/sw/aca/htrn2nc.pl --mlc=1 --wvn_min=1.0e-4 --wvn_max=50000.0 /cdrom/hitran96/hitran96.par ${DATA}/hitran/H2O_all.nc
+# $HOME/sw/aca/htrn2nc.pl --mlc=1 --iso=1 --wvn_min=2000.0 --wvn_max=17900.0 ${DATA}/hitran/hitran16.txt ${DATA}/hitran/1H2_16O.nc
+# $HOME/sw/aca/htrn2nc.pl --mlc=1 --iso=2 --wvn_min=2000.0 --wvn_max=17900.0 ${DATA}/hitran/hitran16.txt ${DATA}/hitran/1H2_18O.nc
+# $HOME/sw/aca/htrn2nc.pl --mlc=1 --iso=3 --wvn_min=2000.0 --wvn_max=17900.0 ${DATA}/hitran/hitran16.txt ${DATA}/hitran/1H2_17O.nc
+# $HOME/sw/aca/htrn2nc.pl --mlc=1 --iso=4 --wvn_min=2000.0 --wvn_max=17900.0 ${DATA}/hitran/hitran16.txt ${DATA}/hitran/1H_2H_16O.nc
 
 BEGIN{
-    unshift @INC,$ENV{'HOME'}.'/perl'; # Location of DBG.pm HaS98 p. 170
-    unshift @INC,$ENV{'HOME'}.'/ck'; # Location of HITRAN.pm HaS98 p. 170
+    unshift @INC,$ENV{'HOME'}.'/sw/perl'; # Location of DBG.pm HaS98 p. 170
+    unshift @INC,$ENV{'HOME'}.'/sw/ck'; # Location of HITRAN.pm HaS98 p. 170
 } # end BEGIN
 
 my $CVS_Header='$Id$';
