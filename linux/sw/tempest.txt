@@ -184,3 +184,35 @@ sudo make install
 #***********************************************************************
 # 20180126: blues.lcrc.anl.gov x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.1.1 netcdf-4.5.1 HDF4 git
 #***********************************************************************
+
+#***********************************************************************
+# 20180727: edison.nersc.gov 
+#***********************************************************************
+# Tempest 2.0
+# 20180727: Not yet working
+sudo dnf install lapack lapack-devel blas # skyglow, Fedora
+sudo aptitude install liblapack3 liblapack-dev # grele, Ubuntu
+cd ${DATA}/tmp
+#git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+git pull
+git reset --hard origin/master
+autoreconf -fi
+mkdir -p build
+cd ${DATA}/tmp/tempestremap/build
+../configure --prefix=${HOME}
+LDFLAGS='-lmkl' ../configure --prefix=${HOME}
+make all
+sudo make install
+
+configure: error: BLAS library not found
+Need lapack and blas!
+
+"On the Cray systems highly optimized LAPACK is provided by Cray as part of its Cray Scientific Library (libsci), which is in the cray-libsci module and is loaded by default.  For further information type man libsci and/or man lapack.  
+You can also use LAPACK from the Intel MKL library.  Please see the NERSC Intel Math Kernel Library documentation page for more details."
+
+module load libsci
+
+#***********************************************************************
+# 20180727: edison.nersc.gov 
+#***********************************************************************
