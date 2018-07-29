@@ -20,7 +20,7 @@
 
 (defvar running-xemacs nil "flag for testing whether xemacs (lucid) is running")
 (cond ((string-match "XEmacs\\|Lucid" emacs-version)
-  (setq running-xemacs t)))
+(setq running-xemacs t)))
 
 ; Add path to packages which do not come with xemacs by default
 (if running-xemacs  

@@ -212,7 +212,6 @@ Need lapack and blas!
 You can also use LAPACK from the Intel MKL library.  Please see the NERSC Intel Math Kernel Library documentation page for more details."
 
 module load libsci
-
 #***********************************************************************
 # 20180727: edison.nersc.gov 
 #***********************************************************************
