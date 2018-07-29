@@ -296,6 +296,7 @@ make install
 
 #***********************************************************************
 # 20180729: blues.lcrc.anl.gov 
+# antlr provided by soft add +antlr-2.7.7 does not have patched CharScanner.hpp!
 # NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
 #include <strings.h> // csz 20150310
 #include <cstdio> // csz 20150310
@@ -307,9 +308,13 @@ cd ${DATA}/tmp/antlr-2.7.7
 make distclean
 CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
 make
-
-make test # breaks on atof() issue
+make test
 make install
+# STATUS: Not Working, last error comes from gcj which cannot find ecj1:
+make[1]: Entering directory `/blues/gpfs/home/zender/data/tmp/antlr-2.7.7/antlr'
+*** compiling 216 Java file(s)
+gcj: error trying to exec 'ecj1': execvp: No such file or directory
+
 #make clean
 #***********************************************************************
 # 20180729: blues.lcrc.anl.gov 
