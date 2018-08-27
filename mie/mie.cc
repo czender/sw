@@ -272,20 +272,20 @@ int main(int argc,char **argv)
   prc_cmp vlm_frc_mtx(CEWI_cpv); // [frc] Volume fraction in matrix
   prc_cmp vlm_frc_prt(CEWI_cpv); // [frc] Volume fraction in particle
 
-  register long psd_idx; // [idx] Counting index for aerosol mode
+  long psd_idx; // [idx] Counting index for aerosol mode
 #ifdef PGI_CXX
   // fxm: 20060817 pgCC requires int, rather than long, parallel loop variables
-  register int bnd_idx; // [idx] Counting index for band
+  int bnd_idx; // [idx] Counting index for band
 #else // !PGI_CXX
-  register long bnd_idx; // [idx] Counting index for band
+  long bnd_idx; // [idx] Counting index for band
 #endif // !PGI_CXX
-  register long idx; // [idx] Counting index 
-  register long ncl_idx; // [idx] Counting index for inclusion
-  register long ngl_idx; // [idx] Counting index for angle
-  register long sz_idx; // [idx] Counting index for size
-  register long dsd_idx; // [idx] Counting index for raindrop size
-  register long wvl_idx; // [idx] Counting index for wavelength
-  register long wvl_bnd_sz_idx(0); // [idx] Counting index for wavelength/band/size loop
+  long idx; // [idx] Counting index 
+  long ncl_idx; // [idx] Counting index for inclusion
+  long ngl_idx; // [idx] Counting index for angle
+  long sz_idx; // [idx] Counting index for size
+  long dsd_idx; // [idx] Counting index for raindrop size
+  long wvl_idx; // [idx] Counting index for wavelength
+  long wvl_bnd_sz_idx(0); // [idx] Counting index for wavelength/band/size loop
 
   const std::string CVS_Date("$Date$"); // [sng] CVS date string
   const std::string CVS_Header("$Id$"); // [sng] CVS header string

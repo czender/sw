@@ -4883,11 +4883,17 @@ cd ~/anaconda/bin
 conda update libnetcdf
 conda update nco
 conda update --prefix /Users/zender/anaconda conda
-conda update --all
+conda update --all # Update all packages
 
 # 20180418 ocefpaf suggests this, which activates an "environment":
-conda create --name NCO --channel conda-forge nco
-conda activate NCO  # if your conda is old you may need to source activate NCO instead.
+conda create --name nco --channel conda-forge nco
+conda activate nco  # if your conda is old you may need to source activate NCO instead.
+conda info --envs # Print active environments
+conda list # Print all packages installed in active Anaconda environment
+
+# 20180827 ESS Python Tutorial
+git clone git@github.com:raspstephan/ESS-Python-Tutorial.git
+conda install -c conda-forge xarray cartopy
 
 # Webserver
 # Ensure port 80 is open

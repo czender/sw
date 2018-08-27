@@ -1,3 +1,7 @@
+2018-08-27  Charlie Zender  <zender@aerosol>
+
+	* Remove register storage class to comply with GCC std=c++11
+
 2013-01-19  Charlie Zender  <zender@uci.edu>
 
 	* Fix bug in archived vlm_frc_mtx
