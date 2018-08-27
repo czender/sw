@@ -734,7 +734,7 @@ int main(int argc,char **argv)
       } // endif "psd"
       if(opt_crr == "abc_flg") abc_flg=true; // [flg] Alphabetize output with ncks
       if(opt_crr == "abs_ncl_wk_mdm_flg") abs_ncl_wk_mdm_flg=true; // [flg] Absorbing inclusion in weakly-absorbing sphere (MaS99)
-      if(opt_crr == "cmp_prt") cmp_sng_prt=aer_cls::opt2abb(opt_sng); spc_abb_sng=cmp_sng_prt; // [sng] Composition of particle
+      if(opt_crr == "cmp_prt"){cmp_sng_prt=aer_cls::opt2abb(opt_sng); spc_abb_sng=cmp_sng_prt;} // [sng] Composition of particle
       if(opt_crr == "cmp_cor") cmp_sng_cor=aer_cls::opt2abb(opt_sng); // [sng] Composition of core
       if(opt_crr == "cmp_mdm") cmp_sng_mdm=aer_cls::opt2abb(opt_sng); // [sng] Composition of medium
       if(opt_crr == "cmp_mnt") cmp_sng_mnt=aer_cls::opt2abb(opt_sng); // [sng] Composition of mantle
@@ -3565,7 +3565,7 @@ int main(int argc,char **argv)
 #endif // PARALLELIZE_OVER_CL3
 #ifdef _OPENMP // OpenMP
 #ifdef PARALLELIZE_OVER_CL2
-#pragma omp parallel for default(none) firstprivate(rcd) private(abs_fct_MaS99_scl,asm_prm_scl,bck_hms_scl,bnd_idx,ngl_idx,phz_fnc_crr,plz_crr,q_abs,q_bck,q_ext,q_sct,spk_val,sz_idx,wgt_xsa) shared(abs_cff_vlm,abs_fct_MaS99,abs_fsh,abs_fsh_ffc,abs_ncl_wk_mdm_flg,asm_prm,asm_prm_fsh,bch_flg,bck_cff_vlm,bck_fsh,bck_fsh_ffc,bnd_ctr,bnd_nbr,cnc_sph,coat_flg,dbg_lvl,dmn_frc,dns_prt,ext_cff_vlm,ext_fsh,ext_fsh_ffc,ffc_mdm_typ,flx_wgt_frc,flx_slr_frc_bnd,flx_IR_frc_bnd,flx_wgt_frc_bnd,idx_rfr_cor_bnd,idx_rfr_ffc_bnd,idx_rfr_mdm_bnd,idx_rfr_mnt_bnd,idx_rfr_mtx_bnd,idx_rfr_ncl_bnd,idx_rfr_prt_bnd,lgn_nbr,lng_foo,mie_flg,ngl,ngl_dlt,ngl_nbr,phz_fnc_ffc,phz_fnc_dgn,plz_dgn,rds_cor,rds_mnt,sbr_nm,sca_cff_vlm,sca_fsh,sca_fsh_ffc,slf_tst_flg,slf_tst_typ,slv_sng,std::cerr,sz_ctr_sph,sz_nbr,sz_prm_rsn_usr_spc,tst_sng,vlm_sph,vlm_frc_ncl,wgt_vlm,wvl_bnd_sz_idx,wvl_idx,wvl_nbr,xsa_sph)
+#pragma omp parallel for default(none) firstprivate(rcd) private(abs_fct_MaS99_scl,asm_prm_scl,bck_hms_scl,bnd_idx,ngl_idx,phz_fnc_crr,plz_crr,q_abs,q_bck,q_ext,q_sct,spk_val,sz_idx,wgt_xsa) shared(abs_cff_vlm,abs_fct_MaS99,abs_fsh,abs_fsh_ffc,abs_ncl_wk_mdm_flg,asm_prm,asm_prm_fsh,bch_flg,bck_cff_vlm,bck_fsh,bck_fsh_ffc,bnd_ctr,bnd_nbr,cnc_sph,coat_flg,dbg_lvl,dmn_frc,dns_prt,ext_cff_vlm,ext_fsh,ext_fsh_ffc,ffc_mdm_typ,flx_wgt_frc,flx_slr_frc_bnd,flx_IR_frc_bnd,flx_wgt_frc_bnd,idx_rfr_cor_bnd,idx_rfr_ffc_bnd,idx_rfr_mdm_bnd,idx_rfr_mnt_bnd,idx_rfr_mtx_bnd,idx_rfr_ncl_bnd,idx_rfr_prt_bnd,lgn_nbr,lng_foo,mie_flg,ngl,ngl_dlt,ngl_nbr,phz_fnc_ffc,phz_fnc_dgn,plz_dgn,rds_cor,rds_mnt,sca_cff_vlm,sca_fsh,sca_fsh_ffc,slf_tst_flg,slf_tst_typ,slv_sng,std::cerr,sz_ctr_sph,sz_nbr,sz_prm_rsn_usr_spc,tst_sng,vlm_sph,vlm_frc_ncl,wgt_vlm,wvl_bnd_sz_idx,wvl_idx,wvl_nbr,xsa_sph)
 #endif // !PARALLELIZE_OVER_CL2
 #endif // !_OpenMP
     for(bnd_idx=0;bnd_idx<bnd_nbr;bnd_idx++){ // CL2: Start middle loop

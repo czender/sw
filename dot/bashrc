@@ -18,13 +18,14 @@
 
 # Usage: 
 # /bin/cp -f ${HOME}/.bashrc /fs/cgd/home0/${USER}
-# scp -p ${HOME}/sw/dot/bashrc cheyenne.ucar.edu:.bashrc
-# scp -p ${HOME}/sw/dot/bashrc dust.ess.uci.edu:.bashrc
-# scp -p ${HOME}/sw/dot/bashrc rhea.ccs.ornl.gov:.bashrc
-# scp -p ${HOME}/sw/dot/bashrc cooley.alcf.anl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc bebop.lcrc.anl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc blues.lcrc.anl.gov:.bashrc
+# scp -p ${HOME}/sw/dot/bashrc cheyenne.ucar.edu:.bashrc
+# scp -p ${HOME}/sw/dot/bashrc cooley.alcf.anl.gov:.bashrc
+# scp -p ${HOME}/sw/dot/bashrc dust.ess.uci.edu:.bashrc
+# scp -p ${HOME}/sw/dot/bashrc rhea.ccs.ornl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc roger-login.ncsa.illinois.edu:.bashrc
+# scp -p ${HOME}/sw/dot/bashrc skyglow.ess.uci.edu:.bashrc
 
 # RedHat Linux 7.x does not define PS1 in /etc/bashrc
 if [ -f /etc/bashrc ]; then
@@ -478,7 +479,7 @@ case "${PVM_ARCH}" in
 	esac # endcase ${HOST}
 	PATH=${PATH}\:/usr/local/bin
 	PATH=${PATH}\:/usr/local/sbin # Debian
-	PATH=${PATH}\:${HOME}/anaconda/bin
+#	PATH=${PATH}\:${HOME}/anaconda/bin
 	PATH=${PATH}\:/bin
 	PATH=${PATH}\:/sbin
 	PATH=${PATH}\:/usr/bin
@@ -602,7 +603,7 @@ case "${PVM_ARCH}" in
 	PATH=${PATH}\:/usr/local/bin # Custom-built 3rd party packages
 	PATH=${PATH}\:/opt/local/bin # MacPorts packages
 	PATH=${PATH}\:/opt/local/sbin # MacPorts packages
-	PATH=${PATH}\:${HOME}/anaconda/bin
+#	PATH=${PATH}\:${HOME}/anaconda/bin
 	PATH=${PATH}\:/usr/bin # OS X defaults
 	PATH=${PATH}\:/bin # OS X coreutils
 	PATH=${PATH}\:/usr/sbin # OS X root coreutils
