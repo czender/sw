@@ -139,7 +139,7 @@ sudo port install netcdf-cxx
 # 20180112: configure fails on Mac unless gfortran is found
 # https://stackoverflow.com/questions/8361002/how-to-use-the-gcc-installed-in-macports
 port select --list gcc
-sudo port select --set gcc mp-gcc7
+#sudo port select --set gcc mp-gcc7
 hash -r
 
 cd ${DATA}/tmp
@@ -153,7 +153,7 @@ cd ${DATA}/tmp/tempestremap/build
 ../configure --prefix=/usr/local --with-blas=/opt/local --with-lapack=/opt/local --with-netcdf=/opt/local --with-hdf5=/opt/local
 make all
 sudo make install
-sudo port select --set gcc none
+#sudo port select --set gcc none
 hash -r
 #***********************************************************************
 # 20180112: firn.ess.uci.edu x86_64-apple-darwin17.3.0 MacOSX 10.13.2 Sierra llvm/clang 8.1.0 netcdf-4.4.1

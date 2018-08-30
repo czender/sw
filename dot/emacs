@@ -23,9 +23,10 @@
 (setq running-xemacs t)))
 
 ; Add path to packages which do not come with xemacs by default
-(if running-xemacs  
+;(if running-xemacs  
 ; Required for metamail
 ;(add-to-list 'load-path "/usr/share/emacs/21.2/lisp/mail")) 
+;) ; endif running-xemacs
 
 (require 'my_keys) ; my ESC/Control key customizations
 (require 'my_macros) ; my ESC/Control key customizations

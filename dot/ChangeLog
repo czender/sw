@@ -1,3 +1,7 @@
+2018-08-30  Charlie Zender  <zender@aerosol>
+
+	* Fix syntax bug in .emacs file that prevented full loading
+
 2015-04-02  Charlie Zender  <zender@uci.edu>
 
 	* Remove ncview from Xdefaults to use system version instead
