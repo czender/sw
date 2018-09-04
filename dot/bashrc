@@ -479,7 +479,7 @@ case "${PVM_ARCH}" in
 	esac # endcase ${HOST}
 	PATH=${PATH}\:/usr/local/bin
 	PATH=${PATH}\:/usr/local/sbin # Debian
-#	PATH=${PATH}\:${HOME}/anaconda/bin
+	PATH=${PATH}\:${HOME}/anaconda/bin # Needed for ESMF_RegridWeightGen
 	PATH=${PATH}\:/bin
 	PATH=${PATH}\:/sbin
 	PATH=${PATH}\:/usr/bin

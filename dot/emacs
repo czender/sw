@@ -47,7 +47,7 @@
 (setq auto-save-default t) ; Auto-save every buffer
 (setq auto-save-interval 300) ; Number of characters before autosave
 ;(setq delete-auto-save-files t) ; Delete auto-save files when a true save is done
-(setq tags-table-list (list "~/nco/bld/TAGS"))
+;(setq tags-table-list (list "~/nco/bld/"))
 (setq inhibit-startup-message t)
 (setq global-auto-revert-mode t) ; 20180201 Synchronize buffers with current Git branch
 (setq line-number-mode t) ; Display current line #
