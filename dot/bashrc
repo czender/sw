@@ -510,7 +510,7 @@ case "${PVM_ARCH}" in
 		;; # endif G1-development machines
 	esac # endcase ${HOST}
 	case "${HOST}" in 
-	    acme1* | aims4* ) PATH=${PATH}\:/usr/local/uvcdat/2016-01-21/bin:/usr/local/uvcdat/2016-01-21/Externals/bin ; ;; # endif LLNL
+	    acme1* | aims4* ) PATH=${PATH}\:/usr/local/e3sm_unified/envs/base/envs/e3sm_unified_1.2.2_py2.7_nox/bin ; ;; # endif LLNL
 	    *cheyenne* ) PATH=${PATH}\:/opt/pbs/bin ; ;; # NCAR cheyenne
 	    gplogin* | mirage* ) # x86-64
 		PATH=${PATH}\:${ICC_ROOT}/bin/intel64 ; ;; # endif greenplanet
@@ -558,10 +558,10 @@ case "${PVM_ARCH}" in
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
 	case "${HOST}" in 
 	    # 20130916: Support NCAR modules on cheyenne by removing custom environment variables
-	    acme1* | aims4* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/uvcdat/2016-01-21/lib:/usr/local/uvcdat/2016-01-21/Externals/lib64:/usr/local/uvcdat/2016-01-21/Externals/lib; ;; # endif LLNL
-	    *cheyenne* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/u/apps/ch/opt/udunits/2.2.20/gnu/4.8.2/lib; ;; # endif NCAR
-	    pileus* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/ACME/lib\:/opt/ACME/uvcdat-2.2-build/install/Externals/lib; ;; # endif CADES
-	    rhea* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/sw/redhat6/udunits/2.1.24/rhel6.4_intel13.1.3/lib; ;; # endif ORNL
+	    acme1* | aims4* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/e3sm_unified/envs/base/envs/e3sm_unified_1.2.2_py2.7_nox/lib ; ;; # endif LLNL
+	    *cheyenne* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/u/apps/ch/opt/udunits/2.2.20/gnu/4.8.2/lib ; ;; # endif NCAR
+	    pileus* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/ACME/lib\:/opt/ACME/uvcdat-2.2-build/install/Externals/lib ; ;; # endif CADES
+	    rhea* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/sw/redhat6/udunits/2.1.24/rhel6.4_intel13.1.3/lib ; ;; # endif ORNL
 	esac # endcase ${HOST}
 	if [ -n "${MPI_ROOT}" ]; then
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MPI_ROOT}/lib # OpenMPI
