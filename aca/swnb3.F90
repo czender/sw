@@ -5915,7 +5915,10 @@ program swnb3
            sca_frc_Ray(lev_idx)=1.0
            sca_frc_HG(lev_idx)=0.0
            sca_frc_Mie(lev_idx)=0.0
-           ss_alb_fct(bnd_idx,lev_idx)=1.0
+           ! 20180928: Fixed bug where ss_alb_fct was set to 1.0 not to odsl/odxl for pure Rayleigh scattering atmospheres (neglected absorption)
+           ss_alb_fct(bnd_idx,lev_idx)= &
+                odsl_spc_ttl(bnd_idx,lev_idx)/ &
+                odxl_spc_ttl(bnd_idx,lev_idx)
         else ! endif no scattering whatsoever
            ! ... Some scattering is particle scattering ...
            ! Single scattering albedo is ill-conditioned when 
