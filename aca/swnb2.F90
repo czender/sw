@@ -5958,7 +5958,10 @@ program swnb2
            sca_frc_Ray(lev_idx)=1.0
            sca_frc_HG(lev_idx)=0.0
            sca_frc_Mie(lev_idx)=0.0
-           ss_alb_fct(bnd_idx,lev_idx)=1.0
+           ! 20180928: Fixed bug where ss_alb_fct was set to 1.0 not to odsl/odxl for pure Rayleigh scattering atmospheres (neglected absorption)
+           ss_alb_fct(bnd_idx,lev_idx)= &
+                odsl_spc_ttl(bnd_idx,lev_idx)/ &
+                odxl_spc_ttl(bnd_idx,lev_idx)
         else ! endif no scattering whatsoever
            ! ... Some scattering is particle scattering ...
            ! Single scattering albedo is ill-conditioned when 
@@ -5967,7 +5970,6 @@ program swnb2
            ss_alb_fct(bnd_idx,lev_idx)= &
                 odsl_spc_ttl(bnd_idx,lev_idx)/ &
                 odxl_spc_ttl(bnd_idx,lev_idx)
-           
            ! Weighted asymmetry parameters and scattering fraction due to 
            ! each process (Rayleigh, HG, and Mie) must be saved for all 
            ! bands and levels until DISORT() is called.
@@ -5977,7 +5979,7 @@ program swnb2
            sca_frc_HG(lev_idx)=odsl_HG(lev_idx)/odsl_spc_ttl(bnd_idx,lev_idx)
            sca_frc_Mie(lev_idx)=odsl_Mie(lev_idx)/odsl_spc_ttl(bnd_idx,lev_idx)
               
-              ! See CZP III p. #115 for discussion of effective asymmetry parameter
+           ! See CZP III p. #115 for discussion of effective asymmetry parameter
            lev_bnd_snw_idx=lev_idx-lev_atm_nbr
            if (lev_bnd_snw_nbr==1 .or. lev_bnd_snw_idx < 1) lev_bnd_snw_idx=1
 
@@ -6301,7 +6303,7 @@ program swnb2
                    'Detailed debugging information for bnd(',bnd_idx,') = ', &
                    wvl_min(bnd_idx)*1.0e6,'--',wvl_max(bnd_idx)*1.0e6,' um = ', &
                    wvnmlo,'--',wvnmhi,' cm-1'
-              write (6,'(a4,20(1x,a8))') &
+              write (6,'(a4,21(1x,a8))') &
                    'lev_idx', &
                    'prs_mdp', &
                    'tpt_mdp', &
@@ -6309,6 +6311,7 @@ program swnb2
                    'tau_abs', &
                    'tau_ext', &
                    'ss_alb', &
+                   'frc_Ray', &
                    'frc_HG', &
                    'frc_Mie', &
                    'sct_Ray', &
@@ -6323,7 +6326,7 @@ program swnb2
                    'pmom(3)', &
                    'pmom(4)'
               do lev_idx=1,lev_nbr
-                 write (6,'(i4,20(1x,es8.1))') &
+                 write (6,'(i4,21(1x,es8.1))') &
                       lev_idx, &
                       prs(lev_idx), &
                       tpt(lev_idx), &
@@ -6331,6 +6334,7 @@ program swnb2
                       odal_spc_ttl(bnd_idx,lev_idx), &
                       odxl_spc_ttl(bnd_idx,lev_idx), &
                       ss_alb_fct(bnd_idx,lev_idx), &
+                      sca_frc_Ray(lev_idx), &
                       sca_frc_HG(lev_idx), &
                       sca_frc_Mie(lev_idx), &
                       odsl_Ray(lev_idx), &
