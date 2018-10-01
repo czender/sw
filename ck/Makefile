@@ -35,11 +35,17 @@ endif
 ifndef UNAMES
  UNAMES := $(shell uname -s)
 endif
+ifndef NETCDF_ROOT
+ NETCDF_ROOT := /usr/local
+endif
+ifndef NETCDF4_ROOT
+ NETCDF4_ROOT := ${NETCDF_ROOT}
+endif
 ifndef NETCDF_INC
- NETCDF_INC := /usr/local/include 
+ NETCDF_INC := ${NETCDF_ROOT}/include # Directory containing netcdf.h
 endif
 ifndef NETCDF_LIB
- NETCDF_LIB := /usr/local/lib
+ NETCDF_LIB := ${NETCDF_ROOT}/lib # Directory containing libnetcdf.a
 endif
 
 # NB: Do NOT add comment lines, e.g., # This is a comma, to character definitions
@@ -62,7 +68,7 @@ VPATH := $(subst ${space},:,${MDL_PTH})
 CPP_PTH := $(foreach dir,${MDL_PTH},-I${dir})
 
 # Variables having to do with binary executables created by module
-MDL_BIN_TRG := ck htrn # Binary targets
+MDL_BIN_TRG := htrn # Binary targets
 MDL_BIN_SYM_LNK := # Symbolic links
 MDL_BIN_STB := ${MDL_BIN_TRG} ${MDL_BIN_SYM_LNK} # All C++ files in MY_BIN_DIR
 MDL_BIN := $(addprefix ${MY_BIN_DIR}/,${MDL_BIN_STB}) # dst_cln removes these files
@@ -217,8 +223,8 @@ ${MY_OBJ_DIR}/%.o : %.f
 endif
 # endif CRAY
 
-# Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD
-ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSD))
+# Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOSX
+ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSDMACOSX))
 C++ := g++
 CC := gcc
 CPPFLAGS := -D${PVM_ARCH} ${CPP_PTH} -I${NETCDF_INC}

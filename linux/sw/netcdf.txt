@@ -7254,7 +7254,7 @@ autoreconf -i -f
 # NB: --enable-pnetcdf build with parallel I/O for classic files
 # NB: --enable-separate-fortran builds libnetcdff.a (default with shared libraries)
 # NB: --enable-shared builds shared libraries
-# NB: --enable-v2 enables the version 2 interface used by netcdf-perl
+# NB: --enable-v2 enables the version 2 interface used by netcdf-perl (needed for htrn2nc.pl)
 # NB: --with-libcf builds libcf.a (apparently deprecated ~201307)
 # NB: --with-udunits builds libudunits2.a (apparently deprecated ~201307)
 # With HDF4 on FC26:

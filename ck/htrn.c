@@ -2,7 +2,7 @@
 
 /* htrn -- Parse and compute HITRAN statistics */
 
-/* Copyright (C) 1994--2013 Charlie Zender
+/* Copyright (C) 1994--2018 Charlie Zender
    License: GNU General Public License (GPL) Version 3
    See http://www.gnu.org/copyleft/gpl.html for full license text
    The original author of this software, Charlie Zender, seeks to improve
@@ -26,21 +26,22 @@
    cd ~/ck;make htrn
 
    Debugging:
-   htrn --dbg=2 --pth_out=${HOME}/ck --pth_out_F=${HOME}/ck --pth_out_F90=${HOME}/ck --pth_out_cc=${HOME}/ck
+   htrn --dbg=2 --pth_out=${HOME}/sw/ck --pth_out_F=${HOME}/sw/ck --pth_out_F90=${HOME}/sw/ck --pth_out_cc=${HOME}/sw/ck # borken
+
    Production:
    htrn
    htrn --dbg=1
    htrn --dbg=2
 
    By default, htrn overwrites following files:
-   ${HOME}/ck/HITRAN.pm
-   ${HOME}/f/htrn_mdl.F90
-   ${HOME}/aca/hitran.F
-   ${HOME}/aca/hitran.com
-   ${HOME}/ck/hitran.h
-   ${HOME}/c++/htrn_c++.cc
-   ${HOME}/c++/htrn_c++.hh
-   To change this, specify different output directories, e.g., home directory with "ck" prefix as above */
+   ${HOME}/sw/ck/HITRAN.pm
+   ${HOME}/sw/f/htrn_mdl.F90
+   ${HOME}/sw/aca/hitran.F
+   ${HOME}/sw/aca/hitran.com
+   ${HOME}/sw/ck/hitran.h
+   ${HOME}/sw/c++/htrn_c++.cc
+   ${HOME}/sw/c++/htrn_c++.hh
+   To change this, specify different output directories, e.g., home directory with "sw/ck/" prefix as above */
 
 /* Purpose: Parse HITRAN "molparam.txt" molecule parameter file and auotmatically
    generate header files for C, Fortran, and Perl programs.
@@ -55,7 +56,8 @@ Molecule # Iso Abundance     Q(296K)      gj    Molar Mass(g)
    20010212: Filled in Q and gj columns of molparam.txt for HITRAN2000
    H2O isotopes 5 and 6 (which were blank and thus crashing htrn)
    20090512: Renamed input molparamYY.txt. Tried with HITRAN2008.
-   20130611: Updated to HITRAN2012. */
+   20130611: Updated to HITRAN2012
+   20181001: Updated to HITRAN2016 */
 
 /* Standard C headers */
 #include <math.h> /* sin cos cos sin 3.14159 */
@@ -254,7 +256,7 @@ int main(int argc,char **argv)
   pth_in=(char *)strdup(home_nvr); /* [sng] Input directory */
   if(pth_in != NULL){
     /* Add one for NUL-terminator */
-    char pth_sfx_in[]="/ck/"; /* [sng] */
+    char pth_sfx_in[]="/sw/ck/"; /* [sng] */
     pth_in=realloc(pth_in,strlen(pth_sfx_in)+strlen(pth_in)+1L);
     pth_in=strcat(pth_in,(char *)strdup(pth_sfx_in));
   } /* end if */
@@ -263,7 +265,7 @@ int main(int argc,char **argv)
   pth_out_sng_lng=strlen(pth_out); /* [nbr] Length of pth_out string */
   if(pth_out != NULL){
     /* Add one for NUL-terminator */
-    char pth_sfx_out[]="/ck/"; /* [sng] */
+    char pth_sfx_out[]="/sw/ck/"; /* [sng] */
     pth_out=realloc(pth_out,strlen(pth_sfx_out)+strlen(pth_out)+1L);
     pth_out=strcat(pth_out,(char *)strdup(pth_sfx_out));
   } /* end if */
@@ -271,7 +273,7 @@ int main(int argc,char **argv)
   pth_out_F=(char *)strdup(home_nvr); /* [sng] Output directory for Fortran files */
   if(pth_out_F != NULL){
     /* Add one for NUL-terminator */
-    char pth_sfx_F[]="/aca/"; /* [sng] */
+    char pth_sfx_F[]="/sw/aca/"; /* [sng] */
     pth_out_F=realloc(pth_out_F,strlen(pth_sfx_F)+strlen(pth_out_F)+1L);
     pth_out_F=strcat(pth_out_F,(char *)strdup(pth_sfx_F));
   } /* end if */
@@ -279,7 +281,7 @@ int main(int argc,char **argv)
   pth_out_F90=(char *)strdup(home_nvr); /* [sng] Output directory for Fortran90 files */
   if(pth_out_F90 != NULL){
     /* Add one for NUL-terminator */
-    char pth_sfx_F90[]="/f/"; /* [sng] */
+    char pth_sfx_F90[]="/sw/f/"; /* [sng] */
     pth_out_F90=realloc(pth_out_F90,strlen(pth_sfx_F90)+strlen(pth_out_F90)+1L);
     pth_out_F90=strcat(pth_out_F90,(char *)strdup(pth_sfx_F90));
   } /* end if */
@@ -287,7 +289,7 @@ int main(int argc,char **argv)
   pth_out_cc=(char *)strdup(home_nvr); /* [sng] Output directory for C++ files */
   if(pth_out_cc != NULL){
     /* Add one for NUL-terminator */
-    char pth_sfx_cc[]="/c++/"; /* [sng] */
+    char pth_sfx_cc[]="/sw/c++/"; /* [sng] */
     pth_out_cc=realloc(pth_out_cc,strlen(pth_sfx_cc)+strlen(pth_out_cc)+1L);
     pth_out_cc=strcat(pth_out_cc,(char *)strdup(pth_sfx_cc));
   } /* end if */
@@ -393,7 +395,7 @@ int main(int argc,char **argv)
 
   fl_in=(char *)strdup(pth_in);
   fl_in=(char *)realloc(fl_in,(strlen(pth_in)+strlen("molparam12.txt")+1L)*sizeof(char));
-  (void)strcat(fl_in,"molparam12.txt");
+  (void)strcat(fl_in,"molparam16.txt");
   fl_htrn_com=(char *)strdup(pth_out_F);
   fl_htrn_com=(char *)realloc(fl_htrn_com,(strlen(pth_out_F)+strlen("hitran.com")+1L)*sizeof(char));
   (void)strcat(fl_htrn_com,"hitran.com");
@@ -630,11 +632,11 @@ int main(int argc,char **argv)
   } /* endif */
   (void)fprintf(fp_htrn_cc,"// $Id$\n\n");
   (void)fprintf(fp_htrn_cc,"// Purpose: Implementation (declaration) of HITRAN classes\n\n");
-  (void)fprintf(fp_htrn_cc,"/* Copyright (C) 1997--2013 Charlie Zender\n   This software is distributed under the terms of the GNU General Public License (GPL) Version 3\n   See http://www.gnu.org/copyleft/gpl.html for full license text */\n\n");
+  (void)fprintf(fp_htrn_cc,"/* Copyright (C) 1997--2018 Charlie Zender\n   This software is distributed under the terms of the GNU General Public License (GPL) Version 3\n   See http://www.gnu.org/copyleft/gpl.html for full license text */\n\n");
   (void)fprintf(fp_htrn_cc,"/* Usage: %s automatically generated by %s on %s\n",fl_htrn_cc,prg_nm,time_bfr_srt);
   (void)fprintf(fp_htrn_cc,"   Command: %s\n\n",cmd_ln);
   (void)fprintf(fp_htrn_cc,"   Compilation:\n"); 
-  (void)fprintf(fp_htrn_cc,"   g++ -Wall -c -O -D$PVM_ARCH -I${HOME}/include ${HOME}/c++/htrn_c++.cc -o ${MY_OBJ_DIR}/htrn_c++.o\n");
+  (void)fprintf(fp_htrn_cc,"   g++ -Wall -c -O -D$PVM_ARCH -I${HOME}/include ${HOME}/sw/c++/htrn_c++.cc -o ${MY_OBJ_DIR}/htrn_c++.o\n");
   (void)fprintf(fp_htrn_cc,"*/\n");
   (void)fprintf(fp_htrn_cc,"#include <htrn_c++.hh> // HITRAN definitions\n\n");
   (void)fprintf(fp_htrn_cc,"// Namespaces\n");
@@ -741,7 +743,7 @@ int main(int argc,char **argv)
   } /* endif */
   (void)fprintf(fp_htrn_hh,"// $Id$\n\n");
   (void)fprintf(fp_htrn_hh,"// Purpose: HITRAN definitions used by C++ programs\n\n");
-  (void)fprintf(fp_htrn_hh,"/* Copyright (C) 1997--2013 Charlie Zender\n   This software is distributed under the terms of the GNU General Public License (GPL) Version 3\n   See http://www.gnu.org/copyleft/gpl.html for full license text */\n\n");
+  (void)fprintf(fp_htrn_hh,"/* Copyright (C) 1997--2018 Charlie Zender\n   This software is distributed under the terms of the GNU General Public License (GPL) Version 3\n   See http://www.gnu.org/copyleft/gpl.html for full license text */\n\n");
   (void)fprintf(fp_htrn_hh,"/* Usage: %s automatically generated by %s on %s",fl_htrn_hh,prg_nm,time_bfr_srt);
   (void)fprintf(fp_htrn_hh,"   Command: %s */\n\n",cmd_ln);
   (void)fprintf(fp_htrn_hh,"// #include <htrn_c++.hh> // HITRAN line database definitions\n\n");
@@ -969,7 +971,7 @@ int main(int argc,char **argv)
   } /* endif */
   (void)fprintf(fp_htrn_F90,"! $Id$\n\n");
   (void)fprintf(fp_htrn_F90,"! Purpose: HITRAN constants and subroutines used by radiative transfer programs swnb, nbm, ck, lbl\n\n");
-  (void)fprintf(fp_htrn_F90,"! Copyright (C) 1994--2013 Charlie Zender\n! This software is distributed under the terms of the GNU General Public License (GPL) Version 3\n! See http://www.gnu.org/copyleft/gpl.html for full license text\n\n");
+  (void)fprintf(fp_htrn_F90,"! Copyright (C) 1994--2018 Charlie Zender\n! This software is distributed under the terms of the GNU General Public License (GPL) Version 3\n! See http://www.gnu.org/copyleft/gpl.html for full license text\n\n");
   (void)fprintf(fp_htrn_F90,"! Compilation: \n");
   (void)fprintf(fp_htrn_F90,"! pgf90 -c -fast -Mextend -Mnosecond_underscore -mp -byteswapio -Mrecursive -Mdalign -DLINUX -I. -I${HOME}/include -Di386 -I/usr/local/include -o ${HOME}/obj/LINUX/hitran.o %s\n",fl_htrn_F90);
   (void)fprintf(fp_htrn_F90,"! f90 -c -xs -stackvar -e  -fast -DSUNMP -I. -I${HOME}/include -I/contrib/include  -o ${HOME}/SUNMP/hitran.o %s\n",fl_htrn_F90);
@@ -1315,6 +1317,8 @@ mlc_grp_set(mlc_sct *mlc)
   if(!strcmp(mlc_sng,"H2")) mlc_grp=unknown_structure;
   if(!strcmp(mlc_sng,"CS")) mlc_grp=unknown_structure;
   if(!strcmp(mlc_sng,"SO3")) mlc_grp=unknown_structure;
+  if(!strcmp(mlc_sng,"C2N2")) mlc_grp=unknown_structure; /* fxm: Here and below are HITRAN 2016---need their groups! */
+  if(!strcmp(mlc_sng,"COCl2")) mlc_grp=unknown_structure;
 
   if(mlc_grp == unknown_structure) (void)fprintf(stderr,"%s: WARNING molecule %s has unknown molecular structure group in mlc_grp_set()\n",prg_nm,mlc_sng);
   if(mlc_grp == -1){
@@ -1346,6 +1350,7 @@ nm_mk_iso(char *mlc_sng,short iso_idx)
     case 4: iso_sng="1H_2H_16O"; break;
     case 5: iso_sng="1H_2H_18O"; break;
     case 6: iso_sng="1H_2H_17O"; break;
+    case 7: iso_sng="2H_2H_16O"; break;
     default: (void)fprintf(stdout,"%s: ERROR unknown %s isotope number %d\n",prg_nm,mlc_sng,iso_idx); break;
     } /* end switch */
   
@@ -1691,6 +1696,19 @@ nm_mk_iso(char *mlc_sng,short iso_idx)
   if(!strcmp(mlc_sng,"SO3")) /* Sulfur trioxide */
     switch(iso_idx){
     case 1: iso_sng="32S_16O3"; break; /* fxm: 20130611 isopotomer not yet verified */
+    default: (void)fprintf(stdout,"%s: ERROR unknown %s isotope number %d\n",prg_nm,mlc_sng,iso_idx); break;
+    } /* end switch */
+  
+  if(!strcmp(mlc_sng,"C2N2")) /* Cyanogen */
+    switch(iso_idx){
+    case 1: iso_sng="12C2_14N2"; break; /* fxm: 20181001 isopotomer not yet verified */
+    default: (void)fprintf(stdout,"%s: ERROR unknown %s isotope number %d\n",prg_nm,mlc_sng,iso_idx); break;
+    } /* end switch */
+  
+  if(!strcmp(mlc_sng,"COCl2")) /* Phosgene */
+    switch(iso_idx){
+    case 1: iso_sng="12C_16O_35Cl2"; break; /* fxm: 20181001 isopotomer not yet verified */
+    case 2: iso_sng="12C_16O_35Cl_37Cl"; break; /* fxm: 20181001 isopotomer not yet verified */
     default: (void)fprintf(stdout,"%s: ERROR unknown %s isotope number %d\n",prg_nm,mlc_sng,iso_idx); break;
     } /* end switch */
   

@@ -1,3 +1,15 @@
+2018-10-01  Charlie Zender  <zender@uci.edu>
+
+	* Add Cyanogen and Phosgene isopotomers
+
+	* Add iso_sng="2H_2H_16O"
+
+	* Add "sw/" to input/output paths for text files
+
+	* Add molparam16.txt from http://hitran.org/media/molparam.txt
+
+	* Update for HITRAN 2016
+
 2013-06-12  Charlie Zender  <zender@uci.edu>
 
 	* Add new isotopologues for HITRAN 2012
