@@ -152,18 +152,18 @@ if($dbg_lvl > 1){print ("$prg_nm: $prg_dsc, version $prg_vrs of $prg_date\n");} 
 # fxm: Should add a function to unique'ize iso and mlc lists
 
 # Check lists for errors
-if(defined(@mlc)){
+if(@mlc){
     foreach $mlc (@mlc){
 	die "ERROR Invalid molecule ID $mlc\n" if($mlc > $mlc_nbr_max_htrn || $mlc < 1);
     } # end loop over $mlc
 } # endif
-if(defined(@iso)){
+if(@iso){
     foreach $iso (@iso){
 	die "ERROR Invalid isotopomer ID $iso\n" if($iso > $iso_nbr_max_htrn || $iso < 1);
     } # end loop over $iso
 } # endif
 
-if(defined(@mlc) && defined(@iso)){
+if(@mlc && @iso){
 # Specifying both molecules and isotopes is currently only OK when mlc_nbr == 1
     if($#mlc+1 == 1){
 # The isotope list is assumed to contain isotopic abundance indices (1..8) when only one molecule is specified
@@ -180,8 +180,8 @@ if(defined(@mlc) && defined(@iso)){
 } # endif
 
 # Ensure molecule list is defined
-if(!defined(@mlc) && !defined(@iso)){@mlc=(1..$mlc_nbr_max_htrn);}
-if(!defined(@mlc) && defined(@iso)){
+if(@mlc && !@iso){@mlc=(1..$mlc_nbr_max_htrn);}
+if(!@mlc && @iso){
 # Isotope list is assumed to contain isotopomer indices (1..90) when there is no molecule list
     foreach $iso (@iso){
 	for($mlc_idx=1;$mlc_idx<=$mlc_nbr_max_htrn;$mlc_idx++){
@@ -195,7 +195,7 @@ if(!defined(@mlc) && defined(@iso)){
 $mlc_nbr=$#mlc+1;
 
 # Ensure isotope list is defined
-if(!defined(@iso)){
+if(@iso){
 # Not specifying any isotopes is same as requesting all isotopomers of each molecule in molecule list
     foreach $mlc_nm (@mlc_sng{@mlc}){
 	push @iso,@{$mlc_iso{$mlc_nm}}; # Put braces around list to extract it from an HoL

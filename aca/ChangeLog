@@ -1,3 +1,7 @@
+2018-10-01  Charlie Zender  <zender@uci.edu>
+
+	* Eliminate @defined(@array) syntax since Perl deprecated it in ~2014
+
 2018-09-28  Charlie Zender  <zender@uci.edu>
 
 	* Fixed bug where ss_alb_fct was set to 1.0 not to odsl/odxl for pure Rayleigh scattering atmospheres (neglected absorption)
