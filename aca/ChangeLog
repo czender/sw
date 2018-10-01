@@ -1,5 +1,7 @@
 2018-10-01  Charlie Zender  <zender@uci.edu>
 
+	* htrn2nb.F90 expand ln_nbr_max to 600000 since HITRAN16 O3 from 0.2--100.0 um has 449570, CO2 has 559874
+
 	* htrn2nb.sh Keep all gases at 10 cm-1 bands except CO2 and CH4 at 5 cm-1 bands
 
 	* Eliminate @defined(@array) syntax since Perl deprecated it in ~2014

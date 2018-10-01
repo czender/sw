@@ -68,7 +68,8 @@ program htrn2nb
   character*(*),parameter::CVS_Id='$Id$'
   integer,parameter::bnd_nbr_max=10000   ! 0.0--50000.0 cm-1 in 5 cm-1 bands
   integer,parameter::fl_in_unit=73
-  integer,parameter::ln_nbr_max=500000 ! O3 from 0.2--100.0 um has >409000
+  !  integer,parameter::ln_nbr_max=500000 ! O3 from 0.2--100.0 um has >409000
+  integer,parameter::ln_nbr_max=600000 ! 20181001 HITRAN16 O3 from 0.2--100.0 um has 449570, CO2 has 559874
   integer,parameter::tpt_nbr_max=140     ! 180.0--320.0 K in 1 dgr increments
   integer,parameter::iso_sng_htrn_lng_max=20 ! [nbr] Maximum length of HITRAN isopotomer string
   integer,parameter::mlc_sng_htrn_lng_max=10 ! [nbr] Maximum length of HITRAN molecule string
