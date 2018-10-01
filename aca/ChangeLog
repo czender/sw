@@ -1,6 +1,7 @@
 2018-09-28  Charlie Zender  <zender@uci.edu>
 
 	* Fixed bug where ss_alb_fct was set to 1.0 not to odsl/odxl for pure Rayleigh scattering atmospheres (neglected absorption)
+	According to this ChangeLog, bug may have been introduced 20071215 and would have affected all simulations where particle scattering was turned-off
 
 2018-06-06  Charlie Zender  <zender@uci.edu>
 
@@ -280,7 +281,7 @@
 	Changes since f-2_0_2, aca-2_0_2: netCDF3 works w/w/o snow
 	Rayleigh scattering bugfix (changes answers!), flexibility
 
-	* Always initialize (usually to 0.0) snowpack CWP/LWP/IWP/bga/aer 
+	* Always initialize (usually to 0.0) snowpack CWP/LWP/IWP/bga/aer
 
 	* clm now writes netCDF3 files even if netCDF4 is available
 	This will help avoid ${DATA_RT} repository differences among
