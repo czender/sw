@@ -180,7 +180,7 @@ if(@mlc && @iso){
 } # endif
 
 # Ensure molecule list is defined
-if(@mlc && !@iso){@mlc=(1..$mlc_nbr_max_htrn);}
+if(!@mlc && !@iso){@mlc=(1..$mlc_nbr_max_htrn);}
 if(!@mlc && @iso){
 # Isotope list is assumed to contain isotopomer indices (1..90) when there is no molecule list
     foreach $iso (@iso){
@@ -195,7 +195,7 @@ if(!@mlc && @iso){
 $mlc_nbr=$#mlc+1;
 
 # Ensure isotope list is defined
-if(@iso){
+if(!@iso){
 # Not specifying any isotopes is same as requesting all isotopomers of each molecule in molecule list
     foreach $mlc_nm (@mlc_sng{@mlc}){
 	push @iso,@{$mlc_iso{$mlc_nm}}; # Put braces around list to extract it from an HoL
