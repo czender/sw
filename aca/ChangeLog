@@ -1,5 +1,7 @@
 2018-10-01  Charlie Zender  <zender@uci.edu>
 
+	* htrn2nb.sh Keep all gases at 10 cm-1 bands except CO2 and CH4 at 5 cm-1 bands
+
 	* Eliminate @defined(@array) syntax since Perl deprecated it in ~2014
 
 2018-09-28  Charlie Zender  <zender@uci.edu>

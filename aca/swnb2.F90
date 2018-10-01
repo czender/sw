@@ -5516,7 +5516,7 @@ program swnb2
            u_bar(1)=q_CH4(1)*phi_wgt(1)*prs_ntf(1)/grv(1)
            prs_bar(1)=q_CH4(1)*psi_wgt(1)*prs_ntf(1)*prs_ntf(1)/grv(1)
            
-           ! Sumuup integrands
+           ! Sum integrands
            ! Recall that dp/g = mpl_mst_air ([kg m-2]) so that, e.g.,
            ! q_CH4*dp/g = mpl_CH4 ([kg m-2]). Using the stored values
            ! saves lots of floating point operations.
