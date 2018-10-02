@@ -10,7 +10,8 @@
 #export htrn_fl="${DATA}/hitran/hitran00.txt"
 #export htrn_fl="${DATA}/hitran/hitran08.txt"
 #export htrn_fl="${DATA}/hitran/hitran12.txt"
-export htrn_fl="${DATA}/hitran/hitran16.txt"
+#export htrn_fl="${DATA}/hitran/hitran16.txt"
+export htrn_fl="${DATA}/hitran/hitran_20181002.txt"
 
 # Water Vapor
 ${HOME}/sw/aca/htrn2nc.pl --mlc=1 --wvn_min=1.0e-4 --wvn_max=50000.0 ${htrn_fl} ${DATA}/hitran/H2O.nc

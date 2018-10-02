@@ -39,15 +39,15 @@ program htrn2nb
   ! htrn2nb -b 3180 -i ${DATA}/aca/CO2.dat -o ${DATA}/aca/mlk_CO2.nc
   
   ! Water Vapor:
-  ! htrn2nb -l 2000.0 -h 17900.0 -b 1590 -i ${DATA}/hitran/H2O.nc -o ${DATA}/aca/mlk_H2O.nc
+  ! htrn2nb -l 2000.0 -h 27000.0 -b 2500 -i ${DATA}/hitran/H2O.nc -o ${DATA}/aca/mlk_H2O.nc
   ! htrn2nb -l 0.0 -h 25000.0 -b 2500 -i ${DATA}/hitran/H2O.nc -o ${DATA}/aca/mlk_H2O_all.nc
-  ! htrn2nb -l 2000.0 -h 17900.0 -b 1590 -i ${DATA}/hitran/1H2_16O.nc -o ${DATA}/aca/mlk_1H2_16O.nc
-  ! htrn2nb -l 2000.0 -h 17900.0 -b 1590 -i ${DATA}/hitran/1H2_17O.nc -o ${DATA}/aca/mlk_1H2_17O.nc
-  ! htrn2nb -l 2000.0 -h 17900.0 -b 1590 -i ${DATA}/hitran/1H2_18O.nc -o ${DATA}/aca/mlk_1H2_18O.nc
-  ! htrn2nb -l 2000.0 -h 17900.0 -b 1590 -i ${DATA}/hitran/1H_2H_16O.nc -o ${DATA}/aca/mlk_1H_2H_16O.nc
+  ! htrn2nb -l 2000.0 -h 27000.0 -b 2500 -i ${DATA}/hitran/1H2_16O.nc -o ${DATA}/aca/mlk_1H2_16O.nc
+  ! htrn2nb -l 2000.0 -h 27000.0 -b 2500 -i ${DATA}/hitran/1H2_17O.nc -o ${DATA}/aca/mlk_1H2_17O.nc
+  ! htrn2nb -l 2000.0 -h 27000.0 -b 2500 -i ${DATA}/hitran/1H2_18O.nc -o ${DATA}/aca/mlk_1H2_18O.nc
+  ! htrn2nb -l 2000.0 -h 27000.0 -b 2500 -i ${DATA}/hitran/1H_2H_16O.nc -o ${DATA}/aca/mlk_1H_2H_16O.nc
   
   ! Carbon dioxide:
-  ! htrn2nb -l 2000.0 -h 17900.0 -b 3180 -i ${DATA}/hitran/CO2.nc -o ${DATA}/aca/mlk_CO2.nc
+  ! htrn2nb -l 2000.0 -h 27000.0 -b 5000 -i ${DATA}/hitran/CO2.nc -o ${DATA}/aca/mlk_CO2.nc
 
   use dbg_mdl ! [mdl] Debugging constants, prg_nm, dbg_lvl
   use drv_cst_mdl ! [mdl] Derived physical constants

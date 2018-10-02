@@ -2,7 +2,7 @@
 
 program O3
   
-  ! Purpose: Converts O3 and O2 absorption cross section data to netCDF format.
+  ! Purpose: Convert O3 and O2 absorption cross section data to netCDF format
   
   ! Compilation:
   ! cd ${HOME}/aca; make -W O3.F OPTS=D O3; cd -

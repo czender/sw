@@ -1,3 +1,11 @@
+2018-10-02  Charlie Zender  <zender@uci.edu>
+
+	* Adopt new convention .par filename = hitran16_YYYYMMDD.txt
+
+	* Updating August 2018 HITRAN which restores (from 2012) ~1200 H2O bands inadvertently dropped in 2016
+
+	* Increase spectral range of Malkmus model from 2000-17900 cm-1 (1590 10cm-1 bands) to 2000-27000 cm-1 (2500 10cm-1 bands)
+
 2018-10-01  Charlie Zender  <zender@uci.edu>
 
 	* htrn2nb.F90 expand ln_nbr_max to 600000 since HITRAN16 O3 from 0.2--100.0 um has 449570, CO2 has 559874
