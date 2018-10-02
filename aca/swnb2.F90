@@ -365,15 +365,15 @@ program swnb2
   character(*),parameter::nlc=char(0) ! [sng] NUL character = ASCII 0 = char(0)
   ! Arrays are allocatable, but die if size exceeds corresponding *_nbr_max
   integer,parameter::azi_nbr_max=16 ! arbitrary
-  integer,parameter::bnd_nbr_CO2_max=3180 ! 5 cm-1 resolution from 0.56--5.0 um
+  integer,parameter::bnd_nbr_CO2_max=5000 ! 5 cm-1 resolution from 0.3889--5.0 um
   integer,parameter::bnd_nbr_H2OH2O_max=8192 ! Old 3 cm-1 #s from Chy98
-  integer,parameter::bnd_nbr_H2O_max=1590 ! 10 cm-1 resolution from 0.56--5.0 um
-  integer,parameter::bnd_nbr_NO2_max=750 ! 10 cm-1 resolution from 0.56--5.0 um
+  integer,parameter::bnd_nbr_H2O_max=2500 ! 10 cm-1 resolution from 0.3889--5.0 um
+  integer,parameter::bnd_nbr_NO2_max=750 ! 10 cm-1 resolution from 0.3889--5.0 um
   integer,parameter::bnd_nbr_O2O2_max=4086 ! Greenblatt et al. (1992) resolution + SPS98 1.27 um band
-  integer,parameter::bnd_nbr_O2_max=1590 ! 10 cm-1 resolution from 0.56--5.0 um
+  integer,parameter::bnd_nbr_O2_max=2500 ! 10 cm-1 resolution from 0.3889--5.0 um
   integer,parameter::bnd_nbr_O3_max=158 ! WMO85 resolution
-  integer,parameter::bnd_nbr_OH_max=1590 ! 10 cm-1 resolution from 0.56--5.0 um
-  integer,parameter::bnd_nbr_CH4_max=3180 ! 5 cm-1 resolution from 0.56--5.0 um
+  integer,parameter::bnd_nbr_OH_max=2500 ! 10 cm-1 resolution from 0.3889--5.0 um
+  integer,parameter::bnd_nbr_CH4_max=5000 ! 5 cm-1 resolution from 0.3889--5.0 um
   integer,parameter::bnd_nbr_aer_max=1690 ! WMO-spliced
   integer,parameter::bnd_nbr_bga_max=480 ! 0.01 um resolution from 0.2--5.0 um
   integer,parameter::bnd_nbr_ice_max=480 ! 0.01 um resolution from 0.2--5.0 um
@@ -383,7 +383,7 @@ program swnb2
   integer,parameter::bnd_nbr_rfl_max=1690 ! WMO-spliced
   integer,parameter::bnd_nbr_mpr_max=1690 ! WMO-spliced
   integer,parameter::bnd_nbr_snw_max=1690 ! WMO-spliced
-  integer,parameter::bnd_nbr_max=1690 ! WMO-spliced onto 10 cm-1 resolution from 0.56--5.0 um
+  integer,parameter::bnd_nbr_max=1690 ! WMO-spliced onto 10 cm-1 resolution from 0.3889--5.0 um
   integer,parameter::chn_nbr_max=12 ! [nbr] Arbitrary
   integer,parameter::lev_snw_nbr_max=5 ! CLM snow model resolution
   integer,parameter::lev_nbr_max=110 ! roughly 10 mb resolution from 1010 mb to TOA
@@ -4042,8 +4042,7 @@ program swnb2
   lmn_ngt_TOA=lmn_TOA_ulx*1.0e-6 ! [ulm m-2 sr-1]->[lm m-2 sr-1]
   lmn_TOA_nL=lmn_ngt_TOA*pi/(1.0e-9*10000.0) ! [lm m-2 sr-1]->[nL]
 
-  ! There is no easier way to turn off Herzberg continuum
-  ! but keep O2 line absorption on than to zero absorption cross-sections here.
+  ! Easiest way to turn-off Herzberg continuum and keep O2 line absorption is to zero absorption cross-sections here
   if (.not.flg_Herzberg) then
      do bnd_idx_O3=1,bnd_nbr_O3
         abs_xsx_O2(bnd_idx_O3)=0.0

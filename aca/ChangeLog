@@ -1,5 +1,7 @@
 2018-10-02  Charlie Zender  <zender@uci.edu>
 
+	* Expand bnd_nbr_max for all gases to accomodate new 2500/5000 band Malkmus files
+
 	* Adopt new convention .par filename = hitran16_YYYYMMDD.txt
 
 	* Updating August 2018 HITRAN which restores (from 2012) ~1200 H2O bands inadvertently dropped in 2016
