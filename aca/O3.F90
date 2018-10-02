@@ -5,9 +5,9 @@ program O3
   ! Purpose: Convert O3 and O2 absorption cross section data to netCDF format
   
   ! Compilation:
-  ! cd ${HOME}/aca; make -W O3.F OPTS=D O3; cd -
-  ! cd ${HOME}/aca; make -W O3.F O3; cd -
-  ! cd ${HOME}/aca; make OPTS=D O3; cd -
+  ! cd ${HOME}/sw/aca; make -W O3.F OPTS=D O3; cd -
+  ! cd ${HOME}/sw/aca; make -W O3.F O3; cd -
+  ! cd ${HOME}/sw/aca; make OPTS=D O3; cd -
   
   ! Usage:
   ! ncks -H -C -F -v wvl_ctr_CCM,flx_slr_frc_CCM,abs_xsx_O3_CCM ${DATA}/aca/abs_xsx_O3.nc
@@ -19,10 +19,12 @@ program O3
   
   ! Use WMO85 data
   ! O3 -i ${DATA}/aca/abs_xsx_WMO85.txt -o ${DATA}/aca/abs_xsx_O3.nc
+  ! Use HITRAN16 data
+  ! O3 -i ${DATA}/aca/absO3_200.0_0.0_29164.0-40798.0_04.xsc -o ${DATA}/aca/abs_xsx_O3.nc
   ! Weight WMO85 data by LaN68
   ! O3 -S ${DATA}/aca/spc_LaN68.nc
   
-  ! Currently the code processes input ASCII data files that look like:
+  ! Process input ASCII data files from WMO85 that look like:
   
   ! ==   Reference Solar Irradiance, Rayleigh Scattering, O2 and O3 Xsection==
   ! =============================WMO, 1985, P355-362=======================
@@ -43,6 +45,39 @@ program O3
   ! 8   186.916   188.679   4.73E+11   4.93E-25   7.36E-24   5.88E-19   5.88E-19
   ! I corrected my copy of the WMO85 data (${DATA}/aca/abs_xsx_WMO85.txt) on 96/12/27
   
+  ! or process input .xsc ASCII data files from HITRAN that look like:
+  !                  O3    29164.    40798.   5818   200.    0. 1.181E-17250mA          ozone        19
+  ! 1.464E-22 2.062E-22 2.295E-22 2.011E-22 1.566E-22 1.346E-22 1.380E-22 1.576E-22 1.756E-22 1.735E-22
+  ! 1.627E-22 1.712E-22 1.825E-22 1.423E-22 5.071E-23 0.000E+00 0.000E+00 1.677E-22 4.810E-22 6.631E-22
+
+#if 0
+  From http://hitran.org/docs/cross-sections-definitions
+  "In the HITRAN FTP site, the data are presented as separate files for each individual molecule. Each portion of the file corresponding to a particular temperature-pressure pair begins with a header (see Table 1) that contains information on the wavenumber (cm−1) range, number of cross-section data in this set, temperature (K), and pressure (Torr). The maximum value of the absorption cross sections (cm2/molecule) and additional information containing the reference to that observation are also presented in each header. The cross sections have been cast into an equal wavenumber interval grid. It should be noted that the initial and final wavenumbers, νmin and νmax, respectively, of each temperature–pressure set for a given wavenumber region are not always identical. They have been taken from the analysis of the observations. The sampling intervals are also not necessarily identical for each temperature–pressure set. The wavenumber interval of the grid is obtained by taking the difference of the initial and final wavenumber and dividing this quantity by the number of points, N, minus one, i.e., Δν=(νmax−νmin)/(N−1).
+
+  This value of N is provided so that a user’s personal program can read the table of cross- sections that follows the header. Note that the use of the features of HITRANonline makes much of this discussion transparent.
+
+  The table below illustrates the format of each header record. Following the header, the cross-section values are arranged in records containing ten values of fields of ten for each cross-section. In other words, each record contains 100 bytes (the trailing bytes on the last line may not be meaningful if N is not a multiple of 10).
+
+  Quantity	Field length	Type	Comment
+  Molecule	20	Character	Chemical formula (right-justified)
+  Minimum wavenumber, νmin	10	Real	Start of range (cm−1)
+  Maximum wavenumber, νmax	10	Real	End of range (cm−1)
+  Number of points, N	7	Integer	Number of cross-sections in set
+  Temperature, T	7	Real	Temperature (K) of set
+  Pressure, P	6	Real	Pressure of set in Torr
+  Maximum cross-section value in set, σmax	10	Real	Useful for scaling plots (cm2/molecule)
+  Instrument resolution	5	Real	See note
+  Common name	15	Character	Familiar name of molecule
+  Not currently used	4		Reserved for future use
+  Broadener	3	Character	Air, N2, or self-broadened (if left blank)
+  Reference	3	Integer	Index pointing to source of data
+  Note: Most cross sections have been taken from Fourier transform spectrometer (FTS) measurements. In that case the resolution is given in cm−1. There are some cross-sections taken from grating spectrometer measurements in the UV. In those cases, the resolution is given in milli-Ångströms in the form xxx mÅ, where xxx are up to three digits.
+
+  In the FTP site, for the IR cross-sections, the data on each molecule (chemical compound) are stored in separate files, which are labeled with the chemical symbol followed by an underscore and IRxx.xsc, where xx stands for the HITRAN edition that the data were originally introduced or later updated and the file extension xsc signifies that it is a list of cross-sections. For example, the file with the name C2H6_IR10.xsc contains ethane (C2H6) infrared cross-sections that were obtained in 2010.
+
+  It is to be noted that the files may have many temperature–pressure sets for different spectral regions, as indicated by headers throughout the file. While the temperature–pressure (T,p) sets are reasonably complete for many species for an adequate simulation of atmospheric transmission in the spectral regions where those species are active, for other species an insufficiency of the (T,p) sets may become apparent. It is hoped that future measurements at extended sets of (T,p) combinations may help broaden the coverage in the database."
+#endif /* !0 */
+
   use dbg_mdl ! [mdl] Debugging constants, prg_nm, dbg_lvl
   use netcdf ! [mdl] netCDF interface
   use nf90_utl ! [mdl] netCDF utilities
@@ -101,6 +136,8 @@ program O3
   integer nc_id             ! file handle
   integer bnd_nbr ! dimension size
   
+  integer tpt_cold_id
+  integer tpt_std_id
   integer Rayleigh_sca_xsx_id
   integer abs_cff_mss_O3_id
   integer abs_xsx_O2_id
@@ -349,6 +386,8 @@ program O3
   if (rcd /= nf90_noerr) call nf90_err_exit(rcd,fl_out)
   
   ! Variable definitions
+  rcd=nf90_wrp(nf90_def_var(nc_id,'tpt_cold',nf90_float,tpt_cold_id),sbr_nm//": dv tpt_cold")
+  rcd=nf90_wrp(nf90_def_var(nc_id,'tpt_std',nf90_float,tpt_std_id),sbr_nm//": dv tpt_std")
   rcd=nf90_wrp(nf90_def_var(nc_id,'Rayleigh_sca_xsx',nf90_float,bnd_dim_id,Rayleigh_sca_xsx_id),sbr_nm//": dv Rayleigh_sca_xsx")
   rcd=nf90_wrp(nf90_def_var(nc_id,'abs_cff_mss_O3',nf90_float,bnd_dim_id,abs_cff_mss_O3_id),sbr_nm//": dv abs_cff_mss_O3")
   rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_O2',nf90_float,bnd_dim_id,abs_xsx_O2_id),sbr_nm//": dv abs_xsx_O2")
@@ -382,6 +421,8 @@ program O3
   rcd=rcd+nf90_put_att(nc_id,nf90_global,'src_fl_sng',src_fl_sng(1:ftn_strlen(src_fl_sng)))
   
   ! Add english text descriptions
+  rcd=rcd+nf90_put_att(nc_id,tpt_cold_id,'long_name','Temperature of coldest O3 measurements')
+  rcd=rcd+nf90_put_att(nc_id,tpt_std_id,'long_name','Temperature at which interpolated O3 cross sections are archived')
   rcd=rcd+nf90_put_att(nc_id,Rayleigh_sca_xsx_id,'long_name','Rayleigh scattering cross section')
   rcd=rcd+nf90_put_att(nc_id,abs_cff_mss_O3_id,'long_name','Ozone mass absorption coefficient')
   rcd=rcd+nf90_put_att(nc_id,abs_xsx_O2_id,'long_name','Molecular Oxygen Herzberg continuum absorption cross section')
@@ -404,6 +445,8 @@ program O3
   rcd=rcd+nf90_put_att(nc_id,wvl_dlt_id,'long_name','Bandwidth')
   
   ! Add units
+  rcd=rcd+nf90_put_att(nc_id,tpt_cold_id,'units','kelvin')
+  rcd=rcd+nf90_put_att(nc_id,tpt_std_id,'units','kelvin')
   rcd=rcd+nf90_put_att(nc_id,Rayleigh_sca_xsx_id,'units','meter2')
   rcd=rcd+nf90_put_att(nc_id,abs_cff_mss_O3_id,'units','meter2 kilogram-1')
   rcd=rcd+nf90_put_att(nc_id,abs_xsx_O2_id,'units','meter2')
@@ -429,6 +472,8 @@ program O3
   rcd=rcd+nf90_enddef(nc_id)
   
   ! Write data
+  rcd=rcd+nf90_put_var(nc_id,tpt_cold_id,tpt_cold)
+  rcd=rcd+nf90_put_var(nc_id,tpt_std_id,tpt_std)
   rcd=rcd+nf90_put_var(nc_id,Rayleigh_sca_xsx_id,Rayleigh_sca_xsx)
   rcd=rcd+nf90_put_var(nc_id,abs_cff_mss_O3_id,abs_cff_mss_O3)
   rcd=rcd+nf90_put_var(nc_id,abs_xsx_O2_id,abs_xsx_O2)

@@ -883,6 +883,8 @@ program swnb2
   ! WMO input variables
   integer abs_xsx_O2_id
   integer abs_xsx_O3_id
+  integer abs_xsx_O3_dadT_id
+  integer tpt_std_O3_id
   integer wvl_max_O3_id
   integer wvl_min_O3_id
   integer wvl_ctr_O3_id
@@ -1372,6 +1374,8 @@ program swnb2
   ! WMO input variables
   real abs_xsx_O2(bnd_nbr_O3_max)
   real abs_xsx_O3(bnd_nbr_O3_max)
+  real abs_xsx_O3_dadT(bnd_nbr_O3_max)
+  real tpt_std_O3
   real wvl_max_O3(bnd_nbr_O3_max)
   real wvl_min_O3(bnd_nbr_O3_max)
   real wvl_ctr_O3(bnd_nbr_O3_max)
@@ -1809,6 +1813,7 @@ program swnb2
   real slr_cst_xnt_fac
   real tpt_dlt_Mlk(lev_nbr_max)
   real tpt_dlt_Mlk_sqr(lev_nbr_max)
+  real tpt_dlt_O3(lev_nbr_max)
   real sum_fsf_srf ! [frc] Inner product of flx_slr_frc*lmn_SRF
   real tpt_vrt_sfc ! [K] Virtual temperature at surface
   real trn_ALT_CH4
@@ -3086,14 +3091,22 @@ program swnb2
   
   ! Get variable IDs
   rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O2',abs_xsx_O2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O3_cold',abs_xsx_O3_id)
+  ! 20181002: Until today, always used abs_xsx_O3_cold (T = 203 K) for abs_xsx_O3 at all levels
+  ! Henceforth use standard temperature (usually tpt_std_O3=250 K) of archived O3 cross-sections
+  ! and adjust by level-dependent temperature gradient to tpt_std_O3
+  !rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O3_cold',abs_xsx_O3_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O3',abs_xsx_O3_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O3_dadT',abs_xsx_O3_dadT_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'tpt_std',tpt_std_O3_id)
   rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_O3_id)
   rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_O3_id)
   rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_O3_id)
   
   ! Get data
+  rcd=nf90_wrp(nf90_get_var(nc_id,tpt_std_O3_id,tpt_std_O3),"gv tpt_std_O3")
   rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_O2_id,abs_xsx_O2,srt_one,cnt_bnd),"gv abs_xsx_O2")
   rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_O3_id,abs_xsx_O3,srt_one,cnt_bnd),"gv abs_xsx_O3")
+  rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_O3_dadT_id,abs_xsx_O3_dadT,srt_one,cnt_bnd),"gv abs_xsx_O3_dadT")
   rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_O3_id,wvl_max_O3,srt_one,cnt_bnd),"gv wvl_max_O3")
   rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_O3_id,wvl_min_O3,srt_one,cnt_bnd),"gv wvl_min_O3")
   rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_O3_id,wvl_ctr_O3,srt_one,cnt_bnd),"gv wvl_ctr_O3")
@@ -4663,6 +4676,7 @@ program swnb2
   
   ! Initialize band-independent arrays that depend on level
   do lev_idx=1,lev_nbr
+     tpt_dlt_O3(lev_idx)=tpt(lev_idx)-tpt_std_O3
      tpt_dlt_Mlk(lev_idx)=tpt(lev_idx)-tpt_Malkmus_fit
      tpt_dlt_Mlk_sqr(lev_idx)=tpt_dlt_Mlk(lev_idx)*tpt_dlt_Mlk(lev_idx)
   enddo                     ! end loop over lev
@@ -5022,7 +5036,7 @@ program swnb2
   !$omp$shared(slr_zen_ngl_cos,alb_sfc_vsb_drc,alb_sfc_vsb_dff,alb_sfc_NIR_drc,alb_sfc_NIR_dff)
   !$omp$shared(slr_cst_xnt_fac,flx_slr_frc,chn_SRF_msk)
   !$omp$shared(lev_nbr,levp_nbr,plr_nbr,mmn_nbr,azi_nbr,tau_nbr,bnd_nbr_H2O,bnd_nbr_pure_O3,bnd_nbr_non_O3,bnd_nbr_O3)
-  !$omp$shared(abs_xsx_O3,npl_O3,wvl_min_O3,wvl_max_O3,abs_xsx_O2,npl_O2,bnd_nbr,abs_xsx_H2OH2O,npl_H2OH2O)
+  !$omp$shared(abs_xsx_O3,abs_xsx_O3_dadT,tpt_std_O3,npl_O3,wvl_min_O3,wvl_max_O3,abs_xsx_O2,npl_O2,bnd_nbr,abs_xsx_H2OH2O,npl_H2OH2O)
   !$omp$shared(abs_xsx_O2O2,npl_O2O2,abs_xsx_NO2,npl_NO2)
   !$omp$shared(abs_cff_mss_lqd,mpl_LWP,sca_cff_mss_lqd,bnd_nbr_lqd,wvl_min_lqd,wvl_max_lqd,asm_prm_lqd)
   !$omp$shared(abs_cff_mss_aer,mpl_aer,sca_cff_mss_aer,bnd_nbr_aer,wvl_min_aer,wvl_max_aer,asm_prm_aer)
@@ -5042,7 +5056,7 @@ program swnb2
   !$omp$shared(S_d_abs_cff_mss_CH4,S_p_abs_cff_mss_CH4,mpl_CH4,A_phi_CH4,B_phi_CH4,A_psi_CH4,B_psi_CH4,q_CH4)
   !$omp$shared(S_d_abs_cff_mss_O2,S_p_abs_cff_mss_O2,mpl_O2,A_phi_O2,B_phi_O2,A_psi_O2,B_psi_O2,q_O2)
   !$omp$shared(S_d_abs_cff_mss_CO2,S_p_abs_cff_mss_CO2,mpl_CO2,A_phi_CO2,B_phi_CO2,A_psi_CO2,B_psi_CO2,q_CO2)
-  !$omp$shared(ss_alb_fct,tpt_dlt_Mlk,tpt_dlt_Mlk_sqr)
+  !$omp$shared(ss_alb_fct,tpt_dlt_Mlk,tpt_dlt_Mlk_sqr,tpt_dlt_O3)
 #ifdef _OPENMP
   !$omp single
   thr_nbr=omp_get_num_threads() ! [nbr] OpenMP number of threads
@@ -5627,7 +5641,7 @@ program swnb2
         
         do lev_idx=1,lev_nbr
            odal_O3(lev_idx)= &
-                abs_xsx_O3(bnd_idx_tmp_O3)*npl_O3(lev_idx)
+                (abs_xsx_O3(bnd_idx_tmp_O3)+tpt_dlt_O3(lev_idx)*abs_xsx_O3_dadT(bnd_idx_tmp_O3))*npl_O3(lev_idx)
            odal_O2(lev_idx)=odal_O2(lev_idx)+ &
                 abs_xsx_O2(bnd_idx_tmp_O3)*npl_O2(lev_idx)
         enddo               ! end loop over lev
@@ -5639,7 +5653,7 @@ program swnb2
         ! O3,O2 cross-sections here should be interpolated
         do lev_idx=1,lev_nbr
            odal_O3(lev_idx)= &
-                abs_xsx_O3(bnd_idx_O3)*npl_O3(lev_idx)
+                (abs_xsx_O3(bnd_idx_O3)+tpt_dlt_O3(lev_idx)*abs_xsx_O3_dadT(bnd_idx_O3))*npl_O3(lev_idx)
            odal_O2(lev_idx)=odal_O2(lev_idx)+ &
                 abs_xsx_O2(bnd_idx_O3)*npl_O2(lev_idx)
         enddo               ! end loop over lev
@@ -5651,7 +5665,7 @@ program swnb2
         ! Absorption will be due solely to O3, O2
         do lev_idx=1,lev_nbr
            odal_O3(lev_idx)= &
-                abs_xsx_O3(bnd_idx_O3)*npl_O3(lev_idx)
+                (abs_xsx_O3(bnd_idx_O3)+tpt_dlt_O3(lev_idx)*abs_xsx_O3_dadT(bnd_idx_O3))*npl_O3(lev_idx)
            odal_O2(lev_idx)=odal_O2(lev_idx)+ &
                 abs_xsx_O2(bnd_idx_O3)*npl_O2(lev_idx)
         enddo               ! end loop over lev
