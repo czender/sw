@@ -1861,12 +1861,12 @@ program swnb2
   ! Initialize default values
   drc_in='/data/zender/aca'//nlc ! [sng] Input directory
   drc_out=''                ! [sng] Output directory
-  fl_CO2='swnb_CO2.nc'//nlc
+  fl_CO2='mlk_CO2.nc'//nlc
   fl_H2OH2O='abs_xsx_H2OH2O.nc'//nlc
-  fl_H2O='swnb_H2O.nc'//nlc
-  fl_OH='swnb_OH.nc'//nlc
+  fl_H2O='mlk_H2O.nc'//nlc
+  fl_OH='mlk_OH.nc'//nlc
   fl_CH4='mlk_CH4.nc'//nlc
-  fl_O2='swnb_O2.nc'//nlc
+  fl_O2='mlk_O2.nc'//nlc
   fl_O3='abs_xsx_O3.nc'//nlc
   fl_O2O2='abs_xsx_O2O2.nc'//nlc
   fl_NO2='abs_xsx_NO2.nc'//nlc
