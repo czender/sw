@@ -2000,8 +2000,8 @@ program swnb2
   cmd_ln_slr_zen_ngl_cos=.false.
   cmd_ln_slr_zen_ngl_dgr=.false.
   exit_status=0             ! [enm] Program exit status
-  flg_CO=.false.
-  flg_N2O=.false.
+  flg_CO=.true.
+  flg_N2O=.true.
   flg_CH4=.true.
   flg_CO2=.true.
   flg_H2O=.true.
