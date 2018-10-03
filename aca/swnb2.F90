@@ -2200,6 +2200,8 @@ program swnb2
            flg_lqd=.false.
         else if (opt_sng == 'no_Planck') then
            flg_Planck=.false.
+        else if (opt_sng == 'no_thermal') then
+           flg_Planck=.false.
         else if (opt_sng == 'no_NO2') then
            flg_NO2=.false.
         else if (opt_sng == 'no_O2') then
@@ -2410,6 +2412,7 @@ program swnb2
   ! Prepend user-specified path, if any, to output data file names
   if (ftn_strlen(drc_out) > 0) call ftn_drcpfx(drc_out,fl_out) ! [sng] Output file
   
+  ! Herzberg continuum data currently read-in with O3 data
   flg_Herzberg=flg_O3
   mmn_nbr=str_nbr           ! # moments always equals # streams
   if (sv_cmp_plr_ngl) then
