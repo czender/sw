@@ -375,6 +375,7 @@ program swnb2
   integer,parameter::bnd_nbr_OH_max=2500 ! 10 cm-1 resolution from 0.3889--5.0 um
   integer,parameter::bnd_nbr_CH4_max=5000 ! 5 cm-1 resolution from 0.3889--5.0 um
   integer,parameter::bnd_nbr_CO_max=5000 ! 5 cm-1 resolution from 0.3889--5.0 um
+  integer,parameter::bnd_nbr_N2_max=5000 ! 5 cm-1 resolution from 0.3889--5.0 um
   integer,parameter::bnd_nbr_N2O_max=5000 ! 5 cm-1 resolution from 0.3889--5.0 um
   integer,parameter::bnd_nbr_aer_max=2562 ! WMO-spliced
   integer,parameter::bnd_nbr_bga_max=480 ! 0.01 um resolution from 0.2--5.0 um
@@ -434,6 +435,7 @@ program swnb2
   character(sng_lng_dfl_fl)::fl_OH=nlc
   character(sng_lng_dfl_fl)::fl_CH4=nlc
   character(sng_lng_dfl_fl)::fl_CO=nlc
+  character(sng_lng_dfl_fl)::fl_N2=nlc
   character(sng_lng_dfl_fl)::fl_N2O=nlc
   character(sng_lng_dfl_fl)::fl_aer=nlc
   character(sng_lng_dfl_fl)::fl_bga=nlc
@@ -468,6 +470,7 @@ program swnb2
   character(sng_lng_dfl_stt)::stt_OH=nlc
   character(sng_lng_dfl_stt)::stt_CH4=nlc
   character(sng_lng_dfl_stt)::stt_CO=nlc
+  character(sng_lng_dfl_stt)::stt_N2=nlc
   character(sng_lng_dfl_stt)::stt_N2O=nlc
   character(sng_lng_dfl_stt)::stt_Planck=nlc
   character(sng_lng_dfl_stt)::stt_Rayleigh=nlc
@@ -528,6 +531,7 @@ program swnb2
   logical flg_OH
   logical flg_CH4
   logical flg_CO
+  logical flg_N2
   logical flg_N2O
   logical flg_Planck
   logical flg_Rayleigh
@@ -577,6 +581,7 @@ program swnb2
   integer bnd_nbr_OH        ! dimension size
   integer bnd_nbr_CH4       ! dimension size
   integer bnd_nbr_CO       ! dimension size
+  integer bnd_nbr_N2       ! dimension size
   integer bnd_nbr_N2O       ! dimension size
   integer bnd_nbr_aer       ! dimension size
   integer bnd_nbr_brdf      ! dimension size BRDF
@@ -618,6 +623,7 @@ program swnb2
   integer azi_idx           ! counting index
   integer bnd_idx           ! counting index
   integer bnd_idx_CO        ! counting index
+  integer bnd_idx_N2       ! counting index
   integer bnd_idx_N2O       ! counting index
   integer bnd_idx_CH4       ! counting index
   integer bnd_idx_CO2       ! counting index
@@ -802,6 +808,7 @@ program swnb2
   integer odac_spc_mpr_id
   integer odac_spc_snw_id
   integer odxc_spc_CO_id
+  integer odxc_spc_N2_id
   integer odxc_spc_N2O_id
   integer odxc_spc_CH4_id
   integer odxc_spc_CO2_id
@@ -840,6 +847,7 @@ program swnb2
   integer trn_bb_atm_id
   integer trn_nst_atm_id
   integer trn_spc_atm_CO_id
+  integer trn_spc_atm_N2_id
   integer trn_spc_atm_N2O_id
   integer trn_spc_atm_CH4_id
   integer trn_spc_atm_CO2_id
@@ -964,6 +972,17 @@ program swnb2
   integer wvl_max_CO_id
   integer wvl_min_CO_id
   integer wvl_ctr_CO_id
+  
+  ! Narrow band N2 input variables
+  integer A_phi_N2_id
+  integer A_psi_N2_id
+  integer B_phi_N2_id
+  integer B_psi_N2_id
+  integer S_d_abs_cff_mss_N2_id
+  integer S_p_abs_cff_mss_N2_id
+  integer wvl_max_N2_id
+  integer wvl_min_N2_id
+  integer wvl_ctr_N2_id
   
   ! Narrow band N2O input variables
   integer A_phi_N2O_id
@@ -1092,6 +1111,7 @@ program swnb2
   integer mpl_OH_id
   integer mpl_CH4_id
   integer mpl_CO_id
+  integer mpl_N2_id
   integer mpl_N2O_id
   integer mpl_aer_id
   integer mpl_bga_id
@@ -1125,6 +1145,7 @@ program swnb2
   integer q_OH_id
   integer q_CH4_id
   integer q_CO_id
+  integer q_N2_id
   integer q_N2O_id
   integer spc_heat_mst_air_id
   integer tpt_id
@@ -1281,6 +1302,7 @@ program swnb2
   real,dimension(:),allocatable::odxc_spc_OH
   real,dimension(:),allocatable::odxc_spc_CH4
   real,dimension(:),allocatable::odxc_spc_CO
+  real,dimension(:),allocatable::odxc_spc_N2
   real,dimension(:),allocatable::odxc_spc_N2O
   real,dimension(:),allocatable::odxc_spc_Ray
   real,dimension(:),allocatable::odxc_spc_aer
@@ -1307,6 +1329,7 @@ program swnb2
   real,dimension(:),allocatable::trn_spc_atm_OH
   real,dimension(:),allocatable::trn_spc_atm_CH4
   real,dimension(:),allocatable::trn_spc_atm_CO
+  real,dimension(:),allocatable::trn_spc_atm_N2
   real,dimension(:),allocatable::trn_spc_atm_N2O
   real,dimension(:),allocatable::trn_spc_atm_Ray
   real,dimension(:),allocatable::trn_spc_atm_aer
@@ -1487,6 +1510,17 @@ program swnb2
   real wvl_min_CO(bnd_nbr_CO_max)
   real wvl_ctr_CO(bnd_nbr_CO_max)
   
+  ! Narrow band N2 input variables
+  real A_phi_N2(bnd_nbr_N2_max)
+  real A_psi_N2(bnd_nbr_N2_max)
+  real B_phi_N2(bnd_nbr_N2_max)
+  real B_psi_N2(bnd_nbr_N2_max)
+  real S_d_abs_cff_mss_N2(bnd_nbr_N2_max)
+  real S_p_abs_cff_mss_N2(bnd_nbr_N2_max)
+  real wvl_max_N2(bnd_nbr_N2_max)
+  real wvl_min_N2(bnd_nbr_N2_max)
+  real wvl_ctr_N2(bnd_nbr_N2_max)
+  
   ! Narrow band N2O input variables
   real A_phi_N2O(bnd_nbr_N2O_max)
   real A_psi_N2O(bnd_nbr_N2O_max)
@@ -1643,6 +1677,7 @@ program swnb2
   real mpl_OH(lev_nbr_max)
   real mpl_CH4(lev_nbr_max)
   real mpl_CO(lev_nbr_max)
+  real mpl_N2(lev_nbr_max)
   real mpl_N2O(lev_nbr_max)
   real mpl_aer(lev_nbr_max)
   real mpl_bga(lev_nbr_max)
@@ -1665,6 +1700,7 @@ program swnb2
   real q_OH(lev_nbr_max)
   real q_CH4(lev_nbr_max)
   real q_CO(lev_nbr_max)
+  real q_N2(lev_nbr_max)
   real q_N2O(lev_nbr_max)
   real spc_heat_mst_air(lev_nbr_max)
   real tpt_skn
@@ -1838,6 +1874,7 @@ program swnb2
   real mpc_IWP
   real mpl_tmp ! [kg m-2] Temporary optical depth
   real odal_CO(lev_nbr_max)
+  real odal_N2(lev_nbr_max)
   real odal_N2O(lev_nbr_max)
   real odal_CH4(lev_nbr_max)
   real odal_CO2(lev_nbr_max)
@@ -1859,6 +1896,7 @@ program swnb2
   real odxc_obs_snw_cmd_ln
   real odxl_tmp ! [frc] Temporary optical depth
   real opt_dep_ITOD_CO_hires(levp_nbr_max,2)
+  real opt_dep_ITOD_N2_hires(levp_nbr_max,2)
   real opt_dep_ITOD_N2O_hires(levp_nbr_max,2)
   real opt_dep_ITOD_CH4_hires(levp_nbr_max,2)
   real opt_dep_ITOD_CO2_hires(levp_nbr_max,2)
@@ -1866,6 +1904,7 @@ program swnb2
   real opt_dep_ITOD_O2(levp_nbr_max)
   real opt_dep_ITOD_OH(levp_nbr_max)
   real opt_dep_LTOD_CO_hires
+  real opt_dep_LTOD_N2_hires
   real opt_dep_LTOD_N2O_hires
   real opt_dep_LTOD_CH4_hires
   real opt_dep_LTOD_CO2_hires
@@ -1895,10 +1934,12 @@ program swnb2
   real sum_fsf_srf ! [frc] Inner product of flx_slr_frc*lmn_SRF
   real tpt_vrt_sfc ! [K] Virtual temperature at surface
   real trn_ALT_CO
+  real trn_ALT_N2
   real trn_ALT_N2O
   real trn_ALT_CH4
   real trn_ALT_CO2
   real trn_LT_CO_hires(lev_nbr_max,2)
+  real trn_LT_N2_hires(lev_nbr_max,2)
   real trn_LT_N2O_hires(lev_nbr_max,2)
   real trn_LT_CH4_hires(lev_nbr_max,2)
   real trn_LT_CO2_hires(lev_nbr_max,2)
@@ -1953,6 +1994,7 @@ program swnb2
   fl_H2O='mlk_H2O.nc'//nlc
   fl_OH='mlk_OH.nc'//nlc
   fl_CO='mlk_CO.nc'//nlc
+  fl_N2='mlk_N2.nc'//nlc
   fl_N2O='mlk_N2O.nc'//nlc
   fl_CH4='mlk_CH4.nc'//nlc
   fl_O2='mlk_O2.nc'//nlc
@@ -2001,7 +2043,8 @@ program swnb2
   cmd_ln_slr_zen_ngl_dgr=.false.
   exit_status=0             ! [enm] Program exit status
   flg_CO=.false. ! [flg] CO turned-off by default while debugging its incorporation
-  flg_N2O=.false. ! [flg] N2O turned-off by default while debugging its incorporation
+  flg_N2=.true.
+  flg_N2O=.true.
   flg_CH4=.true.
   flg_CO2=.true.
   flg_H2O=.true.
@@ -2182,6 +2225,8 @@ program swnb2
            flg_CO=.true.
         else if (opt_sng == 'H2OH2O') then
            flg_H2OH2O=.true.
+        else if (opt_sng == 'N2') then
+           flg_N2=.true.
         else if (opt_sng == 'N2O') then
            flg_N2O=.true.
         else if (opt_sng == 'no_aer') then
@@ -2206,6 +2251,8 @@ program swnb2
            flg_CO2=.false.
         else if (opt_sng == 'no_H2O') then
            flg_H2O=.false.
+        else if (opt_sng == 'no_N2') then
+           flg_N2=.false.
         else if (opt_sng == 'no_N2O') then
            flg_N2O=.false.
         else if (opt_sng == 'no_NO2') then
@@ -2399,6 +2446,7 @@ program swnb2
      call ftn_drcpfx(drc_in,fl_OH) ! [sng] OH file
      call ftn_drcpfx(drc_in,fl_CH4) ! [sng] CH4 file
      call ftn_drcpfx(drc_in,fl_CO) ! [sng] CO file
+     call ftn_drcpfx(drc_in,fl_N2) ! [sng] N2 file
      call ftn_drcpfx(drc_in,fl_N2O) ! [sng] N2O file
      call ftn_drcpfx(drc_in,fl_aer) ! [sng] Aerosol file
      call ftn_drcpfx(drc_in,fl_bga) ! [sng] Background aerosol file
@@ -2470,6 +2518,11 @@ program swnb2
      call ftn_strcpylsc(stt_CO,'CO line absorption: Malkmus narrow band parameters from '//fl_CO)
   else
      call ftn_strcpylsc(stt_CO,'CO line absorption: Off')
+  endif
+  if (flg_N2) then
+     call ftn_strcpylsc(stt_N2,'N2 line absorption: Malkmus narrow band parameters from '//fl_N2)
+  else
+     call ftn_strcpylsc(stt_N2,'N2 line absorption: Off')
   endif
   if (flg_N2O) then
      call ftn_strcpylsc(stt_N2O,'N2O line absorption: Malkmus narrow band parameters from '//fl_N2O)
@@ -2788,6 +2841,7 @@ program swnb2
   rcd=nf90_wrp_inq_varid(nc_id,'mpl_OH',mpl_OH_id)
   rcd=nf90_wrp_inq_varid(nc_id,'mpl_CH4',mpl_CH4_id)
   rcd=nf90_wrp_inq_varid(nc_id,'mpl_CO',mpl_CO_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'mpl_N2',mpl_N2_id)
   rcd=nf90_wrp_inq_varid(nc_id,'mpl_N2O',mpl_N2O_id)
   rcd=nf90_wrp_inq_varid(nc_id,'mpl_aer',mpl_aer_id)
   rcd=nf90_wrp_inq_varid(nc_id,'mpl_bga',mpl_bga_id)
@@ -2810,6 +2864,7 @@ program swnb2
   rcd=nf90_wrp_inq_varid(nc_id,'q_OH',q_OH_id)
   rcd=nf90_wrp_inq_varid(nc_id,'q_CH4',q_CH4_id)
   rcd=nf90_wrp_inq_varid(nc_id,'q_CO',q_CO_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'q_N2',q_N2_id)
   rcd=nf90_wrp_inq_varid(nc_id,'q_N2O',q_N2O_id)
   rcd=nf90_wrp_inq_varid(nc_id,'slr_zen_ngl_cos',slr_zen_ngl_cos_id)
   rcd=nf90_wrp_inq_varid(nc_id,'spc_heat_mst_air',spc_heat_mst_air_id)
@@ -2870,6 +2925,7 @@ program swnb2
   rcd=nf90_wrp(nf90_get_var(nc_id,mpl_OH_id,mpl_OH,srt_one,cnt_lev),"gv mpl_OH")
   rcd=nf90_wrp(nf90_get_var(nc_id,mpl_CH4_id,mpl_CH4,srt_one,cnt_lev),"gv mpl_CH4")
   rcd=nf90_wrp(nf90_get_var(nc_id,mpl_CO_id,mpl_CO,srt_one,cnt_lev),"gv mpl_CO")
+  rcd=nf90_wrp(nf90_get_var(nc_id,mpl_N2_id,mpl_N2,srt_one,cnt_lev),"gv mpl_N2")
   rcd=nf90_wrp(nf90_get_var(nc_id,mpl_N2O_id,mpl_N2O,srt_one,cnt_lev),"gv mpl_N2O")
   rcd=nf90_wrp(nf90_get_var(nc_id,mpl_aer_id,mpl_aer,srt_one,cnt_lev),"gv mpl_aer")
   rcd=nf90_wrp(nf90_get_var(nc_id,mpl_bga_id,mpl_bga,srt_one,cnt_lev),"gv mpl_bga")
@@ -2892,6 +2948,7 @@ program swnb2
   rcd=nf90_wrp(nf90_get_var(nc_id,q_OH_id,q_OH,srt_one,cnt_lev),"gv q_OH")
   rcd=nf90_wrp(nf90_get_var(nc_id,q_CH4_id,q_CH4,srt_one,cnt_lev),"gv q_CH4")
   rcd=nf90_wrp(nf90_get_var(nc_id,q_CO_id,q_CO,srt_one,cnt_lev),"gv q_CO")
+  rcd=nf90_wrp(nf90_get_var(nc_id,q_N2_id,q_N2,srt_one,cnt_lev),"gv q_N2")
   rcd=nf90_wrp(nf90_get_var(nc_id,q_N2O_id,q_N2O,srt_one,cnt_lev),"gv q_N2O")
   rcd=nf90_wrp(nf90_get_var(nc_id,spc_heat_mst_air_id,spc_heat_mst_air,srt_one,cnt_lev),"gv spc_heat_mst_air")
   rcd=nf90_wrp(nf90_get_var(nc_id,tpt_id,tpt,srt_one,cnt_lev),"gv tpt")
@@ -2999,6 +3056,7 @@ program swnb2
         mpl_OH(lev_idx)=frc_sfc_snw(lev_snw_idx)*mpl_OH(lev_atm_nbr)
         mpl_CH4(lev_idx)=frc_sfc_snw(lev_snw_idx)*mpl_CH4(lev_atm_nbr)
         mpl_CO(lev_idx)=frc_sfc_snw(lev_snw_idx)*mpl_CO(lev_atm_nbr)
+        mpl_N2(lev_idx)=frc_sfc_snw(lev_snw_idx)*mpl_N2(lev_atm_nbr)
         mpl_N2O(lev_idx)=frc_sfc_snw(lev_snw_idx)*mpl_N2O(lev_atm_nbr)
         mpl_mst_air(lev_idx)=frc_sfc_snw(lev_snw_idx)*mpl_mst_air(lev_atm_nbr)
         npl_NO2(lev_idx)=frc_sfc_snw(lev_snw_idx)*npl_NO2(lev_atm_nbr)
@@ -3163,6 +3221,41 @@ program swnb2
   rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_CO_id,wvl_ctr_CO,srt_one,cnt_bnd),"gv wvl_ctr_CO")
   ! Close file
   rcd=nf90_wrp_close(nc_id,fl_CO,'Ingested') ! [fnc] Close file
+
+  ! Ingest fl_N2
+  rcd=nf90_wrp_open(fl_N2,nf90_nowrite,nc_id)
+  
+  ! Get dimension IDs
+  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
+  
+  ! Get dimension sizes
+  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_N2),sbr_nm//": inquire_dim bnd")
+  if (bnd_nbr_N2>bnd_nbr_N2_max) stop 'bnd_nbr_N2>bnd_nbr_N2_max'
+  cnt_bnd(1)=bnd_nbr_N2
+
+  ! Get variable IDs
+  rcd=nf90_wrp_inq_varid(nc_id,'A_phi',A_phi_N2_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'A_psi',A_psi_N2_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'B_phi',B_phi_N2_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'B_psi',B_psi_N2_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'S_d_abs_cff_mss',S_d_abs_cff_mss_N2_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'S_p_abs_cff_mss',S_p_abs_cff_mss_N2_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_N2_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_N2_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_N2_id)
+  
+  ! Get data
+  rcd=nf90_wrp(nf90_get_var(nc_id,A_phi_N2_id,A_phi_N2,srt_one,cnt_bnd),"gv A_phi_N2")
+  rcd=nf90_wrp(nf90_get_var(nc_id,A_psi_N2_id,A_psi_N2,srt_one,cnt_bnd),"gv A_psi_N2")
+  rcd=nf90_wrp(nf90_get_var(nc_id,B_phi_N2_id,B_phi_N2,srt_one,cnt_bnd),"gv B_phi_N2")
+  rcd=nf90_wrp(nf90_get_var(nc_id,B_psi_N2_id,B_psi_N2,srt_one,cnt_bnd),"gv B_psi_N2")
+  rcd=nf90_wrp(nf90_get_var(nc_id,S_d_abs_cff_mss_N2_id,S_d_abs_cff_mss_N2,srt_one,cnt_bnd),"gv S_d_abs_cff_mss_N2")
+  rcd=nf90_wrp(nf90_get_var(nc_id,S_p_abs_cff_mss_N2_id,S_p_abs_cff_mss_N2,srt_one,cnt_bnd),"gv S_p_abs_cff_mss_N2")
+  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_N2_id,wvl_max_N2,srt_one,cnt_bnd),"gv wvl_max_N2")
+  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_N2_id,wvl_min_N2,srt_one,cnt_bnd),"gv wvl_min_N2")
+  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_N2_id,wvl_ctr_N2,srt_one,cnt_bnd),"gv wvl_ctr_N2")
+  ! Close file
+  rcd=nf90_wrp_close(nc_id,fl_N2,'Ingested') ! [fnc] Close file
 
   ! Ingest fl_N2O
   rcd=nf90_wrp_open(fl_N2O,nf90_nowrite,nc_id)
@@ -4539,6 +4632,8 @@ program swnb2
   if(rcd /= 0) stop "allocate() failed for odxc_spc_CH4"
   allocate(odxc_spc_CO(bnd_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for odxc_spc_CO"
+  allocate(odxc_spc_N2(bnd_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for odxc_spc_N2"
   allocate(odxc_spc_N2O(bnd_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for odxc_spc_N2O"
   allocate(odxc_spc_Ray(bnd_nbr),stat=rcd)
@@ -4591,6 +4686,8 @@ program swnb2
   if(rcd /= 0) stop "allocate() failed for trn_spc_atm_CH4"
   allocate(trn_spc_atm_CO(bnd_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for trn_spc_atm_CO"
+  allocate(trn_spc_atm_N2(bnd_nbr),stat=rcd)
+  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_N2"
   allocate(trn_spc_atm_N2O(bnd_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for trn_spc_atm_N2O"
   allocate(trn_spc_atm_Ray(bnd_nbr),stat=rcd)
@@ -4782,7 +4879,7 @@ program swnb2
   ! End block of formatting diagnostic strings
   
   if (dbg_lvl>dbg_off) then
-     write (6,'(37(a,/))')        &
+     write (6,'(38(a,/))')        &
           str_sng(1:ftn_strlen(str_sng)), &
           prf_sng(1:ftn_strlen(prf_sng)), &
           plr_sng(1:ftn_strlen(plr_sng)), &
@@ -4803,6 +4900,7 @@ program swnb2
           stt_vpr_H2O_abs_cld(1:ftn_strlen(stt_vpr_H2O_abs_cld)), &
           stt_OH(1:ftn_strlen(stt_OH)), &
           stt_CO(1:ftn_strlen(stt_CO)), &
+          stt_N2(1:ftn_strlen(stt_N2)), &
           stt_N2O(1:ftn_strlen(stt_N2O)), &
           stt_CH4(1:ftn_strlen(stt_CH4)), &
           stt_O2(1:ftn_strlen(stt_O2)), &
@@ -4834,6 +4932,7 @@ program swnb2
           '# input CO2 narrow bands bnd_nbr_CO2 = ',bnd_nbr_CO2, &
           '# input OH narrow bands bnd_nbr_OH = ',bnd_nbr_OH, &
           '# input CO narrow bands bnd_nbr_CO = ',bnd_nbr_CO, &
+          '# input N2 narrow bands bnd_nbr_N2 = ',bnd_nbr_N2, &
           '# input N2O narrow bands bnd_nbr_N2O = ',bnd_nbr_N2O, &
           '# input CH4 narrow bands bnd_nbr_CH4 = ',bnd_nbr_CH4, &
           '# input O2 narrow bands bnd_nbr_O2 = ',bnd_nbr_O2, &
@@ -4853,6 +4952,7 @@ program swnb2
   do bnd_idx=1,bnd_nbr
      odxc_spc_OH(bnd_idx)=0.0
      odxc_spc_CO(bnd_idx)=0.0
+     odxc_spc_N2(bnd_idx)=0.0
      odxc_spc_N2O(bnd_idx)=0.0
      odxc_spc_CH4(bnd_idx)=0.0
      odxc_spc_O2(bnd_idx)=0.0
@@ -5215,12 +5315,13 @@ program swnb2
   !$omp$private(plank,header)
   !$omp$private(rfldir,rfldn)
   !$omp$private(flup,dfdt,uavg,uu,albmed,trnmed,u0u)
-  !$omp$private(bnd_idx,lev_idx,bnd_idx_O3,bnd_idx_CO,bnd_idx_N2O,bnd_idx_CH4,bnd_idx_H2O,bnd_idx_CO2,bnd_idx_tmp_O3,i21)
+  !$omp$private(bnd_idx,lev_idx,bnd_idx_O3,bnd_idx_CO,bnd_idx_N2O,bnd_idx_N2,bnd_idx_CH4,bnd_idx_H2O,bnd_idx_CO2,bnd_idx_tmp_O3,i21)
   !$omp$private(mmn_idx,tau_idx,plr_idx,azi_idx)
   !$omp$private(phi_wgt,psi_wgt,u_bar,prs_bar,float_foo,tau)
-  !$omp$private(opt_dep_ITOD_H2O,opt_dep_ITOD_O2,opt_dep_ITOD_OH,opt_dep_ITOD_CH4,opt_dep_ITOD_CO,opt_dep_ITOD_N2O)
+  !$omp$private(opt_dep_ITOD_H2O,opt_dep_ITOD_O2,opt_dep_ITOD_OH,opt_dep_ITOD_CH4,opt_dep_ITOD_CO,opt_dep_ITOD_N2,opt_dep_ITOD_N2O)
   !$omp$private(opt_dep_ITOD_CO2_hires,opt_dep_LTOD_CO2_hires,trn_LT_CO2_hires,trn_ALT_CO2)
-  !$omp$private(odsl_Ray,odsl_ice,odsl_lqd,odsl_aer,odsl_bga,odal_ice,odal_lqd,odal_aer,odal_bga,odal_OH,odal_CO,odal_N2O,odal_CH4)
+  !$omp$private(odsl_Ray,odsl_ice,odsl_lqd,odsl_aer,odsl_bga,odal_ice,odal_lqd,odal_aer,odal_bga)
+  !$omp$private(odal_OH,odal_CO,odal_N2,odal_N2O,odal_CH4)
   !$omp$private(odal_O2,odal_O3,odal_O2O2,odal_O2N2,odal_NO2,odal_CO2,odal_H2OH2O,odal_H2O)
   !$omp$private(sca_cff_mss_Ray,sca_frc_HG,sca_frc_Mie)
   !$omp$shared(nlyr,nmom,temper)
@@ -5232,7 +5333,7 @@ program swnb2
   !$omp$shared(idx_rfr_air_STP,prg_nm,sv_ntn,sv_cmp_tau,single_bnd_computation)
   !$omp$shared(hb,br,f_iso,f_vol,f_geo,nrm_cff_CM,idx_rfr_sfc,b0,hh,w,nrm_rfl_M,k_cff_M,nrm_cff_RP,k_cff_RP,g_phs,nrm_rfl_LS)
   !$omp$shared(wvl_ctr,wvl_dlt,wvl_min,wvl_max,wvn_min,wvn_max,bnd_dbg,tst_case_Rayleigh,tst_case_HG)
-  !$omp$shared(flg_Rayleigh,flg_ice,flg_lqd,flg_aer,flg_bga,flg_H2O,flg_H2OH2O,flg_OH,flg_CH4,flg_CO,flg_N2O,flg_O2,flg_CO2)
+  !$omp$shared(flg_Rayleigh,flg_ice,flg_lqd,flg_aer,flg_bga,flg_H2O,flg_H2OH2O,flg_OH,flg_CH4,flg_CO,flg_N2,flg_N2O,flg_O2,flg_CO2)
   !$omp$shared(flg_O3,flg_O2O2,flg_O2N2,flg_NO2,bnd_obs_aer,bnd_obs_bga,flg_Planck,wvl_Planck,mode_chn)
   !$omp$shared(prs,prs_ntf,tpt,mmw_mst_air,mpl_mst_air,grv,pi,ocn_msk)
   !$omp$shared(odal_obs_aer,odsl_obs_aer,odxl_obs_aer,odal_obs_bga,odsl_obs_bga,odxl_obs_bga)
@@ -5251,13 +5352,14 @@ program swnb2
   !$omp$shared(ntn_spc_aa_sfc,ntn_spc_aa_zen,ntn_spc_aa_zen_sfc,ntn_spc_chn,ntn_spc_mean)
   !$omp$shared(odac_spc_aer,odac_spc_snw,odac_spc_mpr,odac_spc_bga,odac_spc_ice,odac_spc_lqd,odal_spc_ttl)
   !$omp$shared(odsl_spc_ttl,odxc_spc_CO2,odxc_spc_H2O,odxc_spc_H2OH2O,odxc_spc_NO2)
-  !$omp$shared(odxc_spc_O2,odxc_spc_O2N2,odxc_spc_O2O2,odxc_spc_O3,odxc_spc_OH,odxc_spc_CH4,odxc_spc_CO,odxc_spc_N2O)
+  !$omp$shared(odxc_spc_O2,odxc_spc_O2N2,odxc_spc_O2O2,odxc_spc_O3,odxc_spc_OH,odxc_spc_CH4,odxc_spc_CO,odxc_spc_N2,odxc_spc_N2O)
   !$omp$shared(odxc_spc_Ray,odxc_spc_aer,odxc_spc_aer,odxc_spc_bga,odxc_spc_ice,odxc_spc_lqd)
   !$omp$shared(odxl_spc_ttl,odxc_spc_ttl)
   !$omp$shared(S_d_abs_cff_mss_H2O,S_p_abs_cff_mss_H2O,mpl_H2O,A_phi_H2O,B_phi_H2O,A_psi_H2O,B_psi_H2O,q_H2O)
   !$omp$shared(S_d_abs_cff_mss_OH,S_p_abs_cff_mss_OH,mpl_OH,A_phi_OH,B_phi_OH,A_psi_OH,B_psi_OH,q_OH)
   !$omp$shared(S_d_abs_cff_mss_CH4,S_p_abs_cff_mss_CH4,mpl_CH4,A_phi_CH4,B_phi_CH4,A_psi_CH4,B_psi_CH4,q_CH4)
   !$omp$shared(S_d_abs_cff_mss_CO,S_p_abs_cff_mss_CO,mpl_CO,A_phi_CO,B_phi_CO,A_psi_CO,B_psi_CO,q_CO)
+  !$omp$shared(S_d_abs_cff_mss_N2,S_p_abs_cff_mss_N2,mpl_N2,A_phi_N2,B_phi_N2,A_psi_N2,B_psi_N2,q_N2)
   !$omp$shared(S_d_abs_cff_mss_N2O,S_p_abs_cff_mss_N2O,mpl_N2O,A_phi_N2O,B_phi_N2O,A_psi_N2O,B_psi_N2O,q_N2O)
   !$omp$shared(S_d_abs_cff_mss_O2,S_p_abs_cff_mss_O2,mpl_O2,A_phi_O2,B_phi_O2,A_psi_O2,B_psi_O2,q_O2)
   !$omp$shared(S_d_abs_cff_mss_CO2,S_p_abs_cff_mss_CO2,mpl_CO2,A_phi_CO2,B_phi_CO2,A_psi_CO2,B_psi_CO2,q_CO2)
@@ -5336,26 +5438,11 @@ program swnb2
      ! combined band data, so index juggling is necessary.
      bnd_idx_O3=bnd_nbr_pure_O3-(bnd_idx-bnd_nbr_H2O-1)
      
-     ! OH data is indexed identically to the combined band data
-     !bnd_idx_OH=bnd_idx
-     
-     ! CO data is indexed identically to the combined band data
-     bnd_idx_CO=bnd_idx
-     
-     ! N2O data is indexed identically to the combined band data
-     bnd_idx_N2O=bnd_idx
-     
-     ! CH4 data is indexed identically to the combined band data
-     bnd_idx_CH4=bnd_idx
-     
-     ! O2 data is indexed identically to the combined band data
-     !bnd_idx_O2=bnd_idx
-     
      ! H2O data is indexed identically to the combined band data
      bnd_idx_H2O=bnd_idx
      
      ! Before anything is actually computed for this band, 
-     ! zero out all optical depth arrays. This is important
+     ! zero-out all optical depth arrays. This is important
      ! both as a failsafe programming technique and for the case
      ! when arguments are given to ignore specified radiative
      ! processes, e.g., the pure Rayleigh scattering case.
@@ -5379,6 +5466,7 @@ program swnb2
         odal_bga(lev_idx)=0.0
         odal_OH(lev_idx)=0.0
         odal_CO(lev_idx)=0.0
+        odal_N2(lev_idx)=0.0
         odal_N2O(lev_idx)=0.0
         odal_CH4(lev_idx)=0.0
         odal_O2(lev_idx)=0.0
@@ -5391,11 +5479,12 @@ program swnb2
         odal_H2O(lev_idx)=0.0
      enddo                  ! end loop over lev
      
-     ! Malkmus narrow band parameters need to be evaluated for H2O, OH, CH4, CO, N2O, O2, and CO2 bands
+     ! Malkmus narrow band parameters need to be evaluated for H2O, OH, CH4, CO, N2, N2O, O2, and CO2 bands
      ! H2O band data is indexed exactly as the combined band data so no index juggling is necessary
      ! O2 data is presumably indexed the same as H2O
      ! OH data is presumably indexed the same as H2O
      ! CO data covers the same range at twice the resolution
+     ! N2 data covers the same range at twice the resolution
      ! N2O data covers the same range at twice the resolution
      ! CH4 data covers the same range at twice the resolution
      ! CO2 data covers the same range at twice the resolution
@@ -5697,7 +5786,7 @@ program swnb2
         ! the logarithm of the ALT; compute ALMOD by multiplying 
         ! ALT by the cosine of the solar zenith angle.
         
-        ! ALMOD only need be computed for CO2, CH4, CO, N2O
+        ! ALMOD only need be computed for CO2, CH4, CO, N2, N2O
         do i21=2,1,-1
            do lev_idx=1,lev_nbr
               opt_dep_LTOD_CO2_hires= &
@@ -5821,7 +5910,59 @@ program swnb2
         enddo               ! end loop over lev
         ! end CO
 
-        ! Line absorption computation #8: N2O (treat same as CO2)
+        ! Line absorption computation #8: N2 (treat same as CO2)
+        do bnd_idx_N2=2*bnd_idx-1,2*bnd_idx
+           i21=mod(bnd_idx_N2,2)+1
+           do lev_idx=1,lev_nbr
+              phi_wgt(lev_idx)= &
+                   exp(A_phi_N2(bnd_idx_N2)*tpt_dlt_Mlk(lev_idx)+ &
+                   B_phi_N2(bnd_idx_N2)*tpt_dlt_Mlk_sqr(lev_idx))
+              psi_wgt(lev_idx)= &
+                   exp(A_psi_N2(bnd_idx_N2)*tpt_dlt_Mlk(lev_idx)+ &
+                   B_psi_N2(bnd_idx_N2)*tpt_dlt_Mlk_sqr(lev_idx))
+           enddo            ! end loop over lev
+           u_bar(1)=q_N2(1)*phi_wgt(1)*prs_ntf(1)/grv(1)
+           prs_bar(1)=q_N2(1)*psi_wgt(1)*prs_ntf(1)*prs_ntf(1)/grv(1)
+           do lev_idx=2,levp_nbr
+              u_bar(lev_idx)=u_bar(lev_idx-1)+ &
+                   mpl_N2(lev_idx-1)*phi_wgt(lev_idx-1)
+              prs_bar(lev_idx)=prs_bar(lev_idx-1)+ &
+                   mpl_N2(lev_idx-1)*psi_wgt(lev_idx-1)*prs(lev_idx-1)
+           enddo            ! end loop over lev
+           do lev_idx=1,levp_nbr
+              prs_bar(lev_idx)=prs_bar(lev_idx)/(u_bar(lev_idx)*prs_HITRAN)
+           enddo            ! end loop over lev
+           do lev_idx=1,levp_nbr
+              float_foo= &
+                   sqrt( &
+                   1.0+4.0*S_p_abs_cff_mss_N2(bnd_idx_N2)*u_bar(lev_idx)/ &
+                   (prs_bar(lev_idx)*slr_zen_ngl_cos) &
+                   )
+              opt_dep_ITOD_N2_hires(lev_idx,i21)=(float_foo-1.0)* &
+                   0.5*S_d_abs_cff_mss_N2(bnd_idx_N2)*prs_bar(lev_idx)/ &
+                   S_p_abs_cff_mss_N2(bnd_idx_N2)
+           enddo            ! end loop over lev
+        enddo               ! end loop over both hires N2 bands
+        do i21=2,1,-1
+           do lev_idx=1,lev_nbr
+              opt_dep_LTOD_N2_hires= &
+                   opt_dep_ITOD_N2_hires(lev_idx+1,i21)- &
+                   opt_dep_ITOD_N2_hires(lev_idx,i21)
+              trn_LT_N2_hires(lev_idx,i21)= &
+                   exp(-opt_dep_LTOD_N2_hires)
+           enddo            ! end loop over lev
+        enddo               ! end loop over both hires N2 bands
+        
+        do lev_idx=1,lev_nbr
+           trn_ALT_N2= &
+                0.5*(trn_LT_N2_hires(lev_idx,1)+ &
+                trn_LT_N2_hires(lev_idx,2))
+           odal_N2(lev_idx)= &
+                -slr_zen_ngl_cos*log(trn_ALT_N2)
+        enddo               ! end loop over lev
+        ! end N2
+
+        ! Line absorption computation #9: N2O (treat same as CO2)
         do bnd_idx_N2O=2*bnd_idx-1,2*bnd_idx
            i21=mod(bnd_idx_N2O,2)+1
            do lev_idx=1,lev_nbr
@@ -6108,6 +6249,11 @@ program swnb2
            odal_CO(lev_idx)=0.0
         enddo               ! end loop over lev
      endif                  ! end if no CO processes
+     if (.not.flg_N2) then
+        do lev_idx=1,lev_nbr
+           odal_N2(lev_idx)=0.0
+        enddo               ! end loop over lev
+     endif                  ! end if no N2 processes
      if (.not.flg_N2O) then
         do lev_idx=1,lev_nbr
            odal_N2O(lev_idx)=0.0
@@ -6199,7 +6345,7 @@ program swnb2
         odal_spc_ttl(bnd_idx,lev_idx)= &
              odal_H2O(lev_idx)+odal_CO2(lev_idx)+ &
              odal_O2(lev_idx)+odal_O3(lev_idx)+ &
-             odal_NO2(lev_idx)+odal_OH(lev_idx)+odal_CH4(lev_idx)+odal_CO(lev_idx)+odal_N2O(lev_idx)+ &
+             odal_NO2(lev_idx)+odal_OH(lev_idx)+odal_CH4(lev_idx)+odal_CO(lev_idx)+odal_N2(lev_idx)+odal_N2O(lev_idx)+ &
              odal_O2O2(lev_idx)+odal_O2N2(lev_idx)+ &
              odal_H2OH2O(lev_idx)+ &
              odal_aer(lev_idx)+odal_bga(lev_idx)+ &
@@ -6311,6 +6457,7 @@ program swnb2
      do lev_idx=1,lev_nbr
         ! Gaseous absorption
         odxc_spc_CO(bnd_idx)=odxc_spc_CO(bnd_idx)+odal_CO(lev_idx)
+        odxc_spc_N2(bnd_idx)=odxc_spc_N2(bnd_idx)+odal_N2(lev_idx)
         odxc_spc_N2O(bnd_idx)=odxc_spc_N2O(bnd_idx)+odal_N2O(lev_idx)
         odxc_spc_CH4(bnd_idx)=odxc_spc_CH4(bnd_idx)+odal_CH4(lev_idx)
         odxc_spc_CO2(bnd_idx)=odxc_spc_CO2(bnd_idx)+odal_CO2(lev_idx)
@@ -6342,6 +6489,7 @@ program swnb2
      odxc_spc_ttl(bnd_idx)= &
           ! Gaseous absorption
           odxc_spc_CO(bnd_idx)+ &
+          odxc_spc_N2(bnd_idx)+ &
           odxc_spc_N2O(bnd_idx)+ &
           odxc_spc_CH4(bnd_idx)+ &
           odxc_spc_CO2(bnd_idx)+ &
@@ -6870,6 +7018,7 @@ program swnb2
 
         ! Gaseous absorption
         odxc_spc_CO(:)=0.0
+        odxc_spc_N2(:)=0.0
         odxc_spc_N2O(:)=0.0
         odxc_spc_CH4(:)=0.0
         odxc_spc_CO2(:)=0.0
@@ -7233,6 +7382,7 @@ program swnb2
      trn_spc_atm_bga(bnd_idx)=exp(-min(odxc_spc_bga(bnd_idx),25.0))
      trn_spc_atm_OH(bnd_idx)=exp(-min(odxc_spc_OH(bnd_idx),25.0))
      trn_spc_atm_CO(bnd_idx)=exp(-min(odxc_spc_CO(bnd_idx),25.0))
+     trn_spc_atm_N2(bnd_idx)=exp(-min(odxc_spc_N2(bnd_idx),25.0))
      trn_spc_atm_N2O(bnd_idx)=exp(-min(odxc_spc_N2O(bnd_idx),25.0))
      trn_spc_atm_CH4(bnd_idx)=exp(-min(odxc_spc_CH4(bnd_idx),25.0))
      trn_spc_atm_O2(bnd_idx)=exp(-min(odxc_spc_O2(bnd_idx),25.0))
@@ -7738,6 +7888,7 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'odxc_spc_OH',nf90_float,bnd_dmn_id,odxc_spc_OH_id),sbr_nm//': dv odxc_spc_OH')
      rcd=nf90_wrp(nf90_def_var(nc_id,'odxc_spc_CH4',nf90_float,bnd_dmn_id,odxc_spc_CH4_id),sbr_nm//': dv odxc_spc_CH4')
      rcd=nf90_wrp(nf90_def_var(nc_id,'odxc_spc_CO',nf90_float,bnd_dmn_id,odxc_spc_CO_id),sbr_nm//': dv odxc_spc_CO')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'odxc_spc_N2',nf90_float,bnd_dmn_id,odxc_spc_N2_id),sbr_nm//': dv odxc_spc_N2')
      rcd=nf90_wrp(nf90_def_var(nc_id,'odxc_spc_N2O',nf90_float,bnd_dmn_id,odxc_spc_N2O_id),sbr_nm//': dv odxc_spc_N2O')
      rcd=nf90_wrp(nf90_def_var(nc_id,'odxc_spc_Ray',nf90_float,bnd_dmn_id,odxc_spc_Ray_id),sbr_nm//': dv odxc_spc_Ray')
      rcd=nf90_wrp(nf90_def_var(nc_id,'odxc_spc_aer',nf90_float,bnd_dmn_id,odxc_spc_aer_id),sbr_nm//': dv odxc_spc_aer')
@@ -7777,6 +7928,7 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'trn_spc_atm_OH',nf90_float,bnd_dmn_id,trn_spc_atm_OH_id),sbr_nm//': dv trn_spc_atm_OH')
      rcd=nf90_wrp(nf90_def_var(nc_id,'trn_spc_atm_CH4',nf90_float,bnd_dmn_id,trn_spc_atm_CH4_id),sbr_nm//': dv trn_spc_atm_CH4')
      rcd=nf90_wrp(nf90_def_var(nc_id,'trn_spc_atm_CO',nf90_float,bnd_dmn_id,trn_spc_atm_CO_id),sbr_nm//': dv trn_spc_atm_CO')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'trn_spc_atm_N2',nf90_float,bnd_dmn_id,trn_spc_atm_N2_id),sbr_nm//': dv trn_spc_atm_N2')
      rcd=nf90_wrp(nf90_def_var(nc_id,'trn_spc_atm_N2O',nf90_float,bnd_dmn_id,trn_spc_atm_N2O_id),sbr_nm//': dv trn_spc_atm_N2O')
      rcd=nf90_wrp(nf90_def_var(nc_id,'trn_spc_atm_Ray',nf90_float,bnd_dmn_id,trn_spc_atm_Ray_id),sbr_nm//': dv trn_spc_atm_Ray')
      rcd=nf90_wrp(nf90_def_var(nc_id,'trn_spc_atm_aer',nf90_float,bnd_dmn_id,trn_spc_atm_aer_id),sbr_nm//': dv trn_spc_atm_aer')
@@ -7930,6 +8082,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'stt_OH',stt_OH(1:ftn_strlen(stt_OH))),sbr_nm//': pa stt_OH in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'stt_CH4',stt_CH4(1:ftn_strlen(stt_CH4))),sbr_nm//': pa stt_CH4 in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'stt_CO',stt_CO(1:ftn_strlen(stt_CO))),sbr_nm//': pa stt_CO in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'stt_N2',stt_N2(1:ftn_strlen(stt_N2))),sbr_nm//': pa stt_N2 in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'stt_N2O',stt_N2O(1:ftn_strlen(stt_N2O))),sbr_nm//': pa stt_N2O in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'stt_aer',stt_aer(1:ftn_strlen(stt_aer))),sbr_nm//': pa stt_aer in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'stt_bga',stt_bga(1:ftn_strlen(stt_bga))),sbr_nm//': pa stt_bga in '//__FILE__)
@@ -8319,6 +8472,8 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,odxc_spc_CO_id,'long_name','CO optical depth to surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,odxc_spc_N2_id,'long_name','N2 optical depth to surface'), &
+          sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,odxc_spc_N2O_id,'long_name','N2O optical depth to surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,odxc_spc_CH4_id,'long_name','CH4 optical depth to surface'), &
@@ -8416,6 +8571,8 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,trn_spc_atm_OH_id,'long_name','Column transmission due to OH absorption'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,trn_spc_atm_CO_id,'long_name','Column transmission due to CO absorption'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,trn_spc_atm_N2_id,'long_name','Column transmission due to N2 absorption'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,trn_spc_atm_N2O_id,'long_name','Column transmission due to N2O absorption'), &
           sbr_nm//': pa long_name in '//__FILE__)
@@ -8644,6 +8801,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,odxc_spc_O3_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,odxc_spc_OH_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,odxc_spc_CO_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,odxc_spc_N2_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,odxc_spc_N2O_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,odxc_spc_CH4_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,odxc_spc_Ray_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
@@ -8693,6 +8851,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,trn_spc_atm_O3_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,trn_spc_atm_OH_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,trn_spc_atm_CO_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,trn_spc_atm_N2_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,trn_spc_atm_N2O_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,trn_spc_atm_CH4_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,trn_spc_atm_Ray_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
@@ -8948,6 +9107,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,odxc_spc_O3_id,odxc_spc_O3),sbr_nm//': pv odxc_spc_O3 in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,odxc_spc_OH_id,odxc_spc_OH),sbr_nm//': pv odxc_spc_OH in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,odxc_spc_CO_id,odxc_spc_CO),sbr_nm//': pv odxc_spc_CO in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,odxc_spc_N2_id,odxc_spc_N2),sbr_nm//': pv odxc_spc_N2 in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,odxc_spc_N2O_id,odxc_spc_N2O),sbr_nm//': pv odxc_spc_N2O in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,odxc_spc_CH4_id,odxc_spc_CH4),sbr_nm//': pv odxc_spc_CH4 in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,odxc_spc_Ray_id,odxc_spc_Ray),sbr_nm//': pv odxc_spc_Ray in '//__FILE__)
@@ -8996,6 +9156,7 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,trn_spc_atm_O3_id,trn_spc_atm_O3),sbr_nm//': pv trn_spc_atm_O3 in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,trn_spc_atm_OH_id,trn_spc_atm_OH),sbr_nm//': pv trn_spc_atm_OH in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,trn_spc_atm_CO_id,trn_spc_atm_CO),sbr_nm//': pv trn_spc_atm_CO in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,trn_spc_atm_N2_id,trn_spc_atm_N2),sbr_nm//': pv trn_spc_atm_N2 in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,trn_spc_atm_N2O_id,trn_spc_atm_N2O),sbr_nm//': pv trn_spc_atm_N2O in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,trn_spc_atm_CH4_id,trn_spc_atm_CH4),sbr_nm//': pv trn_spc_atm_CH4 in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,trn_spc_atm_Ray_id,trn_spc_atm_Ray),sbr_nm//': pv trn_spc_atm_Ray in '//__FILE__)
@@ -9227,6 +9388,8 @@ program swnb2
   if(rcd /= 0) stop 'deallocate() failed for odxc_spc_OH'
   if (allocated(odxc_spc_CO)) deallocate(odxc_spc_CO,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for odxc_spc_CO'
+  if (allocated(odxc_spc_N2)) deallocate(odxc_spc_N2,stat=rcd)
+  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_N2'
   if (allocated(odxc_spc_N2O)) deallocate(odxc_spc_N2O,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for odxc_spc_N2O'
   if (allocated(odxc_spc_CH4)) deallocate(odxc_spc_CH4,stat=rcd)
@@ -9279,6 +9442,8 @@ program swnb2
   if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_OH'
   if (allocated(trn_spc_atm_CO)) deallocate(trn_spc_atm_CO,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_CO'
+  if (allocated(trn_spc_atm_N2)) deallocate(trn_spc_atm_N2,stat=rcd)
+  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_N2'
   if (allocated(trn_spc_atm_N2O)) deallocate(trn_spc_atm_N2O,stat=rcd)
   if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_N2O'
   if (allocated(trn_spc_atm_CH4)) deallocate(trn_spc_atm_CH4,stat=rcd)
