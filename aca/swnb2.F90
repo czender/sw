@@ -2000,12 +2000,12 @@ program swnb2
   cmd_ln_slr_zen_ngl_cos=.false.
   cmd_ln_slr_zen_ngl_dgr=.false.
   exit_status=0             ! [enm] Program exit status
-  flg_CO=.true.
-  flg_N2O=.true.
+  flg_CO=.false. ! [flg] CO turned-off by default while debugging its incorporation
+  flg_N2O=.false. ! [flg] N2O turned-off by default while debugging its incorporation
   flg_CH4=.true.
   flg_CO2=.true.
   flg_H2O=.true.
-  flg_H2OH2O=.false. ! [flg] H2OH2O is the only gas turned off by default
+  flg_H2OH2O=.false. ! [flg] H2OH2O is only gas permanently turned-off by default
   flg_Herzberg=.true.
   flg_NO2=.true.
   flg_O2=.true.
@@ -2178,30 +2178,36 @@ program swnb2
            cmd_ln_mpc_CWP=.true.
            call ftn_arg_get(arg_idx,arg_val,mpc_CWP_cmd_ln) ! [kg m-2] Condensed Water Path
         call ftn_arg_get(arg_idx,arg_val,mpc_CWP_cmd_ln)
+        else if (opt_sng == 'CO') then
+           flg_CO=.true.
+        else if (opt_sng == 'H2OH2O') then
+           flg_H2OH2O=.true.
+        else if (opt_sng == 'N2O') then
+           flg_N2O=.true.
         else if (opt_sng == 'no_aer') then
            flg_aer=.false.
         else if (opt_sng == 'no_bga') then
            flg_bga=.false.
-        else if (opt_sng == 'no_CO') then
-           flg_CO=.false.
-        else if (opt_sng == 'no_N2O') then
-           flg_N2O=.false.
-        else if (opt_sng == 'no_CH4') then
-           flg_CH4=.false.
-        else if (opt_sng == 'no_CO2') then
-           flg_CO2=.false.
-        else if (opt_sng == 'no_H2O') then
-           flg_H2O=.false.
-        else if (opt_sng == 'use_H2OH2O') then
-           flg_H2OH2O=.true.
         else if (opt_sng == 'no_ice') then
            flg_ice=.false.
         else if (opt_sng == 'no_lqd') then
            flg_lqd=.false.
         else if (opt_sng == 'no_Planck') then
            flg_Planck=.false.
+        else if (opt_sng == 'no_Rayleigh') then
+           flg_Rayleigh=.false.
         else if (opt_sng == 'no_thermal') then
            flg_Planck=.false.
+        else if (opt_sng == 'no_CH4') then
+           flg_CH4=.false.
+        else if (opt_sng == 'no_CO') then
+           flg_CO=.false.
+        else if (opt_sng == 'no_CO2') then
+           flg_CO2=.false.
+        else if (opt_sng == 'no_H2O') then
+           flg_H2O=.false.
+        else if (opt_sng == 'no_N2O') then
+           flg_N2O=.false.
         else if (opt_sng == 'no_NO2') then
            flg_NO2=.false.
         else if (opt_sng == 'no_O2') then
@@ -2214,8 +2220,6 @@ program swnb2
            flg_O3=.false.
         else if (opt_sng == 'no_OH') then
            flg_OH=.false.
-        else if (opt_sng == 'no_Rayleigh') then
-           flg_Rayleigh=.false.
         else if (opt_sng == 'odxc_aer') then
            cmd_ln_odxc_obs_aer=.true.
            call ftn_arg_get(arg_idx,arg_val,odxc_obs_aer_cmd_ln)

@@ -1,5 +1,7 @@
 2018-10-03  Charlie Zender  <zender@uci.edu>
 
+	* CO and N2O both cause matrix near-singular errors in DISORT, and NaNf fluxes on Linux and memory errors on MacOS
+
 	* Include default profiles and line-absorption by CO, N2O
 
 2018-10-02  Charlie Zender  <zender@uci.edu>
