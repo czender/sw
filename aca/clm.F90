@@ -6,7 +6,7 @@ program clm
   ! or NWS radiosonde input files, or AFGL standard atmosphere files,
   ! or RFM ATM input files, into netCDF CLM output files. 
 
-  ! Copyright (C) 1994--2017 Charlie Zender
+  ! Copyright (C) 1994--2018 Charlie Zender
   ! License: GNU General Public License (GPL) Version 3
   ! See http://www.gnu.org/copyleft/gpl.html for full license text
   ! The original author of this software, Charlie Zender, seeks to improve
@@ -95,7 +95,7 @@ program clm
   ! Print all information about a gas:
   ! ncks -a -u -F -C -H -d lev,100000.0 -v cnc_N2O,dns_N2O,mpc_N2O,mpl_N2O,npc_N2O,npl_N2O,ppr_N2O,q_N2O,r_N2O,vmr_N2O ${DATA}/aca/mls_clr.nc
   
-  use clm_mdl,only:aer_odxc_get,aer_info_get,q_o3_ntp,q_no2_ntp,q_oh_ntp,rfm_read,slr_crd_Bri92 ! [mdl] Column (CLM) processing
+  use clm_mdl,only:aer_odxc_get,aer_info_get,q_o3_ntp,q_co_ntp,q_no2_ntp,q_oh_ntp,rfm_read,slr_crd_Bri92 ! [mdl] Column (CLM) processing
   use dbg_mdl ! [mdl] Debugging constants, prg_nm, dbg_lvl
   use dmr_mdl ! [mdl] Dimers, collision complexes
   use netcdf ! [mdl] netCDF interface
@@ -200,6 +200,7 @@ program clm
   real,dimension(:),allocatable::cnc_CFC11
   real,dimension(:),allocatable::cnc_CFC12
   real,dimension(:),allocatable::cnc_CH4
+  real,dimension(:),allocatable::cnc_CO
   real,dimension(:),allocatable::cnc_CO2
   real,dimension(:),allocatable::cnc_H2O
   real,dimension(:),allocatable::cnc_H2OH2O
@@ -215,6 +216,7 @@ program clm
   real,dimension(:),allocatable::dns_CFC11
   real,dimension(:),allocatable::dns_CFC12
   real,dimension(:),allocatable::dns_CH4
+  real,dimension(:),allocatable::dns_CO
   real,dimension(:),allocatable::dns_CO2
   real,dimension(:),allocatable::dns_H2O
   real,dimension(:),allocatable::dns_H2OH2O
@@ -248,6 +250,7 @@ program clm
   real,dimension(:),allocatable::mpl_CFC11
   real,dimension(:),allocatable::mpl_CFC12
   real,dimension(:),allocatable::mpl_CH4
+  real,dimension(:),allocatable::mpl_CO
   real,dimension(:),allocatable::mpl_CO2
   real,dimension(:),allocatable::mpl_CWP
   real,dimension(:),allocatable::mpl_H2O
@@ -268,6 +271,7 @@ program clm
   real,dimension(:),allocatable::npl_CFC11
   real,dimension(:),allocatable::npl_CFC12
   real,dimension(:),allocatable::npl_CH4
+  real,dimension(:),allocatable::npl_CO
   real,dimension(:),allocatable::npl_CO2
   real,dimension(:),allocatable::npl_H2O
   real,dimension(:),allocatable::npl_H2OH2O
@@ -291,6 +295,7 @@ program clm
   real,dimension(:),allocatable::ppr_CFC11
   real,dimension(:),allocatable::ppr_CFC12
   real,dimension(:),allocatable::ppr_CH4
+  real,dimension(:),allocatable::ppr_CO
   real,dimension(:),allocatable::ppr_CO2
   real,dimension(:),allocatable::ppr_H2O
   real,dimension(:),allocatable::ppr_H2OH2O
@@ -309,6 +314,7 @@ program clm
   real,dimension(:),allocatable::q_CFC11
   real,dimension(:),allocatable::q_CFC12
   real,dimension(:),allocatable::q_CH4
+  real,dimension(:),allocatable::q_CO
   real,dimension(:),allocatable::q_CO2
   real,dimension(:),allocatable::q_H2O
   real,dimension(:),allocatable::q_H2OH2O
@@ -325,6 +331,7 @@ program clm
   real,dimension(:),allocatable::r_CFC11
   real,dimension(:),allocatable::r_CFC12
   real,dimension(:),allocatable::r_CH4
+  real,dimension(:),allocatable::r_CO
   real,dimension(:),allocatable::r_CO2
   real,dimension(:),allocatable::r_H2O
   real,dimension(:),allocatable::r_H2OH2O
@@ -354,6 +361,7 @@ program clm
   real,dimension(:),allocatable::vmr_CFC11
   real,dimension(:),allocatable::vmr_CFC12
   real,dimension(:),allocatable::vmr_CH4
+  real,dimension(:),allocatable::vmr_CO
   real,dimension(:),allocatable::vmr_CO2
   real,dimension(:),allocatable::vmr_H2O
   real,dimension(:),allocatable::vmr_H2OH2O
@@ -448,6 +456,7 @@ program clm
   integer cnc_CFC11_id
   integer cnc_CFC12_id
   integer cnc_CH4_id
+  integer cnc_CO_id
   integer cnc_CO2_id
   integer cnc_H2OH2O_id
   integer cnc_H2O_id
@@ -470,6 +479,7 @@ program clm
   integer dns_CFC11_id
   integer dns_CFC12_id
   integer dns_CH4_id
+  integer dns_CO_id
   integer dns_CO2_id
   integer dns_H2OH2O_id
   integer dns_H2O_id
@@ -519,6 +529,7 @@ program clm
   integer mpc_CFC11_id
   integer mpc_CFC12_id
   integer mpc_CH4_id
+  integer mpc_CO_id
   integer mpc_CO2_id
   integer mpc_CWP_id
   integer mpc_H2OH2O_id
@@ -540,6 +551,7 @@ program clm
   integer mpl_CFC11_id
   integer mpl_CFC12_id
   integer mpl_CH4_id
+  integer mpl_CO_id
   integer mpl_CO2_id
   integer mpl_CWP_id
   integer mpl_H2OH2O_id
@@ -560,6 +572,7 @@ program clm
   integer npc_CFC11_id
   integer npc_CFC12_id
   integer npc_CH4_id
+  integer npc_CO_id
   integer npc_CO2_id
   integer npc_H2OH2O_id
   integer npc_H2O_id
@@ -575,6 +588,7 @@ program clm
   integer npl_CFC11_id
   integer npl_CFC12_id
   integer npl_CH4_id
+  integer npl_CO_id
   integer npl_CO2_id
   integer npl_H2OH2O_id
   integer npl_H2O_id
@@ -601,6 +615,7 @@ program clm
   integer ppr_CFC11_id
   integer ppr_CFC12_id
   integer ppr_CH4_id
+  integer ppr_CO_id
   integer ppr_CO2_id
   integer ppr_H2OH2O_id
   integer ppr_H2O_id
@@ -623,6 +638,7 @@ program clm
   integer q_CFC11_id
   integer q_CFC12_id
   integer q_CH4_id
+  integer q_CO_id
   integer q_CO2_id
   integer q_H2OH2O_id
   integer q_H2OH2O_rcp_q_H2O_id
@@ -639,6 +655,7 @@ program clm
   integer r_CFC11_id
   integer r_CFC12_id
   integer r_CH4_id
+  integer r_CO_id
   integer r_CO2_id
   integer r_H2OH2O_id
   integer r_H2O_id
@@ -677,6 +694,7 @@ program clm
   integer vmr_CFC11_id
   integer vmr_CFC12_id
   integer vmr_CH4_id
+  integer vmr_CO_id
   integer vmr_CO2_id
   integer vmr_H2OH2O_id
   integer vmr_H2O_id
@@ -749,6 +767,7 @@ program clm
   real lev_LNB ![m] Level of Neutral Buoyancy
   real mpc_CO2
   real mpc_CH4
+  real mpc_CO
   real mpc_N2O
   real mpc_CFC11
   real mpc_CFC12
@@ -770,6 +789,7 @@ program clm
   real mpc_mst_air
   real npc_CO2
   real npc_CH4
+  real npc_CO
   real npc_N2O
   real npc_CFC11
   real npc_CFC12
@@ -1222,6 +1242,7 @@ program clm
   allocate(cnc_CFC11(lev_nbr),stat=rcd)
   allocate(cnc_CFC12(lev_nbr),stat=rcd)
   allocate(cnc_CH4(lev_nbr),stat=rcd)
+  allocate(cnc_CO(lev_nbr),stat=rcd)
   allocate(cnc_CO2(lev_nbr),stat=rcd)
   allocate(cnc_H2O(lev_nbr),stat=rcd)
   allocate(cnc_H2OH2O(lev_nbr),stat=rcd)
@@ -1242,6 +1263,7 @@ program clm
   allocate(dns_CFC11(lev_nbr),stat=rcd)
   allocate(dns_CFC12(lev_nbr),stat=rcd)
   allocate(dns_CH4(lev_nbr),stat=rcd)
+  allocate(dns_CO(lev_nbr),stat=rcd)
   allocate(dns_CO2(lev_nbr),stat=rcd)
   allocate(dns_H2O(lev_nbr),stat=rcd)
   allocate(dns_H2OH2O(lev_nbr),stat=rcd)
@@ -1267,6 +1289,7 @@ program clm
   allocate(mpl_CFC11(lev_nbr),stat=rcd)
   allocate(mpl_CFC12(lev_nbr),stat=rcd)
   allocate(mpl_CH4(lev_nbr),stat=rcd)
+  allocate(mpl_CO(lev_nbr),stat=rcd)
   allocate(mpl_CO2(lev_nbr),stat=rcd)
   allocate(mpl_CWP(lev_nbr),stat=rcd)
   allocate(mpl_H2O(lev_nbr),stat=rcd)
@@ -1287,6 +1310,7 @@ program clm
   allocate(npl_CFC11(lev_nbr),stat=rcd)
   allocate(npl_CFC12(lev_nbr),stat=rcd)
   allocate(npl_CH4(lev_nbr),stat=rcd)
+  allocate(npl_CO(lev_nbr),stat=rcd)
   allocate(npl_CO2(lev_nbr),stat=rcd)
   allocate(npl_H2O(lev_nbr),stat=rcd)
   allocate(npl_H2OH2O(lev_nbr),stat=rcd)
@@ -1310,6 +1334,7 @@ program clm
   allocate(ppr_CFC11(lev_nbr),stat=rcd)
   allocate(ppr_CFC12(lev_nbr),stat=rcd)
   allocate(ppr_CH4(lev_nbr),stat=rcd)
+  allocate(ppr_CO(lev_nbr),stat=rcd)
   allocate(ppr_CO2(lev_nbr),stat=rcd)
   allocate(ppr_H2O(lev_nbr),stat=rcd)
   allocate(ppr_H2OH2O(lev_nbr),stat=rcd)
@@ -1328,6 +1353,7 @@ program clm
   allocate(q_CFC11(lev_nbr),stat=rcd)
   allocate(q_CFC12(lev_nbr),stat=rcd)
   allocate(q_CH4(lev_nbr),stat=rcd)
+  allocate(q_CO(lev_nbr),stat=rcd)
   allocate(q_CO2(lev_nbr),stat=rcd)
   allocate(q_H2O(lev_nbr),stat=rcd)
   allocate(q_H2OH2O(lev_nbr),stat=rcd)
@@ -1344,6 +1370,7 @@ program clm
   allocate(r_CFC11(lev_nbr),stat=rcd)
   allocate(r_CFC12(lev_nbr),stat=rcd)
   allocate(r_CH4(lev_nbr),stat=rcd)
+  allocate(r_CO(lev_nbr),stat=rcd)
   allocate(r_CO2(lev_nbr),stat=rcd)
   allocate(r_H2O(lev_nbr),stat=rcd)
   allocate(r_H2OH2O(lev_nbr),stat=rcd)
@@ -1370,6 +1397,7 @@ program clm
   allocate(vmr_CFC11(lev_nbr),stat=rcd)
   allocate(vmr_CFC12(lev_nbr),stat=rcd)
   allocate(vmr_CH4(lev_nbr),stat=rcd)
+  allocate(vmr_CO(lev_nbr),stat=rcd)
   allocate(vmr_CO2(lev_nbr),stat=rcd)
   allocate(vmr_H2O(lev_nbr),stat=rcd)
   allocate(vmr_H2OH2O(lev_nbr),stat=rcd)
@@ -2380,6 +2408,7 @@ program clm
      q_N2O(idx)=N2O_vmr_clm*(mmw_N2O/mmw_dry_air)
      q_CFC11(idx)=CFC11_vmr_clm*(mmw_CFC11/mmw_dry_air)
      q_CFC12(idx)=CFC12_vmr_clm*(mmw_CFC12/mmw_dry_air)
+     q_CO(idx)=q_CO_ntp(prs(idx))
      q_NO2(idx)=q_NO2_ntp(prs(idx))
      q_OH(idx)=q_OH_ntp(prs(idx))
   enddo
@@ -2495,6 +2524,7 @@ program clm
      r_H2O(idx)=q_H2O(idx)/(1.0-q_H2O(idx)) ! Mixing ratio
      r_CO2(idx)=q_CO2(idx)/(1.0-q_CO2(idx))
      r_CH4(idx)=q_CH4(idx)/(1.0-q_CH4(idx))
+     r_CO(idx)=q_CO(idx)/(1.0-q_CO(idx))
      r_N2O(idx)=q_N2O(idx)/(1.0-q_N2O(idx))
      r_CFC11(idx)=q_CFC11(idx)/(1.0-q_CFC11(idx))
      r_CFC12(idx)=q_CFC12(idx)/(1.0-q_CFC12(idx))
@@ -2510,6 +2540,7 @@ program clm
      mpl_H2O(idx)=q_H2O(idx)*mpl_mst_air(idx)
      mpl_CO2(idx)=q_CO2(idx)*mpl_mst_air(idx)
      mpl_CH4(idx)=q_CH4(idx)*mpl_mst_air(idx)
+     mpl_CO(idx)=q_CO(idx)*mpl_mst_air(idx)
      mpl_N2O(idx)=q_N2O(idx)*mpl_mst_air(idx)
      mpl_CFC11(idx)=q_CFC11(idx)*mpl_mst_air(idx)
      mpl_CFC12(idx)=q_CFC12(idx)*mpl_mst_air(idx)
@@ -2521,6 +2552,7 @@ program clm
      mpl_N2(idx)=r_N2(idx)*mpl_dry_air(idx)
      dns_CO2(idx)=mpl_CO2(idx)/alt_dlt(idx)
      dns_CH4(idx)=mpl_CH4(idx)/alt_dlt(idx)
+     dns_CO(idx)=mpl_CO(idx)/alt_dlt(idx)
      dns_N2O(idx)=mpl_N2O(idx)/alt_dlt(idx)
      dns_CFC11(idx)=mpl_CFC11(idx)/alt_dlt(idx)
      dns_CFC12(idx)=mpl_CFC12(idx)/alt_dlt(idx)
@@ -2537,6 +2569,7 @@ program clm
      ppr_dry_air(idx)=prs(idx)-ppr_H2O(idx)
      ppr_CO2(idx)=dns_CO2(idx)*gas_cst_CO2*tpt(idx)
      ppr_CH4(idx)=dns_CH4(idx)*gas_cst_CH4*tpt(idx)
+     ppr_CO(idx)=dns_CO(idx)*gas_cst_CO*tpt(idx)
      ppr_N2O(idx)=dns_N2O(idx)*gas_cst_N2O*tpt(idx)
      ppr_CFC11(idx)=dns_CFC11(idx)*gas_cst_CFC11*tpt(idx)
      ppr_CFC12(idx)=dns_CFC12(idx)*gas_cst_CFC12*tpt(idx)
@@ -2550,6 +2583,7 @@ program clm
      npl_H2O(idx)=mpl_H2O(idx)*Avagadro/mmw_H2O
      npl_CO2(idx)=mpl_CO2(idx)*Avagadro/mmw_CO2
      npl_CH4(idx)=mpl_CH4(idx)*Avagadro/mmw_CH4
+     npl_CO(idx)=mpl_CO(idx)*Avagadro/mmw_CO
      npl_N2O(idx)=mpl_N2O(idx)*Avagadro/mmw_N2O
      npl_CFC11(idx)=mpl_CFC11(idx)*Avagadro/mmw_CFC11
      npl_CFC12(idx)=mpl_CFC12(idx)*Avagadro/mmw_CFC12
@@ -2561,6 +2595,7 @@ program clm
      vmr_H2O(idx)=q_H2O(idx)*mmw_dry_air/mmw_H2O
      vmr_CO2(idx)=q_CO2(idx)*mmw_dry_air/mmw_CO2
      vmr_CH4(idx)=q_CH4(idx)*mmw_dry_air/mmw_CH4
+     vmr_CO(idx)=q_CO(idx)*mmw_dry_air/mmw_CO
      vmr_N2O(idx)=q_N2O(idx)*mmw_dry_air/mmw_N2O
      vmr_CFC11(idx)=q_CFC11(idx)*mmw_dry_air/mmw_CFC11
      vmr_CFC12(idx)=q_CFC12(idx)*mmw_dry_air/mmw_CFC12
@@ -2574,6 +2609,7 @@ program clm
      cnc_H2O(idx)=npl_H2O(idx)/alt_dlt(idx)
      cnc_CO2(idx)=npl_CO2(idx)/alt_dlt(idx)
      cnc_CH4(idx)=npl_CH4(idx)/alt_dlt(idx)
+     cnc_CO(idx)=npl_CO(idx)/alt_dlt(idx)
      cnc_N2O(idx)=npl_N2O(idx)/alt_dlt(idx)
      cnc_CFC11(idx)=npl_CFC11(idx)/alt_dlt(idx)
      cnc_CFC12(idx)=npl_CFC12(idx)/alt_dlt(idx)
@@ -2597,6 +2633,7 @@ program clm
   ! Compute column totals
   mpc_CO2=0.0               ! [kg m-2]
   mpc_CH4=0.0               ! [kg m-2]
+  mpc_CO=0.0               ! [kg m-2]
   mpc_N2O=0.0               ! [kg m-2]
   mpc_CFC11=0.0             ! [kg m-2]
   mpc_CFC12=0.0             ! [kg m-2]
@@ -2611,6 +2648,7 @@ program clm
   do idx=1,lev_nbr
      mpc_CO2=mpc_CO2+mpl_CO2(idx) ! [kg m-2]
      mpc_CH4=mpc_CH4+mpl_CH4(idx) ! [kg m-2]
+     mpc_CO=mpc_CO+mpl_CO(idx) ! [kg m-2]
      mpc_N2O=mpc_N2O+mpl_N2O(idx) ! [kg m-2]
      mpc_CFC11=mpc_CFC11+mpl_CFC11(idx) ! [kg m-2]
      mpc_CFC12=mpc_CFC12+mpl_CFC12(idx) ! [kg m-2]
@@ -2626,6 +2664,7 @@ program clm
   
   npc_CO2=0.0               ! [mlc m-2]
   npc_CH4=0.0               ! [mlc m-2]
+  npc_CO=0.0               ! [mlc m-2]
   npc_N2O=0.0               ! [mlc m-2]
   npc_CFC11=0.0             ! [mlc m-2]
   npc_CFC12=0.0             ! [mlc m-2]
@@ -2640,6 +2679,7 @@ program clm
   do idx=1,lev_nbr
      npc_CO2=npc_CO2+npl_CO2(idx) ! [mlc m-2]
      npc_CH4=npc_CH4+npl_CH4(idx) ! [mlc m-2]
+     npc_CO=npc_CO+npl_CO(idx) ! [mlc m-2]
      npc_N2O=npc_N2O+npl_N2O(idx) ! [mlc m-2]
      npc_CFC11=npc_CFC11+npl_CFC11(idx) ! [mlc m-2]
      npc_CFC12=npc_CFC12+npl_CFC12(idx) ! [mlc m-2]
@@ -2727,7 +2767,7 @@ program clm
   ! Integral sanity checks
   do idx=1,lev_nbr
      prs_ttl(idx)=ppr_O2(idx)+ppr_N2(idx)+ & !ppr_dry_air(idx)+
-          ppr_H2O(idx)+ppr_CO2(idx)+ppr_CH4(idx)+ppr_N2O(idx)+ppr_CFC11(idx)+ppr_CFC12(idx)+ &
+          ppr_H2O(idx)+ppr_CO2(idx)+ppr_CH4(idx)+ppr_CO(idx)+ppr_N2O(idx)+ppr_CFC11(idx)+ppr_CFC12(idx)+ &
           ppr_O3(idx)+ppr_NO2(idx)+ &
           ppr_OH(idx)
      if (prs_ttl(idx) > prs(idx)) then
@@ -2740,19 +2780,19 @@ program clm
   
   if (dbg_lvl == dbg_crr) then
      write (6,'(a,i3)') 'Integral partial pressure check:'
-     write (6,'(a3,1x,14(a8,1x))') 'idx', &
+     write (6,'(a3,1x,15(a8,1x))') 'idx', &
           'prs','prs_ttl','ppr_dry','ppr_N2','ppr_O2', &
           'ppr_H2O','ppr_CO2','ppr_O3','ppr_NO2','ppr_OH', &
-          'ppr_CH4','ppr_N2O','ppr_CFC11','ppr_CFC12'
+          'ppr_CH4','ppr_CO','ppr_N2O','ppr_CFC11','ppr_CFC12'
      write (6,'(a3,1x,14(a8,1x))') '', &
           'mb','mb','mb','mb','mb', &
           'mb','mb','mb','mb','mb', &
-          'mb','mb','mb','mb'
+          'mb','mb','mb','mb','mb'
      do idx=1,lev_nbr
         write (6,'(i3,1x,14(f8.3,1x))') idx, &
              prs(idx)/100.0,prs_ttl(idx)/100.0,ppr_dry_air(idx)/100.0,ppr_N2(idx)/100.0,ppr_O2(idx)/100.0, &
              ppr_H2O(idx)/100.0,ppr_CO2(idx)/100.0,ppr_O3(idx)/100.0,ppr_NO2(idx)/100.0,ppr_OH(idx)/100.0, &
-             ppr_CH4(idx)/100.0,ppr_N2O(idx)/100.0,ppr_CFC11(idx)/100.0,ppr_CFC12(idx)/100.0
+             ppr_CH4(idx)/100.0,ppr_CO(idx)/100.0,ppr_N2O(idx)/100.0,ppr_CFC11(idx)/100.0,ppr_CFC12(idx)/100.0
      enddo                  ! end loop over lvl
   endif                     ! end if dbg
   
@@ -2989,6 +3029,7 @@ program clm
   rcd=nf90_wrp(nf90_def_var(nc_id,'cnc_CFC11',nf90_float,lev_dmn_id,cnc_CFC11_id),sbr_nm//": dv cnc_CFC11")
   rcd=nf90_wrp(nf90_def_var(nc_id,'cnc_CFC12',nf90_float,lev_dmn_id,cnc_CFC12_id),sbr_nm//": dv cnc_CFC12")
   rcd=nf90_wrp(nf90_def_var(nc_id,'cnc_CH4',nf90_float,lev_dmn_id,cnc_CH4_id),sbr_nm//": dv cnc_CH4")
+  rcd=nf90_wrp(nf90_def_var(nc_id,'cnc_CO',nf90_float,lev_dmn_id,cnc_CO_id),sbr_nm//": dv cnc_CO")
   rcd=nf90_wrp(nf90_def_var(nc_id,'cnc_CO2',nf90_float,lev_dmn_id,cnc_CO2_id),sbr_nm//": dv cnc_CO2")
   rcd=nf90_wrp(nf90_def_var(nc_id,'cnc_H2O',nf90_float,lev_dmn_id,cnc_H2O_id),sbr_nm//": dv cnc_H2O")
   rcd=nf90_wrp(nf90_def_var(nc_id,'cnc_H2OH2O',nf90_float,lev_dmn_id,cnc_H2OH2O_id),sbr_nm//": dv cnc_H2OH2O")
@@ -3010,6 +3051,7 @@ program clm
   rcd=nf90_wrp(nf90_def_var(nc_id,'dns_CFC11',nf90_float,lev_dmn_id,dns_CFC11_id),sbr_nm//": dv dns_CFC11")
   rcd=nf90_wrp(nf90_def_var(nc_id,'dns_CFC12',nf90_float,lev_dmn_id,dns_CFC12_id),sbr_nm//": dv dns_CFC12")
   rcd=nf90_wrp(nf90_def_var(nc_id,'dns_CH4',nf90_float,lev_dmn_id,dns_CH4_id),sbr_nm//": dv dns_CH4")
+  rcd=nf90_wrp(nf90_def_var(nc_id,'dns_CO',nf90_float,lev_dmn_id,dns_CO_id),sbr_nm//": dv dns_CO")
   rcd=nf90_wrp(nf90_def_var(nc_id,'dns_CO2',nf90_float,lev_dmn_id,dns_CO2_id),sbr_nm//": dv dns_CO2")
   rcd=nf90_wrp(nf90_def_var(nc_id,'dns_H2O',nf90_float,lev_dmn_id,dns_H2O_id),sbr_nm//": dv dns_H2O")
   rcd=nf90_wrp(nf90_def_var(nc_id,'dns_H2OH2O',nf90_float,lev_dmn_id,dns_H2OH2O_id),sbr_nm//": dv dns_H2OH2O")
@@ -3078,6 +3120,7 @@ program clm
   rcd=nf90_wrp(nf90_def_var(nc_id,'mpc_CFC11',nf90_float,mpc_CFC11_id),sbr_nm//": dv mpc_CFC11")
   rcd=nf90_wrp(nf90_def_var(nc_id,'mpc_CFC12',nf90_float,mpc_CFC12_id),sbr_nm//": dv mpc_CFC12")
   rcd=nf90_wrp(nf90_def_var(nc_id,'mpc_CH4',nf90_float,mpc_CH4_id),sbr_nm//": dv mpc_CH4")
+  rcd=nf90_wrp(nf90_def_var(nc_id,'mpc_CO',nf90_float,mpc_CO_id),sbr_nm//": dv mpc_CO")
   rcd=nf90_wrp(nf90_def_var(nc_id,'mpc_CO2',nf90_float,mpc_CO2_id),sbr_nm//": dv mpc_CO2")
   rcd=nf90_wrp(nf90_def_var(nc_id,'mpc_CWP',nf90_float,mpc_CWP_id),sbr_nm//": dv mpc_CWP")
   rcd=nf90_wrp(nf90_def_var(nc_id,'mpc_H2O',nf90_float,mpc_H2O_id),sbr_nm//": dv mpc_H2O")
@@ -3099,6 +3142,7 @@ program clm
   rcd=nf90_wrp(nf90_def_var(nc_id,'mpl_CFC11',nf90_float,lev_dmn_id,mpl_CFC11_id),sbr_nm//": dv mpl_CFC11")
   rcd=nf90_wrp(nf90_def_var(nc_id,'mpl_CFC12',nf90_float,lev_dmn_id,mpl_CFC12_id),sbr_nm//": dv mpl_CFC12")
   rcd=nf90_wrp(nf90_def_var(nc_id,'mpl_CH4',nf90_float,lev_dmn_id,mpl_CH4_id),sbr_nm//": dv mpl_CH4")
+  rcd=nf90_wrp(nf90_def_var(nc_id,'mpl_CO',nf90_float,lev_dmn_id,mpl_CO_id),sbr_nm//": dv mpl_CO")
   rcd=nf90_wrp(nf90_def_var(nc_id,'mpl_CO2',nf90_float,lev_dmn_id,mpl_CO2_id),sbr_nm//": dv mpl_CO2")
   rcd=nf90_wrp(nf90_def_var(nc_id,'mpl_CWP',nf90_float,lev_dmn_id,mpl_CWP_id),sbr_nm//": dv mpl_CWP")
   rcd=nf90_wrp(nf90_def_var(nc_id,'mpl_H2O',nf90_float,lev_dmn_id,mpl_H2O_id),sbr_nm//": dv mpl_H2O")
@@ -3119,6 +3163,7 @@ program clm
   rcd=nf90_wrp(nf90_def_var(nc_id,'npc_CFC11',nf90_float,npc_CFC11_id),sbr_nm//": dv npc_CFC11")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npc_CFC12',nf90_float,npc_CFC12_id),sbr_nm//": dv npc_CFC12")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npc_CH4',nf90_float,npc_CH4_id),sbr_nm//": dv npc_CH4")
+  rcd=nf90_wrp(nf90_def_var(nc_id,'npc_CO',nf90_float,npc_CO_id),sbr_nm//": dv npc_CO")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npc_CO2',nf90_float,npc_CO2_id),sbr_nm//": dv npc_CO2")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npc_H2O',nf90_float,npc_H2O_id),sbr_nm//": dv npc_H2O")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npc_H2OH2O',nf90_float,npc_H2OH2O_id),sbr_nm//": dv npc_H2OH2O")
@@ -3134,6 +3179,7 @@ program clm
   rcd=nf90_wrp(nf90_def_var(nc_id,'npl_CFC11',nf90_float,lev_dmn_id,npl_CFC11_id),sbr_nm//": dv npl_CFC11")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npl_CFC12',nf90_float,lev_dmn_id,npl_CFC12_id),sbr_nm//": dv npl_CFC12")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npl_CH4',nf90_float,lev_dmn_id,npl_CH4_id),sbr_nm//": dv npl_CH4")
+  rcd=nf90_wrp(nf90_def_var(nc_id,'npl_CO',nf90_float,lev_dmn_id,npl_CO_id),sbr_nm//": dv npl_CO")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npl_CO2',nf90_float,lev_dmn_id,npl_CO2_id),sbr_nm//": dv npl_CO2")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npl_H2O',nf90_float,lev_dmn_id,npl_H2O_id),sbr_nm//": dv npl_H2O")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npl_H2OH2O',nf90_float,lev_dmn_id,npl_H2OH2O_id),sbr_nm//": dv npl_H2OH2O")
@@ -3160,6 +3206,7 @@ program clm
   rcd=nf90_wrp(nf90_def_var(nc_id,'ppr_CFC11',nf90_float,lev_dmn_id,ppr_CFC11_id),sbr_nm//": dv ppr_CFC11")
   rcd=nf90_wrp(nf90_def_var(nc_id,'ppr_CFC12',nf90_float,lev_dmn_id,ppr_CFC12_id),sbr_nm//": dv ppr_CFC12")
   rcd=nf90_wrp(nf90_def_var(nc_id,'ppr_CH4',nf90_float,lev_dmn_id,ppr_CH4_id),sbr_nm//": dv ppr_CH4")
+  rcd=nf90_wrp(nf90_def_var(nc_id,'ppr_CO',nf90_float,lev_dmn_id,ppr_CO_id),sbr_nm//": dv ppr_CO")
   rcd=nf90_wrp(nf90_def_var(nc_id,'ppr_CO2',nf90_float,lev_dmn_id,ppr_CO2_id),sbr_nm//": dv ppr_CO2")
   rcd=nf90_wrp(nf90_def_var(nc_id,'ppr_H2O',nf90_float,lev_dmn_id,ppr_H2O_id),sbr_nm//": dv ppr_H2O")
   rcd=nf90_wrp(nf90_def_var(nc_id,'ppr_H2OH2O',nf90_float,lev_dmn_id,ppr_H2OH2O_id),sbr_nm//": dv ppr_H2OH2O")
@@ -3182,6 +3229,7 @@ program clm
   rcd=nf90_wrp(nf90_def_var(nc_id,'q_CFC11',nf90_float,lev_dmn_id,q_CFC11_id),sbr_nm//": dv q_CFC11")
   rcd=nf90_wrp(nf90_def_var(nc_id,'q_CFC12',nf90_float,lev_dmn_id,q_CFC12_id),sbr_nm//": dv q_CFC12")
   rcd=nf90_wrp(nf90_def_var(nc_id,'q_CH4',nf90_float,lev_dmn_id,q_CH4_id),sbr_nm//": dv q_CH4")
+  rcd=nf90_wrp(nf90_def_var(nc_id,'q_CO',nf90_float,lev_dmn_id,q_CO_id),sbr_nm//": dv q_CO")
   rcd=nf90_wrp(nf90_def_var(nc_id,'q_CO2',nf90_float,lev_dmn_id,q_CO2_id),sbr_nm//": dv q_CO2")
   rcd=nf90_wrp(nf90_def_var(nc_id,'q_H2O',nf90_float,lev_dmn_id,q_H2O_id),sbr_nm//": dv q_H2O")
   rcd=nf90_wrp(nf90_def_var(nc_id,'q_H2OH2O',nf90_float,lev_dmn_id,q_H2OH2O_id),sbr_nm//": dv q_H2OH2O")
@@ -3197,6 +3245,7 @@ program clm
   rcd=nf90_wrp(nf90_def_var(nc_id,'r_CFC11',nf90_float,lev_dmn_id,r_CFC11_id),sbr_nm//": dv r_CFC11")
   rcd=nf90_wrp(nf90_def_var(nc_id,'r_CFC12',nf90_float,lev_dmn_id,r_CFC12_id),sbr_nm//": dv r_CFC12")
   rcd=nf90_wrp(nf90_def_var(nc_id,'r_CH4',nf90_float,lev_dmn_id,r_CH4_id),sbr_nm//": dv r_CH4")
+  rcd=nf90_wrp(nf90_def_var(nc_id,'r_CO',nf90_float,lev_dmn_id,r_CO_id),sbr_nm//": dv r_CO")
   rcd=nf90_wrp(nf90_def_var(nc_id,'r_CO2',nf90_float,lev_dmn_id,r_CO2_id),sbr_nm//": dv r_CO2")
   rcd=nf90_wrp(nf90_def_var(nc_id,'r_H2O',nf90_float,lev_dmn_id,r_H2O_id),sbr_nm//": dv r_H2O")
   rcd=nf90_wrp(nf90_def_var(nc_id,'r_H2OH2O',nf90_float,lev_dmn_id,r_H2OH2O_id),sbr_nm//": dv r_H2OH2O")
@@ -3247,6 +3296,7 @@ program clm
   rcd=nf90_wrp(nf90_def_var(nc_id,'vmr_CFC11',nf90_float,lev_dmn_id,vmr_CFC11_id),sbr_nm//": dv vmr_CFC11")
   rcd=nf90_wrp(nf90_def_var(nc_id,'vmr_CFC12',nf90_float,lev_dmn_id,vmr_CFC12_id),sbr_nm//": dv vmr_CFC12")
   rcd=nf90_wrp(nf90_def_var(nc_id,'vmr_CH4',nf90_float,lev_dmn_id,vmr_CH4_id),sbr_nm//": dv vmr_CH4")
+  rcd=nf90_wrp(nf90_def_var(nc_id,'vmr_CO',nf90_float,lev_dmn_id,vmr_CO_id),sbr_nm//": dv vmr_CO")
   rcd=nf90_wrp(nf90_def_var(nc_id,'vmr_CO2',nf90_float,lev_dmn_id,vmr_CO2_id),sbr_nm//": dv vmr_CO2")
   rcd=nf90_wrp(nf90_def_var(nc_id,'vmr_H2O',nf90_float,lev_dmn_id,vmr_H2O_id),sbr_nm//": dv vmr_H2O")
   rcd=nf90_wrp(nf90_def_var(nc_id,'vmr_H2OH2O',nf90_float,lev_dmn_id,vmr_H2OH2O_id),sbr_nm//": dv vmr_H2OH2O")
@@ -3365,6 +3415,8 @@ program clm
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,cnc_CH4_id,'long_name','CH4 concentration'), &
        sbr_nm//": pa long_name in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,cnc_CO_id,'long_name','CO concentration'), &
+       sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,cnc_N2O_id,'long_name','N2O concentration'), &
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,cnc_CFC11_id,'long_name','CFC11 concentration'), &
@@ -3414,6 +3466,8 @@ program clm
   rcd=nf90_wrp(nf90_put_att(nc_id,dns_CO2_id,'long_name','Density of CO2'), &
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,dns_CH4_id,'long_name','Density of CH4'), &
+       sbr_nm//": pa long_name in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,dns_CO_id,'long_name','Density of CO'), &
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,dns_N2O_id,'long_name','Density of N2O'), &
        sbr_nm//": pa long_name in "//__FILE__)
@@ -3555,6 +3609,8 @@ program clm
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CH4_id,'long_name','Mass path of CH4 in column'), &
        sbr_nm//": pa long_name in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CO_id,'long_name','Mass path of CO in column'), &
+       sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,mpc_N2O_id,'long_name','Mass path of N2O in column'), &
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CFC11_id,'long_name','Mass path of CFC11 in column'), &
@@ -3597,6 +3653,8 @@ program clm
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,mpl_CH4_id,'long_name','Mass path of CH4 in layer'), &
        sbr_nm//": pa long_name in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,mpl_CO_id,'long_name','Mass path of CO in layer'), &
+       sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,mpl_N2O_id,'long_name','Mass path of N2O in layer'), &
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,mpl_CFC11_id,'long_name','Mass path of CFC11 in layer'), &
@@ -3637,6 +3695,8 @@ program clm
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npc_CH4_id,'long_name','Column number path of CH4'), &
        sbr_nm//": pa long_name in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,npc_CO_id,'long_name','Column number path of CO'), &
+       sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npc_N2O_id,'long_name','Column number path of N2O'), &
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npc_CFC11_id,'long_name','Column number path of CFC11'), &
@@ -3666,6 +3726,8 @@ program clm
   rcd=nf90_wrp(nf90_put_att(nc_id,npl_CO2_id,'long_name','Number path of CO2 in layer'), &
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npl_CH4_id,'long_name','Number path of CH4 in layer'), &
+       sbr_nm//": pa long_name in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,npl_CO_id,'long_name','Number path of CO in layer'), &
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npl_N2O_id,'long_name','Number path of N2O in layer'), &
        sbr_nm//": pa long_name in "//__FILE__)
@@ -3708,6 +3770,8 @@ program clm
   rcd=nf90_wrp(nf90_put_att(nc_id,ppr_CO2_id,'long_name','Partial pressure of CO2'), &
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,ppr_CH4_id,'long_name','Partial pressure of CH4'), &
+       sbr_nm//": pa long_name in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,ppr_CO_id,'long_name','Partial pressure of CO'), &
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,ppr_N2O_id,'long_name','Partial pressure of N2O'), &
        sbr_nm//": pa long_name in "//__FILE__)
@@ -3753,6 +3817,8 @@ program clm
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,q_CH4_id,'long_name','Mass mixing ratio of CH4'), &
        sbr_nm//": pa long_name in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,q_CO_id,'long_name','Mass mixing ratio of CO'), &
+       sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,q_N2O_id,'long_name','Mass mixing ratio of N2O'), &
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,q_CFC11_id,'long_name','Mass mixing ratio of CFC11'), &
@@ -3784,6 +3850,8 @@ program clm
   rcd=nf90_wrp(nf90_put_att(nc_id,r_CO2_id,'long_name','Dry-mass mixing ratio (r) of CO2'), &
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,r_CH4_id,'long_name','Dry-mass mixing ratio (r) of CH4'), &
+       sbr_nm//": pa long_name in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,r_CO_id,'long_name','Dry-mass mixing ratio (r) of CO'), &
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,r_N2O_id,'long_name','Dry-mass mixing ratio (r) of N2O'), &
        sbr_nm//": pa long_name in "//__FILE__)
@@ -3884,6 +3952,8 @@ program clm
   rcd=nf90_wrp(nf90_put_att(nc_id,vmr_CO2_id,'long_name','Volume mixing ratio of CO2'), &
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,vmr_CH4_id,'long_name','Volume mixing ratio of CH4'), &
+       sbr_nm//": pa long_name in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,vmr_CO_id,'long_name','Volume mixing ratio of CO'), &
        sbr_nm//": pa long_name in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,vmr_N2O_id,'long_name','Volume mixing ratio of N2O'), &
        sbr_nm//": pa long_name in "//__FILE__)
@@ -4000,6 +4070,7 @@ program clm
   rcd=nf90_wrp(nf90_put_att(nc_id,cld_frc_id,'units','fraction'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,cnc_CO2_id,'units','molecule meter-3'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,cnc_CH4_id,'units','molecule meter-3'),sbr_nm//": pa units in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,cnc_CO_id,'units','molecule meter-3'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,cnc_N2O_id,'units','molecule meter-3'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,cnc_CFC11_id,'units','molecule meter-3'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,cnc_CFC12_id,'units','molecule meter-3'),sbr_nm//": pa units in "//__FILE__)
@@ -4025,6 +4096,7 @@ program clm
   rcd=nf90_wrp(nf90_put_att(nc_id,pcl_DLR_id,'units','kelvin meter-1'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,dns_CO2_id,'units','kilogram meter-3'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,dns_CH4_id,'units','kilogram meter-3'),sbr_nm//": pa units in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,dns_CO_id,'units','kilogram meter-3'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,dns_N2O_id,'units','kilogram meter-3'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,dns_CFC11_id,'units','kilogram meter-3'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,dns_CFC12_id,'units','kilogram meter-3'),sbr_nm//": pa units in "//__FILE__)
@@ -4108,6 +4180,7 @@ program clm
   rcd=nf90_wrp(nf90_put_att(nc_id,pcl_MLR_id,'units','kelvin meter-1'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CO2_id,'units','kilogram meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CH4_id,'units','kilogram meter-2'),sbr_nm//": pa units in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CO_id,'units','kilogram meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,mpc_N2O_id,'units','kilogram meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CFC11_id,'units','kilogram meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,mpc_CFC12_id,'units','kilogram meter-2'),sbr_nm//": pa units in "//__FILE__)
@@ -4129,6 +4202,7 @@ program clm
   rcd=nf90_wrp(nf90_put_att(nc_id,mpc_mst_air_id,'units','kilogram meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,mpl_CO2_id,'units','kilogram meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,mpl_CH4_id,'units','kilogram meter-2'),sbr_nm//": pa units in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,mpl_CO_id,'units','kilogram meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,mpl_N2O_id,'units','kilogram meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,mpl_CFC11_id,'units','kilogram meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,mpl_CFC12_id,'units','kilogram meter-2'),sbr_nm//": pa units in "//__FILE__)
@@ -4149,6 +4223,7 @@ program clm
   rcd=nf90_wrp(nf90_put_att(nc_id,mpl_mst_air_id,'units','kilogram meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npc_CO2_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npc_CH4_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,npc_CO_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npc_N2O_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npc_CFC11_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npc_CFC12_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
@@ -4164,6 +4239,7 @@ program clm
   rcd=nf90_wrp(nf90_put_att(nc_id,npc_mst_air_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npl_CO2_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npl_CH4_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,npl_CO_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npl_N2O_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npl_CFC11_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npl_CFC12_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
@@ -4185,6 +4261,7 @@ program clm
   rcd=nf90_wrp(nf90_put_att(nc_id,pcl_PLR_id,'units','kelvin meter-1'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,ppr_CO2_id,'units','pascal'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,ppr_CH4_id,'units','pascal'),sbr_nm//": pa units in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,ppr_CO_id,'units','pascal'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,ppr_N2O_id,'units','pascal'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,ppr_CFC11_id,'units','pascal'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,ppr_CFC12_id,'units','pascal'),sbr_nm//": pa units in "//__FILE__)
@@ -4207,6 +4284,7 @@ program clm
   rcd=nf90_wrp(nf90_put_att(nc_id,prs_sfc_id,'units','pascal'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,q_CO2_id,'units','kilogram kilogram-1'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,q_CH4_id,'units','kilogram kilogram-1'),sbr_nm//": pa units in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,q_CO_id,'units','kilogram kilogram-1'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,q_N2O_id,'units','kilogram kilogram-1'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,q_CFC11_id,'units','kilogram kilogram-1'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,q_CFC12_id,'units','kilogram kilogram-1'),sbr_nm//": pa units in "//__FILE__)
@@ -4223,6 +4301,7 @@ program clm
   rcd=nf90_wrp(nf90_put_att(nc_id,qst_H2O_lqd_id,'units','kilogram kilogram-1'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,r_CO2_id,'units','kilogram kilogram-1'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,r_CH4_id,'units','kilogram kilogram-1'),sbr_nm//": pa units in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,r_CO_id,'units','kilogram kilogram-1'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,r_N2O_id,'units','kilogram kilogram-1'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,r_CFC11_id,'units','kilogram kilogram-1'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,r_CFC12_id,'units','kilogram kilogram-1'),sbr_nm//": pa units in "//__FILE__)
@@ -4271,6 +4350,7 @@ program clm
   rcd=nf90_wrp(nf90_put_att(nc_id,tpt_vrt_id,'units','kelvin'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,vmr_CO2_id,'units','number number-1'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,vmr_CH4_id,'units','number number-1'),sbr_nm//": pa units in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,vmr_CO_id,'units','number number-1'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,vmr_N2O_id,'units','number number-1'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,vmr_CFC11_id,'units','number number-1'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,vmr_CFC12_id,'units','number number-1'),sbr_nm//": pa units in "//__FILE__)
@@ -4338,6 +4418,7 @@ program clm
   rcd=nf90_wrp(nf90_put_var(nc_id,cnc_CFC11_id,cnc_CFC11),sbr_nm//": pv cnc_CFC11"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,cnc_CFC12_id,cnc_CFC12),sbr_nm//": pv cnc_CFC12"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,cnc_CH4_id,cnc_CH4),sbr_nm//": pv cnc_CH4"//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,cnc_CO_id,cnc_CO),sbr_nm//": pv cnc_CO"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,cnc_CO2_id,cnc_CO2),sbr_nm//": pv cnc_CO2"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,cnc_H2OH2O_id,cnc_H2OH2O),sbr_nm//": pv cnc_H2OH2O"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,cnc_H2O_id,cnc_H2O),sbr_nm//": pv cnc_H2O"//__FILE__)
@@ -4363,6 +4444,7 @@ program clm
   rcd=nf90_wrp(nf90_put_var(nc_id,dns_CFC11_id,dns_CFC11),sbr_nm//": pv dns_CFC11"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,dns_CFC12_id,dns_CFC12),sbr_nm//": pv dns_CFC12"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,dns_CH4_id,dns_CH4),sbr_nm//": pv dns_CH4"//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,dns_CO_id,dns_CO),sbr_nm//": pv dns_CO"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,dns_CO2_id,dns_CO2),sbr_nm//": pv dns_CO2"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,dns_H2OH2O_id,dns_H2OH2O),sbr_nm//": pv dns_H2OH2O"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,dns_H2O_id,dns_H2O),sbr_nm//": pv dns_H2O"//__FILE__)
@@ -4445,6 +4527,7 @@ program clm
   rcd=nf90_wrp(nf90_put_var(nc_id,mpc_CFC11_id,mpc_CFC11),sbr_nm//": pv mpc_CFC11"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,mpc_CFC12_id,mpc_CFC12),sbr_nm//": pv mpc_CFC12"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,mpc_CH4_id,mpc_CH4),sbr_nm//": pv mpc_CH4"//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,mpc_CO_id,mpc_CO),sbr_nm//": pv mpc_CO"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,mpc_CO2_id,mpc_CO2),sbr_nm//": pv mpc_CO2"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,mpc_CWP_id,mpc_CWP),sbr_nm//": pv mpc_CWP"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,mpc_H2OH2O_id,mpc_H2OH2O),sbr_nm//": pv mpc_H2OH2O"//__FILE__)
@@ -4466,6 +4549,7 @@ program clm
   rcd=nf90_wrp(nf90_put_var(nc_id,mpl_CFC11_id,mpl_CFC11),sbr_nm//": pv mpl_CFC11"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,mpl_CFC12_id,mpl_CFC12),sbr_nm//": pv mpl_CFC12"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,mpl_CH4_id,mpl_CH4),sbr_nm//": pv mpl_CH4"//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,mpl_CO_id,mpl_CO),sbr_nm//": pv mpl_CO"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,mpl_CO2_id,mpl_CO2),sbr_nm//": pv mpl_CO2"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,mpl_CWP_id,mpl_CWP),sbr_nm//": pv mpl_CWP"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,mpl_H2OH2O_id,mpl_H2OH2O),sbr_nm//": pv mpl_H2OH2O"//__FILE__)
@@ -4486,6 +4570,7 @@ program clm
   rcd=nf90_wrp(nf90_put_var(nc_id,npc_CFC11_id,npc_CFC11),sbr_nm//": pv npc_CFC11"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,npc_CFC12_id,npc_CFC12),sbr_nm//": pv npc_CFC12"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,npc_CH4_id,npc_CH4),sbr_nm//": pv npc_CH4"//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,npc_CO_id,npc_CO),sbr_nm//": pv npc_CO"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,npc_CO2_id,npc_CO2),sbr_nm//": pv npc_CO2"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,npc_H2OH2O_id,npc_H2OH2O),sbr_nm//": pv npc_H2OH2O"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,npc_H2O_id,npc_H2O),sbr_nm//": pv npc_H2O"//__FILE__)
@@ -4501,6 +4586,7 @@ program clm
   rcd=nf90_wrp(nf90_put_var(nc_id,npl_CFC11_id,npl_CFC11),sbr_nm//": pv npl_CFC11"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,npl_CFC12_id,npl_CFC12),sbr_nm//": pv npl_CFC12"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,npl_CH4_id,npl_CH4),sbr_nm//": pv npl_CH4"//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,npl_CO_id,npl_CO),sbr_nm//": pv npl_CO"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,npl_CO2_id,npl_CO2),sbr_nm//": pv npl_CO2"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,npl_H2OH2O_id,npl_H2OH2O),sbr_nm//": pv npl_H2OH2O"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,npl_H2O_id,npl_H2O),sbr_nm//": pv npl_H2O"//__FILE__)
@@ -4523,6 +4609,7 @@ program clm
   rcd=nf90_wrp(nf90_put_var(nc_id,ppr_CFC11_id,ppr_CFC11),sbr_nm//": pv ppr_CFC11"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,ppr_CFC12_id,ppr_CFC12),sbr_nm//": pv ppr_CFC12"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,ppr_CH4_id,ppr_CH4),sbr_nm//": pv ppr_CH4"//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,ppr_CO_id,ppr_CO),sbr_nm//": pv ppr_CO"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,ppr_CO2_id,ppr_CO2),sbr_nm//": pv ppr_CO2"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,ppr_H2OH2O_id,ppr_H2OH2O),sbr_nm//": pv ppr_H2OH2O"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,ppr_H2O_id,ppr_H2O),sbr_nm//": pv ppr_H2O"//__FILE__)
@@ -4545,6 +4632,7 @@ program clm
   rcd=nf90_wrp(nf90_put_var(nc_id,q_CFC11_id,q_CFC11),sbr_nm//": pv q_CFC11"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,q_CFC12_id,q_CFC12),sbr_nm//": pv q_CFC12"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,q_CH4_id,q_CH4),sbr_nm//": pv q_CH4"//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,q_CO_id,q_CO),sbr_nm//": pv q_CO"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,q_CO2_id,q_CO2),sbr_nm//": pv q_CO2"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,q_H2OH2O_id,q_H2OH2O),sbr_nm//": pv q_H2OH2O"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,q_H2OH2O_rcp_q_H2O_id,q_H2OH2O_rcp_q_H2O),sbr_nm//": pv q_H2OH2O_rcp_q_H2O"//__FILE__)
@@ -4561,6 +4649,7 @@ program clm
   rcd=nf90_wrp(nf90_put_var(nc_id,r_CFC11_id,r_CFC11),sbr_nm//": pv r_CFC11"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,r_CFC12_id,r_CFC12),sbr_nm//": pv r_CFC12"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,r_CH4_id,r_CH4),sbr_nm//": pv r_CH4"//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,r_CO_id,r_CO),sbr_nm//": pv r_CO"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,r_CO2_id,r_CO2),sbr_nm//": pv r_CO2"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,r_H2OH2O_id,r_H2OH2O),sbr_nm//": pv r_H2OH2O"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,r_H2O_id,r_H2O),sbr_nm//": pv r_H2O"//__FILE__)
@@ -4611,6 +4700,7 @@ program clm
   rcd=nf90_wrp(nf90_put_var(nc_id,vmr_CFC11_id,vmr_CFC11),sbr_nm//": pv vmr_CFC11"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,vmr_CFC12_id,vmr_CFC12),sbr_nm//": pv vmr_CFC12"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,vmr_CH4_id,vmr_CH4),sbr_nm//": pv vmr_CH4"//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,vmr_CO_id,vmr_CO),sbr_nm//": pv vmr_CO"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,vmr_CO2_id,vmr_CO2),sbr_nm//": pv vmr_CO2"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,vmr_H2OH2O_id,vmr_H2OH2O),sbr_nm//": pv vmr_H2OH2O"//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,vmr_H2O_id,vmr_H2O),sbr_nm//": pv vmr_H2O"//__FILE__)
@@ -4659,6 +4749,7 @@ program clm
   if (allocated(cnc_CFC11)) deallocate(cnc_CFC11,stat=rcd)
   if (allocated(cnc_CFC12)) deallocate(cnc_CFC12,stat=rcd)
   if (allocated(cnc_CH4)) deallocate(cnc_CH4,stat=rcd)
+  if (allocated(cnc_CO)) deallocate(cnc_CO,stat=rcd)
   if (allocated(cnc_CO2)) deallocate(cnc_CO2,stat=rcd)
   if (allocated(cnc_H2O)) deallocate(cnc_H2O,stat=rcd)
   if (allocated(cnc_H2OH2O)) deallocate(cnc_H2OH2O,stat=rcd)
@@ -4679,6 +4770,7 @@ program clm
   if (allocated(dns_CFC11)) deallocate(dns_CFC11,stat=rcd)
   if (allocated(dns_CFC12)) deallocate(dns_CFC12,stat=rcd)
   if (allocated(dns_CH4)) deallocate(dns_CH4,stat=rcd)
+  if (allocated(dns_CO)) deallocate(dns_CO,stat=rcd)
   if (allocated(dns_CO2)) deallocate(dns_CO2,stat=rcd)
   if (allocated(dns_H2O)) deallocate(dns_H2O,stat=rcd)
   if (allocated(dns_H2OH2O)) deallocate(dns_H2OH2O,stat=rcd)
@@ -4703,6 +4795,7 @@ program clm
   if (allocated(mpl_CFC11)) deallocate(mpl_CFC11,stat=rcd)
   if (allocated(mpl_CFC12)) deallocate(mpl_CFC12,stat=rcd)
   if (allocated(mpl_CH4)) deallocate(mpl_CH4,stat=rcd)
+  if (allocated(mpl_CO)) deallocate(mpl_CO,stat=rcd)
   if (allocated(mpl_CO2)) deallocate(mpl_CO2,stat=rcd)
   if (allocated(mpl_CWP)) deallocate(mpl_CWP,stat=rcd)
   if (allocated(mpl_H2O)) deallocate(mpl_H2O,stat=rcd)
@@ -4723,6 +4816,7 @@ program clm
   if (allocated(npl_CFC11)) deallocate(npl_CFC11,stat=rcd)
   if (allocated(npl_CFC12)) deallocate(npl_CFC12,stat=rcd)
   if (allocated(npl_CH4)) deallocate(npl_CH4,stat=rcd)
+  if (allocated(npl_CO)) deallocate(npl_CO,stat=rcd)
   if (allocated(npl_CO2)) deallocate(npl_CO2,stat=rcd)
   if (allocated(npl_H2O)) deallocate(npl_H2O,stat=rcd)
   if (allocated(npl_H2OH2O)) deallocate(npl_H2OH2O,stat=rcd)
@@ -4746,6 +4840,7 @@ program clm
   if (allocated(ppr_CFC11)) deallocate(ppr_CFC11,stat=rcd)
   if (allocated(ppr_CFC12)) deallocate(ppr_CFC12,stat=rcd)
   if (allocated(ppr_CH4)) deallocate(ppr_CH4,stat=rcd)
+  if (allocated(ppr_CO)) deallocate(ppr_CO,stat=rcd)
   if (allocated(ppr_CO2)) deallocate(ppr_CO2,stat=rcd)
   if (allocated(ppr_H2O)) deallocate(ppr_H2O,stat=rcd)
   if (allocated(ppr_H2OH2O)) deallocate(ppr_H2OH2O,stat=rcd)
@@ -4764,6 +4859,7 @@ program clm
   if (allocated(q_CFC11)) deallocate(q_CFC11,stat=rcd)
   if (allocated(q_CFC12)) deallocate(q_CFC12,stat=rcd)
   if (allocated(q_CH4)) deallocate(q_CH4,stat=rcd)
+  if (allocated(q_CO)) deallocate(q_CO,stat=rcd)
   if (allocated(q_CO2)) deallocate(q_CO2,stat=rcd)
   if (allocated(q_H2O)) deallocate(q_H2O,stat=rcd)
   if (allocated(q_H2OH2O)) deallocate(q_H2OH2O,stat=rcd)
@@ -4780,6 +4876,7 @@ program clm
   if (allocated(r_CFC11)) deallocate(r_CFC11,stat=rcd)
   if (allocated(r_CFC12)) deallocate(r_CFC12,stat=rcd)
   if (allocated(r_CH4)) deallocate(r_CH4,stat=rcd)
+  if (allocated(r_CO)) deallocate(r_CO,stat=rcd)
   if (allocated(r_CO2)) deallocate(r_CO2,stat=rcd)
   if (allocated(r_H2O)) deallocate(r_H2O,stat=rcd)
   if (allocated(r_H2OH2O)) deallocate(r_H2OH2O,stat=rcd)
@@ -4806,6 +4903,7 @@ program clm
   if (allocated(vmr_CFC11)) deallocate(vmr_CFC11,stat=rcd)
   if (allocated(vmr_CFC12)) deallocate(vmr_CFC12,stat=rcd)
   if (allocated(vmr_CH4)) deallocate(vmr_CH4,stat=rcd)
+  if (allocated(vmr_CO)) deallocate(vmr_CO,stat=rcd)
   if (allocated(vmr_CO2)) deallocate(vmr_CO2,stat=rcd)
   if (allocated(vmr_H2O)) deallocate(vmr_H2O,stat=rcd)
   if (allocated(vmr_H2OH2O)) deallocate(vmr_H2OH2O,stat=rcd)

@@ -2,7 +2,7 @@
 
 ! Purpose: Utility routines for column (CLM) processing
 
-! Copyright (C) 1994--2017 Charlie Zender
+! Copyright (C) 1994--2018 Charlie Zender
 ! This software is distributed under the terms of the GNU General Public License
 ! See http://www.gnu.org/copyleft/gpl.html for full license text
 
@@ -206,10 +206,9 @@ contains
   
   real function q_NO2_ntp(prs)
     ! Purpose:
-    ! Compute mixing ratio of NO2 based on constant relative concentration.
-    ! Input volume mixing ratio as a fraction, i.e., 350 ppmv = 350/1.0e6 = 3.5e-4
-    ! Input pressure in pascal. 
-    ! NO2 mixing ratio returned in kg/kg.
+    ! Compute mixing ratio of NO2 based on constant relative concentration
+    ! Input pressure in pascal
+    ! NO2 mixing ratio returned in kg/kg
     use phys_cst_mdl,only:mmw_dry_air,mmw_NO2 ! [mdl] Fundamental and derived physical constants
     implicit none
     ! Parameters
@@ -233,8 +232,6 @@ contains
        ! Set NO2 mixing ratio to clean tropospheric value everywhere beneath 200 mb
        q_NO2_ntp=NO2_vmr*(mmw_NO2/mmw_dry_air)
     else
-       ! BrS84 p. 443 give mid-latitude equinox values above 10 km (269 mb)
-       ! from equilibrium in a 1-D radiative convective photochemical model
        q_NO2_ntp=0.0
     endif
     
@@ -243,15 +240,14 @@ contains
   
   real function q_OH_ntp(prs)
     ! Purpose:
-    ! Compute mixing ratio of OH based on constant relative concentration.
-    ! Input volume mixing ratio as a fraction, i.e., 350 ppmv = 350/1.0e6 = 3.5e-4
-    ! Input pressure in pascal 
+    ! Guess mass mixing ratio of OH
+    ! Input pressure in pascal
     ! OH mixing ratio returned in kg/kg
     implicit none
     ! Parameters
-    ! Clean troposphere OH_mmr is XXX ppbv, average is XXX ppbv
-    ! Polluted troposphere OH_mmr is XXX ppbv, average is XXX ppbv
-    real,parameter::OH_mmr=1.0e-13
+    ! https://www.atmos-chem-phys.net/1/37/2001/acp-1-37-2001.pdf
+    ! Best guesses for global mean mass-weighted [OH] are ~10^6 molec/cm3
+    real,parameter::OH_mmr=0.2e-12
     ! Input Arguments
     real,intent(in)::prs                  ! pascal
     ! Input/Output Arguments
@@ -260,16 +256,42 @@ contains
     ! Main code
     
     if (prs > 20000.0) then
-       ! BrS84 p. 443 give mid-latitude equinox values
-       ! from equilibrium in a 1-D radiative convective photochemical model
        q_OH_ntp=OH_mmr
     else
-       ! Set OH mixing ratio to clean tropospheric value everywhere beneath 200 mb
+       ! Set OH mixing ratio to zero above 200 mb
        q_OH_ntp=0.0
     endif
     
     return
   end function q_OH_ntp                       ! end q_OH_ntp()
+  
+  real function q_CO_ntp(prs)
+    ! Purpose:
+    ! Compute mixing ratio of CO based on constant relative concentration
+    ! Input pressure in pascal
+    ! CO mixing ratio returned in kg/kg
+    use phys_cst_mdl,only:mmw_dry_air,mmw_CO ! [mdl] Fundamental and derived physical constants
+    implicit none
+    ! Parameters
+    ! Clean troposphere CO_vmr is fxm ppbv, average is fxm ppbv (Sei86 p. 37)
+    ! Polluted troposphere CO_vmr is fxm ppbv, average is fxm ppbv (Sei86 p. 37)
+    real,parameter::CO_vmr=120.0e-09
+    ! Input Arguments
+    real,intent(in)::prs                  ! pascal
+    ! Input/Output Arguments
+    ! Output Arguments
+    ! Local workspace
+    ! Main code
+    
+    if (prs > 20000.0) then
+       q_CO_ntp=CO_vmr*(mmw_CO/mmw_dry_air)
+    else
+       ! Set CO mixing ratio to zero above 200 mb
+       q_CO_ntp=0.0
+    endif
+    
+    return
+  end function q_CO_ntp                       ! end q_CO_ntp()
   
   subroutine aer_info_get(fl_aer,wvl_obs_aer,dns_aer,ext_cff_mss_aer_spc)
     ! Purpose: Retrieve microphysical optical properties from aerosol file

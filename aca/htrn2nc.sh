@@ -56,3 +56,6 @@ ${HOME}/sw/aca/htrn2nc.pl --mlc=3 --wvn_min=1.0e-4 --wvn_max=50000.0 ${htrn_fl} 
 
 # Methane
 ${HOME}/sw/aca/htrn2nc.pl --mlc=6 --wvn_min=1.0e-4 --wvn_max=50000.0 ${htrn_fl} ${DATA}/hitran/CH4.nc
+
+# Carbon Monoxide
+${HOME}/sw/aca/htrn2nc.pl --mlc=5 --wvn_min=1.0e-4 --wvn_max=50000.0 ${htrn_fl} ${DATA}/hitran/CO.nc

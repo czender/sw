@@ -2,7 +2,7 @@
 
 ! Purpose: Store fundamental physical constants in SI units
 
-! Copyright (C) 1994--2017 Charlie Zender
+! Copyright (C) 1994--2018 Charlie Zender
 ! This software is distributed under the terms of the GNU General Public License
 ! See http://www.gnu.org/copyleft/gpl.html for full license text
 
@@ -38,6 +38,7 @@ module phys_cst_mdl ! [mdl] Fundamental and derived physical constants
   ! keeps Avagadro's number the same and still gets rid of all those pesky factors of 1000.0
   ! High precision mmw's come from HITRAN isotopic distribution in hitran.com
   real,parameter::mmw_CO2=4.4009743e-02 ! [kg mol-1]
+  real,parameter::mmw_CO=2.8010445e-02 ! [kg mol-1]
   real,parameter::mmw_CH4=1.6043060e-02 ! [kg mol-1]
   real,parameter::mmw_CFC11=136.0e-03 ! [kg mol-1] (CCM: physics/comvmr.h)
   real,parameter::mmw_CFC12=120.0e-03 ! [kg mol-1] (CCM: physics/comvmr.h)
@@ -80,6 +81,7 @@ module phys_cst_mdl ! [mdl] Fundamental and derived physical constants
   real,parameter::N2_per_O2=vmr_std_N2/vmr_std_O2 ! 3.72787
   real,parameter::eps_H2O=mmw_H2O/mmw_dry_air ! (0.622) molec wgt vapor/molec wgt dry air
   real,parameter::gas_cst_CO2=gas_cst_unv/mmw_CO2 ! (188.92) [J kg-1 K-1]
+  real,parameter::gas_cst_CO=gas_cst_unv/mmw_CO ! () [J kg-1 K-1]
   real,parameter::gas_cst_CH4=gas_cst_unv/mmw_CH4 ! () [J kg-1 K-1]
   real,parameter::gas_cst_N2O=gas_cst_unv/mmw_N2O ! () [J kg-1 K-1]
   real,parameter::gas_cst_CFC11=gas_cst_unv/mmw_CFC11 ! () [J kg-1 K-1]

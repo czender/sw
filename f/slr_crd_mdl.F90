@@ -2,7 +2,7 @@
 
 ! Purpose: Utilities to compute solar geometry
 
-! Copyright (C) 1994--2017 Charlie Zender
+! Copyright (C) 1994--2018 Charlie Zender
 ! This software is distributed under the terms of the GNU General Public License
 ! See http://www.gnu.org/copyleft/gpl.html for full license text
 

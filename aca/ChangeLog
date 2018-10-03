@@ -1,3 +1,7 @@
+2018-10-03  Charlie Zender  <zender@uci.edu>
+
+	* Include default profiles and line-absorption by CO, N2O
+
 2018-10-02  Charlie Zender  <zender@uci.edu>
 
 	* Utilize temperature dependence of O3 cross-sections in each layer

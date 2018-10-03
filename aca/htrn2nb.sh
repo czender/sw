@@ -37,7 +37,7 @@ htrn2nb -l 2000.0 -h 27000.0 -b 2500 -i ${DATA}/hitran/N2.nc -o ${DATA}/aca/mlk_
 htrn2nb -l 2000.0 -h 27000.0 -b 2500 -i ${DATA}/hitran/O3.nc -o ${DATA}/aca/mlk_O3.nc
 
 # Nitrous Oxide:
-htrn2nb -l 2000.0 -h 27000.0 -b 2500 -i ${DATA}/hitran/N2O.nc -o ${DATA}/aca/mlk_N2O.nc
+htrn2nb -l 2000.0 -h 27000.0 -b 5000 -i ${DATA}/hitran/N2O.nc -o ${DATA}/aca/mlk_N2O.nc
 
 # Nitric Oxide:
 htrn2nb -l 2000.0 -h 27000.0 -b 2500 -i ${DATA}/hitran/NO.nc -o ${DATA}/aca/mlk_NO.nc
@@ -54,4 +54,6 @@ htrn2nb -l 2000.0 -h 27000.0 -b 2500 -i ${DATA}/hitran/H2O2.nc -o ${DATA}/aca/ml
 # Methane:
 htrn2nb -l 2000.0 -h 27000.0 -b 5000 -i ${DATA}/hitran/CH4.nc -o ${DATA}/aca/mlk_CH4.nc
 
+# Carbon Monoxide:
+htrn2nb -l 2000.0 -h 27000.0 -b 5000 -i ${DATA}/hitran/CO.nc -o ${DATA}/aca/mlk_CO.nc
 
