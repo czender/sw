@@ -433,7 +433,8 @@ program swnb2
   character(sng_lng_dfl_fl)::fl_NO2=nlc
   character(sng_lng_dfl_fl)::fl_O2=nlc
   character(sng_lng_dfl_fl)::fl_O3=nlc
-  character(sng_lng_dfl_fl)::fl_HHHCWC=nlc
+  character(sng_lng_dfl_fl)::fl_HC=nlc
+  character(sng_lng_dfl_fl)::fl_HHCWC=nlc
   character(sng_lng_dfl_fl)::fl_O2O2=nlc
   character(sng_lng_dfl_fl)::fl_OH=nlc
   character(sng_lng_dfl_fl)::fl_CH4=nlc
@@ -464,10 +465,10 @@ program swnb2
   character(sng_lng_dfl_stt)::stt_CO2=nlc
   character(sng_lng_dfl_stt)::stt_H2O=nlc
   character(sng_lng_dfl_stt)::stt_H2OH2O=nlc
-  character(sng_lng_dfl_stt)::stt_Herzberg=nlc
   character(sng_lng_dfl_stt)::stt_NO2=nlc
   character(sng_lng_dfl_stt)::stt_O2=nlc
-  character(sng_lng_dfl_stt)::stt_HHHCWC=nlc
+  character(sng_lng_dfl_stt)::stt_HC=nlc
+  character(sng_lng_dfl_stt)::stt_HHCWC=nlc
   character(sng_lng_dfl_stt)::stt_O3=nlc
   character(sng_lng_dfl_stt)::stt_O2O2=nlc
   character(sng_lng_dfl_stt)::stt_O2N2=nlc
@@ -526,10 +527,10 @@ program swnb2
   logical flg_CO2
   logical flg_H2OH2O
   logical flg_H2O
-  logical flg_Herzberg
   logical flg_NO2
   logical flg_O2
-  logical flg_HHHCWC
+  logical flg_HC
+  logical flg_HHCWC
   logical flg_O3
   logical flg_O2O2
   logical flg_O2N2
@@ -583,7 +584,7 @@ program swnb2
   integer bnd_nbr_O2        ! dimension size
   integer bnd_nbr_O2O2      ! dimension size
   integer bnd_nbr_O3        ! dimension size
-  integer bnd_nbr_HHHC        ! dimension size
+  integer bnd_nbr_HHCWC      ! dimension size
   integer bnd_nbr_OH        ! dimension size
   integer bnd_nbr_CH4       ! dimension size
   integer bnd_nbr_CO       ! dimension size
@@ -597,7 +598,7 @@ program swnb2
   integer bnd_nbr_rfl       ! dimension size
   integer bnd_nbr_mpr       ! dimension size
   integer bnd_nbr_snw       ! dimension size
-  integer bnd_nbr_non_HHHC    ! dimension size
+  integer bnd_nbr_non_HHCWC    ! dimension size
   integer bnd_nbr_lmn       ! dimension size
   integer bnd_nbr_nst       ! dimension size
   integer lev_nbr           ! dimension size
@@ -614,7 +615,7 @@ program swnb2
   integer mmn_spc_nbr       ! dimension size
   integer lgn_dmn_sz        ! dimension size
   integer plr_nbr           ! dimension size
-  integer bnd_nbr_pure_HHHC   ! dimension size
+  integer bnd_nbr_pure_HHCWC   ! dimension size
   integer str_nbr           ! dimension size
   integer tau_nbr           ! dimension size
 #ifdef _OPENMP
@@ -633,9 +634,9 @@ program swnb2
   integer bnd_idx_CO2       ! counting index
   integer bnd_idx_H2O       ! counting index
   integer bnd_idx_O3        ! counting index
-  integer bnd_idx_HHHC      ! counting index
+  integer bnd_idx_HHCWC      ! counting index
   integer bnd_idx_nst       ! counting index
-  integer bnd_idx_tmp_HHHC    ! counting index
+  integer bnd_idx_tmp_HHCWC    ! counting index
   integer chn_idx           ! counting index
   integer i21               ! counting index
   integer lev_TOA           ! counting index
@@ -1461,7 +1462,7 @@ program swnb2
   ! Array dimensions: azi,plr,levp
   real,dimension(:,:,:),allocatable::ntn_spc_chn
 
-  ! HHHCWC input variables
+  ! HHCWC input variables
   real abs_xsx_O2(bnd_nbr_O2_HC_max)
   real abs_xsx_O3(bnd_nbr_O3_HHCWC_max)
   real abs_xsx_O3_dadT(bnd_nbr_O3_HHCWC_max)
@@ -2039,7 +2040,8 @@ program swnb2
   fl_N2O='mlk_N2O.nc'//nlc
   fl_CH4='mlk_CH4.nc'//nlc
   fl_O2='mlk_O2.nc'//nlc
-  fl_HHHCWC='abs_xsx_O3.nc'//nlc
+  fl_HC='abs_xsx_O2_WMO85.nc'//nlc
+  fl_HHCWC='abs_xsx_O3_WMO85.nc'//nlc
   fl_O3='mlk_O3.nc'//nlc
   fl_O2O2='abs_xsx_O2O2.nc'//nlc
   fl_NO2='abs_xsx_NO2.nc'//nlc
@@ -2091,8 +2093,8 @@ program swnb2
   flg_CO2=.true.
   flg_H2O=.true.
   flg_H2OH2O=.false. ! [flg] H2OH2O is only gas permanently turned-off by default
-  flg_Herzberg=.true.
-  flg_HHHCWC=.true.
+  flg_HC=.true.
+  flg_HHCWC=.true.
   flg_NO2=.true.
   flg_O2=.true.
   flg_O2N2=.true.
@@ -2263,7 +2265,6 @@ program swnb2
         else if (opt_sng == 'mpc_CWP' .or. opt_sng == 'CWP') then
            cmd_ln_mpc_CWP=.true.
            call ftn_arg_get(arg_idx,arg_val,mpc_CWP_cmd_ln) ! [kg m-2] Condensed Water Path
-        call ftn_arg_get(arg_idx,arg_val,mpc_CWP_cmd_ln)
         else if (opt_sng == 'CO') then
            flg_CO=.true.
         else if (opt_sng == 'H2OH2O') then
@@ -2308,8 +2309,8 @@ program swnb2
            flg_O2N2=.false.
         else if (opt_sng == 'no_O3') then
            flg_O3=.false.
-        else if (opt_sng == 'no_HHHCWC') then
-           flg_HHHCWC=.false.
+        else if (opt_sng == 'no_HHCWC') then
+           flg_HHCWC=.false.
         else if (opt_sng == 'no_OH') then
            flg_OH=.false.
         else if (opt_sng == 'odxc_aer') then
@@ -2487,7 +2488,7 @@ program swnb2
      call ftn_drcpfx(drc_in,fl_NO2) ! [sng] NO2 file
      call ftn_drcpfx(drc_in,fl_O2) ! [sng] O2 file
      call ftn_drcpfx(drc_in,fl_O2O2) ! [sng] O2O2 file
-     call ftn_drcpfx(drc_in,fl_HHHCWC) ! [sng] HHHCWC file
+     call ftn_drcpfx(drc_in,fl_HHCWC) ! [sng] HHCWC file
      call ftn_drcpfx(drc_in,fl_O3) ! [sng] O3 file
      call ftn_drcpfx(drc_in,fl_OH) ! [sng] OH file
      call ftn_drcpfx(drc_in,fl_CH4) ! [sng] CH4 file
@@ -2511,7 +2512,6 @@ program swnb2
   if (ftn_strlen(drc_out) > 0) call ftn_drcpfx(drc_out,fl_out) ! [sng] Output file
   
   ! Herzberg continuum data currently read-in with O3 Hartley, Huggins, Chappuis, Wulf continuum data
-  flg_Herzberg=flg_HHHCWC
   mmn_nbr=str_nbr           ! # moments always equals # streams
   if (sv_cmp_plr_ngl) then
      plr_nbr=str_nbr
@@ -2585,15 +2585,15 @@ program swnb2
   else
      call ftn_strcpylsc(stt_O3,'O3 line absorption: Off')
   endif
-  if (flg_Herzberg) then
-     call ftn_strcpylsc(stt_Herzberg,'O2 Herzberg bands: Continuum absorption cross sections from '//fl_HHHCWC)
+  if (flg_HC) then
+     call ftn_strcpylsc(stt_HC,'O2 Herzberg bands: Continuum absorption cross sections from '//fl_HC)
   else
-     call ftn_strcpylsc(stt_Herzberg,'O2 Herzberg bands: Off')
+     call ftn_strcpylsc(stt_HC,'O2 Herzberg bands: Off')
   endif
-  if (flg_HHHCWC) then
-     call ftn_strcpylsc(stt_HHHCWC,'O3 Hartley, Huggins, Chappuis, and Wulf bands: Continuum absorption cross sections from '//fl_HHHCWC)
+  if (flg_HHCWC) then
+     call ftn_strcpylsc(stt_HHCWC,'O3 Hartley, Huggins, Chappuis, and Wulf bands: Continuum absorption cross sections from '//fl_HHCWC)
   else
-     call ftn_strcpylsc(stt_HHHCWC,'O3 Hartley, Huggins, Chappuis, and Wulf bands: Off')
+     call ftn_strcpylsc(stt_HHCWC,'O3 Hartley, Huggins, Chappuis, and Wulf bands: Off')
   endif
   if (flg_O2O2) then
      call ftn_strcpylsc(stt_O2O2,'O2-O2 collision-induced absorption: Continuum absorption cross sections from '//fl_O2O2)
@@ -3452,8 +3452,8 @@ program swnb2
   ! Close file
   rcd=nf90_wrp_close(nc_id,fl_O3,'Ingested') ! [fnc] Close file
 
-  ! Ingest fl_HHHCWC
-  rcd=nf90_wrp_open(fl_HHHCWC,nf90_nowrite,nc_id)
+  ! Ingest fl_HHCWC
+  rcd=nf90_wrp_open(fl_HHCWC,nf90_nowrite,nc_id)
   ! Get dimension IDs
   rcd=nf90_wrp_inq_dimid(nc_id,'bnd_O2_HC',bnd_dmn_O2_HC_id)
   rcd=nf90_wrp_inq_dimid(nc_id,'bnd_O3_HHCWC',bnd_dmn_O3_HHCWC_id)
@@ -3494,7 +3494,7 @@ program swnb2
   rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_O3_HHCWC_id,wvl_min_O3_HHCWC,srt_one,cnt_bnd),"gv wvl_min_O3_HHCWC")
   rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_O3_HHCWC_id,wvl_ctr_O3_HHCWC,srt_one,cnt_bnd),"gv wvl_ctr_O3_HHCWC")
   ! Close file
-  rcd=nf90_wrp_close(nc_id,fl_HHHCWC,'Ingested') ! [fnc] Close file
+  rcd=nf90_wrp_close(nc_id,fl_HHCWC,'Ingested') ! [fnc] Close file
   
   ! Ingest fl_O2O2
   rcd=nf90_wrp_open(fl_O2O2,nf90_nowrite,nc_id)
@@ -4439,7 +4439,7 @@ program swnb2
   lmn_TOA_nL=lmn_ngt_TOA*pi/(1.0e-9*10000.0) ! [lm m-2 sr-1]->[nL]
 
   ! Easiest way to turn-off Herzberg continuum and keep O2 line absorption is to zero absorption cross-sections here
-  if (.not.flg_Herzberg) then
+  if (.not.flg_HC) then
      do bnd_idx_O2_HC=1,bnd_nbr_O2_HC
         abs_xsx_O2(bnd_idx_O2_HC)=0.0
      enddo                  ! end loop over O2_HC bands
@@ -4992,8 +4992,8 @@ program swnb2
           stt_CO2(1:ftn_strlen(stt_CO2)), &
           stt_H2O(1:ftn_strlen(stt_H2O)), &
           stt_H2OH2O(1:ftn_strlen(stt_H2OH2O)), &
-          stt_Herzberg(1:ftn_strlen(stt_Herzberg)), &
-          stt_HHHCWC(1:ftn_strlen(stt_HHHCWC)), &
+          stt_HC(1:ftn_strlen(stt_HC)), &
+          stt_HHCWC(1:ftn_strlen(stt_HHCWC)), &
           stt_ice(1:ftn_strlen(stt_ice)), &
           stt_lqd(1:ftn_strlen(stt_lqd)), &
           stt_cld_sat(1:ftn_strlen(stt_cld_sat)), &
@@ -5419,7 +5419,7 @@ program swnb2
   !$omp$private(rfldir,rfldn)
   !$omp$private(flup,dfdt,uavg,uu,albmed,trnmed,u0u)
   !$omp$private(bnd_idx,lev_idx,bnd_idx_O3,bnd_idx_CO)
-  !$omp$private(bnd_idx_N2O,bnd_idx_N2,bnd_idx_CH4,bnd_idx_H2O,bnd_idx_CO2,bnd_idx_tmp_HHHC,i21)
+  !$omp$private(bnd_idx_N2O,bnd_idx_N2,bnd_idx_CH4,bnd_idx_H2O,bnd_idx_CO2,bnd_idx_tmp_HHCWC,i21)
   !$omp$private(mmn_idx,tau_idx,plr_idx,azi_idx)
   !$omp$private(phi_wgt,psi_wgt,u_bar,prs_bar,float_foo,tau)
   !$omp$private(opt_dep_ITOD_H2O,opt_dep_ITOD_O2,opt_dep_ITOD_OH)
@@ -5439,15 +5439,15 @@ program swnb2
   !$omp$shared(hb,br,f_iso,f_vol,f_geo,nrm_cff_CM,idx_rfr_sfc,b0,hh,w,nrm_rfl_M,k_cff_M,nrm_cff_RP,k_cff_RP,g_phs,nrm_rfl_LS)
   !$omp$shared(wvl_ctr,wvl_dlt,wvl_min,wvl_max,wvn_min,wvn_max,bnd_dbg,tst_case_Rayleigh,tst_case_HG)
   !$omp$shared(flg_Rayleigh,flg_ice,flg_lqd,flg_aer,flg_bga,flg_H2O,flg_H2OH2O,flg_OH,flg_CH4,flg_CO,flg_N2,flg_N2O,flg_O2,flg_CO2)
-  !$omp$shared(flg_O3,flg_HHHCWC,flg_O2O2,flg_O2N2,flg_NO2,bnd_obs_aer,bnd_obs_bga,flg_Planck,wvl_Planck,mode_chn)
+  !$omp$shared(flg_O3,flg_HHCWC,flg_O2O2,flg_O2N2,flg_NO2,bnd_obs_aer,bnd_obs_bga,flg_Planck,wvl_Planck,mode_chn)
   !$omp$shared(prs,prs_ntf,tpt,mmw_mst_air,mpl_mst_air,grv,pi,ocn_msk)
   !$omp$shared(odal_obs_aer,odsl_obs_aer,odxl_obs_aer,odal_obs_bga,odsl_obs_bga,odxl_obs_bga)
   !$omp$shared(slr_zen_ngl_cos,alb_sfc_vsb_drc,alb_sfc_vsb_dff,alb_sfc_NIR_drc,alb_sfc_NIR_dff)
   !$omp$shared(slr_cst_xnt_fac,flx_slr_frc,chn_SRF_msk)
   !$omp$shared(lev_nbr,levp_nbr,plr_nbr,mmn_nbr,azi_nbr,tau_nbr)
-  !$omp$shared(bnd_nbr_H2O,bnd_nbr_pure_HHHC,bnd_nbr_non_HHHC,bnd_nbr_HHHC,bnd_nbr_HHHC)
+  !$omp$shared(bnd_nbr_H2O,bnd_nbr_pure_HHCWC,bnd_nbr_non_HHCWC,bnd_nbr_HC,bnd_nbr_HHCWC)
   !$omp$shared(abs_xsx_O3,abs_xsx_O3_dadT,tpt_std_O3,npl_O3)
-  !$omp$shared(wvl_min_HHHC,wvl_max_HHHC,abs_xsx_O2,npl_O2,bnd_nbr,abs_xsx_H2OH2O,npl_H2OH2O)
+  !$omp$shared(wvl_min_HHCWC,wvl_max_HHCWC,abs_xsx_O2,npl_O2,bnd_nbr,abs_xsx_H2OH2O,npl_H2OH2O)
   !$omp$shared(abs_xsx_O2O2,npl_O2O2,abs_xsx_NO2,npl_NO2)
   !$omp$shared(abs_cff_mss_lqd,mpl_LWP,sca_cff_mss_lqd,bnd_nbr_lqd,wvl_min_lqd,wvl_max_lqd,asm_prm_lqd)
   !$omp$shared(abs_cff_mss_aer,mpl_aer,sca_cff_mss_aer,bnd_nbr_aer,wvl_min_aer,wvl_max_aer,asm_prm_aer)
@@ -8275,8 +8275,8 @@ program swnb2
           sbr_nm//': pa opt_dep_sng in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'stt_H2OH2O',stt_H2OH2O(1:ftn_strlen(stt_H2OH2O))), &
           sbr_nm//': pa stt_H2OH2O in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'stt_Herzberg',stt_Herzberg(1:ftn_strlen(stt_Herzberg))), &
-          sbr_nm//': pa stt_Herzberg in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'stt_HC',stt_HC(1:ftn_strlen(stt_HC))), &
+          sbr_nm//': pa stt_HC in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'stt_O2N2',stt_O2N2(1:ftn_strlen(stt_O2N2))), &
           sbr_nm//': pa stt_O2N2 in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'stt_O2O2',stt_O2O2(1:ftn_strlen(stt_O2O2))), &

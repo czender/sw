@@ -1,3 +1,7 @@
+2018-10-04  Charlie Zender  <zender@uci.edu>
+
+	* Convert O3.F90 for O3 and O2 into O3.F90 for O3 and O2.F90 for O2
+
 2018-10-03  Charlie Zender  <zender@uci.edu>
 
 	* CO and N2O both cause matrix near-singular errors in DISORT, and NaNf fluxes on Linux and memory errors on MacOS

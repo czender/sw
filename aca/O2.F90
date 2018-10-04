@@ -13,6 +13,8 @@ program O2
   ! ncks -H -C -F -d bnd,0.3e-6 -v abs_xsx_O2 ${DATA}/aca/abs_xsx_O2.nc
   
   ! Use WMO85 or JPL15 data
+  ! O2 --JPL15
+  ! O2 --WMO85
   ! O2 -i ${DATA}/aca/abs_xsx_WMO85.txt -o ${DATA}/aca/abs_xsx_O2.nc
   ! Use HITRAN16 data
   ! O2 -i ${DATA}/aca/absO2_200.0_0.0_29164.0-40798.0_04.xsc -o ${DATA}/aca/abs_xsx_O2.nc
@@ -41,6 +43,11 @@ program O2
   ! I corrected my copy of the WMO85 data (${DATA}/aca/abs_xsx_WMO85.txt) on 96/12/27
   
   ! or process input .dat ASCII data files from JPL15 that look like:
+  !wvl (nm) xs(cm2) *1e-24 
+  !-----------------------------------------------------------------------
+  !175.4 177.0   4.61  Begin WMO85 data
+  !177.0 178.6   5.03
+  !178.6 180.2   5.46
 
   ! or process input .xsc ASCII data files from HITRAN that look like:
 
@@ -86,22 +93,32 @@ program O2
   
   implicit none
   ! Parameters
-  character(len=*),parameter::CVS_Id="$Id$" ! [sng] CVS Identification
+  character(len=*),parameter::CVS_Id='$Id$' ! [sng] CVS Identification
   character(len=*),parameter::sbr_nm='O2' ! [sng] Subroutine name
+  character(*),parameter::fl_in_WMO85='abs_xsx_WMO85.txt'
+  character(*),parameter::fl_in_JPL15='abs_xsx_O2_JPL15.txt'
+  character(*),parameter::fl_out_WMO85='abs_xsx_O2_WMO85.nc'
+  character(*),parameter::fl_out_JPL15='abs_xsx_O2_JPL15.nc'
+  character(*),parameter::fl_slr_dfl='spc_Kur95_01wvn.nc'
+  character(*),parameter::nlc=char(0) ! [sng] NUL character = ASCII 0 = char(0)
   
-  ! Arrays are allocatable, but die if size exceeds corresponding *_nbr_max
-  integer fl_in_unit
-  integer bnd_nbr_O2_HC_JPL15
-  integer bnd_nbr_O2_HC_WMO85
-  parameter(fl_in_unit=73, &
-       bnd_nbr_O2_HC_WMO85=158, &
-       bnd_nbr_O2_HC_JPL15=58) &
+  integer,parameter::fl_in_unit=73
+  integer,parameter::bnd_nbr_JPL15=58
+  integer,parameter::bnd_nbr_WMO85=158
+  integer,parameter::sng_lng_dfl_fl=80 ! [nbr] Default filename string length
+  integer,parameter::sng_lng_dfl_stt=200 ! [nbr] Default statement string length
+  real,parameter::mss_val=nf90_fill_float ! Missing value = missing_value and/or _FillValue
+
   ! Input Arguments
   ! Input/Output Arguments
   ! Output Arguments
   ! Local workspace
-  character argv*80
-  character cmd_ln*200
+  character(sng_lng_dfl_fl)::arg_val=nlc      ! [sng] Command line argument value
+  character cmd_ln*500      ! [sng] Command line
+  character dsh_key*2       ! [sng] Command line dash and switch
+  character(sng_lng_dfl_fl)::drc_in=nlc       ! [sng] Input directory
+  character(sng_lng_dfl_fl)::drc_out=nlc      ! [sng] Output directory
+  character(sng_lng_dfl_fl)::opt_sng=nlc      ! [sng] Option string
   character fl_in*80
   character fl_out*80
   character fl_slr*80
@@ -113,27 +130,25 @@ program O2
   character src_fl_sng*200
   character src_rfr_sng*200
   
-  integer arg
-  integer arg_nbr
-  integer int_foo
-  integer exit_status       ! program exit status
+  integer arg_idx           ! [idx] Counting index
+  integer arg_nbr           ! [nbr] Number of command line arguments
+  integer exit_status       ! [enm] Program exit status
+  integer int_foo           ! [nbr] Integer
+  integer opt_lng           ! [nbr] Length of option
+  integer rcd               ! [rcd] Return success code
   integer idx
-  integer rcd               ! return success code
   
   logical JPL15
   logical WMO85
   
-  integer bnd_dim_id        ! dimension ID for bands
-  integer grd_dim_id        ! dimension ID for grid
+  integer bnd_dmn_id        ! dimension ID for bands
+  integer grd_dmn_id        ! dimension ID for grid
   integer bnd_idx           ! counting index
   integer nc_id             ! file handle
-  integer bnd_nbr_O2_HC
-  integer bnd_nbr_O3_HHCWC
   integer bnd_nbr ! dimension size
-  integer tpt_cold_id
-  integer tpt_std_id
   integer Rayleigh_sca_xsx_id
-  integer abs_cff_mss_O3_id
+  integer slr_spc_xtr_typ
+  integer abs_cff_mss_O2_id
   integer abs_xsx_O2_id
   integer bnd_id            ! coordinate ID
   integer flx_bnd_dwn_TOA_id
@@ -147,10 +162,16 @@ program O2
   integer wvl_max_id
   integer wvl_min_id
   integer wvl_dlt_id
+  ! netCDF4 
+  integer::dfl_lvl=0 ! [enm] Deflate level
+  integer::flg_shf=1 ! [flg] Turn on netCDF4 shuffle filter
+  integer::flg_dfl=1 ! [flg] Turn on netCDF4 deflate filter
+  integer::fl_out_fmt=nco_format_undefined ! [enm] Output file format
+  integer::nf90_create_mode=nf90_clobber ! [enm] Mode flag for nf90_create() call
   
   ! Allocatable variables
   real,dimension(:),allocatable::Rayleigh_sca_xsx
-  real,dimension(:),allocatable::abs_cff_mss_O3
+  real,dimension(:),allocatable::abs_cff_mss_O2
   real,dimension(:),allocatable::abs_xsx_O2
   real,dimension(:),allocatable::abs_xsx_O3
   real,dimension(:),allocatable::abs_xsx_O3_cold
@@ -169,16 +190,22 @@ program O2
   real,dimension(:),allocatable::wvl_max
   real,dimension(:),allocatable::wvl_min
   
+  logical cmd_ln_fl_in
+  logical cmd_ln_fl_out
+
   ! Main code
   
   ! Initialize default values
+  drc_in='/data/zender/aca'//nlc ! [sng] Input directory
+  drc_out=''                ! [sng] Output directory
+
   JPL15=.false.
   WMO85=.true.
+  cmd_ln_fl_in=.false.
+  cmd_ln_fl_out=.false.
   dbg_lvl=dbg_off
   exit_status=0
-  fl_in='/data/zender/aca/abs_xsx_WMO85.txt'
-  fl_out='/data/zender/aca/abs_xsx_O2.nc'
-  fl_slr='/data/zender/aca/spc_Kur95_01wvn.nc'
+  fl_slr=fl_slr_dfl
   rcd=nf90_noerr              ! nf90_noerr == 0
   CVS_Date='$Date$'
   CVS_Revision='$Revision$'
@@ -188,37 +215,65 @@ program O2
   call ftn_cmd_ln_sng(cmd_ln)
   call ftn_prg_ID_mk(CVS_Id,CVS_Revision,CVS_Date,prg_ID)
   write (6,'(a)') prg_ID(1:ftn_strlen(prg_ID))
-  arg_nbr=command_argument_count()
-  do arg=1,arg_nbr
-     call getarg(arg,argv)
-     if (argv(1:2) == '-D') then
-        call getarg(arg+1,argv)
-        read (argv,'(i4)') dbg_lvl
-     endif
-     if (argv(1:2) == '-i') then
-        call getarg(arg+1,argv)
-        read (argv,'(a)') fl_in
-     endif
-     if (argv(1:2) == '-o') then
-        call getarg(arg+1,argv)
-        read (argv,'(a)') fl_out
-     endif
-     if (argv(1:2) == '-S') then
-        call getarg(arg+1,argv)
-        read (argv,'(a)') fl_slr
-     endif
-     if (argv(1:2) == '-T') then
-        call getarg(arg+1,argv)
-        read (argv,'(f8.3)') tpt_std
-     endif
-     if (argv(1:2) == '-v') then
+  arg_nbr=command_argument_count()           ! [nbr] Number of command line arguments
+  arg_idx=1                 ! [idx] Counting index
+  loop_while_options: do while (arg_idx <= arg_nbr)
+     call ftn_getarg_wrp(arg_idx,arg_val) ! [sbr] Call getarg, increment arg_idx
+     dsh_key=arg_val(1:2)   ! [sng] First two characters of option
+     if_dbl_dsh: if (dsh_key == '--') then
+        opt_lng=ftn_opt_lng_get(arg_val) ! [nbr] Length of option
+        if (opt_lng <= 0) stop 'Long option has no name'
+        opt_sng=arg_val(3:2+opt_lng) ! [sng] Option string
+        if (opt_sng == 'dbg' .or. opt_sng == 'dbg_lvl' ) then
+           call ftn_arg_get(arg_idx,arg_val,dbg_lvl) ! [enm] Debugging level
+        else if (opt_sng == 'drc_in') then
+           call ftn_arg_get(arg_idx,arg_val,drc_in) ! [sng] Input directory
+        else if (opt_sng == 'drc_out') then
+           call ftn_arg_get(arg_idx,arg_val,drc_out) ! [sng] Output directory
+        else if (opt_sng == 'input' .or. opt_sng == 'fl_O2' .or. opt_sng == 'O2') then
+           call ftn_arg_get(arg_idx,arg_val,fl_in) ! [sng] Ozone file
+        else if (opt_sng == 'JPL15') then
+           JPL15=.true.
+           WMO85=.false.
+        else if (opt_sng == 'WMO85') then
+           WMO85=.true.
+           JPL15=.false.
+        else                ! Option not recognized
+           arg_idx=arg_idx-1 ! [idx] Counting index
+           call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
+        endif               ! endif option is recognized
+        ! Jump to top of while loop
+        cycle loop_while_options ! C, F77, and F90 use "continue", "goto", and "cycle"
+     endif if_dbl_dsh            ! endif long option
+     ! Handle short options
+     if_sgl_dsh: if (dsh_key == '-3') then
+        fl_out_fmt=nf90_format_classic ! [enm] Output file format
+     else if (dsh_key == '-4') then
+        fl_out_fmt=nf90_format_netcdf4 ! [enm] Output file format
+     else if (dsh_key == '-D') then
+        call ftn_arg_get(arg_idx,arg_val,dbg_lvl)
+     else if (dsh_key == '-i') then
+        call ftn_arg_get(arg_idx,arg_val,fl_in)
+        cmd_ln_fl_in=.true.
+     else if (dsh_key == '-J') then
+        JPL15=.true.
+        WMO85=.false.
+     else if (dsh_key == '-o') then
+        call ftn_arg_get(arg_idx,arg_val,fl_out)
+        cmd_ln_fl_out=.true.
+     else if (dsh_key == '-S') then
+        call ftn_arg_get(arg_idx,arg_val,fl_slr)
+     else if (dsh_key == '-v') then
         write (6,'(a)') CVS_Id
         goto 1000
-     endif
-     if (argv(1:2) == '-W') then
+     else if (dsh_key == '-W') then
         WMO85=.true.
-     endif
-  end do
+        JPL15=.false.
+     else                   ! Option not recognized
+        arg_idx=arg_idx-1   ! [idx] Counting index
+        call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
+     endif if_sgl_dsh       ! endif arg_val
+  end do loop_while_options ! end while (arg_idx <= arg_nbr)
   
   ! Compute quantities that depend on command line input
   call ftn_strnul(fl_in)
@@ -226,17 +281,29 @@ program O2
   call ftn_strnul(fl_slr)
   call ftn_strcpy(src_fl_sng,'Original data file is ' // fl_in)
   if (WMO85) then
-     bnd_nbr=bnd_nbr_O2_HC_WMO85
+     bnd_nbr=bnd_nbr_WMO85
+     if (.not.cmd_ln_fl_in) fl_in=fl_in_WMO85//nlc
+     if (.not.cmd_ln_fl_out) fl_out=fl_out_WMO85//nlc
      call ftn_strcpy(src_rfr_sng,'Data reference is WMO (1985) (WMO85)')
-  endif
-  if (JPL15) then
-     bnd_nbr=bnd_nbr_O2_HC_JPL15
+  else if (JPL15) then
+     bnd_nbr=bnd_nbr_JPL15
+     if (.not.cmd_ln_fl_in) fl_in=fl_in_JPL15//nlc
+     if (.not.cmd_ln_fl_out) fl_out=fl_out_JPL15//nlc
      call ftn_strcpy(src_rfr_sng,'Data reference is JPL (2015) (JPL15)')
   endif
 
+  ! Compute quantities that may depend on command line input
+  ! Prepend user-specified path, if any, to input data file names
+  if (ftn_strlen(drc_in) > 0) then
+     call ftn_drcpfx(drc_in,fl_in) ! [sng] Input file
+     call ftn_drcpfx(drc_in,fl_slr) ! [sng] Solar spectrum file
+  endif                     ! endif drc_in
+  ! Prepend user-specified path, if any, to output data file names
+  if (ftn_strlen(drc_out) > 0) call ftn_drcpfx(drc_out,fl_out) ! [sng] Output file
+
   ! Allocate space for dynamic arrays
   allocate(Rayleigh_sca_xsx(bnd_nbr),stat=rcd)
-  allocate(abs_cff_mss_O3(bnd_nbr),stat=rcd)
+  allocate(abs_cff_mss_O2(bnd_nbr),stat=rcd)
   allocate(abs_xsx_O2(bnd_nbr),stat=rcd)
   allocate(abs_xsx_O3(bnd_nbr),stat=rcd)
   allocate(abs_xsx_O3_cold(bnd_nbr),stat=rcd)
@@ -286,23 +353,17 @@ program O2
         abs_xsx_O3_warm(bnd_idx)=abs_xsx_O3_warm(bnd_idx)*1.0e-4 ! cm2 -> m2
      enddo
      
-  endif                     ! WMO85 data
+  else if (JPL15) then            ! JPL15 data
 
-  if (JPL15) then            ! JPL15 data
-     do idx=1,5
+     do idx=1,16
         read (fl_in_unit,'(a80)') lbl
      enddo
      lbl(1:1)=lbl(1:1) ! CEWI
      do bnd_idx=1,bnd_nbr
         read (fl_in_unit,*)  &
-             int_foo, &
              wvl_min(bnd_idx), &
              wvl_max(bnd_idx), &
-             flx_bnd_pht_dwn_TOA(bnd_idx), &
-             Rayleigh_sca_xsx(bnd_idx), &
-             abs_xsx_O2(bnd_idx), &
-             abs_xsx_O3_cold(bnd_idx), &
-             abs_xsx_O3_warm(bnd_idx)
+             abs_xsx_O2(bnd_idx)
      enddo
      int_foo=int_foo ! CEWI
      
@@ -310,11 +371,9 @@ program O2
      do bnd_idx=1,bnd_nbr
         wvl_min(bnd_idx)=wvl_min(bnd_idx)*1.0e-9 ! nm -> m
         wvl_max(bnd_idx)=wvl_max(bnd_idx)*1.0e-9 ! nm -> m
-        flx_bnd_pht_dwn_TOA(bnd_idx)=flx_bnd_pht_dwn_TOA(bnd_idx)*1.0e4 ! #/cm2/s -> #/m2/s
-        Rayleigh_sca_xsx(bnd_idx)=Rayleigh_sca_xsx(bnd_idx)*1.0e-4 ! cm2 -> m2
-        abs_xsx_O2(bnd_idx)=abs_xsx_O2(bnd_idx)*1.0e-4 ! cm2 -> m2
-        abs_xsx_O3_cold(bnd_idx)=abs_xsx_O3_cold(bnd_idx)*1.0e-4 ! cm2 -> m2
-        abs_xsx_O3_warm(bnd_idx)=abs_xsx_O3_warm(bnd_idx)*1.0e-4 ! cm2 -> m2
+        abs_xsx_O2(bnd_idx)=abs_xsx_O2(bnd_idx)*1.0e-24 ! raw -> cm2
+        flx_bnd_pht_dwn_TOA(bnd_idx)=mss_val ! #/cm2/s -> #/m2/s
+        Rayleigh_sca_xsx(bnd_idx)=mss_val ! cm2 -> m2
      enddo
      
   endif                     ! JPL15 data
@@ -339,7 +398,7 @@ program O2
      flx_spc_dwn_TOA(bnd_idx)=flx_slr_frc(bnd_idx)*slr_cst_CCM/wvl_dlt(bnd_idx)
      ! NB: flx_bnd_pht_dwn_TOA is actually supplied in the WMO85 data set
      ! What to do, what to store?
-     flx_bnd_pht_dwn_TOA(bnd_idx)=flx_bnd_dwn_TOA(bnd_idx)/nrg_pht(bnd_idx)
+     if(flx_bnd_pht_dwn_TOA(bnd_idx) /= mss_val) flx_bnd_pht_dwn_TOA(bnd_idx)=flx_bnd_dwn_TOA(bnd_idx)/nrg_pht(bnd_idx)
   enddo                     ! end loop over bnd
   wvl_grd(bnd_nbr+1)=wvl_max(bnd_nbr)
   
@@ -351,112 +410,128 @@ program O2
           prs_STP*0.01/tpt_STP
   enddo
   
-  ! Begin netCDF output routines
-  rcd=rcd+nf90_create(fl_out,nf90_clobber,nc_id)
-  if (rcd /= nf90_noerr) call nf90_err_exit(rcd,fl_out)
+  ! Sanity check
+  if (dbg_lvl >= dbg_fl) then
+     write (6,'(5(a,1x))') 'idx','wvl_ctr','abs_xsx_O2','abs_cff_mss_O2','flx_slr_frc'
+     do bnd_idx=1,bnd_nbr
+        write (6,'(i4,1x,es15.8,1x,es15.8,1x,es15.8,1x,es15.8)')  &
+             bnd_idx,wvl_ctr(bnd_idx),abs_xsx_O2(bnd_idx),abs_cff_mss_O2(bnd_idx),flx_slr_frc(bnd_idx)
+     enddo                  ! end loop over bnd
+  endif                     ! endif dbg
+
+#ifdef ENABLE_NETCDF4
+  if (fl_out_fmt == nco_format_undefined) fl_out_fmt=nf90_format_classic ! [enm] Output file format
+  if (fl_out_fmt == nf90_format_64bit) then
+     nf90_create_mode=nf90_create_mode+nf90_64bit_offset
+  else if (fl_out_fmt == nf90_format_netcdf4) then
+     nf90_create_mode=nf90_create_mode+nf90_netcdf4
+  else if (fl_out_fmt == nf90_format_netcdf4_classic) then
+     nf90_create_mode=nf90_create_mode+(nf90_classic_model+nf90_netcdf4)
+  end if ! end else fl_out_fmt
+#else /* !ENABLE_NETCDF4 */
+  if (fl_out_fmt == nco_format_undefined) fl_out_fmt=nf90_format_classic ! [enm] Output file format
+  if(fl_out_fmt == nf90_format_classic) nf90_create_mode=nf90_create_mode+0 ! CEWI
+#endif /* !ENABLE_NETCDF4 */
+  dfl_lvl=dfl_lvl+0 ! CEWI
+  flg_dfl=flg_dfl+0 ! CEWI
+  flg_shf=flg_shf+0 ! CEWI
+  rcd=nf90_wrp_create(fl_out,nf90_create_mode,nc_id,sbr_nm=sbr_nm)
   
   ! Define dimension IDs
-  rcd=rcd+nf90_def_dim(nc_id,'bnd',bnd_nbr,bnd_dim_id)
-  if (rcd /= nf90_noerr) call nf90_err_exit(rcd,fl_out)
-  rcd=rcd+nf90_def_dim(nc_id,'grd',bnd_nbr+1,grd_dim_id)
-  if (rcd /= nf90_noerr) call nf90_err_exit(rcd,fl_out)
+  rcd=nf90_wrp(nf90_def_dim(nc_id,'bnd',bnd_nbr,bnd_dmn_id),sbr_nm//': def_dim bnd in '//__FILE__)
+  rcd=nf90_wrp(nf90_def_dim(nc_id,'grd',bnd_nbr+1,grd_dmn_id),sbr_nm//': def_dim grd in '//__FILE__)
   
   ! Variable definitions
-  rcd=nf90_wrp(nf90_def_var(nc_id,'Rayleigh_sca_xsx',nf90_float,bnd_dim_id,Rayleigh_sca_xsx_id),sbr_nm//": dv Rayleigh_sca_xsx")
-  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_cff_mss_O2',nf90_float,bnd_dim_id,abs_cff_mss_O2_id),sbr_nm//": dv abs_cff_mss_O2")
-  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_O2',nf90_float,bnd_dim_id,abs_xsx_O2_id),sbr_nm//": dv abs_xsx_O2")
-  rcd=nf90_wrp(nf90_def_var(nc_id,'bnd',nf90_float,bnd_dim_id,bnd_id),sbr_nm//": dv bnd")
-  rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bnd_dwn_TOA',nf90_float,bnd_dim_id,flx_bnd_dwn_TOA_id),sbr_nm//": dv flx_bnd_dwn_TOA")
-  rcd=nf90_wrp(nf90_def_var(nc_id,'flx_slr_frc',nf90_float,bnd_dim_id,flx_slr_frc_id),sbr_nm//": dv flx_slr_frc")
-  rcd=nf90_wrp(nf90_def_var(nc_id,'flx_spc_dwn_TOA',nf90_float,bnd_dim_id,flx_spc_dwn_TOA_id),sbr_nm//": dv flx_spc_dwn_TOA")
-  rcd=nf90_wrp(nf90_def_var(nc_id,'idx_rfr_air_STP',nf90_float,bnd_dim_id,idx_rfr_air_STP_id),sbr_nm//": dv idx_rfr_air_STP")
-  rcd=nf90_wrp(nf90_def_var(nc_id,'nrg_pht',nf90_float,bnd_dim_id,nrg_pht_id),sbr_nm//": dv nrg_pht")
-  rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_ctr',nf90_float,bnd_dim_id,wvl_ctr_id),sbr_nm//": dv wvl_ctr")
-  rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_grd',nf90_float,grd_dim_id,wvl_grd_id),sbr_nm//": dv wvl_grd")
-  rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_max',nf90_float,bnd_dim_id,wvl_max_id),sbr_nm//": dv wvl_max")
-  rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_min',nf90_float,bnd_dim_id,wvl_min_id),sbr_nm//": dv wvl_min")
-  rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_dlt',nf90_float,bnd_dim_id,wvl_dlt_id),sbr_nm//": dv wvl_dlt")
+  rcd=nf90_wrp(nf90_def_var(nc_id,'Rayleigh_sca_xsx',nf90_float,bnd_dmn_id,Rayleigh_sca_xsx_id),sbr_nm//': dv Rayleigh_sca_xsx')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_cff_mss_O2',nf90_float,bnd_dmn_id,abs_cff_mss_O2_id),sbr_nm//': dv abs_cff_mss_O2')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_O2',nf90_float,bnd_dmn_id,abs_xsx_O2_id),sbr_nm//': dv abs_xsx_O2')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'bnd',nf90_float,bnd_dmn_id,bnd_id),sbr_nm//': dv bnd')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bnd_dwn_TOA',nf90_float,bnd_dmn_id,flx_bnd_dwn_TOA_id),sbr_nm//': dv flx_bnd_dwn_TOA')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'flx_slr_frc',nf90_float,bnd_dmn_id,flx_slr_frc_id),sbr_nm//': dv flx_slr_frc')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'flx_spc_dwn_TOA',nf90_float,bnd_dmn_id,flx_spc_dwn_TOA_id),sbr_nm//': dv flx_spc_dwn_TOA')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'idx_rfr_air_STP',nf90_float,bnd_dmn_id,idx_rfr_air_STP_id),sbr_nm//': dv idx_rfr_air_STP')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'nrg_pht',nf90_float,bnd_dmn_id,nrg_pht_id),sbr_nm//': dv nrg_pht')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_ctr',nf90_float,bnd_dmn_id,wvl_ctr_id),sbr_nm//': dv wvl_ctr')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_grd',nf90_float,grd_dmn_id,wvl_grd_id),sbr_nm//': dv wvl_grd')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_max',nf90_float,bnd_dmn_id,wvl_max_id),sbr_nm//': dv wvl_max')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_min',nf90_float,bnd_dmn_id,wvl_min_id),sbr_nm//': dv wvl_min')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_dlt',nf90_float,bnd_dmn_id,wvl_dlt_id),sbr_nm//': dv wvl_dlt')
   ! Wrap
-  rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bnd_pht_dwn_TOA',nf90_float,bnd_dim_id,flx_bnd_pht_dwn_TOA_id), &
-       sbr_nm//": dv flx_bnd_pht_dwn_TOA")
+  rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bnd_pht_dwn_TOA',nf90_float,bnd_dmn_id,flx_bnd_pht_dwn_TOA_id), &
+       sbr_nm//': dv flx_bnd_pht_dwn_TOA')
   
   ! Add global attributes
-  rcd=rcd+nf90_put_att(nc_id,nf90_global,'CVS_Id',CVS_Id)
-  rcd=rcd+nf90_put_att(nc_id,nf90_global,'creation_date',lcl_date_time)
-  rcd=rcd+nf90_put_att(nc_id,nf90_global,'prg_ID',prg_ID(1:ftn_strlen(prg_ID)))
-  rcd=rcd+nf90_put_att(nc_id,nf90_global,'cmd_ln',cmd_ln(1:ftn_strlen(cmd_ln)))
-  rcd=rcd+nf90_put_att(nc_id,nf90_global,'src_rfr_sng',src_rfr_sng(1:ftn_strlen(src_rfr_sng)))
-  rcd=rcd+nf90_put_att(nc_id,nf90_global,'src_fl_sng',src_fl_sng(1:ftn_strlen(src_fl_sng)))
+  rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'CVS_Id',CVS_Id),sbr_nm//': pa CVS_Id in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'creation_date',lcl_date_time),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'prg_ID',prg_ID(1:ftn_strlen(prg_ID))),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'cmd_ln',cmd_ln(1:ftn_strlen(cmd_ln))),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'src_rfr_sng',src_rfr_sng(1:ftn_strlen(src_rfr_sng))),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'src_fl_sng',src_fl_sng(1:ftn_strlen(src_fl_sng))),sbr_nm)
   
   ! Add english text descriptions
-  rcd=rcd+nf90_put_att(nc_id,Rayleigh_sca_xsx_id,'long_name','Rayleigh scattering cross section')
-  rcd=rcd+nf90_put_att(nc_id,abs_cff_mss_O2_id,'long_name','Oxygen mass absorption coefficient')
-  rcd=rcd+nf90_put_att(nc_id,abs_xsx_O2_id,'long_name','Molecular Oxygen Herzberg continuum absorption cross section')
-  rcd=rcd+nf90_put_att(nc_id,bnd_id,'long_name','Band center wavelength')
-  rcd=rcd+nf90_put_att(nc_id,flx_bnd_dwn_TOA_id,'long_name','Solar Energy flux in band')
-  rcd=rcd+nf90_put_att(nc_id,flx_bnd_pht_dwn_TOA_id,'long_name','Photon flux in band')
-  rcd=rcd+nf90_put_att(nc_id,flx_slr_frc_id,'long_name','Fraction of solar flux in band: ' // fl_slr)
-  rcd=rcd+nf90_put_att(nc_id,flx_spc_dwn_TOA_id,'long_name','Spectral solar insolation at TOA')
-  rcd=rcd+nf90_put_att(nc_id,idx_rfr_air_STP_id,'long_name','Index of refraction at band center at STP')
-  rcd=rcd+nf90_put_att(nc_id,nrg_pht_id,'long_name','Energy of photon at band center')
-  rcd=rcd+nf90_put_att(nc_id,wvl_ctr_id,'long_name','Band center wavelength')
-  rcd=rcd+nf90_put_att(nc_id,wvl_grd_id,'long_name','Wavelength grid')
-  rcd=rcd+nf90_put_att(nc_id,wvl_max_id,'long_name','Band maximum wavelength')
-  rcd=rcd+nf90_put_att(nc_id,wvl_min_id,'long_name','Band minimum wavelength')
-  rcd=rcd+nf90_put_att(nc_id,wvl_dlt_id,'long_name','Bandwidth')
+  rcd=nf90_wrp(nf90_put_att(nc_id,Rayleigh_sca_xsx_id,'long_name','Rayleigh scattering cross section'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_O2_id,'long_name','Oxygen mass absorption coefficient'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O2_id,'long_name','Oxygen absorption cross section'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,bnd_id,'long_name','Band center wavelength'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_dwn_TOA_id,'long_name','Solar Energy flux in band'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_pht_dwn_TOA_id,'long_name','Photon flux in band'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,flx_slr_frc_id,'long_name','Fraction of solar flux in band: ' // fl_slr),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_TOA_id,'long_name','Spectral solar insolation at TOA'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,idx_rfr_air_STP_id,'long_name','Index of refraction at band center at STP'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,nrg_pht_id,'long_name','Energy of photon at band center'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_ctr_id,'long_name','Band center wavelength'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_grd_id,'long_name','Wavelength grid'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_max_id,'long_name','Band maximum wavelength'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_min_id,'long_name','Band minimum wavelength'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_dlt_id,'long_name','Bandwidth'),sbr_nm)
   
   ! Add units
-  rcd=rcd+nf90_put_att(nc_id,tpt_cold_id,'units','kelvin')
-  rcd=rcd+nf90_put_att(nc_id,tpt_std_id,'units','kelvin')
-  rcd=rcd+nf90_put_att(nc_id,Rayleigh_sca_xsx_id,'units','meter2')
-  rcd=rcd+nf90_put_att(nc_id,abs_cff_mss_O2_id,'units','meter2 kilogram-1')
-  rcd=rcd+nf90_put_att(nc_id,abs_xsx_O2_id,'units','meter2')
-  rcd=rcd+nf90_put_att(nc_id,bnd_id,'units','meter')
-  rcd=rcd+nf90_put_att(nc_id,flx_bnd_dwn_TOA_id,'units','watt meter-2')
-  rcd=rcd+nf90_put_att(nc_id,flx_bnd_pht_dwn_TOA_id,'units','photon meter-2 second-1')
-  rcd=rcd+nf90_put_att(nc_id,flx_slr_frc_id,'units','fraction')
-  rcd=rcd+nf90_put_att(nc_id,flx_spc_dwn_TOA_id,'units','watt meter-2 meter-1')
-  rcd=rcd+nf90_put_att(nc_id,idx_rfr_air_STP_id,'units','fraction')
-  rcd=rcd+nf90_put_att(nc_id,nrg_pht_id,'units','joule photon-1')
-  rcd=rcd+nf90_put_att(nc_id,wvl_ctr_id,'units','meter')
-  rcd=rcd+nf90_put_att(nc_id,wvl_grd_id,'units','meter')
-  rcd=rcd+nf90_put_att(nc_id,wvl_max_id,'units','meter')
-  rcd=rcd+nf90_put_att(nc_id,wvl_min_id,'units','meter')
-  rcd=rcd+nf90_put_att(nc_id,wvl_dlt_id,'units','meter')
+  rcd=nf90_wrp(nf90_put_att(nc_id,Rayleigh_sca_xsx_id,'units','meter2'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_O2_id,'units','meter2 kilogram-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O2_id,'units','meter2'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,bnd_id,'units','meter'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_dwn_TOA_id,'units','watt meter-2'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_pht_dwn_TOA_id,'units','photon meter-2 second-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,flx_slr_frc_id,'units','fraction'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_TOA_id,'units','watt meter-2 meter-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,idx_rfr_air_STP_id,'units','fraction'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,nrg_pht_id,'units','joule photon-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_ctr_id,'units','meter'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_grd_id,'units','meter'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_max_id,'units','meter'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_min_id,'units','meter'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_dlt_id,'units','meter'),sbr_nm)
   
+  ! Add _FillValue where necessary
+!  rcd=nf90_wrp(nf90_put_att(nc_id,Rayleigh_sca_xsx_id,'_FillValue',mss_val),sbr_nm)
+  !rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_pht_dwn_TOA_id,'_FillValue',mss_val),sbr_nm)
+
   ! All dimensions, variables, and attributes have been defined
-  rcd=rcd+nf90_enddef(nc_id)
+  rcd=nf90_wrp(nf90_enddef(nc_id),sbr_nm//': enddef in '//__FILE__) 
   
   ! Write data
-  rcd=rcd+nf90_put_var(nc_id,tpt_cold_id,tpt_cold)
-  rcd=rcd+nf90_put_var(nc_id,tpt_std_id,tpt_std)
-  rcd=rcd+nf90_put_var(nc_id,Rayleigh_sca_xsx_id,Rayleigh_sca_xsx)
-  rcd=rcd+nf90_put_var(nc_id,abs_cff_mss_O2_id,abs_cff_mss_O2)
-  rcd=rcd+nf90_put_var(nc_id,abs_xsx_O2_id,abs_xsx_O2)
-  rcd=rcd+nf90_put_var(nc_id,bnd_id,bnd)
-  rcd=rcd+nf90_put_var(nc_id,flx_bnd_dwn_TOA_id,flx_bnd_dwn_TOA)
-  rcd=rcd+nf90_put_var(nc_id,flx_bnd_pht_dwn_TOA_id,flx_bnd_pht_dwn_TOA)
-  rcd=rcd+nf90_put_var(nc_id,flx_slr_frc_id,flx_slr_frc)
-  rcd=rcd+nf90_put_var(nc_id,flx_spc_dwn_TOA_id,flx_spc_dwn_TOA)
-  rcd=rcd+nf90_put_var(nc_id,idx_rfr_air_STP_id,idx_rfr_air_STP)
-  rcd=rcd+nf90_put_var(nc_id,nrg_pht_id,nrg_pht)
-  rcd=rcd+nf90_put_var(nc_id,wvl_ctr_id,wvl_ctr)
-  rcd=rcd+nf90_put_var(nc_id,wvl_grd_id,wvl_grd)
-  rcd=rcd+nf90_put_var(nc_id,wvl_max_id,wvl_max)
-  rcd=rcd+nf90_put_var(nc_id,wvl_min_id,wvl_min)
-  rcd=rcd+nf90_put_var(nc_id,wvl_dlt_id,wvl_dlt)
+  rcd=nf90_wrp(nf90_put_var(nc_id,Rayleigh_sca_xsx_id,Rayleigh_sca_xsx),sbr_nm//': pv Rayleigh_sca_xsx in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,abs_cff_mss_O2_id,abs_cff_mss_O2),sbr_nm//': pv abs_cff_mss_O2 in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_O2_id,abs_xsx_O2),sbr_nm//': pv abs_xsx_O2 in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,bnd_id,bnd),sbr_nm//': pv bnd in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,flx_bnd_dwn_TOA_id,flx_bnd_dwn_TOA),sbr_nm//': pv flx_bnd_dwn_TOA in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,flx_bnd_pht_dwn_TOA_id,flx_bnd_pht_dwn_TOA),sbr_nm//': pv flx_bnd_pht_dwn_TOA in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,flx_slr_frc_id,flx_slr_frc),sbr_nm//': pv flx_slr_frc in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,flx_spc_dwn_TOA_id,flx_spc_dwn_TOA),sbr_nm//': pv flx_spc_dwn_TOA in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,idx_rfr_air_STP_id,idx_rfr_air_STP),sbr_nm//': pv idx_rfr_air_STP in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,nrg_pht_id,nrg_pht),sbr_nm//': pv nrg_pht in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,wvl_ctr_id,wvl_ctr),sbr_nm//': pv wvl_ctr in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,wvl_grd_id,wvl_grd),sbr_nm//': pv wvl_grd in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,wvl_max_id,wvl_max),sbr_nm//': pv wvl_max in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,wvl_min_id,wvl_min),sbr_nm//': pv wvl_min in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,wvl_dlt_id,wvl_dlt),sbr_nm//': pv wvl_dlt in '//__FILE__)
   
-  rcd=rcd+nf90_close(nc_id)
-  if (rcd /= nf90_noerr) call nf90_err_exit(rcd,fl_out)
-  write (6,'(a28,1x,a)') 'Wrote results to netCDF file',fl_out(1:ftn_strlen(fl_out))
+  rcd=nf90_wrp_close(nc_id,fl_out,'Wrote results to') ! [fnc] Close file
   
   ! De-allocate dynamic variables
   if (allocated(Rayleigh_sca_xsx)) deallocate(Rayleigh_sca_xsx,stat=rcd)
   if (allocated(abs_cff_mss_O2)) deallocate(abs_cff_mss_O2,stat=rcd)
   if (allocated(abs_xsx_O2)) deallocate(abs_xsx_O2,stat=rcd)
-  if (allocated(abs_xsx_O3)) deallocate(abs_xsx_O3,stat=rcd)
-  if (allocated(abs_xsx_O3_cold)) deallocate(abs_xsx_O3_cold,stat=rcd)
-  if (allocated(abs_xsx_O3_warm)) deallocate(abs_xsx_O3_warm,stat=rcd)
   if (allocated(bnd)) deallocate(bnd,stat=rcd)     ! coordinate variable
   if (allocated(flx_bnd_dwn_TOA)) deallocate(flx_bnd_dwn_TOA,stat=rcd)
   if (allocated(flx_bnd_pht_dwn_TOA)) deallocate(flx_bnd_pht_dwn_TOA,stat=rcd)
