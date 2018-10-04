@@ -1,5 +1,7 @@
 2018-10-04  Charlie Zender  <zender@uci.edu>
 
+	* Adapt swnb2 to use new split HC and HHCWC inputs and verify BFB with before split
+
 	* Convert O3.F90 for O3 and O2 into O3.F90 for O3 and O2.F90 for O2
 
 2018-10-03  Charlie Zender  <zender@uci.edu>

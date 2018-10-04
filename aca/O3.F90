@@ -9,6 +9,16 @@ program O3
   ! cd ${HOME}/sw/aca; make -W O3.F90 O3; cd -
   ! cd ${HOME}/sw/aca; make OPTS=D O3; cd -
   
+  ! Use WMO85 or JPL15 data
+  ! O3 --JPL15
+  ! O3 --WMO85
+  ! O3 --JPL15 -o ${DATA}/aca/abs_xsx_O3_JPL15.nc
+  ! O3 --WMO85 -o ${DATA}/aca/abs_xsx_O3_WMO85.nc
+  ! Use HITRAN16 data
+  ! O3 -i ${DATA}/aca/absO3_200.0_0.0_29164.0-40798.0_04.xsc -o ${DATA}/aca/abs_xsx_O3.nc
+  ! Weight WMO85 data by LaN68
+  ! O3 -S ${DATA}/aca/spc_LaN68.nc
+  
   ! Usage:
   ! ncks -H -C -F -v wvl_ctr_CCM,flx_slr_frc_CCM,abs_xsx_O3_CCM ${DATA}/aca/abs_xsx_O3.nc
   ! ncks -H -C -F -d bnd,0.3e-6 -d bnd_CCM,0.3e-6 -v wvl_ctr_CCM,flx_slr_frc_CCM,abs_xsx_O3_CCM,abs_xsx_O3 ${DATA}/aca/abs_xsx_O3.nc
@@ -16,15 +26,6 @@ program O3
   ! ncks -H -C -F -d bnd,0.3e-6 -v abs_xsx_O3 ${DATA}/aca/abs_xsx_O3.nc
   ! ncks -H -C -F -v abs_xsx_O3 ${DATA}/aca/O3.nc
   ! ncks -H -C -F -d bnd_CCM,6 -v abs_xsx_O3_CCM ${DATA}/aca/abs_xsx_O3.nc
-  
-  ! Use WMO85 or JPL15 data
-  ! O3 --JPL15
-  ! O3 --WMO85
-  ! O3 -i ${DATA}/aca/abs_xsx_WMO85.txt -o ${DATA}/aca/abs_xsx_O3.nc
-  ! Use HITRAN16 data
-  ! O3 -i ${DATA}/aca/absO3_200.0_0.0_29164.0-40798.0_04.xsc -o ${DATA}/aca/abs_xsx_O3.nc
-  ! Weight WMO85 data by LaN68
-  ! O3 -S ${DATA}/aca/spc_LaN68.nc
   
   ! Process input ASCII data files from WMO85 that look like:
   
