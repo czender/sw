@@ -34,7 +34,7 @@ htrn2nb -l 2000.0 -h 27000.0 -b 2500 -i ${DATA}/hitran/16O_1H.nc -o ${DATA}/aca/
 htrn2nb -l 2000.0 -h 27000.0 -b 5000 -i ${DATA}/hitran/N2.nc -o ${DATA}/aca/mlk_N2.nc
 
 # Ozone:
-htrn2nb -l 2000.0 -h 27000.0 -b 2500 -i ${DATA}/hitran/O3.nc -o ${DATA}/aca/mlk_O3.nc
+htrn2nb -l 2000.0 -h 27000.0 -b 5000 -i ${DATA}/hitran/O3.nc -o ${DATA}/aca/mlk_O3.nc
 
 # Nitrous Oxide:
 htrn2nb -l 2000.0 -h 27000.0 -b 5000 -i ${DATA}/hitran/N2O.nc -o ${DATA}/aca/mlk_N2O.nc
