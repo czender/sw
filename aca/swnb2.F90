@@ -642,8 +642,8 @@ program swnb2
   integer bnd_idx_CH4       ! counting index
   integer bnd_idx_CO2       ! counting index
   integer bnd_idx_H2O       ! counting index
+  integer bnd_idx_HHCWC     ! counting index
   integer bnd_idx_O3        ! counting index
-  integer bnd_idx_HHCWC      ! counting index
   integer bnd_idx_nst       ! counting index
   integer chn_idx           ! counting index
   integer i21               ! counting index
@@ -2053,8 +2053,10 @@ program swnb2
   fl_N2O='mlk_N2O.nc'//nlc
   fl_CH4='mlk_CH4.nc'//nlc
   fl_O2='mlk_O2.nc'//nlc
-  fl_HC='abs_xsx_O2_WMO85.nc'//nlc
-  fl_HHCWC='abs_xsx_O3_WMO85.nc'//nlc
+  ! fl_HC='abs_xsx_O2_WMO85.nc'//nlc
+  fl_HC='abs_xsx_O2_JPL15.nc'//nlc
+  ! fl_HHCWC='abs_xsx_O3_WMO85.nc'//nlc
+  fl_HHCWC='abs_xsx_O3_JPL15.nc'//nlc
   fl_O3='mlk_O3.nc'//nlc
   fl_O2O2='abs_xsx_O2O2.nc'//nlc
   fl_NO2='abs_xsx_NO2.nc'//nlc
@@ -5103,7 +5105,7 @@ program swnb2
           '# input bga bands bnd_nbr_bga = ',bnd_nbr_bga, &
           '# input HHCWC bands outside H2O bands (no H2O overlap) bnd_nbr_pure_HHCWC = ',bnd_nbr_pure_HHCWC, &
           'idx last pure H2O band (no HHCWC overlap) bnd_nbr_non_HHCWC = ',bnd_nbr_non_HHCWC, &
-          '# total bands bnd_nbr = bnd_nbr_pure_HHCWC+bnd_nbr_H2O = ',bnd_nbr
+          '# total bands bnd_nbr = wvl_cnt_nbr+bnd_nbr_H2O = ',bnd_nbr
   endif                     ! end if dbg
   
   slr_cst_xnt_fac=slr_cst*xnt_fac
@@ -5397,6 +5399,7 @@ program swnb2
   if (.not.flg_HHCWC) then
      do bnd_idx=1,bnd_nbr
         abs_xsx_O3(bnd_idx)=0.0
+        abs_xsx_O3_dadT(bnd_idx)=0.0        
      enddo                  ! end loop over bands
   endif                     ! end if turning off Herzberg continuum
   call rbn_vec(bnd_nbr_NO2,wvl_grd_NO2,abs_xsx_NO2_dsk, &
@@ -5421,6 +5424,41 @@ program swnb2
   do bnd_idx=1,bnd_nbr
      bnd_wgt_lmn(bnd_idx)=lmn_SRF(bnd_idx)
   enddo                  ! end loop over bnd
+
+  ! Verify re-binned cross-sections are positive-definite
+  do bnd_idx=1,bnd_nbr
+     if(abs_xsx_O3(bnd_idx) < 0.0) then
+        write (6,'(a,a,i4,a,e11.4,a,f10.3,a)') prg_nm(1:ftn_strlen(prg_nm)), &
+             ': WARNING abs_xsx_O3(',bnd_idx,') = ',abs_xsx_O3(bnd_idx),' at wvl = ',wvl_ctr(bnd_idx)*1.0e9,' nm. Zeroing...'
+        abs_xsx_O3(bnd_idx)=0.0
+     endif
+     if(abs_xsx_O2(bnd_idx) < 0.0) then
+        write (6,'(a,a,i4,a,e11.4,a,f10.3,a)') prg_nm(1:ftn_strlen(prg_nm)), &
+             ': WARNING abs_xsx_O2(',bnd_idx,') = ',abs_xsx_O2(bnd_idx),' at wvl = ',wvl_ctr(bnd_idx)*1.0e9,' nm. Zeroing...'
+        abs_xsx_O2(bnd_idx)=0.0
+     endif
+     if(abs_xsx_NO2(bnd_idx) < 0.0) then
+        write (6,'(a,a,i4,a,e11.4,a,f10.3,a)') prg_nm(1:ftn_strlen(prg_nm)), &
+             ': WARNING abs_xsx_NO2(',bnd_idx,') = ',abs_xsx_NO2(bnd_idx),' at wvl = ',wvl_ctr(bnd_idx)*1.0e9,' nm. Zeroing...'
+        abs_xsx_NO2(bnd_idx)=0.0
+     endif
+     if(abs_xsx_O2O2(bnd_idx) < 0.0) then
+        write (6,'(a,a,i4,a,e11.4,a,f10.3,a)') prg_nm(1:ftn_strlen(prg_nm)), &
+             ': WARNING abs_xsx_O2O2(',bnd_idx,') = ',abs_xsx_O2O2(bnd_idx),' at wvl = ',wvl_ctr(bnd_idx)*1.0e9,' nm. Zeroing...'
+        abs_xsx_O2O2(bnd_idx)=0.0
+     endif
+     if(lmn_SRF(bnd_idx) < 0.0) then
+        write (6,'(a,a,i4,a,e11.4,a,f10.3,a)') prg_nm(1:ftn_strlen(prg_nm)), &
+             ': WARNING lmn_SRF(',bnd_idx,') = ',lmn_SRF(bnd_idx),' at wvl = ',wvl_ctr(bnd_idx)*1.0e9,' nm. Zeroing...'
+        lmn_SRF(bnd_idx)=0.0
+     endif
+     if(abs_xsx_H2OH2O(bnd_idx) < 0.0) then
+        write (6,'(a,a,i4,a,e11.4,a,f10.3,a)') prg_nm(1:ftn_strlen(prg_nm)), &
+             ': WARNING abs_xsx_H2OH2O(',bnd_idx,') = ',abs_xsx_H2OH2O(bnd_idx),' at wvl = ',wvl_ctr(bnd_idx)*1.0e9, &
+             ' nm. Zeroing...'
+        abs_xsx_H2OH2O(bnd_idx)=0.0
+     endif
+  enddo                  ! end loop over bands
   
   chn_SRF_msk(:)=0 ! CEWI lf95
   if(mode_chn) then
@@ -5620,7 +5658,8 @@ program swnb2
      
      ! O3 data is reverse indexed with an offset relative to 
      ! combined band data, so index juggling is necessary.
-     bnd_idx_HHCWC=bnd_nbr_pure_HHCWC-(bnd_idx-bnd_nbr_H2O-1)
+     ! 20181005: No longer necessary
+     !bnd_idx_HHCWC=bnd_nbr_pure_HHCWC-(bnd_idx-bnd_nbr_H2O-1)
      
      ! H2O data is indexed identically to the combined band data
      bnd_idx_H2O=bnd_idx
@@ -6272,8 +6311,7 @@ program swnb2
      ! abs_xsx_H2OH2O(bnd_idx)=abs_xsx_H2OH2O_CFT99(wvn_ctr(bnd_idx))
      ! abs_xsx_H2OH2O(bnd_idx)=abs_xsx_H2OH2O_Chy97(wvn_ctr(bnd_idx))
      do lev_idx=1,lev_nbr
-        odal_H2OH2O(lev_idx)= &
-             abs_xsx_H2OH2O(bnd_idx)*npl_H2OH2O(lev_idx)
+        odal_H2OH2O(lev_idx)=abs_xsx_H2OH2O(bnd_idx)*npl_H2OH2O(lev_idx)
      enddo                  ! end loop over lev
      
      ! O2-O2 continuum absorption
@@ -6471,7 +6509,7 @@ program swnb2
      endif                  ! end if no O2 processes
      if (.not.flg_O3) then
         do lev_idx=1,lev_nbr
-           odal_O3(lev_idx)=0.0
+           odal_O3(lev_idx)=0.0 ! Turn-off line+HHCWC absorption
         enddo               ! end loop over lev
      endif                  ! end if no O3 processes
      if (.not.flg_O2O2) then
@@ -6586,7 +6624,7 @@ program swnb2
            ss_alb_fct(bnd_idx,lev_idx)= &
                 odsl_spc_ttl(bnd_idx,lev_idx)/ &
                 odxl_spc_ttl(bnd_idx,lev_idx)
-        else ! endif no scattering whatsoever
+        else ! endif Rayleight scattering only
            ! ... Some scattering is particle scattering ...
            ! Single scattering albedo is ill-conditioned when 
            ! scattering optical depth is zero and there is no absorption.
@@ -6652,8 +6690,9 @@ program swnb2
      ! small Rayleigh scattering optical depths (p <~ 1 Pa) in single precision
      do lev_idx=1,lev_nbr
         if (ss_alb_fct(bnd_idx,lev_idx)>1.0) then
-           write (6,'(a,a,i4,a,i3,a,f10.7)') &
-                prg_nm(1:ftn_strlen(prg_nm)),': WARNING ss_alb_fct(',bnd_idx,',',lev_idx,') = ',ss_alb_fct(bnd_idx,lev_idx)
+           write (6,'(a,a,i4,a,i3,a,f10.7,a,i3,a,f10.3,a,i4,a,f10.7,a)') &
+                prg_nm(1:ftn_strlen(prg_nm)),': WARNING ss_alb_fct(',bnd_idx,',',lev_idx,') = ',ss_alb_fct(bnd_idx,lev_idx), &
+                ' at lev(',lev_idx,' = ',prs(lev_idx)/100.0,' mb and wvl(',bnd_idx,') = ',wvl(bnd_idx)*1.0e6,' um'
            ss_alb_fct(bnd_idx,lev_idx)=1.0
         endif
      enddo                  ! end loop over lev
@@ -8012,6 +8051,8 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'abs_spc_SAS',nf90_float,bnd_dmn_id,abs_spc_SAS_id),sbr_nm//': dv abs_spc_SAS')
      rcd=nf90_wrp(nf90_def_var(nc_id,'abs_spc_atm',nf90_float,bnd_dmn_id,abs_spc_atm_id),sbr_nm//': dv abs_spc_atm')
      rcd=nf90_wrp(nf90_def_var(nc_id,'abs_spc_sfc',nf90_float,bnd_dmn_id,abs_spc_sfc_id),sbr_nm//': dv abs_spc_sfc')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_O3',nf90_float,bnd_dmn_id,abs_xsx_O3_id),sbr_nm//': dv abs_xsx_O3')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_O3_dadT',nf90_float,bnd_dmn_id,abs_xsx_O3_dadT_id),sbr_nm//': dv abs_xsx_O3_dadT')
      rcd=nf90_wrp(nf90_def_var(nc_id,'alt_ntf',nf90_double,levp_dmn_id,alt_ntf_id),sbr_nm//': dv alt_ntf')
      rcd=nf90_wrp(nf90_def_var(nc_id,'azi',nf90_double,azi_dmn_id,azi_id),sbr_nm//': dv azi')
      rcd=nf90_wrp(nf90_def_var(nc_id,'azi_dgr',nf90_double,azi_dmn_id,azi_dgr_id),sbr_nm//': dv azi_dgr')
@@ -8416,6 +8457,10 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,abs_spc_atm_id,'long_name','Spectral absorptance of atmosphere'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,abs_spc_sfc_id,'long_name','Spectral absorptance of surface'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_id,'long_name','Ozone absorption cross section at tpt_rfr'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_dadT_id,'long_name','Slope of absorption cross section temperature dependence'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,alb_sfc_id,'long_name','Broadband Lambertian surface albedo'), &
           sbr_nm//': pa long_name in '//__FILE__)
@@ -8889,6 +8934,8 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,abs_spc_SAS_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,abs_spc_atm_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,abs_spc_sfc_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_id,'units','meter2'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_dadT_id,'units','meter2 kelvin-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,alb_sfc_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,alb_sfc_NIR_dff_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,alb_sfc_NIR_drc_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
@@ -9187,6 +9234,8 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_SAS_id,abs_spc_SAS),sbr_nm//': pv abs_spc_SAS in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_atm_id,abs_spc_atm),sbr_nm//': pv abs_spc_atm in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_sfc_id,abs_spc_sfc),sbr_nm//': pv abs_spc_sfc in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_O3_id,abs_xsx_O3),sbr_nm//': pv abs_xsx_O3 in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_O3_dadT_id,abs_xsx_O3_dadT),sbr_nm//': pv abs_xsx_O3_dadT in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,alb_sfc_id,alb_sfc),sbr_nm//': pv alb_sfc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,alb_sfc_NIR_dff_id,alb_sfc_NIR_dff),sbr_nm//': pv alb_sfc_NIR_dff in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,alb_sfc_NIR_drc_id,alb_sfc_NIR_drc),sbr_nm//': pv alb_sfc_NIR_drc in '//__FILE__)
