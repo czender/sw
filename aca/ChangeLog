@@ -1,3 +1,7 @@
+2018-10-05  Charlie Zender  <zender@uci.edu>
+
+	* Implement option to use NC_DOUBLE instead of NC_FLOAT in htrn2nb.F90
+
 2018-10-04  Charlie Zender  <zender@uci.edu>
 
 	* Adapt swnb2 to use new split HC and HHCWC inputs and verify BFB with before split

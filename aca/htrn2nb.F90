@@ -400,6 +400,10 @@ program htrn2nb
      end if ! end position arguments
   end do loop_while_options ! end while (arg_idx <= arg_nbr)
   
+  ! Compute quantities that depend on command line input
+  call ftn_strnul(fl_in)
+  call ftn_strnul(fl_out)
+
   ! Compute any quantities that might depend on command-line input
   ! Prepend user-specified path, if any, to input data file names
   if (ftn_strlen(drc_in) > 0) call ftn_drcpfx(drc_in,fl_in) ! [sng] Input file

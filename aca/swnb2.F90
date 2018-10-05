@@ -379,16 +379,16 @@ program swnb2
   integer,parameter::bnd_nbr_CO_max=5000 ! 5 cm-1 resolution from 0.3889--5.0 um
   integer,parameter::bnd_nbr_N2_max=5000 ! 5 cm-1 resolution from 0.3889--5.0 um
   integer,parameter::bnd_nbr_N2O_max=5000 ! 5 cm-1 resolution from 0.3889--5.0 um
-  integer,parameter::bnd_nbr_aer_max=2562 ! WMO-spliced
+  integer,parameter::bnd_nbr_aer_max=2696 ! WMO-spliced
   integer,parameter::bnd_nbr_bga_max=480 ! 0.01 um resolution from 0.2--5.0 um
   integer,parameter::bnd_nbr_ice_max=480 ! 0.01 um resolution from 0.2--5.0 um
   integer,parameter::bnd_nbr_lqd_max=480 ! 0.01 um resolution from 0.2--5.0 um
   integer,parameter::bnd_nbr_lmn_max=81 ! CIE photopic luminosity function 5 nm resolution from 380-780 nm
   integer,parameter::bnd_nbr_nst_max=1000 ! new FSBR resolution
-  integer,parameter::bnd_nbr_rfl_max=2562 ! WMO-spliced
-  integer,parameter::bnd_nbr_mpr_max=2562 ! WMO-spliced
-  integer,parameter::bnd_nbr_snw_max=2562 ! WMO-spliced
-  integer,parameter::bnd_nbr_max=2562 ! WMO-spliced onto 10 cm-1 resolution from 0.3889--5.0 um
+  integer,parameter::bnd_nbr_rfl_max=2696 ! WMO-spliced
+  integer,parameter::bnd_nbr_mpr_max=2696 ! WMO-spliced
+  integer,parameter::bnd_nbr_snw_max=2696 ! WMO-spliced
+  integer,parameter::bnd_nbr_max=2696 ! WMO at 1 nm spliced onto 10 cm-1 resolution H2O line absorption
   integer,parameter::chn_nbr_max=12 ! [nbr] Arbitrary
   integer,parameter::lev_snw_nbr_max=5 ! CLM snow model resolution
   integer,parameter::lev_nbr_max=110 ! roughly 10 mb resolution from 1010 mb to TOA
@@ -401,7 +401,15 @@ program swnb2
   real,parameter::mss_val=1.0e36 ! Missing value = missing_value and/or _FillValue
   real,parameter::real_tiny=1.0e-20 ! Tiny value to avoid divide-by-zero errors
   ! integer,parameter::bnd_nbr_nst_max=235 ! FSBR resolution
-  
+
+  ! Wavelength Grid
+  integer::wvl_cnt_nbr ! [nbr] Number of pure continuum regions
+  integer::wvl_cnt_idx ! [idx] Counting index
+  real,parameter::wvl_min_srt=175e-9 ! [m] Starting wavelength
+  real,parameter::wvl_cnt_rsn=1.0e-9 ! [m] Resolution in pure continuum region
+  real::wvl_cnt_spn ! [m] Wavelength spanned by pure continuum region
+  real::wvl_cnt_nbr_flt ! [nbr] Number of pure continuum regions
+
   ! Derived parameters
   integer,parameter::asm_prm_mmn_idx=1 ! [idx] Asymmetry parameter Legendre index
   integer,parameter::mmn_nbr_max=str_nbr_max ! # phase function moments
@@ -635,10 +643,8 @@ program swnb2
   integer bnd_idx_CO2       ! counting index
   integer bnd_idx_H2O       ! counting index
   integer bnd_idx_O3        ! counting index
-  integer bnd_idx_HC      ! counting index
   integer bnd_idx_HHCWC      ! counting index
   integer bnd_idx_nst       ! counting index
-  integer bnd_idx_tmp_HHCWC    ! counting index
   integer chn_idx           ! counting index
   integer i21               ! counting index
   integer lev_TOA           ! counting index
@@ -912,12 +918,6 @@ program swnb2
   integer abs_bb_snw_id
   integer trn_bb_snw_id
 
-  ! HC input variables
-  integer abs_xsx_O2_id
-  integer wvl_max_HC_id
-  integer wvl_min_HC_id
-  integer wvl_ctr_HC_id
-  
   ! HHCWC input variables
   integer abs_xsx_O3_id
   integer abs_xsx_O3_dadT_id
@@ -925,10 +925,15 @@ program swnb2
   integer wvl_max_HHCWC_id
   integer wvl_min_HHCWC_id
   integer wvl_ctr_HHCWC_id
+  integer wvl_grd_HHCWC_id
   
   ! O2-O2 input variables
   integer abs_xsx_O2O2_id
   integer wvl_grd_O2O2_id
+  
+  ! HC input variables
+  integer abs_xsx_O2_id
+  integer wvl_grd_HC_id
   
   ! NO2 input variables
   integer abs_xsx_NO2_id
@@ -1466,24 +1471,26 @@ program swnb2
   ! Array dimensions: azi,plr,levp
   real,dimension(:,:,:),allocatable::ntn_spc_chn
 
-  ! HC input variables
-  real abs_xsx_O2(bnd_nbr_HC_max)
-  real wvl_max_HC(bnd_nbr_HC_max)
-  real wvl_min_HC(bnd_nbr_HC_max)
-  real wvl_ctr_HC(bnd_nbr_HC_max)
-  
-  ! HHCWC input variables
-  real abs_xsx_O3(bnd_nbr_HHCWC_max)
-  real abs_xsx_O3_dadT(bnd_nbr_HHCWC_max)
-  real tpt_std_O3
-  real wvl_max_HHCWC(bnd_nbr_HHCWC_max)
-  real wvl_min_HHCWC(bnd_nbr_HHCWC_max)
-  real wvl_ctr_HHCWC(bnd_nbr_HHCWC_max)
-  
   ! O2-O2 input variables
   real abs_xsx_O2O2_dsk(bnd_nbr_O2O2_max)
   real abs_xsx_O2O2(bnd_nbr_max)
   real wvl_grd_O2O2(bnd_nbr_O2O2_max+1)
+  
+  ! HHCWC input variables
+  real abs_xsx_O3_dsk(bnd_nbr_HHCWC_max)
+  real abs_xsx_O3(bnd_nbr_max)
+  real abs_xsx_O3_dadT_dsk(bnd_nbr_HHCWC_max)
+  real abs_xsx_O3_dadT(bnd_nbr_max)
+  real tpt_std_O3
+  real wvl_max_HHCWC(bnd_nbr_HHCWC_max)
+  real wvl_min_HHCWC(bnd_nbr_HHCWC_max)
+  real wvl_ctr_HHCWC(bnd_nbr_HHCWC_max)
+  real wvl_grd_HHCWC(bnd_nbr_HHCWC_max+1)
+  
+  ! HC input variables
+  real abs_xsx_O2_dsk(bnd_nbr_HC_max)
+  real abs_xsx_O2(bnd_nbr_max)
+  real wvl_grd_HC(bnd_nbr_HC_max+1)
   
   ! NO2 input variables
   real abs_xsx_NO2_dsk(bnd_nbr_NO2_max)
@@ -3464,66 +3471,6 @@ program swnb2
   rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_O3_id,wvl_ctr_O3,srt_one,cnt_bnd),"gv wvl_ctr_O3")
   ! Close file
   rcd=nf90_wrp_close(nc_id,fl_O3,'Ingested') ! [fnc] Close file
-
-  ! Ingest fl_HC
-  rcd=nf90_wrp_open(fl_HC,nf90_nowrite,nc_id)
-  ! Get dimension IDs
-  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
-  
-  ! Get dimension sizes
-  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_HC),sbr_nm//": inquire_dim bnd")
-  if (bnd_nbr_HC>bnd_nbr_HC_max) stop 'bnd_nbr_HC>bnd_nbr_HC_max'
-  cnt_bnd(1)=bnd_nbr_HC
-  
-  ! Get variable IDs
-  ! 20181002: Until today, always used abs_xsx_O2_cold (T = 203 K) for abs_xsx_O2 at all levels
-  ! Henceforth use standard temperature (usually tpt_std_O2=250 K) of archived O2 cross-sections
-  ! and adjust by level-dependent temperature gradient to tpt_std_O2
-  !rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O2_cold',abs_xsx_O2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O2',abs_xsx_O2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_HC_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_HC_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_HC_id)
-  
-  ! Get data
-  rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_O2_id,abs_xsx_O2,srt_one,cnt_bnd),"gv abs_xsx_O2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_HC_id,wvl_max_HC,srt_one,cnt_bnd),"gv wvl_max_HC")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_HC_id,wvl_min_HC,srt_one,cnt_bnd),"gv wvl_min_HC")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_HC_id,wvl_ctr_HC,srt_one,cnt_bnd),"gv wvl_ctr_HC")
-  ! Close file
-  rcd=nf90_wrp_close(nc_id,fl_HC,'Ingested') ! [fnc] Close file
-
-  ! Ingest fl_HHCWC
-  rcd=nf90_wrp_open(fl_HHCWC,nf90_nowrite,nc_id)
-  ! Get dimension IDs
-  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
-  
-  ! Get dimension sizes
-  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_HHCWC),sbr_nm//": inquire_dim bnd")
-  if (bnd_nbr_HHCWC>bnd_nbr_HHCWC_max) stop 'bnd_nbr_HHCWC>bnd_nbr_HHCWC_max'
-  cnt_bnd(1)=bnd_nbr_HHCWC
-  
-  ! Get variable IDs
-  ! 20181002: Until today, always used abs_xsx_O3_cold (T = 203 K) for abs_xsx_O3 at all levels
-  ! Henceforth use standard temperature (usually tpt_std_O3=250 K) of archived O3 cross-sections
-  ! and adjust by level-dependent temperature gradient to tpt_std_O3
-  !rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O3_cold',abs_xsx_O3_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O3',abs_xsx_O3_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O3_dadT',abs_xsx_O3_dadT_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'tpt_std',tpt_std_O3_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_HHCWC_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_HHCWC_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_HHCWC_id)
-  
-  ! Get data
-  rcd=nf90_wrp(nf90_get_var(nc_id,tpt_std_O3_id,tpt_std_O3),"gv tpt_std_O3")
-  rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_O3_id,abs_xsx_O3,srt_one,cnt_bnd),"gv abs_xsx_O3")
-  rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_O3_dadT_id,abs_xsx_O3_dadT,srt_one,cnt_bnd),"gv abs_xsx_O3_dadT")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_HHCWC_id,wvl_max_HHCWC,srt_one,cnt_bnd),"gv wvl_max_HHCWC")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_HHCWC_id,wvl_min_HHCWC,srt_one,cnt_bnd),"gv wvl_min_HHCWC")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_HHCWC_id,wvl_ctr_HHCWC,srt_one,cnt_bnd),"gv wvl_ctr_HHCWC")
-  ! Close file
-  rcd=nf90_wrp_close(nc_id,fl_HHCWC,'Ingested') ! [fnc] Close file
   
   ! Ingest fl_O2O2
   rcd=nf90_wrp_open(fl_O2O2,nf90_nowrite,nc_id)
@@ -3543,6 +3490,56 @@ program swnb2
   ! Close file
   rcd=nf90_wrp_close(nc_id,fl_O2O2,'Ingested') ! [fnc] Close file
   
+  ! Ingest fl_HC
+  rcd=nf90_wrp_open(fl_HC,nf90_nowrite,nc_id)
+  ! Get dimension IDs
+  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
+  ! Get dimension sizes
+  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_HC),sbr_nm//": inquire_dim bnd")
+  if (bnd_nbr_HC>bnd_nbr_HC_max) stop 'bnd_nbr_HC>bnd_nbr_HC_max'
+  cnt_bnd(1)=bnd_nbr_HC
+  cnt_bndp(1)=bnd_nbr_HC+1
+  ! Get variable IDs
+  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O2',abs_xsx_O2_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'wvl_grd',wvl_grd_HC_id)
+  ! Get data
+  rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_O2_id,abs_xsx_O2_dsk,srt_one,cnt_bnd),"gv abs_xsx_O2_dsk")
+  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_grd_HC_id,wvl_grd_HC,srt_one,cnt_bndp),"gv wvl_grd_HC")
+  ! Close file
+  rcd=nf90_wrp_close(nc_id,fl_HC,'Ingested') ! [fnc] Close file
+
+  ! Ingest fl_HHCWC
+  rcd=nf90_wrp_open(fl_HHCWC,nf90_nowrite,nc_id)
+  ! Get dimension IDs
+  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
+  ! Get dimension sizes
+  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_HHCWC),sbr_nm//": inquire_dim bnd")
+  if (bnd_nbr_HHCWC>bnd_nbr_HHCWC_max) stop 'bnd_nbr_HHCWC>bnd_nbr_HHCWC_max'
+  cnt_bnd(1)=bnd_nbr_HHCWC
+  cnt_bndp(1)=bnd_nbr_HHCWC+1
+  ! Get variable IDs
+  ! 20181002: Until today, always used abs_xsx_O3_cold (T = 203 K) for abs_xsx_O3 at all levels
+  ! Henceforth use standard temperature (usually tpt_std_O3=250 K) of archived O3 cross-sections
+  ! and adjust by level-dependent temperature gradient to tpt_std_O3
+  !rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O3_cold',abs_xsx_O3_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O3',abs_xsx_O3_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O3_dadT',abs_xsx_O3_dadT_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'tpt_std',tpt_std_O3_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_HHCWC_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_HHCWC_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_HHCWC_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'wvl_grd',wvl_grd_HHCWC_id)
+  ! Get data
+  rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_O3_id,abs_xsx_O3_dsk,srt_one,cnt_bnd),"gv abs_xsx_O3_dsk")
+  rcd=nf90_wrp(nf90_get_var(nc_id,tpt_std_O3_id,tpt_std_O3),"gv tpt_std_O3")
+  rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_O3_dadT_id,abs_xsx_O3_dadT,srt_one,cnt_bnd),"gv abs_xsx_O3_dadT")
+  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_HHCWC_id,wvl_max_HHCWC,srt_one,cnt_bnd),"gv wvl_max_HHCWC")
+  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_HHCWC_id,wvl_min_HHCWC,srt_one,cnt_bnd),"gv wvl_min_HHCWC")
+  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_HHCWC_id,wvl_ctr_HHCWC,srt_one,cnt_bnd),"gv wvl_ctr_HHCWC")
+  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_grd_HHCWC_id,wvl_grd_HHCWC,srt_one,cnt_bndp),"gv wvl_grd_HHCWC")
+  ! Close file
+  rcd=nf90_wrp_close(nc_id,fl_HHCWC,'Ingested') ! [fnc] Close file
+
   ! Ingest fl_NO2
   rcd=nf90_wrp_open(fl_NO2,nf90_nowrite,nc_id)
   ! Get dimension IDs
@@ -4467,13 +4464,6 @@ program swnb2
   lmn_ngt_TOA=lmn_TOA_ulx*1.0e-6 ! [ulm m-2 sr-1]->[lm m-2 sr-1]
   lmn_TOA_nL=lmn_ngt_TOA*pi/(1.0e-9*10000.0) ! [lm m-2 sr-1]->[nL]
 
-  ! Easiest way to turn-off Herzberg continuum and keep O2 line absorption is to zero absorption cross-sections here
-  if (.not.flg_HC) then
-     do bnd_idx_HC=1,bnd_nbr_HC
-        abs_xsx_O2(bnd_idx_HC)=0.0
-     enddo                  ! end loop over O2_HC bands
-  endif                     ! end if turning off Herzberg continuum
-  
   ! Many DISORT arguments only need to be set once
   ! Set them here, outside band loop
   nstr=str_nbr
@@ -4621,11 +4611,10 @@ program swnb2
   ! Band-independent DISORT() initialization is now complete
   ! Remaining DISORT arguments need to be set inside main band loop
   
-  ! Compute how many total bands will be used in entire band
-  ! computation by adding the number of narrow band H2O
-  ! data to the O3 continua. Number of pure O3 bands
-  ! will be number of bands from the O3 continua data
-  ! truncated at shortest wavelength narrow band data.
+  ! Compute number of total bands as number of narrow band H2O data
+  ! plus number in pure O3 continua region sampled at 1 nm.
+  ! Determine number of pure O3 bands by counting from the O3 continua data
+  ! until reaching shortest wavelength narrow band data.
   do bnd_idx_HHCWC=1,bnd_nbr_HHCWC
      if (wvl_max_HHCWC(bnd_idx_HHCWC)>wvl_min_H2O(bnd_nbr_H2O)) then
         bnd_nbr_pure_HHCWC=bnd_idx_HHCWC
@@ -4640,9 +4629,23 @@ program swnb2
      endif
   enddo                     ! end loop over H2O bands
 110 continue
-  
-  bnd_nbr=bnd_nbr_pure_HHCWC+bnd_nbr_H2O
 
+  ! 20181005 Until today used this:
+  ! bnd_nbr=bnd_nbr_pure_HHCWC+bnd_nbr_H2O
+  wvl_cnt_spn=wvl_min_H2O(bnd_nbr_H2O)-wvl_min_srt ! Both WMO85 and JPL15 starts at 175.4 nm
+  wvl_cnt_nbr_flt=wvl_cnt_spn/wvl_cnt_rsn ! [nbr] Number of pure continuum regions
+  wvl_cnt_nbr=int(wvl_cnt_nbr_flt) ! [nbr] Number of pure continuum regions
+  if(wvl_cnt_nbr_flt /= wvl_cnt_nbr) wvl_cnt_nbr=wvl_cnt_nbr+1
+  
+  bnd_nbr=wvl_cnt_nbr+bnd_nbr_H2O
+  if (dbg_lvl >= dbg_off) then
+     write (6,*) 'wvl_cnt_spn = ',wvl_cnt_spn
+     write (6,*) 'wvl_cnt_rsn = ',wvl_cnt_rsn
+     write (6,*) 'wvl_cnt_nbr_flt = ',wvl_cnt_nbr_flt
+     write (6,*) 'wvl_cnt_nbr = ',wvl_cnt_nbr
+     write (6,*) 'bnd_nbr = ',bnd_nbr
+  endif ! endif dbg
+  
   ! Array dimensions: bnd
   allocate(ext_cff_mss_aer(bnd_nbr),stat=rcd)
   if(rcd /= 0) stop "allocate() failed for ext_cff_mss_aer"
@@ -4933,17 +4936,39 @@ program swnb2
   if(rcd /= 0) stop "allocate() failed for ntn_spc_TOA"
 
   ! Initialize level-independent arrays that depend on bnd_nbr
+  wvl_grd(1)=wvl_max_H2O(1)
   do bnd_idx=1,bnd_nbr_H2O
-     wvl_max(bnd_idx)=wvl_max_H2O(bnd_idx)
-     wvl_min(bnd_idx)=wvl_min_H2O(bnd_idx)
+     !     wvl_max(bnd_idx)=wvl_max_H2O(bnd_idx)
+     !     wvl_min(bnd_idx)=wvl_min_H2O(bnd_idx)
+     wvl_grd(bnd_idx+1)=wvl_min_H2O(bnd_idx)
   enddo                     ! end loop over bnd
-  wvl_max(bnd_nbr_H2O+1)=wvl_min_H2O(bnd_nbr_H2O)
-  wvl_min(bnd_nbr_H2O+1)=wvl_min_HHCWC(bnd_nbr_pure_HHCWC)
-  do bnd_idx=bnd_nbr_H2O+2,bnd_nbr
-     bnd_idx_HHCWC=bnd_nbr_pure_HHCWC-(bnd_idx-bnd_nbr_H2O-1)
-     wvl_max(bnd_idx)=wvl_max_HHCWC(bnd_idx_HHCWC)
-     wvl_min(bnd_idx)=wvl_min_HHCWC(bnd_idx_HHCWC)
+  do bnd_idx=bnd_nbr+1,bnd_nbr_H2O+2,-1
+     if (dbg_lvl >= dbg_off) then
+        write (6,*) 'bnd_idx = ',bnd_idx
+        write (6,*) 'wvl_cnt_idx = ',wvl_cnt_idx
+        write (6,*) 'wvl_grd(bnd_idx) = ',wvl_grd(bnd_idx)
+     endif ! endif dbg
+     wvl_cnt_idx=wvl_cnt_nbr-(bnd_idx-bnd_nbr_H2O)
+     wvl_grd(bnd_idx)=wvl_min_srt+wvl_cnt_rsn*(wvl_cnt_idx-1)
+     if (dbg_lvl >= dbg_off) then
+        write (6,*) 'bnd_idx = ',bnd_idx
+        write (6,*) 'wvl_cnt_idx = ',wvl_cnt_idx
+        write (6,*) 'wvl_grd(bnd_idx) = ',wvl_grd(bnd_idx)
+     endif ! endif dbg
   enddo                     ! end loop over bnd
+
+  ! Old grid
+  !  do bnd_idx=1,bnd_nbr_H2O
+  !     wvl_max(bnd_idx)=wvl_max_H2O(bnd_idx)
+  !    wvl_min(bnd_idx)=wvl_min_H2O(bnd_idx)
+  !  enddo                     ! end loop over bnd
+  !  wvl_min(bnd_nbr_H2O+1)=wvl_min_HHCWC(bnd_nbr_pure_HHCWC)
+  !  do bnd_idx=bnd_nbr_H2O+2,bnd_nbr
+  !     bnd_idx_HHCWC=bnd_nbr_pure_HHCWC-(bnd_idx-bnd_nbr_H2O-1)
+  !     wvl_max(bnd_idx)=wvl_max_HHCWC(bnd_idx_HHCWC)
+  !     wvl_min(bnd_idx)=wvl_min_HHCWC(bnd_idx_HHCWC)
+  !  enddo                     ! end loop over bnd
+
   do bnd_idx=1,bnd_nbr
      wvl_ctr(bnd_idx)= &
           0.5*(wvl_max(bnd_idx)+wvl_min(bnd_idx))
@@ -5053,11 +5078,12 @@ program swnb2
   endif                     ! endif dbg
   
   if (dbg_lvl>dbg_off) then
-     write (6,'(23(a,i4,/))')        &
+     write (6,'(25(a,i4,/))')        &
           '# input atmosphere levels lev_atm_nbr = ',lev_atm_nbr, &
           '# input snow levels lev_snw_nbr = ',lev_snw_nbr, &
           '# total levels lev_nbr = lev_atm_nbr+lev_snw_nbr = ',lev_nbr, &
-          '# input O3_HHCWC bands bnd_nbr_HHCWC = ',bnd_nbr_HHCWC, &
+          '# input HC bands bnd_nbr_HC = ',bnd_nbr_HC, &
+          '# input HHCWC bands bnd_nbr_HHCWC = ',bnd_nbr_HHCWC, &
           '# input H2OH2O bands bnd_nbr_H2OH2O = ',bnd_nbr_H2OH2O, &
           '# input H2O narrow bands bnd_nbr_H2O = ',bnd_nbr_H2O, &
           '# input CO2 narrow bands bnd_nbr_CO2 = ',bnd_nbr_CO2, &
@@ -5075,8 +5101,8 @@ program swnb2
           '# input aer bands bnd_nbr_aer = ',bnd_nbr_aer, &
           '# input snw bands bnd_nbr_snw = ',bnd_nbr_snw, &
           '# input bga bands bnd_nbr_bga = ',bnd_nbr_bga, &
-          '# input O3_HHCWC bands outside H2O bands (no H2O overlap) bnd_nbr_pure_HHCWC = ',bnd_nbr_pure_HHCWC, &
-          'idx last pure H2O band (no O3_HHCWC overlap) bnd_nbr_non_HHCWC = ',bnd_nbr_non_HHCWC, &
+          '# input HHCWC bands outside H2O bands (no H2O overlap) bnd_nbr_pure_HHCWC = ',bnd_nbr_pure_HHCWC, &
+          'idx last pure H2O band (no HHCWC overlap) bnd_nbr_non_HHCWC = ',bnd_nbr_non_HHCWC, &
           '# total bands bnd_nbr = bnd_nbr_pure_HHCWC+bnd_nbr_H2O = ',bnd_nbr
   endif                     ! end if dbg
   
@@ -5352,6 +5378,27 @@ program swnb2
   ! Absorption cross-sections should be 0 outside data range
   xtr_typ_LHS=xtr_prt_nil+xtr_fll_nil
   xtr_typ_RHS=xtr_prt_nil+xtr_fll_nil
+  call rbn_vec(bnd_nbr_HC,wvl_grd_HC,abs_xsx_O2_dsk, &
+       bnd_nbr,wvl_grd,abs_xsx_O2, &
+       xtr_typ_LHS,xtr_typ_RHS)
+  ! Easiest way to turn-off Herzberg continuum yet keep O2 line absorption is to zero HC cross-sections here
+  if (.not.flg_HC) then
+     do bnd_idx=1,bnd_nbr
+        abs_xsx_O2(bnd_idx)=0.0
+     enddo                  ! end loop over bands
+  endif                     ! end if turning off Herzberg continuum
+  call rbn_vec(bnd_nbr_HHCWC,wvl_grd_HHCWC,abs_xsx_O3_dsk, &
+       bnd_nbr,wvl_grd,abs_xsx_O3, &
+       xtr_typ_LHS,xtr_typ_RHS)
+  call rbn_vec(bnd_nbr_HHCWC,wvl_grd_HHCWC,abs_xsx_O3_dadT_dsk, &
+       bnd_nbr,wvl_grd,abs_xsx_O3_dadT, &
+       xtr_typ_LHS,xtr_typ_RHS)
+  ! Easiest way to turn-off Hartley, Huggins, Chappuis, Wulf continuum yet keep O3 line absorption is to zero HHCWC cross-sections here
+  if (.not.flg_HHCWC) then
+     do bnd_idx=1,bnd_nbr
+        abs_xsx_O3(bnd_idx)=0.0
+     enddo                  ! end loop over bands
+  endif                     ! end if turning off Herzberg continuum
   call rbn_vec(bnd_nbr_NO2,wvl_grd_NO2,abs_xsx_NO2_dsk, &
        bnd_nbr,wvl_grd,abs_xsx_NO2, &
        xtr_typ_LHS,xtr_typ_RHS)
@@ -5448,7 +5495,7 @@ program swnb2
   !$omp$private(rfldir,rfldn)
   !$omp$private(flup,dfdt,uavg,uu,albmed,trnmed,u0u)
   !$omp$private(bnd_idx,lev_idx,bnd_idx_O3,bnd_idx_CO)
-  !$omp$private(bnd_idx_N2O,bnd_idx_N2,bnd_idx_CH4,bnd_idx_H2O,bnd_idx_CO2,bnd_idx_tmp_HHCWC,i21)
+  !$omp$private(bnd_idx_N2O,bnd_idx_N2,bnd_idx_CH4,bnd_idx_H2O,bnd_idx_CO2,i21)
   !$omp$private(mmn_idx,tau_idx,plr_idx,azi_idx)
   !$omp$private(phi_wgt,psi_wgt,u_bar,prs_bar,float_foo,tau)
   !$omp$private(opt_dep_ITOD_H2O,opt_dep_ITOD_O2,opt_dep_ITOD_OH)
@@ -5583,7 +5630,7 @@ program swnb2
      ! both as a failsafe programming technique and for the case
      ! when arguments are given to ignore specified radiative
      ! processes, e.g., the pure Rayleigh scattering case.
-     ! Also, at least one optical property, odal_O2, is
+     ! Also, some optical properties, odal_O2, odal_O3, are
      ! accumulated between two processes (Herzberg continuum absorption
      ! and line absorption near 0.69, 0.77, and 1.28 um in the 
      ! case of O2).
@@ -6206,51 +6253,19 @@ program swnb2
 
      endif                  ! end if band is in line data region
      
-     bnd_idx_tmp_HHCWC=bnd_nbr_HHCWC
-     if ((bnd_idx_HHCWC>bnd_nbr_pure_HHCWC).and. &
-          (bnd_idx>bnd_nbr_non_HHCWC)) then
-        ! We are in overlap region where there is both H2O and continuum data
-        ! We need to interpolate O3,O2 continuum absorption data from
-        ! O3_HHCWC bins onto the H2O bins. This is messy.
-        ! For now we just search for the O3_HHCWC band which contains the H2O
-        ! band center, and assign those O3_HHCWC cross-sections to that H2O band.
-120     if ((wvl_ctr(bnd_idx)<wvl_min_HHCWC(bnd_idx_tmp_HHCWC)).or. &
-             (wvl_ctr(bnd_idx)>wvl_max_HHCWC(bnd_idx_tmp_HHCWC))) then
-           bnd_idx_tmp_HHCWC=bnd_idx_tmp_HHCWC-1
-           goto 120
-        endif
-        
-        do lev_idx=1,lev_nbr
-           odal_O3(lev_idx)= &
-                (abs_xsx_O3(bnd_idx_tmp_HHCWC)+tpt_dlt_O3(lev_idx)*abs_xsx_O3_dadT(bnd_idx_tmp_HHCWC))*npl_O3(lev_idx)
-           odal_O2(lev_idx)=odal_O2(lev_idx)+ &
-                abs_xsx_O2(bnd_idx_tmp_HHCWC)*npl_O2(lev_idx)
-        enddo               ! end loop over lev
-        
-     endif                  ! endif in overlap region
+     ! Gases with both continuum and line absorption
+     ! where both processes are on same wavelength grid
+     do lev_idx=1,lev_nbr
+        ! Add Herzberg continuum (HC) absorption to line absorption
+        odal_O2(lev_idx)=odal_O2(lev_idx)+ & 
+             abs_xsx_O2(bnd_idx)*npl_O2(lev_idx)
+     enddo                  ! end loop over lev
      
-     if (bnd_idx_HHCWC==bnd_nbr_pure_HHCWC) then
-        ! Take special care with this band as it is the band we truncated
-        ! O3,O2 cross-sections here should be interpolated
-        do lev_idx=1,lev_nbr
-           odal_O3(lev_idx)= &
-                (abs_xsx_O3(bnd_idx_HHCWC)+tpt_dlt_O3(lev_idx)*abs_xsx_O3_dadT(bnd_idx_HHCWC))*npl_O3(lev_idx)
-           odal_O2(lev_idx)=odal_O2(lev_idx)+ &
-                abs_xsx_O2(bnd_idx_HHCWC)*npl_O2(lev_idx)
-        enddo               ! end loop over lev
-     endif                  ! endif band is the splice band
-     
-     if ((bnd_idx_HHCWC<bnd_nbr_pure_HHCWC).and. &
-          (bnd_idx<=bnd_nbr)) then
-        ! We are in pure continuum region
-        ! Absorption will be due solely to O3, O2
-        do lev_idx=1,lev_nbr
-           odal_O3(lev_idx)= &
-                (abs_xsx_O3(bnd_idx_HHCWC)+tpt_dlt_O3(lev_idx)*abs_xsx_O3_dadT(bnd_idx_HHCWC))*npl_O3(lev_idx)
-           odal_O2(lev_idx)=odal_O2(lev_idx)+ &
-                abs_xsx_O2(bnd_idx_HHCWC)*npl_O2(lev_idx)
-        enddo               ! end loop over lev
-     endif                  ! end if outside H2O data
+     do lev_idx=1,lev_nbr
+        ! Add Hartley, Huggins, Chappuis, Wulf continuum (HHCWC) absorption to line absorption
+        odal_O3(lev_idx)=odal_O3(lev_idx)+ &
+             (abs_xsx_O3(bnd_idx)+tpt_dlt_O3(lev_idx)*abs_xsx_O3_dadT(bnd_idx))*npl_O3(lev_idx)
+     enddo                  ! end loop over lev
      
      ! H2OH2O absorption
      ! call odal_H2OH2O_Chy97(wvn_ctr(bnd_idx),lev_nbr,t,mpl_H2O,RH_lqd,odal_H2OH2O,dbg_lvl)
@@ -6451,7 +6466,7 @@ program swnb2
      endif                  ! end if no N2O processes
      if (.not.flg_O2) then
         do lev_idx=1,lev_nbr
-           odal_O2(lev_idx)=0.0
+           odal_O2(lev_idx)=0.0 ! Turn-off line+HC absorption
         enddo               ! end loop over lev
      endif                  ! end if no O2 processes
      if (.not.flg_O3) then

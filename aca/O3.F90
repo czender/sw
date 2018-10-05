@@ -241,22 +241,23 @@ program O3
   logical cmd_ln_fl_out
 
   ! Main code
-  
-  ! Initialize default values
-  drc_in='/data/zender/aca'//nlc ! [sng] Input directory
-  drc_out=''                ! [sng] Output directory
 
+  ! Initialize default values
+  CVS_Date='$Date$'
+  CVS_Revision='$Revision$'
   JPL15=.false.
   WMO85=.true.
   cmd_ln_fl_in=.false.
   cmd_ln_fl_out=.false.
   dbg_lvl=dbg_off
+  drc_in='/data/zender/aca'//nlc ! [sng] Input directory
+  drc_out=''                ! [sng] Output directory
   exit_status=0
   fl_slr=fl_slr_dfl
   rcd=nf90_noerr              ! nf90_noerr == 0
-  CVS_Date='$Date$'
-  CVS_Revision='$Revision$'
+  tpt_cold=tpt_cold_WMO85
   tpt_std=250.0 ! Temperature at which generic O3 cross sections will be archived
+  tpt_warm=tpt_warm_WMO85
   
   ! Retrieve command line arguments
   call date_time_get(lcl_date_time)
