@@ -2509,6 +2509,7 @@ program swnb2
      call ftn_drcpfx(drc_in,fl_NO2) ! [sng] NO2 file
      call ftn_drcpfx(drc_in,fl_O2) ! [sng] O2 file
      call ftn_drcpfx(drc_in,fl_O2O2) ! [sng] O2O2 file
+     call ftn_drcpfx(drc_in,fl_HC) ! [sng] HC file
      call ftn_drcpfx(drc_in,fl_HHCWC) ! [sng] HHCWC file
      call ftn_drcpfx(drc_in,fl_O3) ! [sng] O3 file
      call ftn_drcpfx(drc_in,fl_OH) ! [sng] OH file
