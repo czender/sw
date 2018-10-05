@@ -4638,7 +4638,7 @@ program swnb2
   if(wvl_cnt_nbr_flt /= wvl_cnt_nbr) wvl_cnt_nbr=wvl_cnt_nbr+1
   
   bnd_nbr=wvl_cnt_nbr+bnd_nbr_H2O
-  if (dbg_lvl >= dbg_off) then
+  if (dbg_lvl >= dbg_crr) then
      write (6,*) 'wvl_cnt_spn = ',wvl_cnt_spn
      write (6,*) 'wvl_cnt_rsn = ',wvl_cnt_rsn
      write (6,*) 'wvl_cnt_nbr_flt = ',wvl_cnt_nbr_flt
@@ -4938,23 +4938,15 @@ program swnb2
   ! Initialize level-independent arrays that depend on bnd_nbr
   wvl_grd(1)=wvl_max_H2O(1)
   do bnd_idx=1,bnd_nbr_H2O
-     !     wvl_max(bnd_idx)=wvl_max_H2O(bnd_idx)
-     !     wvl_min(bnd_idx)=wvl_min_H2O(bnd_idx)
      wvl_grd(bnd_idx+1)=wvl_min_H2O(bnd_idx)
   enddo                     ! end loop over bnd
   do bnd_idx=bnd_nbr+1,bnd_nbr_H2O+2,-1
-     if (dbg_lvl >= dbg_off) then
-        write (6,*) 'bnd_idx = ',bnd_idx
-        write (6,*) 'wvl_cnt_idx = ',wvl_cnt_idx
-        write (6,*) 'wvl_grd(bnd_idx) = ',wvl_grd(bnd_idx)
-     endif ! endif dbg
-     wvl_cnt_idx=wvl_cnt_nbr-(bnd_idx-bnd_nbr_H2O)
+     wvl_cnt_idx=wvl_cnt_nbr-(bnd_idx-bnd_nbr_H2O)+2
      wvl_grd(bnd_idx)=wvl_min_srt+wvl_cnt_rsn*(wvl_cnt_idx-1)
-     if (dbg_lvl >= dbg_off) then
-        write (6,*) 'bnd_idx = ',bnd_idx
-        write (6,*) 'wvl_cnt_idx = ',wvl_cnt_idx
-        write (6,*) 'wvl_grd(bnd_idx) = ',wvl_grd(bnd_idx)
-     endif ! endif dbg
+  enddo                     ! end loop over bnd
+  do bnd_idx=1,bnd_nbr
+     wvl_max(bnd_idx)=wvl_grd(bnd_idx)
+     wvl_min(bnd_idx)=wvl_grd(bnd_idx+1)
   enddo                     ! end loop over bnd
 
   ! Old grid
@@ -4996,6 +4988,14 @@ program swnb2
      if ((wvl_min(bnd_idx)<=wvl_obs_bga).and. &
           (wvl_max(bnd_idx)>wvl_obs_bga)) bnd_obs_bga=bnd_idx
   enddo                     ! end loop over bnd
+  if (dbg_lvl >= dbg_old) then
+     write(6,*) 'bnd_idx','wvl_min','wvl_max','wvl_ctr'
+     write(6,*) 'bnd_idx','nm','nm','nm'
+     do bnd_idx=bnd_nbr,1,-1
+        write(6,*) &
+             bnd_idx,wvl_min(bnd_idx)*1.0e9,wvl_max(bnd_idx)*1.0e9,wvl_ctr(bnd_idx)*1.0e9
+     enddo                     ! end loop over bnd
+  endif ! endif dbg
   
   ! Get TOA solar spectrum
   slr_spc_xtr_typ=xtr_fll_ngh ! Use xtr_fll_ngh on solar spectra
@@ -6652,7 +6652,7 @@ program swnb2
      ! small Rayleigh scattering optical depths (p <~ 1 Pa) in single precision
      do lev_idx=1,lev_nbr
         if (ss_alb_fct(bnd_idx,lev_idx)>1.0) then
-           write (6,'(a,a,i4,a,i3,a,f10.7)')  &
+           write (6,'(a,a,i4,a,i3,a,f10.7)') &
                 prg_nm(1:ftn_strlen(prg_nm)),': WARNING ss_alb_fct(',bnd_idx,',',lev_idx,') = ',ss_alb_fct(bnd_idx,lev_idx)
            ss_alb_fct(bnd_idx,lev_idx)=1.0
         endif
