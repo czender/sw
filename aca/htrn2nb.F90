@@ -5,6 +5,7 @@ program htrn2nb
   ! Purpose: Compute Malkmus narrow band parameters from HITRAN line data
   ! If input is from BPB, just convert Malkmus band parameters to netCDF format
   
+  ! 20181005: Update Fortran style
   ! 19981128: Default to run htrn2nb in double precision
   ! 19981128: Noticed that new narrow band parameters are ~10% larger than old
   ! Compared S_p_abs_cff_mss in mlk_H2O.nc vs. swnb_H2O.nc
@@ -12,8 +13,8 @@ program htrn2nb
   ! fxm: Should try to track this down, verify parameters are correct
   
   ! Compilation:
-  ! cd ${HOME}/aca; make -W htrn2nb.F OPTS=D precision=double htrn2nb; cd -
-  ! cd ${HOME}/aca; make -W htrn2nb.F precision=double htrn2nb; cd -
+  ! cd ${HOME}/aca; make -W htrn2nb.F90 OPTS=D precision=double htrn2nb; cd -
+  ! cd ${HOME}/aca; make -W htrn2nb.F90 precision=double htrn2nb; cd -
   ! cd ${HOME}/aca; make OPTS=D precision=double htrn2nb; cd -
   
   ! KiR83 show 5 cm-1 bands are optimal for CO2
@@ -49,6 +50,9 @@ program htrn2nb
   ! Carbon dioxide:
   ! htrn2nb -l 2000.0 -h 27000.0 -b 5000 -i ${DATA}/hitran/CO2.nc -o ${DATA}/aca/mlk_CO2.nc
 
+  ! Carbon monoxide:
+  ! htrn2nb -l 2000.0 -h 27000.0 -b 5000 -i ${DATA}/hitran/CO.nc -o ${DATA}/aca/mlk_CO.nc
+  
   use dbg_mdl ! [mdl] Debugging constants, prg_nm, dbg_lvl
   use drv_cst_mdl ! [mdl] Derived physical constants
   use flx_slr_mdl ! [mdl] Solar spectral fluxes
@@ -61,40 +65,49 @@ program htrn2nb
 
   implicit none
   ! Parameters
-  integer,parameter::r4=selected_real_kind(p=6) ! r4: 4B (C float) default, 8B (C double) possible
+  character(len=*),parameter::CVS_Date='$Date$' ! [sng] Date string
+  character(len=*),parameter::CVS_Id='$Id$' ! [sng] CVS Identification
+  character(len=*),parameter::CVS_Name='$HeadURL$' ! [sng] File name string
+  character(len=*),parameter::CVS_Revision='$Revision$' ! [sng] File revision string
+  character(len=*),parameter::nlc=char(0) ! [sng] NUL character = ASCII 0 = char(0)
   character(len=*),parameter::sbr_nm='htrn2nb' ! [sng] Subroutine name
-  real(selected_real_kind(p=12)),parameter::ln_lo_min=1.0e-10   ! [cm-1] Minimum wavenumber
-  real(selected_real_kind(p=12)),parameter::tpt_Malkmus_BPB=250.0 ! [K] Reference temperature for Malkmus parameters
-  character*(*),parameter::CVS_Id='$Id$'
+  integer,parameter::r4=selected_real_kind(p=6) ! r4: 4B (C float) default, 8B (C double) possible
   integer,parameter::bnd_nbr_max=10000   ! 0.0--50000.0 cm-1 in 5 cm-1 bands
   integer,parameter::fl_in_unit=73
-  !  integer,parameter::ln_nbr_max=500000 ! O3 from 0.2--100.0 um has >409000
   integer,parameter::ln_nbr_max=600000 ! 20181001 HITRAN16 O3 from 0.2--100.0 um has 449570, CO2 has 559874
   integer,parameter::tpt_nbr_max=140     ! 180.0--320.0 K in 1 dgr increments
   integer,parameter::iso_sng_htrn_lng_max=20 ! [nbr] Maximum length of HITRAN isopotomer string
   integer,parameter::mlc_sng_htrn_lng_max=10 ! [nbr] Maximum length of HITRAN molecule string
-  ! Input Arguments
-  ! Input/Output Arguments
-  ! Output Arguments
-  ! Local workspace
-  character argv*80
-  character cmd_ln*200
-  character fl_in*80
-  character fl_out*80
-  character*26::lcl_date_time ! Time formatted as Day Mth DD HH:MM:SS TZ YYYY
-  character prg_ID*200
-  character CVS_Date*28
-  character CVS_Revision*16
+  real(selected_real_kind(p=12)),parameter::ln_lo_min=1.0e-10   ! [cm-1] Minimum wavenumber
+  real(selected_real_kind(p=12)),parameter::tpt_Malkmus_BPB=250.0 ! [K] Reference temperature for Malkmus parameters
+
+  ! Locals with simple initialization and no command-line override
+  ! integer::exit_status=0 ! [enm] Program exit status (non-standard Fortran)
+  integer::rcd=nf90_noerr ! [rcd] Return success code
   
-  integer arg
-  integer bnd_dbg
-  integer int_foo
-  integer arg_nbr
-  integer rcd               ! [rcd] Return success code
-  
+  character(2)::dsh_key ! [sng] command-line dash and switch
+  character(200)::cmd_ln ! [sng] command-line
+  character(200)::prg_ID ! [sng] Program ID
+  character(26)::lcl_date_time ! [sng] Time formatted as Day Mth DD HH:MM:SS TZ YYYY
+  character(80)::arg_val ! [sng] command-line argument value
+  character(80)::opt_sng ! [sng] Option string
+
+  ! Command-line parsing
+  integer::arg_idx ! [idx] Counting index
+  integer::arg_nbr ! [nbr] Number of command-line arguments
+  integer::opt_lng ! [nbr] Length of option
+
+  ! netCDF4 
+  integer::dfl_lvl=0 ! [enm] Deflate level
+  integer::flg_shf=1 ! [flg] Turn on netCDF4 shuffle filter
+  integer::flg_dfl=1 ! [flg] Turn on netCDF4 deflate filter
+  integer::fl_out_fmt=nco_format_undefined ! [enm] Output file format
+  integer::nf90_create_mode=nf90_clobber ! [enm] Mode flag for nf90_create() call
+
   logical nc_flg
   
   integer bnd_dmn_id        ! Dimension ID for band
+  integer bnd_dbg           ! [idx] Debugging band
   integer bnd_idx           ! Counting index
   integer bnd_nbr           ! Dimension size
   integer cnt_iso(1)
@@ -109,6 +122,7 @@ program htrn2nb
   integer ln_nbr            ! Dimension size
   integer mlc_dmn_id        ! Dimension ID for mlc
   integer mlc_nbr           ! Dimension size
+  integer typ_out           ! Output floating point type
   integer nc_id             ! file handle
   integer srt_one(1)
   integer tpt_dmn_id        ! Dimension ID for tpt
@@ -274,24 +288,27 @@ program htrn2nb
   real mmw_mlc(mlc_nbr_max_htrn) ! [kg mol-1] mean molecular weight of all HITRAN molecules
   real xpn_mlc(mlc_nbr_max_htrn) ! Exponent defining temperature dependence of rotational partition function
   
+  ! Set defaults for command-line options 
+  character(80)::drc_in='/data/zender/hitran'//nlc ! [sng] Input directory
+  character(80)::drc_out='/data/zender/aca'//nlc ! [sng] Output directory
+  character(80)::fl_in='H2O.nc'//nlc ! [sng] Input file
+  character(80)::fl_out='mlk_H2O.nc'//nlc ! [sng] Output file
+  integer::int_foo=1 ! [nbr] Integer
+
   ! Main code
   
   ! Initialize default values
-  CVS_Date='$Date$'
-  CVS_Revision='$Revision$'
   nc_flg=.true.
-  rcd=nf90_noerr              ! nf90_noerr == 0
   tpt_min=180.0             ! [K]
   tpt_max=320.0             ! [K]
   
   ! Initialize options which may be overridden by command line
   bnd_dbg=800               ! Option -B
   dbg_lvl=0                 ! Option -D
-  fl_in='/data/zender/hitran/H2O.nc' ! Option -i
   bnd_nbr=1590              ! Option -b
-  fl_out='/data/zender/aca/mlk_H2O.nc' ! Option -o
   ln_lo=2000.0              ! [cm-1] Option -l
   ln_hi=17900.0             ! [cm-1] Option -h
+  typ_out=nf90_float        ! [enm] Output floating point type
   tpt_Malkmus_rfr=tpt_Malkmus_BPB ! Option -T
   tpt_nbr=140               ! Option -t
   
@@ -300,58 +317,95 @@ program htrn2nb
   call ftn_cmd_ln_sng(cmd_ln)
   call ftn_prg_ID_mk(CVS_Id,CVS_Revision,CVS_Date,prg_ID)
   write (6,'(a)') prg_ID(1:ftn_strlen(prg_ID))
-  arg_nbr=command_argument_count()
-  do arg=1,arg_nbr
-     call getarg(arg,argv)
-     if (argv(1:2)=='-B') then
-        call getarg(arg+1,argv)
-        read (argv,'(i5)') bnd_dbg
-     endif
-     if (argv(1:2)=='-b') then
-        call getarg(arg+1,argv)
-        read(argv,'(i5)') bnd_nbr
-     endif
-     if (argv(1:2)=='-D') then
-        call getarg(arg+1,argv)
-        read(argv,'(i4)') dbg_lvl
-     endif
-     if (argv(1:2)=='-f') then
-        call getarg(arg+1,argv)
-        read(argv,'(f8.3)') float_foo
-     endif
-     if (argv(1:2)=='-h') then
-        call getarg(arg+1,argv)
-        read(argv,'(f8.3)') ln_hi
-     endif
-     if (argv(1:2)=='-i') then
-        call getarg(arg+1,argv)
-        read(argv,'(a)') fl_in
-     endif
-     if (argv(1:2)=='-l') then
-        call getarg(arg+1,argv)
-        read(argv,'(f8.3)') ln_lo
-     endif
-     if (argv(1:2)=='-n') then
-        nc_flg=.not.nc_flg
-     endif
-     if (argv(1:2)=='-o') then
-        call getarg(arg+1,argv)
-        read(argv,'(a)') fl_out
-     endif
-     if (argv(1:2)=='-t') then
-        call getarg(arg+1,argv)
-        read(argv,'(i4)') tpt_nbr
-     endif
-     if (argv(1:2)=='-T') then
-        call getarg(arg+1,argv)
-        read(argv,'(f8.3)') tpt_Malkmus_rfr
-     endif
-     if (argv(1:2)=='-v') then
-        write(6,'(a)') CVS_Id
-        goto 1000
-     endif
-  end do
+  arg_nbr=command_argument_count() ! [nbr] Number of command-line arguments
+  arg_idx=1 ! [idx] Counting index
+  loop_while_options: do while (arg_idx <= arg_nbr)
+     call ftn_getarg_wrp(arg_idx,arg_val) ! [sbr] Call getarg(), increment arg_idx
+     dsh_key=arg_val(1:2) ! [sng] First two characters of option
+     if (dsh_key == '--') then
+        opt_lng=ftn_opt_lng_get(arg_val) ! [nbr] Length of option
+        if (opt_lng <= 0) stop 'Long option has no name'
+        opt_sng=arg_val(3:2+opt_lng) ! [sng] Option string
+        if (dbg_lvl >= dbg_io) write (6,'(5a,i3)') prg_nm(1:ftn_strlen(prg_nm)), &
+             ': DEBUG Double hyphen indicates multi-character option: ', &
+             'opt_sng = ',opt_sng(1:ftn_strlen(opt_sng)),', opt_lng = ',opt_lng
+        ! fxm: Change if else if construct to select case but how to handle fall-through cases elegantly?
+        if (opt_sng == 'dbg' .or. opt_sng == 'dbg_lvl' ) then
+           call ftn_arg_get(arg_idx,arg_val,dbg_lvl) ! [enm] Debugging level
+        else if (opt_sng == 'dbl' .or. opt_sng == 'dbl_foo' ) then
+           typ_out=nf90_double ! [frc] Double
+        else if (opt_sng == 'dfl' .or. opt_sng == 'deflate' ) then
+           call ftn_arg_get(arg_idx,arg_val,dfl_lvl) ! [enm] Deflate level
+        else if (opt_sng == 'drc_in') then
+           call ftn_arg_get(arg_idx,arg_val,drc_in) ! [sng] Input directory
+        else if (opt_sng == 'drc_out') then
+           call ftn_arg_get(arg_idx,arg_val,drc_out) ! [sng] Output directory
+        else if (opt_sng == 'fl_in') then
+           call ftn_arg_get(arg_idx,arg_val,fl_in) ! [sng] Input file
+        else if (opt_sng == 'fl_out') then
+           call ftn_arg_get(arg_idx,arg_val,fl_out) ! [sng] Output file
+        else if (opt_sng == 'flt' .or. opt_sng == 'flt_foo' ) then
+           typ_out=nf90_float ! [frc] Double
+        else ! Option not recognized
+           arg_idx=arg_idx-1 ! [idx] Counting index
+           call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
+        endif ! endif option is recognized
+        ! Jump to top of while loop
+        cycle loop_while_options ! C, F77, and F90 use "continue", "goto", and "cycle"
+     else if (dsh_key(1:1) == '-') then ! endif long option
+        ! Handle short options
+        if (dsh_key == '-3') then
+           fl_out_fmt=nf90_format_classic ! [enm] Output file format
+        else if (dsh_key == '-4') then
+           fl_out_fmt=nf90_format_netcdf4 ! [enm] Output file format
+        else if (dsh_key == '-B') then
+           call ftn_arg_get(arg_idx,arg_val,bnd_dbg)
+        else if (dsh_key == '-b') then
+           call ftn_arg_get(arg_idx,arg_val,bnd_nbr)
+        else if (dsh_key == '-D') then
+           call ftn_arg_get(arg_idx,arg_val,dbg_lvl)
+        else if (dsh_key == '-f') then
+           call ftn_arg_get(arg_idx,arg_val,float_foo)
+        else if (dsh_key == '-h') then
+           call ftn_arg_get(arg_idx,arg_val,ln_hi)
+        else if (dsh_key == '-i') then
+           call ftn_arg_get(arg_idx,arg_val,fl_in)
+        else if (dsh_key == '-l') then
+           call ftn_arg_get(arg_idx,arg_val,ln_lo)
+        else if (dsh_key == '-n') then
+           nc_flg=.not.nc_flg
+        else if (dsh_key == '-o') then
+           call ftn_arg_get(arg_idx,arg_val,fl_out)
+        else if (dsh_key == '-t') then
+           call ftn_arg_get(arg_idx,arg_val,tpt_nbr)
+        else if (dsh_key == '-T') then
+           call ftn_arg_get(arg_idx,arg_val,tpt_Malkmus_rfr)
+        else if (dsh_key == '-v') then
+           write (6,'(a)') CVS_Id
+           goto 1000 ! Goto exit with error status
+        else ! Option not recognized
+           arg_idx=arg_idx-1 ! [idx] Counting index
+           call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
+        endif ! endif arg_val
+     else ! endif short option
+        ! Last argument(s) may be positional
+        if (arg_idx == arg_nbr) then
+           call ftn_strcpylsc(fl_in,arg_val) ! [sng] Input file
+        else if (arg_idx == arg_nbr+1) then
+           call ftn_strcpylsc(fl_out,arg_val) ! [sng] Output file
+        else ! Option not recognized
+           arg_idx=arg_idx-1 ! [idx] Counting index
+           call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
+        endif ! arg_idx != arg_nbr
+     end if ! end position arguments
+  end do loop_while_options ! end while (arg_idx <= arg_nbr)
   
+  ! Compute any quantities that might depend on command-line input
+  ! Prepend user-specified path, if any, to input data file names
+  if (ftn_strlen(drc_in) > 0) call ftn_drcpfx(drc_in,fl_in) ! [sng] Input file
+  ! Prepend user-specified path, if any, to output data file names
+  if (ftn_strlen(drc_out) > 0) call ftn_drcpfx(drc_out,fl_out) ! [sng] Output file
+
   ! Enough memory?
   if (tpt_nbr > tpt_nbr_max) stop 'tpt_nbr > tpt_nbr_max'
   if (bnd_nbr > bnd_nbr_max) stop 'bnd_nbr > bnd_nbr_max'
@@ -987,172 +1041,184 @@ program htrn2nb
      endif                  ! endif
   end do                    ! end loop over bnd
   
-  ! Begin NetCDF output routines
-  rcd=nf90_wrp_create(fl_out,nf90_clobber,nc_id,sbr_nm=sbr_nm)
+#ifdef ENABLE_NETCDF4
+  if (fl_out_fmt == nco_format_undefined) fl_out_fmt=nf90_format_classic ! [enm] Output file format
+  if (fl_out_fmt == nf90_format_64bit) then
+     nf90_create_mode=nf90_create_mode+nf90_64bit_offset
+  else if (fl_out_fmt == nf90_format_netcdf4) then
+     nf90_create_mode=nf90_create_mode+nf90_netcdf4
+  else if (fl_out_fmt == nf90_format_netcdf4_classic) then
+     nf90_create_mode=nf90_create_mode+(nf90_classic_model+nf90_netcdf4)
+  end if ! end else fl_out_fmt
+#else /* !ENABLE_NETCDF4 */
+  if (fl_out_fmt == nco_format_undefined) fl_out_fmt=nf90_format_classic ! [enm] Output file format
+  if(fl_out_fmt == nf90_format_classic) nf90_create_mode=nf90_create_mode+0 ! CEWI
+#endif /* !ENABLE_NETCDF4 */
+  dfl_lvl=dfl_lvl+0 ! CEWI
+  flg_dfl=flg_dfl+0 ! CEWI
+  flg_shf=flg_shf+0 ! CEWI
+  rcd=nf90_wrp_create(fl_out,nf90_create_mode,nc_id,sbr_nm=sbr_nm)
   
   ! Define dimension IDs
-  rcd=rcd+nf90_def_dim(nc_id,'bnd',bnd_nbr,bnd_dmn_id)
-  if (rcd /= nf90_noerr) call nf90_err_exit(rcd,fl_out)
-  rcd=rcd+nf90_def_dim(nc_id,'grd',bnd_nbr+1,grd_dmn_id)
-  if (rcd /= nf90_noerr) call nf90_err_exit(rcd,fl_out)
-  rcd=rcd+nf90_def_dim(nc_id,'t',tpt_nbr,tpt_dmn_id)
-  if (rcd /= nf90_noerr) call nf90_err_exit(rcd,fl_out)
+  rcd=nf90_wrp(nf90_def_dim(nc_id,'bnd',bnd_nbr,bnd_dmn_id),sbr_nm//': def_dim bnd in '//__FILE__)
+  rcd=nf90_wrp(nf90_def_dim(nc_id,'grd',bnd_nbr+1,grd_dmn_id),sbr_nm//': def_dim grd in '//__FILE__)
+  rcd=nf90_wrp(nf90_def_dim(nc_id,'t',tpt_nbr,tpt_dmn_id),sbr_nm//': def_dim tpt in '//__FILE__)
   
   ! Variable definitions
-  rcd=rcd+nf90_def_var(nc_id,'A_phi',nf90_float,bnd_dmn_id,A_phi_id)
-  rcd=rcd+nf90_def_var(nc_id,'A_psi',nf90_float,bnd_dmn_id,A_psi_id)
-  rcd=rcd+nf90_def_var(nc_id,'B_phi',nf90_float,bnd_dmn_id,B_phi_id)
-  rcd=rcd+nf90_def_var(nc_id,'B_psi',nf90_float,bnd_dmn_id,B_psi_id)
-  rcd=rcd+nf90_def_var(nc_id,'S_d',nf90_float,bnd_dmn_id,S_d_id)
-  rcd=rcd+nf90_def_var(nc_id,'S_d_abs_cff_mss',nf90_float,bnd_dmn_id,S_d_abs_cff_mss_id)
-  rcd=rcd+nf90_def_var(nc_id,'S_p',nf90_float,bnd_dmn_id,S_p_id)
-  rcd=rcd+nf90_def_var(nc_id,'S_p_abs_cff_mss',nf90_float,bnd_dmn_id,S_p_abs_cff_mss_id)
-  rcd=rcd+nf90_def_var(nc_id,'alpha',nf90_float,bnd_dmn_id,alpha_id)
-  rcd=rcd+nf90_def_var(nc_id,'bnd',nf90_float,bnd_dmn_id,bnd_id)
-  rcd=rcd+nf90_def_var(nc_id,'bnd_ln_nbr',nf90_int,bnd_dmn_id,bnd_ln_nbr_id)
-  rcd=rcd+nf90_def_var(nc_id,'bnd_dlt',nf90_float,bnd_dlt_id)
-  rcd=rcd+nf90_def_var(nc_id,'frc_slr_flx_LaN68',nf90_float,bnd_dmn_id,frc_slr_flx_LaN68_id)
-  rcd=rcd+nf90_def_var(nc_id,'frc_slr_flx_ThD71',nf90_float,bnd_dmn_id,frc_slr_flx_ThD71_id)
-  rcd=rcd+nf90_def_var(nc_id,'idx_rfr_air_STP',nf90_float,bnd_dmn_id,idx_rfr_air_STP_id)
-  rcd=rcd+nf90_def_var(nc_id,'oneD_foo',nf90_float,tpt_dmn_id,oneD_foo_id)
-  rcd=rcd+nf90_def_var(nc_id,'phi_exact',nf90_float,tpt_dmn_id,phi_exact_id)
-  rcd=rcd+nf90_def_var(nc_id,'phi_fit',nf90_float,tpt_dmn_id,phi_fit_id)
-  rcd=rcd+nf90_def_var(nc_id,'psi_exact',nf90_float,tpt_dmn_id,psi_exact_id)
-  rcd=rcd+nf90_def_var(nc_id,'psi_fit',nf90_float,tpt_dmn_id,psi_fit_id)
-  rcd=rcd+nf90_def_var(nc_id,'scalar_foo',nf90_float,scalar_foo_id)
-  rcd=rcd+nf90_def_var(nc_id,'tpt',nf90_float,tpt_dmn_id,tpt_id)
-  rcd=rcd+nf90_def_var(nc_id,'wvl_ctr',nf90_float,bnd_dmn_id,wvl_ctr_id)
-  rcd=rcd+nf90_def_var(nc_id,'wvl_grd',nf90_float,grd_dmn_id,wvl_grd_id)
-  rcd=rcd+nf90_def_var(nc_id,'wvl_max',nf90_float,bnd_dmn_id,wvl_max_id)
-  rcd=rcd+nf90_def_var(nc_id,'wvl_min',nf90_float,bnd_dmn_id,wvl_min_id)
-  rcd=rcd+nf90_def_var(nc_id,'wvl_dlt',nf90_float,bnd_dmn_id,wvl_dlt_id)
-  rcd=rcd+nf90_def_var(nc_id,'wvn_ctr',nf90_float,bnd_dmn_id,wvn_ctr_id)
-  rcd=rcd+nf90_def_var(nc_id,'wvn_grd',nf90_float,grd_dmn_id,wvn_grd_id)
-  rcd=rcd+nf90_def_var(nc_id,'wvn_max',nf90_float,bnd_dmn_id,wvn_max_id)
-  rcd=rcd+nf90_def_var(nc_id,'wvn_min',nf90_float,bnd_dmn_id,wvn_min_id)
-  rcd=rcd+nf90_def_var(nc_id,'wvn_dlt',nf90_float,bnd_dmn_id,wvn_dlt_id)
-  rcd=rcd+nf90_def_var(nc_id,'iso_id',nf90_int,iso_id_id)
-  rcd=rcd+nf90_def_var(nc_id,'mlc_id',nf90_int,mlc_id_id)
+  rcd=nf90_wrp(nf90_def_var(nc_id,'A_phi',typ_out,bnd_dmn_id,A_phi_id),sbr_nm//': dv A_phi')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'A_psi',typ_out,bnd_dmn_id,A_psi_id),sbr_nm//': dv A_psi')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'B_phi',typ_out,bnd_dmn_id,B_phi_id),sbr_nm//': dv B_phi')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'B_psi',typ_out,bnd_dmn_id,B_psi_id),sbr_nm//': dv B_psi')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'S_d',typ_out,bnd_dmn_id,S_d_id),sbr_nm//': dv S_d')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'S_d_abs_cff_mss',typ_out,bnd_dmn_id,S_d_abs_cff_mss_id),sbr_nm//': dv S_d_abs_cff_mss')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'S_p',typ_out,bnd_dmn_id,S_p_id),sbr_nm//': dv S_p')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'S_p_abs_cff_mss',typ_out,bnd_dmn_id,S_p_abs_cff_mss_id),sbr_nm//': dv S_p_abs_cff_mss')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'alpha',typ_out,bnd_dmn_id,alpha_id),sbr_nm//': dv alpha')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'bnd',typ_out,bnd_dmn_id,bnd_id),sbr_nm//': dv bnd')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'bnd_ln_nbr',nf90_int,bnd_dmn_id,bnd_ln_nbr_id),sbr_nm//': dv bnd_ln_nbr')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'bnd_dlt',typ_out,bnd_dlt_id),sbr_nm//': dv bnd_dlt')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'frc_slr_flx_LaN68',typ_out,bnd_dmn_id,frc_slr_flx_LaN68_id),sbr_nm//': dv frc_slr_flx_LaN68')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'frc_slr_flx_ThD71',typ_out,bnd_dmn_id,frc_slr_flx_ThD71_id),sbr_nm//': dv frc_slr_flx_ThD71')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'idx_rfr_air_STP',typ_out,bnd_dmn_id,idx_rfr_air_STP_id),sbr_nm//': dv idx_rfr_air_STP')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'oneD_foo',typ_out,tpt_dmn_id,oneD_foo_id),sbr_nm//': dv oneD_foo')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'phi_exact',typ_out,tpt_dmn_id,phi_exact_id),sbr_nm//': dv phi_exact')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'phi_fit',typ_out,tpt_dmn_id,phi_fit_id),sbr_nm//': dv phi_fit')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'psi_exact',typ_out,tpt_dmn_id,psi_exact_id),sbr_nm//': dv psi_exact')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'psi_fit',typ_out,tpt_dmn_id,psi_fit_id),sbr_nm//': dv psi_fit')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'scalar_foo',typ_out,scalar_foo_id),sbr_nm//': dv scalar_foo')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'tpt',typ_out,tpt_dmn_id,tpt_id),sbr_nm//': dv tpt')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_ctr',typ_out,bnd_dmn_id,wvl_ctr_id),sbr_nm//': dv wvl_ctr')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_grd',typ_out,grd_dmn_id,wvl_grd_id),sbr_nm//': dv wvl_grd')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_max',typ_out,bnd_dmn_id,wvl_max_id),sbr_nm//': dv wvl_max')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_min',typ_out,bnd_dmn_id,wvl_min_id),sbr_nm//': dv wvl_min')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_dlt',typ_out,bnd_dmn_id,wvl_dlt_id),sbr_nm//': dv wvl_dlt')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'wvn_ctr',typ_out,bnd_dmn_id,wvn_ctr_id),sbr_nm//': dv wvn_ctr')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'wvn_grd',typ_out,grd_dmn_id,wvn_grd_id),sbr_nm//': dv wvn_grd')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'wvn_max',typ_out,bnd_dmn_id,wvn_max_id),sbr_nm//': dv wvn_max')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'wvn_min',typ_out,bnd_dmn_id,wvn_min_id),sbr_nm//': dv wvn_min')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'wvn_dlt',typ_out,bnd_dmn_id,wvn_dlt_id),sbr_nm//': dv wvn_dlt')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'iso_id',nf90_int,iso_id_id),sbr_nm//': dv iso_id')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'mlc_id',nf90_int,mlc_id_id),sbr_nm//': dv mlc_id')
   
   ! Add global attributes
-  rcd=rcd+nf90_put_att(nc_id,nf90_global,'CVS_Id',CVS_Id)
-  rcd=rcd+nf90_put_att(nc_id,nf90_global,'creation_date',lcl_date_time)
-  rcd=rcd+nf90_put_att(nc_id,nf90_global,'prg_ID',prg_ID(1:ftn_strlen(prg_ID)))
-  rcd=rcd+nf90_put_att(nc_id,nf90_global,'cmd_ln',cmd_ln(1:ftn_strlen(cmd_ln)))
-  rcd=rcd+nf90_put_att(nc_id,nf90_global,'molecule',mlc_sng(1:ftn_strlen(mlc_sng)))
-  rcd=rcd+nf90_put_att(nc_id,nf90_global,'isotope',iso_sng(1:ftn_strlen(iso_sng)))
+  rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'CVS_Id',CVS_Id),sbr_nm//': pa CVS_Id')
+  rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'creation_date',lcl_date_time),sbr_nm//': pa creation_date')
+  rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'prg_ID',prg_ID(1:ftn_strlen(prg_ID))),sbr_nm//': pa prg_ID')
+  rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'cmd_ln',cmd_ln(1:ftn_strlen(cmd_ln))),sbr_nm//': pa cmd_ln')
+  rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'molecule',mlc_sng(1:ftn_strlen(mlc_sng))),sbr_nm//': pa molecule')
+  rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'isotope',iso_sng(1:ftn_strlen(iso_sng))),sbr_nm//': pa isotope')
   
   ! Add English text descriptions
-  rcd=rcd+nf90_put_att(nc_id,A_phi_id,'long_name','Linear temperature dependence of line strengths')
-  rcd=rcd+nf90_put_att(nc_id,A_psi_id,'long_name','Linear temperature dependence of Lorentzian HWHM')
-  rcd=rcd+nf90_put_att(nc_id,B_phi_id,'long_name','Quadratic temperature dependence of line strengths')
-  rcd=rcd+nf90_put_att(nc_id,B_psi_id,'long_name','Quadratic temperature dependence of Lorentzian HWHM')
-  rcd=rcd+nf90_put_att(nc_id,S_d_abs_cff_mss_id,'long_name','Band average line strength')
-  rcd=rcd+nf90_put_att(nc_id,S_d_id,'long_name','Band average line strength')
-  rcd=rcd+nf90_put_att(nc_id,S_p_abs_cff_mss_id,'long_name','Band average line strength amount over line width')
-  rcd=rcd+nf90_put_att(nc_id,S_p_id,'long_name','Band average line strength amount over line width')
-  rcd=rcd+nf90_put_att(nc_id,alpha_id,'long_name','Description')
-  rcd=rcd+nf90_put_att(nc_id,bnd_id,'long_name','Band center')
-  rcd=rcd+nf90_put_att(nc_id,bnd_ln_nbr_id,'long_name','# of HITRAN lines in each band')
-  rcd=rcd+nf90_put_att(nc_id,bnd_dlt_id,'long_name','Uniform width of bands')
-  rcd=rcd+nf90_put_att(nc_id,frc_slr_flx_LaN68_id,'long_name','Fraction of solar flux: Labs & Neckel 1968')
-  rcd=rcd+nf90_put_att(nc_id,frc_slr_flx_ThD71_id,'long_name','Fraction of solar fluxL Thekeakara & Drummond 1971')
-  rcd=rcd+nf90_put_att(nc_id,idx_rfr_air_STP_id,'long_name','Index of refraction at band center at STP')
-  rcd=rcd+nf90_put_att(nc_id,iso_id_id,'long_name','HITRAN isotope number (1..9)')
-  rcd=rcd+nf90_put_att(nc_id,mlc_id_id,'long_name','HITRAN molecule number (1..37)')
-  rcd=rcd+nf90_put_att(nc_id,oneD_foo_id,'long_name','Description')
-  rcd=rcd+nf90_put_att(nc_id,phi_exact_id,'long_name','Phi exactly computed')
-  rcd=rcd+nf90_put_att(nc_id,phi_fit_id,'long_name','Phi from least squares fit')
-  rcd=rcd+nf90_put_att(nc_id,psi_exact_id,'long_name','Psi exactly computed')
-  rcd=rcd+nf90_put_att(nc_id,psi_fit_id,'long_name','Psi from least squares fit')
-  rcd=rcd+nf90_put_att(nc_id,scalar_foo_id,'long_name','Description')
-  rcd=rcd+nf90_put_att(nc_id,tpt_id,'long_name','Temperature')
-  rcd=rcd+nf90_put_att(nc_id,wvl_ctr_id,'long_name','Band center wavelength')
-  rcd=rcd+nf90_put_att(nc_id,wvl_grd_id,'long_name','Wavelength grid')
-  rcd=rcd+nf90_put_att(nc_id,wvl_max_id,'long_name','Band maximum wavelength')
-  rcd=rcd+nf90_put_att(nc_id,wvl_min_id,'long_name','Band minimum wavelength')
-  rcd=rcd+nf90_put_att(nc_id,wvl_dlt_id,'long_name','Bandwidth')
-  rcd=rcd+nf90_put_att(nc_id,wvn_ctr_id,'long_name','Band center wavenumber')
-  rcd=rcd+nf90_put_att(nc_id,wvn_grd_id,'long_name','Wavenumber grid')
-  rcd=rcd+nf90_put_att(nc_id,wvn_max_id,'long_name','Band maximum wavenumber')
-  rcd=rcd+nf90_put_att(nc_id,wvn_min_id,'long_name','Band minimum wavenumber')
-  rcd=rcd+nf90_put_att(nc_id,wvn_dlt_id,'long_name','Bandwidth')
+  rcd=nf90_wrp(nf90_put_att(nc_id,A_phi_id,'long_name','Linear temperature dependence of line strengths'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,A_psi_id,'long_name','Linear temperature dependence of Lorentzian HWHM'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,B_phi_id,'long_name','Quadratic temperature dependence of line strengths'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,B_psi_id,'long_name','Quadratic temperature dependence of Lorentzian HWHM'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,S_d_abs_cff_mss_id,'long_name','Band average line strength'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,S_d_id,'long_name','Band average line strength'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,S_p_abs_cff_mss_id,'long_name','Band average line strength amount over line width'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,S_p_id,'long_name','Band average line strength amount over line width'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,alpha_id,'long_name','Description'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,bnd_id,'long_name','Band center'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,bnd_ln_nbr_id,'long_name','# of HITRAN lines in each band'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,bnd_dlt_id,'long_name','Uniform width of bands'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,frc_slr_flx_LaN68_id,'long_name','Fraction of solar flux: Labs & Neckel 1968'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,frc_slr_flx_ThD71_id,'long_name','Fraction of solar fluxL Thekeakara & Drummond 1971'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,idx_rfr_air_STP_id,'long_name','Index of refraction at band center at STP'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,iso_id_id,'long_name','HITRAN isotope number (1..9)'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,mlc_id_id,'long_name','HITRAN molecule number (1..37)'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,oneD_foo_id,'long_name','Description'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,phi_exact_id,'long_name','Phi exactly computed'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,phi_fit_id,'long_name','Phi from least squares fit'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,psi_exact_id,'long_name','Psi exactly computed'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,psi_fit_id,'long_name','Psi from least squares fit'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,scalar_foo_id,'long_name','Description'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,tpt_id,'long_name','Temperature'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_ctr_id,'long_name','Band center wavelength'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_grd_id,'long_name','Wavelength grid'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_max_id,'long_name','Band maximum wavelength'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_min_id,'long_name','Band minimum wavelength'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_dlt_id,'long_name','Bandwidth'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvn_ctr_id,'long_name','Band center wavenumber'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvn_grd_id,'long_name','Wavenumber grid'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvn_max_id,'long_name','Band maximum wavenumber'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvn_min_id,'long_name','Band minimum wavenumber'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvn_dlt_id,'long_name','Bandwidth'),sbr_nm)
   
   ! Add units
-  rcd=rcd+nf90_put_att(nc_id,A_phi_id,'units','kelvin-1')
-  rcd=rcd+nf90_put_att(nc_id,A_psi_id,'units','kelvin-1')
-  rcd=rcd+nf90_put_att(nc_id,B_phi_id,'units','kelvin-2')
-  rcd=rcd+nf90_put_att(nc_id,B_psi_id,'units','kelvin-2')
-  rcd=rcd+nf90_put_att(nc_id,S_d_abs_cff_mss_id,'units','centimeter-1 meter2 kilogram-1')
-  rcd=rcd+nf90_put_att(nc_id,S_d_id,'units','meter2 molecule-1')
-  rcd=rcd+nf90_put_att(nc_id,S_p_abs_cff_mss_id,'units','centimeter-1 meter2 kilogram-1')
-  rcd=rcd+nf90_put_att(nc_id,S_p_id,'units','meter2 molecule-1')
-  rcd=rcd+nf90_put_att(nc_id,alpha_id,'units','unknown')
-  rcd=rcd+nf90_put_att(nc_id,bnd_id,'units','centimeter-1')
-  rcd=rcd+nf90_put_att(nc_id,bnd_ln_nbr_id,'units','cardinal')
-  rcd=rcd+nf90_put_att(nc_id,bnd_dlt_id,'units','centimeter-1')
-  rcd=rcd+nf90_put_att(nc_id,frc_slr_flx_LaN68_id,'units','fraction')
-  rcd=rcd+nf90_put_att(nc_id,frc_slr_flx_ThD71_id,'units','fraction')
-  rcd=rcd+nf90_put_att(nc_id,idx_rfr_air_STP_id,'units','fraction')
-  rcd=rcd+nf90_put_att(nc_id,oneD_foo_id,'units','unknown')
-  rcd=rcd+nf90_put_att(nc_id,phi_exact_id,'units','fraction')
-  rcd=rcd+nf90_put_att(nc_id,phi_fit_id,'units','fraction')
-  rcd=rcd+nf90_put_att(nc_id,psi_exact_id,'units','fraction')
-  rcd=rcd+nf90_put_att(nc_id,psi_fit_id,'units','fraction')
-  rcd=rcd+nf90_put_att(nc_id,scalar_foo_id,'units','unknown')
-  rcd=rcd+nf90_put_att(nc_id,tpt_id,'units','kelvin')
-  rcd=rcd+nf90_put_att(nc_id,wvl_ctr_id,'units','meter')
-  rcd=rcd+nf90_put_att(nc_id,wvl_grd_id,'units','meter')
-  rcd=rcd+nf90_put_att(nc_id,wvl_max_id,'units','meter')
-  rcd=rcd+nf90_put_att(nc_id,wvl_min_id,'units','meter')
-  rcd=rcd+nf90_put_att(nc_id,wvl_dlt_id,'units','meter')
-  rcd=rcd+nf90_put_att(nc_id,wvn_ctr_id,'units','centimeter-1')
-  rcd=rcd+nf90_put_att(nc_id,wvn_grd_id,'units','centimeter-1')
-  rcd=rcd+nf90_put_att(nc_id,wvn_max_id,'units','centimeter-1')
-  rcd=rcd+nf90_put_att(nc_id,wvn_min_id,'units','centimeter-1')
-  rcd=rcd+nf90_put_att(nc_id,wvn_dlt_id,'units','centimeter-1')
+  rcd=nf90_wrp(nf90_put_att(nc_id,A_phi_id,'units','kelvin-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,A_psi_id,'units','kelvin-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,B_phi_id,'units','kelvin-2'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,B_psi_id,'units','kelvin-2'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,S_d_abs_cff_mss_id,'units','centimeter-1 meter2 kilogram-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,S_d_id,'units','meter2 molecule-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,S_p_abs_cff_mss_id,'units','centimeter-1 meter2 kilogram-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,S_p_id,'units','meter2 molecule-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,alpha_id,'units','unknown'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,bnd_id,'units','centimeter-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,bnd_ln_nbr_id,'units','cardinal'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,bnd_dlt_id,'units','centimeter-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,frc_slr_flx_LaN68_id,'units','fraction'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,frc_slr_flx_ThD71_id,'units','fraction'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,idx_rfr_air_STP_id,'units','fraction'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,oneD_foo_id,'units','unknown'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,phi_exact_id,'units','fraction'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,phi_fit_id,'units','fraction'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,psi_exact_id,'units','fraction'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,psi_fit_id,'units','fraction'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,scalar_foo_id,'units','unknown'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,tpt_id,'units','kelvin'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_ctr_id,'units','meter'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_grd_id,'units','meter'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_max_id,'units','meter'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_min_id,'units','meter'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvl_dlt_id,'units','meter'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvn_ctr_id,'units','centimeter-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvn_grd_id,'units','centimeter-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvn_max_id,'units','centimeter-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvn_min_id,'units','centimeter-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,wvn_dlt_id,'units','centimeter-1'),sbr_nm)
   
-  ! Now that all dimensions, variables, and attributes have been defined, make call to end define mode.
-  rcd=rcd+nf90_enddef(nc_id)
+  ! All dimensions, variables, and attributes have been defined
+  rcd=nf90_wrp(nf90_enddef(nc_id),sbr_nm//': enddef in '//__FILE__) 
   
   ! Write data
-  rcd=rcd+nf90_put_var(nc_id,bnd_dlt_id,bnd_dlt)
-  rcd=rcd+nf90_put_var(nc_id,iso_id_id,iso_id)
-  rcd=rcd+nf90_put_var(nc_id,mlc_id_id,mlc_id)
-  rcd=rcd+nf90_put_var(nc_id,scalar_foo_id,scalar_foo)
+  rcd=nf90_wrp(nf90_put_var(nc_id,bnd_dlt_id,bnd_dlt),sbr_nm//': pv bnd_dlt in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,iso_id_id,iso_id),sbr_nm//': pv iso in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,mlc_id_id,mlc_id),sbr_nm//': pv mlc in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,scalar_foo_id,scalar_foo),sbr_nm//': pv scalar_foo in '//__FILE__)
   
-  rcd=rcd+nf90_put_var(nc_id,A_phi_id,A_phi)
-  rcd=rcd+nf90_put_var(nc_id,A_psi_id,A_psi)
-  rcd=rcd+nf90_put_var(nc_id,B_phi_id,B_phi)
-  rcd=rcd+nf90_put_var(nc_id,B_psi_id,B_psi)
-  rcd=rcd+nf90_put_var(nc_id,S_d_abs_cff_mss_id,S_d_abs_cff_mss)
-  rcd=rcd+nf90_put_var(nc_id,S_d_id,S_d)
-  rcd=rcd+nf90_put_var(nc_id,S_p_abs_cff_mss_id,S_p_abs_cff_mss)
-  rcd=rcd+nf90_put_var(nc_id,S_p_id,S_p)
-  rcd=rcd+nf90_put_var(nc_id,alpha_id,alpha)
-  rcd=rcd+nf90_put_var(nc_id,bnd_id,bnd)
-  rcd=rcd+nf90_put_var(nc_id,bnd_ln_nbr_id,bnd_ln_nbr)
-  rcd=rcd+nf90_put_var(nc_id,frc_slr_flx_LaN68_id,frc_slr_flx_LaN68)
-  rcd=rcd+nf90_put_var(nc_id,frc_slr_flx_ThD71_id,frc_slr_flx_ThD71)
-  rcd=rcd+nf90_put_var(nc_id,idx_rfr_air_STP_id,idx_rfr_air_STP)
-  rcd=rcd+nf90_put_var(nc_id,oneD_foo_id,oneD_foo)
-  rcd=rcd+nf90_put_var(nc_id,phi_exact_id,phi_exact)
-  rcd=rcd+nf90_put_var(nc_id,phi_fit_id,phi_fit)
-  rcd=rcd+nf90_put_var(nc_id,psi_exact_id,psi_exact)
-  rcd=rcd+nf90_put_var(nc_id,psi_fit_id,psi_fit)
-  rcd=rcd+nf90_put_var(nc_id,tpt_id,tpt)
-  rcd=rcd+nf90_put_var(nc_id,wvl_ctr_id,wvl_ctr)
-  rcd=rcd+nf90_put_var(nc_id,wvl_grd_id,wvl_grd)
-  rcd=rcd+nf90_put_var(nc_id,wvl_max_id,wvl_max)
-  rcd=rcd+nf90_put_var(nc_id,wvl_min_id,wvl_min)
-  rcd=rcd+nf90_put_var(nc_id,wvl_dlt_id,wvl_dlt)
-  rcd=rcd+nf90_put_var(nc_id,wvn_ctr_id,wvn_ctr)
-  rcd=rcd+nf90_put_var(nc_id,wvn_grd_id,wvn_grd)
-  rcd=rcd+nf90_put_var(nc_id,wvn_max_id,wvn_max)
-  rcd=rcd+nf90_put_var(nc_id,wvn_min_id,wvn_min)
-  rcd=rcd+nf90_put_var(nc_id,wvn_dlt_id,wvn_dlt)
-  ! Close file
-  rcd=nf90_wrp_close(nc_id,fl_out,"Wrote results to")
+  rcd=nf90_wrp(nf90_put_var(nc_id,A_phi_id,A_phi),sbr_nm//': pv A_phi in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,A_psi_id,A_psi),sbr_nm//': pv A_psi in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,B_phi_id,B_phi),sbr_nm//': pv B_phi in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,B_psi_id,B_psi),sbr_nm//': pv B_psi in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,S_d_abs_cff_mss_id,S_d_abs_cff_mss),sbr_nm//': pv S_d_abs_cff_mss in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,S_d_id,S_d),sbr_nm//': pv S_d in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,S_p_abs_cff_mss_id,S_p_abs_cff_mss),sbr_nm//': pv S_p_abs_cff_mss in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,S_p_id,S_p),sbr_nm//': pv S_p in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,alpha_id,alpha),sbr_nm//': pv alpha in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,bnd_id,bnd),sbr_nm//': pv bnd in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,bnd_ln_nbr_id,bnd_ln_nbr),sbr_nm//': pv bnd_ln_nbr in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,frc_slr_flx_LaN68_id,frc_slr_flx_LaN68),sbr_nm//': pv frc_slr_flx_LaN68 in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,frc_slr_flx_ThD71_id,frc_slr_flx_ThD71),sbr_nm//': pv frc_slr_flx_ThD71 in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,idx_rfr_air_STP_id,idx_rfr_air_STP),sbr_nm//': pv idx_rfr_air_STP in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,oneD_foo_id,oneD_foo),sbr_nm//': pv oneD_foo in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,phi_exact_id,phi_exact),sbr_nm//': pv phi_exact in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,phi_fit_id,phi_fit),sbr_nm//': pv phi_fit in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,psi_exact_id,psi_exact),sbr_nm//': pv psi_exact in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,psi_fit_id,psi_fit),sbr_nm//': pv psi_fit in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,tpt_id,tpt),sbr_nm//': pv tpt in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,wvl_ctr_id,wvl_ctr),sbr_nm//': pv wvl_ctr in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,wvl_grd_id,wvl_grd),sbr_nm//': pv wvl_grd in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,wvl_max_id,wvl_max),sbr_nm//': pv wvl_max in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,wvl_min_id,wvl_min),sbr_nm//': pv wvl_min in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,wvl_dlt_id,wvl_dlt),sbr_nm//': pv wvl_dlt in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,wvn_ctr_id,wvn_ctr),sbr_nm//': pv wvn_ctr in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,wvn_grd_id,wvn_grd),sbr_nm//': pv wvn_grd in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,wvn_max_id,wvn_max),sbr_nm//': pv wvn_max in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,wvn_min_id,wvn_min),sbr_nm//': pv wvn_min in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,wvn_dlt_id,wvn_dlt),sbr_nm//': pv wvn_dlt in '//__FILE__)
+
+  rcd=nf90_wrp_close(nc_id,fl_out,'Wrote results to') ! [fnc] Close file
   
   ! De-allocate dynamic variables
   ! Local variables

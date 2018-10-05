@@ -2221,6 +2221,12 @@ program swnb2
            call ftn_arg_get(arg_idx,arg_val,drc_in) ! [sng] Input directory
         else if (opt_sng == 'drc_out') then
            call ftn_arg_get(arg_idx,arg_val,drc_out) ! [sng] Output directory
+        else if (opt_sng == 'fl_HHCWC' .or. opt_sng == 'HHCWC') then
+           flg_HHCWC=.true.
+           call ftn_arg_get(arg_idx,arg_val,fl_HHCWC) ! [sng] Hartley, Huggins, Chappuis, and Wulf Continuum file
+        else if (opt_sng == 'fl_HC' .or. opt_sng == 'HC') then
+           flg_HC=.true.
+           call ftn_arg_get(arg_idx,arg_val,fl_HC) ! [sng] Herzberg Continuum file
         else if (opt_sng == 'fl_clm' .or. opt_sng == 'input' .or. opt_sng == 'input') then
            call ftn_arg_get(arg_idx,arg_val,fl_clm) ! [sng] Column profile
         else if (opt_sng == 'fl_lqd' .or. opt_sng == 'lqd') then
