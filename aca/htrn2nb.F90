@@ -674,7 +674,7 @@ program htrn2nb
         tpt_dlt_4(tpt_idx)=tpt_dlt_3(tpt_idx)*tpt_dlt_1(tpt_idx)
      enddo                  ! end loop over temperatures
      
-     ! Least-squares fit matrix coefficients on LHS are purely temperature dependent
+     ! Least-squares fit matrix coefficients on LHS are purely temperature-dependent
      ! Linear system matrices look like
      ! a1*x + b1*y = c1 
      ! a2*x + b2*y = c2
@@ -917,7 +917,7 @@ program htrn2nb
   ! Set S_p to 1.0 when there are no lines in band (i.e., when S_d is 0.0) 
   ! This ensures S_p from my HITRAN calculations equals S_p from BPB's
   do bnd_idx=1,bnd_nbr
-     if (S_d(bnd_idx)==0.0) then
+     if (S_d(bnd_idx) == 0.0) then
         S_p(bnd_idx)=1.0
      endif
   enddo                  ! end loop over bnd
@@ -1018,6 +1018,17 @@ program htrn2nb
           B_psi(bnd_dbg)*tpt_dlt_2(tpt_idx))
   enddo                  ! end loop over t
   
+  do bnd_idx=1,bnd_nbr
+     if (S_p(bnd_idx) == 0.0) then
+        write(6,*) 'WARNING: S_p(',bnd_idx,') = 0.0 at wvn =', &
+             wvn_ctr(bnd_idx),' cm-1, wvl = ',wvl_ctr(bnd_idx)* 1.0e9,' nm'
+     endif
+     if (S_d(bnd_idx) == 0.0) then
+        write(6,*) 'WARNING: S_d(',bnd_idx,') = 0.0 at wvn =', &
+             wvn_ctr(bnd_idx),' cm-1, wvl = ',wvl_ctr(bnd_idx)* 1.0e9,' nm'
+     endif
+  enddo                  ! end loop over bnd
+
   ! Check that single precision bounds were not exceeded
   do bnd_idx=1,bnd_nbr
      if (S_d(bnd_idx) < 1.0e-36.and.S_d(bnd_idx) > 0.0) then 

@@ -228,13 +228,13 @@ contains
     ! Local workspace
     ! Main code
     
-    if (prs > 20000.0) then
-       ! Set NO2 mixing ratio to clean tropospheric value everywhere beneath 200 mb
-       q_NO2_ntp=NO2_vmr*(mmw_NO2/mmw_dry_air)
-    else
-       q_NO2_ntp=0.0
-    endif
+    ! Set NO2 mixing ratio to clean tropospheric value everywhere beneath 200 mb
+    q_NO2_ntp=NO2_vmr*(mmw_NO2/mmw_dry_air)
     
+    ! Malkmus band model fails (unless protected) when layer path is zero
+    ! Set mixing ratio to small value above 200 mb
+    if (prs < 20000.0) q_NO2_ntp=0.01*q_NO2_ntp
+
     return
   end function q_NO2_ntp                       ! end q_NO2_ntp()
   
@@ -255,13 +255,12 @@ contains
     ! Local workspace
     ! Main code
     
-    if (prs > 20000.0) then
-       q_OH_ntp=OH_mmr
-    else
-       ! Set OH mixing ratio to zero above 200 mb
-       q_OH_ntp=0.0
-    endif
-    
+    q_OH_ntp=OH_mmr
+
+    ! Malkmus band model fails (unless protected) when layer path is zero
+    ! Set mixing ratio to small value above 200 mb
+    if (prs < 20000.0) q_OH_ntp=0.01*q_OH_ntp
+
     return
   end function q_OH_ntp                       ! end q_OH_ntp()
   
@@ -283,12 +282,11 @@ contains
     ! Local workspace
     ! Main code
     
-    if (prs > 20000.0) then
-       q_CO_ntp=CO_vmr*(mmw_CO/mmw_dry_air)
-    else
-       ! Set CO mixing ratio to zero above 200 mb
-       q_CO_ntp=0.0
-    endif
+    q_CO_ntp=CO_vmr*(mmw_CO/mmw_dry_air)
+
+    ! Malkmus band model fails (unless protected) when layer path is zero
+    ! Set mixing ratio to small value above 200 mb
+    if (prs < 20000.0) q_CO_ntp=0.01*q_CO_ntp
     
     return
   end function q_CO_ntp                       ! end q_CO_ntp()

@@ -1,3 +1,7 @@
+2018-10-06  Charlie Zender  <zender@uci.edu>
+
+	* Prevent mmr_CO, mmr_OH, mmr_NO2 etc from being zero in any layer, otherwise Malkmus band model needs protection or will fail
+
 2018-10-05  Charlie Zender  <zender@uci.edu>
 
 	* Implement option to use NC_DOUBLE instead of NC_FLOAT in htrn2nb.F90
