@@ -9,9 +9,11 @@ program O3
   ! cd ${HOME}/sw/aca; make -W O3.F90 O3; cd -
   ! cd ${HOME}/sw/aca; make OPTS=D O3; cd -
   
-  ! Use WMO85 or JPL15 data
+  ! Use WMO85, JPL15, or HITRAN data
+  ! O3 --HTR04
   ! O3 --JPL15
   ! O3 --WMO85
+  ! O3 --HTR04 -o ${DATA}/aca/abs_xsx_O3_HTR04.nc
   ! O3 --JPL15 -o ${DATA}/aca/abs_xsx_O3_JPL15.nc
   ! O3 --WMO85 -o ${DATA}/aca/abs_xsx_O3_WMO85.nc
   ! Use HITRAN16 data
@@ -108,21 +110,26 @@ program O3
   character(len=*),parameter::CVS_Id='$Id$' ! [sng] CVS Identification
   character(len=*),parameter::sbr_nm='O3' ! [sng] Subroutine name
   character(*),parameter::fl_in_WMO85='abs_xsx_WMO85.txt'
+  character(*),parameter::fl_in_HTR04='O3_200.0_0.0_29164.0-40798.0_04.xsc'
   character(*),parameter::fl_in_JPL15='abs_xsx_O3_JPL15.txt'
   character(*),parameter::fl_out_WMO85='abs_xsx_O3_WMO85.nc'
+  character(*),parameter::fl_out_HTR04='abs_xsx_O3_HTR04.nc'
   character(*),parameter::fl_out_JPL15='abs_xsx_O3_JPL15.nc'
   character(*),parameter::fl_slr_dfl='spc_Kur95_01wvn.nc'
   character(*),parameter::nlc=char(0) ! [sng] NUL character = ASCII 0 = char(0)
   
   integer,parameter::fl_in_unit=73
   integer,parameter::bnd_nbr_JPL15=174
+  integer,parameter::bnd_nbr_HTR04=5818
   integer,parameter::bnd_nbr_WMO85=158
   integer,parameter::sng_lng_dfl_fl=80 ! [nbr] Default filename string length
   integer,parameter::sng_lng_dfl_stt=200 ! [nbr] Default statement string length
+  real,parameter::tpt_cold_HTR04=200.0
   real,parameter::tpt_cold_JPL15=218.0
   real,parameter::tpt_warm_JPL15=295.5
   real,parameter::tpt_cold_WMO85=203.0
   real,parameter::tpt_warm_WMO85=273.0
+  real,parameter::tpt_warm_HTR04=200.0
   real,parameter::mss_val=nf90_fill_float ! Missing value = missing_value and/or _FillValue
 
   ! Input Arguments
@@ -155,13 +162,29 @@ program O3
   integer idx
   
   logical JPL15
+  logical HTR04
   logical WMO85
   
-  integer bnd_dmn_id        ! dimension ID for bands
-  integer grd_dmn_id        ! dimension ID for grid
-  integer bnd_idx           ! counting index
-  integer nc_id             ! file handle
-  integer bnd_nbr ! dimension size
+  ! HITRAN XSC format
+  character brd_nm_htrn*3 ! [sng] Broadener (Air, N2, or self-broadened (if left blank))
+  character chr_foo_htrn*4 ! [sng] Reserved for future use
+  character mA_sng_htrn*2 ! [sng] mA
+  character mlc_frm_htrn*20 ! [sng] Molecule chemical formula (right-justified)
+  character mlc_nm_htrn*15 ! [sng] Molecule common name
+  integer bnd_nbr_htrn ! [nbr] Number of wavenumber bins
+  integer rfr_nbr_htrn ! [idx] Reference number (# of bibliographic reference in HITRAN GRH17 reference list)
+  real prs_htrn ! [Pa] Pressure
+  real rsn_nst_htrn ! [m] Instrument resolution
+  real tpt_htrn ! [K] Temperature
+  real wvn_max_htrn ! [cm-1] Wavenumber at end of range
+  real wvn_min_htrn ! [cm-1] Wavenumber at start of range
+  real xsx_max_htrn ! [cm2 mlc-1] Maximum cross-section
+  
+  integer bnd_dmn_id        ! Dimension ID for bands
+  integer grd_dmn_id        ! Dimension ID for grid
+  integer bnd_idx           ! Counting index
+  integer nc_id             ! File handle
+  integer bnd_nbr ! [nbr] Dimension size
   integer tpt_cold_id
   integer tpt_std_id
   integer Rayleigh_sca_xsx_id
@@ -171,7 +194,7 @@ program O3
   integer abs_xsx_O3_id
   integer abs_xsx_O3_tpt_rfr_id
   integer abs_xsx_O3_warm_id
-  integer bnd_id            ! coordinate ID
+  integer bnd_id            ! Coordinate ID
   integer flx_bnd_dwn_TOA_id
   integer flx_bnd_pht_dwn_TOA_id
   integer flx_slr_frc_id
@@ -183,6 +206,7 @@ program O3
   integer wvl_max_id
   integer wvl_min_id
   integer wvl_dlt_id
+
   ! netCDF4 
   integer::dfl_lvl=0 ! [enm] Deflate level
   integer::flg_shf=1 ! [flg] Turn on netCDF4 shuffle filter
@@ -245,6 +269,7 @@ program O3
   ! Initialize default values
   CVS_Date='$Date$'
   CVS_Revision='$Revision$'
+  HTR04=.false.
   JPL15=.false.
   WMO85=.true.
   cmd_ln_fl_in=.false.
@@ -281,10 +306,16 @@ program O3
            call ftn_arg_get(arg_idx,arg_val,drc_out) ! [sng] Output directory
         else if (opt_sng == 'input' .or. opt_sng == 'fl_O3' .or. opt_sng == 'O3') then
            call ftn_arg_get(arg_idx,arg_val,fl_in) ! [sng] Ozone file
+        else if (opt_sng == 'HTR04') then
+           HTR04=.true.
+           JPL15=.false.
+           WMO85=.false.
         else if (opt_sng == 'JPL15') then
+           HTR04=.false.
            JPL15=.true.
            WMO85=.false.
         else if (opt_sng == 'WMO85') then
+           HTR04=.false.
            WMO85=.true.
            JPL15=.false.
         else                ! Option not recognized
@@ -305,7 +336,12 @@ program O3
         call ftn_arg_get(arg_idx,arg_val,fl_in)
         cmd_ln_fl_in=.true.
      else if (dsh_key == '-J') then
+        HTR04=.false.
         JPL15=.true.
+        WMO85=.false.
+     else if (dsh_key == '-H') then
+        HTR04=.true.
+        JPL15=.false.
         WMO85=.false.
      else if (dsh_key == '-o') then
         call ftn_arg_get(arg_idx,arg_val,fl_out)
@@ -318,6 +354,7 @@ program O3
         write (6,'(a)') CVS_Id
         goto 1000
      else if (dsh_key == '-W') then
+        HTR04=.false.
         WMO85=.true.
         JPL15=.false.
      else                   ! Option not recognized
@@ -345,6 +382,13 @@ program O3
      if (.not.cmd_ln_fl_in) fl_in=fl_in_JPL15//nlc
      if (.not.cmd_ln_fl_out) fl_out=fl_out_JPL15//nlc
      call ftn_strcpy(src_rfr_sng,'Data reference is JPL (2015) (JPL15)')
+  else if (HTR04) then
+     bnd_nbr=bnd_nbr_HTR04
+     tpt_cold=tpt_cold_HTR04
+     tpt_warm=tpt_warm_HTR04
+     if (.not.cmd_ln_fl_in) fl_in=fl_in_HTR04//nlc
+     if (.not.cmd_ln_fl_out) fl_out=fl_out_HTR04//nlc
+     call ftn_strcpy(src_rfr_sng,'Data reference is HITRAN (2017) (HTR04)')
   endif
 
   ! Compute quantities that may depend on command line input
@@ -411,6 +455,22 @@ program O3
         abs_xsx_O3_warm(bnd_idx)=abs_xsx_O3_warm(bnd_idx)*1.0e-4 ! cm2 -> m2
      enddo
      
+  else if (HTR04) then            ! HTR04 data
+     ! HITRAN data are in .xsc format described above
+     read (fl_in_unit,'(a20,f10.3,f10.3,i7,f7.3,f6.3,e10.3,f3.0,a2,a15,a4,a3,a3)') &
+          mlc_frm_htrn,wvn_min_htrn,wvn_max_htrn,bnd_nbr_htrn,tpt_htrn,prs_htrn, &
+          xsx_max_htrn,rsn_nst_htrn,mA_sng_htrn,mlc_nm_htrn,chr_foo_htrn,brd_nm_htrn,rfr_nbr_htrn
+     
+     read (fl_in_unit,*) (abs_xsx_O3_cold(bnd_idx),bnd_idx=1,bnd_nbr_htrn)
+
+     write (6,'(a20,f10.3,f10.3,i7,f7.3,f6.3,e10.3,f3.0,a2,a15,a4,a3,a3)') &
+          mlc_frm_htrn,wvn_min_htrn,wvn_max_htrn,bnd_nbr_htrn,tpt_htrn,prs_htrn, &
+          xsx_max_htrn,rsn_nst_htrn,mA_sng_htrn,mlc_nm_htrn,chr_foo_htrn,brd_nm_htrn,rfr_nbr_htrn
+
+     write (6,*) (abs_xsx_O3_cold(bnd_idx),bnd_idx=1,bnd_nbr_htrn)
+     
+     call exit(0)
+
   else if (JPL15) then            ! JPL15 data
 
      do idx=1,11

@@ -1,3 +1,7 @@
+2018-10-09  Charlie Zender  <zender@uci.edu>
+
+	* Add most functionality needed to support HITRAN .xsc files
+
 2018-10-06  Charlie Zender  <zender@uci.edu>
 
 	* Prevent mmr_CO, mmr_OH, mmr_NO2 etc from being zero in any layer, otherwise Malkmus band model needs protection or will fail

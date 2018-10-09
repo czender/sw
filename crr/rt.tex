@@ -2,7 +2,7 @@
 
 % Purpose: Theory and Practice of Radiative Transfer in the Earth System
 
-% Copyright (c) 1998--2017, Charles S. Zender
+% Copyright (c) 1998--2018, Charles S. Zender
 % Permission is granted to copy, distribute and/or modify this document
 % under the terms of the GNU Free Documentation License (GFDL), Version 1.3
 % or any later version published by the Free Software Foundation;
@@ -162,7 +162,7 @@ Irvine, CA~~92697-3100 \hfill Fax: (949)\thinspace 824-3256
 
 % GFDL legalities: http://www.gnu.org/copyleft/fdl.html
 \bigskip\noindent
-Copyright \copyright\ 1998--2017, Charles S. Zender\\
+Copyright \copyright\ 1998--2018, Charles S. Zender\\
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version~1.3
 or any later version published by the Free Software Foundation;
@@ -5415,7 +5415,7 @@ These are the natural line width, pressure broadening, and Doppler
 broadening. 
 \trmdfn{Natural line width}, which arises from the Heisenberg
 uncertainty principle, is unimportant in planetary atmospheres.
-Pressure- and Doppler-broadening effects dominated line shapes here.
+Pressure- and Doppler-broadening effects dominate line shapes here.
 However, the processes determining natural line widths and
 \trmdfn{pressure broadening} of lines are statistically identical, so 
 these two processes have the same analytical form.
@@ -5458,7 +5458,7 @@ where $\cncttl$ is the number concentration [\mlcxmC] of the species.
 
 The value of $\xsxabsoffrq$ depends on the absorber type.
 For a single spectral line, $\xsxabsoffrq$ is obtained by converting
-the parameters in the \trmidx{\acr{hitran}} compilation \cite[]{RRG98} to
+the parameters in the \trmidx{\acr{HITRAN}} compilation \cite[]{RRG98} to
 the local temperature and pressure. 
 For a continuum absorption process, e.g., \Ot\ Chappuis bands,
 $\xsxabsoffrq$ is usually obtained from a standard table (which may
@@ -5896,7 +5896,7 @@ The exponent $\hwhmxpn$ determining the temperature dependence in
 (\ref{eqn:hwhm_prs_scl_dfn}) is called the \trmdfn{line width exponent}. 
 Two of the key line parameters measured in laboratory experiments 
 are $\hwhmprsnot$ and $\hwhmxpn$.
-Both are tabulated in databases such as \acr{hitran}
+Both are tabulated in databases such as \acr{HITRAN}
 (\S\ref{sxn:htrn}).
 Table~\ref{tbl:hwhmxpn} shows the mean, median, and range of the
 temperature-dependent exponent $\hwhmxpn$ for the pressure-broadened
@@ -7144,31 +7144,31 @@ We repeat the definition of \trmidx{line strength}
 In practice, (\ref{eqn:lnstr_dfn2}) is either measured in the
 laboratory or predicted from \textit{ab initio} methods.
 
-\subsubsection[\acr{hitran}]{\acr{hitran}}\label{sxn:htrn}
-The \acr{hitran} (``high-resolution transmission'') database provides the
+\subsubsection[\acr{HITRAN}]{\acr{HITRAN}}\label{sxn:htrn}
+The \acr{HITRAN} (``high-resolution transmission'') database provides the
 parameters required to computed absorption coefficients for all
 atmospheric transitions of interest. 
-The \acr{hitran} database is defined by \cite{RRG98}, and its usage is
+The \acr{HITRAN} database is defined by \cite{RRG98}, and its usage is
 defined in their Appendix~A.
 
 The idiosyncratic units of line parameters can be confusing.
-Most \acr{hitran} data are provided in CGS units. 
+Most \acr{HITRAN} data are provided in CGS units. 
 For reference, Table~\ref{tbl:htrn} presents the equivalence between
 the symbols used in \cite{RRG98}, their Appendix~A, and our symbols.
 \begin{table}
 \begin{minipage}{\hsize} % Minipage necessary for footnotes KoD95 p. 110 (4.10.4)
 \renewcommand{\footnoterule}{\rule{\hsize}{0.0cm}\vspace{-0.0cm}} % KoD95 p. 111
 \begin{center}
-\caption[\acr{hitran} database]{\textbf{\acr{hitran} database}%
+\caption[\acr{HITRAN} database]{\textbf{\acr{HITRAN} database}%
 \footnote{Equivalance between symbols employed in this work and those
 used by \cite{RRG98}, Appendix~A.}%
-\footnote{\acr{hitran} data are tabulated at a temperature $\tptnot$
+\footnote{\acr{HITRAN} data are tabulated at a temperature $\tptnot$
 and pressure $\prsnot$ of $296$\,K and $101325.0$\,Pa, respectively.}% 
 \label{tbl:htrn}}
 \vspace{\cpthdrhlnskp}
 \begin{tabular}{ >{$}c<{$} >{$}c<{$} l }
 \hline \rule{0.0ex}{\hlntblhdrskp}% 
-\mbox{This Text} & \mbox{\acr{hitran}} & Description \\[0.0ex]
+\mbox{This Text} & \mbox{\acr{HITRAN}} & Description \\[0.0ex]
 \hline \rule{0.0ex}{\hlntblntrskp}%
 \lnstrlnnot & S_{\eta\eta^{\prime}} & Line strength \\[1.0ex]
 \hwhmlnnot & \gamma_{\mbox{\scriptsize air}} & Pressure-broadened HWHM \\[1.0ex]
@@ -7186,7 +7186,7 @@ and pressure $\prsnot$ of $296$\,K and $101325.0$\,Pa, respectively.}%
 \end{table}
 
 The \trmidx{line strength} $\lnstrlnnot$ (\ref{eqn:lnstr_dfn}) is
-tabulated in \acr{hitran} in CGS units of wavenumbers times centimeter
+tabulated in \acr{HITRAN} in CGS units of wavenumbers times centimeter
 squared per molecule, \wvncmSxmlc, often written \cmxatm. 
 Line strengths for weak lines can be less than
 $10^{-36}$\,\wvncmSxmlc, i.e., unrepresentable as IEEE single
@@ -7224,18 +7224,18 @@ Equation~(\ref{eqn:lnstr_wvl}) is uncertain.
 The energy of the lower state of each transition, $\nrglwrln$, is
 required to determine the relative population of that state available
 for transitions. 
-\acr{hitran} supplies this energy in wavenumber units in the tabulated
+\acr{HITRAN} supplies this energy in wavenumber units in the tabulated
 parameter $\wvnlwrln$ which is simply related to $\nrglwrln$ by
 \begin{eqnarray}
 \nrglwrln & = & \cstplk \cstspdlgt \wvnlwrln
 \label{eqn:nrg_lwr_ln_dfn}
 \end{eqnarray}
-Of course, consistent with \acr{hitran} and spectroscopic conventions,
+Of course, consistent with \acr{HITRAN} and spectroscopic conventions,
 $\wvnlwrln$ is archived in CGS, \xcm.
 
-All \acr{hitran} data have been scaled from the conditions of the experiment
+All \acr{HITRAN} data have been scaled from the conditions of the experiment
 to a temperature and pressure of $296$\,K and $1013.25$\,mb, respectively.
-Thus line strengths must typically be scaled from \acr{hitran}-standard
+Thus line strengths must typically be scaled from \acr{HITRAN}-standard
 conditions, $\lnstrlnnot(\tptnot)$, to the atmospheric conditions of
 interest, $\lnstrln(\tpt)$.
 \begin{eqnarray}
@@ -7297,14 +7297,14 @@ offers decreased computational overhead relative to
 Pressure-broadened halfwidths $\hwhmprsnot$ are also provided at the 
 reference temperature and pressure, 
 $\hwhmprsnot \equiv \hwhmprs(\prsnot,\tptnot)$.
-\acr{hitran} literature refers to broadening features are as
+\acr{HITRAN} literature refers to broadening features are as
 \trmdfn{air-broadened} (rather than pressure-broadened) because all
-parameters in the \acr{hitran} database are normalized to Earth's natural
+parameters in the \acr{HITRAN} database are normalized to Earth's natural
 isotopic mixing ratios. 
 Thus while the broadening process is collision-broadening, the
 tabulated line width refers to collision-broadening by air of Earth's  
 isotopic composition, hence the label. 
-\acr{hitran} actually provides two halfwidths, the self-broadened halfwidth
+\acr{HITRAN} actually provides two halfwidths, the self-broadened halfwidth
 $\hwhmslfnot$ and the air-broadened or \trmdfn{foreign-broadened}
 halfwidth $\hwhmfrnnot$.
 Air-broadening accounts for collision-broadening by foreign molecules,
@@ -7328,7 +7328,7 @@ species \AAA\ at arbitrary pressure and temperature scales as
 \label{eqn:hwhm_scl}
 \end{eqnarray}
 where $\prsbrdtptdpnxpn$ is an empirical fitting parameter supplied by
-\acr{hitran} and $\prsprtA$ is the partial pressure of species \AAA.
+\acr{HITRAN} and $\prsprtA$ is the partial pressure of species \AAA.
 Clearly self-broadening effects are appreciable only for species with 
 signifcant partial pressures, i.e., \Od\ and \Nd. 
 For minor trace gases, $\prsprtA \ll \prs$ and $\prsprtA \ll \prsnot$
@@ -7346,7 +7346,7 @@ Collision-broadening may also cause a \trmidx{pressure-shift} of the
 line transition frequency away from the tabulated line center
 frequency $\wvnnot = \wvn(\prsnot)$ to a shifted frequency 
 $\wvnshf = \wvn(\prs)$.
-\acr{hitran} supplies a parameter $\prsshf(\prsnot)$ in CGS
+\acr{HITRAN} supplies a parameter $\prsshf(\prsnot)$ in CGS
 wavenumbers per atmosphere (\wvnxatm) with which to calculate the line
 center frequency change due to pressure-shifting.
 \begin{eqnarray}
@@ -7373,9 +7373,9 @@ and (\ref{eqn:hwhm_scl}) leads to a corrected Lorentzian profile
 (\frq - \frqshf)^{2} + \hwhmlrn(\prs,\tpt)^{2}}
 \label{eqn:lnshp_lrn_crc_dfn}
 \end{eqnarray}
-Of course this section has only discussed application of \acr{hitran}
+Of course this section has only discussed application of \acr{HITRAN}
 database parameters to atmospheres in \trmidx{LTE} conditions.
-Application of \acr{hitran} to \trmdfn{nonlocal thermodynamic equilibrium}
+Application of \acr{HITRAN} to \trmdfn{nonlocal thermodynamic equilibrium}
 conditions is discussed in \cite{GaR92}.
 
 It is necessary to compute statistics of $\lnstrln$ for use in
@@ -8479,7 +8479,7 @@ We recall that (\ref{eqn:abs_xpn_lrn}) is based on the idealized,
 continuous line strength distribution (\ref{eqn:dst_xpn}) rather than
 on real (observed) line strengths.
 Observed line strengths and positions are tabulated in the
-\trmidx{\acr{hitran}} database (\S\ref{sxn:htrn}).
+\trmidx{\acr{HITRAN}} database (\S\ref{sxn:htrn}).
 Therefore we may compute any desired statistics of the actual line
 strength distribution.
 Of particular interest is the observed mean absorptance of a band
@@ -9452,7 +9452,7 @@ parameters.
 Let $\tptnot$ be the temperature at which the line parameters
 (strengths, half-widths) are known.
 Typically $\tptnot = 296\,$K, the reference temperature of the
-\acr{hitran} database discussed in \S\ref{sxn:htrn}.
+\acr{HITRAN} database discussed in \S\ref{sxn:htrn}.
 The H-C-G approximation accounts for the influence of temperature and
 pressure inhomogeneity along the path on the absorption
 (\ref{eqn:tau_abs_dfn2}). 
@@ -9544,7 +9544,7 @@ interest:
 and $\psiscla$ and $\psisclb$ are defined analogously.
 
 In practice SWNB adjusts all band parameters from the
-\acr{hitran}-standard temperature (296\,K) to 250\,K, which is near
+\acr{HITRAN}-standard temperature (296\,K) to 250\,K, which is near
 the mass-weighted mean temperature of Earth's atmosphere.
 This reduces any biases caused by non-quadratic temperature-dependent
 behavior of the logarithms of $\phiscloftpt$ and $\psiscloftpt$
@@ -9675,7 +9675,7 @@ must be determined from laboratory studies
 \cite[e.g.,][]{HKS98,PGS77,Pat81,PeG91,Tan97,Vol73,BoH83},
 or from models constrained by field measurements 
 \cite[e.g.,][]{CTT02,STD03}.
-The \acr{hitran} database \cite[]{RRG98} contains a compilation of
+The \acr{HITRAN} database \cite[]{RRG98} contains a compilation of
 $\idxrfr$ for many aerosols of atmospheric interest.
 
 \subsubsection[Maxwell Equations]{Maxwell Equations}\label{sxn:mxw_eqn}

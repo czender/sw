@@ -2101,7 +2101,7 @@ program swnb2
   cmd_ln_slr_zen_ngl_cos=.false.
   cmd_ln_slr_zen_ngl_dgr=.false.
   exit_status=0             ! [enm] Program exit status
-  flg_CO=.false. ! [flg] CO turned-off by default while debugging its incorporation
+  flg_CO=.true.
   flg_N2=.true.
   flg_N2O=.true.
   flg_CH4=.true.
@@ -4311,7 +4311,12 @@ program swnb2
      do lev_idx=1,lev_nbr
         if (odxl_obs_aer(lev_idx) > 0.0) aer_lvl_nbr=aer_lvl_nbr+1
      enddo                  ! end loop over lev
-     if (aer_lvl_nbr == 0) stop 'aer_lvl_nbr==0'
+     if (aer_lvl_nbr == 0) then
+        write (6,'(a,a)') prg_nm(1:ftn_strlen(prg_nm)), &
+             ': WARNING command-line aerosol imposed on clean profile...adding all aerosol to lowest layer'
+        aer_lvl_nbr=1
+        odxl_obs_aer(lev_nbr)=odxc_obs_aer_cmd_ln
+     endif ! aer_lvl_nbr
      do lev_idx=1,lev_nbr
         if (odxl_obs_aer(lev_idx) > 0.0) odxl_obs_aer(lev_idx)=odxc_obs_aer_cmd_ln/real(aer_lvl_nbr)
      enddo                  ! end loop over lev
@@ -6343,45 +6348,35 @@ program swnb2
      
      ! Compute aerosol scattering/absorption optical depths
      do lev_idx=1,lev_nbr
-        odal_aer(lev_idx)= &
-             abs_cff_mss_aer(bnd_idx)*mpl_aer(lev_idx)
-        odsl_aer(lev_idx)= &
-             sca_cff_mss_aer(bnd_idx)*mpl_aer(lev_idx)
+        odal_aer(lev_idx)=abs_cff_mss_aer(bnd_idx)*mpl_aer(lev_idx)
+        odsl_aer(lev_idx)=sca_cff_mss_aer(bnd_idx)*mpl_aer(lev_idx)
      enddo                  ! end loop over lev
 
      ! Compute background aerosol scattering/absorption optical depths
      do lev_idx=1,lev_nbr
-        odal_bga(lev_idx)= &
-             abs_cff_mss_bga(bnd_idx)*mpl_bga(lev_idx)
-        odsl_bga(lev_idx)= &
-             sca_cff_mss_bga(bnd_idx)*mpl_bga(lev_idx)
+        odal_bga(lev_idx)=abs_cff_mss_bga(bnd_idx)*mpl_bga(lev_idx)
+        odsl_bga(lev_idx)=sca_cff_mss_bga(bnd_idx)*mpl_bga(lev_idx)
      enddo                  ! end loop over lev
      
      ! Compute ice scattering/absorption optical depths
      do lev_idx=1,lev_nbr
-        odal_ice(lev_idx)= &
-             abs_cff_mss_ice(bnd_idx)*mpl_IWP(lev_idx)
-        odsl_ice(lev_idx)= &
-             sca_cff_mss_ice(bnd_idx)*mpl_IWP(lev_idx)
+        odal_ice(lev_idx)=abs_cff_mss_ice(bnd_idx)*mpl_IWP(lev_idx)
+        odsl_ice(lev_idx)=sca_cff_mss_ice(bnd_idx)*mpl_IWP(lev_idx)
      enddo                  ! end loop over lev
      
      ! Compute liquid scattering/absorption optical depths
      do lev_idx=1,lev_nbr
-        odal_lqd(lev_idx)= &
-             abs_cff_mss_lqd(bnd_idx)*mpl_LWP(lev_idx)
-        ! [flg] Liquid cloud droplets are pure scatterers
+        odal_lqd(lev_idx)=abs_cff_mss_lqd(bnd_idx)*mpl_LWP(lev_idx)
+        ! [flg] Liquid cloud droplets are, optionally, pure scatterers
         if (flg_sct_lqd) odal_lqd(lev_idx)=0.0
-        odsl_lqd(lev_idx)= &
-             sca_cff_mss_lqd(bnd_idx)*mpl_LWP(lev_idx)
+        odsl_lqd(lev_idx)=sca_cff_mss_lqd(bnd_idx)*mpl_LWP(lev_idx)
      enddo                  ! end loop over lev
      
      ! Compute snow-impurity scattering/absorption optical depths
      do lev_snw_idx=1,lev_snw_nbr
         lev_idx=lev_snw_idx+lev_atm_nbr
-        odal_mpr(lev_idx)= &
-             abs_cff_mss_mpr(bnd_idx)*mpl_mpr(lev_snw_idx)
-        odsl_mpr(lev_idx)= &
-             sca_cff_mss_mpr(bnd_idx)*mpl_mpr(lev_snw_idx)
+        odal_mpr(lev_idx)=abs_cff_mss_mpr(bnd_idx)*mpl_mpr(lev_snw_idx)
+        odsl_mpr(lev_idx)=sca_cff_mss_mpr(bnd_idx)*mpl_mpr(lev_snw_idx)
      enddo                  ! end loop over lev_snw
      
      ! Compute snow scattering/absorption optical depths
@@ -6389,10 +6384,8 @@ program swnb2
         lev_bnd_snw_idx=1
         if (lev_bnd_snw_nbr > 1) lev_bnd_snw_idx=lev_snw_idx
         lev_idx=lev_snw_idx+lev_atm_nbr
-        odal_snw(lev_idx)= &
-             abs_cff_mss_snw(bnd_idx,lev_bnd_snw_idx)*mpl_snw(lev_snw_idx)
-        odsl_snw(lev_idx)= &
-             sca_cff_mss_snw(bnd_idx,lev_bnd_snw_idx)*mpl_snw(lev_snw_idx)
+        odal_snw(lev_idx)=abs_cff_mss_snw(bnd_idx,lev_bnd_snw_idx)*mpl_snw(lev_snw_idx)
+        odsl_snw(lev_idx)=sca_cff_mss_snw(bnd_idx,lev_bnd_snw_idx)*mpl_snw(lev_snw_idx)
      enddo                  ! end loop over lev_snw
      
      ! Rayleigh scattering optical depth
@@ -6408,8 +6401,7 @@ program swnb2
         sca_cff_mss_Ray(lev_idx)= &
              pi**3*float_foo*(Avagadro/N_STP)/ &
              (mmw_mst_air(lev_idx)*N_STP*wvl_ctr(bnd_idx)**4)
-        odsl_Ray(lev_idx)= &
-             mpl_mst_air(lev_idx)*sca_cff_mss_Ray(lev_idx)
+        odsl_Ray(lev_idx)=mpl_mst_air(lev_idx)*sca_cff_mss_Ray(lev_idx)
      enddo                  ! end loop over lev
      ! End continuum processes
      
@@ -9235,6 +9227,9 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_SAS_id,abs_spc_SAS),sbr_nm//': pv abs_spc_SAS in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_atm_id,abs_spc_atm),sbr_nm//': pv abs_spc_atm in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_sfc_id,abs_spc_sfc),sbr_nm//': pv abs_spc_sfc in '//__FILE__)
+     if (dbg_lvl>=dbg_fl) then
+        write (6,'(a,f15.12)') 'abs_xsx_O3 bnd_nbr = ',bnd_nbr
+     endif ! endif dbg
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_O3_id,abs_xsx_O3),sbr_nm//': pv abs_xsx_O3 in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_O3_dadT_id,abs_xsx_O3_dadT),sbr_nm//': pv abs_xsx_O3_dadT in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,alb_sfc_id,alb_sfc),sbr_nm//': pv alb_sfc in '//__FILE__)

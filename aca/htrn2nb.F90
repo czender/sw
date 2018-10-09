@@ -332,7 +332,7 @@ program htrn2nb
         ! fxm: Change if else if construct to select case but how to handle fall-through cases elegantly?
         if (opt_sng == 'dbg' .or. opt_sng == 'dbg_lvl' ) then
            call ftn_arg_get(arg_idx,arg_val,dbg_lvl) ! [enm] Debugging level
-        else if (opt_sng == 'dbl' .or. opt_sng == 'dbl_foo' ) then
+        else if (opt_sng == 'dbl' .or. opt_sng == 'double' ) then
            typ_out=nf90_double ! [frc] Double
         else if (opt_sng == 'dfl' .or. opt_sng == 'deflate' ) then
            call ftn_arg_get(arg_idx,arg_val,dfl_lvl) ! [enm] Deflate level
@@ -517,20 +517,20 @@ program htrn2nb
      rcd=nf90_wrp_inq_varid(nc_id,'mlc_id',mlc_id_id)
      rcd=nf90_wrp_inq_varid(nc_id,'iso_id',iso_id_id)
      ! Get data
-     rcd=nf90_wrp(nf90_get_var(nc_id,mlc_id_id,mlc_id),"gv mlc_id")
-     rcd=nf90_wrp(nf90_get_var(nc_id,iso_id_id,iso_id,srt_one,cnt_iso),"gv iso_id")
-     rcd=nf90_wrp(nf90_get_var(nc_id,HWHM_air_id,HWHM_air,srt_one,cnt_ln),"gv HWHM_air")
-     rcd=nf90_wrp(nf90_get_var(nc_id,HWHM_tpt_dpn_xpn_id,HWHM_tpt_dpn_xpn,srt_one,cnt_ln),"gv HWHM_tpt_dpn_xpn")
-     rcd=nf90_wrp(nf90_get_var(nc_id,ln_ctr_id,ln_ctr,srt_one,cnt_ln),"gv ln_ctr")
-     rcd=nf90_wrp(nf90_get_var(nc_id,ln_nrg_lwr_id,ln_nrg_lwr,srt_one,cnt_ln),"gv ln_nrg_lwr")
-     rcd=nf90_wrp(nf90_get_var(nc_id,ln_str_id,ln_str,srt_one,cnt_ln),"gv ln_str")
+     rcd=nf90_wrp(nf90_get_var(nc_id,mlc_id_id,mlc_id),'gv mlc_id')
+     rcd=nf90_wrp(nf90_get_var(nc_id,iso_id_id,iso_id,srt_one,cnt_iso),'gv iso_id')
+     rcd=nf90_wrp(nf90_get_var(nc_id,HWHM_air_id,HWHM_air,srt_one,cnt_ln),'gv HWHM_air')
+     rcd=nf90_wrp(nf90_get_var(nc_id,HWHM_tpt_dpn_xpn_id,HWHM_tpt_dpn_xpn,srt_one,cnt_ln),'gv HWHM_tpt_dpn_xpn')
+     rcd=nf90_wrp(nf90_get_var(nc_id,ln_ctr_id,ln_ctr,srt_one,cnt_ln),'gv ln_ctr')
+     rcd=nf90_wrp(nf90_get_var(nc_id,ln_nrg_lwr_id,ln_nrg_lwr,srt_one,cnt_ln),'gv ln_nrg_lwr')
+     rcd=nf90_wrp(nf90_get_var(nc_id,ln_str_id,ln_str,srt_one,cnt_ln),'gv ln_str')
      ! Get global attributes
      rcd=rcd+nf90_get_att(nc_id,nf90_global,'molecule',mlc_sng)
      rcd=rcd+nf90_get_att(nc_id,nf90_global,'isotope',iso_sng)
      call ftn_strnul(mlc_sng)
      call ftn_strnul(iso_sng)
      ! Close file
-     rcd=nf90_wrp_close(nc_id,fl_in,"Ingested")
+     rcd=nf90_wrp_close(nc_id,fl_in,'Ingested')
      
      ! Convert input data to SI units where necessary 
      ! Normally I never store anything in units other than SI in a netCDF file, but HITRAN input is an exception 
@@ -765,7 +765,7 @@ program htrn2nb
      ! Suffix _tpt_crr pertains to quantities evaluated at/scaled to the current 
      ! temperature in the temperature range over which we are parameterizing band parameters
      do bnd_idx=1,bnd_nbr
-        write (6,'(a1)',advance="no") '.'
+        write (6,'(a1)',advance='no') '.'
         if (bnd_ln_nbr(bnd_idx) > 0) then
            mtx_c1_phi=0.0
            mtx_c2_phi=0.0
@@ -1004,7 +1004,7 @@ program htrn2nb
   enddo                  ! end loop over bnd
   
   ! Create some useful SI versions of line strength parameters
-  write(6,'(a)') 'Creating S_d_abs_cff_mss and S_p_abs_cff_mss:'
+  !  write(6,'(a)') 'Creating S_d_abs_cff_mss and S_p_abs_cff_mss:'
   do bnd_idx=1,bnd_nbr
      S_d_abs_cff_mss(bnd_idx)=S_d(bnd_idx)*Avagadro/mmw_mlc(mlc_id) ! [cm-1 m2 mlc-1] -> [cm-1 m2 kg-1]
      S_p_abs_cff_mss(bnd_idx)=S_p(bnd_idx)*Avagadro/mmw_mlc(mlc_id) ! [cm-1 m2 mlc-1] -> [cm-1 m2 kg-1]
@@ -1020,13 +1020,14 @@ program htrn2nb
   
   do bnd_idx=1,bnd_nbr
      if (S_p(bnd_idx) == 0.0) then
-        write(6,*) 'WARNING: S_p(',bnd_idx,') = 0.0 at wvn =', &
+        write(6,*) 'ERROR: S_p(',bnd_idx,') = 0.0 at wvn =', &
              wvn_ctr(bnd_idx),' cm-1, wvl = ',wvl_ctr(bnd_idx)* 1.0e9,' nm'
      endif
-     if (S_d(bnd_idx) == 0.0) then
-        write(6,*) 'WARNING: S_d(',bnd_idx,') = 0.0 at wvn =', &
-             wvn_ctr(bnd_idx),' cm-1, wvl = ',wvl_ctr(bnd_idx)* 1.0e9,' nm'
-     endif
+     stop
+     !if (S_d(bnd_idx) == 0.0) then
+     !        write(6,*) 'WARNING: S_d(',bnd_idx,') = 0.0 at wvn =', &
+     !             wvn_ctr(bnd_idx),' cm-1, wvl = ',wvl_ctr(bnd_idx)* 1.0e9,' nm'
+     !endif
   enddo                  ! end loop over bnd
 
   ! Check that single precision bounds were not exceeded
