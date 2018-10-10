@@ -120,6 +120,10 @@ program O3
   character(*),parameter::fl_slr_dfl='spc_Kur95_01wvn.nc'
   character(*),parameter::nlc=char(0) ! [sng] NUL character = ASCII 0 = char(0)
   
+  ! Locals with simple initialization and no command-line override
+  ! integer::exit_status=0 ! [enm] Program exit status (non-standard Fortran)
+  integer::rcd=nf90_noerr ! [rcd] Return success code
+
   integer,parameter::fl_in_unit=73
   integer,parameter::bnd_nbr_JPL15=174
   integer,parameter::bnd_nbr_HTR16=5818
@@ -138,30 +142,30 @@ program O3
   ! Input/Output Arguments
   ! Output Arguments
   ! Local workspace
-  character(sng_lng_dfl_fl)::arg_val=nlc      ! [sng] Command line argument value
-  character cmd_ln*500      ! [sng] Command line
-  character dsh_key*2       ! [sng] Command line dash and switch
-  character(sng_lng_dfl_fl)::drc_in=nlc       ! [sng] Input directory
-  character(sng_lng_dfl_fl)::drc_out=nlc      ! [sng] Output directory
-  character(sng_lng_dfl_fl)::opt_sng=nlc      ! [sng] Option string
+  character CVS_Date*28
+  character CVS_Revision*16
   character fl_in*80
   character fl_out*80
   character fl_slr*80
   character lbl*80
-  character*26::lcl_date_time ! Time formatted as Day Mth DD HH:MM:SS TZ YYYY
-  character prg_ID*200
-  character CVS_Date*28
-  character CVS_Revision*16
   character src_fl_sng*200
   character src_rfr_sng*200
+  character(2)::dsh_key ! [sng] command-line dash and switch
+  character(200)::cmd_ln ! [sng] command-line
+  character(200)::prg_ID ! [sng] Program ID
+  character(26)::lcl_date_time ! [sng] Time formatted as Day Mth DD HH:MM:SS TZ YYYY
+  character(80)::arg_val ! [sng] command-line argument value
+  character(80)::opt_sng ! [sng] Option string
+  character(sng_lng_dfl_fl)::drc_in=nlc       ! [sng] Input directory
+  character(sng_lng_dfl_fl)::drc_out=nlc      ! [sng] Output directory
   
-  integer arg_idx           ! [idx] Counting index
-  integer arg_nbr           ! [nbr] Number of command line arguments
-  integer exit_status       ! [enm] Program exit status
-  integer int_foo           ! [nbr] Integer
-  integer opt_lng           ! [nbr] Length of option
-  integer rcd               ! [rcd] Return success code
+  ! Command-line parsing
+  integer::arg_idx ! [idx] Counting index
+  integer::arg_nbr ! [nbr] Number of command-line arguments
+  integer::opt_lng ! [nbr] Length of option
+
   integer idx
+  integer int_foo           ! [nbr] Integer
   
   logical JPL15
   logical HTR16
@@ -283,7 +287,6 @@ program O3
   dbg_lvl=dbg_off
   drc_in='/data/zender/aca'//nlc ! [sng] Input directory
   drc_out=''                ! [sng] Output directory
-  exit_status=0
   fl_slr=fl_slr_dfl
   rcd=nf90_noerr              ! nf90_noerr == 0
   tpt_cold=tpt_cold_WMO85
@@ -861,6 +864,7 @@ program O3
   
 1000 continue
   
-  call exit(exit_status)
+  ! call exit(exit_status)    ! [enm] Exit with current exit status (non-standard Fortran)
+
 end program O3
 
