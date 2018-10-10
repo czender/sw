@@ -10,10 +10,10 @@ program O3
   ! cd ${HOME}/sw/aca; make OPTS=D O3; cd -
   
   ! Use WMO85, JPL15, or HITRAN data
-  ! O3 --HTR04
+  ! O3 --HTR16
   ! O3 --JPL15
   ! O3 --WMO85
-  ! O3 --HTR04 -o ${DATA}/aca/abs_xsx_O3_HTR04.nc
+  ! O3 --HTR16 --drc_out=${DATA}/aca -o abs_xsx_O3_HTR16.nc
   ! O3 --JPL15 -o ${DATA}/aca/abs_xsx_O3_JPL15.nc
   ! O3 --WMO85 -o ${DATA}/aca/abs_xsx_O3_WMO85.nc
   ! Use HITRAN16 data
@@ -110,8 +110,7 @@ program O3
   character(len=*),parameter::CVS_Id='$Id$' ! [sng] CVS Identification
   character(len=*),parameter::sbr_nm='O3' ! [sng] Subroutine name
   character(*),parameter::fl_in_WMO85='abs_xsx_WMO85.txt'
-!  character(*),parameter::fl_in_HTR16_cold='O3_200.0_0.0_29164.0-40798.0_04.xsc'
-  character(*),parameter::fl_in_HTR16_cold='O3_300.0_0.0_29164.0-40798.0_04.xsc'
+  character(*),parameter::fl_in_HTR16_cold='O3_200.0_0.0_29164.0-40798.0_04.xsc'
   character(*),parameter::fl_in_HTR16_warm='O3_300.0_0.0_29164.0-40798.0_04.xsc'
   character(*),parameter::fl_in_JPL15='abs_xsx_O3_JPL15.txt'
   character(*),parameter::fl_out_WMO85='abs_xsx_O3_WMO85.nc'
@@ -126,7 +125,7 @@ program O3
 
   integer,parameter::fl_in_unit=73
   integer,parameter::bnd_nbr_JPL15=174
-  integer,parameter::bnd_nbr_HTR16=5818
+  integer,parameter::bnd_nbr_HTR16=5817 ! [nbr] 5818 is # of interfaces, 5817 is # of bands
   integer,parameter::bnd_nbr_WMO85=158
   integer,parameter::sng_lng_dfl_fl=80 ! [nbr] Default filename string length
   integer,parameter::sng_lng_dfl_stt=200 ! [nbr] Default statement string length
@@ -193,6 +192,7 @@ program O3
   integer nc_id             ! File handle
   integer bnd_nbr ! [nbr] Dimension size
   integer tpt_cold_id
+  integer tpt_warm_id
   integer tpt_std_id
   integer Rayleigh_sca_xsx_id
   integer abs_cff_mss_O3_id
@@ -398,7 +398,7 @@ program O3
      if (.not.cmd_ln_fl_in) fl_in=fl_in_HTR16_cold//nlc
      if (.not.cmd_ln_fl_out) fl_out=fl_out_HTR16//nlc
      call ftn_strcpy(src_rfr_sng,'Data reference is HITRAN (2017) (HTR16)')
-  endif
+  endif ! HTR16
 
   ! Compute quantities that may depend on command line input
   ! Prepend user-specified path, if any, to input data file names
@@ -481,6 +481,9 @@ program O3
 
      ! HITRAN data are in .xsc format described above
      fl_in=fl_in_HTR16_warm//nlc
+     if (ftn_strlen(drc_in) > 0) then
+        call ftn_drcpfx(drc_in,fl_in) ! [sng] Input file
+     endif                     ! endif drc_in
      open (fl_in_unit,file=fl_in,status='old',iostat=rcd)
      read (fl_in_unit,'(a20,f10.3,f10.3,i7,f7.3,f6.3,e10.3,f3.0,a2,a15,a4,a3,a3)') &
           mlc_frm_htrn,wvn_min_htrn,wvn_max_htrn,bnd_nbr_htrn,tpt_htrn,prs_htrn, &
@@ -497,7 +500,7 @@ program O3
         write (6,'(a20,f10.3,f10.3,i7,f7.3,f6.3,e10.3,f3.0,a2,a15,a4,a3,a3)') &
              mlc_frm_htrn,wvn_min_htrn,wvn_max_htrn,bnd_nbr_htrn,tpt_htrn,prs_htrn, &
              xsx_max_htrn,rsn_nst_htrn,mA_sng_htrn,mlc_nm_htrn,chr_foo_htrn,brd_nm_htrn,rfr_nbr_htrn
-        write (6,*) (abs_xsx_O3_cold(bnd_idx),bnd_idx=1,bnd_nbr_htrn)
+        write (6,*) (abs_xsx_O3_cold(bnd_idx),bnd_idx=1,bnd_nbr)
         
      endif                     ! endif dbg
 
@@ -506,7 +509,7 @@ program O3
      do bnd_idx=1,bnd_nbr
         wvn_grd(bnd_idx)=wvn_min_htrn+(bnd_idx-1)*wvn_rsn
      enddo
-     wvn_grd(bnd_idx+1)=wvn_min_htrn+bnd_nbr*wvn_rsn
+     wvn_grd(bnd_nbr+1)=wvn_min_htrn+bnd_nbr*wvn_rsn
      do bnd_idx=1,bnd_nbr
         wvn_min(bnd_idx)=wvn_grd(bnd_idx)
         wvn_max(bnd_idx)=wvn_grd(bnd_idx+1)
@@ -627,6 +630,7 @@ program O3
   
   ! Variable definitions
   rcd=nf90_wrp(nf90_def_var(nc_id,'tpt_cold',nf90_float,tpt_cold_id),sbr_nm//': dv tpt_cold')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'tpt_warm',nf90_float,tpt_warm_id),sbr_nm//': dv tpt_warm')
   rcd=nf90_wrp(nf90_def_var(nc_id,'tpt_std',nf90_float,tpt_std_id),sbr_nm//': dv tpt_std')
   rcd=nf90_wrp(nf90_def_var(nc_id,'Rayleigh_sca_xsx',nf90_float,bnd_dmn_id,Rayleigh_sca_xsx_id),sbr_nm//': dv Rayleigh_sca_xsx')
   rcd=nf90_wrp(nf90_def_var(nc_id,'abs_cff_mss_O3',nf90_float,bnd_dmn_id,abs_cff_mss_O3_id),sbr_nm//': dv abs_cff_mss_O3')
@@ -661,14 +665,15 @@ program O3
   
   ! Add english text descriptions
   rcd=nf90_wrp(nf90_put_att(nc_id,tpt_cold_id,'long_name','Temperature of coldest O3 measurements'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,tpt_warm_id,'long_name','Temperature of warmest O3 measurements'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,tpt_std_id,'long_name','Temperature at which interpolated O3 cross sections are archived'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,Rayleigh_sca_xsx_id,'long_name','Rayleigh scattering cross section'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_O3_id,'long_name','Ozone mass absorption coefficient'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_cold_id,'long_name','Ozone absorption cross section at 203 K'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_cold_id,'long_name','Ozone absorption cross section at tpt_cold'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_dadT_id,'long_name','Slope of absorption cross section temperature dependence'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_id,'long_name','Ozone absorption cross section at tpt_rfr'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_tpt_rfr_id,'long_name','Valid temperature for absorption cross section'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_warm_id,'long_name','Ozone absorption cross section at 273 K'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_warm_id,'long_name','Ozone absorption cross section at tpt_warm'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,bnd_id,'long_name','Band center wavelength'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_dwn_TOA_id,'long_name','Solar Energy flux in band'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_pht_dwn_TOA_id,'long_name','Photon flux in band'),sbr_nm)
@@ -684,6 +689,7 @@ program O3
   
   ! Add units
   rcd=nf90_wrp(nf90_put_att(nc_id,tpt_cold_id,'units','kelvin'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,tpt_warm_id,'units','kelvin'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,tpt_std_id,'units','kelvin'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,Rayleigh_sca_xsx_id,'units','meter2'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_O3_id,'units','meter2 kilogram-1'),sbr_nm)
@@ -714,6 +720,7 @@ program O3
   
   ! Write data
   rcd=nf90_wrp(nf90_put_var(nc_id,tpt_cold_id,tpt_cold),sbr_nm//': pv tpt_cold in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,tpt_warm_id,tpt_warm),sbr_nm//': pv tpt_warm in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,tpt_std_id,tpt_std),sbr_nm//': pv tpt_std in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,Rayleigh_sca_xsx_id,Rayleigh_sca_xsx),sbr_nm//': pv Rayleigh_sca_xsx in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,abs_cff_mss_O3_id,abs_cff_mss_O3),sbr_nm//': pv abs_cff_mss_O3 in '//__FILE__)
@@ -737,104 +744,108 @@ program O3
   
   rcd=nf90_wrp_close(nc_id,fl_out,'Wrote results to') ! [fnc] Close file
   
-  ! Get CCM wavelength grid
-  call wvl_grd_CCM_SW_mk(bnd_nbr_CCM,bnd_CCM,wvl_min_CCM,wvl_max_CCM,wvl_ctr_CCM,wvl_dlt_CCM)
-  
-  ! Get TOA solar spectrum
-  call slr_spc_get_CCM(fl_slr,wvl_min_CCM,wvl_max_CCM,bnd_nbr_CCM,flx_slr_frc_CCM,slr_spc_xtr_typ,slr_spc_xtr_typ)
-  
-  ! Weight high resolution absorption cross sections by high resolution TOA solar flux
-  do idx=1,bnd_nbr
-     xsx_wgt_flx(idx)=abs_xsx_O3(idx)*flx_spc_dwn_TOA(idx)
-  enddo                     ! end loop over O3 bnd
-  
-  ! Initialize default values
-  xtr_typ_LHS=xtr_prt_wgt+xtr_fll_nil+xtr_vrb
-  xtr_typ_RHS=xtr_prt_wgt+xtr_fll_nil+xtr_vrb
-  
-  ! Rebin solar flux
-  call rbn_vec_CCM(bnd_nbr,wvl_grd,flx_spc_dwn_TOA, &
-       bnd_nbr_CCM,wvl_min_CCM,wvl_max_CCM,foo_CCM, &
-       xtr_typ_LHS,xtr_typ_RHS)
-  ! Rebin flux-weighted absorption cross sections
-  call rbn_vec_CCM(bnd_nbr,wvl_grd,xsx_wgt_flx,  &
-       bnd_nbr_CCM,wvl_min_CCM,wvl_max_CCM,xsx_wgt_flx_CCM, &
-       xtr_typ_LHS,xtr_typ_RHS)
-  
-  ! Normalize flux-weighted absorption cross section by solar flux
-  do idx=1,bnd_nbr_CCM
-     flx_spc_dwn_TOA_CCM(idx)=flx_slr_frc_CCM(idx)*slr_cst_CCM/wvl_dlt_CCM(idx)
-     abs_xsx_O3_CCM(idx)=xsx_wgt_flx_CCM(idx)/flx_spc_dwn_TOA_CCM(idx)
-     abs_cff_mss_O3_CCM(idx)=abs_xsx_O3_CCM(idx)*Avagadro/mmw_O3
-  enddo                     ! end loop over CCM bnd
-  
-  if (dbg_lvl == dbg_crr) then
-     ! Compare retrieved versus rebinned spectral fluxes
-     write (6,'(3(a,1x))') 'idx','flx_spc rtr','flx_spc rbn'
-     write (6,'(3(a,1x))') '   ','W m-2 m-1  ','W m-2 m-1  '
+  if (.not.HTR16) then
+     
+     ! Get CCM wavelength grid
+     call wvl_grd_CCM_SW_mk(bnd_nbr_CCM,bnd_CCM,wvl_min_CCM,wvl_max_CCM,wvl_ctr_CCM,wvl_dlt_CCM)
+     
+     ! Get TOA solar spectrum
+     call slr_spc_get_CCM(fl_slr,wvl_min_CCM,wvl_max_CCM,bnd_nbr_CCM,flx_slr_frc_CCM,slr_spc_xtr_typ,slr_spc_xtr_typ)
+     
+     ! Weight high resolution absorption cross sections by high resolution TOA solar flux
+     do idx=1,bnd_nbr
+        xsx_wgt_flx(idx)=abs_xsx_O3(idx)*flx_spc_dwn_TOA(idx)
+     enddo                     ! end loop over O3 bnd
+     
+     ! Initialize default values
+     xtr_typ_LHS=xtr_prt_wgt+xtr_fll_nil+xtr_vrb
+     xtr_typ_RHS=xtr_prt_wgt+xtr_fll_nil+xtr_vrb
+     
+     ! Rebin solar flux
+     call rbn_vec_CCM(bnd_nbr,wvl_grd,flx_spc_dwn_TOA, &
+          bnd_nbr_CCM,wvl_min_CCM,wvl_max_CCM,foo_CCM, &
+          xtr_typ_LHS,xtr_typ_RHS)
+     ! Rebin flux-weighted absorption cross sections
+     call rbn_vec_CCM(bnd_nbr,wvl_grd,xsx_wgt_flx,  &
+          bnd_nbr_CCM,wvl_min_CCM,wvl_max_CCM,xsx_wgt_flx_CCM, &
+          xtr_typ_LHS,xtr_typ_RHS)
+     
+     ! Normalize flux-weighted absorption cross section by solar flux
      do idx=1,bnd_nbr_CCM
-        write (6,'(i4,1x,2(es10.3,1x))') &
-             idx,flx_spc_dwn_TOA_CCM(idx),foo_CCM(idx)
-     enddo                  ! end loop over CCM bnd
-  endif                     ! endif dbg
-  
-  ! Add CCM grid to netCDF output file
-  call nc_out_CCM_SW(fl_out,bnd_dmn_id)
-  
-  ! Add O3 data on CCM grid to netCDF output file
-  rcd=nf90_wrp_open(fl_out,nf90_write,nc_id)
-  if (rcd /= nf90_noerr) call nf90_err_exit(rcd,fl_out)
-  
-  ! Put output file in define mode
-  rcd=nf90_redef(nc_id)
-  if (rcd /= nf90_noerr) call nf90_err_exit(rcd,fl_out)
-  
-  ! Variable definitions.
-  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_O3_CCM',nf90_float,bnd_dmn_id,abs_xsx_O3_id),sbr_nm//': dv abs_xsx_O3')
-  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_cff_mss_O3_CCM',nf90_float,bnd_dmn_id,abs_cff_mss_O3_id),sbr_nm//': dv abs_cff_mss_O3')
-  rcd=nf90_wrp(nf90_def_var(nc_id,'flx_slr_frc_CCM',nf90_float,bnd_dmn_id,flx_slr_frc_id),sbr_nm//': dv flx_slr_frc')
-  rcd=nf90_wrp(nf90_def_var(nc_id,'flx_spc_dwn_TOA_CCM',nf90_float,bnd_dmn_id,flx_spc_dwn_TOA_id),sbr_nm//': dv flx_spc_dwn_TOA')
-  
-  ! Add global attributes
-  
-  ! Add english text descriptions
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_O3_id,'long_name','Ozone mass absorption coefficient'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_id,'long_name','Ozone continuum absorption cross section'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,flx_slr_frc_id,'long_name','Fraction of solar flux in band: ' // fl_slr),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_TOA_id,'long_name','Spectral solar insolation at TOA'),sbr_nm)
-  
-  ! Add units
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_O3_id,'units','meter2 kilogram-1'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_id,'units','meter2'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,flx_slr_frc_id,'units','fraction'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_TOA_id,'units','watt meter-2 meter-1'),sbr_nm)
-  
-  ! Now that all dimensions, variables, and attributes have been defined, make call to end define mode
-  rcd=nf90_wrp(nf90_enddef(nc_id),sbr_nm//': enddef in '//__FILE__)
-  
-  ! Write out data
-  rcd=nf90_wrp(nf90_put_var(nc_id,abs_cff_mss_O3_id,abs_cff_mss_O3_CCM),sbr_nm//': pv abs_cff_mss_O3 in '//__FILE__)
-  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_O3_id,abs_xsx_O3_CCM),sbr_nm//': pv abs_xsx_O3 in '//__FILE__)
-  rcd=nf90_wrp(nf90_put_var(nc_id,flx_slr_frc_id,flx_slr_frc_CCM),sbr_nm//': pv flx_slr_frc in '//__FILE__)
-  rcd=nf90_wrp(nf90_put_var(nc_id,flx_spc_dwn_TOA_id,flx_spc_dwn_TOA_CCM),sbr_nm//': pv flx_spc_dwn_TOA in '//__FILE__)
-  
-  ! Close output file
-  rcd=nf90_wrp_close(nc_id,fl_out,'Wrote O3 data on CCM grid to')
-  
-  ! Convert absorption coefficients to cm2/gm and output block for radcsw
-  do idx=1,bnd_nbr_CCM
-     abs_cff_mss_O3_CCM_CGS(idx)=abs_cff_mss_O3_CCM(idx)*10. !  m2 kg-1 --> cm2 g-1 
-  enddo                     ! end loop over CCM bnd
-  nbr_dat_per_ln=4
-  write (0,'(a,a,a,a)') 'c     Data generated by ',prg_nm(1:ftn_strlen(prg_nm)),' on ',lcl_date_time
-  write (0,'(a,a)') 'c     ',prg_ID(1:ftn_strlen(prg_ID))
-  write (0,'(a,a)') 'c     Command line: ',cmd_ln(1:ftn_strlen(cmd_ln))
-  write (0,'(a,f7.3,a)') 'c     O3 mass absorption coefficients in cm2 g-1 for T = ',tpt_std,' K'
-  write (0,'(a,a)') 'c     ',src_rfr_sng(1:ftn_strlen(src_rfr_sng))
-  write (0,'(a,a)') 'c     ',src_fl_sng(1:ftn_strlen(src_fl_sng))
-  call dat_prn_f77(bnd_nbr_CCM,abs_cff_mss_O3_CCM_CGS,nbr_dat_per_ln,'abO3'//char(0))
-  call dat_prn_f90(bnd_nbr_CCM,abs_cff_mss_O3_CCM_CGS,nbr_dat_per_ln,'abO3'//char(0))
-  
+        flx_spc_dwn_TOA_CCM(idx)=flx_slr_frc_CCM(idx)*slr_cst_CCM/wvl_dlt_CCM(idx)
+        abs_xsx_O3_CCM(idx)=xsx_wgt_flx_CCM(idx)/flx_spc_dwn_TOA_CCM(idx)
+        abs_cff_mss_O3_CCM(idx)=abs_xsx_O3_CCM(idx)*Avagadro/mmw_O3
+     enddo                     ! end loop over CCM bnd
+     
+     if (dbg_lvl == dbg_crr) then
+        ! Compare retrieved versus rebinned spectral fluxes
+        write (6,'(3(a,1x))') 'idx','flx_spc rtr','flx_spc rbn'
+        write (6,'(3(a,1x))') '   ','W m-2 m-1  ','W m-2 m-1  '
+        do idx=1,bnd_nbr_CCM
+           write (6,'(i4,1x,2(es10.3,1x))') &
+                idx,flx_spc_dwn_TOA_CCM(idx),foo_CCM(idx)
+        enddo                  ! end loop over CCM bnd
+     endif                     ! endif dbg
+     
+     ! Add CCM grid to netCDF output file
+     call nc_out_CCM_SW(fl_out,bnd_dmn_id)
+     
+     ! Add O3 data on CCM grid to netCDF output file
+     rcd=nf90_wrp_open(fl_out,nf90_write,nc_id)
+     if (rcd /= nf90_noerr) call nf90_err_exit(rcd,fl_out)
+     
+     ! Put output file in define mode
+     rcd=nf90_redef(nc_id)
+     if (rcd /= nf90_noerr) call nf90_err_exit(rcd,fl_out)
+     
+     ! Variable definitions.
+     rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_O3_CCM',nf90_float,bnd_dmn_id,abs_xsx_O3_id),sbr_nm//': dv abs_xsx_O3')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'abs_cff_mss_O3_CCM',nf90_float,bnd_dmn_id,abs_cff_mss_O3_id),sbr_nm//': dv abs_cff_mss_O3')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'flx_slr_frc_CCM',nf90_float,bnd_dmn_id,flx_slr_frc_id),sbr_nm//': dv flx_slr_frc')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'flx_spc_dwn_TOA_CCM',nf90_float,bnd_dmn_id,flx_spc_dwn_TOA_id),sbr_nm//': dv flx_spc_dwn_TOA')
+     
+     ! Add global attributes
+     
+     ! Add english text descriptions
+     rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_O3_id,'long_name','Ozone mass absorption coefficient'),sbr_nm)
+     rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_id,'long_name','Ozone continuum absorption cross section'),sbr_nm)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_slr_frc_id,'long_name','Fraction of solar flux in band: ' // fl_slr),sbr_nm)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_TOA_id,'long_name','Spectral solar insolation at TOA'),sbr_nm)
+     
+     ! Add units
+     rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_O3_id,'units','meter2 kilogram-1'),sbr_nm)
+     rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_id,'units','meter2'),sbr_nm)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_slr_frc_id,'units','fraction'),sbr_nm)
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_TOA_id,'units','watt meter-2 meter-1'),sbr_nm)
+     
+     ! Now that all dimensions, variables, and attributes have been defined, make call to end define mode
+     rcd=nf90_wrp(nf90_enddef(nc_id),sbr_nm//': enddef in '//__FILE__)
+     
+     ! Write out data
+     rcd=nf90_wrp(nf90_put_var(nc_id,abs_cff_mss_O3_id,abs_cff_mss_O3_CCM),sbr_nm//': pv abs_cff_mss_O3 in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_O3_id,abs_xsx_O3_CCM),sbr_nm//': pv abs_xsx_O3 in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,flx_slr_frc_id,flx_slr_frc_CCM),sbr_nm//': pv flx_slr_frc in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,flx_spc_dwn_TOA_id,flx_spc_dwn_TOA_CCM),sbr_nm//': pv flx_spc_dwn_TOA in '//__FILE__)
+     
+     ! Close output file
+     rcd=nf90_wrp_close(nc_id,fl_out,'Wrote O3 data on CCM grid to')
+     
+     ! Convert absorption coefficients to cm2/gm and output block for radcsw
+     do idx=1,bnd_nbr_CCM
+        abs_cff_mss_O3_CCM_CGS(idx)=abs_cff_mss_O3_CCM(idx)*10. !  m2 kg-1 --> cm2 g-1 
+     enddo                     ! end loop over CCM bnd
+     nbr_dat_per_ln=4
+     write (0,'(a,a,a,a)') 'c     Data generated by ',prg_nm(1:ftn_strlen(prg_nm)),' on ',lcl_date_time
+     write (0,'(a,a)') 'c     ',prg_ID(1:ftn_strlen(prg_ID))
+     write (0,'(a,a)') 'c     Command line: ',cmd_ln(1:ftn_strlen(cmd_ln))
+     write (0,'(a,f7.3,a)') 'c     O3 mass absorption coefficients in cm2 g-1 for T = ',tpt_std,' K'
+     write (0,'(a,a)') 'c     ',src_rfr_sng(1:ftn_strlen(src_rfr_sng))
+     write (0,'(a,a)') 'c     ',src_fl_sng(1:ftn_strlen(src_fl_sng))
+     call dat_prn_f77(bnd_nbr_CCM,abs_cff_mss_O3_CCM_CGS,nbr_dat_per_ln,'abO3'//char(0))
+     call dat_prn_f90(bnd_nbr_CCM,abs_cff_mss_O3_CCM_CGS,nbr_dat_per_ln,'abO3'//char(0))
+     
+  endif ! HTR16
+
   ! De-allocate dynamic variables
   if (allocated(Rayleigh_sca_xsx)) deallocate(Rayleigh_sca_xsx,stat=rcd)
   if (allocated(abs_cff_mss_O3)) deallocate(abs_cff_mss_O3,stat=rcd)

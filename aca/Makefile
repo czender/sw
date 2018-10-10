@@ -228,7 +228,7 @@ comma := ,
 newline := \n
 
 # Source file names with directories removed
-MDL_SRC := H2OH2O.F90 NO2.F90 O2X.F90 O2.F90 O3.F90 clm.F90 htrn2nb.F machine.F mie2nc.F nbm.F swnb2.F90 swnb3.F90 bdref.f d1mach.f disort.f disort2.f linpak.f r1mach.f rdhtrn.f disort3.f disobrdf3.f bdref3.f errpack3.f lapack3.f linpak3.f rdi1mach3.f disotest3.f disobrdf3.f
+MDL_SRC := H2OH2O.F90 NO2.F90 O2X.F90 O2.F90 O3.F90 CFC11.F90 clm.F90 htrn2nb.F machine.F mie2nc.F nbm.F swnb2.F90 swnb3.F90 bdref.f d1mach.f disort.f disort2.f linpak.f r1mach.f rdhtrn.f disort3.f disobrdf3.f bdref3.f errpack3.f lapack3.f linpak3.f rdi1mach3.f disotest3.f disobrdf3.f
 # Directories to search for source files
 MDL_PTH := . ${HOME}/include ${HOME}/sw/f
 # Dependency list for executable
@@ -241,7 +241,7 @@ VPATH := $(subst ${space},:,${MDL_PTH})
 CPP_PTH := $(foreach dir,${MDL_PTH},-I${dir})
 
 # Variables having to do with binary executables created by module
-MDL_BIN_TRG := swnb2 swnb3 disotest3 htrn2nb O2 O3 NO2 H2OH2O O2X clm # Binary targets
+MDL_BIN_TRG := swnb2 swnb3 disotest3 htrn2nb O2 O3 CFC11 NO2 H2OH2O O2X clm # Binary targets
 MDL_BIN_SYM_LNK := # Symbolic links
 MDL_BIN_STB := ${MDL_BIN_TRG} ${MDL_BIN_SYM_LNK} # All executables in MY_BIN_DIR
 MDL_BIN := $(addprefix ${MY_BIN_DIR}/,${MDL_BIN_STB}) # dst_cln removes these files
@@ -265,7 +265,7 @@ ${DATA_RT}/% : %
 
 # Files to install on website
 C_FL := date_time.c # C files
-DAT_FL := abs_xsx_H2OH2O.nc abs_xsx_NO2.nc abs_xsx_O2O2.nc abs_xsx_O2.nc abs_xsx_O3.nc aer_H2SO4_PaW75.nc aer_dust_like.nc aer_h2so4_215K.nc aer_h2so4_300K.nc aer_meteoric_dust.nc aer_mineral_dust.nc aer_saharan_dust.nc aer_sulfate.nc aer_volcanic_dust.nc ice_05.nc ice_20.nc lqd_05.nc lqd_07.nc lqd_10.nc mls_cld.nc mls_cld.txt mls_clr.nc mls_clr.txt mls_icrccm_92lvl.nc mls_icrccm_92lvl.txt nst_FSBR.nc spc_Kur95_01wvn.nc spc_Kur95_20wvn.nc spc_LaN68.nc spc_NeL84.nc spc_ThD71.nc swnb_CO2.nc swnb_H2O.nc swnb_O2.nc swnb_OH.nc trp_icrccm_92lvl.nc trp_icrccm_92lvl.txt # Data files
+DAT_FL := abs_xsx_H2OH2O.nc abs_xsx_NO2.nc abs_xsx_O2O2.nc abs_xsx_O2.nc abs_xsx_O3_WMO85.nc abs_xsx_O3_JPL15.nc abs_xsx_O3_HTR16.nc abs_xsx_CFC11.nc aer_H2SO4_PaW75.nc aer_dust_like.nc aer_h2so4_215K.nc aer_h2so4_300K.nc aer_meteoric_dust.nc aer_mineral_dust.nc aer_saharan_dust.nc aer_sulfate.nc aer_volcanic_dust.nc ice_05.nc ice_20.nc lqd_05.nc lqd_07.nc lqd_10.nc mls_cld.nc mls_cld.txt mls_clr.nc mls_clr.txt mls_icrccm_92lvl.nc mls_icrccm_92lvl.txt nst_FSBR.nc spc_Kur95_01wvn.nc spc_Kur95_20wvn.nc spc_LaN68.nc spc_NeL84.nc spc_ThD71.nc swnb_CO2.nc swnb_H2O.nc swnb_O2.nc swnb_OH.nc trp_icrccm_92lvl.nc trp_icrccm_92lvl.txt # Data files
 DST_FL := swnb2.F90 clm.F90 disort2.f d1mach.f r1mach.f linpak.f bdref.f # Distribution files
 DST_MFL := ChangeLog INSTALL Makefile README TODO VERSION # Distribution metafiles
 #DST_MFL += FAQ index.shtml MANIFEST
@@ -1004,6 +1004,12 @@ O3_OBJ := 	${MY_OBJ_DIR}/O3.o
 O3:	${MY_BIN_DIR}/O3
 ${MY_BIN_DIR}/O3:	lib $(O3_OBJ) 
 	${FC} -o $@ $(O3_OBJ) ${LDFLAGS} 
+	chmod 755 $@
+
+CFC11_OBJ := 	${MY_OBJ_DIR}/CFC11.o
+CFC11:	${MY_BIN_DIR}/CFC11
+${MY_BIN_DIR}/CFC11:	lib $(CFC11_OBJ) 
+	${FC} -o $@ $(CFC11_OBJ) ${LDFLAGS} 
 	chmod 755 $@
 
 NO2_OBJ := 	${MY_OBJ_DIR}/NO2.o

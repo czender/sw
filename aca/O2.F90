@@ -147,7 +147,6 @@ program O2
   integer nc_id             ! file handle
   integer bnd_nbr ! dimension size
   integer Rayleigh_sca_xsx_id
-  integer slr_spc_xtr_typ
   integer abs_cff_mss_O2_id
   integer abs_xsx_O2_id
   integer bnd_id            ! coordinate ID
@@ -155,6 +154,7 @@ program O2
   integer flx_bnd_pht_dwn_TOA_id
   integer flx_slr_frc_id
   integer flx_spc_dwn_TOA_id
+  integer slr_spc_xtr_typ
   integer idx_rfr_air_STP_id
   integer nrg_pht_id
   integer wvl_ctr_id
