@@ -110,26 +110,28 @@ program O3
   character(len=*),parameter::CVS_Id='$Id$' ! [sng] CVS Identification
   character(len=*),parameter::sbr_nm='O3' ! [sng] Subroutine name
   character(*),parameter::fl_in_WMO85='abs_xsx_WMO85.txt'
-  character(*),parameter::fl_in_HTR04='O3_200.0_0.0_29164.0-40798.0_04.xsc'
+!  character(*),parameter::fl_in_HTR16_cold='O3_200.0_0.0_29164.0-40798.0_04.xsc'
+  character(*),parameter::fl_in_HTR16_cold='O3_300.0_0.0_29164.0-40798.0_04.xsc'
+  character(*),parameter::fl_in_HTR16_warm='O3_300.0_0.0_29164.0-40798.0_04.xsc'
   character(*),parameter::fl_in_JPL15='abs_xsx_O3_JPL15.txt'
   character(*),parameter::fl_out_WMO85='abs_xsx_O3_WMO85.nc'
-  character(*),parameter::fl_out_HTR04='abs_xsx_O3_HTR04.nc'
+  character(*),parameter::fl_out_HTR16='abs_xsx_O3_HTR16.nc'
   character(*),parameter::fl_out_JPL15='abs_xsx_O3_JPL15.nc'
   character(*),parameter::fl_slr_dfl='spc_Kur95_01wvn.nc'
   character(*),parameter::nlc=char(0) ! [sng] NUL character = ASCII 0 = char(0)
   
   integer,parameter::fl_in_unit=73
   integer,parameter::bnd_nbr_JPL15=174
-  integer,parameter::bnd_nbr_HTR04=5818
+  integer,parameter::bnd_nbr_HTR16=5818
   integer,parameter::bnd_nbr_WMO85=158
   integer,parameter::sng_lng_dfl_fl=80 ! [nbr] Default filename string length
   integer,parameter::sng_lng_dfl_stt=200 ! [nbr] Default statement string length
-  real,parameter::tpt_cold_HTR04=200.0
+  real,parameter::tpt_cold_HTR16=200.0
   real,parameter::tpt_cold_JPL15=218.0
   real,parameter::tpt_warm_JPL15=295.5
   real,parameter::tpt_cold_WMO85=203.0
   real,parameter::tpt_warm_WMO85=273.0
-  real,parameter::tpt_warm_HTR04=200.0
+  real,parameter::tpt_warm_HTR16=300.0
   real,parameter::mss_val=nf90_fill_float ! Missing value = missing_value and/or _FillValue
 
   ! Input Arguments
@@ -162,7 +164,7 @@ program O3
   integer idx
   
   logical JPL15
-  logical HTR04
+  logical HTR16
   logical WMO85
   
   ! HITRAN XSC format
@@ -179,6 +181,7 @@ program O3
   real wvn_max_htrn ! [cm-1] Wavenumber at end of range
   real wvn_min_htrn ! [cm-1] Wavenumber at start of range
   real xsx_max_htrn ! [cm2 mlc-1] Maximum cross-section
+  real wvn_rsn ! [cm-1] Wavenumber resolution
   
   integer bnd_dmn_id        ! Dimension ID for bands
   integer grd_dmn_id        ! Dimension ID for grid
@@ -240,6 +243,9 @@ program O3
   real,dimension(:),allocatable::wvl_grd
   real,dimension(:),allocatable::wvl_max
   real,dimension(:),allocatable::wvl_min
+  real,dimension(:),allocatable::wvn_grd
+  real,dimension(:),allocatable::wvn_max
+  real,dimension(:),allocatable::wvn_min
   real,dimension(:),allocatable::xsx_wgt_flx
   
   integer bnd_nbr_CCM
@@ -269,7 +275,7 @@ program O3
   ! Initialize default values
   CVS_Date='$Date$'
   CVS_Revision='$Revision$'
-  HTR04=.false.
+  HTR16=.false.
   JPL15=.false.
   WMO85=.true.
   cmd_ln_fl_in=.false.
@@ -306,16 +312,16 @@ program O3
            call ftn_arg_get(arg_idx,arg_val,drc_out) ! [sng] Output directory
         else if (opt_sng == 'input' .or. opt_sng == 'fl_O3' .or. opt_sng == 'O3') then
            call ftn_arg_get(arg_idx,arg_val,fl_in) ! [sng] Ozone file
-        else if (opt_sng == 'HTR04') then
-           HTR04=.true.
+        else if (opt_sng == 'HTR16') then
+           HTR16=.true.
            JPL15=.false.
            WMO85=.false.
         else if (opt_sng == 'JPL15') then
-           HTR04=.false.
+           HTR16=.false.
            JPL15=.true.
            WMO85=.false.
         else if (opt_sng == 'WMO85') then
-           HTR04=.false.
+           HTR16=.false.
            WMO85=.true.
            JPL15=.false.
         else                ! Option not recognized
@@ -336,11 +342,11 @@ program O3
         call ftn_arg_get(arg_idx,arg_val,fl_in)
         cmd_ln_fl_in=.true.
      else if (dsh_key == '-J') then
-        HTR04=.false.
+        HTR16=.false.
         JPL15=.true.
         WMO85=.false.
      else if (dsh_key == '-H') then
-        HTR04=.true.
+        HTR16=.true.
         JPL15=.false.
         WMO85=.false.
      else if (dsh_key == '-o') then
@@ -354,7 +360,7 @@ program O3
         write (6,'(a)') CVS_Id
         goto 1000
      else if (dsh_key == '-W') then
-        HTR04=.false.
+        HTR16=.false.
         WMO85=.true.
         JPL15=.false.
      else                   ! Option not recognized
@@ -382,13 +388,13 @@ program O3
      if (.not.cmd_ln_fl_in) fl_in=fl_in_JPL15//nlc
      if (.not.cmd_ln_fl_out) fl_out=fl_out_JPL15//nlc
      call ftn_strcpy(src_rfr_sng,'Data reference is JPL (2015) (JPL15)')
-  else if (HTR04) then
-     bnd_nbr=bnd_nbr_HTR04
-     tpt_cold=tpt_cold_HTR04
-     tpt_warm=tpt_warm_HTR04
-     if (.not.cmd_ln_fl_in) fl_in=fl_in_HTR04//nlc
-     if (.not.cmd_ln_fl_out) fl_out=fl_out_HTR04//nlc
-     call ftn_strcpy(src_rfr_sng,'Data reference is HITRAN (2017) (HTR04)')
+  else if (HTR16) then
+     bnd_nbr=bnd_nbr_HTR16
+     tpt_cold=tpt_cold_HTR16
+     tpt_warm=tpt_warm_HTR16
+     if (.not.cmd_ln_fl_in) fl_in=fl_in_HTR16_cold//nlc
+     if (.not.cmd_ln_fl_out) fl_out=fl_out_HTR16//nlc
+     call ftn_strcpy(src_rfr_sng,'Data reference is HITRAN (2017) (HTR16)')
   endif
 
   ! Compute quantities that may depend on command line input
@@ -422,6 +428,9 @@ program O3
   allocate(wvl_grd(bnd_nbr+1),stat=rcd)
   allocate(wvl_max(bnd_nbr),stat=rcd)
   allocate(wvl_min(bnd_nbr),stat=rcd)
+  allocate(wvn_grd(bnd_nbr+1),stat=rcd)
+  allocate(wvn_max(bnd_nbr),stat=rcd)
+  allocate(wvn_min(bnd_nbr),stat=rcd)
   allocate(xsx_wgt_flx(bnd_nbr),stat=rcd)
   
   open (fl_in_unit,file=fl_in,status='old',iostat=rcd)
@@ -455,22 +464,60 @@ program O3
         abs_xsx_O3_warm(bnd_idx)=abs_xsx_O3_warm(bnd_idx)*1.0e-4 ! cm2 -> m2
      enddo
      
-  else if (HTR04) then            ! HTR04 data
+  else if (HTR16) then            ! HTR16 data
+
      ! HITRAN data are in .xsc format described above
      read (fl_in_unit,'(a20,f10.3,f10.3,i7,f7.3,f6.3,e10.3,f3.0,a2,a15,a4,a3,a3)') &
           mlc_frm_htrn,wvn_min_htrn,wvn_max_htrn,bnd_nbr_htrn,tpt_htrn,prs_htrn, &
           xsx_max_htrn,rsn_nst_htrn,mA_sng_htrn,mlc_nm_htrn,chr_foo_htrn,brd_nm_htrn,rfr_nbr_htrn
-     
-     read (fl_in_unit,*) (abs_xsx_O3_cold(bnd_idx),bnd_idx=1,bnd_nbr_htrn)
+     tpt_cold=tpt_htrn
+     bnd_nbr=bnd_nbr_htrn-1
+     read (fl_in_unit,*) (abs_xsx_O3_cold(bnd_idx),bnd_idx=1,bnd_nbr)
+     close (fl_in_unit)
+     write (6,'(a20,1x,a)') 'Read input data from',fl_in(1:ftn_strlen(fl_in))
 
-     write (6,'(a20,f10.3,f10.3,i7,f7.3,f6.3,e10.3,f3.0,a2,a15,a4,a3,a3)') &
+     ! HITRAN data are in .xsc format described above
+     fl_in=fl_in_HTR16_warm//nlc
+     open (fl_in_unit,file=fl_in,status='old',iostat=rcd)
+     read (fl_in_unit,'(a20,f10.3,f10.3,i7,f7.3,f6.3,e10.3,f3.0,a2,a15,a4,a3,a3)') &
           mlc_frm_htrn,wvn_min_htrn,wvn_max_htrn,bnd_nbr_htrn,tpt_htrn,prs_htrn, &
           xsx_max_htrn,rsn_nst_htrn,mA_sng_htrn,mlc_nm_htrn,chr_foo_htrn,brd_nm_htrn,rfr_nbr_htrn
+     tpt_warm=tpt_htrn
+     bnd_nbr=bnd_nbr_htrn-1
+     read (fl_in_unit,*) (abs_xsx_O3_warm(bnd_idx),bnd_idx=1,bnd_nbr)
+     close (fl_in_unit)
+     write (6,'(a20,1x,a)') 'Read input data from',fl_in(1:ftn_strlen(fl_in))
 
-     write (6,*) (abs_xsx_O3_cold(bnd_idx),bnd_idx=1,bnd_nbr_htrn)
+     ! Sanity check
+     if (dbg_lvl >= dbg_fl) then
      
-     call exit(0)
+        write (6,'(a20,f10.3,f10.3,i7,f7.3,f6.3,e10.3,f3.0,a2,a15,a4,a3,a3)') &
+             mlc_frm_htrn,wvn_min_htrn,wvn_max_htrn,bnd_nbr_htrn,tpt_htrn,prs_htrn, &
+             xsx_max_htrn,rsn_nst_htrn,mA_sng_htrn,mlc_nm_htrn,chr_foo_htrn,brd_nm_htrn,rfr_nbr_htrn
+        write (6,*) (abs_xsx_O3_cold(bnd_idx),bnd_idx=1,bnd_nbr_htrn)
+        
+     endif                     ! endif dbg
 
+     ! Convert input data to SI units where necessary
+     wvn_rsn=(wvn_max_htrn-wvn_min_htrn)/(bnd_nbr-1)
+     do bnd_idx=1,bnd_nbr
+        wvn_grd(bnd_idx)=wvn_min_htrn+(bnd_idx-1)*wvn_rsn
+     enddo
+     wvn_grd(bnd_idx+1)=wvn_min_htrn+bnd_nbr*wvn_rsn
+     do bnd_idx=1,bnd_nbr
+        wvn_min(bnd_idx)=wvn_grd(bnd_idx)
+        wvn_max(bnd_idx)=wvn_grd(bnd_idx+1)
+     enddo
+     do bnd_idx=1,bnd_nbr
+        wvl_min(bnd_idx)=1.0/(100.0*wvn_max(bnd_idx))
+        wvl_max(bnd_idx)=1.0/(100.0*wvn_min(bnd_idx))
+        abs_xsx_O3_cold(bnd_idx)=abs_xsx_O3_cold(bnd_idx)*1.0e-4 ! cm2 -> m2
+        abs_xsx_O3_warm(bnd_idx)=abs_xsx_O3_warm(bnd_idx)*1.0e-4 ! cm2 -> m2
+        abs_xsx_O2(bnd_idx)=mss_val ! cm2 -> m2
+        flx_bnd_pht_dwn_TOA(bnd_idx)=mss_val ! #/cm2/s -> #/m2/s
+        Rayleigh_sca_xsx(bnd_idx)=mss_val ! cm2 -> m2
+     enddo
+     
   else if (JPL15) then            ! JPL15 data
 
      do idx=1,11
@@ -807,6 +854,9 @@ program O3
   if (allocated(wvl_grd)) deallocate(wvl_grd,stat=rcd)
   if (allocated(wvl_max)) deallocate(wvl_max,stat=rcd)
   if (allocated(wvl_min)) deallocate(wvl_min,stat=rcd)
+  if (allocated(wvn_grd)) deallocate(wvn_grd,stat=rcd)
+  if (allocated(wvn_max)) deallocate(wvn_max,stat=rcd)
+  if (allocated(wvn_min)) deallocate(wvn_min,stat=rcd)
   if (allocated(xsx_wgt_flx)) deallocate(xsx_wgt_flx,stat=rcd)
   
 1000 continue
