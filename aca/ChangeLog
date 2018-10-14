@@ -1,5 +1,9 @@
 2018-10-13  Charlie Zender  <zender@uci.edu>
 
+	* swnb2 now works in LW! Underpredicts surface LW by ~35 W/m2
+
+	* Implement diffusivity_factor=1.66 for LW angular integration
+
 	* Expanding range of Malkmus files from 2000 to 0 cm-1, i.e., including entire LW
 
 2018-10-10  Charlie Zender  <zender@uci.edu>
