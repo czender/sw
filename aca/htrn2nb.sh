@@ -14,7 +14,7 @@ set echo
 #htrn2nb -l 2000.0 -h 17900.0 -b 1590 -i ${DATA}/hitran/H2O.nc -o ${DATA}/aca/mlk_H2O.nc
 
 #wvn_min=2000 # [cm-1] Minimum wavenumber
-wvn_min=0 # [cm-1] Minimum wavenumber
+wvn_min=10 # [cm-1] Minimum wavenumber
 wvn_max=27000 # [cm-1] Maximum wavenumber
 wvn_rsn_H2O=10 # [cm-1] Band resolution for H2O
 wvn_rsn=5 # [cm-1] Band resolution

@@ -380,16 +380,16 @@ program swnb2
   integer,parameter::bnd_nbr_CO_max=5400 ! 5 cm-1 resolution from 0.3889--5.0 um + 0--2000 cm-1
   integer,parameter::bnd_nbr_N2_max=5400 ! 5 cm-1 resolution from 0.3889--5.0 um + 0--2000 cm-1
   integer,parameter::bnd_nbr_N2O_max=5400 ! 5 cm-1 resolution from 0.3889--5.0 um + 0--2000 cm-1
-  integer,parameter::bnd_nbr_aer_max=2896 ! WMO-spliced
+  integer,parameter::bnd_nbr_aer_max=2895 ! WMO-spliced
   integer,parameter::bnd_nbr_bga_max=480 ! 0.01 um resolution from 0.2--5.0 um
   integer,parameter::bnd_nbr_ice_max=480 ! 0.01 um resolution from 0.2--5.0 um
   integer,parameter::bnd_nbr_lqd_max=480 ! 0.01 um resolution from 0.2--5.0 um
   integer,parameter::bnd_nbr_lmn_max=81 ! CIE photopic luminosity function 5 nm resolution from 380-780 nm
   integer,parameter::bnd_nbr_nst_max=1000 ! new FSBR resolution
-  integer,parameter::bnd_nbr_rfl_max=2896 ! WMO-spliced
-  integer,parameter::bnd_nbr_mpr_max=2896 ! WMO-spliced
-  integer,parameter::bnd_nbr_snw_max=2896 ! WMO-spliced
-  integer,parameter::bnd_nbr_max=2896 ! WMO at 1 nm spliced onto 10 cm-1 resolution H2O line absorption
+  integer,parameter::bnd_nbr_rfl_max=2895 ! WMO-spliced
+  integer,parameter::bnd_nbr_mpr_max=2895 ! WMO-spliced
+  integer,parameter::bnd_nbr_snw_max=2895 ! WMO-spliced
+  integer,parameter::bnd_nbr_max=2895 ! WMO at 1 nm spliced onto 10 cm-1 resolution H2O line absorption
   integer,parameter::chn_nbr_max=12 ! [nbr] Arbitrary
   integer,parameter::lev_snw_nbr_max=5 ! CLM snow model resolution
   integer,parameter::lev_nbr_max=110 ! roughly 10 mb resolution from 1010 mb to TOA
@@ -400,6 +400,7 @@ program swnb2
   integer,parameter::sng_lng_dfl_stt=200 ! [nbr] Default statement string length
   real,parameter::tpt_Malkmus_fit=250.0 ! reference temperature for Malkmus parameters
   real,parameter::mss_val=1.0e36 ! Missing value = missing_value and/or _FillValue
+  real,parameter::diffusivity_factor=1.66 ! Diffusivity factor for angular integration of thermal fluxes
   real,parameter::real_tiny=1.0e-20 ! Tiny value to avoid divide-by-zero errors
   ! integer,parameter::bnd_nbr_nst_max=235 ! FSBR resolution
 
@@ -1257,6 +1258,7 @@ program swnb2
   real rfl_nst_sfc
   real trn_bb_atm
   real trn_nst_atm
+  real angular_integral_factor
 
   ! Array dimensions: azi
   real,dimension(:),allocatable::azi !
@@ -5791,6 +5793,12 @@ program swnb2
      ! The same physics applies to all three gases
      if (bnd_idx<=bnd_nbr_H2O) then
         
+        if (wvl_ctr(bnd_idx)<0.5e-6) then
+           angular_integral_factor=slr_zen_ngl_cos
+        else
+           angular_integral_factor=1.0/diffusivity_factor
+        endif
+
         ! Line absorption computation #1: H2O
         do lev_idx=1,lev_nbr
            ! Phi and psi weights are mid-layer quantities
@@ -5830,7 +5838,7 @@ program swnb2
            float_foo= &
                 sqrt( &
                 1.0+4.0*S_p_abs_cff_mss_H2O(bnd_idx)*u_bar(lev_idx)/ &
-                (prs_bar(lev_idx)*slr_zen_ngl_cos) &
+                (prs_bar(lev_idx)*angular_integral_factor) &
                 )
            opt_dep_ITOD_H2O(lev_idx)=(float_foo-1.0)* &
                 0.5*S_d_abs_cff_mss_H2O(bnd_idx)*prs_bar(lev_idx)/ &
@@ -5844,7 +5852,7 @@ program swnb2
         ! difficulties with saturated lines when the transmission is 0.0
         ! This log transmission method fails in single precision
         do lev_idx=1,lev_nbr
-           odal_H2O(lev_idx)=slr_zen_ngl_cos* &
+           odal_H2O(lev_idx)=angular_integral_factor* &
                 (opt_dep_ITOD_H2O(lev_idx+1)-opt_dep_ITOD_H2O(lev_idx))
            if (.not.flg_vpr_H2O_abs_cld) then
               ! If H2O vapor absorption in cloud is not allowed...
@@ -5900,7 +5908,7 @@ program swnb2
            float_foo= &
                 sqrt( &
                 1.0+4.0*S_p_abs_cff_mss_OH(bnd_idx)*u_bar(lev_idx)/ &
-                (prs_bar(lev_idx)*slr_zen_ngl_cos) &
+                (prs_bar(lev_idx)*angular_integral_factor) &
                 )
            ! NB: OH line strengths are often underflows in single precision,
            ! so S_p_abs_cff_mss_OH must either be checked for this, or else
@@ -5918,7 +5926,7 @@ program swnb2
         ! This log transmission method fails in single precision.
         do lev_idx=1,lev_nbr
            odal_OH(lev_idx)=odal_OH(lev_idx)+ &
-                slr_zen_ngl_cos* &
+                angular_integral_factor* &
                 (opt_dep_ITOD_OH(lev_idx+1)-opt_dep_ITOD_OH(lev_idx))
         enddo               ! end loop over lev
         
@@ -5964,7 +5972,7 @@ program swnb2
            float_foo= &
                 sqrt( &
                 1.0+4.0*S_p_abs_cff_mss_O2(bnd_idx)*u_bar(lev_idx)/ &
-                (prs_bar(lev_idx)*slr_zen_ngl_cos) &
+                (prs_bar(lev_idx)*angular_integral_factor) &
                 )
            opt_dep_ITOD_O2(lev_idx)=(float_foo-1.0)* &
                 0.5*S_d_abs_cff_mss_O2(bnd_idx)*prs_bar(lev_idx)/ &
@@ -5979,7 +5987,7 @@ program swnb2
         ! This log transmission method fails in single precision.
         do lev_idx=1,lev_nbr
            odal_O2(lev_idx)=odal_O2(lev_idx)+ &
-                slr_zen_ngl_cos* &
+                angular_integral_factor* &
                 (opt_dep_ITOD_O2(lev_idx+1)-opt_dep_ITOD_O2(lev_idx))
         enddo               ! end loop over lev
         
@@ -6036,7 +6044,7 @@ program swnb2
               float_foo= &
                    sqrt( &
                    1.0+4.0*S_p_abs_cff_mss_CO2(bnd_idx_CO2)*u_bar(lev_idx)/ &
-                   (prs_bar(lev_idx)*slr_zen_ngl_cos) &
+                   (prs_bar(lev_idx)*angular_integral_factor) &
                    )
               opt_dep_ITOD_CO2_hires(lev_idx,i21)=(float_foo-1.0)* &
                    0.5*S_d_abs_cff_mss_CO2(bnd_idx_CO2)*prs_bar(lev_idx)/ &
@@ -6102,7 +6110,7 @@ program swnb2
                 0.5*(trn_LT_CO2_hires(lev_idx,1)+ &
                 trn_LT_CO2_hires(lev_idx,2))
            odal_CO2(lev_idx)= &
-                -slr_zen_ngl_cos*log(trn_ALT_CO2)
+                -angular_integral_factor*log(trn_ALT_CO2)
         enddo               ! end loop over lev
         ! end CO2
         
@@ -6132,7 +6140,7 @@ program swnb2
               float_foo= &
                    sqrt( &
                    1.0+4.0*S_p_abs_cff_mss_CH4(bnd_idx_CH4)*u_bar(lev_idx)/ &
-                   (prs_bar(lev_idx)*slr_zen_ngl_cos) &
+                   (prs_bar(lev_idx)*angular_integral_factor) &
                    )
               opt_dep_ITOD_CH4_hires(lev_idx,i21)=(float_foo-1.0)* &
                    0.5*S_d_abs_cff_mss_CH4(bnd_idx_CH4)*prs_bar(lev_idx)/ &
@@ -6154,7 +6162,7 @@ program swnb2
                 0.5*(trn_LT_CH4_hires(lev_idx,1)+ &
                 trn_LT_CH4_hires(lev_idx,2))
            odal_CH4(lev_idx)= &
-                -slr_zen_ngl_cos*log(trn_ALT_CH4)
+                -angular_integral_factor*log(trn_ALT_CH4)
         enddo               ! end loop over lev
         ! end CH4
 
@@ -6184,7 +6192,7 @@ program swnb2
               float_foo= &
                    sqrt( &
                    1.0+4.0*S_p_abs_cff_mss_CO(bnd_idx_CO)*u_bar(lev_idx)/ &
-                   (prs_bar(lev_idx)*slr_zen_ngl_cos) &
+                   (prs_bar(lev_idx)*angular_integral_factor) &
                    )
               opt_dep_ITOD_CO_hires(lev_idx,i21)=(float_foo-1.0)* &
                    0.5*S_d_abs_cff_mss_CO(bnd_idx_CO)*prs_bar(lev_idx)/ &
@@ -6206,7 +6214,7 @@ program swnb2
                 0.5*(trn_LT_CO_hires(lev_idx,1)+ &
                 trn_LT_CO_hires(lev_idx,2))
            odal_CO(lev_idx)= &
-                -slr_zen_ngl_cos*log(trn_ALT_CO)
+                -angular_integral_factor*log(trn_ALT_CO)
         enddo               ! end loop over lev
         ! end CO
 
@@ -6236,7 +6244,7 @@ program swnb2
               float_foo= &
                    sqrt( &
                    1.0+4.0*S_p_abs_cff_mss_N2(bnd_idx_N2)*u_bar(lev_idx)/ &
-                   (prs_bar(lev_idx)*slr_zen_ngl_cos) &
+                   (prs_bar(lev_idx)*angular_integral_factor) &
                    )
               opt_dep_ITOD_N2_hires(lev_idx,i21)=(float_foo-1.0)* &
                    0.5*S_d_abs_cff_mss_N2(bnd_idx_N2)*prs_bar(lev_idx)/ &
@@ -6258,7 +6266,7 @@ program swnb2
                 0.5*(trn_LT_N2_hires(lev_idx,1)+ &
                 trn_LT_N2_hires(lev_idx,2))
            odal_N2(lev_idx)= &
-                -slr_zen_ngl_cos*log(trn_ALT_N2)
+                -angular_integral_factor*log(trn_ALT_N2)
         enddo               ! end loop over lev
         ! end N2
 
@@ -6288,7 +6296,7 @@ program swnb2
               float_foo= &
                    sqrt( &
                    1.0+4.0*S_p_abs_cff_mss_N2O(bnd_idx_N2O)*u_bar(lev_idx)/ &
-                   (prs_bar(lev_idx)*slr_zen_ngl_cos) &
+                   (prs_bar(lev_idx)*angular_integral_factor) &
                    )
               opt_dep_ITOD_N2O_hires(lev_idx,i21)=(float_foo-1.0)* &
                    0.5*S_d_abs_cff_mss_N2O(bnd_idx_N2O)*prs_bar(lev_idx)/ &
@@ -6310,7 +6318,7 @@ program swnb2
                 0.5*(trn_LT_N2O_hires(lev_idx,1)+ &
                 trn_LT_N2O_hires(lev_idx,2))
            odal_N2O(lev_idx)= &
-                -slr_zen_ngl_cos*log(trn_ALT_N2O)
+                -angular_integral_factor*log(trn_ALT_N2O)
         enddo               ! end loop over lev
         ! end N2O
         
@@ -6340,7 +6348,7 @@ program swnb2
               float_foo= &
                    sqrt( &
                    1.0+4.0*S_p_abs_cff_mss_O3(bnd_idx_O3)*u_bar(lev_idx)/ &
-                   (prs_bar(lev_idx)*slr_zen_ngl_cos) &
+                   (prs_bar(lev_idx)*angular_integral_factor) &
                    )
               opt_dep_ITOD_O3_hires(lev_idx,i21)=(float_foo-1.0)* &
                    0.5*S_d_abs_cff_mss_O3(bnd_idx_O3)*prs_bar(lev_idx)/ &
@@ -6362,7 +6370,7 @@ program swnb2
                 0.5*(trn_LT_O3_hires(lev_idx,1)+ &
                 trn_LT_O3_hires(lev_idx,2))
            odal_O3(lev_idx)= &
-                -slr_zen_ngl_cos*log(trn_ALT_O3)
+                -angular_integral_factor*log(trn_ALT_O3)
         enddo               ! end loop over lev
         ! end O3
 
