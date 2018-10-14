@@ -1023,7 +1023,6 @@ program htrn2nb
         write(6,*) 'ERROR: S_p(',bnd_idx,') = 0.0 at wvn =', &
              wvn_ctr(bnd_idx),' cm-1, wvl = ',wvl_ctr(bnd_idx)* 1.0e9,' nm'
      endif
-     stop
      !if (S_d(bnd_idx) == 0.0) then
      !        write(6,*) 'WARNING: S_d(',bnd_idx,') = 0.0 at wvn =', &
      !             wvn_ctr(bnd_idx),' cm-1, wvl = ',wvl_ctr(bnd_idx)* 1.0e9,' nm'

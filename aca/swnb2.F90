@@ -5145,7 +5145,7 @@ program swnb2
   endif                     ! endif dbg
   
   if (dbg_lvl>dbg_off) then
-     write (6,'(26(a,i4,/))')        &
+     write (6,'(26(a,i6,/))')        &
           '# input atmosphere levels lev_atm_nbr = ',lev_atm_nbr, &
           '# input snow levels lev_snw_nbr = ',lev_snw_nbr, &
           '# total levels lev_nbr = lev_atm_nbr+lev_snw_nbr = ',lev_nbr, &
