@@ -1,3 +1,7 @@
+2018-10-13  Charlie Zender  <zender@uci.edu>
+
+	* Expanding range of Malkmus files from 2000 to 0 cm-1, i.e., including entire LW
+
 2018-10-10  Charlie Zender  <zender@uci.edu>
 
 	* Finish O3 support for HITRAN .xsc files, add CFC11 support

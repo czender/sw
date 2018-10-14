@@ -365,21 +365,21 @@ program swnb2
   character(*),parameter::nlc=char(0) ! [sng] NUL character = ASCII 0 = char(0)
   ! Arrays are allocatable, but die if size exceeds corresponding *_nbr_max
   integer,parameter::azi_nbr_max=16 ! arbitrary
-  integer,parameter::bnd_nbr_CO2_max=5000 ! 5 cm-1 resolution from 0.3889--5.0 um
+  integer,parameter::bnd_nbr_CO2_max=5400 ! 5 cm-1 resolution from 0.3889--5.0 um + 0--2000 cm-1
   integer,parameter::bnd_nbr_H2OH2O_max=8192 ! Old 3 cm-1 #s from Chy98
-  integer,parameter::bnd_nbr_H2O_max=2500 ! 10 cm-1 resolution from 0.3889--5.0 um
+  integer,parameter::bnd_nbr_H2O_max=2700 ! 10 cm-1 resolution from 0.3889--5.0 um + 0--2000 cm-1
   integer,parameter::bnd_nbr_NO2_max=750 ! 10 cm-1 resolution from 0.3889--5.0 um
   integer,parameter::bnd_nbr_CFC11_max=98400 ! 0.06026514 cm-1 resolution from 569.9828--6500.073 cm-1 = 1.5384--17.54253 um
   integer,parameter::bnd_nbr_O2O2_max=4086 ! Greenblatt et al. (1992) resolution + SPS98 1.27 um band
-  integer,parameter::bnd_nbr_O2_max=2500 ! 10 cm-1 resolution from 0.3889--5.0 um
-  integer,parameter::bnd_nbr_O3_max=5000 ! 5 cm-1 resolution from 0.3889--5.0 um
+  integer,parameter::bnd_nbr_O2_max=2700 ! 10 cm-1 resolution from 0.3889--5.0 um + 0--2000 cm-1
+  integer,parameter::bnd_nbr_O3_max=5400 ! 5 cm-1 resolution from 0.3889--5.0 um + 0--2000 cm-1
   integer,parameter::bnd_nbr_HC_max=174 ! WMO85 resolution
   integer,parameter::bnd_nbr_HHCWC_max=174 ! WMO85 resolution
-  integer,parameter::bnd_nbr_OH_max=2500 ! 10 cm-1 resolution from 0.3889--5.0 um
-  integer,parameter::bnd_nbr_CH4_max=5000 ! 5 cm-1 resolution from 0.3889--5.0 um
-  integer,parameter::bnd_nbr_CO_max=5000 ! 5 cm-1 resolution from 0.3889--5.0 um
-  integer,parameter::bnd_nbr_N2_max=5000 ! 5 cm-1 resolution from 0.3889--5.0 um
-  integer,parameter::bnd_nbr_N2O_max=5000 ! 5 cm-1 resolution from 0.3889--5.0 um
+  integer,parameter::bnd_nbr_OH_max=2700 ! 10 cm-1 resolution from 0.3889--5.0 um + 0--2000 cm-1
+  integer,parameter::bnd_nbr_CH4_max=5400 ! 5 cm-1 resolution from 0.3889--5.0 um + 0--2000 cm-1
+  integer,parameter::bnd_nbr_CO_max=5400 ! 5 cm-1 resolution from 0.3889--5.0 um + 0--2000 cm-1
+  integer,parameter::bnd_nbr_N2_max=5400 ! 5 cm-1 resolution from 0.3889--5.0 um + 0--2000 cm-1
+  integer,parameter::bnd_nbr_N2O_max=5400 ! 5 cm-1 resolution from 0.3889--5.0 um + 0--2000 cm-1
   integer,parameter::bnd_nbr_aer_max=2696 ! WMO-spliced
   integer,parameter::bnd_nbr_bga_max=480 ! 0.01 um resolution from 0.2--5.0 um
   integer,parameter::bnd_nbr_ice_max=480 ! 0.01 um resolution from 0.2--5.0 um
@@ -2133,7 +2133,7 @@ program swnb2
   flg_HC=.true.
   flg_HHCWC=.true.
   flg_NO2=.true.
-  flg_CFC11=.false. ! [flg] CFC11 turned-off until validated
+  flg_CFC11=.true.
   flg_O2=.true.
   flg_O2N2=.true.
   flg_O2O2=.true.
@@ -9323,9 +9323,6 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_SAS_id,abs_spc_SAS),sbr_nm//': pv abs_spc_SAS in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_atm_id,abs_spc_atm),sbr_nm//': pv abs_spc_atm in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_sfc_id,abs_spc_sfc),sbr_nm//': pv abs_spc_sfc in '//__FILE__)
-     if (dbg_lvl>=dbg_fl) then
-        write (6,'(a,f15.12)') 'abs_xsx_O3 bnd_nbr = ',bnd_nbr
-     endif ! endif dbg
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_O3_id,abs_xsx_O3),sbr_nm//': pv abs_xsx_O3 in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_O3_dadT_id,abs_xsx_O3_dadT),sbr_nm//': pv abs_xsx_O3_dadT in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,alb_sfc_id,alb_sfc),sbr_nm//': pv alb_sfc in '//__FILE__)
