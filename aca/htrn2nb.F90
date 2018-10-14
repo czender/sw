@@ -568,17 +568,16 @@ program htrn2nb
      bnd_dlt=(ln_hi-ln_lo)/bnd_nbr
      float_foo=bnd_dlt/2.0
      do bnd_idx=1,bnd_nbr
-        wvn_min(bnd_idx)=ln_lo+(bnd_idx-1)*bnd_dlt
+        wvn_grd(bnd_idx)=ln_lo+(bnd_idx-1)*bnd_dlt
      enddo                  ! end loop over bnd
-     do bnd_idx=1,bnd_nbr-1
-        wvn_max(bnd_idx)=wvn_min(bnd_idx+1)
-     enddo                  ! end loop over bnd
-     wvn_max(bnd_nbr)=ln_hi
+     wvn_grd(bnd_nbr+1)=ln_hi
      do bnd_idx=1,bnd_nbr
-        wvn_ctr(bnd_idx)=wvn_min(bnd_idx)+float_foo
-        wvn_grd(bnd_idx)=wvn_min(bnd_idx)
+        wvn_min(bnd_idx)=wvn_grd(bnd_idx)
+        wvn_max(bnd_idx)=wvn_grd(bnd_idx+1)
      enddo                  ! end loop over bnd
-     wvn_grd(bnd_nbr+1)=wvn_max(bnd_nbr)
+     do bnd_idx=1,bnd_nbr
+        wvn_ctr(bnd_idx)=0.5*(wvn_min(bnd_idx)+wvn_max(bnd_idx))
+     enddo                  ! end loop over bnd
      
      ! Initialize output parameters: 
      ! Empty bands (bands containing zero lines) will contain these initialized values on output 
@@ -600,7 +599,7 @@ program htrn2nb
      enddo                  ! end loop over bnd
      
      if (dbg_lvl > dbg_fl) then
-        write (6,'(2(a8,f9.2,a5,/),a10,i5,/,a10,i3)')  &
+        write (6,'(2(a8,f9.2,a5,/),a10,i6,/,a10,i4)')  &
              'ln_lo = ',ln_lo,' cm-1', &
              'ln_hi = ',ln_hi,' cm-1', &
              'ln_nbr = ',ln_nbr, &
