@@ -1,3 +1,7 @@
+2018-10-15  Charlie Zender  <zender@uci.edu>
+
+	* Use wvl_bnd_lw_sw to set LW/SW boundary for diffusivity approximation and transmission diagnostics
+
 2018-10-13  Charlie Zender  <zender@uci.edu>
 
 	* swnb2 now works in LW! Underpredicts surface LW by ~35 W/m2

@@ -2022,6 +2022,8 @@ program swnb2
   real trn_LT_O3_hires(lev_nbr_max,2)
   real trn_LT_CO2_hires(lev_nbr_max,2)
   real u_bar(levp_nbr_max)
+  real::wvl_bnd_lw_sw=4.0e-6 ! [m] Wavelength boundary between LW and SW to invoke diffusivity approximation and diagnose transmission
+
   real wvl_Planck
   
   ! The following line is from the DISORT() subroutine: 
@@ -2125,7 +2127,7 @@ program swnb2
   cmd_ln_slr_zen_ngl_cos=.false.
   cmd_ln_slr_zen_ngl_dgr=.false.
   exit_status=0             ! [enm] Program exit status
-  flg_CO=.true.
+  flg_CO=.false. ! [flg] CO temporarily turned-off due to singularities that double-precision mlk_CO.nc does not solve
   flg_N2=.true.
   flg_N2O=.true.
   flg_CH4=.true.
@@ -2398,6 +2400,8 @@ program swnb2
            call ftn_arg_get(arg_idx,arg_val,str_nbr)
         else if (opt_sng == 'vpr_H2O_abs_cld') then
            call ftn_arg_get(arg_idx,arg_val,flg_vpr_H2O_abs_cld) ! [flg] H2O vapor absorption in cloud allowed
+        else if (opt_sng == 'wvl_bnd' .or. opt_sng == 'wvl_bnd_lw_sw' .or. opt_sng == 'lw_sw') then
+           call ftn_arg_get(arg_idx,arg_val,wvl_bnd_lw_sw)
         else if (opt_sng == 'zen') then ! Shortcut for --slr_zen_ngl_cos=1.0
            cmd_ln_slr_zen_ngl_cos=.true.
            slr_zen_ngl_cos_cmd_ln=1.0 ! [frc] Cosine solar zenith angle
@@ -5793,7 +5797,7 @@ program swnb2
      ! The same physics applies to all three gases
      if (bnd_idx<=bnd_nbr_H2O) then
         
-        if (wvl_ctr(bnd_idx)<0.5e-6) then
+        if (wvl_ctr(bnd_idx)<wvl_bnd_lw_sw) then
            angular_integral_factor=slr_zen_ngl_cos
         else
            angular_integral_factor=1.0/diffusivity_factor
@@ -6904,7 +6908,7 @@ program swnb2
      wvnmhi=wvn_max(bnd_idx)
      
      ! Set plank=.true. whenever considering thermal emission
-     ! Computing thermal source function for T ~ 300 K blackbody generates underflows in single precision when lambda <~ 2.0 um
+     ! Computing thermal source function for T ~ 300 K blackbody generates underflows in single precision when lambda < ~2.0 um
      if (wvl_ctr(bnd_idx)>wvl_Planck.or.btemp>1000.0) then
         plank=flg_Planck
      else
@@ -7909,27 +7913,47 @@ program swnb2
   ! These definitions must be made in a conditional clause because
   ! they are all normalized by insolation, which may be zero.
   do bnd_idx=1,bnd_nbr
-!     if (flx_spc_dwn_TOA(bnd_idx)>0.0) then
-     if (flx_spc_dwn_TOA(bnd_idx)>real_tiny) then
-        trn_spc_atm_ttl(bnd_idx)= &
-             flx_spc_dwn_sfc(bnd_idx)/ &
-             flx_spc_dwn_TOA(bnd_idx)
-        rfl_spc_SAS(bnd_idx)= &
-             flx_spc_upw(bnd_idx,levp_TOA)/ &
-             flx_spc_dwn_TOA(bnd_idx)
-        ! Layer absorptance is absorbed flux normalized by flux entering layer
-        ! Define absorptance so surface + atmospheric absorptances sum to total SAS absorptance,
-        ! i.e., as fraction of insolation absorbed by atmosphere, surface, and SAS, respectively.
-        abs_spc_SAS(bnd_idx)= &
-             flx_spc_net(bnd_idx,levp_TOA)/flx_spc_dwn_TOA(bnd_idx)
-        abs_spc_sfc(bnd_idx)= &
-             flx_spc_net(bnd_idx,levp_sfc)/flx_spc_dwn_TOA(bnd_idx)
-     else ! flx_spc_dwn_TOA<=0
-        trn_spc_atm_ttl(bnd_idx)=0.0
-        rfl_spc_SAS(bnd_idx)=0.0
-        abs_spc_SAS(bnd_idx)=0.0
-        abs_spc_sfc(bnd_idx)=0.0
-     endif ! flx_spc_dwn_TOA<=0
+     if (wvl_ctr(bnd_idx)<wvl_bnd_lw_sw) then
+        if (flx_spc_dwn_TOA(bnd_idx)>real_tiny) then
+           trn_spc_atm_ttl(bnd_idx)= &
+                flx_spc_dwn_sfc(bnd_idx)/ &
+                flx_spc_dwn_TOA(bnd_idx)
+           rfl_spc_SAS(bnd_idx)= &
+                flx_spc_upw(bnd_idx,levp_TOA)/ &
+                flx_spc_dwn_TOA(bnd_idx)
+           ! Layer absorptance is absorbed flux normalized by flux entering layer
+           ! Define absorptance so surface + atmospheric absorptances sum to total SAS absorptance,
+           ! i.e., as fraction of insolation absorbed by atmosphere, surface, and SAS, respectively.
+           abs_spc_SAS(bnd_idx)= &
+                flx_spc_net(bnd_idx,levp_TOA)/flx_spc_dwn_TOA(bnd_idx)
+           abs_spc_sfc(bnd_idx)= &
+                flx_spc_net(bnd_idx,levp_sfc)/flx_spc_dwn_TOA(bnd_idx)
+        else ! flx_spc_dwn_TOA<=0
+           trn_spc_atm_ttl(bnd_idx)=0.0
+           rfl_spc_SAS(bnd_idx)=0.0
+           abs_spc_SAS(bnd_idx)=0.0
+           abs_spc_sfc(bnd_idx)=0.0
+        endif ! flx_spc_dwn_TOA<=0
+     else ! !wvl_bnd_lw_sw
+        if (flx_spc_upw(bnd_idx,levp_sfc)>real_tiny) then
+           trn_spc_atm_ttl(bnd_idx)= &
+                flx_spc_upw(bnd_idx,levp_TOA)/ &
+                flx_spc_upw(bnd_idx,levp_sfc)
+           rfl_spc_SAS(bnd_idx)=0.0
+           ! Layer absorptance is absorbed flux normalized by flux entering layer
+           ! Define absorptance so surface + atmospheric absorptances sum to total SAS absorptance,
+           ! i.e., as fraction of insolation absorbed by atmosphere, surface, and SAS, respectively.
+           abs_spc_SAS(bnd_idx)= &
+                flx_spc_net(bnd_idx,levp_TOA)/flx_spc_upw(bnd_idx,levp_sfc)
+           abs_spc_sfc(bnd_idx)= &
+                flx_spc_net(bnd_idx,levp_sfc)/flx_spc_upw(bnd_idx,levp_sfc)
+        else ! flx_spc_dwn_TOA<=0
+           trn_spc_atm_ttl(bnd_idx)=0.0
+           rfl_spc_SAS(bnd_idx)=0.0
+           abs_spc_SAS(bnd_idx)=0.0
+           abs_spc_sfc(bnd_idx)=0.0
+        endif ! flx_spc_dwn_TOA<=0
+     endif ! !wvl_bnd_lw_sw
      if (flx_spc_dwn_snw(bnd_idx)>0.0) then
         alb_spc_snw(bnd_idx)= & ! [frc] Snowpack spectral flux reflectance
              flx_spc_upw(bnd_idx,levp_atm_nbr)/ &
