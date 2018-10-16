@@ -1,5 +1,7 @@
 2018-10-16  Charlie Zender  <zender@uci.edu>
 
+	* Subroutinize absorption cross-section retrieval in abs_xsx_get()
+
 	* Full support for CFC12
 
 2018-10-15  Charlie Zender  <zender@uci.edu>

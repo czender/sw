@@ -16,29 +16,30 @@ set echo
 #wvn_min=2000 # [cm-1] Minimum wavenumber
 wvn_min=10 # [cm-1] Minimum wavenumber
 wvn_max=27000 # [cm-1] Maximum wavenumber
-wvn_rsn_H2O=10 # [cm-1] Band resolution for H2O
 wvn_rsn=5 # [cm-1] Band resolution
 wvn_rsn_H2O=10 # [cm-1] Band resolution for H2O
+#wvn_rsn=1 # [cm-1] Band resolution
+#wvn_rsn_H2O=2 # [cm-1] Band resolution for H2O
 wvn_nbr_H2O=$(((wvn_max-wvn_min)/wvn_rsn_H2O))
 wvn_nbr=$(((wvn_max-wvn_min)/wvn_rsn))
 
 htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/H2O.nc -o ${DATA}/aca/mlk_H2O.nc
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/1H2_16O.nc -o ${DATA}/aca/mlk_1H2_16O.nc
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/1H2_17O.nc -o ${DATA}/aca/mlk_1H2_17O.nc
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/1H2_18O.nc -o ${DATA}/aca/mlk_1H2_18O.nc
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/1H_2H_16O.nc -o ${DATA}/aca/mlk_1H_2H_16O.nc
+#htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/1H2_16O.nc -o ${DATA}/aca/mlk_1H2_16O.nc
+#htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/1H2_17O.nc -o ${DATA}/aca/mlk_1H2_17O.nc
+#htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/1H2_18O.nc -o ${DATA}/aca/mlk_1H2_18O.nc
+#htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/1H_2H_16O.nc -o ${DATA}/aca/mlk_1H_2H_16O.nc
 
 # Carbon Dioxide:
 htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr} -i ${DATA}/hitran/CO2.nc -o ${DATA}/aca/mlk_CO2.nc
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr} -i ${DATA}/hitran/12C_16O2.nc -o ${DATA}/aca/mlk_12C_16O2.nc
+#htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr} -i ${DATA}/hitran/12C_16O2.nc -o ${DATA}/aca/mlk_12C_16O2.nc
 
 # Oxygen:
 htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/O2.nc -o ${DATA}/aca/mlk_O2.nc
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/16O2.nc -o ${DATA}/aca/mlk_16O2.nc
+#htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/16O2.nc -o ${DATA}/aca/mlk_16O2.nc
 
 # Hydroxyl:
 htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/OH.nc -o ${DATA}/aca/mlk_OH.nc
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/16O_1H.nc -o ${DATA}/aca/mlk_16O_1H.nc
+#htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/16O_1H.nc -o ${DATA}/aca/mlk_16O_1H.nc
 
 # Nitrogen:
 htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr} -i ${DATA}/hitran/N2.nc -o ${DATA}/aca/mlk_N2.nc

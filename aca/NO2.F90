@@ -2,7 +2,7 @@
 
 program NO2
   
-  ! Purpose: Converts NO2 absorption cross section data to netCDF format.
+  ! Purpose: Convert NO2 absorption cross section data to netCDF format
   
   ! Compilation:
   ! cd ${HOME}/aca; make -W NO2.F OPTS=D NO2; cd -

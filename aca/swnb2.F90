@@ -345,7 +345,7 @@ program swnb2
   use netcdf ! [mdl] netCDF interface
   use nf90_utl ! [mdl] netCDF utilities
   use phys_cst_mdl ! [mdl] Fundamental and derived physical constants
-  use rt_mdl,only:mlk_bnd_prm_get,slr_spc_get ! [mdl] Radiative transfer utilities
+  use rt_mdl,only:abs_xsx_get,mlk_bnd_prm_get,slr_spc_get ! [mdl] Radiative transfer utilities
   use skg_mdl ! [mdl] Skyglow parameters
   use sng_mdl ! [mdl] String manipulation
   use tdy_mdl,only:svp_H2O_lqd_PrK78,svp_H2O_ice_PrK78 ! [mdl] Thermodynamics
@@ -382,6 +382,7 @@ program swnb2
   integer,parameter::bnd_nbr_mpr_max=2895 ! WMO-spliced
   integer,parameter::bnd_nbr_snw_max=2895 ! WMO-spliced
   integer,parameter::bnd_nbr_max=2895 ! WMO at 1 nm spliced onto 10 cm-1 resolution H2O line absorption
+!  integer,parameter::bnd_nbr_max=13691 ! WMO at 1 nm spliced onto  2 cm-1 resolution H2O line absorption
   integer,parameter::chn_nbr_max=12 ! [nbr] Arbitrary
   integer,parameter::lev_snw_nbr_max=5 ! CLM snow model resolution
   integer,parameter::lev_nbr_max=110 ! roughly 10 mb resolution from 1010 mb to TOA
@@ -948,11 +949,9 @@ program swnb2
 
   ! CFC11 input variables
   integer abs_xsx_CFC11_id
-  integer wvl_grd_CFC11_id
   
   ! CFC12 input variables
   integer abs_xsx_CFC12_id
-  integer wvl_grd_CFC12_id
   
   ! Reflectance input variables
   integer wvl_grd_rfl_id
@@ -1422,14 +1421,14 @@ program swnb2
   real wvl_grd_NO2(bnd_nbr_NO2_max+1)
   
   ! CFC11 input variables
-  real abs_xsx_CFC11_dsk(bnd_nbr_CFC11_max)
+  real,dimension(:),allocatable::abs_xsx_CFC11_dsk
+  real,dimension(:),allocatable::wvl_grd_CFC11
   real abs_xsx_CFC11(bnd_nbr_max)
-  real wvl_grd_CFC11(bnd_nbr_CFC11_max+1)
   
   ! CFC12 input variables
-  real abs_xsx_CFC12_dsk(bnd_nbr_CFC12_max)
+  real,dimension(:),allocatable::abs_xsx_CFC12_dsk
+  real,dimension(:),allocatable::wvl_grd_CFC12
   real abs_xsx_CFC12(bnd_nbr_max)
-  real wvl_grd_CFC12(bnd_nbr_CFC12_max+1)
   
   ! H2OH2O input variables
   real abs_xsx_H2OH2O_dsk(bnd_nbr_H2OH2O_max)
@@ -3258,42 +3257,12 @@ program swnb2
   ! Close file
   rcd=nf90_wrp_close(nc_id,fl_NO2,'Ingested') ! [fnc] Close file
   
-  ! Ingest fl_CFC11
-  rcd=nf90_wrp_open(fl_CFC11,nf90_nowrite,nc_id)
-  ! Get dimension IDs
-  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
-  ! Get dimension sizes
-  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_CFC11),sbr_nm//": inquire_dim bnd")
-  if (bnd_nbr_CFC11>bnd_nbr_CFC11_max) stop 'bnd_nbr_CFC11>bnd_nbr_CFC11_max'
-  cnt_bnd(1)=bnd_nbr_CFC11
-  cnt_bndp(1)=bnd_nbr_CFC11+1
-  ! Get variable IDs
-  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_CFC11',abs_xsx_CFC11_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_grd',wvl_grd_CFC11_id)
-  ! Get data
-  rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_CFC11_id,abs_xsx_CFC11_dsk,srt_one,cnt_bnd),"gv abs_xsx_CFC11_dsk")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_grd_CFC11_id,wvl_grd_CFC11,srt_one,cnt_bndp),"gv wvl_grd_CFC11")
-  ! Close file
-  rcd=nf90_wrp_close(nc_id,fl_CFC11,'Ingested') ! [fnc] Close file
-  
-  ! Ingest fl_CFC12
-  rcd=nf90_wrp_open(fl_CFC12,nf90_nowrite,nc_id)
-  ! Get dimension IDs
-  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
-  ! Get dimension sizes
-  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_CFC12),sbr_nm//": inquire_dim bnd")
-  if (bnd_nbr_CFC12>bnd_nbr_CFC12_max) stop 'bnd_nbr_CFC12>bnd_nbr_CFC12_max'
-  cnt_bnd(1)=bnd_nbr_CFC12
-  cnt_bndp(1)=bnd_nbr_CFC12+1
-  ! Get variable IDs
-  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_CFC12',abs_xsx_CFC12_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_grd',wvl_grd_CFC12_id)
-  ! Get data
-  rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_CFC12_id,abs_xsx_CFC12_dsk,srt_one,cnt_bnd),"gv abs_xsx_CFC12_dsk")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_grd_CFC12_id,wvl_grd_CFC12,srt_one,cnt_bndp),"gv wvl_grd_CFC12")
-  ! Close file
-  rcd=nf90_wrp_close(nc_id,fl_CFC12,'Ingested') ! [fnc] Close file
-  
+  call abs_xsx_get(fl_CFC11,bnd_nbr_CFC11, &
+       abs_xsx_CFC11_dsk,wvl_grd_CFC11)
+
+  call abs_xsx_get(fl_CFC12,bnd_nbr_CFC12, &
+       abs_xsx_CFC12_dsk,wvl_grd_CFC12)
+
   ! Ingest fl_H2OH2O
   rcd=nf90_wrp_open(fl_H2OH2O,nf90_nowrite,nc_id)
   ! Get dimension IDs
@@ -4744,6 +4713,8 @@ program swnb2
      enddo                     ! end loop over bnd
   endif ! endif dbg
   
+  ! Retrieve cross-sections rebinned to output wavelength grid
+
   ! Get TOA solar spectrum
   slr_spc_xtr_typ=xtr_fll_ngh ! Use xtr_fll_ngh on solar spectra
   call slr_spc_get(fl_slr,wvl_min,wvl_max,bnd_nbr,flx_slr_frc,slr_spc_xtr_typ,slr_spc_xtr_typ)
@@ -6393,13 +6364,14 @@ program swnb2
         end if ! !flg_mie
 
         ! Avoid divide-by-zero conditions in rare, diagnostic cases where ...
-        if (odsl_spc_ttl(bnd_idx,lev_idx)<=0.0) then
+        if (odsl_spc_ttl(bnd_idx,lev_idx) <= 0.0) then
            ! ... All scattering is turned off ... 
            sca_frc_Ray(lev_idx)=0.0
            sca_frc_HG(lev_idx)=0.0
            sca_frc_Mie(lev_idx)=0.0
            ss_alb_fct(bnd_idx,lev_idx)=0.0
-        else if (odsl_spc_ttl(bnd_idx,lev_idx)==odsl_Ray(lev_idx)) then
+#ifdef NOT_DEFINED
+        else if (odsl_spc_ttl(bnd_idx,lev_idx) == odsl_Ray(lev_idx)) then
            ! ... All scattering is Rayleigh scattering ...
            sca_frc_Ray(lev_idx)=1.0
            sca_frc_HG(lev_idx)=0.0
@@ -6408,6 +6380,7 @@ program swnb2
            ss_alb_fct(bnd_idx,lev_idx)= &
                 odsl_spc_ttl(bnd_idx,lev_idx)/ &
                 odxl_spc_ttl(bnd_idx,lev_idx)
+#endif /* NOT_DEFINED */
         else ! endif Rayleight scattering only
            ! ... Some scattering is particle scattering ...
            ! Single scattering albedo is ill-conditioned when 

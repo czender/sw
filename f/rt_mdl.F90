@@ -17,6 +17,120 @@ module rt_mdl ! [mdl] Radiative transfer utilities
   
 contains
   
+  subroutine abs_xsx_get(fl_in,bnd_nbr, &
+       abs_xsx,wvl_grd, &
+       abs_xsx_dadT,tpt_std, &
+       qnt_yld, &
+       wvl_ctr,wvl_min,wvl_max)
+    use dbg_mdl ! [mdl] Debugging constants, prg_nm, dbg_lvl
+    use netcdf ! [mdl] netCDF interface
+    use nf90_utl ! [mdl] netCDF utilities
+    use wvl_mdl ! [mdl] Wavelength grid parameters
+    implicit none
+    ! Parameters
+    character(len=*),parameter::sbr_nm='abs_xsx_get' ! [sng] Subroutine name
+    ! Input
+    character(len=*),intent(in)::fl_in
+    ! Output
+    integer,intent(out)::bnd_nbr
+    real,dimension(:),allocatable,intent(out)::abs_xsx
+    real,dimension(:),allocatable,intent(out)::wvl_grd
+    real,dimension(:),allocatable,optional,intent(out)::tpt_std
+    real,dimension(:),allocatable,optional,intent(out)::abs_xsx_dadT
+    real,dimension(:),allocatable,optional,intent(out)::qnt_yld
+    real,dimension(:),allocatable,optional,intent(out)::wvl_ctr
+    real,dimension(:),allocatable,optional,intent(out)::wvl_min
+    real,dimension(:),allocatable,optional,intent(out)::wvl_max
+
+    ! Local
+    integer::bnd_dmn_id
+    integer::cnt_bnd(1)
+    integer::cnt_bndp(1)
+    integer::nc_id
+    integer::rcd=nf90_noerr ! [rcd] Return success code
+    integer::srt_one(1)
+
+    ! Cross-section file input variables
+    integer::abs_xsx_id
+    integer::abs_xsx_dadT_id
+    integer::qnt_yld_id
+    integer::tpt_std_id
+    integer::wvl_ctr_id
+    integer::wvl_grd_id
+    integer::wvl_min_id
+    integer::wvl_max_id
+    
+    ! Main Code
+    if (dbg_lvl >= dbg_sbr) write (6,'(a)') 'Entering '//sbr_nm
+    
+    ! Ingest fl_in
+    rcd=nf90_wrp_open(fl_in,nf90_nowrite,nc_id)
+    ! Get dimension IDs
+    rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
+    
+    ! Get dimension sizes
+    rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr),sbr_nm//": inquire_dim bnd")
+    !if (bnd_nbr>bnd_nbr_max) stop 'bnd_nbr>bnd_nbr_max'
+    cnt_bnd(1)=bnd_nbr
+    cnt_bndp(1)=bnd_nbr+1
+    
+    allocate(abs_xsx(bnd_nbr),stat=rcd)
+    if(rcd /= 0) stop "allocate() failed for abs_xsx"
+    allocate(wvl_grd(bnd_nbr+1),stat=rcd)
+    if(rcd /= 0) stop "allocate() failed for wvl_grd"
+
+    ! Get variable IDs
+    rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx',abs_xsx_id)
+    rcd=nf90_wrp_inq_varid(nc_id,'wvl_grd',wvl_grd_id)
+
+    ! Get data
+    rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_id,abs_xsx,srt_one,cnt_bnd),"gv abs_xsx")
+    rcd=nf90_wrp(nf90_get_var(nc_id,wvl_grd_id,wvl_grd,srt_one,cnt_bndp),"gv wvl_grd")
+
+    if(present(abs_xsx_dadT)) then
+       allocate(abs_xsx_dadT(bnd_nbr),stat=rcd)
+       if(rcd /= 0) stop "allocate() failed for abs_xsx_dadT"
+       rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_dadT',abs_xsx_dadT_id)
+       rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_dadT_id,abs_xsx_dadT,srt_one,cnt_bnd),"gv abs_xsx_dadT")
+    endif ! !abs_xsx_dadT
+    if(present(tpt_std)) then
+       allocate(tpt_std(bnd_nbr),stat=rcd)
+       if(rcd /= 0) stop "allocate() failed for tpt_std"
+       rcd=nf90_wrp_inq_varid(nc_id,'tpt_std',tpt_std_id)
+       rcd=nf90_wrp(nf90_get_var(nc_id,tpt_std_id,tpt_std,srt_one,cnt_bnd),"gv tpt_std")
+    endif ! !tpt_std
+    if(present(qnt_yld)) then
+       allocate(qnt_yld(bnd_nbr),stat=rcd)
+       if(rcd /= 0) stop "allocate() failed for qnt_yld"
+       rcd=nf90_wrp_inq_varid(nc_id,'qnt_yld',qnt_yld_id)
+       rcd=nf90_wrp(nf90_get_var(nc_id,qnt_yld_id,qnt_yld,srt_one,cnt_bnd),"gv qnt_yld")
+    endif ! !qnt_yld
+    if(present(wvl_ctr)) then
+       allocate(wvl_ctr(bnd_nbr),stat=rcd)
+       if(rcd /= 0) stop "allocate() failed for wvl_ctr"
+       rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_id)
+       rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_id,wvl_ctr,srt_one,cnt_bnd),"gv wvl_ctr")
+    endif ! !wvl_ctr
+    if(present(wvl_min)) then
+       allocate(wvl_min(bnd_nbr),stat=rcd)
+       if(rcd /= 0) stop "allocate() failed for wvl_min"
+       rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_id)
+       rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_id,wvl_min,srt_one,cnt_bnd),"gv wvl_min")
+    endif ! !wvl_min
+    if(present(wvl_max)) then
+       allocate(wvl_max(bnd_nbr),stat=rcd)
+       if(rcd /= 0) stop "allocate() failed for wvl_max"
+       rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_id)
+       rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_id,wvl_max,srt_one,cnt_bnd),"gv wvl_max")
+    endif ! !wvl_max
+
+    ! Close file
+    rcd=nf90_wrp_close(nc_id,fl_in,'Ingested') ! [fnc] Close file
+    
+    if (dbg_lvl >= dbg_sbr) write (6,'(a)') 'Exiting '//sbr_nm
+    return
+  end subroutine abs_xsx_get                       ! end abs_xsx_get()
+
   subroutine mlk_bnd_prm_get(fl_in,bnd_nbr, &
        A_phi,A_psi,B_phi,B_psi,S_d_abs_cff_mss,S_p_abs_cff_mss, &
        wvl_ctr,wvl_min,wvl_max)

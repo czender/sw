@@ -72,7 +72,7 @@ program htrn2nb
   character(len=*),parameter::nlc=char(0) ! [sng] NUL character = ASCII 0 = char(0)
   character(len=*),parameter::sbr_nm='htrn2nb' ! [sng] Subroutine name
   integer,parameter::r4=selected_real_kind(p=6) ! r4: 4B (C float) default, 8B (C double) possible
-  integer,parameter::bnd_nbr_max=10000   ! 0.0--50000.0 cm-1 in 5 cm-1 bands
+  integer,parameter::bnd_nbr_max=50000   ! 0.0--50000.0 cm-1 in 1 cm-1 bands
   integer,parameter::fl_in_unit=73
   integer,parameter::ln_nbr_max=600000 ! 20181001 HITRAN16 O3 from 0.2--100.0 um has 449570, CO2 has 559874
   integer,parameter::tpt_nbr_max=140     ! 180.0--320.0 K in 1 dgr increments
