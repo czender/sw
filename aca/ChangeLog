@@ -1,5 +1,7 @@
 2018-10-15  Charlie Zender  <zender@uci.edu>
 
+	* Subroutinize band parameter retrieval in mlk_bnd_prm_get()
+
 	* Use wvl_bnd_lw_sw to set LW/SW boundary for diffusivity approximation and transmission diagnostics
 
 2018-10-13  Charlie Zender  <zender@uci.edu>

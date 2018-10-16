@@ -17,6 +17,107 @@ module rt_mdl ! [mdl] Radiative transfer utilities
   
 contains
   
+  subroutine mlk_bnd_prm_get(fl_in,bnd_nbr, &
+       A_phi,A_psi,B_phi,B_psi,S_d_abs_cff_mss,S_p_abs_cff_mss, &
+       wvl_ctr,wvl_min,wvl_max)
+    use dbg_mdl ! [mdl] Debugging constants, prg_nm, dbg_lvl
+    use netcdf ! [mdl] netCDF interface
+    use nf90_utl ! [mdl] netCDF utilities
+    use wvl_mdl ! [mdl] Wavelength grid parameters
+    implicit none
+    ! Parameters
+    character(len=*),parameter::sbr_nm='mlk_bnd_prm_get' ! [sng] Subroutine name
+    ! Input
+    character(len=*),intent(in)::fl_in
+    ! Output
+    integer,intent(out)::bnd_nbr
+    real,dimension(:),allocatable,intent(out)::A_phi
+    real,dimension(:),allocatable,intent(out)::A_psi
+    real,dimension(:),allocatable,intent(out)::B_phi
+    real,dimension(:),allocatable,intent(out)::B_psi
+    real,dimension(:),allocatable,intent(out)::S_d_abs_cff_mss
+    real,dimension(:),allocatable,intent(out)::S_p_abs_cff_mss
+    real,dimension(:),allocatable,intent(out)::wvl_max
+    real,dimension(:),allocatable,intent(out)::wvl_min
+    real,dimension(:),allocatable,intent(out)::wvl_ctr
+    ! Local
+    integer::bnd_dmn_id
+    integer::cnt_bnd(1)
+    integer::nc_id
+    integer::rcd=nf90_noerr ! [rcd] Return success code
+    integer::srt_one(1)
+
+    ! Narrow band CO2 input variables
+    integer::A_phi_id
+    integer::A_psi_id
+    integer::B_phi_id
+    integer::B_psi_id
+    integer::S_d_abs_cff_mss_id
+    integer::S_p_abs_cff_mss_id
+    integer::wvl_max_id
+    integer::wvl_min_id
+    integer::wvl_ctr_id
+    
+    ! Main Code
+    if (dbg_lvl >= dbg_sbr) write (6,'(a)') 'Entering '//sbr_nm
+    
+    ! Ingest fl_in
+    rcd=nf90_wrp_open(fl_in,nf90_nowrite,nc_id)
+    ! Get dimension IDs
+    rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
+    
+    ! Get dimension sizes
+    rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr),sbr_nm//": inquire_dim bnd")
+    !if (bnd_nbr>bnd_nbr_max) stop 'bnd_nbr>bnd_nbr_max'
+    cnt_bnd(1)=bnd_nbr
+    
+    allocate(A_phi(bnd_nbr),stat=rcd)
+    if(rcd /= 0) stop "allocate() failed for A_phi"
+    allocate(A_psi(bnd_nbr),stat=rcd)
+    if(rcd /= 0) stop "allocate() failed for A_psi"
+    allocate(B_phi(bnd_nbr),stat=rcd)
+    if(rcd /= 0) stop "allocate() failed for B_phi"
+    allocate(B_psi(bnd_nbr),stat=rcd)
+    if(rcd /= 0) stop "allocate() failed for B_psi"
+    allocate(S_d_abs_cff_mss(bnd_nbr),stat=rcd)
+    if(rcd /= 0) stop "allocate() failed for S_d_abs_cff_mss"
+    allocate(S_p_abs_cff_mss(bnd_nbr),stat=rcd)
+    if(rcd /= 0) stop "allocate() failed for S_p_abs_cff_mss"
+    allocate(wvl_max(bnd_nbr),stat=rcd)
+    if(rcd /= 0) stop "allocate() failed for wvl_max"
+    allocate(wvl_min(bnd_nbr),stat=rcd)
+    if(rcd /= 0) stop "allocate() failed for wvl_min"
+    allocate(wvl_ctr(bnd_nbr),stat=rcd)
+    if(rcd /= 0) stop "allocate() failed for wvl_ctr"
+    
+    ! Get variable IDs
+    rcd=nf90_wrp_inq_varid(nc_id,'A_phi',A_phi_id)
+    rcd=nf90_wrp_inq_varid(nc_id,'A_psi',A_psi_id)
+    rcd=nf90_wrp_inq_varid(nc_id,'B_phi',B_phi_id)
+    rcd=nf90_wrp_inq_varid(nc_id,'B_psi',B_psi_id)
+    rcd=nf90_wrp_inq_varid(nc_id,'S_d_abs_cff_mss',S_d_abs_cff_mss_id)
+    rcd=nf90_wrp_inq_varid(nc_id,'S_p_abs_cff_mss',S_p_abs_cff_mss_id)
+    rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_id)
+    rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_id)
+    rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_id)
+    
+    ! Get data
+    rcd=nf90_wrp(nf90_get_var(nc_id,A_phi_id,A_phi,srt_one,cnt_bnd),"gv A_phi")
+    rcd=nf90_wrp(nf90_get_var(nc_id,A_psi_id,A_psi,srt_one,cnt_bnd),"gv A_psi")
+    rcd=nf90_wrp(nf90_get_var(nc_id,B_phi_id,B_phi,srt_one,cnt_bnd),"gv B_phi")
+    rcd=nf90_wrp(nf90_get_var(nc_id,B_psi_id,B_psi,srt_one,cnt_bnd),"gv B_psi")
+    rcd=nf90_wrp(nf90_get_var(nc_id,S_d_abs_cff_mss_id,S_d_abs_cff_mss,srt_one,cnt_bnd),"gv S_d_abs_cff_mss")
+    rcd=nf90_wrp(nf90_get_var(nc_id,S_p_abs_cff_mss_id,S_p_abs_cff_mss,srt_one,cnt_bnd),"gv S_p_abs_cff_mss")
+    rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_id,wvl_max,srt_one,cnt_bnd),"gv wvl_max")
+    rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_id,wvl_min,srt_one,cnt_bnd),"gv wvl_min")
+    rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_id,wvl_ctr,srt_one,cnt_bnd),"gv wvl_ctr")
+    ! Close file
+    rcd=nf90_wrp_close(nc_id,fl_in,'Ingested') ! [fnc] Close file
+    
+    if (dbg_lvl >= dbg_sbr) write (6,'(a)') 'Exiting '//sbr_nm
+    return
+  end subroutine mlk_bnd_prm_get                       ! end mlk_bnd_prm_get()
+
   subroutine slr_spc_get_CCM(fl_slr,wvl_min,wvl_max,wvl_nbr,flx_slr_frc,xtr_typ_LHS,xtr_typ_RHS)
     ! Purpose: Wrapper routine for slr_spc_get which takes care of non-monotonicity of CCM wavelength grid
     use dbg_mdl ! [mdl] Debugging constants, prg_nm, dbg_lvl
@@ -32,7 +133,7 @@ contains
     ! Output
     real,intent(out)::flx_slr_frc(wvl_nbr)
     ! Local
-    integer wvl_nbr_tmp
+    integer::wvl_nbr_tmp
     
     ! Main Code
     if (dbg_lvl >= dbg_sbr) write (6,'(a)') 'Entering slr_spc_get_CCM()'
@@ -76,9 +177,9 @@ contains
     ! Output
     real,intent(out)::dat_out(out_nbr)     ! Input data rebinned to output grid
     ! Local
-    integer idx               ! [idx] Counting index
-    integer out_idx_srt       ! [idx] Starting index of current output block
-    integer out_nbr_tmp       ! [nbr] Number of output bins in current output block
+    integer::idx               ! [idx] Counting index
+    integer::out_idx_srt       ! [idx] Starting index of current output block
+    integer::out_nbr_tmp       ! [nbr] Number of output bins in current output block
     real grd_out(bnd_nbr_CCM_SW_max+1) ! Output grid
     
     ! Main Code
@@ -144,23 +245,23 @@ contains
     ! Output
     real,intent(out)::flx_frc_out(wvl_out_nbr)
     ! Local
-    integer wvl_in_nbr        ! [nbr] Dimension size
-    integer rcd
-    integer nc_id
-    integer wvl_dim_id
+    integer::wvl_in_nbr        ! [nbr] Dimension size
+    integer::rcd
+    integer::nc_id
+    integer::wvl_dim_id
     real wvl_min_out_mnt(wvl_out_nbr) ! [m] Minimum wavelength on montonically increasing grid
     real wvl_max_out_mnt(wvl_out_nbr) ! [m] Maximum wavelength on montonically increasing grid
     ! Solar spectrum input variables
-    integer flx_frc_blr_in_id
-    integer wvl_max_in_id
-    integer wvl_min_in_id
+    integer::flx_frc_blr_in_id
+    integer::wvl_max_in_id
+    integer::wvl_min_in_id
     ! Solar Spectrum input variables
     ! Allocatable variables
     real,dimension(:),allocatable::flx_frc_blr_in
     real,dimension(:),allocatable::wvl_max_in 
     real,dimension(:),allocatable::wvl_min_in 
     ! Local
-    integer out_idx
+    integer::out_idx
     logical mnt               ! Monotonicity flag
     logical REVERSE
     real flx_frc_blr_max_out(wvl_out_nbr)
@@ -300,23 +401,23 @@ contains
     ! Output
     real,intent(out)::var_out(wvl_out_nbr)
     ! Local
-    integer wvl_in_nbr        ! dimension size
-    integer grd_in_nbr        ! dimension size
-    integer rcd
-    integer nc_id
-    integer wvl_dim_id
-    integer grd_dim_id
-    integer xtr_typ_LHS
-    integer xtr_typ_RHS
+    integer::wvl_in_nbr        ! dimension size
+    integer::grd_in_nbr        ! dimension size
+    integer::rcd
+    integer::nc_id
+    integer::wvl_dim_id
+    integer::grd_dim_id
+    integer::xtr_typ_LHS
+    integer::xtr_typ_RHS
     ! Transmission input variables
-    integer var_in_id
-    integer wvl_grd_in_id
+    integer::var_in_id
+    integer::wvl_grd_in_id
     ! Transmission input variables
     ! Allocatable variables
     real,dimension(:),allocatable::var_in
     real,dimension(:),allocatable::wvl_grd_in 
     ! Local
-    integer out_idx
+    integer::out_idx
     
     ! Main Code
     if (dbg_lvl >= dbg_sbr) write (6,'(a)') 'Entering '//sbr_nm
@@ -385,7 +486,7 @@ contains
     real,intent(out)::wvl_max(bnd_nbr_CCM_LW_max) ! [m] Maximum wavelength in band
     real,intent(out)::wvl_dlt(bnd_nbr_CCM_LW_max) ! [m] Bandwidth
     ! Local
-    integer idx               ! Counting index
+    integer::idx               ! Counting index
     real wvn_min(bnd_nbr_CCM_LW_max) ! [cm-1]
     real wvn_max(bnd_nbr_CCM_LW_max) ! [cm-1]
     data wvn_min / 250.0,500.0,650.0,800.0,1000.0,1200.0 / ! [cm-1]
@@ -420,7 +521,7 @@ contains
     real,intent(out)::wvl_max(bnd_nbr_CCM_SW_max) ! Maximum wavelength in band
     real,intent(out)::wvl_dlt(bnd_nbr_CCM_SW_max) ! Bandwidth
     ! Local
-    integer idx               ! Counting index
+    integer::idx               ! Counting index
     real(selected_real_kind(p=12)) wvl_min_mcr(bnd_nbr_CCM_SW_max)
     real(selected_real_kind(p=12)) wvl_max_mcr(bnd_nbr_CCM_SW_max)
     ! Setup CCM wavelength grid
@@ -460,20 +561,20 @@ contains
     ! Output
     integer,intent(out)::bnd_dim_id        ! Dimension ID for bnd
     ! Local
-    integer bnd_nbr           ! Number of spectral intervals
-    integer idx               ! Counting index
-    integer nc_id             ! netCDF file ID of output file
-    integer rcd               ! Return success code
-    integer bnd_id            ! Coordinate ID for bnd
-    integer wvl_ctr_id        
-    integer wvl_max_id
-    integer wvl_min_id
-    integer wvl_dlt_id
-    integer wvn_id        
-    integer wvn_ctr_id        
-    integer wvn_max_id
-    integer wvn_min_id
-    integer wvn_dlt_id
+    integer::bnd_nbr           ! Number of spectral intervals
+    integer::idx               ! Counting index
+    integer::nc_id             ! netCDF file ID of output file
+    integer::rcd               ! Return success code
+    integer::bnd_id            ! Coordinate ID for bnd
+    integer::wvl_ctr_id        
+    integer::wvl_max_id
+    integer::wvl_min_id
+    integer::wvl_dlt_id
+    integer::wvn_id        
+    integer::wvn_ctr_id        
+    integer::wvn_max_id
+    integer::wvn_min_id
+    integer::wvn_dlt_id
     real wvl(bnd_nbr_CCM_SW_max) ! Nominal wavelength coordinate
     real wvl_ctr(bnd_nbr_CCM_SW_max) ! Center of band in wavelength space
     real wvl_min(bnd_nbr_CCM_SW_max) ! Minimum wavelength in band
@@ -666,8 +767,7 @@ contains
     ! Output
     real,intent(out)::odal_H2OH2O(lvl_nbr) ! [kg m-2]
     ! Local
-    integer  &
-         idx
+    integer::idx
     
     real &
          abs_xsx_H2OH2O_cm2, &

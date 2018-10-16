@@ -61,6 +61,8 @@ program CFC11
   
   implicit none
   ! Parameters
+  character(*),parameter::CVS_Date='$Date$' ! [sng] Date string
+  character(*),parameter::CVS_Revision='$Revision$' ! [sng] File revision string
   character(len=*),parameter::CVS_Id='$Id$' ! [sng] CVS Identification
   character(len=*),parameter::sbr_nm='CFC11' ! [sng] Subroutine name
   character(*),parameter::fl_in_HTR16_cold='CCl3F_278.1K-760.0Torr_570.0-6500.0_0.11_N2_50_43.xsc'
@@ -84,82 +86,78 @@ program CFC11
   ! Input Arguments
   ! Input/Output Arguments
   ! Output Arguments
-  ! Local workspace
+
+  ! Command-line parsing
   character(2)::dsh_key ! [sng] command-line dash and switch
   character(200)::cmd_ln ! [sng] command-line
   character(200)::prg_ID ! [sng] Program ID
   character(26)::lcl_date_time ! [sng] Time formatted as Day Mth DD HH:MM:SS TZ YYYY
   character(80)::arg_val ! [sng] command-line argument value
-
-  character(28)::CVS_Date
-  character(16)::CVS_Revision
-  character(80)::opt_sng ! [sng] Option string
-  character(sng_lng_dfl_fl)::drc_in=nlc       ! [sng] Input directory
-  character(sng_lng_dfl_fl)::drc_out=nlc      ! [sng] Output directory
-  character(sng_lng_dfl_fl)::src_fl_sng
-  character(sng_lng_dfl_fl)::src_rfr_sng
-  
-  ! Set defaults for command-line options 
-  character(80)::fl_in='in.nc'//nlc ! [sng] Input file
-  character(80)::fl_out='foo.nc'//nlc ! [sng] Output file
-  character(80)::fl_slr='foo.nc'//nlc ! [sng] Solar spectra file
-
-  ! Command-line parsing
+  character(80)::opt_sng=nlc ! [sng] Option string
   integer::arg_idx ! [idx] Counting index
   integer::arg_nbr ! [nbr] Number of command-line arguments
   integer::opt_lng ! [nbr] Length of option
 
-  logical HTR16
+  ! Set defaults for command-line options 
+  character(sng_lng_dfl_fl)::drc_in='/data/zender/aca'//nlc       ! [sng] Input directory
+  character(sng_lng_dfl_fl)::drc_out=nlc ! [sng] Output directory
+  character(80)::fl_in='in.nc'//nlc ! [sng] Input file
+  character(80)::fl_out='foo.nc'//nlc ! [sng] Output file
+  character(80)::fl_slr=fl_slr_dfl//nlc ! [sng] Solar spectra file
+
+  ! Local workspace
+  character(sng_lng_dfl_fl)::src_fl_sng
+  character(sng_lng_dfl_fl)::src_rfr_sng
   
   ! HITRAN XSC format
-  character brd_nm_htrn*3 ! [sng] Broadener (Air, N2, or self-broadened (if left blank))
-  character chr_foo_htrn*4 ! [sng] Reserved for future use
-  character mA_sng_htrn*2 ! [sng] mA
-  character mlc_frm_htrn*20 ! [sng] Molecule chemical formula (right-justified)
-  character mlc_nm_htrn*15 ! [sng] Molecule common name
-  integer bnd_nbr_htrn ! [nbr] Number of wavenumber bins
-  integer rfr_nbr_htrn ! [idx] Reference number (# of bibliographic reference in HITRAN GRH17 reference list)
-  real prs_htrn ! [Pa] Pressure
-  real rsn_nst_htrn ! [m] Instrument resolution
-  real tpt_htrn ! [K] Temperature
-  real wvn_max_htrn ! [cm-1] Wavenumber at end of range
-  real wvn_min_htrn ! [cm-1] Wavenumber at start of range
-  real xsx_max_htrn ! [cm2 mlc-1] Maximum cross-section
-  real wvn_rsn ! [cm-1] Wavenumber resolution
+  character::brd_nm_htrn*3 ! [sng] Broadener (Air, N2, or self-broadened (if left blank))
+  character::chr_foo_htrn*4 ! [sng] Reserved for future use
+  character::mA_sng_htrn*2 ! [sng] mA
+  character::mlc_frm_htrn*20 ! [sng] Molecule chemical formula (right-justified)
+  character::mlc_nm_htrn*15 ! [sng] Molecule common name
+  integer::bnd_nbr_htrn ! [nbr] Number of wavenumber bins
+  integer::rfr_nbr_htrn ! [idx] Reference number (# of bibliographic reference in HITRAN GRH17 reference list)
+  real::prs_htrn ! [Pa] Pressure
+  real::rsn_nst_htrn ! [m] Instrument resolution
+  real::tpt_htrn ! [K] Temperature
+  real::wvn_max_htrn ! [cm-1] Wavenumber at end of range
+  real::wvn_min_htrn ! [cm-1] Wavenumber at start of range
+  real::xsx_max_htrn ! [cm2 mlc-1] Maximum cross-section
+  real::wvn_rsn ! [cm-1] Wavenumber resolution
   
-  integer bnd_dmn_id        ! Dimension ID for bands
-  integer grd_dmn_id        ! Dimension ID for grid
-  integer bnd_idx           ! Counting index
-  integer nc_id             ! File handle
-  integer bnd_nbr ! [nbr] Dimension size
-  integer tpt_cold_id
-  integer tpt_warm_id
-  integer tpt_std_id
-  integer Rayleigh_sca_xsx_id
-  integer slr_spc_xtr_typ
-  integer abs_cff_mss_CFC11_id
-  integer abs_xsx_CFC11_cold_id
-  integer abs_xsx_CFC11_dadT_id
-  integer abs_xsx_CFC11_id
-  integer abs_xsx_CFC11_tpt_rfr_id
-  integer abs_xsx_CFC11_warm_id
-  integer bnd_id            ! Coordinate ID
-  integer flx_bnd_dwn_TOA_id
-  integer flx_bnd_pht_dwn_TOA_id
-  integer flx_slr_frc_id
-  integer flx_spc_dwn_TOA_id
-  integer idx_rfr_air_STP_id
-  integer nrg_pht_id
-  integer wvl_ctr_id
-  integer wvl_grd_id
-  integer wvl_max_id
-  integer wvl_min_id
-  integer wvl_dlt_id
-  integer wvn_ctr_id
-  integer wvn_grd_id
-  integer wvn_max_id
-  integer wvn_min_id
-  integer wvn_dlt_id
+  integer::bnd_dmn_id        ! Dimension ID for bands
+  integer::grd_dmn_id        ! Dimension ID for grid
+  integer::bnd_idx           ! Counting index
+  integer::nc_id             ! File handle
+  integer::bnd_nbr ! [nbr] Dimension size
+  integer::tpt_cold_id
+  integer::tpt_warm_id
+  integer::tpt_std_id
+  integer::Rayleigh_sca_xsx_id
+  integer::slr_spc_xtr_typ
+  integer::abs_cff_mss_CFC11_id
+  integer::abs_xsx_CFC11_cold_id
+  integer::abs_xsx_CFC11_dadT_id
+  integer::abs_xsx_CFC11_id
+  integer::abs_xsx_CFC11_tpt_rfr_id
+  integer::abs_xsx_CFC11_warm_id
+  integer::bnd_id            ! Coordinate ID
+  integer::flx_bnd_dwn_TOA_id
+  integer::flx_bnd_pht_dwn_TOA_id
+  integer::flx_slr_frc_id
+  integer::flx_spc_dwn_TOA_id
+  integer::idx_rfr_air_STP_id
+  integer::nrg_pht_id
+  integer::wvl_ctr_id
+  integer::wvl_grd_id
+  integer::wvl_max_id
+  integer::wvl_min_id
+  integer::wvl_dlt_id
+  integer::wvn_ctr_id
+  integer::wvn_grd_id
+  integer::wvn_max_id
+  integer::wvn_min_id
+  integer::wvn_dlt_id
 
   ! netCDF4 
   integer::dfl_lvl=0 ! [enm] Deflate level
@@ -167,10 +165,6 @@ program CFC11
   integer::flg_dfl=1 ! [flg] Turn on netCDF4 deflate filter
   integer::fl_out_fmt=nco_format_undefined ! [enm] Output file format
   integer::nf90_create_mode=nf90_clobber ! [enm] Mode flag for nf90_create() call
-  
-  real tpt_cold
-  real tpt_std
-  real tpt_warm
   
   ! Allocatable variables
   real,dimension(:),allocatable::Rayleigh_sca_xsx
@@ -202,25 +196,19 @@ program CFC11
   real,dimension(:),allocatable::wvn_min
   real,dimension(:),allocatable::xsx_wgt_flx
   
-  logical cmd_ln_fl_in
-  logical cmd_ln_fl_out
-
+  logical::cmd_ln_fl_in=.false.
+  logical::cmd_ln_fl_out=.false.
+  logical::HTR16=.true.
+  
+  real::tpt_cold=tpt_cold_HTR16
+  real::tpt_std=250.0 ! Temperature at which generic CFC11 cross sections will be archived
+  real::tpt_warm=tpt_warm_HTR16
+  
   ! Main code
 
   ! Initialize default values
-  CVS_Date='$Date$'
-  CVS_Revision='$Revision$'
-  HTR16=.true.
-  cmd_ln_fl_in=.false.
-  cmd_ln_fl_out=.false.
   dbg_lvl=dbg_off
-  drc_in='/data/zender/aca'//nlc ! [sng] Input directory
-  drc_out=''                ! [sng] Output directory
   fl_slr=fl_slr_dfl
-  rcd=nf90_noerr              ! nf90_noerr == 0
-  tpt_cold=tpt_cold_HTR16
-  tpt_std=250.0 ! Temperature at which generic CFC11 cross sections will be archived
-  tpt_warm=tpt_warm_HTR16
   
   ! Retrieve command line arguments
   call date_time_get(lcl_date_time)

@@ -345,7 +345,7 @@ program swnb2
   use netcdf ! [mdl] netCDF interface
   use nf90_utl ! [mdl] netCDF utilities
   use phys_cst_mdl ! [mdl] Fundamental and derived physical constants
-  use rt_mdl ! [mdl] Radiative transfer utilities
+  use rt_mdl,only:mlk_bnd_prm_get,slr_spc_get ! [mdl] Radiative transfer utilities
   use skg_mdl ! [mdl] Skyglow parameters
   use sng_mdl ! [mdl] String manipulation
   use tdy_mdl,only:svp_H2O_lqd_PrK78,svp_H2O_ice_PrK78 ! [mdl] Thermodynamics
@@ -959,105 +959,6 @@ program swnb2
   integer abs_xsx_H2OH2O_id
   integer wvl_grd_H2OH2O_id
   
-  ! Narrow band H2O input variables
-  integer A_phi_H2O_id
-  integer A_psi_H2O_id
-  integer B_phi_H2O_id
-  integer B_psi_H2O_id
-  integer S_d_abs_cff_mss_H2O_id
-  integer S_p_abs_cff_mss_H2O_id
-  integer wvl_max_H2O_id
-  integer wvl_min_H2O_id
-  integer wvl_ctr_H2O_id
-  
-  ! Narrow band CO2 input variables
-  integer A_phi_CO2_id
-  integer A_psi_CO2_id
-  integer B_phi_CO2_id
-  integer B_psi_CO2_id
-  integer S_d_abs_cff_mss_CO2_id
-  integer S_p_abs_cff_mss_CO2_id
-  integer wvl_max_CO2_id
-  integer wvl_min_CO2_id
-  integer wvl_ctr_CO2_id
-  
-  ! Narrow band OH input variables
-  integer A_phi_OH_id
-  integer A_psi_OH_id
-  integer B_phi_OH_id
-  integer B_psi_OH_id
-  integer S_d_abs_cff_mss_OH_id
-  integer S_p_abs_cff_mss_OH_id
-  integer wvl_max_OH_id
-  integer wvl_min_OH_id
-  integer wvl_ctr_OH_id
-  
-  ! Narrow band CO input variables
-  integer A_phi_CO_id
-  integer A_psi_CO_id
-  integer B_phi_CO_id
-  integer B_psi_CO_id
-  integer S_d_abs_cff_mss_CO_id
-  integer S_p_abs_cff_mss_CO_id
-  integer wvl_max_CO_id
-  integer wvl_min_CO_id
-  integer wvl_ctr_CO_id
-  
-  ! Narrow band N2 input variables
-  integer A_phi_N2_id
-  integer A_psi_N2_id
-  integer B_phi_N2_id
-  integer B_psi_N2_id
-  integer S_d_abs_cff_mss_N2_id
-  integer S_p_abs_cff_mss_N2_id
-  integer wvl_max_N2_id
-  integer wvl_min_N2_id
-  integer wvl_ctr_N2_id
-  
-  ! Narrow band N2O input variables
-  integer A_phi_N2O_id
-  integer A_psi_N2O_id
-  integer B_phi_N2O_id
-  integer B_psi_N2O_id
-  integer S_d_abs_cff_mss_N2O_id
-  integer S_p_abs_cff_mss_N2O_id
-  integer wvl_max_N2O_id
-  integer wvl_min_N2O_id
-  integer wvl_ctr_N2O_id
-  
-  ! Narrow band CH4 input variables
-  integer A_phi_CH4_id
-  integer A_psi_CH4_id
-  integer B_phi_CH4_id
-  integer B_psi_CH4_id
-  integer S_d_abs_cff_mss_CH4_id
-  integer S_p_abs_cff_mss_CH4_id
-  integer wvl_max_CH4_id
-  integer wvl_min_CH4_id
-  integer wvl_ctr_CH4_id
-  
-  ! Narrow band O3 input variables
-  integer A_phi_O3_id
-  integer A_psi_O3_id
-  integer B_phi_O3_id
-  integer B_psi_O3_id
-  integer S_d_abs_cff_mss_O3_id
-  integer S_p_abs_cff_mss_O3_id
-  integer wvl_max_O3_id
-  integer wvl_min_O3_id
-  integer wvl_ctr_O3_id
-  
-  ! Narrow band O2 input variables
-  integer A_phi_O2_id
-  integer A_psi_O2_id
-  integer B_phi_O2_id
-  integer B_psi_O2_id
-  integer S_d_abs_cff_mss_O2_id
-  integer S_p_abs_cff_mss_O2_id
-  integer wvl_max_O2_id
-  integer wvl_min_O2_id
-  integer wvl_ctr_O2_id
-  
   ! Aerosol input variables
   integer lgn_xpn_cff_aer_id
   integer asm_prm_aer_id
@@ -1526,103 +1427,103 @@ program swnb2
   real wvl_grd_H2OH2O(bnd_nbr_H2OH2O_max+1)
   
   ! Narrow band H2O input variables
-  real A_phi_H2O(bnd_nbr_H2O_max)
-  real A_psi_H2O(bnd_nbr_H2O_max)
-  real B_phi_H2O(bnd_nbr_H2O_max)
-  real B_psi_H2O(bnd_nbr_H2O_max)
-  real S_d_abs_cff_mss_H2O(bnd_nbr_H2O_max)
-  real S_p_abs_cff_mss_H2O(bnd_nbr_H2O_max)
-  real wvl_max_H2O(bnd_nbr_H2O_max)
-  real wvl_min_H2O(bnd_nbr_H2O_max)
-  real wvl_ctr_H2O(bnd_nbr_H2O_max)
+  real,dimension(:),allocatable::A_phi_H2O
+  real,dimension(:),allocatable::A_psi_H2O
+  real,dimension(:),allocatable::B_phi_H2O
+  real,dimension(:),allocatable::B_psi_H2O
+  real,dimension(:),allocatable::S_d_abs_cff_mss_H2O
+  real,dimension(:),allocatable::S_p_abs_cff_mss_H2O
+  real,dimension(:),allocatable::wvl_max_H2O
+  real,dimension(:),allocatable::wvl_min_H2O
+  real,dimension(:),allocatable::wvl_ctr_H2O
   
   ! Narrow band CO2 input variables
-  real A_phi_CO2(bnd_nbr_CO2_max)
-  real A_psi_CO2(bnd_nbr_CO2_max)
-  real B_phi_CO2(bnd_nbr_CO2_max)
-  real B_psi_CO2(bnd_nbr_CO2_max)
-  real S_d_abs_cff_mss_CO2(bnd_nbr_CO2_max)
-  real S_p_abs_cff_mss_CO2(bnd_nbr_CO2_max)
-  real wvl_max_CO2(bnd_nbr_CO2_max)
-  real wvl_min_CO2(bnd_nbr_CO2_max)
-  real wvl_ctr_CO2(bnd_nbr_CO2_max)
+  real,dimension(:),allocatable::A_phi_CO2
+  real,dimension(:),allocatable::A_psi_CO2
+  real,dimension(:),allocatable::B_phi_CO2
+  real,dimension(:),allocatable::B_psi_CO2
+  real,dimension(:),allocatable::S_d_abs_cff_mss_CO2
+  real,dimension(:),allocatable::S_p_abs_cff_mss_CO2
+  real,dimension(:),allocatable::wvl_max_CO2
+  real,dimension(:),allocatable::wvl_min_CO2
+  real,dimension(:),allocatable::wvl_ctr_CO2
   
   ! Narrow band OH input variables
-  real A_phi_OH(bnd_nbr_OH_max)
-  real A_psi_OH(bnd_nbr_OH_max)
-  real B_phi_OH(bnd_nbr_OH_max)
-  real B_psi_OH(bnd_nbr_OH_max)
-  real S_d_abs_cff_mss_OH(bnd_nbr_OH_max)
-  real S_p_abs_cff_mss_OH(bnd_nbr_OH_max)
-  real wvl_max_OH(bnd_nbr_OH_max)
-  real wvl_min_OH(bnd_nbr_OH_max)
-  real wvl_ctr_OH(bnd_nbr_OH_max)
+  real,dimension(:),allocatable::A_phi_OH
+  real,dimension(:),allocatable::A_psi_OH
+  real,dimension(:),allocatable::B_phi_OH
+  real,dimension(:),allocatable::B_psi_OH
+  real,dimension(:),allocatable::S_d_abs_cff_mss_OH
+  real,dimension(:),allocatable::S_p_abs_cff_mss_OH
+  real,dimension(:),allocatable::wvl_max_OH
+  real,dimension(:),allocatable::wvl_min_OH
+  real,dimension(:),allocatable::wvl_ctr_OH
   
   ! Narrow band CO input variables
-  real A_phi_CO(bnd_nbr_CO_max)
-  real A_psi_CO(bnd_nbr_CO_max)
-  real B_phi_CO(bnd_nbr_CO_max)
-  real B_psi_CO(bnd_nbr_CO_max)
-  real S_d_abs_cff_mss_CO(bnd_nbr_CO_max)
-  real S_p_abs_cff_mss_CO(bnd_nbr_CO_max)
-  real wvl_max_CO(bnd_nbr_CO_max)
-  real wvl_min_CO(bnd_nbr_CO_max)
-  real wvl_ctr_CO(bnd_nbr_CO_max)
+  real,dimension(:),allocatable::A_phi_CO
+  real,dimension(:),allocatable::A_psi_CO
+  real,dimension(:),allocatable::B_phi_CO
+  real,dimension(:),allocatable::B_psi_CO
+  real,dimension(:),allocatable::S_d_abs_cff_mss_CO
+  real,dimension(:),allocatable::S_p_abs_cff_mss_CO
+  real,dimension(:),allocatable::wvl_max_CO
+  real,dimension(:),allocatable::wvl_min_CO
+  real,dimension(:),allocatable::wvl_ctr_CO
   
   ! Narrow band N2 input variables
-  real A_phi_N2(bnd_nbr_N2_max)
-  real A_psi_N2(bnd_nbr_N2_max)
-  real B_phi_N2(bnd_nbr_N2_max)
-  real B_psi_N2(bnd_nbr_N2_max)
-  real S_d_abs_cff_mss_N2(bnd_nbr_N2_max)
-  real S_p_abs_cff_mss_N2(bnd_nbr_N2_max)
-  real wvl_max_N2(bnd_nbr_N2_max)
-  real wvl_min_N2(bnd_nbr_N2_max)
-  real wvl_ctr_N2(bnd_nbr_N2_max)
+  real,dimension(:),allocatable::A_phi_N2
+  real,dimension(:),allocatable::A_psi_N2
+  real,dimension(:),allocatable::B_phi_N2
+  real,dimension(:),allocatable::B_psi_N2
+  real,dimension(:),allocatable::S_d_abs_cff_mss_N2
+  real,dimension(:),allocatable::S_p_abs_cff_mss_N2
+  real,dimension(:),allocatable::wvl_max_N2
+  real,dimension(:),allocatable::wvl_min_N2
+  real,dimension(:),allocatable::wvl_ctr_N2
   
   ! Narrow band N2O input variables
-  real A_phi_N2O(bnd_nbr_N2O_max)
-  real A_psi_N2O(bnd_nbr_N2O_max)
-  real B_phi_N2O(bnd_nbr_N2O_max)
-  real B_psi_N2O(bnd_nbr_N2O_max)
-  real S_d_abs_cff_mss_N2O(bnd_nbr_N2O_max)
-  real S_p_abs_cff_mss_N2O(bnd_nbr_N2O_max)
-  real wvl_max_N2O(bnd_nbr_N2O_max)
-  real wvl_min_N2O(bnd_nbr_N2O_max)
-  real wvl_ctr_N2O(bnd_nbr_N2O_max)
+  real,dimension(:),allocatable::A_phi_N2O
+  real,dimension(:),allocatable::A_psi_N2O
+  real,dimension(:),allocatable::B_phi_N2O
+  real,dimension(:),allocatable::B_psi_N2O
+  real,dimension(:),allocatable::S_d_abs_cff_mss_N2O
+  real,dimension(:),allocatable::S_p_abs_cff_mss_N2O
+  real,dimension(:),allocatable::wvl_max_N2O
+  real,dimension(:),allocatable::wvl_min_N2O
+  real,dimension(:),allocatable::wvl_ctr_N2O
   
   ! Narrow band CH4 input variables
-  real A_phi_CH4(bnd_nbr_CH4_max)
-  real A_psi_CH4(bnd_nbr_CH4_max)
-  real B_phi_CH4(bnd_nbr_CH4_max)
-  real B_psi_CH4(bnd_nbr_CH4_max)
-  real S_d_abs_cff_mss_CH4(bnd_nbr_CH4_max)
-  real S_p_abs_cff_mss_CH4(bnd_nbr_CH4_max)
-  real wvl_max_CH4(bnd_nbr_CH4_max)
-  real wvl_min_CH4(bnd_nbr_CH4_max)
-  real wvl_ctr_CH4(bnd_nbr_CH4_max)
-  
+  real,dimension(:),allocatable::A_phi_CH4
+  real,dimension(:),allocatable::A_psi_CH4
+  real,dimension(:),allocatable::B_phi_CH4
+  real,dimension(:),allocatable::B_psi_CH4
+  real,dimension(:),allocatable::S_d_abs_cff_mss_CH4
+  real,dimension(:),allocatable::S_p_abs_cff_mss_CH4
+  real,dimension(:),allocatable::wvl_max_CH4
+  real,dimension(:),allocatable::wvl_min_CH4
+  real,dimension(:),allocatable::wvl_ctr_CH4
+
   ! Narrow band O2 input variables
-  real A_phi_O2(bnd_nbr_O2_max)
-  real A_psi_O2(bnd_nbr_O2_max)
-  real B_phi_O2(bnd_nbr_O2_max)
-  real B_psi_O2(bnd_nbr_O2_max)
-  real S_d_abs_cff_mss_O2(bnd_nbr_O2_max)
-  real S_p_abs_cff_mss_O2(bnd_nbr_O2_max)
-  real wvl_max_O2(bnd_nbr_O2_max)
-  real wvl_min_O2(bnd_nbr_O2_max)
-  real wvl_ctr_O2(bnd_nbr_O2_max)
+  real,dimension(:),allocatable::A_phi_O2
+  real,dimension(:),allocatable::A_psi_O2
+  real,dimension(:),allocatable::B_phi_O2
+  real,dimension(:),allocatable::B_psi_O2
+  real,dimension(:),allocatable::S_d_abs_cff_mss_O2
+  real,dimension(:),allocatable::S_p_abs_cff_mss_O2
+  real,dimension(:),allocatable::wvl_max_O2
+  real,dimension(:),allocatable::wvl_min_O2
+  real,dimension(:),allocatable::wvl_ctr_O2
   
   ! Narrow band O3 input variables
-  real A_phi_O3(bnd_nbr_O3_max)
-  real A_psi_O3(bnd_nbr_O3_max)
-  real B_phi_O3(bnd_nbr_O3_max)
-  real B_psi_O3(bnd_nbr_O3_max)
-  real S_d_abs_cff_mss_O3(bnd_nbr_O3_max)
-  real S_p_abs_cff_mss_O3(bnd_nbr_O3_max)
-  real wvl_max_O3(bnd_nbr_O3_max)
-  real wvl_min_O3(bnd_nbr_O3_max)
-  real wvl_ctr_O3(bnd_nbr_O3_max)
+  real,dimension(:),allocatable::A_phi_O3
+  real,dimension(:),allocatable::A_psi_O3
+  real,dimension(:),allocatable::B_phi_O3
+  real,dimension(:),allocatable::B_psi_O3
+  real,dimension(:),allocatable::S_d_abs_cff_mss_O3
+  real,dimension(:),allocatable::S_p_abs_cff_mss_O3
+  real,dimension(:),allocatable::wvl_max_O3
+  real,dimension(:),allocatable::wvl_min_O3
+  real,dimension(:),allocatable::wvl_ctr_O3
   
   ! Aerosol input variables
   real,dimension(:),allocatable::abs_cff_mss_aer_dsk
@@ -3206,316 +3107,41 @@ program swnb2
   ! Close file
   rcd=nf90_wrp_close(nc_id,fl_clm,'Ingested') ! [fnc] Close file
   
-  ! Ingest fl_H2O
-  rcd=nf90_wrp_open(fl_H2O,nf90_nowrite,nc_id)
-  ! Get dimension IDs
-  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
-  ! Get dimension sizes
-  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_H2O),sbr_nm//": inquire_dim bnd")
-  if (bnd_nbr_H2O>bnd_nbr_H2O_max) stop 'bnd_nbr_H2O>bnd_nbr_H2O_max'
-  cnt_bnd(1)=bnd_nbr_H2O
-  
-  ! Get variable IDs
-  rcd=nf90_wrp_inq_varid(nc_id,'A_phi',A_phi_H2O_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'A_psi',A_psi_H2O_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'B_phi',B_phi_H2O_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'B_psi',B_psi_H2O_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'S_d_abs_cff_mss',S_d_abs_cff_mss_H2O_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'S_p_abs_cff_mss',S_p_abs_cff_mss_H2O_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_H2O_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_H2O_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_H2O_id)
-  
-  ! Get data
-  rcd=nf90_wrp(nf90_get_var(nc_id,A_phi_H2O_id,A_phi_H2O,srt_one,cnt_bnd),"gv A_phi_H2O")
-  rcd=nf90_wrp(nf90_get_var(nc_id,A_psi_H2O_id,A_psi_H2O,srt_one,cnt_bnd),"gv A_psi_H2O")
-  rcd=nf90_wrp(nf90_get_var(nc_id,B_phi_H2O_id,B_phi_H2O,srt_one,cnt_bnd),"gv B_phi_H2O")
-  rcd=nf90_wrp(nf90_get_var(nc_id,B_psi_H2O_id,B_psi_H2O,srt_one,cnt_bnd),"gv B_psi_H2O")
-  rcd=nf90_wrp(nf90_get_var(nc_id,S_d_abs_cff_mss_H2O_id,S_d_abs_cff_mss_H2O,srt_one,cnt_bnd),"gv S_d_abs_cff_mss_H2O")
-  rcd=nf90_wrp(nf90_get_var(nc_id,S_p_abs_cff_mss_H2O_id,S_p_abs_cff_mss_H2O,srt_one,cnt_bnd),"gv S_p_abs_cff_mss_H2O")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_H2O_id,wvl_max_H2O,srt_one,cnt_bnd),"gv wvl_max_H2O")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_H2O_id,wvl_min_H2O,srt_one,cnt_bnd),"gv wvl_min_H2O")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_H2O_id,wvl_ctr_H2O,srt_one,cnt_bnd),"gv wvl_ctr_H2O")
-  ! Close file
-  rcd=nf90_wrp_close(nc_id,fl_H2O,'Ingested') ! [fnc] Close file
-  
-  ! Ingest fl_CO2
-  rcd=nf90_wrp_open(fl_CO2,nf90_nowrite,nc_id)
-  ! Get dimension IDs
-  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
-  
-  ! Get dimension sizes
-  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_CO2),sbr_nm//": inquire_dim bnd")
-  if (bnd_nbr_CO2>bnd_nbr_CO2_max) stop 'bnd_nbr_CO2>bnd_nbr_CO2_max'
-  cnt_bnd(1)=bnd_nbr_CO2
-  
-  ! Get variable IDs
-  rcd=nf90_wrp_inq_varid(nc_id,'A_phi',A_phi_CO2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'A_psi',A_psi_CO2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'B_phi',B_phi_CO2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'B_psi',B_psi_CO2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'S_d_abs_cff_mss',S_d_abs_cff_mss_CO2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'S_p_abs_cff_mss',S_p_abs_cff_mss_CO2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_CO2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_CO2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_CO2_id)
-  
-  ! Get data
-  rcd=nf90_wrp(nf90_get_var(nc_id,A_phi_CO2_id,A_phi_CO2,srt_one,cnt_bnd),"gv A_phi_CO2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,A_psi_CO2_id,A_psi_CO2,srt_one,cnt_bnd),"gv A_psi_CO2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,B_phi_CO2_id,B_phi_CO2,srt_one,cnt_bnd),"gv B_phi_CO2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,B_psi_CO2_id,B_psi_CO2,srt_one,cnt_bnd),"gv B_psi_CO2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,S_d_abs_cff_mss_CO2_id,S_d_abs_cff_mss_CO2,srt_one,cnt_bnd),"gv S_d_abs_cff_mss_CO2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,S_p_abs_cff_mss_CO2_id,S_p_abs_cff_mss_CO2,srt_one,cnt_bnd),"gv S_p_abs_cff_mss_CO2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_CO2_id,wvl_max_CO2,srt_one,cnt_bnd),"gv wvl_max_CO2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_CO2_id,wvl_min_CO2,srt_one,cnt_bnd),"gv wvl_min_CO2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_CO2_id,wvl_ctr_CO2,srt_one,cnt_bnd),"gv wvl_ctr_CO2")
-  ! Close file
-  rcd=nf90_wrp_close(nc_id,fl_CO2,'Ingested') ! [fnc] Close file
-  
-  ! Ingest fl_OH
-  rcd=nf90_wrp_open(fl_OH,nf90_nowrite,nc_id)
-  
-  ! Get dimension IDs
-  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
-  
-  ! Get dimension sizes
-  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_OH),sbr_nm//": inquire_dim bnd")
-  if (bnd_nbr_OH>bnd_nbr_OH_max) stop 'bnd_nbr_OH>bnd_nbr_OH_max'
-  cnt_bnd(1)=bnd_nbr_OH
+  call mlk_bnd_prm_get(fl_H2O,bnd_nbr_H2O, &
+       A_phi_H2O,A_psi_H2O,B_phi_H2O,B_psi_H2O,S_d_abs_cff_mss_H2O,S_p_abs_cff_mss_H2O, &
+       wvl_ctr_H2O,wvl_min_H2O,wvl_max_H2O)
 
-  ! Get variable IDs
-  rcd=nf90_wrp_inq_varid(nc_id,'A_phi',A_phi_OH_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'A_psi',A_psi_OH_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'B_phi',B_phi_OH_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'B_psi',B_psi_OH_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'S_d_abs_cff_mss',S_d_abs_cff_mss_OH_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'S_p_abs_cff_mss',S_p_abs_cff_mss_OH_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_OH_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_OH_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_OH_id)
-  
-  ! Get data
-  rcd=nf90_wrp(nf90_get_var(nc_id,A_phi_OH_id,A_phi_OH,srt_one,cnt_bnd),"gv A_phi_OH")
-  rcd=nf90_wrp(nf90_get_var(nc_id,A_psi_OH_id,A_psi_OH,srt_one,cnt_bnd),"gv A_psi_OH")
-  rcd=nf90_wrp(nf90_get_var(nc_id,B_phi_OH_id,B_phi_OH,srt_one,cnt_bnd),"gv B_phi_OH")
-  rcd=nf90_wrp(nf90_get_var(nc_id,B_psi_OH_id,B_psi_OH,srt_one,cnt_bnd),"gv B_psi_OH")
-  rcd=nf90_wrp(nf90_get_var(nc_id,S_d_abs_cff_mss_OH_id,S_d_abs_cff_mss_OH,srt_one,cnt_bnd),"gv S_d_abs_cff_mss_OH")
-  rcd=nf90_wrp(nf90_get_var(nc_id,S_p_abs_cff_mss_OH_id,S_p_abs_cff_mss_OH,srt_one,cnt_bnd),"gv S_p_abs_cff_mss_OH")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_OH_id,wvl_max_OH,srt_one,cnt_bnd),"gv wvl_max_OH")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_OH_id,wvl_min_OH,srt_one,cnt_bnd),"gv wvl_min_OH")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_OH_id,wvl_ctr_OH,srt_one,cnt_bnd),"gv wvl_ctr_OH")
-  ! Close file
-  rcd=nf90_wrp_close(nc_id,fl_OH,'Ingested') ! [fnc] Close file
-  
-  ! Ingest fl_CO
-  rcd=nf90_wrp_open(fl_CO,nf90_nowrite,nc_id)
-  
-  ! Get dimension IDs
-  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
-  
-  ! Get dimension sizes
-  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_CO),sbr_nm//": inquire_dim bnd")
-  if (bnd_nbr_CO>bnd_nbr_CO_max) stop 'bnd_nbr_CO>bnd_nbr_CO_max'
-  cnt_bnd(1)=bnd_nbr_CO
+  call mlk_bnd_prm_get(fl_CO2,bnd_nbr_CO2, &
+       A_phi_CO2,A_psi_CO2,B_phi_CO2,B_psi_CO2,S_d_abs_cff_mss_CO2,S_p_abs_cff_mss_CO2, &
+       wvl_ctr_CO2,wvl_min_CO2,wvl_max_CO2)
 
-  ! Get variable IDs
-  rcd=nf90_wrp_inq_varid(nc_id,'A_phi',A_phi_CO_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'A_psi',A_psi_CO_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'B_phi',B_phi_CO_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'B_psi',B_psi_CO_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'S_d_abs_cff_mss',S_d_abs_cff_mss_CO_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'S_p_abs_cff_mss',S_p_abs_cff_mss_CO_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_CO_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_CO_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_CO_id)
-  
-  ! Get data
-  rcd=nf90_wrp(nf90_get_var(nc_id,A_phi_CO_id,A_phi_CO,srt_one,cnt_bnd),"gv A_phi_CO")
-  rcd=nf90_wrp(nf90_get_var(nc_id,A_psi_CO_id,A_psi_CO,srt_one,cnt_bnd),"gv A_psi_CO")
-  rcd=nf90_wrp(nf90_get_var(nc_id,B_phi_CO_id,B_phi_CO,srt_one,cnt_bnd),"gv B_phi_CO")
-  rcd=nf90_wrp(nf90_get_var(nc_id,B_psi_CO_id,B_psi_CO,srt_one,cnt_bnd),"gv B_psi_CO")
-  rcd=nf90_wrp(nf90_get_var(nc_id,S_d_abs_cff_mss_CO_id,S_d_abs_cff_mss_CO,srt_one,cnt_bnd),"gv S_d_abs_cff_mss_CO")
-  rcd=nf90_wrp(nf90_get_var(nc_id,S_p_abs_cff_mss_CO_id,S_p_abs_cff_mss_CO,srt_one,cnt_bnd),"gv S_p_abs_cff_mss_CO")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_CO_id,wvl_max_CO,srt_one,cnt_bnd),"gv wvl_max_CO")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_CO_id,wvl_min_CO,srt_one,cnt_bnd),"gv wvl_min_CO")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_CO_id,wvl_ctr_CO,srt_one,cnt_bnd),"gv wvl_ctr_CO")
-  ! Close file
-  rcd=nf90_wrp_close(nc_id,fl_CO,'Ingested') ! [fnc] Close file
+  call mlk_bnd_prm_get(fl_OH,bnd_nbr_OH, &
+       A_phi_OH,A_psi_OH,B_phi_OH,B_psi_OH,S_d_abs_cff_mss_OH,S_p_abs_cff_mss_OH, &
+       wvl_ctr_OH,wvl_min_OH,wvl_max_OH)
 
-  ! Ingest fl_N2
-  rcd=nf90_wrp_open(fl_N2,nf90_nowrite,nc_id)
-  
-  ! Get dimension IDs
-  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
-  
-  ! Get dimension sizes
-  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_N2),sbr_nm//": inquire_dim bnd")
-  if (bnd_nbr_N2>bnd_nbr_N2_max) stop 'bnd_nbr_N2>bnd_nbr_N2_max'
-  cnt_bnd(1)=bnd_nbr_N2
+  call mlk_bnd_prm_get(fl_CO,bnd_nbr_CO, &
+       A_phi_CO,A_psi_CO,B_phi_CO,B_psi_CO,S_d_abs_cff_mss_CO,S_p_abs_cff_mss_CO, &
+       wvl_ctr_CO,wvl_min_CO,wvl_max_CO)
 
-  ! Get variable IDs
-  rcd=nf90_wrp_inq_varid(nc_id,'A_phi',A_phi_N2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'A_psi',A_psi_N2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'B_phi',B_phi_N2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'B_psi',B_psi_N2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'S_d_abs_cff_mss',S_d_abs_cff_mss_N2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'S_p_abs_cff_mss',S_p_abs_cff_mss_N2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_N2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_N2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_N2_id)
-  
-  ! Get data
-  rcd=nf90_wrp(nf90_get_var(nc_id,A_phi_N2_id,A_phi_N2,srt_one,cnt_bnd),"gv A_phi_N2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,A_psi_N2_id,A_psi_N2,srt_one,cnt_bnd),"gv A_psi_N2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,B_phi_N2_id,B_phi_N2,srt_one,cnt_bnd),"gv B_phi_N2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,B_psi_N2_id,B_psi_N2,srt_one,cnt_bnd),"gv B_psi_N2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,S_d_abs_cff_mss_N2_id,S_d_abs_cff_mss_N2,srt_one,cnt_bnd),"gv S_d_abs_cff_mss_N2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,S_p_abs_cff_mss_N2_id,S_p_abs_cff_mss_N2,srt_one,cnt_bnd),"gv S_p_abs_cff_mss_N2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_N2_id,wvl_max_N2,srt_one,cnt_bnd),"gv wvl_max_N2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_N2_id,wvl_min_N2,srt_one,cnt_bnd),"gv wvl_min_N2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_N2_id,wvl_ctr_N2,srt_one,cnt_bnd),"gv wvl_ctr_N2")
-  ! Close file
-  rcd=nf90_wrp_close(nc_id,fl_N2,'Ingested') ! [fnc] Close file
+  call mlk_bnd_prm_get(fl_N2,bnd_nbr_N2, &
+       A_phi_N2,A_psi_N2,B_phi_N2,B_psi_N2,S_d_abs_cff_mss_N2,S_p_abs_cff_mss_N2, &
+       wvl_ctr_N2,wvl_min_N2,wvl_max_N2)
 
-  ! Ingest fl_N2O
-  rcd=nf90_wrp_open(fl_N2O,nf90_nowrite,nc_id)
-  
-  ! Get dimension IDs
-  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
-  
-  ! Get dimension sizes
-  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_N2O),sbr_nm//": inquire_dim bnd")
-  if (bnd_nbr_N2O>bnd_nbr_N2O_max) stop 'bnd_nbr_N2O>bnd_nbr_N2O_max'
-  cnt_bnd(1)=bnd_nbr_N2O
+  call mlk_bnd_prm_get(fl_N2O,bnd_nbr_N2O, &
+       A_phi_N2O,A_psi_N2O,B_phi_N2O,B_psi_N2O,S_d_abs_cff_mss_N2O,S_p_abs_cff_mss_N2O, &
+       wvl_ctr_N2O,wvl_min_N2O,wvl_max_N2O)
 
-  ! Get variable IDs
-  rcd=nf90_wrp_inq_varid(nc_id,'A_phi',A_phi_N2O_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'A_psi',A_psi_N2O_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'B_phi',B_phi_N2O_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'B_psi',B_psi_N2O_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'S_d_abs_cff_mss',S_d_abs_cff_mss_N2O_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'S_p_abs_cff_mss',S_p_abs_cff_mss_N2O_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_N2O_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_N2O_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_N2O_id)
-  
-  ! Get data
-  rcd=nf90_wrp(nf90_get_var(nc_id,A_phi_N2O_id,A_phi_N2O,srt_one,cnt_bnd),"gv A_phi_N2O")
-  rcd=nf90_wrp(nf90_get_var(nc_id,A_psi_N2O_id,A_psi_N2O,srt_one,cnt_bnd),"gv A_psi_N2O")
-  rcd=nf90_wrp(nf90_get_var(nc_id,B_phi_N2O_id,B_phi_N2O,srt_one,cnt_bnd),"gv B_phi_N2O")
-  rcd=nf90_wrp(nf90_get_var(nc_id,B_psi_N2O_id,B_psi_N2O,srt_one,cnt_bnd),"gv B_psi_N2O")
-  rcd=nf90_wrp(nf90_get_var(nc_id,S_d_abs_cff_mss_N2O_id,S_d_abs_cff_mss_N2O,srt_one,cnt_bnd),"gv S_d_abs_cff_mss_N2O")
-  rcd=nf90_wrp(nf90_get_var(nc_id,S_p_abs_cff_mss_N2O_id,S_p_abs_cff_mss_N2O,srt_one,cnt_bnd),"gv S_p_abs_cff_mss_N2O")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_N2O_id,wvl_max_N2O,srt_one,cnt_bnd),"gv wvl_max_N2O")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_N2O_id,wvl_min_N2O,srt_one,cnt_bnd),"gv wvl_min_N2O")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_N2O_id,wvl_ctr_N2O,srt_one,cnt_bnd),"gv wvl_ctr_N2O")
-  ! Close file
-  rcd=nf90_wrp_close(nc_id,fl_N2O,'Ingested') ! [fnc] Close file
+  call mlk_bnd_prm_get(fl_CH4,bnd_nbr_CH4, &
+       A_phi_CH4,A_psi_CH4,B_phi_CH4,B_psi_CH4,S_d_abs_cff_mss_CH4,S_p_abs_cff_mss_CH4, &
+       wvl_ctr_CH4,wvl_min_CH4,wvl_max_CH4)
 
-  ! Ingest fl_CH4
-  rcd=nf90_wrp_open(fl_CH4,nf90_nowrite,nc_id)
+  call mlk_bnd_prm_get(fl_O2,bnd_nbr_O2, &
+       A_phi_O2,A_psi_O2,B_phi_O2,B_psi_O2,S_d_abs_cff_mss_O2,S_p_abs_cff_mss_O2, &
+       wvl_ctr_O2,wvl_min_O2,wvl_max_O2)
   
-  ! Get dimension IDs
-  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
-  
-  ! Get dimension sizes
-  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_CH4),sbr_nm//": inquire_dim bnd")
-  if (bnd_nbr_CH4>bnd_nbr_CH4_max) stop 'bnd_nbr_CH4>bnd_nbr_CH4_max'
-  cnt_bnd(1)=bnd_nbr_CH4
-
-  ! Get variable IDs
-  rcd=nf90_wrp_inq_varid(nc_id,'A_phi',A_phi_CH4_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'A_psi',A_psi_CH4_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'B_phi',B_phi_CH4_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'B_psi',B_psi_CH4_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'S_d_abs_cff_mss',S_d_abs_cff_mss_CH4_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'S_p_abs_cff_mss',S_p_abs_cff_mss_CH4_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_CH4_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_CH4_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_CH4_id)
-  
-  ! Get data
-  rcd=nf90_wrp(nf90_get_var(nc_id,A_phi_CH4_id,A_phi_CH4,srt_one,cnt_bnd),"gv A_phi_CH4")
-  rcd=nf90_wrp(nf90_get_var(nc_id,A_psi_CH4_id,A_psi_CH4,srt_one,cnt_bnd),"gv A_psi_CH4")
-  rcd=nf90_wrp(nf90_get_var(nc_id,B_phi_CH4_id,B_phi_CH4,srt_one,cnt_bnd),"gv B_phi_CH4")
-  rcd=nf90_wrp(nf90_get_var(nc_id,B_psi_CH4_id,B_psi_CH4,srt_one,cnt_bnd),"gv B_psi_CH4")
-  rcd=nf90_wrp(nf90_get_var(nc_id,S_d_abs_cff_mss_CH4_id,S_d_abs_cff_mss_CH4,srt_one,cnt_bnd),"gv S_d_abs_cff_mss_CH4")
-  rcd=nf90_wrp(nf90_get_var(nc_id,S_p_abs_cff_mss_CH4_id,S_p_abs_cff_mss_CH4,srt_one,cnt_bnd),"gv S_p_abs_cff_mss_CH4")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_CH4_id,wvl_max_CH4,srt_one,cnt_bnd),"gv wvl_max_CH4")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_CH4_id,wvl_min_CH4,srt_one,cnt_bnd),"gv wvl_min_CH4")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_CH4_id,wvl_ctr_CH4,srt_one,cnt_bnd),"gv wvl_ctr_CH4")
-  ! Close file
-  rcd=nf90_wrp_close(nc_id,fl_CH4,'Ingested') ! [fnc] Close file
-  
-  ! Ingest fl_O2
-  rcd=nf90_wrp_open(fl_O2,nf90_nowrite,nc_id)
-  ! Get dimension IDs
-  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
-  
-  ! Get dimension sizes
-  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_O2),sbr_nm//": inquire_dim bnd")
-  if (bnd_nbr_O2>bnd_nbr_O2_max) stop 'bnd_nbr_O2>bnd_nbr_O2_max'
-  cnt_bnd(1)=bnd_nbr_O2
-  
-  ! Get variable IDs
-  rcd=nf90_wrp_inq_varid(nc_id,'A_phi',A_phi_O2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'A_psi',A_psi_O2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'B_phi',B_phi_O2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'B_psi',B_psi_O2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'S_d_abs_cff_mss',S_d_abs_cff_mss_O2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'S_p_abs_cff_mss',S_p_abs_cff_mss_O2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_O2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_O2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_O2_id)
-  
-  ! Get data
-  rcd=nf90_wrp(nf90_get_var(nc_id,A_phi_O2_id,A_phi_O2,srt_one,cnt_bnd),"gv A_phi_O2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,A_psi_O2_id,A_psi_O2,srt_one,cnt_bnd),"gv A_psi_O2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,B_phi_O2_id,B_phi_O2,srt_one,cnt_bnd),"gv B_phi_O2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,B_psi_O2_id,B_psi_O2,srt_one,cnt_bnd),"gv B_psi_O2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,S_d_abs_cff_mss_O2_id,S_d_abs_cff_mss_O2,srt_one,cnt_bnd),"gv S_d_abs_cff_mss_O2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,S_p_abs_cff_mss_O2_id,S_p_abs_cff_mss_O2,srt_one,cnt_bnd),"gv S_p_abs_cff_mss_O2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_O2_id,wvl_max_O2,srt_one,cnt_bnd),"gv wvl_max_O2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_O2_id,wvl_min_O2,srt_one,cnt_bnd),"gv wvl_min_O2")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_O2_id,wvl_ctr_O2,srt_one,cnt_bnd),"gv wvl_ctr_O2")
-  ! Close file
-  rcd=nf90_wrp_close(nc_id,fl_O2,'Ingested') ! [fnc] Close file
-  
-  ! Ingest fl_O3
-  rcd=nf90_wrp_open(fl_O3,nf90_nowrite,nc_id)
-  
-  ! Get dimension IDs
-  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
-  
-  ! Get dimension sizes
-  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_O3),sbr_nm//": inquire_dim bnd")
-  if (bnd_nbr_O3>bnd_nbr_O3_max) stop 'bnd_nbr_O3>bnd_nbr_O3_max'
-  cnt_bnd(1)=bnd_nbr_O3
-
-  ! Get variable IDs
-  rcd=nf90_wrp_inq_varid(nc_id,'A_phi',A_phi_O3_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'A_psi',A_psi_O3_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'B_phi',B_phi_O3_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'B_psi',B_psi_O3_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'S_d_abs_cff_mss',S_d_abs_cff_mss_O3_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'S_p_abs_cff_mss',S_p_abs_cff_mss_O3_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_O3_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_O3_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_O3_id)
-  
-  ! Get data
-  rcd=nf90_wrp(nf90_get_var(nc_id,A_phi_O3_id,A_phi_O3,srt_one,cnt_bnd),"gv A_phi_O3")
-  rcd=nf90_wrp(nf90_get_var(nc_id,A_psi_O3_id,A_psi_O3,srt_one,cnt_bnd),"gv A_psi_O3")
-  rcd=nf90_wrp(nf90_get_var(nc_id,B_phi_O3_id,B_phi_O3,srt_one,cnt_bnd),"gv B_phi_O3")
-  rcd=nf90_wrp(nf90_get_var(nc_id,B_psi_O3_id,B_psi_O3,srt_one,cnt_bnd),"gv B_psi_O3")
-  rcd=nf90_wrp(nf90_get_var(nc_id,S_d_abs_cff_mss_O3_id,S_d_abs_cff_mss_O3,srt_one,cnt_bnd),"gv S_d_abs_cff_mss_O3")
-  rcd=nf90_wrp(nf90_get_var(nc_id,S_p_abs_cff_mss_O3_id,S_p_abs_cff_mss_O3,srt_one,cnt_bnd),"gv S_p_abs_cff_mss_O3")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_O3_id,wvl_max_O3,srt_one,cnt_bnd),"gv wvl_max_O3")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_O3_id,wvl_min_O3,srt_one,cnt_bnd),"gv wvl_min_O3")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_O3_id,wvl_ctr_O3,srt_one,cnt_bnd),"gv wvl_ctr_O3")
-  ! Close file
-  rcd=nf90_wrp_close(nc_id,fl_O3,'Ingested') ! [fnc] Close file
+  call mlk_bnd_prm_get(fl_O3,bnd_nbr_O3, &
+       A_phi_O3,A_psi_O3,B_phi_O3,B_psi_O3,S_d_abs_cff_mss_O3,S_p_abs_cff_mss_O3, &
+       wvl_ctr_O3,wvl_min_O3,wvl_max_O3)
   
   ! Ingest fl_O2O2
   rcd=nf90_wrp_open(fl_O2O2,nf90_nowrite,nc_id)
@@ -5795,9 +5421,9 @@ program swnb2
      ! CH4 data covers the same range at twice the resolution
      ! CO2 data covers the same range at twice the resolution
      ! The same physics applies to all three gases
-     if (bnd_idx<=bnd_nbr_H2O) then
+     if (bnd_idx <= bnd_nbr_H2O) then
         
-        if (wvl_ctr(bnd_idx)<wvl_bnd_lw_sw) then
+        if (wvl_ctr(bnd_idx) < wvl_bnd_lw_sw) then
            angular_integral_factor=slr_zen_ngl_cos
         else
            angular_integral_factor=1.0/diffusivity_factor
