@@ -1,3 +1,7 @@
+2018-10-16  Charlie Zender  <zender@uci.edu>
+
+	* Full support for CFC12
+
 2018-10-15  Charlie Zender  <zender@uci.edu>
 
 	* Subroutinize band parameter retrieval in mlk_bnd_prm_get()
