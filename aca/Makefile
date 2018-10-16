@@ -1012,6 +1012,12 @@ ${MY_BIN_DIR}/CFC11:	lib $(CFC11_OBJ)
 	${FC} -o $@ $(CFC11_OBJ) ${LDFLAGS} 
 	chmod 755 $@
 
+CFC12_OBJ := 	${MY_OBJ_DIR}/CFC12.o
+CFC12:	${MY_BIN_DIR}/CFC12
+${MY_BIN_DIR}/CFC12:	lib $(CFC12_OBJ) 
+	${FC} -o $@ $(CFC12_OBJ) ${LDFLAGS} 
+	chmod 755 $@
+
 NO2_OBJ := 	${MY_OBJ_DIR}/NO2.o
 NO2:	${MY_BIN_DIR}/NO2
 ${MY_BIN_DIR}/NO2:	lib $(NO2_OBJ) 

@@ -1,24 +1,23 @@
 ! $Id$
 
-program CFC11
+program CFC12
   
-  ! Purpose: Convert CFC11 absorption cross section data to netCDF format
-  ! CCl3F is Trichlorofluoromethane, also called freon-11, CFC-11, or R-11
+  ! Purpose: Convert CFC12 absorption cross section data to netCDF format
+  ! CCl2F2 is Dichlorodifluoromethane (R-12) is a colorless gas usually sold under the brand name Freon-12 ... Freon 12. R-12. CFC-12. P-12. Propellant 12. 
   
   ! Compilation:
-  ! cd ${HOME}/sw/aca; make OPTS=D CFC11; cd -
+  ! cd ${HOME}/sw/aca; make OPTS=D CFC12; cd -
   
   ! Use HITRAN data
-  ! CFC11 --HTR16
-  ! CFC11 --HTR16 --drc_out=${DATA}/aca -o abs_xsx_CFC11_HTR16.nc
-  ! CFC11 -i ${DATA}/aca/CCl3F_278.1K-760.0Torr_570.0-6500.0_0.11_N2_50_43.xsc -o ${DATA}/aca/abs_xsx_CFC11.nc # Use HITRAN16 data
-  ! CFC11 -S ${DATA}/aca/spc_LaN68.nc # Weight WMO85 data by LaN68
+  ! CFC12 --HTR16
+  ! CFC12 --HTR16 --drc_out=${DATA}/aca -o abs_xsx_CFC12_HTR16.nc
+  ! CFC12 -i ${DATA}/aca/CCl3F_278.1K-760.0Torr_570.0-6500.0_0.11_N2_50_43.xsc -o ${DATA}/aca/abs_xsx_CFC12.nc # Use HITRAN16 data
+  ! CFC12 -S ${DATA}/aca/spc_LaN68.nc # Weight WMO85 data by LaN68
 
   ! Process input .xsc ASCII data files from HITRAN that look like:
-  ! CCl3F  569.9828 6500.0125  98401  278.1 760.0 4.881E-180.112          CCl3F     N2 88
-  ! 0.000E+00 1.929E-22 6.055E-22 1.770E-22 1.251E-22 8.730E-23 2.083E-22 0.000E+00 3.347E-22 3.763E-22
-  ! 3.675E-22 0.000E+00 0.000E+00 3.865E-22 0.000E+00 0.000E+00 4.763E-22 1.271E-22 1.382E-22 4.060E-22
-  ! 3.259E-22 0.000E+00 0.000E+00 1.823E-22 2.606E-22 0.000E+00 5.468E-22 5.694E-22 0.000E+00 1.636E-22
+  !             CCl2F2  799.9950 1270.0094 187181  294.2 350.5 1.162E-170.030         CFC-12    air 54
+  ! 0.000E+00 0.000E+00 0.000E+00 0.000E+00 0.000E+00 0.000E+00 0.000E+00 0.000E+00 1.319E-21 2.788E-21
+  ! 4.001E-21 4.842E-21 5.301E-21 5.451E-21 5.403E-21 5.261E-21 5.105E-21 4.995E-21 4.977E-21 5.092E-21
 
 #if 0
   From http://hitran.org/docs/cross-sections-definitions
@@ -65,10 +64,10 @@ program CFC11
   character(*),parameter::CVS_Date='$Date$' ! [sng] Date string
   character(*),parameter::CVS_Revision='$Revision$' ! [sng] File revision string
   character(len=*),parameter::CVS_Id='$Id$' ! [sng] CVS Identification
-  character(len=*),parameter::sbr_nm='CFC11' ! [sng] Subroutine name
-  character(*),parameter::fl_in_HTR16_cold='CCl3F_278.1K-760.0Torr_570.0-6500.0_0.11_N2_50_43.xsc'
-  character(*),parameter::fl_in_HTR16_warm='CCl3F_298.1K-760.0Torr_570.0-6500.0_0.11_N2_50_43.xsc'
-  character(*),parameter::fl_out_HTR16='abs_xsx_CFC11_HTR16.nc'
+  character(len=*),parameter::sbr_nm='CFC12' ! [sng] Subroutine name
+  character(*),parameter::fl_in_HTR16_cold='CCl2F2_216.2K-379.5Torr_800.0-1270.0_00.xsc'
+  character(*),parameter::fl_in_HTR16_warm='CCl2F2_294.2K-350.5Torr_800.0-1270.0_00.xsc'
+  character(*),parameter::fl_out_HTR16='abs_xsx_CFC12_HTR16.nc'
   character(*),parameter::fl_slr_dfl='spc_Kur95_01wvn.nc'
   character(*),parameter::nlc=char(0) ! [sng] NUL character = ASCII 0 = char(0)
   
@@ -77,11 +76,11 @@ program CFC11
   integer::rcd=nf90_noerr ! [rcd] Return success code
 
   integer,parameter::fl_in_unit=73
-  integer,parameter::bnd_nbr_HTR16=5817 ! [nbr] 5818 is # of interfaces, 5817 is # of bands
+  integer,parameter::bnd_nbr_HTR16=187180 ! [nbr] 187181 is # of interfaces, 187180 is # of bands
   integer,parameter::sng_lng_dfl_fl=80 ! [nbr] Default filename string length
   integer,parameter::sng_lng_dfl_stt=200 ! [nbr] Default statement string length
-  real,parameter::tpt_cold_HTR16=278.1
-  real,parameter::tpt_warm_HTR16=298.1
+  real,parameter::tpt_cold_HTR16=216.2
+  real,parameter::tpt_warm_HTR16=294.2
   real,parameter::mss_val=nf90_fill_float ! Missing value = missing_value and/or _FillValue
 
   ! Input Arguments
@@ -136,12 +135,12 @@ program CFC11
   integer::tpt_std_id
   integer::Rayleigh_sca_xsx_id
   integer::slr_spc_xtr_typ
-  integer::abs_cff_mss_CFC11_id
-  integer::abs_xsx_CFC11_cold_id
-  integer::abs_xsx_CFC11_dadT_id
-  integer::abs_xsx_CFC11_id
-  integer::abs_xsx_CFC11_tpt_rfr_id
-  integer::abs_xsx_CFC11_warm_id
+  integer::abs_cff_mss_CFC12_id
+  integer::abs_xsx_CFC12_cold_id
+  integer::abs_xsx_CFC12_dadT_id
+  integer::abs_xsx_CFC12_id
+  integer::abs_xsx_CFC12_tpt_rfr_id
+  integer::abs_xsx_CFC12_warm_id
   integer::bnd_id            ! Coordinate ID
   integer::flx_bnd_dwn_TOA_id
   integer::flx_bnd_pht_dwn_TOA_id
@@ -169,13 +168,13 @@ program CFC11
   
   ! Allocatable variables
   real,dimension(:),allocatable::Rayleigh_sca_xsx
-  real,dimension(:),allocatable::abs_cff_mss_CFC11
+  real,dimension(:),allocatable::abs_cff_mss_CFC12
   real,dimension(:),allocatable::abs_xsx_O2
-  real,dimension(:),allocatable::abs_xsx_CFC11
-  real,dimension(:),allocatable::abs_xsx_CFC11_cold
-  real,dimension(:),allocatable::abs_xsx_CFC11_dadT
-  real,dimension(:),allocatable::abs_xsx_CFC11_tpt_rfr
-  real,dimension(:),allocatable::abs_xsx_CFC11_warm
+  real,dimension(:),allocatable::abs_xsx_CFC12
+  real,dimension(:),allocatable::abs_xsx_CFC12_cold
+  real,dimension(:),allocatable::abs_xsx_CFC12_dadT
+  real,dimension(:),allocatable::abs_xsx_CFC12_tpt_rfr
+  real,dimension(:),allocatable::abs_xsx_CFC12_warm
   real,dimension(:),allocatable::bnd     ! coordinate variable
   real,dimension(:),allocatable::flx_bnd_dwn_TOA
   real,dimension(:),allocatable::flx_bnd_pht_dwn_TOA
@@ -202,7 +201,7 @@ program CFC11
   logical::HTR16=.true.
   
   real::tpt_cold=tpt_cold_HTR16
-  real::tpt_std=250.0 ! Temperature at which generic CFC11 cross sections will be archived
+  real::tpt_std=250.0 ! Temperature at which generic CFC12 cross sections will be archived
   real::tpt_warm=tpt_warm_HTR16
   
   ! Main code
@@ -231,8 +230,8 @@ program CFC11
            call ftn_arg_get(arg_idx,arg_val,drc_in) ! [sng] Input directory
         else if (opt_sng == 'drc_out') then
            call ftn_arg_get(arg_idx,arg_val,drc_out) ! [sng] Output directory
-        else if (opt_sng == 'input' .or. opt_sng == 'fl_CFC11' .or. opt_sng == 'CFC11') then
-           call ftn_arg_get(arg_idx,arg_val,fl_in) ! [sng] CFC11 file
+        else if (opt_sng == 'input' .or. opt_sng == 'fl_CFC12' .or. opt_sng == 'CFC12') then
+           call ftn_arg_get(arg_idx,arg_val,fl_in) ! [sng] CFC12 file
         else if (opt_sng == 'HTR16') then
            HTR16=.true.
         else                ! Option not recognized
@@ -310,13 +309,13 @@ program CFC11
 
   ! Allocate space for dynamic arrays
   allocate(Rayleigh_sca_xsx(bnd_nbr),stat=rcd)
-  allocate(abs_cff_mss_CFC11(bnd_nbr),stat=rcd)
+  allocate(abs_cff_mss_CFC12(bnd_nbr),stat=rcd)
   allocate(abs_xsx_O2(bnd_nbr),stat=rcd)
-  allocate(abs_xsx_CFC11(bnd_nbr),stat=rcd)
-  allocate(abs_xsx_CFC11_cold(bnd_nbr),stat=rcd)
-  allocate(abs_xsx_CFC11_dadT(bnd_nbr),stat=rcd)
-  allocate(abs_xsx_CFC11_tpt_rfr(bnd_nbr),stat=rcd)
-  allocate(abs_xsx_CFC11_warm(bnd_nbr),stat=rcd)
+  allocate(abs_xsx_CFC12(bnd_nbr),stat=rcd)
+  allocate(abs_xsx_CFC12_cold(bnd_nbr),stat=rcd)
+  allocate(abs_xsx_CFC12_dadT(bnd_nbr),stat=rcd)
+  allocate(abs_xsx_CFC12_tpt_rfr(bnd_nbr),stat=rcd)
+  allocate(abs_xsx_CFC12_warm(bnd_nbr),stat=rcd)
   allocate(bnd(bnd_nbr),stat=rcd)     ! coordinate variable
   allocate(flx_bnd_dwn_TOA(bnd_nbr),stat=rcd)
   allocate(flx_bnd_pht_dwn_TOA(bnd_nbr),stat=rcd)
@@ -340,7 +339,7 @@ program CFC11
 
   if (HTR16) then            ! HTR16 data
   
-     read (fl_in_unit,*) (abs_xsx_CFC11_cold(bnd_idx),bnd_idx=1,bnd_nbr)
+     read (fl_in_unit,*) (abs_xsx_CFC12_cold(bnd_idx),bnd_idx=1,bnd_nbr)
      close (fl_in_unit)
      write (6,'(a20,1x,a)') 'Read input data from',fl_in(1:ftn_strlen(fl_in))
 
@@ -355,7 +354,7 @@ program CFC11
           xsx_max_htrn,rsn_nst_htrn,mA_sng_htrn,mlc_nm_htrn,chr_foo_htrn,brd_nm_htrn,rfr_nbr_htrn
      tpt_warm=tpt_htrn
      bnd_nbr=bnd_nbr_htrn-1
-     read (fl_in_unit,*) (abs_xsx_CFC11_warm(bnd_idx),bnd_idx=1,bnd_nbr)
+     read (fl_in_unit,*) (abs_xsx_CFC12_warm(bnd_idx),bnd_idx=1,bnd_nbr)
      close (fl_in_unit)
      write (6,'(a20,1x,a)') 'Read input data from',fl_in(1:ftn_strlen(fl_in))
 
@@ -365,7 +364,7 @@ program CFC11
         write (6,'(a20,f10.3,f10.3,i7,f7.3,f6.3,e10.3,f3.0,a2,a15,a4,a3,a3)') &
              mlc_frm_htrn,wvn_min_htrn,wvn_max_htrn,bnd_nbr_htrn,tpt_htrn,prs_htrn, &
              xsx_max_htrn,rsn_nst_htrn,mA_sng_htrn,mlc_nm_htrn,chr_foo_htrn,brd_nm_htrn,rfr_nbr_htrn
-        write (6,*) (abs_xsx_CFC11_cold(bnd_idx),bnd_idx=1,bnd_nbr)
+        write (6,*) (abs_xsx_CFC12_cold(bnd_idx),bnd_idx=1,bnd_nbr)
         
      endif                     ! endif dbg
 
@@ -385,8 +384,8 @@ program CFC11
      do bnd_idx=1,bnd_nbr
         wvl_min(bnd_idx)=1.0/(100.0*wvn_max(bnd_idx))
         wvl_max(bnd_idx)=1.0/(100.0*wvn_min(bnd_idx))
-        abs_xsx_CFC11_cold(bnd_idx)=abs_xsx_CFC11_cold(bnd_idx)*1.0e-4 ! cm2 -> m2
-        abs_xsx_CFC11_warm(bnd_idx)=abs_xsx_CFC11_warm(bnd_idx)*1.0e-4 ! cm2 -> m2
+        abs_xsx_CFC12_cold(bnd_idx)=abs_xsx_CFC12_cold(bnd_idx)*1.0e-4 ! cm2 -> m2
+        abs_xsx_CFC12_warm(bnd_idx)=abs_xsx_CFC12_warm(bnd_idx)*1.0e-4 ! cm2 -> m2
         abs_xsx_O2(bnd_idx)=mss_val ! cm2 -> m2
         flx_bnd_pht_dwn_TOA(bnd_idx)=mss_val ! #/cm2/s -> #/m2/s
         Rayleigh_sca_xsx(bnd_idx)=mss_val ! cm2 -> m2
@@ -397,12 +396,12 @@ program CFC11
   ! Define temperature dependance
   ! Temperature dependence is strongest around 
   do bnd_idx=1,bnd_nbr
-     abs_xsx_CFC11_tpt_rfr(bnd_idx)=tpt_std ! Temperature at which generic abs_xsx_CFC11 array will be stored
-     abs_xsx_CFC11_dadT(bnd_idx)= &
-          (abs_xsx_CFC11_warm(bnd_idx)-abs_xsx_CFC11_cold(bnd_idx))/ &
+     abs_xsx_CFC12_tpt_rfr(bnd_idx)=tpt_std ! Temperature at which generic abs_xsx_CFC12 array will be stored
+     abs_xsx_CFC12_dadT(bnd_idx)= &
+          (abs_xsx_CFC12_warm(bnd_idx)-abs_xsx_CFC12_cold(bnd_idx))/ &
           (tpt_warm-tpt_cold) 
-     abs_xsx_CFC11(bnd_idx)=abs_xsx_CFC11_cold(bnd_idx)+ &
-          (tpt_std-tpt_cold)*abs_xsx_CFC11_dadT(bnd_idx)
+     abs_xsx_CFC12(bnd_idx)=abs_xsx_CFC12_cold(bnd_idx)+ &
+          (tpt_std-tpt_cold)*abs_xsx_CFC12_dadT(bnd_idx)
   enddo                  ! end loop over bnd
   
   ! Get TOA solar spectrum
@@ -411,7 +410,7 @@ program CFC11
   
   ! Compute diagnostic variables
   do bnd_idx=1,bnd_nbr
-     abs_cff_mss_CFC11(bnd_idx)=abs_xsx_CFC11(bnd_idx)*Avagadro/mmw_CFC11
+     abs_cff_mss_CFC12(bnd_idx)=abs_xsx_CFC12(bnd_idx)*Avagadro/mmw_CFC12
      bnd(bnd_idx)=0.5*(wvl_min(bnd_idx)+wvl_max(bnd_idx))
      wvl(bnd_idx)=bnd(bnd_idx)
      wvl_ctr(bnd_idx)=bnd(bnd_idx)
@@ -436,10 +435,10 @@ program CFC11
   
   ! Sanity check
   if (dbg_lvl >= dbg_fl) then
-     write (6,'(5(a,1x))') 'idx','wvl_ctr','abs_xsx_CFC11','abs_cff_mss_CFC11','flx_slr_frc'
+     write (6,'(5(a,1x))') 'idx','wvl_ctr','abs_xsx_CFC12','abs_cff_mss_CFC12','flx_slr_frc'
      do bnd_idx=1,bnd_nbr
         write (6,'(i4,1x,es15.8,1x,es15.8,1x,es15.8,1x,es15.8)')  &
-             bnd_idx,wvl_ctr(bnd_idx),abs_xsx_CFC11(bnd_idx),abs_cff_mss_CFC11(bnd_idx),flx_slr_frc(bnd_idx)
+             bnd_idx,wvl_ctr(bnd_idx),abs_xsx_CFC12(bnd_idx),abs_cff_mss_CFC12(bnd_idx),flx_slr_frc(bnd_idx)
      enddo                  ! end loop over bnd
   endif                     ! endif dbg
 
@@ -487,20 +486,20 @@ program CFC11
   rcd=nf90_wrp(nf90_def_var(nc_id,'wvn_max',nf90_float,bnd_dmn_id,wvn_max_id),sbr_nm//': dv wvn_max')
   rcd=nf90_wrp(nf90_def_var(nc_id,'wvn_min',nf90_float,bnd_dmn_id,wvn_min_id),sbr_nm//': dv wvn_min')
   ! Wrap
-  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_cff_mss_CFC11',nf90_float,bnd_dmn_id,abs_cff_mss_CFC11_id), &
-       sbr_nm//': dv abs_cff_mss_CFC11')
-  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_CFC11',nf90_float,bnd_dmn_id,abs_xsx_CFC11_id), &
-       sbr_nm//': dv abs_xsx_CFC11')
-  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_CFC11_cold',nf90_float,bnd_dmn_id,abs_xsx_CFC11_cold_id), &
-       sbr_nm//': dv abs_xsx_CFC11_cold')
-  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_CFC11_dadT',nf90_float,bnd_dmn_id,abs_xsx_CFC11_dadT_id), &
-       sbr_nm//': dv abs_xsx_CFC11_dadT')
-  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_CFC11_warm',nf90_float,bnd_dmn_id,abs_xsx_CFC11_warm_id), &
-       sbr_nm//': dv abs_xsx_CFC11_warm')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_cff_mss_CFC12',nf90_float,bnd_dmn_id,abs_cff_mss_CFC12_id), &
+       sbr_nm//': dv abs_cff_mss_CFC12')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_CFC12',nf90_float,bnd_dmn_id,abs_xsx_CFC12_id), &
+       sbr_nm//': dv abs_xsx_CFC12')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_CFC12_cold',nf90_float,bnd_dmn_id,abs_xsx_CFC12_cold_id), &
+       sbr_nm//': dv abs_xsx_CFC12_cold')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_CFC12_dadT',nf90_float,bnd_dmn_id,abs_xsx_CFC12_dadT_id), &
+       sbr_nm//': dv abs_xsx_CFC12_dadT')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_CFC12_warm',nf90_float,bnd_dmn_id,abs_xsx_CFC12_warm_id), &
+       sbr_nm//': dv abs_xsx_CFC12_warm')
   rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bnd_pht_dwn_TOA',nf90_float,bnd_dmn_id,flx_bnd_pht_dwn_TOA_id), &
        sbr_nm//': dv flx_bnd_pht_dwn_TOA')
-  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_CFC11_tpt_rfr',nf90_float,bnd_dmn_id,abs_xsx_CFC11_tpt_rfr_id), &
-       sbr_nm//': dv abs_xsx_CFC11_tpt_rfr')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_CFC12_tpt_rfr',nf90_float,bnd_dmn_id,abs_xsx_CFC12_tpt_rfr_id), &
+       sbr_nm//': dv abs_xsx_CFC12_tpt_rfr')
   
   ! Add global attributes
   rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'CVS_Id',CVS_Id),sbr_nm//': pa CVS_Id')
@@ -511,16 +510,16 @@ program CFC11
   rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'src_fl_sng',src_fl_sng(1:ftn_strlen(src_fl_sng))),sbr_nm)
   
   ! Add english text descriptions
-  rcd=nf90_wrp(nf90_put_att(nc_id,tpt_cold_id,'long_name','Temperature of coldest CFC11 measurements'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,tpt_warm_id,'long_name','Temperature of warmest CFC11 measurements'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,tpt_cold_id,'long_name','Temperature of coldest CFC12 measurements'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,tpt_warm_id,'long_name','Temperature of warmest CFC12 measurements'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,tpt_std_id,'long_name','Temperature at which interpolated cross sections are archived'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,Rayleigh_sca_xsx_id,'long_name','Rayleigh scattering cross section'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_CFC11_id,'long_name','CFC11 mass absorption coefficient'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC11_cold_id,'long_name','CFC11 absorption cross section at tpt_cold'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC11_dadT_id,'long_name','Absorption cross section temperature-dependence'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC11_id,'long_name','CFC11 absorption cross section at tpt_rfr'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC11_tpt_rfr_id,'long_name','Valid temperature for absorption cross section'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC11_warm_id,'long_name','CFC11 absorption cross section at tpt_warm'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_CFC12_id,'long_name','CFC12 mass absorption coefficient'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC12_cold_id,'long_name','CFC12 absorption cross section at tpt_cold'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC12_dadT_id,'long_name','Absorption cross section temperature-dependence'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC12_id,'long_name','CFC12 absorption cross section at tpt_rfr'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC12_tpt_rfr_id,'long_name','Valid temperature for absorption cross section'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC12_warm_id,'long_name','CFC12 absorption cross section at tpt_warm'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,bnd_id,'long_name','Band center wavelength'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_dwn_TOA_id,'long_name','Solar Energy flux in band'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_pht_dwn_TOA_id,'long_name','Photon flux in band'),sbr_nm)
@@ -544,12 +543,12 @@ program CFC11
   rcd=nf90_wrp(nf90_put_att(nc_id,tpt_warm_id,'units','kelvin'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,tpt_std_id,'units','kelvin'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,Rayleigh_sca_xsx_id,'units','meter2'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_CFC11_id,'units','meter2 kilogram-1'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC11_cold_id,'units','meter2'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC11_dadT_id,'units','meter2 kelvin-1'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC11_id,'units','meter2'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC11_tpt_rfr_id,'units','kelvin'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC11_warm_id,'units','meter2'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_CFC12_id,'units','meter2 kilogram-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC12_cold_id,'units','meter2'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC12_dadT_id,'units','meter2 kelvin-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC12_id,'units','meter2'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC12_tpt_rfr_id,'units','kelvin'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_CFC12_warm_id,'units','meter2'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,bnd_id,'units','meter'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_dwn_TOA_id,'units','watt meter-2'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_pht_dwn_TOA_id,'units','photon meter-2 second-1'),sbr_nm)
@@ -580,11 +579,11 @@ program CFC11
   rcd=nf90_wrp(nf90_put_var(nc_id,tpt_warm_id,tpt_warm),sbr_nm//': pv tpt_warm in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,tpt_std_id,tpt_std),sbr_nm//': pv tpt_std in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,Rayleigh_sca_xsx_id,Rayleigh_sca_xsx),sbr_nm//': pv Rayleigh_sca_xsx in '//__FILE__)
-  rcd=nf90_wrp(nf90_put_var(nc_id,abs_cff_mss_CFC11_id,abs_cff_mss_CFC11),sbr_nm//': pv abs_cff_mss_CFC11 in '//__FILE__)
-  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_CFC11_cold_id,abs_xsx_CFC11_cold),sbr_nm//': pv abs_xsx_CFC11_cold in '//__FILE__)
-  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_CFC11_dadT_id,abs_xsx_CFC11_dadT),sbr_nm//': pv abs_xsx_CFC11_dadT in '//__FILE__)
-  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_CFC11_id,abs_xsx_CFC11),sbr_nm//': pv abs_xsx_CFC11 in '//__FILE__)
-  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_CFC11_warm_id,abs_xsx_CFC11_warm),sbr_nm//': pv abs_xsx_CFC11_warm in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,abs_cff_mss_CFC12_id,abs_cff_mss_CFC12),sbr_nm//': pv abs_cff_mss_CFC12 in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_CFC12_cold_id,abs_xsx_CFC12_cold),sbr_nm//': pv abs_xsx_CFC12_cold in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_CFC12_dadT_id,abs_xsx_CFC12_dadT),sbr_nm//': pv abs_xsx_CFC12_dadT in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_CFC12_id,abs_xsx_CFC12),sbr_nm//': pv abs_xsx_CFC12 in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_CFC12_warm_id,abs_xsx_CFC12_warm),sbr_nm//': pv abs_xsx_CFC12_warm in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,bnd_id,bnd),sbr_nm//': pv bnd in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,flx_bnd_dwn_TOA_id,flx_bnd_dwn_TOA),sbr_nm//': pv flx_bnd_dwn_TOA in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,flx_bnd_pht_dwn_TOA_id,flx_bnd_pht_dwn_TOA),sbr_nm//': pv flx_bnd_pht_dwn_TOA in '//__FILE__)
@@ -603,20 +602,20 @@ program CFC11
   rcd=nf90_wrp(nf90_put_var(nc_id,wvn_max_id,wvn_max),sbr_nm//': pv wvn_max in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,wvn_min_id,wvn_min),sbr_nm//': pv wvn_min in '//__FILE__)
   ! Wrap
-  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_CFC11_tpt_rfr_id,abs_xsx_CFC11_tpt_rfr), &
-       sbr_nm//': pv abs_xsx_CFC11_tpt_rfr in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_CFC12_tpt_rfr_id,abs_xsx_CFC12_tpt_rfr), &
+       sbr_nm//': pv abs_xsx_CFC12_tpt_rfr in '//__FILE__)
   
   rcd=nf90_wrp_close(nc_id,fl_out,'Wrote results to') ! [fnc] Close file
   
   ! De-allocate dynamic variables
   if (allocated(Rayleigh_sca_xsx)) deallocate(Rayleigh_sca_xsx,stat=rcd)
-  if (allocated(abs_cff_mss_CFC11)) deallocate(abs_cff_mss_CFC11,stat=rcd)
+  if (allocated(abs_cff_mss_CFC12)) deallocate(abs_cff_mss_CFC12,stat=rcd)
   if (allocated(abs_xsx_O2)) deallocate(abs_xsx_O2,stat=rcd)
-  if (allocated(abs_xsx_CFC11)) deallocate(abs_xsx_CFC11,stat=rcd)
-  if (allocated(abs_xsx_CFC11_cold)) deallocate(abs_xsx_CFC11_cold,stat=rcd)
-  if (allocated(abs_xsx_CFC11_dadT)) deallocate(abs_xsx_CFC11_dadT,stat=rcd)
-  if (allocated(abs_xsx_CFC11_tpt_rfr)) deallocate(abs_xsx_CFC11_tpt_rfr,stat=rcd)
-  if (allocated(abs_xsx_CFC11_warm)) deallocate(abs_xsx_CFC11_warm,stat=rcd)
+  if (allocated(abs_xsx_CFC12)) deallocate(abs_xsx_CFC12,stat=rcd)
+  if (allocated(abs_xsx_CFC12_cold)) deallocate(abs_xsx_CFC12_cold,stat=rcd)
+  if (allocated(abs_xsx_CFC12_dadT)) deallocate(abs_xsx_CFC12_dadT,stat=rcd)
+  if (allocated(abs_xsx_CFC12_tpt_rfr)) deallocate(abs_xsx_CFC12_tpt_rfr,stat=rcd)
+  if (allocated(abs_xsx_CFC12_warm)) deallocate(abs_xsx_CFC12_warm,stat=rcd)
   if (allocated(bnd)) deallocate(bnd,stat=rcd)     ! coordinate variable
   if (allocated(flx_bnd_dwn_TOA)) deallocate(flx_bnd_dwn_TOA,stat=rcd)
   if (allocated(flx_bnd_pht_dwn_TOA)) deallocate(flx_bnd_pht_dwn_TOA,stat=rcd)
@@ -642,5 +641,5 @@ program CFC11
   
   ! call exit(exit_status)    ! [enm] Exit with current exit status (non-standard Fortran)
 
-end program CFC11
+end program CFC12
 
