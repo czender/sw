@@ -165,7 +165,8 @@ program swnb2
   
   ! Debugging usage:
   ! Perform full setup for all bands but only call DISORT() for #1603:
-  ! swnb2 --drc_in=${DATA}/aca -D 1 -E -e 1603 -d ~/foo.nc 
+  ! swnb2 --drc_in=${DATA}/aca -D 1 -E -e 1603 -d ~/foo.nc # 0.5 um on old SW grid
+  ! swnb2 --drc_in=${DATA}/aca -D 1 -E -e 1999 -d ~/foo.nc # 0.5 um on new SW/LW grid
   ! Intercompare model on different machines:
   ! swnb2 --drc_in=${DATA}/aca -d ~/foo.nc;ncks -H -v flx_bb_dwn_sfc ~/foo.nc
   
@@ -2018,7 +2019,7 @@ program swnb2
   fl_brdf='brdf.nc'//nlc  ! BRDF file
   
   azi_nbr=azi_nbr_max
-  bnd_dbg=1592
+  bnd_dbg=1592 
   brdf_typ=1      ! Default BRDF
   cmd_ln_alb=.false.
   cmd_ln_alb_sfc_NIR_dff=.false.
@@ -2711,18 +2712,18 @@ program swnb2
      rcd=nf90_wrp_inq_dimid(nc_id,'lev_snw',lev_snw_dmn_id,nf90_ebaddim)
      if(rcd == nf90_noerr) then
         rcd=nf90_wrp(nf90_inquire_dimension(nc_id,lev_snw_dmn_id,len=lev_snw_nbr),sbr_nm//": inquire_dim lev_snw")
-        if (lev_snw_nbr>0) then
+        if (lev_snw_nbr > 0) then
            write (6,'(2a)') prg_nm(1:ftn_strlen(prg_nm)),': Found and will use snow'
-           if (lev_snw_nbr>lev_snw_nbr_max) stop 'lev_snw_nbr>lev_snw_nbr_max'
-           if (lev_snw_nbr+lev_atm_nbr>lev_nbr_max) stop 'lev_snw_nbr+lev_atm_nbr>lev_nbr_max'
+           if (lev_snw_nbr > lev_snw_nbr_max) stop 'lev_snw_nbr>lev_snw_nbr_max'
+           if (lev_snw_nbr+lev_atm_nbr > lev_nbr_max) stop 'lev_snw_nbr+lev_atm_nbr>lev_nbr_max'
            rcd=nf90_wrp_inq_dimid(nc_id,'levp_snw',levp_snw_dmn_id)
            ! Account for snow in vertical grid
            lev_nbr=lev_atm_nbr+lev_snw_nbr
            levp_snw_nbr=lev_snw_nbr+1
         endif ! lev_snw_nbr>0
      endif ! lev_snw dimension exists
-     if (lev_snw_nbr<0) stop 'lev_snw_nbr<0'
-     if (lev_snw_nbr==0) then
+     if (lev_snw_nbr < 0) stop 'lev_snw_nbr<0'
+     if (lev_snw_nbr == 0) then
         write (6,'(2a)') prg_nm(1:ftn_strlen(prg_nm)),': Snow not found, not used'
         ! Set flg_msm false internally to skip unnecessary work
         flg_msm=.false.
@@ -6340,12 +6341,21 @@ program swnb2
              odsl_lqd(lev_idx)+odsl_ice(lev_idx)+ &
              odsl_mpr(lev_idx)+odsl_snw(lev_idx)
         odal_spc_ttl(bnd_idx,lev_idx)= &
-             odal_H2O(lev_idx)+odal_CO2(lev_idx)+ &
-             odal_O2(lev_idx)+odal_O3(lev_idx)+ &
-             odal_NO2(lev_idx)+odal_CFC11(lev_idx)+odal_CFC12(lev_idx)+ &
-             odal_OH(lev_idx)+odal_CH4(lev_idx)+odal_CO(lev_idx)+odal_N2(lev_idx)+odal_N2O(lev_idx)+ &
-             odal_O2O2(lev_idx)+odal_O2N2(lev_idx)+ &
+             odal_CFC11(lev_idx)+ &
+             odal_CFC12(lev_idx)+ &
+             odal_CH4(lev_idx)+ &
+             odal_CO(lev_idx)+ &
+             odal_CO2(lev_idx)+ &
+             odal_H2O(lev_idx)+ &
              odal_H2OH2O(lev_idx)+ &
+             odal_N2(lev_idx)+ &
+             odal_N2O(lev_idx)+ &
+             odal_NO2(lev_idx)+ &
+             odal_O2(lev_idx)+ &
+             odal_O2N2(lev_idx)+ &
+             odal_O2O2(lev_idx)+ &
+             odal_O3(lev_idx)+ &
+             odal_OH(lev_idx)+ &
              odal_aer(lev_idx)+odal_bga(lev_idx)+ &
              odal_lqd(lev_idx)+odal_ice(lev_idx)+ &
              odal_mpr(lev_idx)+odal_snw(lev_idx)
@@ -6355,7 +6365,7 @@ program swnb2
      
      do lev_idx=1,lev_nbr
         ! Initialize some properties to zero
-        ! These are over-written later in the loop if they are non-zero
+        ! Overwrite these later in the loop if they are non-zero
         asm_prm_HG_ttl(bnd_idx,lev_idx)=0.0
         if (flg_mie) then
            do mmn_idx=1,mmn_nbr
@@ -6365,42 +6375,40 @@ program swnb2
 
         ! Avoid divide-by-zero conditions in rare, diagnostic cases where ...
         if (odsl_spc_ttl(bnd_idx,lev_idx) <= 0.0) then
-           ! ... All scattering is turned off ... 
+           ! ... All scattering is turned off or insignificant ... 
            sca_frc_Ray(lev_idx)=0.0
            sca_frc_HG(lev_idx)=0.0
            sca_frc_Mie(lev_idx)=0.0
            ss_alb_fct(bnd_idx,lev_idx)=0.0
-#ifdef NOT_DEFINED
         else if (odsl_spc_ttl(bnd_idx,lev_idx) == odsl_Ray(lev_idx)) then
            ! ... All scattering is Rayleigh scattering ...
            sca_frc_Ray(lev_idx)=1.0
            sca_frc_HG(lev_idx)=0.0
            sca_frc_Mie(lev_idx)=0.0
-           ! 20180928: Fixed bug where ss_alb_fct was set to 1.0 not to odsl/odxl for pure Rayleigh scattering atmospheres (neglected absorption)
+           ! 20180928: Fixed bug where ss_alb_fct was set to 1.0 (i.e., neglected absorption) instead of odsl/odxl for pure Rayleigh scattering atmospheres
            ss_alb_fct(bnd_idx,lev_idx)= &
                 odsl_spc_ttl(bnd_idx,lev_idx)/ &
-                odxl_spc_ttl(bnd_idx,lev_idx)
-#endif /* NOT_DEFINED */
-        else ! endif Rayleight scattering only
+                max(odxl_spc_ttl(bnd_idx,lev_idx),real_tiny)
+        else ! endif Rayleigh scattering only
            ! ... Some scattering is particle scattering ...
            ! Single scattering albedo is ill-conditioned when 
-           ! scattering optical depth is zero and there is no absorption.
+           ! scattering optical depth is zero and there is no absorption, i.e., there is no extinction
            ! This may only be a problem in single precision---I am not sure
            ss_alb_fct(bnd_idx,lev_idx)= &
                 odsl_spc_ttl(bnd_idx,lev_idx)/ &
-                odxl_spc_ttl(bnd_idx,lev_idx)
+                max(odxl_spc_ttl(bnd_idx,lev_idx),real_tiny)
            ! Weighted asymmetry parameters and scattering fraction due to 
            ! each process (Rayleigh, HG, and Mie) must be saved for all 
            ! bands and levels until DISORT() is called.
            ! They are used to weight moments of total phase function 
            ! between Rayleigh, Henyey-Greenstein, and Mie components.
-           sca_frc_Ray(lev_idx)=odsl_Ray(lev_idx)/odsl_spc_ttl(bnd_idx,lev_idx)
-           sca_frc_HG(lev_idx)=odsl_HG(lev_idx)/odsl_spc_ttl(bnd_idx,lev_idx)
-           sca_frc_Mie(lev_idx)=odsl_Mie(lev_idx)/odsl_spc_ttl(bnd_idx,lev_idx)
+           sca_frc_Ray(lev_idx)=odsl_Ray(lev_idx)/max(odsl_spc_ttl(bnd_idx,lev_idx),real_tiny)
+           sca_frc_HG(lev_idx)=odsl_HG(lev_idx)/max(odsl_spc_ttl(bnd_idx,lev_idx),real_tiny)
+           sca_frc_Mie(lev_idx)=odsl_Mie(lev_idx)/max(odsl_spc_ttl(bnd_idx,lev_idx),real_tiny)
               
            ! See CZP III p. #115 for discussion of effective asymmetry parameter
            lev_bnd_snw_idx=lev_idx-lev_atm_nbr
-           if (lev_bnd_snw_nbr==1 .or. lev_bnd_snw_idx < 1) lev_bnd_snw_idx=1
+           if (lev_bnd_snw_nbr == 1 .or. lev_bnd_snw_idx < 1) lev_bnd_snw_idx=1
 
            ! Always compute the weighted asymmetry parameter 
            ! mie computes asm_prm independently of lgn_xpn_cff(1)
@@ -6416,14 +6424,15 @@ program swnb2
                 asm_prm_ice(bnd_idx)*odsl_ice(lev_idx)+ &
                 asm_prm_mpr(bnd_idx)*odsl_mpr(lev_idx)+ &
                 asm_prm_snw(bnd_idx,lev_bnd_snw_idx)*odsl_snw(lev_idx))
+           ! Normalize by total scattering to obtain scattering-weighted asymmetry parameter
            if (flg_mie) then
               asm_prm_HG_ttl(bnd_idx,lev_idx)= &
-                   asm_prm_HG_ttl(bnd_idx,lev_idx)/odsl_Mie(lev_idx)
+                   asm_prm_HG_ttl(bnd_idx,lev_idx)/max(odsl_Mie(lev_idx),real_tiny)
               ! Line above normalizes asm_prm_HG_ttl by odsl_Mie
               ! This ensures asm_prm_HG_ttl is defined when flg_mie is true
            else
               asm_prm_HG_ttl(bnd_idx,lev_idx)= &
-                   asm_prm_HG_ttl(bnd_idx,lev_idx)/odsl_HG(lev_idx)
+                   asm_prm_HG_ttl(bnd_idx,lev_idx)/max(odsl_HG(lev_idx),real_tiny)
            endif ! !flg_mie
 
            if (flg_mie) then
@@ -6436,7 +6445,7 @@ program swnb2
                       lgn_xpn_cff_lqd(mmn_idx,bnd_idx)*odsl_lqd(lev_idx)+ &
                       lgn_xpn_cff_mpr(mmn_idx,bnd_idx)*odsl_mpr(lev_idx)+ &
                       lgn_xpn_cff_snw(mmn_idx,bnd_idx,lev_bnd_snw_idx)*odsl_snw(lev_idx))/ &
-                      odsl_Mie(lev_idx)
+                      max(odsl_Mie(lev_idx),real_tiny)
               end do ! end loop over mmn
            end if ! !flg_mie_snw
         endif ! endif there is particulate scattering
@@ -6446,7 +6455,7 @@ program swnb2
      ! omega's as large as 1.0000656 can occur (at least under LINUX) for very
      ! small Rayleigh scattering optical depths (p <~ 1 Pa) in single precision
      do lev_idx=1,lev_nbr
-        if (ss_alb_fct(bnd_idx,lev_idx)>1.0) then
+        if (ss_alb_fct(bnd_idx,lev_idx) > 1.0) then
            write (6,'(a,a,i4,a,i3,a,f10.7,a,i3,a,f10.3,a,i4,a,f10.7,a)') &
                 prg_nm(1:ftn_strlen(prg_nm)),': WARNING ss_alb_fct(',bnd_idx,',',lev_idx,') = ',ss_alb_fct(bnd_idx,lev_idx), &
                 ' at lev(',lev_idx,' = ',prs(lev_idx)/100.0,' mb and wvl(',bnd_idx,') = ',wvl(bnd_idx)*1.0e6,' um'
@@ -6457,16 +6466,16 @@ program swnb2
      ! Compute diagnostics
      do lev_idx=1,lev_nbr
         ! Gaseous absorption
-        odxc_spc_CO(bnd_idx)=odxc_spc_CO(bnd_idx)+odal_CO(lev_idx)
-        odxc_spc_N2(bnd_idx)=odxc_spc_N2(bnd_idx)+odal_N2(lev_idx)
-        odxc_spc_N2O(bnd_idx)=odxc_spc_N2O(bnd_idx)+odal_N2O(lev_idx)
+        odxc_spc_CFC11(bnd_idx)=odxc_spc_CFC11(bnd_idx)+odal_CFC11(lev_idx)
+        odxc_spc_CFC12(bnd_idx)=odxc_spc_CFC12(bnd_idx)+odal_CFC12(lev_idx)
         odxc_spc_CH4(bnd_idx)=odxc_spc_CH4(bnd_idx)+odal_CH4(lev_idx)
+        odxc_spc_CO(bnd_idx)=odxc_spc_CO(bnd_idx)+odal_CO(lev_idx)
         odxc_spc_CO2(bnd_idx)=odxc_spc_CO2(bnd_idx)+odal_CO2(lev_idx)
         odxc_spc_H2O(bnd_idx)=odxc_spc_H2O(bnd_idx)+odal_H2O(lev_idx)
         odxc_spc_H2OH2O(bnd_idx)=odxc_spc_H2OH2O(bnd_idx)+odal_H2OH2O(lev_idx)
+        odxc_spc_N2(bnd_idx)=odxc_spc_N2(bnd_idx)+odal_N2(lev_idx)
+        odxc_spc_N2O(bnd_idx)=odxc_spc_N2O(bnd_idx)+odal_N2O(lev_idx)
         odxc_spc_NO2(bnd_idx)=odxc_spc_NO2(bnd_idx)+odal_NO2(lev_idx)
-        odxc_spc_CFC11(bnd_idx)=odxc_spc_CFC11(bnd_idx)+odal_CFC11(lev_idx)
-        odxc_spc_CFC12(bnd_idx)=odxc_spc_CFC12(bnd_idx)+odal_CFC12(lev_idx)
         odxc_spc_O2(bnd_idx)=odxc_spc_O2(bnd_idx)+odal_O2(lev_idx)
         odxc_spc_O2N2(bnd_idx)=odxc_spc_O2N2(bnd_idx)+odal_O2N2(lev_idx)
         odxc_spc_O2O2(bnd_idx)=odxc_spc_O2O2(bnd_idx)+odal_O2O2(lev_idx)
@@ -6491,16 +6500,16 @@ program swnb2
      enddo                  ! end loop over lev
      odxc_spc_ttl(bnd_idx)= &
           ! Gaseous absorption
-          odxc_spc_CO(bnd_idx)+ &
-          odxc_spc_N2(bnd_idx)+ &
-          odxc_spc_N2O(bnd_idx)+ &
+          odxc_spc_CFC11(bnd_idx)+ &
+          odxc_spc_CFC12(bnd_idx)+ &
           odxc_spc_CH4(bnd_idx)+ &
+          odxc_spc_CO(bnd_idx)+ &
           odxc_spc_CO2(bnd_idx)+ &
           odxc_spc_H2O(bnd_idx)+ &
           odxc_spc_H2OH2O(bnd_idx)+ &
+          odxc_spc_N2(bnd_idx)+ &
+          odxc_spc_N2O(bnd_idx)+ &
           odxc_spc_NO2(bnd_idx)+ &
-          odxc_spc_CFC11(bnd_idx)+ &
-          odxc_spc_CFC12(bnd_idx)+ &
           odxc_spc_O2(bnd_idx)+ &
           odxc_spc_O2N2(bnd_idx)+ &
           odxc_spc_O2O2(bnd_idx)+ &

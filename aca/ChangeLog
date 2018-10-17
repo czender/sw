@@ -1,3 +1,7 @@
+2018-10-17  Charlie Zender  <zender@uci.edu>
+
+	* Protect ss_alb_fct from underflow
+
 2018-10-16  Charlie Zender  <zender@uci.edu>
 
 	* Subroutinize absorption cross-section retrieval in abs_xsx_get()
