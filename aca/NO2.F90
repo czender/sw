@@ -10,12 +10,12 @@ program NO2
   ! cd ${HOME}/aca; make OPTS=D NO2; cd -
   
   ! Usage:
-  ! ncks -H -C -F -v wvl_ctr_CCM,flx_slr_frc_CCM,abs_xsx_NO2_CCM ${DATA}/aca/abs_xsx_NO2.nc
-  ! ncks -H -C -F -d bnd,0.3e-6 -d bnd_CCM,0.3e-6 -v wvl_ctr_CCM,flx_slr_frc_CCM,abs_xsx_NO2_CCM,abs_xsx_NO2 ${DATA}/aca/abs_xsx_NO2.nc
+  ! ncks -H -C -F -v wvl_ctr_CCM,flx_slr_frc_CCM,abs_xsx_CCM ${DATA}/aca/abs_xsx_NO2.nc
+  ! ncks -H -C -F -d bnd,0.3e-6 -d bnd_CCM,0.3e-6 -v wvl_ctr_CCM,flx_slr_frc_CCM,abs_xsx_CCM,abs_xsx ${DATA}/aca/abs_xsx_NO2.nc
   ! ncwa -a bnd -d bnd,0.295e-6,0.305e-6 ${DATA}/aca/abs_xsx_NO2.nc ${DATA}/aca/NO2.nc
-  ! ncks -H -C -F -d bnd,0.3e-6 -v abs_xsx_NO2 ${DATA}/aca/abs_xsx_NO2.nc
-  ! ncks -H -C -F -v abs_xsx_NO2 ${DATA}/aca/NO2.nc
-  ! ncks -H -C -F -d bnd_CCM,6 -v abs_xsx_NO2_CCM ${DATA}/aca/abs_xsx_NO2.nc
+  ! ncks -H -C -F -d bnd,0.3e-6 -v abs_xsx ${DATA}/aca/abs_xsx_NO2.nc
+  ! ncks -H -C -F -v abs_xsx ${DATA}/aca/NO2.nc
+  ! ncks -H -C -F -d bnd_CCM,6 -v abs_xsx_CCM ${DATA}/aca/abs_xsx_NO2.nc
   
   ! Default to JPL data, renormalize cross sections to 0 C
   ! NO2 
@@ -114,10 +114,10 @@ program NO2
   integer bnd_nbr           ! dimension size
   integer nc_id             ! file handle
   
-  integer abs_cff_mss_NO2_id
-  integer abs_xsx_NO2_dadT_id
-  integer abs_xsx_NO2_id
-  integer abs_xsx_NO2_tpt_rfr_id
+  integer abs_cff_mss_id
+  integer abs_xsx_dadT_id
+  integer abs_xsx_id
+  integer abs_xsx_tpt_rfr_id
   integer bnd_id            ! coordinate ID
   integer flx_bnd_dwn_TOA_id
   integer flx_bnd_pht_dwn_TOA_id
@@ -125,7 +125,7 @@ program NO2
   integer flx_spc_dwn_TOA_id
   integer idx_rfr_air_STP_id
   integer nrg_pht_id
-  integer qnt_yld_NO2_id
+  integer qnt_yld_id
   integer wvl_ctr_id
   integer wvl_grd_id
   integer wvl_max_id
@@ -133,10 +133,10 @@ program NO2
   integer wvl_dlt_id
   
   ! Allocatable variables
-  real,dimension(:),allocatable::abs_cff_mss_NO2
-  real,dimension(:),allocatable::abs_xsx_NO2
-  real,dimension(:),allocatable::abs_xsx_NO2_dadT
-  real,dimension(:),allocatable::abs_xsx_NO2_tpt_rfr
+  real,dimension(:),allocatable::abs_cff_mss
+  real,dimension(:),allocatable::abs_xsx
+  real,dimension(:),allocatable::abs_xsx_dadT
+  real,dimension(:),allocatable::abs_xsx_tpt_rfr
   real,dimension(:),allocatable::bnd     ! coordinate variable
   real,dimension(:),allocatable::flx_bnd_dwn_TOA
   real,dimension(:),allocatable::flx_bnd_pht_dwn_TOA
@@ -144,7 +144,7 @@ program NO2
   real,dimension(:),allocatable::flx_spc_dwn_TOA
   real,dimension(:),allocatable::idx_rfr_air_STP
   real,dimension(:),allocatable::nrg_pht
-  real,dimension(:),allocatable::qnt_yld_NO2
+  real,dimension(:),allocatable::qnt_yld
   real,dimension(:),allocatable::wvl     ! coordinate variable
   real,dimension(:),allocatable::wvl_ctr
   real,dimension(:),allocatable::wvl_dlt
@@ -157,7 +157,7 @@ program NO2
   real wvl_grd_yyy(bnd_nbr_Cal87+1)
   real wvl_max_yyy(bnd_nbr_Cal87)
   real wvl_min_yyy(bnd_nbr_Cal87)
-  real qnt_yld_NO2_yyy(bnd_nbr_Cal87)
+  real qnt_yld_yyy(bnd_nbr_Cal87)
   
   integer bnd_nbr_CCM
   integer nbr_dat_per_ln
@@ -165,10 +165,10 @@ program NO2
   integer xtr_typ_LHS
   integer xtr_typ_RHS
   
-  real abs_cff_mss_NO2_CCM(bnd_nbr_CCM_SW_max)
-  real abs_cff_mss_NO2_CCM_CGS(bnd_nbr_CCM_SW_max)
+  real abs_cff_mss_CCM(bnd_nbr_CCM_SW_max)
+  real abs_cff_mss_CCM_CGS(bnd_nbr_CCM_SW_max)
   real foo_CCM(bnd_nbr_CCM_SW_max)
-  real abs_xsx_NO2_CCM(bnd_nbr_CCM_SW_max)
+  real abs_xsx_CCM(bnd_nbr_CCM_SW_max)
   real flx_spc_dwn_TOA_CCM(bnd_nbr_CCM_SW_max)
   real flx_slr_frc_CCM(bnd_nbr_CCM_SW_max)
   real bnd_CCM(bnd_nbr_CCM_SW_max)
@@ -269,10 +269,10 @@ program NO2
   endif                     ! endif
   
   ! Allocate space for dynamic arrays
-  allocate(abs_cff_mss_NO2(bnd_nbr),stat=rcd)
-  allocate(abs_xsx_NO2(bnd_nbr),stat=rcd)
-  allocate(abs_xsx_NO2_dadT(bnd_nbr),stat=rcd)
-  allocate(abs_xsx_NO2_tpt_rfr(bnd_nbr),stat=rcd)
+  allocate(abs_cff_mss(bnd_nbr),stat=rcd)
+  allocate(abs_xsx(bnd_nbr),stat=rcd)
+  allocate(abs_xsx_dadT(bnd_nbr),stat=rcd)
+  allocate(abs_xsx_tpt_rfr(bnd_nbr),stat=rcd)
   allocate(bnd(bnd_nbr),stat=rcd)     ! coordinate variable
   allocate(flx_bnd_dwn_TOA(bnd_nbr),stat=rcd)
   allocate(flx_bnd_pht_dwn_TOA(bnd_nbr),stat=rcd)
@@ -280,7 +280,7 @@ program NO2
   allocate(flx_spc_dwn_TOA(bnd_nbr),stat=rcd)
   allocate(idx_rfr_air_STP(bnd_nbr),stat=rcd)
   allocate(nrg_pht(bnd_nbr),stat=rcd)
-  allocate(qnt_yld_NO2(bnd_nbr),stat=rcd)
+  allocate(qnt_yld(bnd_nbr),stat=rcd)
   allocate(wvl(bnd_nbr),stat=rcd)     ! coordinate variable
   allocate(wvl_ctr(bnd_nbr),stat=rcd)
   allocate(wvl_dlt(bnd_nbr),stat=rcd)
@@ -313,7 +313,7 @@ program NO2
      do bnd_idx=1,bnd_nbr
         read (fl_yld_unit,*)  &
              wvl_ctr_yyy(bnd_idx), &
-             qnt_yld_NO2_yyy(bnd_idx)
+             qnt_yld_yyy(bnd_idx)
      enddo
      
      ! Convert input data to SI units where necessary
@@ -323,11 +323,11 @@ program NO2
      
      ! Sanity check
      do bnd_idx=1,bnd_nbr
-        if (qnt_yld_NO2_yyy(bnd_idx) < 0.0.or.qnt_yld_NO2_yyy(bnd_idx) > 1.0) then
+        if (qnt_yld_yyy(bnd_idx) < 0.0.or.qnt_yld_yyy(bnd_idx) > 1.0) then
            write (6,'(a,2(a,i4,a,es15.8))')  &
                 prg_nm(1:ftn_strlen(prg_nm)), &
                 ': ERROR wvl_ctr_yyy(',bnd_idx,') = ',wvl_ctr_yyy(bnd_idx), &
-                ', qnt_yld_NO2_yyy(',bnd_idx,') = ',qnt_yld_NO2_yyy(bnd_idx)
+                ', qnt_yld_yyy(',bnd_idx,') = ',qnt_yld_yyy(bnd_idx)
            stop 'EXIT_FAILURE from main()'
         endif               ! endif error
      enddo
@@ -358,18 +358,18 @@ program NO2
         read (fl_in_unit,*)  &
              wvl_min(bnd_idx), &
              wvl_max(bnd_idx), &
-             abs_xsx_NO2(bnd_idx), &
-             abs_xsx_NO2_tpt_rfr(bnd_idx), &
-             abs_xsx_NO2_dadT(bnd_idx)
+             abs_xsx(bnd_idx), &
+             abs_xsx_tpt_rfr(bnd_idx), &
+             abs_xsx_dadT(bnd_idx)
      enddo
      
      ! Convert input data to SI units where necessary
      do bnd_idx=1,bnd_nbr
         wvl_min(bnd_idx)=wvl_min(bnd_idx)*1.0e-9 ! nm -> m
         wvl_max(bnd_idx)=wvl_max(bnd_idx)*1.0e-9 ! nm -> m
-        abs_xsx_NO2(bnd_idx)=abs_xsx_NO2(bnd_idx)*1.0e-24 ! 1.0e20 cm2 mlc-1 -> m2 mlc-1
-        abs_xsx_NO2_tpt_rfr(bnd_idx)=abs_xsx_NO2_tpt_rfr(bnd_idx)+tpt_frz_pnt ! C -> K
-        abs_xsx_NO2_dadT(bnd_idx)=abs_xsx_NO2_dadT(bnd_idx)*1.0e-26 ! 1.0e22 cm2 mlc-1 deg-1 -> m2 mlc-1 deg-1 
+        abs_xsx(bnd_idx)=abs_xsx(bnd_idx)*1.0e-24 ! 1.0e20 cm2 mlc-1 -> m2 mlc-1
+        abs_xsx_tpt_rfr(bnd_idx)=abs_xsx_tpt_rfr(bnd_idx)+tpt_frz_pnt ! C -> K
+        abs_xsx_dadT(bnd_idx)=abs_xsx_dadT(bnd_idx)*1.0e-26 ! 1.0e22 cm2 mlc-1 deg-1 -> m2 mlc-1 deg-1 
      enddo                  ! end loop over bnd
      
      ! Compute diagnostic variables.  
@@ -383,8 +383,8 @@ program NO2
      if (std_tpt) then
         ! a(T)=a(T0)+(T-T0)*dadT
         do bnd_idx=1,bnd_nbr
-           abs_xsx_NO2(bnd_idx)=abs_xsx_NO2(bnd_idx)+abs_xsx_NO2_dadT(bnd_idx)*(tpt_std-abs_xsx_NO2_tpt_rfr(bnd_idx))
-           abs_xsx_NO2_tpt_rfr(bnd_idx)=tpt_std ! Stamp data with new temperature
+           abs_xsx(bnd_idx)=abs_xsx(bnd_idx)+abs_xsx_dadT(bnd_idx)*(tpt_std-abs_xsx_tpt_rfr(bnd_idx))
+           abs_xsx_tpt_rfr(bnd_idx)=tpt_std ! Stamp data with new temperature
         enddo
         write (6,'(a30,1x,f7.3,a2)') 'Renormalized cross sections to',tpt_std,' K'
      endif
@@ -395,7 +395,7 @@ program NO2
      do bnd_idx=1,bnd_nbr
         read (fl_in_unit,*)  &
              wvl_ctr(bnd_idx), &
-             abs_xsx_NO2(bnd_idx), &
+             abs_xsx(bnd_idx), &
              float_foo,     & ! NO2 cross-section at unknown temperature
              float_foo      ! NO2 cross-section at unknown temperature
      enddo
@@ -404,7 +404,7 @@ program NO2
      ! Convert input data to SI units where necessary
      do bnd_idx=1,bnd_nbr
         wvl_ctr(bnd_idx)=wvl_ctr(bnd_idx)*1.0e-9 ! nm -> m
-        abs_xsx_NO2(bnd_idx)=abs_xsx_NO2(bnd_idx)*1.0e-4 ! cm2 mlc-1 -> m2 mlc-1
+        abs_xsx(bnd_idx)=abs_xsx(bnd_idx)*1.0e-4 ! cm2 mlc-1 -> m2 mlc-1
      enddo
      
      ! Compute diagnostic variables
@@ -420,8 +420,8 @@ program NO2
      do bnd_idx=1,bnd_nbr
         bnd(bnd_idx)=wvl_ctr(bnd_idx)
         wvl(bnd_idx)=wvl_ctr(bnd_idx)
-        abs_xsx_NO2_tpt_rfr(bnd_idx)=tpt_frz_pnt ! all NCAR data taken at 0 C
-        abs_xsx_NO2_dadT(bnd_idx)=0.0 ! no temperature dependence given for NCAR data
+        abs_xsx_tpt_rfr(bnd_idx)=tpt_frz_pnt ! all NCAR data taken at 0 C
+        abs_xsx_dadT(bnd_idx)=0.0 ! no temperature dependence given for NCAR data
      enddo
      
   else if (NOAA) then       ! NOAA data
@@ -432,14 +432,14 @@ program NO2
      enddo
      do bnd_idx=1,bnd_nbr
         read (fl_in_unit,*)  &
-             abs_xsx_NO2(bnd_idx)
+             abs_xsx(bnd_idx)
         wvl_ctr(bnd_idx)=345.0+(bnd_idx-1)*0.001
      enddo
      
      ! Convert input data to SI units where necessary.
      do bnd_idx=1,bnd_nbr
         wvl_ctr(bnd_idx)=wvl_ctr(bnd_idx)*1.0e-9 ! nm -> m
-        abs_xsx_NO2(bnd_idx)=abs_xsx_NO2(bnd_idx)*1.0e-19*1.0e-4 ! 1.0e-19 cm2 mlc-1 -> m2 mlc-1
+        abs_xsx(bnd_idx)=abs_xsx(bnd_idx)*1.0e-19*1.0e-4 ! 1.0e-19 cm2 mlc-1 -> m2 mlc-1
      enddo
      
      ! Compute diagnostic variables.  
@@ -456,9 +456,9 @@ program NO2
      do bnd_idx=1,bnd_nbr
         bnd(bnd_idx)=wvl_ctr(bnd_idx)
         ! NOAA data taken at uniform temperature
-        abs_xsx_NO2_tpt_rfr(bnd_idx)=tpt_std 
+        abs_xsx_tpt_rfr(bnd_idx)=tpt_std 
         ! Temperature dependence for NOAA data not currently implemented
-        abs_xsx_NO2_dadT(bnd_idx)=0.0
+        abs_xsx_dadT(bnd_idx)=0.0
      enddo
      
   endif                     ! NOAA data
@@ -472,7 +472,7 @@ program NO2
   
   ! Compute diagnostic variables
   do bnd_idx=1,bnd_nbr
-     abs_cff_mss_NO2(bnd_idx)=abs_xsx_NO2(bnd_idx)*Avagadro/mmw_NO2
+     abs_cff_mss(bnd_idx)=abs_xsx(bnd_idx)*Avagadro/mmw_NO2
      wvl_dlt(bnd_idx)=wvl_max(bnd_idx)-wvl_min(bnd_idx)
      wvl_grd(bnd_idx)=wvl_min(bnd_idx)
      nrg_pht(bnd_idx)=Planck*speed_of_light/wvl_ctr(bnd_idx)
@@ -493,22 +493,22 @@ program NO2
   ! Rebin quantum yield using nearest neighbor extrapolation
   xtr_typ_LHS=xtr_prt_ngh+xtr_fll_ngh+xtr_vrb
   xtr_typ_RHS=xtr_prt_ngh+xtr_fll_ngh+xtr_vrb
-  call rbn_vec(bnd_nbr_Cal87,wvl_grd_yyy,qnt_yld_NO2_yyy, &
-       bnd_nbr,wvl_grd,qnt_yld_NO2, &
+  call rbn_vec(bnd_nbr_Cal87,wvl_grd_yyy,qnt_yld_yyy, &
+       bnd_nbr,wvl_grd,qnt_yld, &
        xtr_typ_LHS,xtr_typ_RHS)
   ! Sanity check
   do bnd_idx=1,bnd_nbr
-     if (qnt_yld_NO2(bnd_idx) < 0.0.or.qnt_yld_NO2(bnd_idx) > 1.0) then
+     if (qnt_yld(bnd_idx) < 0.0.or.qnt_yld(bnd_idx) > 1.0) then
         write (6,'(a,2(a,i4,a,es15.8))')  &
              prg_nm(1:ftn_strlen(prg_nm)), &
              ': WARNING bnd(',bnd_idx,') = ',bnd(bnd_idx), &
-             ', qnt_yld_NO2(',bnd_idx,') = ',qnt_yld_NO2(bnd_idx)
+             ', qnt_yld(',bnd_idx,') = ',qnt_yld(bnd_idx)
         !        stop 'EXIT_FAILURE from main()'
-        if (qnt_yld_NO2(bnd_idx) < 0.0) qnt_yld_NO2(bnd_idx)=0.0
-        if (qnt_yld_NO2(bnd_idx) > 1.0) qnt_yld_NO2(bnd_idx)=1.0
+        if (qnt_yld(bnd_idx) < 0.0) qnt_yld(bnd_idx)=0.0
+        if (qnt_yld(bnd_idx) > 1.0) qnt_yld(bnd_idx)=1.0
         write (6,'(a,1(a,i4,a,es15.8))')  &
              prg_nm(1:ftn_strlen(prg_nm)), &
-             ': WARNING Reset value to qnt_yld_NO2(',bnd_idx,') = ',qnt_yld_NO2(bnd_idx)
+             ': WARNING Reset value to qnt_yld(',bnd_idx,') = ',qnt_yld(bnd_idx)
      endif                  ! endif error
   enddo
   
@@ -523,10 +523,10 @@ program NO2
   if (rcd /= nf90_noerr) call nf90_err_exit(rcd,fl_out)
   
   ! Variable definitions
-  rcd=rcd+nf90_def_var(nc_id,'abs_cff_mss_NO2',nf90_float,bnd_dim_id,abs_cff_mss_NO2_id)
-  rcd=rcd+nf90_def_var(nc_id,'abs_xsx_NO2',nf90_float,bnd_dim_id,abs_xsx_NO2_id)
-  rcd=rcd+nf90_def_var(nc_id,'abs_xsx_NO2_dadT',nf90_float,bnd_dim_id,abs_xsx_NO2_dadT_id)
-  rcd=rcd+nf90_def_var(nc_id,'abs_xsx_NO2_tpt_rfr',nf90_float,bnd_dim_id,abs_xsx_NO2_tpt_rfr_id)
+  rcd=rcd+nf90_def_var(nc_id,'abs_cff_mss',nf90_float,bnd_dim_id,abs_cff_mss_id)
+  rcd=rcd+nf90_def_var(nc_id,'abs_xsx',nf90_float,bnd_dim_id,abs_xsx_id)
+  rcd=rcd+nf90_def_var(nc_id,'abs_xsx_dadT',nf90_float,bnd_dim_id,abs_xsx_dadT_id)
+  rcd=rcd+nf90_def_var(nc_id,'abs_xsx_tpt_rfr',nf90_float,bnd_dim_id,abs_xsx_tpt_rfr_id)
   rcd=rcd+nf90_def_var(nc_id,'bnd',nf90_float,bnd_dim_id,bnd_id)
   rcd=rcd+nf90_def_var(nc_id,'flx_bnd_dwn_TOA',nf90_float,bnd_dim_id,flx_bnd_dwn_TOA_id)
   rcd=rcd+nf90_def_var(nc_id,'flx_bnd_pht_dwn_TOA',nf90_float,bnd_dim_id,flx_bnd_pht_dwn_TOA_id)
@@ -534,7 +534,7 @@ program NO2
   rcd=rcd+nf90_def_var(nc_id,'flx_spc_dwn_TOA',nf90_float,bnd_dim_id,flx_spc_dwn_TOA_id)
   rcd=rcd+nf90_def_var(nc_id,'idx_rfr_air_STP',nf90_float,bnd_dim_id,idx_rfr_air_STP_id)
   rcd=rcd+nf90_def_var(nc_id,'nrg_pht',nf90_float,bnd_dim_id,nrg_pht_id)
-  rcd=rcd+nf90_def_var(nc_id,'qnt_yld_NO2',nf90_float,bnd_dim_id,qnt_yld_NO2_id)
+  rcd=rcd+nf90_def_var(nc_id,'qnt_yld',nf90_float,bnd_dim_id,qnt_yld_id)
   rcd=rcd+nf90_def_var(nc_id,'wvl_ctr',nf90_float,bnd_dim_id,wvl_ctr_id)
   rcd=rcd+nf90_def_var(nc_id,'wvl_grd',nf90_float,grd_dim_id,wvl_grd_id)
   rcd=rcd+nf90_def_var(nc_id,'wvl_max',nf90_float,bnd_dim_id,wvl_max_id)
@@ -549,10 +549,10 @@ program NO2
   rcd=rcd+nf90_put_att(nc_id,nf90_global,'src_rfr_sng',src_rfr_sng(1:ftn_strlen(src_rfr_sng)))
   rcd=rcd+nf90_put_att(nc_id,nf90_global,'src_fl_sng',src_fl_sng(1:ftn_strlen(src_fl_sng)))
   ! Add english text descriptions
-  rcd=rcd+nf90_put_att(nc_id,abs_cff_mss_NO2_id,'long_name','Nitrogen Dioxide mass absorption coefficient')
-  rcd=rcd+nf90_put_att(nc_id,abs_xsx_NO2_dadT_id,'long_name','Slope of absorption cross section temperature dependence')
-  rcd=rcd+nf90_put_att(nc_id,abs_xsx_NO2_id,'long_name','Nitrogen Dioxide continuum absorption cross section')
-  rcd=rcd+nf90_put_att(nc_id,abs_xsx_NO2_tpt_rfr_id,'long_name','Valid temperature for absorption cross section')
+  rcd=rcd+nf90_put_att(nc_id,abs_cff_mss_id,'long_name','Nitrogen Dioxide mass absorption coefficient')
+  rcd=rcd+nf90_put_att(nc_id,abs_xsx_dadT_id,'long_name','Slope of absorption cross section temperature dependence')
+  rcd=rcd+nf90_put_att(nc_id,abs_xsx_id,'long_name','Nitrogen Dioxide continuum absorption cross section')
+  rcd=rcd+nf90_put_att(nc_id,abs_xsx_tpt_rfr_id,'long_name','Valid temperature for absorption cross section')
   rcd=rcd+nf90_put_att(nc_id,bnd_id,'long_name','Band nominal wavelength')
   rcd=rcd+nf90_put_att(nc_id,flx_bnd_dwn_TOA_id,'long_name','Solar Energy flux in band')
   rcd=rcd+nf90_put_att(nc_id,flx_bnd_pht_dwn_TOA_id,'long_name','Photon flux in band')
@@ -560,7 +560,7 @@ program NO2
   rcd=rcd+nf90_put_att(nc_id,flx_spc_dwn_TOA_id,'long_name','Spectral solar insolation at TOA')
   rcd=rcd+nf90_put_att(nc_id,idx_rfr_air_STP_id,'long_name','Index of refraction at band center at STP')
   rcd=rcd+nf90_put_att(nc_id,nrg_pht_id,'long_name','Energy of photon at band center')
-  rcd=rcd+nf90_put_att(nc_id,qnt_yld_NO2_id,'long_name','Quantum yield for NO2 + hv --> O + NO')
+  rcd=rcd+nf90_put_att(nc_id,qnt_yld_id,'long_name','Quantum yield for NO2 + hv --> O + NO')
   rcd=rcd+nf90_put_att(nc_id,wvl_ctr_id,'long_name','Band center wavelength')
   rcd=rcd+nf90_put_att(nc_id,wvl_grd_id,'long_name','Wavelength grid')
   rcd=rcd+nf90_put_att(nc_id,wvl_max_id,'long_name','Band maximum wavelength')
@@ -568,10 +568,10 @@ program NO2
   rcd=rcd+nf90_put_att(nc_id,wvl_dlt_id,'long_name','Bandwidth')
   
   ! Add units
-  rcd=rcd+nf90_put_att(nc_id,abs_cff_mss_NO2_id,'units','meter2 kilogram-1')
-  rcd=rcd+nf90_put_att(nc_id,abs_xsx_NO2_dadT_id,'units','meter2 kelvin-1')
-  rcd=rcd+nf90_put_att(nc_id,abs_xsx_NO2_id,'units','meter2')
-  rcd=rcd+nf90_put_att(nc_id,abs_xsx_NO2_tpt_rfr_id,'units','kelvin')
+  rcd=rcd+nf90_put_att(nc_id,abs_cff_mss_id,'units','meter2 kilogram-1')
+  rcd=rcd+nf90_put_att(nc_id,abs_xsx_dadT_id,'units','meter2 kelvin-1')
+  rcd=rcd+nf90_put_att(nc_id,abs_xsx_id,'units','meter2')
+  rcd=rcd+nf90_put_att(nc_id,abs_xsx_tpt_rfr_id,'units','kelvin')
   rcd=rcd+nf90_put_att(nc_id,bnd_id,'units','meter')
   rcd=rcd+nf90_put_att(nc_id,flx_bnd_dwn_TOA_id,'units','watt meter-2')
   rcd=rcd+nf90_put_att(nc_id,flx_bnd_pht_dwn_TOA_id,'units','photon meter-2 second-1')
@@ -579,7 +579,7 @@ program NO2
   rcd=rcd+nf90_put_att(nc_id,flx_spc_dwn_TOA_id,'units','watt meter-2 meter-1')
   rcd=rcd+nf90_put_att(nc_id,idx_rfr_air_STP_id,'units','fraction')
   rcd=rcd+nf90_put_att(nc_id,nrg_pht_id,'units','joule photon-1')
-  rcd=rcd+nf90_put_att(nc_id,qnt_yld_NO2_id,'units','fraction')
+  rcd=rcd+nf90_put_att(nc_id,qnt_yld_id,'units','fraction')
   rcd=rcd+nf90_put_att(nc_id,wvl_ctr_id,'units','meter')
   rcd=rcd+nf90_put_att(nc_id,wvl_grd_id,'units','meter')
   rcd=rcd+nf90_put_att(nc_id,wvl_max_id,'units','meter')
@@ -590,10 +590,10 @@ program NO2
   rcd=rcd+nf90_enddef(nc_id)
   
   ! Write data
-  rcd=rcd+nf90_put_var(nc_id,abs_cff_mss_NO2_id,abs_cff_mss_NO2)
-  rcd=rcd+nf90_put_var(nc_id,abs_xsx_NO2_dadT_id,abs_xsx_NO2_dadT)
-  rcd=rcd+nf90_put_var(nc_id,abs_xsx_NO2_id,abs_xsx_NO2)
-  rcd=rcd+nf90_put_var(nc_id,abs_xsx_NO2_tpt_rfr_id,abs_xsx_NO2_tpt_rfr)
+  rcd=rcd+nf90_put_var(nc_id,abs_cff_mss_id,abs_cff_mss)
+  rcd=rcd+nf90_put_var(nc_id,abs_xsx_dadT_id,abs_xsx_dadT)
+  rcd=rcd+nf90_put_var(nc_id,abs_xsx_id,abs_xsx)
+  rcd=rcd+nf90_put_var(nc_id,abs_xsx_tpt_rfr_id,abs_xsx_tpt_rfr)
   rcd=rcd+nf90_put_var(nc_id,bnd_id,bnd)
   rcd=rcd+nf90_put_var(nc_id,flx_bnd_dwn_TOA_id,flx_bnd_dwn_TOA)
   rcd=rcd+nf90_put_var(nc_id,flx_bnd_pht_dwn_TOA_id,flx_bnd_pht_dwn_TOA)
@@ -601,7 +601,7 @@ program NO2
   rcd=rcd+nf90_put_var(nc_id,flx_spc_dwn_TOA_id,flx_spc_dwn_TOA)
   rcd=rcd+nf90_put_var(nc_id,idx_rfr_air_STP_id,idx_rfr_air_STP)
   rcd=rcd+nf90_put_var(nc_id,nrg_pht_id,nrg_pht)
-  rcd=rcd+nf90_put_var(nc_id,qnt_yld_NO2_id,qnt_yld_NO2)
+  rcd=rcd+nf90_put_var(nc_id,qnt_yld_id,qnt_yld)
   rcd=rcd+nf90_put_var(nc_id,wvl_ctr_id,wvl_ctr)
   rcd=rcd+nf90_put_var(nc_id,wvl_grd_id,wvl_grd)
   rcd=rcd+nf90_put_var(nc_id,wvl_max_id,wvl_max)
@@ -619,7 +619,7 @@ program NO2
   
   ! Weight high resolution absorption cross sections by high resolution TOA solar flux
   do idx=1,bnd_nbr
-     xsx_wgt_flx(idx)=abs_xsx_NO2(idx)*flx_spc_dwn_TOA(idx)
+     xsx_wgt_flx(idx)=abs_xsx(idx)*flx_spc_dwn_TOA(idx)
   enddo                     ! end loop over NO2 bnd
   
   ! Initialize default values
@@ -638,8 +638,8 @@ program NO2
   ! Normalize flux-weighted absorption cross section by solar flux
   do idx=1,bnd_nbr_CCM
      flx_spc_dwn_TOA_CCM(idx)=flx_slr_frc_CCM(idx)*slr_cst_CCM/wvl_dlt_CCM(idx)
-     abs_xsx_NO2_CCM(idx)=xsx_wgt_flx_CCM(idx)/flx_spc_dwn_TOA_CCM(idx)
-     abs_cff_mss_NO2_CCM(idx)=abs_xsx_NO2_CCM(idx)*Avagadro/mmw_NO2
+     abs_xsx_CCM(idx)=xsx_wgt_flx_CCM(idx)/flx_spc_dwn_TOA_CCM(idx)
+     abs_cff_mss_CCM(idx)=abs_xsx_CCM(idx)*Avagadro/mmw_NO2
   enddo                     ! end loop over CCM bnd
   
   if (dbg_lvl == dbg_crr) then
@@ -664,22 +664,22 @@ program NO2
   if (rcd /= nf90_noerr) call nf90_err_exit(rcd,fl_out)
   
   ! Variable definitions
-  rcd=rcd+nf90_def_var(nc_id,'abs_cff_mss_NO2_CCM',nf90_float,bnd_dim_id,abs_cff_mss_NO2_id)
-  rcd=rcd+nf90_def_var(nc_id,'abs_xsx_NO2_CCM',nf90_float,bnd_dim_id,abs_xsx_NO2_id)
+  rcd=rcd+nf90_def_var(nc_id,'abs_cff_mss_CCM',nf90_float,bnd_dim_id,abs_cff_mss_id)
+  rcd=rcd+nf90_def_var(nc_id,'abs_xsx_CCM',nf90_float,bnd_dim_id,abs_xsx_id)
   rcd=rcd+nf90_def_var(nc_id,'flx_slr_frc_CCM',nf90_float,bnd_dim_id,flx_slr_frc_id)
   rcd=rcd+nf90_def_var(nc_id,'flx_spc_dwn_TOA_CCM',nf90_float,bnd_dim_id,flx_spc_dwn_TOA_id)
   
   ! Add global attributes
   
   ! Add english text descriptions
-  rcd=rcd+nf90_put_att(nc_id,abs_cff_mss_NO2_id,'long_name','Nitrogen Dioxide mass absorption coefficient')
-  rcd=rcd+nf90_put_att(nc_id,abs_xsx_NO2_id,'long_name','Nitrogen Dioxide continuum absorption cross section')
+  rcd=rcd+nf90_put_att(nc_id,abs_cff_mss_id,'long_name','Nitrogen Dioxide mass absorption coefficient')
+  rcd=rcd+nf90_put_att(nc_id,abs_xsx_id,'long_name','Nitrogen Dioxide continuum absorption cross section')
   rcd=rcd+nf90_put_att(nc_id,flx_slr_frc_id,'long_name','Fraction of solar flux in band: ' // fl_slr)
   rcd=rcd+nf90_put_att(nc_id,flx_spc_dwn_TOA_id,'long_name','Spectral solar insolation at TOA')
   
   ! Add units
-  rcd=rcd+nf90_put_att(nc_id,abs_cff_mss_NO2_id,'units','meter2 kilogram-1')
-  rcd=rcd+nf90_put_att(nc_id,abs_xsx_NO2_id,'units','meter2')
+  rcd=rcd+nf90_put_att(nc_id,abs_cff_mss_id,'units','meter2 kilogram-1')
+  rcd=rcd+nf90_put_att(nc_id,abs_xsx_id,'units','meter2')
   rcd=rcd+nf90_put_att(nc_id,flx_slr_frc_id,'units','fraction')
   rcd=rcd+nf90_put_att(nc_id,flx_spc_dwn_TOA_id,'units','watt meter-2 meter-1')
   
@@ -688,8 +688,8 @@ program NO2
   if (rcd /= nf90_noerr) call nf90_err_exit(rcd,fl_out)
   
   ! Write out data
-  rcd=rcd+nf90_put_var(nc_id,abs_cff_mss_NO2_id,abs_cff_mss_NO2_CCM)
-  rcd=rcd+nf90_put_var(nc_id,abs_xsx_NO2_id,abs_xsx_NO2_CCM)
+  rcd=rcd+nf90_put_var(nc_id,abs_cff_mss_id,abs_cff_mss_CCM)
+  rcd=rcd+nf90_put_var(nc_id,abs_xsx_id,abs_xsx_CCM)
   rcd=rcd+nf90_put_var(nc_id,flx_slr_frc_id,flx_slr_frc_CCM)
   rcd=rcd+nf90_put_var(nc_id,flx_spc_dwn_TOA_id,flx_spc_dwn_TOA_CCM)
   
@@ -700,7 +700,7 @@ program NO2
   
   ! Convert absorption coefficients to cm2/gm and output block for radcsw
   do idx=1,bnd_nbr_CCM
-     abs_cff_mss_NO2_CCM_CGS(idx)=abs_cff_mss_NO2_CCM(idx)*10.0 !  m2 kg-1 --> [cm2 g-1] 
+     abs_cff_mss_CCM_CGS(idx)=abs_cff_mss_CCM(idx)*10.0 !  m2 kg-1 --> [cm2 g-1] 
   enddo                     ! end loop over CCM bnd
   nbr_dat_per_ln=4
   write (0,'(a,a,a,a)') 'c     Data generated by ',prg_nm(1:ftn_strlen(prg_nm)),' on ',lcl_date_time
@@ -709,14 +709,14 @@ program NO2
   write (0,'(a,f7.3,a)') 'c     NO2 mass absorption coefficients in [cm2 g-1] for T = ',tpt_std,' K'
   write (0,'(a,a)') 'c     ',src_rfr_sng(1:ftn_strlen(src_rfr_sng))
   write (0,'(a,a)') 'c     ',src_fl_sng(1:ftn_strlen(src_fl_sng))
-  call dat_prn_f77(bnd_nbr_CCM,abs_cff_mss_NO2_CCM_CGS,nbr_dat_per_ln,'abNO2'//char(0))
-  call dat_prn_f90(bnd_nbr_CCM,abs_cff_mss_NO2_CCM_CGS,nbr_dat_per_ln,'abNO2'//char(0))
+  call dat_prn_f77(bnd_nbr_CCM,abs_cff_mss_CCM_CGS,nbr_dat_per_ln,'abNO2'//char(0))
+  call dat_prn_f90(bnd_nbr_CCM,abs_cff_mss_CCM_CGS,nbr_dat_per_ln,'abNO2'//char(0))
   
   ! De-allocate dynamic variables
-  if (allocated(abs_cff_mss_NO2)) deallocate(abs_cff_mss_NO2,stat=rcd)
-  if (allocated(abs_xsx_NO2)) deallocate(abs_xsx_NO2,stat=rcd)
-  if (allocated(abs_xsx_NO2_dadT)) deallocate(abs_xsx_NO2_dadT,stat=rcd)
-  if (allocated(abs_xsx_NO2_tpt_rfr)) deallocate(abs_xsx_NO2_tpt_rfr,stat=rcd)
+  if (allocated(abs_cff_mss)) deallocate(abs_cff_mss,stat=rcd)
+  if (allocated(abs_xsx)) deallocate(abs_xsx,stat=rcd)
+  if (allocated(abs_xsx_dadT)) deallocate(abs_xsx_dadT,stat=rcd)
+  if (allocated(abs_xsx_tpt_rfr)) deallocate(abs_xsx_tpt_rfr,stat=rcd)
   if (allocated(bnd)) deallocate(bnd,stat=rcd)     ! coordinate variable
   if (allocated(flx_bnd_dwn_TOA)) deallocate(flx_bnd_dwn_TOA,stat=rcd)
   if (allocated(flx_bnd_pht_dwn_TOA)) deallocate(flx_bnd_pht_dwn_TOA,stat=rcd)
@@ -724,7 +724,7 @@ program NO2
   if (allocated(flx_spc_dwn_TOA)) deallocate(flx_spc_dwn_TOA,stat=rcd)
   if (allocated(idx_rfr_air_STP)) deallocate(idx_rfr_air_STP,stat=rcd)
   if (allocated(nrg_pht)) deallocate(nrg_pht,stat=rcd)
-  if (allocated(qnt_yld_NO2)) deallocate(qnt_yld_NO2,stat=rcd)
+  if (allocated(qnt_yld)) deallocate(qnt_yld,stat=rcd)
   if (allocated(wvl)) deallocate(wvl,stat=rcd)     ! coordinate variable
   if (allocated(wvl_ctr)) deallocate(wvl_ctr,stat=rcd)
   if (allocated(wvl_dlt)) deallocate(wvl_dlt,stat=rcd)

@@ -1,8 +1,12 @@
 2018-10-17  Charlie Zender  <zender@uci.edu>
 
+	* Re-process NO2.F90
+
 	* Protect ss_alb_fct from underflow
 
 2018-10-16  Charlie Zender  <zender@uci.edu>
+
+	* Default NO2 to use NCAR data (which has no quantuum yields)
 
 	* Subroutinize absorption cross-section retrieval in abs_xsx_get()
 

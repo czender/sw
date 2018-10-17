@@ -944,15 +944,14 @@ program swnb2
   integer wvl_grd_HC_id
   
   ! NO2 input variables
-  integer abs_xsx_NO2_id
-  integer qnt_yld_NO2_id
-  integer wvl_grd_NO2_id
+  ! integer abs_xsx_NO2_id
+  ! integer qnt_yld_NO2_id
 
   ! CFC11 input variables
-  integer abs_xsx_CFC11_id
+  ! integer abs_xsx_CFC11_id
   
   ! CFC12 input variables
-  integer abs_xsx_CFC12_id
+  ! integer abs_xsx_CFC12_id
   
   ! Reflectance input variables
   integer wvl_grd_rfl_id
@@ -1415,11 +1414,11 @@ program swnb2
   real wvl_grd_HC(bnd_nbr_HC_max+1)
   
   ! NO2 input variables
-  real abs_xsx_NO2_dsk(bnd_nbr_NO2_max)
-  real qnt_yld_NO2_dsk(bnd_nbr_NO2_max)
+  real,dimension(:),allocatable::abs_xsx_NO2_dsk
+  real,dimension(:),allocatable::qnt_yld_NO2_dsk
+  real,dimension(:),allocatable::wvl_grd_NO2
   real abs_xsx_NO2(bnd_nbr_max)
   real qnt_yld_NO2(bnd_nbr_max)
-  real wvl_grd_NO2(bnd_nbr_NO2_max+1)
   
   ! CFC11 input variables
   real,dimension(:),allocatable::abs_xsx_CFC11_dsk
@@ -3238,26 +3237,9 @@ program swnb2
   ! Close file
   rcd=nf90_wrp_close(nc_id,fl_HHCWC,'Ingested') ! [fnc] Close file
 
-  ! Ingest fl_NO2
-  rcd=nf90_wrp_open(fl_NO2,nf90_nowrite,nc_id)
-  ! Get dimension IDs
-  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
-  ! Get dimension sizes
-  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_NO2),sbr_nm//": inquire_dim bnd")
-  if (bnd_nbr_NO2>bnd_nbr_NO2_max) stop 'bnd_nbr_NO2>bnd_nbr_NO2_max'
-  cnt_bnd(1)=bnd_nbr_NO2
-  cnt_bndp(1)=bnd_nbr_NO2+1
-  ! Get variable IDs
-  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_NO2',abs_xsx_NO2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'qnt_yld_NO2',qnt_yld_NO2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_grd',wvl_grd_NO2_id)
-  ! Get data
-  rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_NO2_id,abs_xsx_NO2_dsk,srt_one,cnt_bnd),"gv abs_xsx_NO2_dsk")
-  rcd=nf90_wrp(nf90_get_var(nc_id,qnt_yld_NO2_id,qnt_yld_NO2_dsk,srt_one,cnt_bnd),"gv qnt_yld_NO2_dsk")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_grd_NO2_id,wvl_grd_NO2,srt_one,cnt_bndp),"gv wvl_grd_NO2")
-  ! Close file
-  rcd=nf90_wrp_close(nc_id,fl_NO2,'Ingested') ! [fnc] Close file
-  
+  call abs_xsx_get(fl_NO2,bnd_nbr_NO2, &
+       abs_xsx_NO2_dsk,wvl_grd_NO2,qnt_yld=qnt_yld_NO2_dsk)
+
   call abs_xsx_get(fl_CFC11,bnd_nbr_CFC11, &
        abs_xsx_CFC11_dsk,wvl_grd_CFC11)
 

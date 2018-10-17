@@ -102,8 +102,8 @@ contains
     if(present(qnt_yld)) then
        allocate(qnt_yld(bnd_nbr),stat=rcd)
        if(rcd /= 0) stop "allocate() failed for qnt_yld"
-       rcd=nf90_wrp_inq_varid(nc_id,'qnt_yld',qnt_yld_id)
-       rcd=nf90_wrp(nf90_get_var(nc_id,qnt_yld_id,qnt_yld,srt_one,cnt_bnd),"gv qnt_yld")
+       rcd=nf90_wrp_inq_varid(nc_id,'qnt_yld',qnt_yld_id,rcd_opt=nf90_enotvar) ! Tolerate quantuum yield not present
+       if(rcd /= nf90_noerr) rcd=nf90_wrp(nf90_get_var(nc_id,qnt_yld_id,qnt_yld,srt_one,cnt_bnd),"gv qnt_yld")
     endif ! !qnt_yld
     if(present(wvl_ctr)) then
        allocate(wvl_ctr(bnd_nbr),stat=rcd)
