@@ -1,5 +1,7 @@
 2018-10-18  Charlie Zender  <zender@uci.edu>
 
+	* Implement split resolution LW/SW grid capability in htrn2nb.F90
+
 	* Fix kink in aerosol scattering caused by neglecting PMOM(1) by HG scattering fraction
 
 2018-10-17  Charlie Zender  <zender@uci.edu>

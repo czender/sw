@@ -239,44 +239,57 @@ program htrn2nb
   integer,dimension(:),allocatable::bnd_ln_nbr
   integer,dimension(:),allocatable::ln_idx_max
   integer,dimension(:),allocatable::ln_idx_min
+
+  logical::grd_LW_SW=.true.
+  integer::bnd_nbr_LW=199
+  integer::bnd_idx_LW_end
+  integer::bnd_nbr_SW=2500
+
+  real(selected_real_kind(p=12))::bnd_dlt_LW=10
+  real(selected_real_kind(p=12))::bnd_dlt_SW=10
+  real(selected_real_kind(p=12))::wvn_min_SW
+  real(selected_real_kind(p=12))::wvn_max_LW
+  real(selected_real_kind(p=12))::wvn_min_LW=10
+  real(selected_real_kind(p=12))::wvn_max_SW=27000
+  real(selected_real_kind(p=12))::wvn_bnd_LW_SW=2000
   
-  real(selected_real_kind(p=12)) Boltzmann_rcp
-  real(selected_real_kind(p=12)) Boltzmann_wgt
-  real(selected_real_kind(p=12)) Boltzmann_wgt_tpt
-  real(selected_real_kind(p=12)) HWHM_air_rfr
-  real(selected_real_kind(p=12)) HWHM_air_tpt_crr
-  real(selected_real_kind(p=12)) bnd_sum_str_ln_lmt_rfr
-  real(selected_real_kind(p=12)) bnd_sum_str_ln_lmt_tpt_crr
-  real(selected_real_kind(p=12)) bnd_sum_wk_ln_lmt_rfr
-  real(selected_real_kind(p=12)) bnd_sum_wk_ln_lmt_tpt_crr
-  real(selected_real_kind(p=12)) float_foo
-  real(selected_real_kind(p=12)) ln_hi
-  real(selected_real_kind(p=12)) ln_lo
-  real(selected_real_kind(p=12)) ln_str_rfr
-  real(selected_real_kind(p=12)) ln_str_tpt_crr
-  real(selected_real_kind(p=12)) mtx_a1_phi
-  real(selected_real_kind(p=12)) mtx_a1_psi
-  real(selected_real_kind(p=12)) mtx_a2_phi
-  real(selected_real_kind(p=12)) mtx_a2_psi
-  real(selected_real_kind(p=12)) mtx_b1_phi
-  real(selected_real_kind(p=12)) mtx_b1_psi
-  real(selected_real_kind(p=12)) mtx_b2_phi
-  real(selected_real_kind(p=12)) mtx_b2_psi
-  real(selected_real_kind(p=12)) mtx_c1_phi
-  real(selected_real_kind(p=12)) mtx_c1_psi
-  real(selected_real_kind(p=12)) mtx_c2_phi
-  real(selected_real_kind(p=12)) mtx_c2_psi
-  real(selected_real_kind(p=12)) phi
-  real(selected_real_kind(p=12)) psi
-  real(selected_real_kind(p=12)) prt_fnc_tpt_scl_rfr
-  real(selected_real_kind(p=12)) stm_msn_crc
-  real(selected_real_kind(p=12)) stm_msn_crc_tpt
-  real(selected_real_kind(p=12)) tpt_HITRAN_rcp
-  real(selected_real_kind(p=12)) tpt_Malkmus_rfr
-  real(selected_real_kind(p=12)) tpt_Malkmus_rfr_rcp
-  real(selected_real_kind(p=12)) tpt_max
-  real(selected_real_kind(p=12)) tpt_min
-  real(selected_real_kind(p=12)) tpt_ncr
+  real(selected_real_kind(p=12))::Boltzmann_rcp
+  real(selected_real_kind(p=12))::Boltzmann_wgt
+  real(selected_real_kind(p=12))::Boltzmann_wgt_tpt
+  real(selected_real_kind(p=12))::HWHM_air_rfr
+  real(selected_real_kind(p=12))::HWHM_air_tpt_crr
+  real(selected_real_kind(p=12))::bnd_sum_str_ln_lmt_rfr
+  real(selected_real_kind(p=12))::bnd_sum_str_ln_lmt_tpt_crr
+  real(selected_real_kind(p=12))::bnd_sum_wk_ln_lmt_rfr
+  real(selected_real_kind(p=12))::bnd_sum_wk_ln_lmt_tpt_crr
+  real(selected_real_kind(p=12))::float_foo
+  real(selected_real_kind(p=12))::ln_hi
+  real(selected_real_kind(p=12))::ln_lo
+  real(selected_real_kind(p=12))::ln_str_rfr
+  real(selected_real_kind(p=12))::ln_str_tpt_crr
+  real(selected_real_kind(p=12))::mtx_a1_phi
+  real(selected_real_kind(p=12))::mtx_a1_psi
+  real(selected_real_kind(p=12))::mtx_a2_phi
+  real(selected_real_kind(p=12))::mtx_a2_psi
+  real(selected_real_kind(p=12))::mtx_b1_phi
+  real(selected_real_kind(p=12))::mtx_b1_psi
+  real(selected_real_kind(p=12))::mtx_b2_phi
+  real(selected_real_kind(p=12))::mtx_b2_psi
+  real(selected_real_kind(p=12))::mtx_c1_phi
+  real(selected_real_kind(p=12))::mtx_c1_psi
+  real(selected_real_kind(p=12))::mtx_c2_phi
+  real(selected_real_kind(p=12))::mtx_c2_psi
+  real(selected_real_kind(p=12))::phi
+  real(selected_real_kind(p=12))::psi
+  real(selected_real_kind(p=12))::prt_fnc_tpt_scl_rfr
+  real(selected_real_kind(p=12))::stm_msn_crc
+  real(selected_real_kind(p=12))::stm_msn_crc_tpt
+  real(selected_real_kind(p=12))::tpt_HITRAN_rcp
+  real(selected_real_kind(p=12))::tpt_Malkmus_rfr
+  real(selected_real_kind(p=12))::tpt_Malkmus_rfr_rcp
+  real(selected_real_kind(p=12))::tpt_max
+  real(selected_real_kind(p=12))::tpt_min
+  real(selected_real_kind(p=12))::tpt_ncr
   
   character(iso_sng_htrn_lng_max) iso_sng_htrn(iso_nbr_max_htrn) ! Contains all HITRAN isotopomer names
   character(mlc_sng_htrn_lng_max) mlc_sng_htrn(mlc_nbr_max_htrn) ! Contains all HITRAN molecule names
@@ -302,12 +315,12 @@ program htrn2nb
   tpt_min=180.0             ! [K]
   tpt_max=320.0             ! [K]
   
-  ! Initialize options which may be overridden by command line
+  ! Initialize options that may be overridden by command line
   bnd_dbg=800               ! Option -B
   dbg_lvl=0                 ! Option -D
-  bnd_nbr=1590              ! Option -b
-  ln_lo=2000.0              ! [cm-1] Option -l
-  ln_hi=17900.0             ! [cm-1] Option -h
+  bnd_nbr=2699              ! Option -b
+  ln_lo=wvn_min_LW          ! [cm-1] Option -l
+  ln_hi=wvn_max_SW          ! [cm-1] Option -h
   typ_out=nf90_float        ! [enm] Output floating point type
   tpt_Malkmus_rfr=tpt_Malkmus_BPB ! Option -T
   tpt_nbr=140               ! Option -t
@@ -330,7 +343,10 @@ program htrn2nb
              ': DEBUG Double hyphen indicates multi-character option: ', &
              'opt_sng = ',opt_sng(1:ftn_strlen(opt_sng)),', opt_lng = ',opt_lng
         ! fxm: Change if else if construct to select case but how to handle fall-through cases elegantly?
-        if (opt_sng == 'dbg' .or. opt_sng == 'dbg_lvl' ) then
+        if (opt_sng == 'bnd_nbr' .or. opt_sng == 'wvn_nbr' ) then
+           call ftn_arg_get(arg_idx,arg_val,bnd_nbr) ! [nbr] Number of bands
+           grd_LW_SW=.false.
+        else if (opt_sng == 'dbg' .or. opt_sng == 'dbg_lvl' ) then
            call ftn_arg_get(arg_idx,arg_val,dbg_lvl) ! [enm] Debugging level
         else if (opt_sng == 'dbl' .or. opt_sng == 'double' ) then
            typ_out=nf90_double ! [frc] Double
@@ -346,6 +362,16 @@ program htrn2nb
            call ftn_arg_get(arg_idx,arg_val,fl_out) ! [sng] Output file
         else if (opt_sng == 'flt' .or. opt_sng == 'flt_foo' ) then
            typ_out=nf90_float ! [frc] Double
+        else if (opt_sng == 'ln_lo' .or. opt_sng == 'wvn_min' ) then
+           call ftn_arg_get(arg_idx,arg_val,ln_lo) ! [cm-1] Minimum wavenumber
+        else if (opt_sng == 'ln_hi' .or. opt_sng == 'wvn_max' ) then
+           call ftn_arg_get(arg_idx,arg_val,ln_hi) ! [cm-1] Maximum wavenumber
+        else if (opt_sng == 'wvn_bnd' .or. opt_sng == 'wvn_bnd_LW_SW' ) then
+           call ftn_arg_get(arg_idx,arg_val,wvn_bnd_LW_SW) ! [cm-1] Boundary wavenumber between LW and SW grids
+        else if (opt_sng == 'rsn_LW' .or. opt_sng == 'bnd_dlt_LW' ) then
+           call ftn_arg_get(arg_idx,arg_val,bnd_dlt_LW) ! [cm-1] Resolution in LW portion of grid
+        else if (opt_sng == 'rsn_SW' .or. opt_sng == 'bnd_dlt_SW' ) then
+           call ftn_arg_get(arg_idx,arg_val,bnd_dlt_SW) ! [cm-1] Resolution in SW portion of grid
         else ! Option not recognized
            arg_idx=arg_idx-1 ! [idx] Counting index
            call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
@@ -362,6 +388,7 @@ program htrn2nb
            call ftn_arg_get(arg_idx,arg_val,bnd_dbg)
         else if (dsh_key == '-b') then
            call ftn_arg_get(arg_idx,arg_val,bnd_nbr)
+           grd_LW_SW=.false.
         else if (dsh_key == '-D') then
            call ftn_arg_get(arg_idx,arg_val,dbg_lvl)
         else if (dsh_key == '-f') then
@@ -414,6 +441,17 @@ program htrn2nb
   if (tpt_nbr > tpt_nbr_max) stop 'tpt_nbr > tpt_nbr_max'
   if (bnd_nbr > bnd_nbr_max) stop 'bnd_nbr > bnd_nbr_max'
   
+  if(grd_LW_SW) then
+     wvn_min_LW=ln_lo
+     wvn_max_SW=ln_hi
+     wvn_min_SW=wvn_bnd_LW_SW
+     wvn_max_LW=wvn_bnd_LW_SW
+     bnd_nbr_LW=nint((wvn_max_LW-wvn_min_LW)/bnd_dlt_LW)
+     bnd_nbr_SW=nint((wvn_max_SW-wvn_min_SW)/bnd_dlt_SW)
+     bnd_nbr=bnd_nbr_LW+bnd_nbr_SW
+     bnd_idx_LW_end=bnd_nbr_LW
+  endif ! !grd_LW_SW
+
   ! Computational-precision netCDF output variables
   allocate(A_phi(bnd_nbr),stat=rcd)
   allocate(A_psi(bnd_nbr),stat=rcd)
@@ -565,12 +603,31 @@ program htrn2nb
      enddo                  ! end loop over iso
      
      ! Compute wavenumber coordinates
-     bnd_dlt=(ln_hi-ln_lo)/bnd_nbr
-     float_foo=bnd_dlt/2.0
-     do bnd_idx=1,bnd_nbr
-        wvn_grd(bnd_idx)=ln_lo+(bnd_idx-1)*bnd_dlt
-     enddo                  ! end loop over bnd
-     wvn_grd(bnd_nbr+1)=ln_hi
+     if(grd_LW_SW) then
+        ! Split grid with distinct resolutions in SW/LW regions
+        do bnd_idx=1,bnd_nbr_LW
+           wvn_grd(bnd_idx)=wvn_min_LW+(bnd_idx-1)*bnd_dlt_LW
+        enddo                  ! end loop over bnd
+        do bnd_idx=bnd_nbr_LW+1,bnd_nbr_LW+bnd_nbr_SW
+           wvn_grd(bnd_idx)=wvn_min_SW+(bnd_idx-bnd_nbr_LW-1)*bnd_dlt_SW
+        enddo                  ! end loop over bnd
+        wvn_grd(bnd_nbr+1)=wvn_max_SW
+     else ! !grd_LW_SW
+        ! Normal grid with uniform resolution in wvn space
+        bnd_dlt=(ln_hi-ln_lo)/bnd_nbr
+        float_foo=bnd_dlt/2.0
+        do bnd_idx=1,bnd_nbr
+           wvn_grd(bnd_idx)=ln_lo+(bnd_idx-1)*bnd_dlt
+        enddo                  ! end loop over bnd
+        wvn_grd(bnd_nbr+1)=ln_hi
+     endif ! !grd_LW_SW
+
+     if (dbg_lvl >= dbg_crr) then
+        do bnd_idx=1,bnd_nbr+1 
+           write (6,*) 'idx = ',bnd_idx,'wvn_grd = ',wvn_grd(bnd_idx)
+        enddo                  ! end loop over bnd
+     endif ! endif dbg
+     
      do bnd_idx=1,bnd_nbr
         wvn_min(bnd_idx)=wvn_grd(bnd_idx)
         wvn_max(bnd_idx)=wvn_grd(bnd_idx+1)
@@ -626,7 +683,7 @@ program htrn2nb
      ! to beginning of first band, and that ln is monotonically increasing.
      do bnd_idx=1,bnd_nbr
         do while (ln_idx <= ln_nbr.and.ln_ctr(ln_idx) >= wvn_min(bnd_idx).and.ln_ctr(ln_idx) < wvn_max(bnd_idx))
-           if (ln_idx_min(bnd_idx)==0) ln_idx_min(bnd_idx)=ln_idx
+           if (ln_idx_min(bnd_idx) == 0) ln_idx_min(bnd_idx)=ln_idx
            ln_idx_max(bnd_idx)=ln_idx
            ln_idx=ln_idx+1
         end do              ! end loop over lines within each band
@@ -645,9 +702,18 @@ program htrn2nb
         tpt(tpt_idx)=tpt(tpt_idx-1)+tpt_ncr
      enddo                  ! end loop over temperatures
      
-     write (6,'(a51,f12.6,a9,f12.6,a18,f12.6,a11)')  &
-          'Malkmus random band model parameters computed from ', &
-          ln_lo,' cm-1 to ',ln_hi,' cm-1 for regular ',bnd_dlt,' cm-1 bands'
+     if(grd_LW_SW) then 
+        write (6,'(a51,f12.6,a9,f12.6,a10,i5,a9,f12.6,a17)')  &
+             'Malkmus random band model parameters computed from ', &
+             wvn_min_LW,' cm-1 to ',wvn_max_LW,' cm-1 for ',bnd_nbr_LW,' regular ',bnd_dlt_LW,' cm-1 bands in LW'
+        write (6,'(a51,f12.6,a9,f12.6,a10,i5,a9,f12.6,a17)')  &
+             'Malkmus random band model parameters computed from ', &
+             wvn_min_SW,' cm-1 to ',wvn_max_SW,' cm-1 for ',bnd_nbr_SW,' regular ',bnd_dlt_SW,' cm-1 bands in SW'
+     else
+        write (6,'(a51,f12.6,a9,f12.6,a10,i5,a9,f12.6,a11)')  &
+             'Malkmus random band model parameters computed from ', &
+             ln_lo,' cm-1 to ',ln_hi,' cm-1 for ',bnd_nbr_LW,' regular ',bnd_dlt,' cm-1 bands'
+     endif
      write (6,'(i6,a46)') int_foo,' lines fall within specified spectral interval'
      write (6,'(a63,f6.2,a2)')  &
           'Line strength parameters scaled to and saved at tpt(reference) = ',tpt_Malkmus_rfr,' K'
@@ -714,6 +780,14 @@ program htrn2nb
      prt_fnc_tpt_scl_rfr=(tpt_HITRAN/tpt_Malkmus_rfr)**xpn_mlc(mlc_id)
      do bnd_idx=1,bnd_nbr
         if (bnd_ln_nbr(bnd_idx) > 0) then
+           if (grd_LW_SW) then
+              if (bnd_idx <= bnd_idx_LW_end) then
+                 bnd_dlt=bnd_dlt_LW
+              else
+                 bnd_dlt=bnd_dlt_SW
+              endif
+           endif ! !grd_LW_SW
+
            bnd_sum_wk_ln_lmt_rfr=0.0
            bnd_sum_str_ln_lmt_rfr=0.0
            do ln_idx=ln_idx_min(bnd_idx),ln_idx_max(bnd_idx)

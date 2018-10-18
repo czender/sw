@@ -23,48 +23,48 @@ wvn_rsn_H2O=10 # [cm-1] Band resolution for H2O
 wvn_nbr_H2O=$(((wvn_max-wvn_min)/wvn_rsn_H2O))
 wvn_nbr=$(((wvn_max-wvn_min)/wvn_rsn))
 
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/H2O.nc -o ${DATA}/aca/mlk_H2O.nc
-#htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/1H2_16O.nc -o ${DATA}/aca/mlk_1H2_16O.nc
-#htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/1H2_17O.nc -o ${DATA}/aca/mlk_1H2_17O.nc
-#htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/1H2_18O.nc -o ${DATA}/aca/mlk_1H2_18O.nc
-#htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/1H_2H_16O.nc -o ${DATA}/aca/mlk_1H_2H_16O.nc
+htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr_H2O} -i ${DATA}/hitran/H2O.nc -o ${DATA}/aca/mlk_H2O.nc
+#htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr_H2O} -i ${DATA}/hitran/1H2_16O.nc -o ${DATA}/aca/mlk_1H2_16O.nc
+#htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr_H2O} -i ${DATA}/hitran/1H2_17O.nc -o ${DATA}/aca/mlk_1H2_17O.nc
+#htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr_H2O} -i ${DATA}/hitran/1H2_18O.nc -o ${DATA}/aca/mlk_1H2_18O.nc
+#htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr_H2O} -i ${DATA}/hitran/1H_2H_16O.nc -o ${DATA}/aca/mlk_1H_2H_16O.nc
 
 # Carbon Dioxide:
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr} -i ${DATA}/hitran/CO2.nc -o ${DATA}/aca/mlk_CO2.nc
-#htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr} -i ${DATA}/hitran/12C_16O2.nc -o ${DATA}/aca/mlk_12C_16O2.nc
+htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr} -i ${DATA}/hitran/CO2.nc -o ${DATA}/aca/mlk_CO2.nc
+#htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr} -i ${DATA}/hitran/12C_16O2.nc -o ${DATA}/aca/mlk_12C_16O2.nc
 
 # Oxygen:
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/O2.nc -o ${DATA}/aca/mlk_O2.nc
-#htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/16O2.nc -o ${DATA}/aca/mlk_16O2.nc
+htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr_H2O} -i ${DATA}/hitran/O2.nc -o ${DATA}/aca/mlk_O2.nc
+#htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr_H2O} -i ${DATA}/hitran/16O2.nc -o ${DATA}/aca/mlk_16O2.nc
 
 # Hydroxyl:
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/OH.nc -o ${DATA}/aca/mlk_OH.nc
-#htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/16O_1H.nc -o ${DATA}/aca/mlk_16O_1H.nc
+htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr_H2O} -i ${DATA}/hitran/OH.nc -o ${DATA}/aca/mlk_OH.nc
+#htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr_H2O} -i ${DATA}/hitran/16O_1H.nc -o ${DATA}/aca/mlk_16O_1H.nc
 
 # Nitrogen:
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr} -i ${DATA}/hitran/N2.nc -o ${DATA}/aca/mlk_N2.nc
+htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr} -i ${DATA}/hitran/N2.nc -o ${DATA}/aca/mlk_N2.nc
 
 # Ozone:
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr} -i ${DATA}/hitran/O3.nc -o ${DATA}/aca/mlk_O3.nc
+htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr} -i ${DATA}/hitran/O3.nc -o ${DATA}/aca/mlk_O3.nc
 
 # Nitrous Oxide:
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr} -i ${DATA}/hitran/N2O.nc -o ${DATA}/aca/mlk_N2O.nc
+htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr} -i ${DATA}/hitran/N2O.nc -o ${DATA}/aca/mlk_N2O.nc
 
 # Nitric Oxide:
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/NO.nc -o ${DATA}/aca/mlk_NO.nc
+htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr_H2O} -i ${DATA}/hitran/NO.nc -o ${DATA}/aca/mlk_NO.nc
 
 # Sulfur Dioxide:
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/SO2.nc -o ${DATA}/aca/mlk_SO2.nc
+htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr_H2O} -i ${DATA}/hitran/SO2.nc -o ${DATA}/aca/mlk_SO2.nc
 
 # Nitrogen Dioxide:
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/NO2.nc -o ${DATA}/aca/mlk_NO2.nc
+htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr_H2O} -i ${DATA}/hitran/NO2.nc -o ${DATA}/aca/mlk_NO2.nc
 
 # Hydrogen Peroxide:
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr_H2O} -i ${DATA}/hitran/H2O2.nc -o ${DATA}/aca/mlk_H2O2.nc
+htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr_H2O} -i ${DATA}/hitran/H2O2.nc -o ${DATA}/aca/mlk_H2O2.nc
 
 # Methane:
-htrn2nb -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr} -i ${DATA}/hitran/CH4.nc -o ${DATA}/aca/mlk_CH4.nc
+htrn2nb --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr} -i ${DATA}/hitran/CH4.nc -o ${DATA}/aca/mlk_CH4.nc
 
 # Carbon Monoxide:
-htrn2nb --double -l ${wvn_min} -h ${wvn_max} -b ${wvn_nbr} -i ${DATA}/hitran/CO.nc -o ${DATA}/aca/mlk_CO.nc
+htrn2nb --double --wvn_min=${wvn_min} --wvn_max=${wvn_max} --bnd_nbr=${wvn_nbr} -i ${DATA}/hitran/CO.nc -o ${DATA}/aca/mlk_CO.nc
 
