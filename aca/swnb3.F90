@@ -6058,14 +6058,16 @@ program swnb3
      ! Phase-function information
      do lev_idx=1,lev_nbr
         pmom(0,lev_idx)=1.0
-        ! fxm: Until mie computes PMOM correctly use g for PMOM(1)
-        pmom(1,lev_idx)=asm_prm_HG_ttl(bnd_idx,lev_idx)
+        ! fxm: mie may not compute PMOM(1) correctly
+        ! 20181018: Until today, used g for PMOM(1) and did not weight PMOM(1) by sca_frc_HG, resulting in a scattering "kink"
+        ! From today onwards we set pmom(1,*) in normal moment loop below
+        ! pmom(1,lev_idx)=asm_prm_HG_ttl(bnd_idx,lev_idx) ! old buggy value
      end do ! end loop over lev
      
      ! All moments of Rayleigh phase-function except second are zero
      ! To blend Rayleigh phase-function with HG and Mie scattering phase-functions,
      ! weight coefficient contribution by scattering fraction due to its process
-     do mmn_idx=2,mmn_nbr
+     do mmn_idx=1,mmn_nbr
         do lev_idx=1,lev_nbr
            ! Combine HG with "exact" (for spheres) Mie phase functions
            if (flg_mie) then
