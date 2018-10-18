@@ -1,3 +1,7 @@
+2018-10-18  Charlie Zender  <zender@uci.edu>
+
+	* Fix kink in aerosol scattering caused by neglecting PMOM(1) by HG scattering fraction
+
 2018-10-17  Charlie Zender  <zender@uci.edu>
 
 	* Re-process NO2.F90

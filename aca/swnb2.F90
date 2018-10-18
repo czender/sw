@@ -394,7 +394,8 @@ program swnb2
   integer,parameter::sng_lng_dfl_stt=200 ! [nbr] Default statement string length
   real,parameter::tpt_Malkmus_fit=250.0 ! reference temperature for Malkmus parameters
   real,parameter::mss_val=1.0e36 ! Missing value = missing_value and/or _FillValue
-  real,parameter::diffusivity_factor=1.66 ! Diffusivity factor for angular integration of thermal fluxes
+  real,parameter::diffusivity_factor=1.66 ! Diffusivity factor for angular integration of thermal fluxes (5/3 is derived in rt.pdf p. 36, p. 48)
+  ! real,parameter::diffusivity_factor=0.5 ! Diffusivity factor for angular integration of thermal fluxes
   real,parameter::real_tiny=1.0e-20 ! Tiny value to avoid divide-by-zero errors
   ! integer,parameter::bnd_nbr_nst_max=235 ! FSBR resolution
 
@@ -6357,7 +6358,7 @@ program swnb2
 
         ! Avoid divide-by-zero conditions in rare, diagnostic cases where ...
         if (odsl_spc_ttl(bnd_idx,lev_idx) <= 0.0) then
-           ! ... All scattering is turned off or insignificant ... 
+           ! ... All scattering is turned-off or is insignificant ... 
            sca_frc_Ray(lev_idx)=0.0
            sca_frc_HG(lev_idx)=0.0
            sca_frc_Mie(lev_idx)=0.0
@@ -6521,14 +6522,16 @@ program swnb2
      ! Phase-function information
      do lev_idx=1,lev_nbr
         pmom(0,lev_idx)=1.0
-        ! fxm: Until mie computes PMOM correctly use g for PMOM(1)
-        pmom(1,lev_idx)=asm_prm_HG_ttl(bnd_idx,lev_idx)
+        ! fxm: mie may not compute PMOM(1) correctly
+        ! 20181018: Until today, used g for PMOM(1) and did not weight PMOM(1) by sca_frc_HG, resulting in a scattering "kink"
+        ! From today onwards we set pmom(1,*) in normal moment loop below
+        ! pmom(1,lev_idx)=asm_prm_HG_ttl(bnd_idx,lev_idx) ! old buggy value
      end do ! end loop over lev
      
      ! All moments of Rayleigh phase-function except second are zero
      ! To blend Rayleigh phase-function with HG and Mie scattering phase-functions,
      ! weight coefficient contribution by scattering fraction due to its process
-     do mmn_idx=2,mmn_nbr
+     do mmn_idx=1,mmn_nbr
         do lev_idx=1,lev_nbr
            ! Combine HG with "exact" (for spheres) Mie phase functions
            if (flg_mie) then
