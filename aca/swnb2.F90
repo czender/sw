@@ -947,8 +947,8 @@ program swnb2
   integer wvl_grd_HC_id
   
   ! NO2 input variables
-  ! integer abs_xsx_NO2_id
-  ! integer qnt_yld_NO2_id
+  integer abs_xsx_NO2_id
+  integer qnt_yld_NO2_id
 
   ! CFC11 input variables
   ! integer abs_xsx_CFC11_id
@@ -3240,6 +3240,7 @@ program swnb2
   ! Close file
   rcd=nf90_wrp_close(nc_id,fl_HHCWC,'Ingested') ! [fnc] Close file
 
+  qnt_yld_NO2(:)=0.0 ! [frc] In case input file does not contain qnt_yld
   call abs_xsx_get(fl_NO2,bnd_nbr_NO2, &
        abs_xsx_NO2_dsk,wvl_grd_NO2,qnt_yld=qnt_yld_NO2_dsk)
 
@@ -7832,6 +7833,8 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'abs_spc_SAS',nf90_float,bnd_dmn_id,abs_spc_SAS_id),sbr_nm//': dv abs_spc_SAS')
      rcd=nf90_wrp(nf90_def_var(nc_id,'abs_spc_atm',nf90_float,bnd_dmn_id,abs_spc_atm_id),sbr_nm//': dv abs_spc_atm')
      rcd=nf90_wrp(nf90_def_var(nc_id,'abs_spc_sfc',nf90_float,bnd_dmn_id,abs_spc_sfc_id),sbr_nm//': dv abs_spc_sfc')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_NO2',nf90_float,bnd_dmn_id,abs_xsx_NO2_id),sbr_nm//': dv abs_xsx_NO2')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'qnt_yld_NO2',nf90_float,bnd_dmn_id,qnt_yld_NO2_id),sbr_nm//': dv qnt_yld_NO2')
      rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_O3',nf90_float,bnd_dmn_id,abs_xsx_O3_id),sbr_nm//': dv abs_xsx_O3')
      rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_O3_dadT',nf90_float,bnd_dmn_id,abs_xsx_O3_dadT_id),sbr_nm//': dv abs_xsx_O3_dadT')
      rcd=nf90_wrp(nf90_def_var(nc_id,'alt_ntf',nf90_double,levp_dmn_id,alt_ntf_id),sbr_nm//': dv alt_ntf')
@@ -8248,6 +8251,10 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,abs_spc_atm_id,'long_name','Spectral absorptance of atmosphere'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,abs_spc_sfc_id,'long_name','Spectral absorptance of surface'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_NO2_id,'long_name','Nitrogen dioxide absorption cross section at tpt_rfr'), &
+          sbr_nm//': pa long_name in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,qnt_yld_NO2_id,'long_name','Quantum yield of NO2 + hv --> NO + O1D'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_id,'long_name','Ozone absorption cross section at tpt_rfr'), &
           sbr_nm//': pa long_name in '//__FILE__)
@@ -8733,6 +8740,8 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,abs_spc_SAS_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,abs_spc_atm_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,abs_spc_sfc_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_NO2_id,'units','meter2'),sbr_nm//': pa units in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_att(nc_id,qnt_yld_NO2_id,'units','meter2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_id,'units','meter2'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_dadT_id,'units','meter2 kelvin-1'),sbr_nm//': pa units in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,alb_sfc_id,'units','fraction'),sbr_nm//': pa units in '//__FILE__)
@@ -9037,6 +9046,8 @@ program swnb2
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_SAS_id,abs_spc_SAS),sbr_nm//': pv abs_spc_SAS in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_atm_id,abs_spc_atm),sbr_nm//': pv abs_spc_atm in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_spc_sfc_id,abs_spc_sfc),sbr_nm//': pv abs_spc_sfc in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_NO2_id,abs_xsx_NO2),sbr_nm//': pv abs_xsx_NO2 in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,qnt_yld_NO2_id,qnt_yld_NO2),sbr_nm//': pv qnt_yld_NO2 in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_O3_id,abs_xsx_O3),sbr_nm//': pv abs_xsx_O3 in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_O3_dadT_id,abs_xsx_O3_dadT),sbr_nm//': pv abs_xsx_O3_dadT in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,alb_sfc_id,alb_sfc),sbr_nm//': pv alb_sfc in '//__FILE__)
