@@ -1,5 +1,9 @@
 2018-10-23  Charlie Zender  <zender@uci.edu>
 
+	* ACA 2.4.0 release procedure:
+	cd ~/sw;git commit -a -m 'Version 2.4.0: Portland';git push
+	git tag -a 2.4.0 -m 'Extend grid to LW; HITRAN2016; CO N2O CFC11 CFC12 JPL O3';git push --tags
+
 	* Current snapshot works fine on firn with gcc7 on MacOS 10.13
 
 	* Zero qnt_yld_NO2 and abs_xsx_NO2_dadT when not present in input file
