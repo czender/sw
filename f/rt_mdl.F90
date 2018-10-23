@@ -111,7 +111,8 @@ contains
           rcd=nf90_wrp(nf90_get_var(nc_id,qnt_yld_id,qnt_yld,srt_one,cnt_bnd),'gv qnt_yld')
        else
           qnt_yld(:)=0.0
-       endif ! !qnt_yld
+       endif ! !rcd
+    endif ! !qnt_yld
     if(present(wvl_ctr)) then
        allocate(wvl_ctr(bnd_nbr),stat=rcd)
        if(rcd /= 0) stop 'allocate() failed for wvl_ctr'

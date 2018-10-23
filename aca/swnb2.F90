@@ -2043,7 +2043,7 @@ program swnb2
   cmd_ln_slr_zen_ngl_cos=.false.
   cmd_ln_slr_zen_ngl_dgr=.false.
   exit_status=0             ! [enm] Program exit status
-  flg_CO=.false. ! [flg] CO temporarily turned-off due to singularities that double-precision mlk_CO.nc does not solve
+  flg_CO=.true.
   flg_N2=.true.
   flg_N2O=.true.
   flg_CH4=.true.

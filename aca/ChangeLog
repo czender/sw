@@ -1,5 +1,9 @@
 2018-10-23  Charlie Zender  <zender@uci.edu>
 
+	* Zero qnt_yld_NO2 and abs_xsx_NO2_dadT when not present in input file
+
+	* Turn-on CO by default since IEEE issues have disappeared
+
 	* Settle-on new default 10 cm-1/1 cm-1 SW/LW resolution
 
 2018-10-18  Charlie Zender  <zender@uci.edu>
