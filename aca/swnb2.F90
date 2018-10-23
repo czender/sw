@@ -3240,6 +3240,7 @@ program swnb2
   ! Close file
   rcd=nf90_wrp_close(nc_id,fl_HHCWC,'Ingested') ! [fnc] Close file
 
+  !  qnt_yld_NO2_dsk(:)=0.0 ! [frc] In case input file does not contain qnt_yld
   qnt_yld_NO2(:)=0.0 ! [frc] In case input file does not contain qnt_yld
   call abs_xsx_get(fl_NO2,bnd_nbr_NO2, &
        abs_xsx_NO2_dsk,wvl_grd_NO2,qnt_yld=qnt_yld_NO2_dsk)
