@@ -32,6 +32,13 @@ program htrn2nb
   
   ! Production:
   ! Shell script ${HOME}/aca/htrn2nb.sh processes most useful gases
+  ! Split resolution (after 20181020):
+  ! htrn2nb --wvn_min=10.0 --wvn_max=27000.0 --wvn_bnd=2000.0 --rsn_SW=10.0 --rsn_LW=2.0 -i ${DATA}/hitran/H2O.nc -o ${DATA}/aca/mlk_H2O.nc
+  ! htrn2nb --wvn_min=10.0 --wvn_max=27000.0 --wvn_bnd=2000.0 --rsn_SW=5.0 --rsn_LW=1.0 -i ${DATA}/hitran/H2O.nc -o ${DATA}/aca/mlk_H2O.nc
+  ! htrn2nb --wvn_min=10.0 --wvn_max=27000.0 --wvn_bnd=2000.0 --rsn_SW=2.5 --rsn_LW=0.5 -i ${DATA}/hitran/CO2.nc -o ${DATA}/aca/mlk_CO2.nc
+  ! Old method (before 20181020):
+  ! htrn2nb --wvn_min=2000.0 --wvn_max=27000.0 --bnd_nbr=2500 -i ${DATA}/hitran/H2O.nc -o ${DATA}/aca/mlk_H2O.nc
+  ! htrn2nb -l 2000.0 -h 27000.0 -b 2500 -i ${DATA}/hitran/H2O.nc -o ${DATA}/aca/mlk_H2O.nc
   
   ! Debugging:
   ! htrn2nb -t 28 -l 1.0e-35 -h 1.0 -b 2 -i ${DATA}/hitran/foo.nc -o ${DATA}/hitran/foo_out.nc
@@ -157,7 +164,6 @@ program htrn2nb
   integer frc_slr_flx_LaN68_id
   integer frc_slr_flx_ThD71_id
   integer idx_rfr_air_STP_id
-  integer oneD_foo_id
   integer phi_exact_id
   integer phi_fit_id
   integer psi_exact_id
@@ -200,7 +206,6 @@ program htrn2nb
   real(selected_real_kind(p=12)),dimension(:),allocatable::frc_slr_flx_LaN68
   real(selected_real_kind(p=12)),dimension(:),allocatable::frc_slr_flx_ThD71
   real(selected_real_kind(p=12)),dimension(:),allocatable::idx_rfr_air_STP
-  real(selected_real_kind(p=12)),dimension(:),allocatable::oneD_foo
   real(selected_real_kind(p=12)),dimension(:),allocatable::phi_exact
   real(selected_real_kind(p=12)),dimension(:),allocatable::phi_fit
   real(selected_real_kind(p=12)),dimension(:),allocatable::psi_exact
@@ -368,10 +373,13 @@ program htrn2nb
            call ftn_arg_get(arg_idx,arg_val,ln_hi) ! [cm-1] Maximum wavenumber
         else if (opt_sng == 'wvn_bnd' .or. opt_sng == 'wvn_bnd_LW_SW' ) then
            call ftn_arg_get(arg_idx,arg_val,wvn_bnd_LW_SW) ! [cm-1] Boundary wavenumber between LW and SW grids
+           grd_LW_SW=.true.
         else if (opt_sng == 'rsn_LW' .or. opt_sng == 'bnd_dlt_LW' ) then
            call ftn_arg_get(arg_idx,arg_val,bnd_dlt_LW) ! [cm-1] Resolution in LW portion of grid
+           grd_LW_SW=.true.
         else if (opt_sng == 'rsn_SW' .or. opt_sng == 'bnd_dlt_SW' ) then
            call ftn_arg_get(arg_idx,arg_val,bnd_dlt_SW) ! [cm-1] Resolution in SW portion of grid
+           grd_LW_SW=.true.
         else ! Option not recognized
            arg_idx=arg_idx-1 ! [idx] Counting index
            call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
@@ -467,7 +475,6 @@ program htrn2nb
   allocate(frc_slr_flx_ThD71(bnd_nbr),stat=rcd)
   allocate(idx_rfr_air_STP(bnd_nbr),stat=rcd)
   
-  allocate(oneD_foo(tpt_nbr),stat=rcd)
   allocate(phi_exact(tpt_nbr),stat=rcd)
   allocate(phi_fit(tpt_nbr),stat=rcd)
   allocate(psi_exact(tpt_nbr),stat=rcd)
@@ -1103,20 +1110,25 @@ program htrn2nb
   enddo                  ! end loop over bnd
 
   ! Check that single precision bounds were not exceeded
+  if (typ_out.eq.nf90_float) then
+     do bnd_idx=1,bnd_nbr
+        if (S_d(bnd_idx) < 1.0e-36.and.S_d(bnd_idx) > 0.0) then 
+           write(6,*) 'WARNING: Single precision underflow S_d(',bnd_idx,') = ',S_d(bnd_idx)
+           S_d(bnd_idx)=0.0
+        endif
+        if (S_d_abs_cff_mss(bnd_idx) < 1.0e-36.and.S_d_abs_cff_mss(bnd_idx) > 0.0) then 
+           write(6,*) 'WARNING: Single precision underflow S_d_abs_cff_mss(',bnd_idx,') = ',S_d_abs_cff_mss(bnd_idx)
+           S_d_abs_cff_mss(bnd_idx)=0.0
+        endif
+        if (S_p_abs_cff_mss(bnd_idx) < 1.0e-36.and.S_p_abs_cff_mss(bnd_idx) > 0.0) then 
+           write(6,*) 'WARNING: Single precision underflow S_p_abs_cff_mss(',bnd_idx,') = ',S_p_abs_cff_mss(bnd_idx)
+           S_p(bnd_idx)=1.0
+           S_p_abs_cff_mss(bnd_idx)=S_p(bnd_idx)*Avagadro/mmw_mlc(mlc_id) ! [m2 mlc-1] -> [m2 kg-1]
+        endif
+     end do                    ! end loop over bnd
+  endif ! nf90_float)
+
   do bnd_idx=1,bnd_nbr
-     if (S_d(bnd_idx) < 1.0e-36.and.S_d(bnd_idx) > 0.0) then 
-        write(6,*) 'WARNING: Single precision underflow S_d(',bnd_idx,') = ',S_d(bnd_idx)
-        S_d(bnd_idx)=0.0
-     endif
-     if (S_d_abs_cff_mss(bnd_idx) < 1.0e-36.and.S_d_abs_cff_mss(bnd_idx) > 0.0) then 
-        write(6,*) 'WARNING: Single precision underflow S_d_abs_cff_mss(',bnd_idx,') = ',S_d_abs_cff_mss(bnd_idx)
-        S_d_abs_cff_mss(bnd_idx)=0.0
-     endif
-     if (S_p_abs_cff_mss(bnd_idx) < 1.0e-36.and.S_p_abs_cff_mss(bnd_idx) > 0.0) then 
-        write(6,*) 'WARNING: Single precision underflow S_p_abs_cff_mss(',bnd_idx,') = ',S_p_abs_cff_mss(bnd_idx)
-        S_p(bnd_idx)=1.0
-        S_p_abs_cff_mss(bnd_idx)=S_p(bnd_idx)*Avagadro/mmw_mlc(mlc_id) ! [m2 mlc-1] -> [m2 kg-1]
-     endif
      if (S_d(bnd_idx) < 0.0.or.S_p(bnd_idx) < 0.0) then 
         write(6,'(/,a,i4,a4,f9.6,a2,f9.6,a6,f9.3,a2,f9.3,a5)')  &
              'WARNING: Impossible band parameters at bnd(',bnd_idx,') = ', &
@@ -1168,7 +1180,6 @@ program htrn2nb
   rcd=nf90_wrp(nf90_def_var(nc_id,'frc_slr_flx_LaN68',typ_out,bnd_dmn_id,frc_slr_flx_LaN68_id),sbr_nm//': dv frc_slr_flx_LaN68')
   rcd=nf90_wrp(nf90_def_var(nc_id,'frc_slr_flx_ThD71',typ_out,bnd_dmn_id,frc_slr_flx_ThD71_id),sbr_nm//': dv frc_slr_flx_ThD71')
   rcd=nf90_wrp(nf90_def_var(nc_id,'idx_rfr_air_STP',typ_out,bnd_dmn_id,idx_rfr_air_STP_id),sbr_nm//': dv idx_rfr_air_STP')
-  rcd=nf90_wrp(nf90_def_var(nc_id,'oneD_foo',typ_out,tpt_dmn_id,oneD_foo_id),sbr_nm//': dv oneD_foo')
   rcd=nf90_wrp(nf90_def_var(nc_id,'phi_exact',typ_out,tpt_dmn_id,phi_exact_id),sbr_nm//': dv phi_exact')
   rcd=nf90_wrp(nf90_def_var(nc_id,'phi_fit',typ_out,tpt_dmn_id,phi_fit_id),sbr_nm//': dv phi_fit')
   rcd=nf90_wrp(nf90_def_var(nc_id,'psi_exact',typ_out,tpt_dmn_id,psi_exact_id),sbr_nm//': dv psi_exact')
@@ -1214,7 +1225,6 @@ program htrn2nb
   rcd=nf90_wrp(nf90_put_att(nc_id,idx_rfr_air_STP_id,'long_name','Index of refraction at band center at STP'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,iso_id_id,'long_name','HITRAN isotope number (1..9)'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,mlc_id_id,'long_name','HITRAN molecule number (1..37)'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,oneD_foo_id,'long_name','Description'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,phi_exact_id,'long_name','Phi exactly computed'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,phi_fit_id,'long_name','Phi from least squares fit'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,psi_exact_id,'long_name','Psi exactly computed'),sbr_nm)
@@ -1248,7 +1258,6 @@ program htrn2nb
   rcd=nf90_wrp(nf90_put_att(nc_id,frc_slr_flx_LaN68_id,'units','fraction'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,frc_slr_flx_ThD71_id,'units','fraction'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,idx_rfr_air_STP_id,'units','fraction'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,oneD_foo_id,'units','unknown'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,phi_exact_id,'units','fraction'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,phi_fit_id,'units','fraction'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,psi_exact_id,'units','fraction'),sbr_nm)
@@ -1289,7 +1298,6 @@ program htrn2nb
   rcd=nf90_wrp(nf90_put_var(nc_id,frc_slr_flx_LaN68_id,frc_slr_flx_LaN68),sbr_nm//': pv frc_slr_flx_LaN68 in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,frc_slr_flx_ThD71_id,frc_slr_flx_ThD71),sbr_nm//': pv frc_slr_flx_ThD71 in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,idx_rfr_air_STP_id,idx_rfr_air_STP),sbr_nm//': pv idx_rfr_air_STP in '//__FILE__)
-  rcd=nf90_wrp(nf90_put_var(nc_id,oneD_foo_id,oneD_foo),sbr_nm//': pv oneD_foo in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,phi_exact_id,phi_exact),sbr_nm//': pv phi_exact in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,phi_fit_id,phi_fit),sbr_nm//': pv phi_fit in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,psi_exact_id,psi_exact),sbr_nm//': pv psi_exact in '//__FILE__)
@@ -1337,7 +1345,6 @@ program htrn2nb
   if (allocated(frc_slr_flx_LaN68)) deallocate(frc_slr_flx_LaN68,stat=rcd)
   if (allocated(frc_slr_flx_ThD71)) deallocate(frc_slr_flx_ThD71,stat=rcd)
   if (allocated(idx_rfr_air_STP)) deallocate(idx_rfr_air_STP,stat=rcd)
-  if (allocated(oneD_foo)) deallocate(oneD_foo,stat=rcd)
   if (allocated(phi_exact)) deallocate(phi_exact,stat=rcd)
   if (allocated(phi_fit)) deallocate(phi_fit,stat=rcd)
   if (allocated(psi_exact)) deallocate(psi_exact,stat=rcd)

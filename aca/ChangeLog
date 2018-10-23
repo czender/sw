@@ -1,3 +1,7 @@
+2018-10-23  Charlie Zender  <zender@uci.edu>
+
+	* Settle-on new default 10 cm-1/1 cm-1 SW/LW resolution
+
 2018-10-18  Charlie Zender  <zender@uci.edu>
 
 	* Implement split resolution LW/SW grid capability in htrn2nb.F90
