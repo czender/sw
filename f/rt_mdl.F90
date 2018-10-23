@@ -69,59 +69,66 @@ contains
     rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
     
     ! Get dimension sizes
-    rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr),sbr_nm//": inquire_dim bnd")
+    rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr),sbr_nm//': inquire_dim bnd')
     !if (bnd_nbr>bnd_nbr_max) stop 'bnd_nbr>bnd_nbr_max'
     cnt_bnd(1)=bnd_nbr
     cnt_bndp(1)=bnd_nbr+1
     
     allocate(abs_xsx(bnd_nbr),stat=rcd)
-    if(rcd /= 0) stop "allocate() failed for abs_xsx"
+    if(rcd /= 0) stop 'allocate() failed for abs_xsx'
     allocate(wvl_grd(bnd_nbr+1),stat=rcd)
-    if(rcd /= 0) stop "allocate() failed for wvl_grd"
+    if(rcd /= 0) stop 'allocate() failed for wvl_grd'
 
     ! Get variable IDs
     rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx',abs_xsx_id)
     rcd=nf90_wrp_inq_varid(nc_id,'wvl_grd',wvl_grd_id)
 
     ! Get data
-    rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_id,abs_xsx,srt_one,cnt_bnd),"gv abs_xsx")
-    rcd=nf90_wrp(nf90_get_var(nc_id,wvl_grd_id,wvl_grd,srt_one,cnt_bndp),"gv wvl_grd")
+    rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_id,abs_xsx,srt_one,cnt_bnd),'gv abs_xsx')
+    rcd=nf90_wrp(nf90_get_var(nc_id,wvl_grd_id,wvl_grd,srt_one,cnt_bndp),'gv wvl_grd')
 
     if(present(abs_xsx_dadT)) then
        allocate(abs_xsx_dadT(bnd_nbr),stat=rcd)
-       if(rcd /= 0) stop "allocate() failed for abs_xsx_dadT"
-       rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_dadT',abs_xsx_dadT_id)
-       rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_dadT_id,abs_xsx_dadT,srt_one,cnt_bnd),"gv abs_xsx_dadT")
+       if(rcd /= 0) stop 'allocate() failed for abs_xsx_dadT'
+       rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_dadT',abs_xsx_dadT_id,rcd_opt=nf90_enotvar) ! Tolerate variable absence
+       if(rcd /= nf90_noerr) then
+          rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_dadT_id,abs_xsx_dadT,srt_one,cnt_bnd),'gv abs_xsx_dadT')
+       else
+          abs_xsx_dadT(:)=0.0
+       endif ! !rcd
     endif ! !abs_xsx_dadT
     if(present(tpt_std)) then
        allocate(tpt_std(bnd_nbr),stat=rcd)
-       if(rcd /= 0) stop "allocate() failed for tpt_std"
+       if(rcd /= 0) stop 'allocate() failed for tpt_std'
        rcd=nf90_wrp_inq_varid(nc_id,'tpt_std',tpt_std_id)
-       rcd=nf90_wrp(nf90_get_var(nc_id,tpt_std_id,tpt_std,srt_one,cnt_bnd),"gv tpt_std")
+       rcd=nf90_wrp(nf90_get_var(nc_id,tpt_std_id,tpt_std,srt_one,cnt_bnd),'gv tpt_std')
     endif ! !tpt_std
     if(present(qnt_yld)) then
        allocate(qnt_yld(bnd_nbr),stat=rcd)
-       if(rcd /= 0) stop "allocate() failed for qnt_yld"
-       rcd=nf90_wrp_inq_varid(nc_id,'qnt_yld',qnt_yld_id,rcd_opt=nf90_enotvar) ! Tolerate quantuum yield not present
-       if(rcd /= nf90_noerr) rcd=nf90_wrp(nf90_get_var(nc_id,qnt_yld_id,qnt_yld,srt_one,cnt_bnd),"gv qnt_yld")
-    endif ! !qnt_yld
+       if(rcd /= 0) stop 'allocate() failed for qnt_yld'
+       rcd=nf90_wrp_inq_varid(nc_id,'qnt_yld',qnt_yld_id,rcd_opt=nf90_enotvar) ! Tolerate variable absence
+       if(rcd /= nf90_noerr) then
+          rcd=nf90_wrp(nf90_get_var(nc_id,qnt_yld_id,qnt_yld,srt_one,cnt_bnd),'gv qnt_yld')
+       else
+          qnt_yld(:)=0.0
+       endif ! !qnt_yld
     if(present(wvl_ctr)) then
        allocate(wvl_ctr(bnd_nbr),stat=rcd)
-       if(rcd /= 0) stop "allocate() failed for wvl_ctr"
+       if(rcd /= 0) stop 'allocate() failed for wvl_ctr'
        rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_id)
-       rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_id,wvl_ctr,srt_one,cnt_bnd),"gv wvl_ctr")
+       rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_id,wvl_ctr,srt_one,cnt_bnd),'gv wvl_ctr')
     endif ! !wvl_ctr
     if(present(wvl_min)) then
        allocate(wvl_min(bnd_nbr),stat=rcd)
-       if(rcd /= 0) stop "allocate() failed for wvl_min"
+       if(rcd /= 0) stop 'allocate() failed for wvl_min'
        rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_id)
-       rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_id,wvl_min,srt_one,cnt_bnd),"gv wvl_min")
+       rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_id,wvl_min,srt_one,cnt_bnd),'gv wvl_min')
     endif ! !wvl_min
     if(present(wvl_max)) then
        allocate(wvl_max(bnd_nbr),stat=rcd)
-       if(rcd /= 0) stop "allocate() failed for wvl_max"
+       if(rcd /= 0) stop 'allocate() failed for wvl_max'
        rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_id)
-       rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_id,wvl_max,srt_one,cnt_bnd),"gv wvl_max")
+       rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_id,wvl_max,srt_one,cnt_bnd),'gv wvl_max')
     endif ! !wvl_max
 
     ! Close file
