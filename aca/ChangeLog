@@ -1,5 +1,7 @@
 2018-10-23  Charlie Zender  <zender@uci.edu>
 
+	* Current snapshot works fine on firn with gcc7 on MacOS 10.13
+
 	* Zero qnt_yld_NO2 and abs_xsx_NO2_dadT when not present in input file
 
 	* Turn-on CO by default since IEEE issues have disappeared
