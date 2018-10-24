@@ -15,7 +15,6 @@ scp -p ~/sw/dead/index.shtml dust.ess.uci.edu:Sites/dead/index.shtml
 <a href="http://www.ess.uci.edu/~zender">Zender Group</a> /
 <a href="http://dust.ess.uci.edu/dead">DEAD</a> /
 <a href="http://dust.ess.uci.edu/dead/bxm_home.html">Box Model</a> /
-<a href="https://maillists.uci.edu/mailman/public/dead">Mail List</a> /
 <a href="http://dust.ess.uci.edu/dead/index.shtml#RTFM">User's Guide</a> /
 </td>
 
@@ -49,7 +48,6 @@ scp -p ~/sw/dead/index.shtml dust.ess.uci.edu:Sites/dead/index.shtml
 <li><a href="#Data">Input Datasets and Selected Results</a></li>
 <li><a href="#Source">Source code</a></li>
 <li><a href="#README/INSTALL/FAQ/ChangeLog/TODO">README/INSTALL/FAQ/ChangeLog/TODO</a></li>
-<li><a href="#Mail List">Mail List</a></dt>
 <li><a href="#Problems">Known Problems with DEAD</a></li>
 </ul>
 <hr>
@@ -108,6 +106,7 @@ heterogeneous chemistry.
 <dt><a name="News"></a></dt>
 <h2>DEAD News</h2>
 <ul>
+<li>20181024: Added download link (below) for Parajuli &amp; Zender (2017) sediment-supply based erodibility map</li>
 <li>20180117: The DEAD mail list has been disbanded due to lack of use, though DEAD itself lives on!</li>
 <li>20170726: Dead & Company seen in Irvine</li>
 <li>20150703: Ported to MacOSX MacPorts gfortran</li>
@@ -313,6 +312,11 @@ No offer of co-authorship is necessary.
 Custom datasets are available upon request.
 <ul>
 <li>
+DEAD sediment-supply map erodibility dataset 
+<a href="http://dust.ess.uci.edu/dead/data/ssm_PaZ17.nc"> ssm_PaZ17.nc</a>.
+Produced as described in 
+(<a href="http://www.ess.uci.edu/~zender/#PaZ17">Parajuli &amp; Zender, 2017</a>)</li>
+<li>
 DEAD box model forcing dataset 
 <a href="http://dust.ess.uci.edu/dead/data/paws_Ptr_19910101_20031231.nc">
 paws_Ptr_19910101_20031231.nc</a> for 1991&ndash;2003 in Paterson,&nbsp;WA.
@@ -462,18 +466,6 @@ resulting executable in your path <i>before</i> you try to build DEAD.
 <li>No problemo</li>
 </ul>
 <p><hr></p>
-
-<dt><a name="Mail List"></a></dt>
-<h2>Mail List for Discussion of Dust Entrainment and Deposition Modeling</h2></a>
-
-<p><ul>
-<li>DEAD Discussion &lt;dead_at_uci_dot_edu&gt;: 
-<a href="https://maillists.uci.edu/mailman/admin/dead">Admin</a>
-<a href="https://maillists.uci.edu/mailman/public/dead/">Archive</a>
-<a href="mailto:dead_at_uci_dot_edu">Post</a>
-<a href="https://maillists.uci.edu/mailman/listinfo/dead">Subscribe</a></li>
-</ul>
-<p><ul>
 
 <table width="100%"><tr><td align="left" valign="top">/
 <a href="http://www.ess.uci.edu">UCI ESS</a> /

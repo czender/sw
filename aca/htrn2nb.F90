@@ -168,7 +168,6 @@ program htrn2nb
   integer phi_fit_id
   integer psi_exact_id
   integer psi_fit_id
-  integer scalar_foo_id
   integer tpt_id
   integer wvl_ctr_id
   integer wvl_grd_id
@@ -183,7 +182,6 @@ program htrn2nb
   
   ! Computational-precision netCDF output variables
   real(selected_real_kind(p=12)) bnd_dlt
-  real(selected_real_kind(p=12)) scalar_foo
   
   ! Allocatable variables
   ! Computational-precision HITRAN netCDF input variables
@@ -267,7 +265,7 @@ program htrn2nb
   real(selected_real_kind(p=12))::bnd_sum_str_ln_lmt_tpt_crr
   real(selected_real_kind(p=12))::bnd_sum_wk_ln_lmt_rfr
   real(selected_real_kind(p=12))::bnd_sum_wk_ln_lmt_tpt_crr
-  real(selected_real_kind(p=12))::float_foo
+  real(selected_real_kind(p=12))::bnd_dlt_hlf
   real(selected_real_kind(p=12))::ln_hi
   real(selected_real_kind(p=12))::ln_lo
   real(selected_real_kind(p=12))::ln_str_rfr
@@ -311,7 +309,7 @@ program htrn2nb
   character(80)::drc_out='/data/zender/aca'//nlc ! [sng] Output directory
   character(80)::fl_in='H2O.nc'//nlc ! [sng] Input file
   character(80)::fl_out='mlk_H2O.nc'//nlc ! [sng] Output file
-  integer::int_foo=1 ! [nbr] Integer
+  integer::ln_cnt=0 ! [nbr] Number of lines in spectral interval
 
   ! Main code
   
@@ -348,7 +346,9 @@ program htrn2nb
              ': DEBUG Double hyphen indicates multi-character option: ', &
              'opt_sng = ',opt_sng(1:ftn_strlen(opt_sng)),', opt_lng = ',opt_lng
         ! fxm: Change if else if construct to select case but how to handle fall-through cases elegantly?
-        if (opt_sng == 'bnd_nbr' .or. opt_sng == 'wvn_nbr' ) then
+        if (opt_sng == 'bnd_dbg' .or. opt_sng == 'dbg_bnd' ) then
+           call ftn_arg_get(arg_idx,arg_val,bnd_dbg) ! [idx] Debugging band
+        else if (opt_sng == 'bnd_nbr' .or. opt_sng == 'wvn_nbr' ) then
            call ftn_arg_get(arg_idx,arg_val,bnd_nbr) ! [nbr] Number of bands
            grd_LW_SW=.false.
         else if (opt_sng == 'dbg' .or. opt_sng == 'dbg_lvl' ) then
@@ -399,8 +399,6 @@ program htrn2nb
            grd_LW_SW=.false.
         else if (dsh_key == '-D') then
            call ftn_arg_get(arg_idx,arg_val,dbg_lvl)
-        else if (dsh_key == '-f') then
-           call ftn_arg_get(arg_idx,arg_val,float_foo)
         else if (dsh_key == '-h') then
            call ftn_arg_get(arg_idx,arg_val,ln_hi)
         else if (dsh_key == '-i') then
@@ -622,7 +620,7 @@ program htrn2nb
      else ! !grd_LW_SW
         ! Normal grid with uniform resolution in wvn space
         bnd_dlt=(ln_hi-ln_lo)/bnd_nbr
-        float_foo=bnd_dlt/2.0
+        bnd_dlt_hlf=bnd_dlt/2.0
         do bnd_idx=1,bnd_nbr
            wvn_grd(bnd_idx)=ln_lo+(bnd_idx-1)*bnd_dlt
         enddo                  ! end loop over bnd
@@ -695,10 +693,10 @@ program htrn2nb
            ln_idx=ln_idx+1
         end do              ! end loop over lines within each band
      enddo                  ! end loop over bnd
-     int_foo=0
+     ln_cnt=0
      do bnd_idx=1,bnd_nbr
         bnd_ln_nbr(bnd_idx)=ln_idx_max(bnd_idx)-ln_idx_min(bnd_idx)+1
-        int_foo=int_foo+bnd_ln_nbr(bnd_idx)
+        ln_cnt=ln_cnt+bnd_ln_nbr(bnd_idx)
      enddo                  ! end loop over bnd
      
      ! Now we know which lines are in each band
@@ -708,28 +706,6 @@ program htrn2nb
      do tpt_idx=2,tpt_nbr
         tpt(tpt_idx)=tpt(tpt_idx-1)+tpt_ncr
      enddo                  ! end loop over temperatures
-     
-     if(grd_LW_SW) then 
-        write (6,'(a51,f12.6,a9,f12.6,a10,i5,a9,f12.6,a17)')  &
-             'Malkmus random band model parameters computed from ', &
-             wvn_min_LW,' cm-1 to ',wvn_max_LW,' cm-1 for ',bnd_nbr_LW,' regular ',bnd_dlt_LW,' cm-1 bands in LW'
-        write (6,'(a51,f12.6,a9,f12.6,a10,i5,a9,f12.6,a17)')  &
-             'Malkmus random band model parameters computed from ', &
-             wvn_min_SW,' cm-1 to ',wvn_max_SW,' cm-1 for ',bnd_nbr_SW,' regular ',bnd_dlt_SW,' cm-1 bands in SW'
-     else
-        write (6,'(a51,f12.6,a9,f12.6,a10,i5,a9,f12.6,a11)')  &
-             'Malkmus random band model parameters computed from ', &
-             ln_lo,' cm-1 to ',ln_hi,' cm-1 for ',bnd_nbr_LW,' regular ',bnd_dlt,' cm-1 bands'
-     endif
-     write (6,'(i6,a46)') int_foo,' lines fall within specified spectral interval'
-     write (6,'(a63,f6.2,a2)')  &
-          'Line strength parameters scaled to and saved at tpt(reference) = ',tpt_Malkmus_rfr,' K'
-     write (6,'(a75,i3,a19,f6.2,a6,f6.2,a9,f5.2,a2)')  &
-          'Temperature dependence accounted for by least-squares-fit to exact data for ', &
-          tpt_nbr,' temperatures from ',tpt_min,' K to ',tpt_max,' K every ',tpt_ncr,' K'
-     write (6,'(a76,i4,a3,f12.6,a8,f12.6,a3)')  &
-          'Fitted and exact weak and strong line temperature dependence saved for band ',bnd_dbg, &
-          ' = ',wvn_ctr(bnd_dbg),' cm-1 = ',wvl_ctr(bnd_dbg)*1.0e6,' um'
      
      ! Precompute some frequently used factors and/or their reciprocals
      Boltzmann_rcp=1.0/Boltzmann
@@ -983,14 +959,14 @@ program htrn2nb
      
      ! Compute wavenumber coordinates
      bnd_dlt=wvn_ctr(2)-wvn_ctr(1)
-     float_foo=bnd_dlt/2.0
+     bnd_dlt_hlf=bnd_dlt/2.0
      do bnd_idx=1,bnd_nbr
-        wvn_min(bnd_idx)=wvn_ctr(bnd_idx)-float_foo
+        wvn_min(bnd_idx)=wvn_ctr(bnd_idx)-bnd_dlt_hlf
      enddo                  ! end loop over bnd
      do bnd_idx=1,bnd_nbr-1
         wvn_max(bnd_idx)=wvn_min(bnd_idx+1)
      enddo                  ! end loop over bnd
-     wvn_max(bnd_nbr)=wvn_ctr(bnd_nbr)+float_foo
+     wvn_max(bnd_nbr)=wvn_ctr(bnd_nbr)+bnd_dlt_hlf
      
   endif                     ! endif input file is in BPB binary format
   
@@ -1109,6 +1085,28 @@ program htrn2nb
      !endif
   enddo                  ! end loop over bnd
 
+  if(grd_LW_SW) then 
+     write (6,'(a51,f12.6,a9,f12.6,a10,i5,a9,f12.6,a17)')  &
+          'Malkmus random band model parameters computed from ', &
+          wvn_min_LW,' cm-1 to ',wvn_max_LW,' cm-1 for ',bnd_nbr_LW,' regular ',bnd_dlt_LW,' cm-1 bands in LW'
+     write (6,'(a51,f12.6,a9,f12.6,a10,i5,a9,f12.6,a17)')  &
+          'Malkmus random band model parameters computed from ', &
+          wvn_min_SW,' cm-1 to ',wvn_max_SW,' cm-1 for ',bnd_nbr_SW,' regular ',bnd_dlt_SW,' cm-1 bands in SW'
+  else
+     write (6,'(a51,f12.6,a9,f12.6,a10,i5,a9,f12.6,a11)')  &
+          'Malkmus random band model parameters computed from ', &
+          ln_lo,' cm-1 to ',ln_hi,' cm-1 for ',bnd_nbr_LW,' regular ',bnd_dlt,' cm-1 bands'
+  endif
+  write (6,'(i6,a46)') ln_cnt,' lines fall within specified spectral interval'
+  write (6,'(a63,f6.2,a2)')  &
+       'Line strength parameters scaled to and saved at tpt(reference) = ',tpt_Malkmus_rfr,' K'
+  write (6,'(a75,i3,a19,f6.2,a6,f6.2,a9,f5.2,a2)')  &
+       'Temperature dependence accounted for by least-squares-fit to exact data for ', &
+       tpt_nbr,' temperatures from ',tpt_min,' K to ',tpt_max,' K every ',tpt_ncr,' K'
+  write (6,'(a76,i4,a3,f12.6,a8,f12.6,a3)')  &
+       'Fitted and exact weak and strong line temperature dependence saved for band ',bnd_dbg, &
+       ' = ',wvn_ctr(bnd_dbg),' cm-1 = ',wvl_ctr(bnd_dbg)*1.0e6,' um'
+
   ! Check that single precision bounds were not exceeded
   if (typ_out.eq.nf90_float) then
      do bnd_idx=1,bnd_nbr
@@ -1184,7 +1182,6 @@ program htrn2nb
   rcd=nf90_wrp(nf90_def_var(nc_id,'phi_fit',typ_out,tpt_dmn_id,phi_fit_id),sbr_nm//': dv phi_fit')
   rcd=nf90_wrp(nf90_def_var(nc_id,'psi_exact',typ_out,tpt_dmn_id,psi_exact_id),sbr_nm//': dv psi_exact')
   rcd=nf90_wrp(nf90_def_var(nc_id,'psi_fit',typ_out,tpt_dmn_id,psi_fit_id),sbr_nm//': dv psi_fit')
-  rcd=nf90_wrp(nf90_def_var(nc_id,'scalar_foo',typ_out,scalar_foo_id),sbr_nm//': dv scalar_foo')
   rcd=nf90_wrp(nf90_def_var(nc_id,'tpt',typ_out,tpt_dmn_id,tpt_id),sbr_nm//': dv tpt')
   rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_ctr',typ_out,bnd_dmn_id,wvl_ctr_id),sbr_nm//': dv wvl_ctr')
   rcd=nf90_wrp(nf90_def_var(nc_id,'wvl_grd',typ_out,grd_dmn_id,wvl_grd_id),sbr_nm//': dv wvl_grd')
@@ -1229,7 +1226,6 @@ program htrn2nb
   rcd=nf90_wrp(nf90_put_att(nc_id,phi_fit_id,'long_name','Phi from least squares fit'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,psi_exact_id,'long_name','Psi exactly computed'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,psi_fit_id,'long_name','Psi from least squares fit'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,scalar_foo_id,'long_name','Description'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,tpt_id,'long_name','Temperature'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,wvl_ctr_id,'long_name','Band center wavelength'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,wvl_grd_id,'long_name','Wavelength grid'),sbr_nm)
@@ -1262,7 +1258,6 @@ program htrn2nb
   rcd=nf90_wrp(nf90_put_att(nc_id,phi_fit_id,'units','fraction'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,psi_exact_id,'units','fraction'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,psi_fit_id,'units','fraction'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,scalar_foo_id,'units','unknown'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,tpt_id,'units','kelvin'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,wvl_ctr_id,'units','meter'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,wvl_grd_id,'units','meter'),sbr_nm)
@@ -1282,7 +1277,6 @@ program htrn2nb
   rcd=nf90_wrp(nf90_put_var(nc_id,bnd_dlt_id,bnd_dlt),sbr_nm//': pv bnd_dlt in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,iso_id_id,iso_id),sbr_nm//': pv iso in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,mlc_id_id,mlc_id),sbr_nm//': pv mlc in '//__FILE__)
-  rcd=nf90_wrp(nf90_put_var(nc_id,scalar_foo_id,scalar_foo),sbr_nm//': pv scalar_foo in '//__FILE__)
   
   rcd=nf90_wrp(nf90_put_var(nc_id,A_phi_id,A_phi),sbr_nm//': pv A_phi in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,A_psi_id,A_psi),sbr_nm//': pv A_psi in '//__FILE__)

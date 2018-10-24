@@ -2043,7 +2043,7 @@ program swnb2
   cmd_ln_slr_zen_ngl_cos=.false.
   cmd_ln_slr_zen_ngl_dgr=.false.
   exit_status=0             ! [enm] Program exit status
-  flg_CO=.true.
+  flg_CO=.false. ! [flg] CO turned-off by default because it creates ss_alb_fct > 1.0 in all layers/wavelengths fxm
   flg_N2=.true.
   flg_N2O=.true.
   flg_CH4=.true.
@@ -6445,6 +6445,7 @@ program swnb2
                 prg_nm(1:ftn_strlen(prg_nm)),': WARNING ss_alb_fct(',bnd_idx,',',lev_idx,') = ',ss_alb_fct(bnd_idx,lev_idx), &
                 ' at lev(',lev_idx,') = ',prs(lev_idx)/100.0,' mb and wvl(',bnd_idx,') = ',wvl(bnd_idx)*1.0e6,' um'
            ss_alb_fct(bnd_idx,lev_idx)=1.0
+           stop 'ss_alb_fct > 1.0'
         endif
      enddo                  ! end loop over lev
      
