@@ -340,7 +340,7 @@ make install
 #***********************************************************************
 
 #***********************************************************************
-# 20181023: aerosol.ess.uci.edu with gcc/g++ 8.2
+# 20181023: aerosol.ess.uci.edu with gcc/g++ 8.2 on MacOSX 10.14
 # NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
 #include <strings.h> // csz 20150310
 #include <cstdio> // csz 20150310

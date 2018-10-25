@@ -6441,9 +6441,10 @@ program swnb2
      ! small Rayleigh scattering optical depths (p <~ 1 Pa) in single precision
      do lev_idx=1,lev_nbr
         if (ss_alb_fct(bnd_idx,lev_idx) > 1.0) then
-           write (6,'(a,a,i4,a,i3,a,f10.7,a,i3,a,f10.3,a,i4,a,f10.7,a)') &
+           write (6,'(a,a,i4,a,i3,a,f10.7,a,i3,a,f10.3,a,i4,a,f10.7,a,e11.4,a20,e11.4)') &
                 prg_nm(1:ftn_strlen(prg_nm)),': WARNING ss_alb_fct(',bnd_idx,',',lev_idx,') = ',ss_alb_fct(bnd_idx,lev_idx), &
-                ' at lev(',lev_idx,') = ',prs(lev_idx)/100.0,' mb and wvl(',bnd_idx,') = ',wvl(bnd_idx)*1.0e6,' um'
+                ' at lev(',lev_idx,') = ',prs(lev_idx)/100.0,' mb and wvl(',bnd_idx,') = ',wvl(bnd_idx)*1.0e6, &
+                ' um, because odsl_spc_ttl = ',odsl_spc_ttl(bnd_idx,lev_idx),' and odxl_spc_ttl = ',odxl_spc_ttl(bnd_idx,lev_idx)
            ss_alb_fct(bnd_idx,lev_idx)=1.0
            stop 'ss_alb_fct > 1.0'
         endif
