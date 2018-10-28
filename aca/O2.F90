@@ -10,7 +10,7 @@ program O2
   ! cd ${HOME}/sw/aca; make OPTS=D O2; cd -
   
   ! Usage:
-  ! ncks -H -C -F -d bnd,0.3e-6 -v abs_xsx_O2 ${DATA}/aca/abs_xsx_O2.nc
+  ! ncks -H -C -F -d bnd,0.3e-6 -v abs_xsx ${DATA}/aca/abs_xsx_O2.nc
   
   ! Use WMO85 or JPL15 data
   ! O2 --JPL15
@@ -147,8 +147,8 @@ program O2
   integer nc_id             ! file handle
   integer bnd_nbr ! dimension size
   integer Rayleigh_sca_xsx_id
-  integer abs_cff_mss_O2_id
-  integer abs_xsx_O2_id
+  integer abs_cff_mss_id
+  integer abs_xsx_id
   integer bnd_id            ! coordinate ID
   integer flx_bnd_dwn_TOA_id
   integer flx_bnd_pht_dwn_TOA_id
@@ -171,8 +171,8 @@ program O2
   
   ! Allocatable variables
   real,dimension(:),allocatable::Rayleigh_sca_xsx
-  real,dimension(:),allocatable::abs_cff_mss_O2
-  real,dimension(:),allocatable::abs_xsx_O2
+  real,dimension(:),allocatable::abs_cff_mss
+  real,dimension(:),allocatable::abs_xsx
   real,dimension(:),allocatable::abs_xsx_O3
   real,dimension(:),allocatable::abs_xsx_O3_cold
   real,dimension(:),allocatable::abs_xsx_O3_warm
@@ -303,8 +303,8 @@ program O2
 
   ! Allocate space for dynamic arrays
   allocate(Rayleigh_sca_xsx(bnd_nbr),stat=rcd)
-  allocate(abs_cff_mss_O2(bnd_nbr),stat=rcd)
-  allocate(abs_xsx_O2(bnd_nbr),stat=rcd)
+  allocate(abs_cff_mss(bnd_nbr),stat=rcd)
+  allocate(abs_xsx(bnd_nbr),stat=rcd)
   allocate(abs_xsx_O3(bnd_nbr),stat=rcd)
   allocate(abs_xsx_O3_cold(bnd_nbr),stat=rcd)
   allocate(abs_xsx_O3_warm(bnd_nbr),stat=rcd)
@@ -336,7 +336,7 @@ program O2
              wvl_max(bnd_idx), &
              flx_bnd_pht_dwn_TOA(bnd_idx), &
              Rayleigh_sca_xsx(bnd_idx), &
-             abs_xsx_O2(bnd_idx), &
+             abs_xsx(bnd_idx), &
              abs_xsx_O3_cold(bnd_idx), &
              abs_xsx_O3_warm(bnd_idx)
      enddo
@@ -348,7 +348,7 @@ program O2
         wvl_max(bnd_idx)=wvl_max(bnd_idx)*1.0e-9 ! nm -> m
         flx_bnd_pht_dwn_TOA(bnd_idx)=flx_bnd_pht_dwn_TOA(bnd_idx)*1.0e4 ! #/cm2/s -> #/m2/s
         Rayleigh_sca_xsx(bnd_idx)=Rayleigh_sca_xsx(bnd_idx)*1.0e-4 ! cm2 -> m2
-        abs_xsx_O2(bnd_idx)=abs_xsx_O2(bnd_idx)*1.0e-4 ! cm2 -> m2
+        abs_xsx(bnd_idx)=abs_xsx(bnd_idx)*1.0e-4 ! cm2 -> m2
         abs_xsx_O3_cold(bnd_idx)=abs_xsx_O3_cold(bnd_idx)*1.0e-4 ! cm2 -> m2
         abs_xsx_O3_warm(bnd_idx)=abs_xsx_O3_warm(bnd_idx)*1.0e-4 ! cm2 -> m2
      enddo
@@ -363,7 +363,7 @@ program O2
         read (fl_in_unit,*)  &
              wvl_min(bnd_idx), &
              wvl_max(bnd_idx), &
-             abs_xsx_O2(bnd_idx)
+             abs_xsx(bnd_idx)
      enddo
      int_foo=int_foo ! CEWI
      
@@ -371,7 +371,7 @@ program O2
      do bnd_idx=1,bnd_nbr
         wvl_min(bnd_idx)=wvl_min(bnd_idx)*1.0e-9 ! nm -> m
         wvl_max(bnd_idx)=wvl_max(bnd_idx)*1.0e-9 ! nm -> m
-        abs_xsx_O2(bnd_idx)=abs_xsx_O2(bnd_idx)*1.0e-24 ! raw -> cm2
+        abs_xsx(bnd_idx)=abs_xsx(bnd_idx)*1.0e-24 ! raw -> cm2
         flx_bnd_pht_dwn_TOA(bnd_idx)=mss_val ! #/cm2/s -> #/m2/s
         Rayleigh_sca_xsx(bnd_idx)=mss_val ! cm2 -> m2
      enddo
@@ -387,7 +387,7 @@ program O2
   
   ! Compute diagnostic variables
   do bnd_idx=1,bnd_nbr
-     abs_cff_mss_O2(bnd_idx)=abs_xsx_O2(bnd_idx)*Avagadro/mmw_O2
+     abs_cff_mss(bnd_idx)=abs_xsx(bnd_idx)*Avagadro/mmw_O2
      bnd(bnd_idx)=0.5*(wvl_min(bnd_idx)+wvl_max(bnd_idx))
      wvl(bnd_idx)=bnd(bnd_idx)
      wvl_ctr(bnd_idx)=bnd(bnd_idx)
@@ -412,10 +412,10 @@ program O2
   
   ! Sanity check
   if (dbg_lvl >= dbg_fl) then
-     write (6,'(5(a,1x))') 'idx','wvl_ctr','abs_xsx_O2','abs_cff_mss_O2','flx_slr_frc'
+     write (6,'(5(a,1x))') 'idx','wvl_ctr','abs_xsx','abs_cff_mss','flx_slr_frc'
      do bnd_idx=1,bnd_nbr
         write (6,'(i4,1x,es15.8,1x,es15.8,1x,es15.8,1x,es15.8)')  &
-             bnd_idx,wvl_ctr(bnd_idx),abs_xsx_O2(bnd_idx),abs_cff_mss_O2(bnd_idx),flx_slr_frc(bnd_idx)
+             bnd_idx,wvl_ctr(bnd_idx),abs_xsx(bnd_idx),abs_cff_mss(bnd_idx),flx_slr_frc(bnd_idx)
      enddo                  ! end loop over bnd
   endif                     ! endif dbg
 
@@ -443,8 +443,8 @@ program O2
   
   ! Variable definitions
   rcd=nf90_wrp(nf90_def_var(nc_id,'Rayleigh_sca_xsx',nf90_float,bnd_dmn_id,Rayleigh_sca_xsx_id),sbr_nm//': dv Rayleigh_sca_xsx')
-  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_cff_mss_O2',nf90_float,bnd_dmn_id,abs_cff_mss_O2_id),sbr_nm//': dv abs_cff_mss_O2')
-  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_O2',nf90_float,bnd_dmn_id,abs_xsx_O2_id),sbr_nm//': dv abs_xsx_O2')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_cff_mss',nf90_float,bnd_dmn_id,abs_cff_mss_id),sbr_nm//': dv abs_cff_mss')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx',nf90_float,bnd_dmn_id,abs_xsx_id),sbr_nm//': dv abs_xsx')
   rcd=nf90_wrp(nf90_def_var(nc_id,'bnd',nf90_float,bnd_dmn_id,bnd_id),sbr_nm//': dv bnd')
   rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bnd_dwn_TOA',nf90_float,bnd_dmn_id,flx_bnd_dwn_TOA_id),sbr_nm//': dv flx_bnd_dwn_TOA')
   rcd=nf90_wrp(nf90_def_var(nc_id,'flx_slr_frc',nf90_float,bnd_dmn_id,flx_slr_frc_id),sbr_nm//': dv flx_slr_frc')
@@ -470,8 +470,8 @@ program O2
   
   ! Add english text descriptions
   rcd=nf90_wrp(nf90_put_att(nc_id,Rayleigh_sca_xsx_id,'long_name','Rayleigh scattering cross section'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_O2_id,'long_name','Oxygen mass absorption coefficient'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O2_id,'long_name','Oxygen absorption cross section'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_id,'long_name','Oxygen mass absorption coefficient'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_id,'long_name','Oxygen absorption cross section'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,bnd_id,'long_name','Band center wavelength'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_dwn_TOA_id,'long_name','Solar Energy flux in band'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_pht_dwn_TOA_id,'long_name','Photon flux in band'),sbr_nm)
@@ -487,8 +487,8 @@ program O2
   
   ! Add units
   rcd=nf90_wrp(nf90_put_att(nc_id,Rayleigh_sca_xsx_id,'units','meter2'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_O2_id,'units','meter2 kilogram-1'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O2_id,'units','meter2'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_id,'units','meter2 kilogram-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_id,'units','meter2'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,bnd_id,'units','meter'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_dwn_TOA_id,'units','watt meter-2'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_pht_dwn_TOA_id,'units','photon meter-2 second-1'),sbr_nm)
@@ -511,8 +511,8 @@ program O2
   
   ! Write data
   rcd=nf90_wrp(nf90_put_var(nc_id,Rayleigh_sca_xsx_id,Rayleigh_sca_xsx),sbr_nm//': pv Rayleigh_sca_xsx in '//__FILE__)
-  rcd=nf90_wrp(nf90_put_var(nc_id,abs_cff_mss_O2_id,abs_cff_mss_O2),sbr_nm//': pv abs_cff_mss_O2 in '//__FILE__)
-  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_O2_id,abs_xsx_O2),sbr_nm//': pv abs_xsx_O2 in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,abs_cff_mss_id,abs_cff_mss),sbr_nm//': pv abs_cff_mss in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_id,abs_xsx),sbr_nm//': pv abs_xsx in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,bnd_id,bnd),sbr_nm//': pv bnd in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,flx_bnd_dwn_TOA_id,flx_bnd_dwn_TOA),sbr_nm//': pv flx_bnd_dwn_TOA in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,flx_bnd_pht_dwn_TOA_id,flx_bnd_pht_dwn_TOA),sbr_nm//': pv flx_bnd_pht_dwn_TOA in '//__FILE__)
@@ -530,8 +530,8 @@ program O2
   
   ! De-allocate dynamic variables
   if (allocated(Rayleigh_sca_xsx)) deallocate(Rayleigh_sca_xsx,stat=rcd)
-  if (allocated(abs_cff_mss_O2)) deallocate(abs_cff_mss_O2,stat=rcd)
-  if (allocated(abs_xsx_O2)) deallocate(abs_xsx_O2,stat=rcd)
+  if (allocated(abs_cff_mss)) deallocate(abs_cff_mss,stat=rcd)
+  if (allocated(abs_xsx)) deallocate(abs_xsx,stat=rcd)
   if (allocated(bnd)) deallocate(bnd,stat=rcd)     ! coordinate variable
   if (allocated(flx_bnd_dwn_TOA)) deallocate(flx_bnd_dwn_TOA,stat=rcd)
   if (allocated(flx_bnd_pht_dwn_TOA)) deallocate(flx_bnd_pht_dwn_TOA,stat=rcd)
