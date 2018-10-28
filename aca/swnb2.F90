@@ -929,22 +929,16 @@ program swnb2
   integer abs_bb_snw_id
   integer trn_bb_snw_id
 
-  ! HHCWC input variables
-  integer abs_xsx_O3_id
-  integer abs_xsx_O3_dadT_id
-  integer tpt_std_O3_id
-  integer wvl_max_HHCWC_id
-  integer wvl_min_HHCWC_id
-  integer wvl_ctr_HHCWC_id
-  integer wvl_grd_HHCWC_id
-  
   ! O2-O2 input variables
   integer abs_xsx_O2O2_id
   integer wvl_grd_O2O2_id
   
   ! HC input variables
-  integer abs_xsx_O2_id
-  integer wvl_grd_HC_id
+!  integer abs_xsx_O2_id
+  
+  ! HHCWC input variables
+  integer abs_xsx_O3_id
+  integer abs_xsx_O3_dadT_id
   
   ! NO2 input variables
   integer abs_xsx_NO2_id
@@ -1400,38 +1394,38 @@ program swnb2
   real abs_xsx_O2O2(bnd_nbr_max)
   real wvl_grd_O2O2(bnd_nbr_O2O2_max+1)
   
-  ! HHCWC input variables
-  real abs_xsx_O3_dsk(bnd_nbr_HHCWC_max)
-  real abs_xsx_O3(bnd_nbr_max)
-  real abs_xsx_O3_dadT_dsk(bnd_nbr_HHCWC_max)
-  real abs_xsx_O3_dadT(bnd_nbr_max)
-  real tpt_std_O3
-  real wvl_max_HHCWC(bnd_nbr_HHCWC_max)
-  real wvl_min_HHCWC(bnd_nbr_HHCWC_max)
-  real wvl_ctr_HHCWC(bnd_nbr_HHCWC_max)
-  real wvl_grd_HHCWC(bnd_nbr_HHCWC_max+1)
-  
   ! HC input variables
-  real abs_xsx_O2_dsk(bnd_nbr_HC_max)
-  real abs_xsx_O2(bnd_nbr_max)
-  real wvl_grd_HC(bnd_nbr_HC_max+1)
+  real,dimension(:),allocatable::abs_xsx_O2_dsk
+  real,dimension(:),allocatable::wvl_grd_HC
+  real::abs_xsx_O2(bnd_nbr_max)
+  
+  ! HHCWC input variables
+  real,dimension(:),allocatable::abs_xsx_O3_dsk
+  real,dimension(:),allocatable::abs_xsx_O3_dadT_dsk
+  real,dimension(:),allocatable::wvl_max_HHCWC
+  real,dimension(:),allocatable::wvl_min_HHCWC
+  real,dimension(:),allocatable::wvl_ctr_HHCWC
+  real,dimension(:),allocatable::wvl_grd_HHCWC
+  real::tpt_std_O3
+  real::abs_xsx_O3_dadT(bnd_nbr_max)
+  real::abs_xsx_O3(bnd_nbr_max)
   
   ! NO2 input variables
   real,dimension(:),allocatable::abs_xsx_NO2_dsk
   real,dimension(:),allocatable::qnt_yld_NO2_dsk
   real,dimension(:),allocatable::wvl_grd_NO2
-  real abs_xsx_NO2(bnd_nbr_max)
-  real qnt_yld_NO2(bnd_nbr_max)
+  real::abs_xsx_NO2(bnd_nbr_max)
+  real::qnt_yld_NO2(bnd_nbr_max)
   
   ! CFC11 input variables
   real,dimension(:),allocatable::abs_xsx_CFC11_dsk
   real,dimension(:),allocatable::wvl_grd_CFC11
-  real abs_xsx_CFC11(bnd_nbr_max)
+  real::abs_xsx_CFC11(bnd_nbr_max)
   
   ! CFC12 input variables
   real,dimension(:),allocatable::abs_xsx_CFC12_dsk
   real,dimension(:),allocatable::wvl_grd_CFC12
-  real abs_xsx_CFC12(bnd_nbr_max)
+  real::abs_xsx_CFC12(bnd_nbr_max)
   
   ! H2OH2O input variables
   real abs_xsx_H2OH2O_dsk(bnd_nbr_H2OH2O_max)
@@ -3190,56 +3184,14 @@ program swnb2
   ! Close file
   rcd=nf90_wrp_close(nc_id,fl_O2O2,'Ingested') ! [fnc] Close file
   
-  ! Ingest fl_HC
-  rcd=nf90_wrp_open(fl_HC,nf90_nowrite,nc_id)
-  ! Get dimension IDs
-  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
-  ! Get dimension sizes
-  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_HC),sbr_nm//": inquire_dim bnd")
-  if (bnd_nbr_HC>bnd_nbr_HC_max) stop 'bnd_nbr_HC>bnd_nbr_HC_max'
-  cnt_bnd(1)=bnd_nbr_HC
-  cnt_bndp(1)=bnd_nbr_HC+1
-  ! Get variable IDs
-  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O2',abs_xsx_O2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_grd',wvl_grd_HC_id)
-  ! Get data
-  rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_O2_id,abs_xsx_O2_dsk,srt_one,cnt_bnd),"gv abs_xsx_O2_dsk")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_grd_HC_id,wvl_grd_HC,srt_one,cnt_bndp),"gv wvl_grd_HC")
-  ! Close file
-  rcd=nf90_wrp_close(nc_id,fl_HC,'Ingested') ! [fnc] Close file
-
-  ! Ingest fl_HHCWC
-  rcd=nf90_wrp_open(fl_HHCWC,nf90_nowrite,nc_id)
-  ! Get dimension IDs
-  rcd=nf90_wrp_inq_dimid(nc_id,'bnd',bnd_dmn_id)
-  ! Get dimension sizes
-  rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr_HHCWC),sbr_nm//": inquire_dim bnd")
-  if (bnd_nbr_HHCWC>bnd_nbr_HHCWC_max) stop 'bnd_nbr_HHCWC>bnd_nbr_HHCWC_max'
-  cnt_bnd(1)=bnd_nbr_HHCWC
-  cnt_bndp(1)=bnd_nbr_HHCWC+1
-  ! Get variable IDs
-  ! 20181002: Until today, always used abs_xsx_O3_cold (T = 203 K) for abs_xsx_O3 at all levels
-  ! Henceforth use standard temperature (usually tpt_std_O3=250 K) of archived O3 cross-sections
-  ! and adjust by level-dependent temperature gradient to tpt_std_O3
-  !rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O3_cold',abs_xsx_O3_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O3',abs_xsx_O3_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O3_dadT',abs_xsx_O3_dadT_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'tpt_std',tpt_std_O3_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_HHCWC_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_HHCWC_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_HHCWC_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'wvl_grd',wvl_grd_HHCWC_id)
-  ! Get data
-  rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_O3_id,abs_xsx_O3_dsk,srt_one,cnt_bnd),"gv abs_xsx_O3_dsk")
-  rcd=nf90_wrp(nf90_get_var(nc_id,tpt_std_O3_id,tpt_std_O3),"gv tpt_std_O3")
-  rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_O3_dadT_id,abs_xsx_O3_dadT,srt_one,cnt_bnd),"gv abs_xsx_O3_dadT")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_HHCWC_id,wvl_max_HHCWC,srt_one,cnt_bnd),"gv wvl_max_HHCWC")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_HHCWC_id,wvl_min_HHCWC,srt_one,cnt_bnd),"gv wvl_min_HHCWC")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_HHCWC_id,wvl_ctr_HHCWC,srt_one,cnt_bnd),"gv wvl_ctr_HHCWC")
-  rcd=nf90_wrp(nf90_get_var(nc_id,wvl_grd_HHCWC_id,wvl_grd_HHCWC,srt_one,cnt_bndp),"gv wvl_grd_HHCWC")
-  ! Close file
-  rcd=nf90_wrp_close(nc_id,fl_HHCWC,'Ingested') ! [fnc] Close file
-
+  call abs_xsx_get(fl_HC,bnd_nbr_HC, &
+       abs_xsx_O2_dsk,wvl_grd_HC)
+       
+  call abs_xsx_get(fl_HHCWC,bnd_nbr_HHCWC, &
+       abs_xsx_O3_dsk,wvl_grd_HHCWC, &
+       abs_xsx_dadT=abs_xsx_O3_dadT_dsk,tpt_std=tpt_std_O3, &
+       wvl_ctr=wvl_ctr_HHCWC,wvl_min=wvl_min_HHCWC,wvl_max=wvl_max_HHCWC) 
+       
   call abs_xsx_get(fl_NO2,bnd_nbr_NO2, &
        abs_xsx_NO2_dsk,wvl_grd_NO2,qnt_yld=qnt_yld_NO2_dsk)
 

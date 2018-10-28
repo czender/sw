@@ -35,7 +35,7 @@ contains
     integer,intent(out)::bnd_nbr
     real,dimension(:),allocatable,intent(out)::abs_xsx
     real,dimension(:),allocatable,intent(out)::wvl_grd
-    real,dimension(:),allocatable,optional,intent(out)::tpt_std
+    real,optional,intent(out)::tpt_std
     real,dimension(:),allocatable,optional,intent(out)::abs_xsx_dadT
     real,dimension(:),allocatable,optional,intent(out)::qnt_yld
     real,dimension(:),allocatable,optional,intent(out)::wvl_ctr
@@ -98,10 +98,8 @@ contains
        endif ! !rcd
     endif ! !abs_xsx_dadT
     if(present(tpt_std)) then
-       allocate(tpt_std(bnd_nbr),stat=rcd)
-       if(rcd /= 0) stop 'allocate() failed for tpt_std'
        rcd=nf90_wrp_inq_varid(nc_id,'tpt_std',tpt_std_id)
-       rcd=nf90_wrp(nf90_get_var(nc_id,tpt_std_id,tpt_std,srt_one,cnt_bnd),'gv tpt_std')
+       rcd=nf90_wrp(nf90_get_var(nc_id,tpt_std_id,tpt_std),'gv tpt_std')
     endif ! !tpt_std
     if(present(qnt_yld)) then
        allocate(qnt_yld(bnd_nbr),stat=rcd)

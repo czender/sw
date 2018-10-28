@@ -23,11 +23,11 @@ program O3
   
   ! Usage:
   ! ncks -H -C -F -v wvl_ctr_CCM,flx_slr_frc_CCM,abs_xsx_O3_CCM ${DATA}/aca/abs_xsx_O3.nc
-  ! ncks -H -C -F -d bnd,0.3e-6 -d bnd_CCM,0.3e-6 -v wvl_ctr_CCM,flx_slr_frc_CCM,abs_xsx_O3_CCM,abs_xsx_O3 ${DATA}/aca/abs_xsx_O3.nc
+  ! ncks -H -C -F -d bnd,0.3e-6 -d bnd_CCM,0.3e-6 -v wvl_ctr_CCM,flx_slr_frc_CCM,abs_xsx_CCM,abs_xsx ${DATA}/aca/abs_xsx_O3.nc
   ! ncwa -a bnd -d bnd,0.295e-6,0.305e-6 ${DATA}/aca/abs_xsx_O3.nc ${DATA}/aca/O3.nc
-  ! ncks -H -C -F -d bnd,0.3e-6 -v abs_xsx_O3 ${DATA}/aca/abs_xsx_O3.nc
-  ! ncks -H -C -F -v abs_xsx_O3 ${DATA}/aca/O3.nc
-  ! ncks -H -C -F -d bnd_CCM,6 -v abs_xsx_O3_CCM ${DATA}/aca/abs_xsx_O3.nc
+  ! ncks -H -C -F -d bnd,0.3e-6 -v abs_xsx ${DATA}/aca/abs_xsx_O3.nc
+  ! ncks -H -C -F -v abs_xsx ${DATA}/aca/O3.nc
+  ! ncks -H -C -F -d bnd_CCM,6 -v abs_xsx_CCM ${DATA}/aca/abs_xsx_O3.nc
   
   ! Process input ASCII data files from WMO85 that look like:
   
@@ -195,12 +195,12 @@ program O3
   integer tpt_warm_id
   integer tpt_std_id
   integer Rayleigh_sca_xsx_id
-  integer abs_cff_mss_O3_id
-  integer abs_xsx_O3_cold_id
-  integer abs_xsx_O3_dadT_id
-  integer abs_xsx_O3_id
-  integer abs_xsx_O3_tpt_rfr_id
-  integer abs_xsx_O3_warm_id
+  integer abs_cff_mss_id
+  integer abs_xsx_cold_id
+  integer abs_xsx_dadT_id
+  integer abs_xsx_id
+  integer abs_xsx_tpt_rfr_id
+  integer abs_xsx_warm_id
   integer bnd_id            ! Coordinate ID
   integer flx_bnd_dwn_TOA_id
   integer flx_bnd_pht_dwn_TOA_id
@@ -221,19 +221,19 @@ program O3
   integer::fl_out_fmt=nco_format_undefined ! [enm] Output file format
   integer::nf90_create_mode=nf90_clobber ! [enm] Mode flag for nf90_create() call
   
-  real tpt_cold
-  real tpt_std
-  real tpt_warm
+  real::tpt_cold
+  real::tpt_std
+  real::tpt_warm
+  real::abs_xsx_tpt_rfr
   
   ! Allocatable variables
   real,dimension(:),allocatable::Rayleigh_sca_xsx
-  real,dimension(:),allocatable::abs_cff_mss_O3
+  real,dimension(:),allocatable::abs_cff_mss
   real,dimension(:),allocatable::abs_xsx_O2
-  real,dimension(:),allocatable::abs_xsx_O3
-  real,dimension(:),allocatable::abs_xsx_O3_cold
-  real,dimension(:),allocatable::abs_xsx_O3_dadT
-  real,dimension(:),allocatable::abs_xsx_O3_tpt_rfr
-  real,dimension(:),allocatable::abs_xsx_O3_warm
+  real,dimension(:),allocatable::abs_xsx
+  real,dimension(:),allocatable::abs_xsx_cold
+  real,dimension(:),allocatable::abs_xsx_dadT
+  real,dimension(:),allocatable::abs_xsx_warm
   real,dimension(:),allocatable::bnd     ! coordinate variable
   real,dimension(:),allocatable::flx_bnd_dwn_TOA
   real,dimension(:),allocatable::flx_bnd_pht_dwn_TOA
@@ -258,9 +258,9 @@ program O3
   integer xtr_typ_LHS
   integer xtr_typ_RHS
   
-  real abs_cff_mss_O3_CCM(bnd_nbr_CCM_SW_max)
-  real abs_cff_mss_O3_CCM_CGS(bnd_nbr_CCM_SW_max)
-  real abs_xsx_O3_CCM(bnd_nbr_CCM_SW_max)
+  real abs_cff_mss_CCM(bnd_nbr_CCM_SW_max)
+  real abs_cff_mss_CCM_CGS(bnd_nbr_CCM_SW_max)
+  real abs_xsx_CCM(bnd_nbr_CCM_SW_max)
   real bnd_CCM(bnd_nbr_CCM_SW_max)
   real flx_slr_frc_CCM(bnd_nbr_CCM_SW_max)
   real flx_spc_dwn_TOA_CCM(bnd_nbr_CCM_SW_max)
@@ -411,13 +411,12 @@ program O3
 
   ! Allocate space for dynamic arrays
   allocate(Rayleigh_sca_xsx(bnd_nbr),stat=rcd)
-  allocate(abs_cff_mss_O3(bnd_nbr),stat=rcd)
+  allocate(abs_cff_mss(bnd_nbr),stat=rcd)
   allocate(abs_xsx_O2(bnd_nbr),stat=rcd)
-  allocate(abs_xsx_O3(bnd_nbr),stat=rcd)
-  allocate(abs_xsx_O3_cold(bnd_nbr),stat=rcd)
-  allocate(abs_xsx_O3_dadT(bnd_nbr),stat=rcd)
-  allocate(abs_xsx_O3_tpt_rfr(bnd_nbr),stat=rcd)
-  allocate(abs_xsx_O3_warm(bnd_nbr),stat=rcd)
+  allocate(abs_xsx(bnd_nbr),stat=rcd)
+  allocate(abs_xsx_cold(bnd_nbr),stat=rcd)
+  allocate(abs_xsx_dadT(bnd_nbr),stat=rcd)
+  allocate(abs_xsx_warm(bnd_nbr),stat=rcd)
   allocate(bnd(bnd_nbr),stat=rcd)     ! coordinate variable
   allocate(flx_bnd_dwn_TOA(bnd_nbr),stat=rcd)
   allocate(flx_bnd_pht_dwn_TOA(bnd_nbr),stat=rcd)
@@ -451,8 +450,8 @@ program O3
              flx_bnd_pht_dwn_TOA(bnd_idx), &
              Rayleigh_sca_xsx(bnd_idx), &
              abs_xsx_O2(bnd_idx), &
-             abs_xsx_O3_cold(bnd_idx), &
-             abs_xsx_O3_warm(bnd_idx)
+             abs_xsx_cold(bnd_idx), &
+             abs_xsx_warm(bnd_idx)
      enddo
      int_foo=int_foo ! CEWI
      
@@ -463,8 +462,8 @@ program O3
         flx_bnd_pht_dwn_TOA(bnd_idx)=flx_bnd_pht_dwn_TOA(bnd_idx)*1.0e4 ! #/cm2/s -> #/m2/s
         Rayleigh_sca_xsx(bnd_idx)=Rayleigh_sca_xsx(bnd_idx)*1.0e-4 ! cm2 -> m2
         abs_xsx_O2(bnd_idx)=abs_xsx_O2(bnd_idx)*1.0e-4 ! cm2 -> m2
-        abs_xsx_O3_cold(bnd_idx)=abs_xsx_O3_cold(bnd_idx)*1.0e-4 ! cm2 -> m2
-        abs_xsx_O3_warm(bnd_idx)=abs_xsx_O3_warm(bnd_idx)*1.0e-4 ! cm2 -> m2
+        abs_xsx_cold(bnd_idx)=abs_xsx_cold(bnd_idx)*1.0e-4 ! cm2 -> m2
+        abs_xsx_warm(bnd_idx)=abs_xsx_warm(bnd_idx)*1.0e-4 ! cm2 -> m2
      enddo
      
   else if (HTR16) then            ! HTR16 data
@@ -475,7 +474,7 @@ program O3
           xsx_max_htrn,rsn_nst_htrn,mA_sng_htrn,mlc_nm_htrn,chr_foo_htrn,brd_nm_htrn,rfr_nbr_htrn
      tpt_cold=tpt_htrn
      bnd_nbr=bnd_nbr_htrn-1
-     read (fl_in_unit,*) (abs_xsx_O3_cold(bnd_idx),bnd_idx=1,bnd_nbr)
+     read (fl_in_unit,*) (abs_xsx_cold(bnd_idx),bnd_idx=1,bnd_nbr)
      close (fl_in_unit)
      write (6,'(a20,1x,a)') 'Read input data from',fl_in(1:ftn_strlen(fl_in))
 
@@ -490,7 +489,7 @@ program O3
           xsx_max_htrn,rsn_nst_htrn,mA_sng_htrn,mlc_nm_htrn,chr_foo_htrn,brd_nm_htrn,rfr_nbr_htrn
      tpt_warm=tpt_htrn
      bnd_nbr=bnd_nbr_htrn-1
-     read (fl_in_unit,*) (abs_xsx_O3_warm(bnd_idx),bnd_idx=1,bnd_nbr)
+     read (fl_in_unit,*) (abs_xsx_warm(bnd_idx),bnd_idx=1,bnd_nbr)
      close (fl_in_unit)
      write (6,'(a20,1x,a)') 'Read input data from',fl_in(1:ftn_strlen(fl_in))
 
@@ -500,7 +499,7 @@ program O3
         write (6,'(a20,f10.3,f10.3,i7,f7.3,f6.3,e10.3,f3.0,a2,a15,a4,a3,a3)') &
              mlc_frm_htrn,wvn_min_htrn,wvn_max_htrn,bnd_nbr_htrn,tpt_htrn,prs_htrn, &
              xsx_max_htrn,rsn_nst_htrn,mA_sng_htrn,mlc_nm_htrn,chr_foo_htrn,brd_nm_htrn,rfr_nbr_htrn
-        write (6,*) (abs_xsx_O3_cold(bnd_idx),bnd_idx=1,bnd_nbr)
+        write (6,*) (abs_xsx_cold(bnd_idx),bnd_idx=1,bnd_nbr)
         
      endif                     ! endif dbg
 
@@ -517,8 +516,8 @@ program O3
      do bnd_idx=1,bnd_nbr
         wvl_min(bnd_idx)=1.0/(100.0*wvn_max(bnd_idx))
         wvl_max(bnd_idx)=1.0/(100.0*wvn_min(bnd_idx))
-        abs_xsx_O3_cold(bnd_idx)=abs_xsx_O3_cold(bnd_idx)*1.0e-4 ! cm2 -> m2
-        abs_xsx_O3_warm(bnd_idx)=abs_xsx_O3_warm(bnd_idx)*1.0e-4 ! cm2 -> m2
+        abs_xsx_cold(bnd_idx)=abs_xsx_cold(bnd_idx)*1.0e-4 ! cm2 -> m2
+        abs_xsx_warm(bnd_idx)=abs_xsx_warm(bnd_idx)*1.0e-4 ! cm2 -> m2
         abs_xsx_O2(bnd_idx)=mss_val ! cm2 -> m2
         flx_bnd_pht_dwn_TOA(bnd_idx)=mss_val ! #/cm2/s -> #/m2/s
         Rayleigh_sca_xsx(bnd_idx)=mss_val ! cm2 -> m2
@@ -534,8 +533,8 @@ program O3
         read (fl_in_unit,*)  &
              wvl_min(bnd_idx), &
              wvl_max(bnd_idx), &
-             abs_xsx_O3_warm(bnd_idx), &
-             abs_xsx_O3_cold(bnd_idx)
+             abs_xsx_warm(bnd_idx), &
+             abs_xsx_cold(bnd_idx)
      enddo
      int_foo=int_foo ! CEWI
      
@@ -543,10 +542,10 @@ program O3
      do bnd_idx=1,bnd_nbr
         wvl_min(bnd_idx)=wvl_min(bnd_idx)*1.0e-9 ! nm -> m
         wvl_max(bnd_idx)=wvl_max(bnd_idx)*1.0e-9 ! nm -> m
-        abs_xsx_O3_cold(bnd_idx)=abs_xsx_O3_cold(bnd_idx)*1.0e-20 ! raw -> cm2
-        abs_xsx_O3_warm(bnd_idx)=abs_xsx_O3_warm(bnd_idx)*1.0e-20 ! raw -> cm2
-        abs_xsx_O3_cold(bnd_idx)=abs_xsx_O3_cold(bnd_idx)*1.0e-4 ! cm2 -> m2
-        abs_xsx_O3_warm(bnd_idx)=abs_xsx_O3_warm(bnd_idx)*1.0e-4 ! cm2 -> m2
+        abs_xsx_cold(bnd_idx)=abs_xsx_cold(bnd_idx)*1.0e-20 ! raw -> cm2
+        abs_xsx_warm(bnd_idx)=abs_xsx_warm(bnd_idx)*1.0e-20 ! raw -> cm2
+        abs_xsx_cold(bnd_idx)=abs_xsx_cold(bnd_idx)*1.0e-4 ! cm2 -> m2
+        abs_xsx_warm(bnd_idx)=abs_xsx_warm(bnd_idx)*1.0e-4 ! cm2 -> m2
         abs_xsx_O2(bnd_idx)=mss_val ! cm2 -> m2
         flx_bnd_pht_dwn_TOA(bnd_idx)=mss_val ! #/cm2/s -> #/m2/s
         Rayleigh_sca_xsx(bnd_idx)=mss_val ! cm2 -> m2
@@ -559,13 +558,13 @@ program O3
   
   ! Define temperature dependance
   ! Temperature dependence is strongest around 
+  abs_xsx_tpt_rfr=tpt_std ! Temperature at which generic abs_xsx array will be stored
   do bnd_idx=1,bnd_nbr
-     abs_xsx_O3_tpt_rfr(bnd_idx)=tpt_std ! Temperature at which generic abs_xsx_O3 array will be stored
-     abs_xsx_O3_dadT(bnd_idx)= &
-          (abs_xsx_O3_warm(bnd_idx)-abs_xsx_O3_cold(bnd_idx))/ &
+     abs_xsx_dadT(bnd_idx)= &
+          (abs_xsx_warm(bnd_idx)-abs_xsx_cold(bnd_idx))/ &
           (tpt_warm-tpt_cold) 
-     abs_xsx_O3(bnd_idx)=abs_xsx_O3_cold(bnd_idx)+ &
-          (tpt_std-tpt_cold)*abs_xsx_O3_dadT(bnd_idx)
+     abs_xsx(bnd_idx)=abs_xsx_cold(bnd_idx)+ &
+          (tpt_std-tpt_cold)*abs_xsx_dadT(bnd_idx)
   enddo                  ! end loop over bnd
   
   ! Get TOA solar spectrum
@@ -574,7 +573,7 @@ program O3
   
   ! Compute diagnostic variables
   do bnd_idx=1,bnd_nbr
-     abs_cff_mss_O3(bnd_idx)=abs_xsx_O3(bnd_idx)*Avagadro/mmw_O3
+     abs_cff_mss(bnd_idx)=abs_xsx(bnd_idx)*Avagadro/mmw_O3
      bnd(bnd_idx)=0.5*(wvl_min(bnd_idx)+wvl_max(bnd_idx))
      wvl(bnd_idx)=bnd(bnd_idx)
      wvl_ctr(bnd_idx)=bnd(bnd_idx)
@@ -599,10 +598,10 @@ program O3
   
   ! Sanity check
   if (dbg_lvl >= dbg_fl) then
-     write (6,'(5(a,1x))') 'idx','wvl_ctr','abs_xsx_O3','abs_cff_mss_O3','flx_slr_frc'
+     write (6,'(5(a,1x))') 'idx','wvl_ctr','abs_xsx','abs_cff_mss','flx_slr_frc'
      do bnd_idx=1,bnd_nbr
         write (6,'(i4,1x,es15.8,1x,es15.8,1x,es15.8,1x,es15.8)')  &
-             bnd_idx,wvl_ctr(bnd_idx),abs_xsx_O3(bnd_idx),abs_cff_mss_O3(bnd_idx),flx_slr_frc(bnd_idx)
+             bnd_idx,wvl_ctr(bnd_idx),abs_xsx(bnd_idx),abs_cff_mss(bnd_idx),flx_slr_frc(bnd_idx)
      enddo                  ! end loop over bnd
   endif                     ! endif dbg
 
@@ -633,11 +632,11 @@ program O3
   rcd=nf90_wrp(nf90_def_var(nc_id,'tpt_warm',nf90_float,tpt_warm_id),sbr_nm//': dv tpt_warm')
   rcd=nf90_wrp(nf90_def_var(nc_id,'tpt_std',nf90_float,tpt_std_id),sbr_nm//': dv tpt_std')
   rcd=nf90_wrp(nf90_def_var(nc_id,'Rayleigh_sca_xsx',nf90_float,bnd_dmn_id,Rayleigh_sca_xsx_id),sbr_nm//': dv Rayleigh_sca_xsx')
-  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_cff_mss_O3',nf90_float,bnd_dmn_id,abs_cff_mss_O3_id),sbr_nm//': dv abs_cff_mss_O3')
-  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_O3',nf90_float,bnd_dmn_id,abs_xsx_O3_id),sbr_nm//': dv abs_xsx_O3')
-  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_O3_cold',nf90_float,bnd_dmn_id,abs_xsx_O3_cold_id),sbr_nm//': dv abs_xsx_O3_cold')
-  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_O3_dadT',nf90_float,bnd_dmn_id,abs_xsx_O3_dadT_id),sbr_nm//': dv abs_xsx_O3_dadT')
-  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_O3_warm',nf90_float,bnd_dmn_id,abs_xsx_O3_warm_id),sbr_nm//': dv abs_xsx_O3_warm')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_cff_mss',nf90_float,bnd_dmn_id,abs_cff_mss_id),sbr_nm//': dv abs_cff_mss')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx',nf90_float,bnd_dmn_id,abs_xsx_id),sbr_nm//': dv abs_xsx')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_cold',nf90_float,bnd_dmn_id,abs_xsx_cold_id),sbr_nm//': dv abs_xsx_cold')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_dadT',nf90_float,bnd_dmn_id,abs_xsx_dadT_id),sbr_nm//': dv abs_xsx_dadT')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_warm',nf90_float,bnd_dmn_id,abs_xsx_warm_id),sbr_nm//': dv abs_xsx_warm')
   rcd=nf90_wrp(nf90_def_var(nc_id,'bnd',nf90_float,bnd_dmn_id,bnd_id),sbr_nm//': dv bnd')
   rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bnd_dwn_TOA',nf90_float,bnd_dmn_id,flx_bnd_dwn_TOA_id),sbr_nm//': dv flx_bnd_dwn_TOA')
   rcd=nf90_wrp(nf90_def_var(nc_id,'flx_slr_frc',nf90_float,bnd_dmn_id,flx_slr_frc_id),sbr_nm//': dv flx_slr_frc')
@@ -652,8 +651,8 @@ program O3
   ! Wrap
   rcd=nf90_wrp(nf90_def_var(nc_id,'flx_bnd_pht_dwn_TOA',nf90_float,bnd_dmn_id,flx_bnd_pht_dwn_TOA_id), &
        sbr_nm//': dv flx_bnd_pht_dwn_TOA')
-  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_O3_tpt_rfr',nf90_float,bnd_dmn_id,abs_xsx_O3_tpt_rfr_id), &
-       sbr_nm//': dv abs_xsx_O3_tpt_rfr')
+  rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_tpt_rfr',nf90_float,bnd_dmn_id,abs_xsx_tpt_rfr_id), &
+       sbr_nm//': dv abs_xsx_tpt_rfr')
   
   ! Add global attributes
   rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'CVS_Id',CVS_Id),sbr_nm//': pa CVS_Id')
@@ -668,12 +667,12 @@ program O3
   rcd=nf90_wrp(nf90_put_att(nc_id,tpt_warm_id,'long_name','Temperature of warmest O3 measurements'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,tpt_std_id,'long_name','Temperature at which interpolated O3 cross sections are archived'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,Rayleigh_sca_xsx_id,'long_name','Rayleigh scattering cross section'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_O3_id,'long_name','Ozone mass absorption coefficient'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_cold_id,'long_name','Ozone absorption cross section at tpt_cold'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_dadT_id,'long_name','Slope of absorption cross section temperature dependence'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_id,'long_name','Ozone absorption cross section at tpt_rfr'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_tpt_rfr_id,'long_name','Valid temperature for absorption cross section'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_warm_id,'long_name','Ozone absorption cross section at tpt_warm'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_id,'long_name','Ozone mass absorption coefficient'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_cold_id,'long_name','Ozone absorption cross section at tpt_cold'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_dadT_id,'long_name','Slope of absorption cross section temperature dependence'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_id,'long_name','Ozone absorption cross section at tpt_rfr'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_tpt_rfr_id,'long_name','Valid temperature for absorption cross section'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_warm_id,'long_name','Ozone absorption cross section at tpt_warm'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,bnd_id,'long_name','Band center wavelength'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_dwn_TOA_id,'long_name','Solar Energy flux in band'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_pht_dwn_TOA_id,'long_name','Photon flux in band'),sbr_nm)
@@ -692,12 +691,12 @@ program O3
   rcd=nf90_wrp(nf90_put_att(nc_id,tpt_warm_id,'units','kelvin'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,tpt_std_id,'units','kelvin'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,Rayleigh_sca_xsx_id,'units','meter2'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_O3_id,'units','meter2 kilogram-1'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_cold_id,'units','meter2'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_dadT_id,'units','meter2 kelvin-1'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_id,'units','meter2'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_tpt_rfr_id,'units','kelvin'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_warm_id,'units','meter2'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_id,'units','meter2 kilogram-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_cold_id,'units','meter2'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_dadT_id,'units','meter2 kelvin-1'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_id,'units','meter2'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_tpt_rfr_id,'units','kelvin'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_warm_id,'units','meter2'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,bnd_id,'units','meter'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_dwn_TOA_id,'units','watt meter-2'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,flx_bnd_pht_dwn_TOA_id,'units','photon meter-2 second-1'),sbr_nm)
@@ -723,12 +722,12 @@ program O3
   rcd=nf90_wrp(nf90_put_var(nc_id,tpt_warm_id,tpt_warm),sbr_nm//': pv tpt_warm in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,tpt_std_id,tpt_std),sbr_nm//': pv tpt_std in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,Rayleigh_sca_xsx_id,Rayleigh_sca_xsx),sbr_nm//': pv Rayleigh_sca_xsx in '//__FILE__)
-  rcd=nf90_wrp(nf90_put_var(nc_id,abs_cff_mss_O3_id,abs_cff_mss_O3),sbr_nm//': pv abs_cff_mss_O3 in '//__FILE__)
-  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_O3_cold_id,abs_xsx_O3_cold),sbr_nm//': pv abs_xsx_O3_cold in '//__FILE__)
-  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_O3_dadT_id,abs_xsx_O3_dadT),sbr_nm//': pv abs_xsx_O3_dadT in '//__FILE__)
-  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_O3_id,abs_xsx_O3),sbr_nm//': pv abs_xsx_O3 in '//__FILE__)
-  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_O3_tpt_rfr_id,abs_xsx_O3_tpt_rfr),sbr_nm//': pv abs_xsx_O3_tpt_rfr in '//__FILE__)
-  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_O3_warm_id,abs_xsx_O3_warm),sbr_nm//': pv abs_xsx_O3_warm in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,abs_cff_mss_id,abs_cff_mss),sbr_nm//': pv abs_cff_mss in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_cold_id,abs_xsx_cold),sbr_nm//': pv abs_xsx_cold in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_dadT_id,abs_xsx_dadT),sbr_nm//': pv abs_xsx_dadT in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_id,abs_xsx),sbr_nm//': pv abs_xsx in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_tpt_rfr_id,abs_xsx_tpt_rfr),sbr_nm//': pv abs_xsx_tpt_rfr in '//__FILE__)
+  rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_warm_id,abs_xsx_warm),sbr_nm//': pv abs_xsx_warm in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,bnd_id,bnd),sbr_nm//': pv bnd in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,flx_bnd_dwn_TOA_id,flx_bnd_dwn_TOA),sbr_nm//': pv flx_bnd_dwn_TOA in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,flx_bnd_pht_dwn_TOA_id,flx_bnd_pht_dwn_TOA),sbr_nm//': pv flx_bnd_pht_dwn_TOA in '//__FILE__)
@@ -754,7 +753,7 @@ program O3
      
      ! Weight high resolution absorption cross sections by high resolution TOA solar flux
      do idx=1,bnd_nbr
-        xsx_wgt_flx(idx)=abs_xsx_O3(idx)*flx_spc_dwn_TOA(idx)
+        xsx_wgt_flx(idx)=abs_xsx(idx)*flx_spc_dwn_TOA(idx)
      enddo                     ! end loop over O3 bnd
      
      ! Initialize default values
@@ -773,8 +772,8 @@ program O3
      ! Normalize flux-weighted absorption cross section by solar flux
      do idx=1,bnd_nbr_CCM
         flx_spc_dwn_TOA_CCM(idx)=flx_slr_frc_CCM(idx)*slr_cst_CCM/wvl_dlt_CCM(idx)
-        abs_xsx_O3_CCM(idx)=xsx_wgt_flx_CCM(idx)/flx_spc_dwn_TOA_CCM(idx)
-        abs_cff_mss_O3_CCM(idx)=abs_xsx_O3_CCM(idx)*Avagadro/mmw_O3
+        abs_xsx_CCM(idx)=xsx_wgt_flx_CCM(idx)/flx_spc_dwn_TOA_CCM(idx)
+        abs_cff_mss_CCM(idx)=abs_xsx_CCM(idx)*Avagadro/mmw_O3
      enddo                     ! end loop over CCM bnd
      
      if (dbg_lvl == dbg_crr) then
@@ -799,22 +798,22 @@ program O3
      if (rcd /= nf90_noerr) call nf90_err_exit(rcd,fl_out)
      
      ! Variable definitions.
-     rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_O3_CCM',nf90_float,bnd_dmn_id,abs_xsx_O3_id),sbr_nm//': dv abs_xsx_O3')
-     rcd=nf90_wrp(nf90_def_var(nc_id,'abs_cff_mss_O3_CCM',nf90_float,bnd_dmn_id,abs_cff_mss_O3_id),sbr_nm//': dv abs_cff_mss_O3')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'abs_xsx_CCM',nf90_float,bnd_dmn_id,abs_xsx_id),sbr_nm//': dv abs_xsx')
+     rcd=nf90_wrp(nf90_def_var(nc_id,'abs_cff_mss_CCM',nf90_float,bnd_dmn_id,abs_cff_mss_id),sbr_nm//': dv abs_cff_mss')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_slr_frc_CCM',nf90_float,bnd_dmn_id,flx_slr_frc_id),sbr_nm//': dv flx_slr_frc')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_spc_dwn_TOA_CCM',nf90_float,bnd_dmn_id,flx_spc_dwn_TOA_id),sbr_nm//': dv flx_spc_dwn_TOA')
      
      ! Add global attributes
      
      ! Add english text descriptions
-     rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_O3_id,'long_name','Ozone mass absorption coefficient'),sbr_nm)
-     rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_id,'long_name','Ozone continuum absorption cross section'),sbr_nm)
+     rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_id,'long_name','Ozone mass absorption coefficient'),sbr_nm)
+     rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_id,'long_name','Ozone continuum absorption cross section'),sbr_nm)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_slr_frc_id,'long_name','Fraction of solar flux in band: ' // fl_slr),sbr_nm)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_TOA_id,'long_name','Spectral solar insolation at TOA'),sbr_nm)
      
      ! Add units
-     rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_O3_id,'units','meter2 kilogram-1'),sbr_nm)
-     rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_O3_id,'units','meter2'),sbr_nm)
+     rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_id,'units','meter2 kilogram-1'),sbr_nm)
+     rcd=nf90_wrp(nf90_put_att(nc_id,abs_xsx_id,'units','meter2'),sbr_nm)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_slr_frc_id,'units','fraction'),sbr_nm)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_TOA_id,'units','watt meter-2 meter-1'),sbr_nm)
      
@@ -822,8 +821,8 @@ program O3
      rcd=nf90_wrp(nf90_enddef(nc_id),sbr_nm//': enddef in '//__FILE__)
      
      ! Write out data
-     rcd=nf90_wrp(nf90_put_var(nc_id,abs_cff_mss_O3_id,abs_cff_mss_O3_CCM),sbr_nm//': pv abs_cff_mss_O3 in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_O3_id,abs_xsx_O3_CCM),sbr_nm//': pv abs_xsx_O3 in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,abs_cff_mss_id,abs_cff_mss_CCM),sbr_nm//': pv abs_cff_mss in '//__FILE__)
+     rcd=nf90_wrp(nf90_put_var(nc_id,abs_xsx_id,abs_xsx_CCM),sbr_nm//': pv abs_xsx in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_slr_frc_id,flx_slr_frc_CCM),sbr_nm//': pv flx_slr_frc in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,flx_spc_dwn_TOA_id,flx_spc_dwn_TOA_CCM),sbr_nm//': pv flx_spc_dwn_TOA in '//__FILE__)
      
@@ -832,7 +831,7 @@ program O3
      
      ! Convert absorption coefficients to cm2/gm and output block for radcsw
      do idx=1,bnd_nbr_CCM
-        abs_cff_mss_O3_CCM_CGS(idx)=abs_cff_mss_O3_CCM(idx)*10. !  m2 kg-1 --> cm2 g-1 
+        abs_cff_mss_CCM_CGS(idx)=abs_cff_mss_CCM(idx)*10. !  m2 kg-1 --> cm2 g-1 
      enddo                     ! end loop over CCM bnd
      nbr_dat_per_ln=4
      write (0,'(a,a,a,a)') 'c     Data generated by ',prg_nm(1:ftn_strlen(prg_nm)),' on ',lcl_date_time
@@ -841,20 +840,19 @@ program O3
      write (0,'(a,f7.3,a)') 'c     O3 mass absorption coefficients in cm2 g-1 for T = ',tpt_std,' K'
      write (0,'(a,a)') 'c     ',src_rfr_sng(1:ftn_strlen(src_rfr_sng))
      write (0,'(a,a)') 'c     ',src_fl_sng(1:ftn_strlen(src_fl_sng))
-     call dat_prn_f77(bnd_nbr_CCM,abs_cff_mss_O3_CCM_CGS,nbr_dat_per_ln,'abO3'//char(0))
-     call dat_prn_f90(bnd_nbr_CCM,abs_cff_mss_O3_CCM_CGS,nbr_dat_per_ln,'abO3'//char(0))
+     call dat_prn_f77(bnd_nbr_CCM,abs_cff_mss_CCM_CGS,nbr_dat_per_ln,'abO3'//char(0))
+     call dat_prn_f90(bnd_nbr_CCM,abs_cff_mss_CCM_CGS,nbr_dat_per_ln,'abO3'//char(0))
      
   endif ! HTR16
 
   ! De-allocate dynamic variables
   if (allocated(Rayleigh_sca_xsx)) deallocate(Rayleigh_sca_xsx,stat=rcd)
-  if (allocated(abs_cff_mss_O3)) deallocate(abs_cff_mss_O3,stat=rcd)
+  if (allocated(abs_cff_mss)) deallocate(abs_cff_mss,stat=rcd)
   if (allocated(abs_xsx_O2)) deallocate(abs_xsx_O2,stat=rcd)
-  if (allocated(abs_xsx_O3)) deallocate(abs_xsx_O3,stat=rcd)
-  if (allocated(abs_xsx_O3_cold)) deallocate(abs_xsx_O3_cold,stat=rcd)
-  if (allocated(abs_xsx_O3_dadT)) deallocate(abs_xsx_O3_dadT,stat=rcd)
-  if (allocated(abs_xsx_O3_tpt_rfr)) deallocate(abs_xsx_O3_tpt_rfr,stat=rcd)
-  if (allocated(abs_xsx_O3_warm)) deallocate(abs_xsx_O3_warm,stat=rcd)
+  if (allocated(abs_xsx)) deallocate(abs_xsx,stat=rcd)
+  if (allocated(abs_xsx_cold)) deallocate(abs_xsx_cold,stat=rcd)
+  if (allocated(abs_xsx_dadT)) deallocate(abs_xsx_dadT,stat=rcd)
+  if (allocated(abs_xsx_warm)) deallocate(abs_xsx_warm,stat=rcd)
   if (allocated(bnd)) deallocate(bnd,stat=rcd)     ! coordinate variable
   if (allocated(flx_bnd_dwn_TOA)) deallocate(flx_bnd_dwn_TOA,stat=rcd)
   if (allocated(flx_bnd_pht_dwn_TOA)) deallocate(flx_bnd_pht_dwn_TOA,stat=rcd)
