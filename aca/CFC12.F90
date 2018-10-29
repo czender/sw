@@ -232,6 +232,7 @@ program CFC12
            call ftn_arg_get(arg_idx,arg_val,drc_out) ! [sng] Output directory
         else if (opt_sng == 'input' .or. opt_sng == 'fl_CFC12' .or. opt_sng == 'CFC12') then
            call ftn_arg_get(arg_idx,arg_val,fl_in) ! [sng] CFC12 file
+           cmd_ln_fl_in=.true.
         else if (opt_sng == 'HTR16') then
            HTR16=.true.
         else                ! Option not recognized
@@ -249,8 +250,8 @@ program CFC12
      else if (dsh_key == '-D') then
         call ftn_arg_get(arg_idx,arg_val,dbg_lvl)
      else if (dsh_key == '-i') then
-        call ftn_arg_get(arg_idx,arg_val,fl_in)
         cmd_ln_fl_in=.true.
+        call ftn_arg_get(arg_idx,arg_val,fl_in)
      else if (dsh_key == '-H') then
         HTR16=.true.
      else if (dsh_key == '-o') then

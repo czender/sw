@@ -9,9 +9,9 @@ program O2X
   ! Abbreviation is required to keep symbol names <= 31 characters in some Fortran compilers
   
   ! Compilation:
-  ! cd ${HOME}/aca; make -W O2X.F OPTS=D O2X; cd -
-  ! cd ${HOME}/aca; make -W O2X.F O2X; cd -
-  ! cd ${HOME}/aca; make OPTS=D O2X; cd -
+  ! cd ${HOME}/sw/aca; make -W O2X.F OPTS=D O2X; cd -
+  ! cd ${HOME}/sw/aca; make -W O2X.F O2X; cd -
+  ! cd ${HOME}/sw/aca; make OPTS=D O2X; cd -
   
   ! Usage:
   ! ncks -H -C -F -v wvl_ctr_CCM,flx_slr_frc_CCM,abs_xsx_O2O2_CCM ${DATA}/aca/abs_xsx_O2O2.nc
@@ -44,6 +44,38 @@ program O2X
   !335.3   1.975e-47
   !...
   
+  ! or process input .cia ASCII data files from HITRAN that look like:
+
+#if 0
+  From http://hitran.org/data/CIA/CIA_Readme.pdf
+  "More complete details of the CIA data sets are presented in C. Richard, I.E. Gordon, L.S. Rothman, M. Abel, L. Frommhold, M. Gustafsson, et al, JQSRT 113, 1276-1285 (2012).
+  The data sets in the individual files are ordered by wavenumber spectral intervals, and secondly by increasing temperature."
+
+  CSZ modified following text from .xsc description to apply to .cia files:
+  "In the HITRAN FTP site, the data are presented as separate files for each individual molecule. Each portion of the file corresponding to a particular temperature-pressure pair begins with a header (see Table 1) that contains information on the wavenumber (cm−1) range, number of cross-section data in this set, temperature (K), and pressure (Torr). The maximum value of the absorption cross sections (fxm) and additional information containing the reference to that observation are also presented in each header. The cross sections have been cast into an equal wavenumber interval grid. It should be noted that the initial and final wavenumbers, νmin and νmax, respectively, of each temperature–pressure set for a given wavenumber region are not always identical. They have been taken from the analysis of the observations. The sampling intervals are also not necessarily identical for each temperature–pressure set. The wavenumber interval of the grid is obtained by taking the difference of the initial and final wavenumber and dividing this quantity by the number of points, N, minus one, i.e., Δν=(νmax−νmin)/(N−1).
+
+  This value of N is provided so that a user’s personal program can read the table of cross- sections that follows the header. Note that the use of the features of HITRANonline makes much of this discussion transparent.
+
+  The table below illustrates the format of each header record. 
+
+  Quantity	Field length	Type	Comment
+  Molecule	20	Character	Chemical formula (right-justified)
+  Minimum wavenumber, νmin	10	Real	Start of range (cm−1) (-0.999 is missing value)
+  Maximum wavenumber, νmax	10	Real	End of range (cm−1) (-0.999 is missing value)
+  Number of points, N	7	Integer	Number of cross-sections in set
+  Temperature, T	7	Real	Temperature (K) of set
+  Pressure, P	        7	Real	Pressure of set in Torr (NB: 7 digits in .cia files not 6 digits as in .xsc files)
+  Maximum cross-section value in set, σmax	10	Real	Useful for scaling plots (cm2/molecule fxm)
+  Instrument resolution	5	Real	See note
+  Comments	21	Character	Right-adjusted
+  Reference	3	Integer	Index pointing to source of data
+  Note: Most cross sections have been taken from Fourier transform spectrometer (FTS) measurements. In that case the resolution is given in cm−1. There are some cross-sections taken from grating spectrometer measurements in the UV. In those cases, the resolution is given in milli-Ångströms in the form xxx mÅ, where xxx are up to three digits.
+
+  It is to be noted that the files may have many temperature–pressure sets for different spectral regions, as indicated by headers throughout the file. While the temperature–pressure (T,p) sets are reasonably complete for many species for an adequate simulation of atmospheric transmission in the spectral regions where those species are active, for other species an insufficiency of the (T,p) sets may become apparent. It is hoped that future measurements at extended sets of (T,p) combinations may help broaden the coverage in the database."
+
+20181029 : Noticed that many CIA cross-sections are negative!
+#endif /* !0 */
+
   use dbg_mdl ! [mdl] Debugging constants, prg_nm, dbg_lvl
   use netcdf ! [mdl] netCDF interface
   use nf90_utl ! [mdl] netCDF utilities
@@ -52,54 +84,86 @@ program O2X
   use rt_mdl ! [mdl] Radiative transfer utilities
   use sng_mdl ! [mdl] String manipulation
   use utl_mdl ! [mdl] Utility functions (date_time_get,mnt_chk...)
+  use vec_mdl ! [mdl] Vector manipulation, interpolation, rebinning
   use wvl_mdl ! [mdl] Wavelength grid parameters
   use xtr_mdl ! [mdl] Extrapolation/interpolation handling
   
   implicit none
   ! Parameters
-  character*(*) CVS_Id
+  character(*),parameter::CVS_Date='$Date$' ! [sng] Date string
+  character(*),parameter::CVS_Revision='$Revision$' ! [sng] File revision string
+  character(len=*),parameter::CVS_Id='$Id$' ! [sng] CVS Identification
+  character(len=*),parameter::sbr_nm='O2X' ! [sng] Subroutine name
+  character(*),parameter::fl_in_GOB90='abs_xsx_O2O2.txt'
+  character(*),parameter::fl_in_HTR16_cold='O2O2_200.0_0.0_29164.0-40798.0_04.xsc'
+  character(*),parameter::fl_in_HTR16_warm='O2O2_300.0_0.0_29164.0-40798.0_04.xsc'
+  character(*),parameter::fl_out_GOB90='abs_xsx_O2O2_GOB90.nc'
+  character(*),parameter::fl_out_HTR16='abs_xsx_O2O2_HTR16.nc'
+  character(*),parameter::fl_slr_dfl='spc_Kur95_01wvn.nc'
+  character(*),parameter::fl_wgt_dfl='/data/zender/tmp/swnb_trp.nc'
+  character(*),parameter::wgt_nm_dfl='flx_spc_dwn_sfc'
+  character(*),parameter::nlc=char(0) ! [sng] NUL character = ASCII 0 = char(0)
   
-  integer fl_in_unit
-  integer bnd_nbr_GOB90
-  integer bnd_nbr_max
-  parameter(fl_in_unit=73, &
-       bnd_nbr_GOB90=4086, &    
-       bnd_nbr_max=bnd_nbr_GOB90, & ! max(bnd_nbr_GOB90)
-       CVS_Id='$Id$')
-  
+  integer,parameter::bnd_nbr_GOB90=4086
+  integer,parameter::bnd_nbr_HTR16=5817 ! [nbr] 5818 is # of interfaces, 5817 is # of bands
+  integer,parameter::fl_in_unit=73
+  integer,parameter::sng_lng_dfl_fl=80 ! [nbr] Default filename string length
+  integer,parameter::sng_lng_dfl_stt=200 ! [nbr] Default statement string length
+
   real,parameter::mlt_fct=1.0e20 ! [frc]
+  real,parameter::mss_val=nf90_fill_float ! Missing value = missing_value and/or _FillValue
+  real,parameter::tpt_cold_GOB90=296.0
+  real,parameter::tpt_cold_HTR16=200.0
+  real,parameter::tpt_warm_GOB90=296.0
+  real,parameter::tpt_warm_HTR16=300.0
+
+  ! Locals with simple initialization and no command-line override
+  ! integer::exit_status=0 ! [enm] Program exit status (non-standard Fortran)
+  integer::rcd=nf90_noerr ! [rcd] Return success code
 
   ! Input Arguments
   ! Input/Output Arguments
   ! Output Arguments
+
+  ! Command-line parsing
+  character(2)::dsh_key ! [sng] command-line dash and switch
+  character(200)::cmd_ln ! [sng] command-line
+  character(200)::prg_ID ! [sng] Program ID
+  character(26)::lcl_date_time ! [sng] Time formatted as Day Mth DD HH:MM:SS TZ YYYY
+  character(80)::arg_val ! [sng] command-line argument value
+  character(80)::opt_sng=nlc ! [sng] Option string
+  integer::arg_idx ! [idx] Counting index
+  integer::arg_nbr ! [nbr] Number of command-line arguments
+  integer::opt_lng ! [nbr] Length of option
+
+  ! Set defaults for command-line options 
+  character(sng_lng_dfl_fl)::drc_in='/data/zender/aca'//nlc       ! [sng] Input directory
+  character(sng_lng_dfl_fl)::drc_out=nlc ! [sng] Output directory
+  character(80)::fl_in='in.nc'//nlc ! [sng] Input file
+  character(80)::fl_out='foo.nc'//nlc ! [sng] Output file
+  character(80)::fl_slr=fl_slr_dfl//nlc ! [sng] Solar spectra file
+  character(80)::fl_wgt=fl_wgt_dfl//nlc ! [sng] Weight file
+  character(80)::wgt_nm=wgt_nm_dfl//nlc ! [sng] Solar spectra file
+
+  logical::flg_GOB90=.true.
+  logical::flg_HTR16=.false.
+  logical::WGT_TRN=.false.
+  logical::cmd_ln_fl_in=.false.
+  logical::cmd_ln_fl_out=.false.
+  logical::flg_ncl_1260nm_bnd=.true.
+  logical::flg_ncl_1530nm_bnd=.false.
+  logical::std_tpt=.true.
+
+  real::N2_cll_prt_fsh=0.2 ! [frc] Efficiency of N2 (relative to O2) as a collision partner for O2 in the 1.26 micron band
+  real::tpt_cold=tpt_cold_GOB90
+  real::tpt_std=296.0 ! Temperature at which generic O2O2 cross sections will be archived
+  real::tpt_warm=tpt_warm_GOB90
+  
   ! Local workspace
-  character argv*80
-  character cmd_ln*200
-  character fl_in*80
-  character fl_out*80
-  character fl_slr*80
-  character fl_wgt*80
-  character lbl*80
-  character*26::lcl_date_time ! Time formatted as Day Mth DD HH:MM:SS TZ YYYY
-  character prg_ID*200
-  character CVS_Date*28
-  character CVS_Revision*16
-  character src_fl_sng*200
-  character src_rfr_sng*200
-  character src_wgt_sng*300
-  character wgt_nm*80
-  
-  integer arg
-  integer arg_nbr
-  integer exit_status       ! program exit status
-  integer idx
-  integer rcd               ! return success code
-  
-  logical GOB90
-  logical flg_ncl_1260nm_bnd
-  logical flg_ncl_1530nm_bnd
-  logical std_tpt
-  logical WGT_TRN
+  character(sng_lng_dfl_fl)::src_fl_sng
+  character(sng_lng_dfl_fl)::src_rfr_sng
+  character(300)::src_wgt_sng
+  character(sng_lng_dfl_fl)::lbl
   
   integer bnd_dim_id        ! dimension ID for bands
   integer grd_dim_id        ! dimension ID for grid
@@ -129,10 +193,15 @@ program O2X
   integer wvl_min_id
   integer wvl_dlt_id
   
-  real N2_cll_prt_fsh       ! Efficiency of N2 (relative to O2) as a collision partner for O2 in the 1.26 micron band
-  real tpt_std
   real(selected_real_kind(p=12))::double_foo
   
+  ! netCDF4 
+  integer::dfl_lvl=0 ! [enm] Deflate level
+  integer::flg_shf=1 ! [flg] Turn on netCDF4 shuffle filter
+  integer::flg_dfl=1 ! [flg] Turn on netCDF4 deflate filter
+  integer::fl_out_fmt=nco_format_undefined ! [enm] Output file format
+  integer::nf90_create_mode=nf90_clobber ! [enm] Mode flag for nf90_create() call
+
   ! Allocatable variables
   real(selected_real_kind(p=12)),dimension(:),allocatable::odal_O2O2_PUNC_O2_PUNP_O2
   real(selected_real_kind(p=12)),dimension(:),allocatable::odal_O2N2_PUNC_O2_PUNP_N2
@@ -190,87 +259,146 @@ program O2X
   ! Main code
   
   ! Initialize default values
-  GOB90=.true.
-  N2_cll_prt_fsh=0.2
-  WGT_TRN=.false.
   dbg_lvl=dbg_off
-  exit_status=0
-  fl_in='/data/zender/aca/abs_xsx_O2O2.txt'//char(0)
-  fl_out='/data/zender/aca/abs_xsx_O2O2.nc'//char(0)
-  fl_slr='/data/zender/aca/spc_Kur95_01wvn.nc'//char(0)
-  fl_wgt='/data/zender/tmp/swnb_trp.nc'//char(0)
-  flg_ncl_1260nm_bnd=.true.
-  flg_ncl_1530nm_bnd=.false.
-  rcd=nf90_noerr              ! nf90_noerr == 0
-  CVS_Date='$Date$'
-  CVS_Revision='$Revision$'
-  std_tpt=.true.
-  tpt_std=296.0
-  wgt_nm='flx_spc_dwn_sfc'//char(0)
-  
+
   ! Retrieve command line arguments
   call date_time_get(lcl_date_time)
   call ftn_cmd_ln_sng(cmd_ln)
   call ftn_prg_ID_mk(CVS_Id,CVS_Revision,CVS_Date,prg_ID)
   write (6,'(a)') prg_ID(1:ftn_strlen(prg_ID))
-  arg_nbr=command_argument_count()
-  do arg=1,arg_nbr
-     call getarg(arg,argv)
-     if (argv(1:2) == '-D') then
-        call getarg(arg+1,argv)
-        read (argv,'(i4)') dbg_lvl
-     endif
-     if (argv(1:2) == '-f') then
-        call getarg(arg+1,argv)
-        read (argv,'(a)') wgt_nm
-     endif
-     if (argv(1:2) == '-G') then
-        GOB90=.true.
-     endif
-     if (argv(1:2) == '-i') then
-        call getarg(arg+1,argv)
-        read (argv,'(a)') fl_in
-     endif
-     if (argv(1:2) == '-o') then
-        call getarg(arg+1,argv)
-        read (argv,'(a)') fl_out
-     endif
-     if (argv(1:2) == '-S') then
-        call getarg(arg+1,argv)
-        read (argv,'(a)') fl_slr
-     endif
-     if (argv(1:2) == '-T') then
+  arg_nbr=command_argument_count()           ! [nbr] Number of command line arguments
+  arg_idx=1                 ! [idx] Counting index
+  loop_while_options: do while (arg_idx <= arg_nbr)
+     call ftn_getarg_wrp(arg_idx,arg_val) ! [sbr] Call getarg, increment arg_idx
+     dsh_key=arg_val(1:2)   ! [sng] First two characters of option
+     if_dbl_dsh: if (dsh_key == '--') then
+        opt_lng=ftn_opt_lng_get(arg_val) ! [nbr] Length of option
+        if (opt_lng <= 0) stop 'Long option has no name'
+        opt_sng=arg_val(3:2+opt_lng) ! [sng] Option string
+        if (opt_sng == 'dbg' .or. opt_sng == 'dbg_lvl' ) then
+           call ftn_arg_get(arg_idx,arg_val,dbg_lvl) ! [enm] Debugging level
+        else if (opt_sng == 'drc_in') then
+           call ftn_arg_get(arg_idx,arg_val,drc_in) ! [sng] Input directory
+        else if (opt_sng == 'drc_out') then
+           call ftn_arg_get(arg_idx,arg_val,drc_out) ! [sng] Output directory
+        else if (opt_sng == 'input' .or. opt_sng == 'fl_O2O2' .or. opt_sng == 'O2O2') then
+           call ftn_arg_get(arg_idx,arg_val,fl_in) ! [sng] Ozone file
+        else if (opt_sng == 'HTR16') then
+           flg_HTR16=.true.
+           flg_GOB90=.false.
+        else if (opt_sng == 'GOB90') then
+           flg_GOB90=.true.
+           flg_HTR16=.false.
+        else                ! Option not recognized
+           arg_idx=arg_idx-1 ! [idx] Counting index
+           call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
+        endif               ! endif option is recognized
+        ! Jump to top of while loop
+        cycle loop_while_options ! C, F77, and F90 use "continue", "goto", and "cycle"
+     endif if_dbl_dsh            ! endif long option
+     ! Handle short options
+     if_sgl_dsh: if (dsh_key == '-3') then
+        fl_out_fmt=nf90_format_classic ! [enm] Output file format
+     else if (dsh_key == '-4') then
+        fl_out_fmt=nf90_format_netcdf4 ! [enm] Output file formaty
+     else if (dsh_key == '-D') then
+        call ftn_arg_get(arg_idx,arg_val,dbg_lvl)
+     else if (dsh_key == '-f') then
+        call ftn_arg_get(arg_idx,arg_val,wgt_nm)
+     else if (dsh_key == '-G') then
+        flg_GOB90=.true.
+        flg_HTR16=.false.
+     else if (dsh_key == '-i') then
+        call ftn_arg_get(arg_idx,arg_val,fl_in)
+        cmd_ln_fl_in=.true.
+     else if (dsh_key == '-H') then
+        flg_HTR16=.true.
+        flg_GOB90=.false.
+     else if (dsh_key == '-o') then
+        call ftn_arg_get(arg_idx,arg_val,fl_out)
+        cmd_ln_fl_out=.true.
+     else if (dsh_key == '-S') then
+        call ftn_arg_get(arg_idx,arg_val,fl_slr)
+     else if (dsh_key == '-T') then
         std_tpt=.not.std_tpt
-     endif
-     if (argv(1:2) == '-t') then
-        call getarg(arg+1,argv)
-        read (argv,'(f8.3)') tpt_std
-     endif
-     if (argv(1:2) == '-v') then
+     else if (dsh_key == '-t') then
+        call ftn_arg_get(arg_idx,arg_val,tpt_std)
+     else if (dsh_key == '-W') then
+        WGT_TRN=.true.
+     else if (dsh_key == '-w') then
+        call ftn_arg_get(arg_idx,arg_val,fl_wgt)
+     else if (dsh_key == '-v') then
         write (6,'(a)') CVS_Id
         goto 1000
-     endif
-     if (argv(1:2) == '-w') then
-        call getarg(arg+1,argv)
-        read (argv,'(a)') fl_wgt
-     endif
-     if (argv(1:2) == '-W') then
-        WGT_TRN=.true.
-     endif
-     if (argv(1:2) == '-x') then
-        flg_ncl_1260nm_bnd=.not.flg_ncl_1260nm_bnd
-     endif
-     if (argv(1:2) == '-X') then
+     else if (dsh_key == '-X') then
         flg_ncl_1530nm_bnd=.not.flg_ncl_1530nm_bnd
-     endif
-  end do
-  
-  if (GOB90) then
+     else if (dsh_key == '-x') then
+        flg_ncl_1260nm_bnd=.not.flg_ncl_1260nm_bnd
+     else                   ! Option not recognized
+        arg_idx=arg_idx-1   ! [idx] Counting index
+        call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
+     endif if_sgl_dsh       ! endif arg_val
+  end do loop_while_options ! end while (arg_idx <= arg_nbr)
+
+  if (flg_GOB90) then
      bnd_nbr=bnd_nbr_GOB90
   else
-     stop 'GOB90 is .false. but is only O2-O2 data source'
+     stop 'flg_GOB90 is .false. but is only O2-O2 data source'
   endif                     ! endif GOB90
   
+  ! Compute quantities that may depend on command line input
+  ! Prepend user-specified path, if any, to input data file names
+  if (ftn_strlen(drc_in) > 0) then
+     call ftn_drcpfx(drc_in,fl_in) ! [sng] Input file
+     call ftn_drcpfx(drc_in,fl_slr) ! [sng] Solar spectrum file
+     call ftn_drcpfx(drc_in,fl_wgt) ! [sng] Weight file
+  endif                     ! endif drc_in
+  ! Prepend user-specified path, if any, to output data file names
+  if (ftn_strlen(drc_out) > 0) call ftn_drcpfx(drc_out,fl_out) ! [sng] Output file
+
+  ! Compute any quantities that might depend on command line input
+  call ftn_strnul(fl_in)
+  call ftn_strnul(fl_out)
+  call ftn_strnul(fl_slr)
+  call ftn_strnul(fl_wgt)
+  call ftn_strnul(wgt_nm)
+  call ftn_strcpy(src_fl_sng,'Original data file is ' // fl_in)
+  if (flg_GOB90) then
+     bnd_nbr=bnd_nbr_GOB90
+     tpt_cold=tpt_cold_GOB90
+     tpt_warm=tpt_warm_GOB90
+     if (.not.cmd_ln_fl_in) fl_in=fl_in_GOB90//nlc
+     if (.not.cmd_ln_fl_out) fl_out=fl_out_GOB90//nlc
+     call ftn_strcpy(src_rfr_sng,'Data reference is Greenblatt et al. (1990) (GOB90)')
+  endif ! flg_GOB90
+  if (flg_HTR16) then
+     bnd_nbr=bnd_nbr_HTR16
+     tpt_cold=tpt_cold_HTR16
+     tpt_warm=tpt_warm_HTR16
+     if (.not.cmd_ln_fl_in) fl_in=fl_in_HTR16_cold//nlc
+     if (.not.cmd_ln_fl_out) fl_out=fl_out_HTR16//nlc
+     call ftn_strcpy(src_rfr_sng,'Data reference is HITRAN (2017) (HTR16)')
+  endif ! flg_GOB90
+  if (flg_ncl_1260nm_bnd) then
+     write (6,'(a)') 'Including 1.26 micron absorption band'
+  else
+     write (6,'(a)') 'Excluding 1.26 micron absorption band'
+  endif ! flg_ncl_1260nm_bnd
+  if (flg_ncl_1530nm_bnd) then
+     write (6,'(a)') 'Including 1.53 micron absorption band seen by MCB98'
+     stop 'ERROR: 1.53 micron absorption band not supported yet'
+  else
+     write (6,'(a)') 'Excluding 1.53 micron absorption band seen by MCB98'
+  endif ! flg_ncl_1530nm_bnd
+  if (WGT_TRN) then
+     call ftn_strcpy(src_wgt_sng,'CCM cross sections are averages of high resolution cross-sections ' &
+             //'weighted by variable '//wgt_nm(1:ftn_strlen(wgt_nm))// &
+             ' from model atmosphere in '//fl_wgt(1:ftn_strlen(fl_wgt))//char(0))
+  else
+     call ftn_strcpy(src_wgt_sng,'CCM cross sections are averages of high resolution cross-sections ' &
+             //'weighted by TOA solar spectral flux'//char(0))
+  endif ! WGT_TRN
+
   ! Allocate space for dynamic arrays
   allocate(abs_cff_mss_O2O2(bnd_nbr),stat=rcd)
   allocate(abs_xsx_O2N2(bnd_nbr),stat=rcd)
@@ -297,52 +425,24 @@ program O2X
   allocate(wvl_min(bnd_nbr),stat=rcd)
   allocate(xsx_wgt_flx(bnd_nbr),stat=rcd)
   
-  ! Compute any quantities that might depend on command line input.
-  call ftn_strnul(fl_in)
-  call ftn_strnul(fl_out)
-  call ftn_strnul(fl_slr)
-  call ftn_strnul(fl_wgt)
-  call ftn_strnul(wgt_nm)
-  call ftn_strcpy(src_fl_sng,'Original data file is ' // fl_in)
-  if (WGT_TRN) then
-     call ftn_strcpy(src_wgt_sng,'CCM cross sections are averages of high resolution cross-sections ' &
-             //'weighted by variable '//wgt_nm(1:ftn_strlen(wgt_nm))// &
-             ' from model atmosphere in '//fl_wgt(1:ftn_strlen(fl_wgt))//char(0))
-  else
-     call ftn_strcpy(src_wgt_sng,'CCM cross sections are averages of high resolution cross-sections ' &
-             //'weighted by TOA solar spectral flux'//char(0))
-  endif                     ! endif WGT_TRN
-  if (GOB90) call ftn_strcpy(src_rfr_sng,'Data source is Greenblatt et al. (1990) (GOB90)'//char(0))
-  if (flg_ncl_1260nm_bnd) then
-     write (6,'(a)') 'Including 1.26 micron absorption band'
-  else
-     write (6,'(a)') 'Excluding 1.26 micron absorption band'
-  endif                     ! endif flg_ncl_1260nm_bnd
-  if (flg_ncl_1530nm_bnd) then
-     write (6,'(a)') 'Including 1.53 micron absorption band seen by MCB98'
-     stop 'ERROR: 1.53 micron absorption band not supported yet'
-  else
-     write (6,'(a)') 'Excluding 1.53 micron absorption band seen by MCB98'
-  endif                     ! endif flg_ncl_1530nm_bnd
-  
   open (fl_in_unit,file=fl_in,status='old',iostat=rcd)
   
-  if (GOB90) then
-     do idx=1,7
+  if (flg_GOB90) then
+     do bnd_idx=1,7
         read (fl_in_unit,'(a80)') lbl
-     enddo                  ! end loop over idx
+     enddo ! bnd_idx
      lbl(1:1)=lbl(1:1) ! CEWI
      do bnd_idx=1,bnd_nbr
         read (fl_in_unit,*) &
                    wvl_ctr(bnd_idx), &
                    odal_O2O2_PUNC_O2_PUNP_O2(bnd_idx)
-     enddo                  ! end loop over bnd
+     enddo ! bnd_idx
      
      ! Convert input data to SI units where necessary
      do bnd_idx=1,bnd_nbr
         wvl_ctr(bnd_idx)=wvl_ctr(bnd_idx)*1.0e-9 ! nm -> m
         odal_O2O2_PUNC_O2_PUNP_O2(bnd_idx)=odal_O2O2_PUNC_O2_PUNP_O2(bnd_idx)*1.0e-10 ! cm5 mlc-2 -> m5 mlc-2
-     enddo                  ! end loop over bnd
+     enddo ! bnd_idx
      
      ! Zero the 1260 nm band only if requested
      if (.not.flg_ncl_1260nm_bnd) then
@@ -350,71 +450,71 @@ program O2X
            ! The 1.26 micron band is currently the only O2-O2 absorption beyond 1.137 microns
            if (wvl_ctr(bnd_idx) >= 1.137e-6.and.wvl_ctr(bnd_idx) <= 1.350e-6) then
               odal_O2O2_PUNC_O2_PUNP_O2(bnd_idx)=0.0
-           endif            ! endif wvl
-        enddo               ! end loop over bnd
-     endif                  ! endif flg_ncl_1260nm_bnd
+           endif ! wvl_ctr
+        enddo ! bnd_idx
+     endif ! flg_ncl_1260nm_bnd
      
-     ! NB: The measurement of O2-O2 cross sections leads to non-standard nomenclature.
+     ! NB: The measurement of O2-O2 cross sections leads to non-standard nomenclature
      
-     ! Shardanand (1969) is convinced O2-O2 absorption is attributable to covalently bonded O4. 
-     ! Shardanand (1977) is convinced O2-O2, O2-N2, O2-Ar absorption is attributable to van der Waals complexes.
-     ! GOB90 and Blake and McCoy (1987) believe O2-O2 absorption is attributable to collision-induced absorption.
-     ! Short lived collision pairs, not bound dimers, are conclusively shown to be the cause of O2-O2 and O2-N2 absorption in SPS98.
-     ! Thus concentration of O2-O2 the concentration of O2-O2 collision pairs.
-     ! Unfortunately, no one knows how to directly calculate the concentration of O2-O2.
-     ! The physical meaningfulness of such a concentration is not clear in any case.
-     ! Labs measure total monochromatic absorption cross section at given O2 pressure.
-     ! Collision-pair induced absorption is inferred from pressure variation of this absorption.
-     ! O2 concentration is increased by increasing O2 partial pressure.
-     ! Change in measured absorption cross section is then correlated with square of O2 concentration.
-     ! GOB90 show once absorption that varies linearly with O2 concentration is removed, residual absorption correlates nearly exactly with square of O2 concentration.
-     ! This residual absorption is due to O2-O2 collision complexes.
-     ! Unfortunately, only convolution of O2-O2 concentration and O2-O2 absorption is known with certainty.
-     ! O2-O2 concentration and O2-O2 absorption cross sections are not known individually.
+     ! Shardanand (1969) is convinced O2-O2 absorption is attributable to covalently bonded O4
+     ! Shardanand (1977) is convinced O2-O2, O2-N2, O2-Ar absorption is attributable to van der Waals complexes
+     ! GOB90 and Blake and McCoy (1987) believe O2-O2 absorption is attributable to collision-induced absorption
+     ! Short lived collision pairs, not bound dimers, are conclusively shown to be the cause of O2-O2 and O2-N2 absorption in SPS98
+     ! Thus concentration of O2-O2 the concentration of O2-O2 collision pairs
+     ! Unfortunately, no one knows how to directly calculate the concentration of O2-O2
+     ! The physical meaningfulness of such a concentration is not clear in any case
+     ! Labs measure total monochromatic absorption cross section at given O2 pressure
+     ! Collision-pair induced absorption is inferred from pressure variation of this absorption
+     ! O2 concentration is increased by increasing O2 partial pressure
+     ! Change in measured absorption cross section is then correlated with square of O2 concentration
+     ! GOB90 show once absorption that varies linearly with O2 concentration is removed, residual absorption correlates nearly exactly with square of O2 concentration
+     ! This residual absorption is due to O2-O2 collision complexes
+     ! Unfortunately, only convolution of O2-O2 concentration and O2-O2 absorption is known with certainty
+     ! O2-O2 concentration and O2-O2 absorption cross sections are not known individually
      ! How to implement this absorption in RT codes?
      
-     ! abs_xsx_O2O2: the standard measurement of molecular cross-section. 
-     ! Multiply abs_xsx_O2O2 by column path of O2-O2 complexes (# m-2) to obtain absorption optical depth of O2-O2.
-     ! abs_xsx_O2O2 has the advantage of physical simplicity; it measures O2-O2 absorption in terms of O2-O2 concentration. 
-     ! This allows, e.g., O2-O2 absorption cross-sections to be directly compared to, say, O3 cross-sections.
-     ! Disadvantage is the uncertainty of O2-O2 concentration.
-     ! Shardanand (Sha77 p. 436, 527) quotes an interaction coefficient for O2 + O2 <-> O2-O2 of K = 2.6e-23 cm3 mlc-1.
-     ! GOB90 are skeptical of applying any equilibrium reaction coefficients to back out O2-O2 concentration from O2 concentration.
-     ! Since SPS98 and MCB98 agree with GOB90, I disavow using O2-O2 concentrations on physical principle.
-     ! I continue to use faux O2-O2 concentrations in swnb because changing clm and swnb to use either of the following more physical quantities will be time-consuming.
+     ! abs_xsx_O2O2: the standard measurement of molecular cross-section
+     ! Multiply abs_xsx_O2O2 by column path of O2-O2 complexes (# m-2) to obtain absorption optical depth of O2-O2
+     ! abs_xsx_O2O2 has the advantage of physical simplicity; it measures O2-O2 absorption in terms of O2-O2 concentration
+     ! This allows, e.g., O2-O2 absorption cross-sections to be directly compared to, say, O3 cross-sections
+     ! Disadvantage is the uncertainty of O2-O2 concentration
+     ! Shardanand (Sha77 p. 436, 527) quotes an interaction coefficient for O2 + O2 <-> O2-O2 of K = 2.6e-23 cm3 mlc-1
+     ! GOB90 are skeptical of applying any equilibrium reaction coefficients to back out O2-O2 concentration from O2 concentration
+     ! Since SPS98 and MCB98 agree with GOB90, I disavow using O2-O2 concentrations on physical principle
+     ! I continue to use faux O2-O2 concentrations in swnb because changing clm and swnb to use either of the following more physical quantities will be time-consuming
      
-     ! The first physically based method is based on O2 number concentration.
-     ! odal_O2O2_PUNC_O2_PUNP_O2: measured absorption optical depth of O2-O2 per unit number concentration of O2 per unit number path of O2.
-     ! This is the quantity measured by GOB90.
-     ! PUNC stands for "per unit number concentration".
-     ! PUNP stands for "per unit number path".
-     ! Multiply odal_O2O2_PUNC_O2_PUNP_O2 by number concentration of O2 molecules (# m-3) to obtain absorption cross-section of O2-O2 per molecule O2. 
-     ! Multiply odal_O2O2_PUNC_O2_PUNP_O2 by O2 number concentration (# m-3) then by O2 number path (# m-2) to obtain absorption optical depth of O2-O2.
-     ! Advantage of this method is it does not rely on uncertain equilibrium rate coefficients for O2 + O2 <-> O2-O2.
+     ! The first physically based method is based on O2 number concentration
+     ! odal_O2O2_PUNC_O2_PUNP_O2: measured absorption optical depth of O2-O2 per unit number concentration of O2 per unit number path of O2
+     ! This is the quantity measured by GOB90
+     ! PUNC stands for "per unit number concentration"
+     ! PUNP stands for "per unit number path"
+     ! Multiply odal_O2O2_PUNC_O2_PUNP_O2 by number concentration of O2 molecules (# m-3) to obtain absorption cross-section of O2-O2 per molecule O2
+     ! Multiply odal_O2O2_PUNC_O2_PUNP_O2 by O2 number concentration (# m-3) then by O2 number path (# m-2) to obtain absorption optical depth of O2-O2
+     ! Advantage of this method is it does not rely on uncertain equilibrium rate coefficients for O2 + O2 <-> O2-O2
      ! There are two disadvantages to this method:
-     ! 1. Computation of O2-O2 absorption optical depth in RT program is slightly non-standard because it requires knowing O2 concentration and path in the O2-O2 loop.
+     ! 1. Computation of O2-O2 absorption optical depth in RT program is slightly non-standard because it requires knowing O2 concentration and path in the O2-O2 loop
      ! 2. odal_O2O2_PUNC_O2_PUNP_O2 is O(1.0e-46) and thus requires double precision (eight byte) representation,
      ! Remainder of RT code has (barely) managed to avoid double precision until now
      
-     ! The second, and ultimately better, physically based method is based on O2 mass concentration.
-     ! odal_O2O2_PUMC_O2_PUMP_O2: measured absorption optical depth of O2-O2 per unit mass concentration of O2 per unit mass path of O2.
-     ! odal_O2O2_PUMC_O2_PUMP_O2 translates to "layer absorption optical depth of O2-O2 per unit mass concentration of O2 per unit mass path of O2".
-     ! PUMC stands for "per unit mass concentration".
-     ! PUMP stands for "per unit mass path".
-     ! Multiply odal_O2O2_PUMC_O2_PUMP_O2 by mass concentration (kg m-3) of O2 (not O2-O2) to obtain absorption optical depth of O2-O2 per unit mass path of O2.
-     ! Multiply odal_O2O2_PUMC_O2_PUMP_O2 by mass concentration (kg m-3) of O2 (not O2-O2) then by mass path (kg m-2) of O2 (not O2-O2) to obtain absorption optical depth of O2-O2.
-     ! A main advantage of odal_O2O2_PUMC_O2_PUMP_O2 is that using it requires no assumptions about O2-O2 concentration.
-     ! All one needs to know to use odal_O2O2_PUMC_O2_PUMP_O2 is the abundance of O2, which is trivial to derive.
-     ! Another advantage is that odal_O2O2_PUMC_O2_PUMP_O2 is always representable in single precision (4 byte) storage.
+     ! The second, and ultimately better, physically based method is based on O2 mass concentration
+     ! odal_O2O2_PUMC_O2_PUMP_O2: measured absorption optical depth of O2-O2 per unit mass concentration of O2 per unit mass path of O2
+     ! odal_O2O2_PUMC_O2_PUMP_O2 translates to "layer absorption optical depth of O2-O2 per unit mass concentration of O2 per unit mass path of O2"
+     ! PUMC stands for "per unit mass concentration"
+     ! PUMP stands for "per unit mass path"
+     ! Multiply odal_O2O2_PUMC_O2_PUMP_O2 by mass concentration (kg m-3) of O2 (not O2-O2) to obtain absorption optical depth of O2-O2 per unit mass path of O2
+     ! Multiply odal_O2O2_PUMC_O2_PUMP_O2 by mass concentration (kg m-3) of O2 (not O2-O2) then by mass path (kg m-2) of O2 (not O2-O2) to obtain absorption optical depth of O2-O2
+     ! A main advantage of odal_O2O2_PUMC_O2_PUMP_O2 is that using it requires no assumptions about O2-O2 concentration
+     ! All one needs to know to use odal_O2O2_PUMC_O2_PUMP_O2 is the abundance of O2, which is trivial to derive
+     ! Another advantage is that odal_O2O2_PUMC_O2_PUMP_O2 is always representable in single precision (4 byte) storage
      
      ! Compute diagnostic variables
      wvl_min(1)=wvl_ctr(1)-0.5*(wvl_ctr(2)-wvl_ctr(1))
      do bnd_idx=2,bnd_nbr
         wvl_min(bnd_idx)=0.5*(wvl_ctr(bnd_idx-1)+wvl_ctr(bnd_idx))
-     enddo                  ! end loop over bnd
+     enddo ! bnd_idx
      do bnd_idx=1,bnd_nbr-1
         wvl_max(bnd_idx)=0.5*(wvl_ctr(bnd_idx)+wvl_ctr(bnd_idx+1))
-     enddo                  ! end loop over bnd
+     enddo ! bnd_idx
      wvl_max(bnd_nbr)=wvl_ctr(bnd_nbr)+0.5*(wvl_ctr(bnd_nbr)-wvl_ctr(bnd_nbr-1))
      
      do bnd_idx=1,bnd_nbr
@@ -425,7 +525,7 @@ program O2X
         abs_xsx_O2O2_tpt_rfr(bnd_idx)=tpt_std ! All GOB90 data taken at 296 K
         ! Temperature dependence for GOB90 data not currently implemented
         abs_xsx_O2O2_dadT(bnd_idx)=0.0 ! GOB90 showed very little temperature dependence 
-     enddo                  ! end loop over bnd
+     enddo ! bnd_idx
      
      ! Set O2-N2 collision-induced absorption cross sections
      do bnd_idx=1,bnd_nbr
@@ -436,9 +536,9 @@ program O2X
            odal_O2N2_PUNC_O2_PUNP_N2(bnd_idx)=0.0
            abs_xsx_O2N2(bnd_idx)=0.0
         endif               ! endelse wvl
-     enddo                  ! end loop over bnd
+     enddo ! bnd_idx
      
-  endif                     ! GOB90 data
+  endif                     ! flg_GOB90
   
   close (fl_in_unit)
   write (6,'(a20,1x,a)') 'Read input data from',fl_in(1:ftn_strlen(fl_in))
@@ -462,7 +562,7 @@ program O2X
      flx_bnd_dwn_TOA(bnd_idx)=flx_slr_frc(bnd_idx)*slr_cst_CCM
      flx_spc_dwn_TOA(bnd_idx)=flx_slr_frc(bnd_idx)*slr_cst_CCM/wvl_dlt(bnd_idx)
      flx_bnd_pht_dwn_TOA(bnd_idx)=flx_bnd_dwn_TOA(bnd_idx)/nrg_pht(bnd_idx)
-  enddo                     ! end loop over bnd
+  enddo ! bnd_idx
   wvl_grd(bnd_nbr+1)=wvl_max(bnd_nbr)
   
   ! Compute index of refraction through dry air at STP (Len93 p. 155)
@@ -471,10 +571,26 @@ program O2X
           1.0+ &
           1.0e-6*(77.46+0.459/(1.0e12*wvl_ctr(bnd_idx)**2))* &
           prs_STP*0.01/tpt_STP
-  enddo
+  enddo ! bnd_idx
   
-  ! Begin netCDF output routines
-  rcd=nf90_wrp_create(fl_out,nf90_clobber,nc_id)
+#ifdef ENABLE_NETCDF4
+  if (fl_out_fmt == nco_format_undefined) fl_out_fmt=nf90_format_classic ! [enm] Output file format
+  if (fl_out_fmt == nf90_format_64bit) then
+     nf90_create_mode=nf90_create_mode+nf90_64bit_offset
+  else if (fl_out_fmt == nf90_format_netcdf4) then
+     nf90_create_mode=nf90_create_mode+nf90_netcdf4
+  else if (fl_out_fmt == nf90_format_netcdf4_classic) then
+     nf90_create_mode=nf90_create_mode+(nf90_classic_model+nf90_netcdf4)
+  end if ! end else fl_out_fmt
+#else /* !ENABLE_NETCDF4 */
+  if (fl_out_fmt == nco_format_undefined) fl_out_fmt=nf90_format_classic ! [enm] Output file format
+  if(fl_out_fmt == nf90_format_classic) nf90_create_mode=nf90_create_mode+0 ! CEWI
+#endif /* !ENABLE_NETCDF4 */
+  dfl_lvl=dfl_lvl+0 ! CEWI
+  flg_dfl=flg_dfl+0 ! CEWI
+  flg_shf=flg_shf+0 ! CEWI
+  rcd=nf90_wrp_create(fl_out,nf90_create_mode,nc_id,sbr_nm=sbr_nm)
+  
   ! Define dimension IDs
   rcd=rcd+nf90_def_dim(nc_id,'bnd',bnd_nbr,bnd_dim_id)
   if (rcd /= nf90_noerr) call nf90_err_exit(rcd,fl_out)
@@ -603,15 +719,14 @@ program O2X
   if (WGT_TRN) then
      ! Weight high resolution absorption cross-sections by atmospheric transmission of atmosphere with all constituents except O2O2
      call wgt_get(fl_wgt,wgt_nm,wvl_grd,bnd_nbr,wgt_spc)         
-     do idx=1,bnd_nbr
-        xsx_wgt_flx(idx)=(mlt_fct*abs_xsx_O2O2(idx))*wgt_spc(idx)
-
-     enddo                  ! end loop over bnd
+     do bnd_idx=1,bnd_nbr
+        xsx_wgt_flx(bnd_idx)=(mlt_fct*abs_xsx_O2O2(bnd_idx))*wgt_spc(bnd_idx)
+     enddo ! bnd_idx
   else                      ! !WGT_TRN
      ! Weight high resolution absorption cross sections by high resolution TOA solar flux
-     do idx=1,bnd_nbr
-        xsx_wgt_flx(idx)=(mlt_fct*abs_xsx_O2O2(idx))*flx_spc_dwn_TOA(idx)
-     enddo                  ! end loop over bnd
+     do bnd_idx=1,bnd_nbr
+        xsx_wgt_flx(bnd_idx)=(mlt_fct*abs_xsx_O2O2(bnd_idx))*flx_spc_dwn_TOA(bnd_idx)
+     enddo ! bnd_idx
   endif                     ! !WGT_TRN
   
   ! Initialize default values
@@ -634,55 +749,55 @@ program O2X
   endif                     ! endif WGT_TRN
   
   ! Multiply double (above) then divide single by large number to avoid underflow
-  do idx=1,bnd_nbr_CCM
-     xsx_wgt_flx_CCM(idx)=xsx_wgt_flx_CCM(idx)/mlt_fct
+  do bnd_idx=1,bnd_nbr_CCM
+     xsx_wgt_flx_CCM(bnd_idx)=xsx_wgt_flx_CCM(bnd_idx)/mlt_fct
      ! NB: next line not necessary since xsx_wgt_flx is not used again
-     ! xsx_wgt_flx(idx)=xsx_wgt_flx(idx)/mlt_fct
-  enddo                  ! end loop over bnd
+     ! xsx_wgt_flx(bnd_idx)=xsx_wgt_flx(bnd_idx)/mlt_fct
+  enddo ! bnd_idx
 
   if (dbg_lvl == dbg_crr) then
      ! Examine weights
      write (6,'(5(a,1x))') '#  ','wvl        ','xsx_abs    ','flx TOA    ',wgt_nm(1:ftn_strlen(wgt_nm))
      write (6,'(5(a,1x))') '   ','m          ','m-2 mlc-1  ','W m-2 m-1  ','W m-2 m-1  '
-     do idx=1,bnd_nbr
+     do bnd_idx=1,bnd_nbr
         write (6,'(i4,1x,4(es10.3,1x))') &
-             idx,wvl_ctr(idx),abs_xsx_O2O2(idx),flx_spc_dwn_TOA(idx),wgt_spc(idx)
-     enddo                  ! end loop over bnd
+             bnd_idx,wvl_ctr(bnd_idx),abs_xsx_O2O2(bnd_idx),flx_spc_dwn_TOA(bnd_idx),wgt_spc(bnd_idx)
+     enddo ! bnd_idx
   endif                     ! endif dbg
   
   ! Normalize flux-weighted absorption cross sections
-  do idx=1,bnd_nbr_CCM
-     flx_spc_dwn_TOA_CCM(idx)=flx_slr_frc_CCM(idx)*slr_cst_CCM/wvl_dlt_CCM(idx)
+  do bnd_idx=1,bnd_nbr_CCM
+     flx_spc_dwn_TOA_CCM(bnd_idx)=flx_slr_frc_CCM(bnd_idx)*slr_cst_CCM/wvl_dlt_CCM(bnd_idx)
      if (WGT_TRN) then
-        if (wgt_spc_CCM(idx) /= 0.0) then
-           abs_xsx_O2O2_CCM(idx)=xsx_wgt_flx_CCM(idx)/wgt_spc_CCM(idx)
+        if (wgt_spc_CCM(bnd_idx) /= 0.0) then
+           abs_xsx_O2O2_CCM(bnd_idx)=xsx_wgt_flx_CCM(bnd_idx)/wgt_spc_CCM(bnd_idx)
         else
            write (6,'(a,a,i2,a)') prg_nm(1:ftn_strlen(prg_nm)), &
-                ': WARNING wgt_spc_CCM(',idx,') = 0.0 Setting cross section equal to zero.'
-           abs_xsx_O2O2_CCM(idx)=0.0
+                ': WARNING wgt_spc_CCM(',bnd_idx,') = 0.0 Setting cross section equal to zero.'
+           abs_xsx_O2O2_CCM(bnd_idx)=0.0
         endif               ! endif not degenerate
      else
-        abs_xsx_O2O2_CCM(idx)=xsx_wgt_flx_CCM(idx)/flx_spc_dwn_TOA_CCM(idx)
+        abs_xsx_O2O2_CCM(bnd_idx)=xsx_wgt_flx_CCM(bnd_idx)/flx_spc_dwn_TOA_CCM(bnd_idx)
      endif                  ! endif WGT_TRN
-     abs_cff_mss_O2O2_CCM(idx)=abs_xsx_O2O2_CCM(idx)*Avagadro/mmw_O2O2
-     odal_O2O2_PUNC_O2_PUNP_O2_CCM(idx)=dble(abs_xsx_O2O2_CCM(idx))*dble(k_O2_O2) ! NB: Double precision arithmetic is required here
+     abs_cff_mss_O2O2_CCM(bnd_idx)=abs_xsx_O2O2_CCM(bnd_idx)*Avagadro/mmw_O2O2
+     odal_O2O2_PUNC_O2_PUNP_O2_CCM(bnd_idx)=dble(abs_xsx_O2O2_CCM(bnd_idx))*dble(k_O2_O2) ! NB: Double precision arithmetic is required here
      double_foo= &
-             odal_O2O2_PUNC_O2_PUNP_O2_CCM(idx)*(dble(Avagadro)/dble(mmw_O2))**2
-     odal_O2O2_PUMC_O2_PUMP_O2_CCM(idx)=double_foo ! Defensive programming
-  enddo                     ! end loop over CCM bnd
+             odal_O2O2_PUNC_O2_PUNP_O2_CCM(bnd_idx)*(dble(Avagadro)/dble(mmw_O2))**2
+     odal_O2O2_PUMC_O2_PUMP_O2_CCM(bnd_idx)=double_foo ! Defensive programming
+  enddo ! bnd_idx
   
   ! Do the same thing for O2-N2
   if (WGT_TRN) then
      ! Weight high resolution absorption cross-sections by atmospheric transmission of atmosphere with all constituents except H2OH2O
      call wgt_get(fl_wgt,wgt_nm,wvl_grd,bnd_nbr,wgt_spc)         
-     do idx=1,bnd_nbr
-        xsx_wgt_flx(idx)=abs_xsx_O2N2(idx)*wgt_spc(idx)
-     enddo                  ! end loop over bnd
+     do bnd_idx=1,bnd_nbr
+        xsx_wgt_flx(bnd_idx)=abs_xsx_O2N2(bnd_idx)*wgt_spc(bnd_idx)
+     enddo ! bnd_idx
   else                      ! !WGT_TRN
      ! Weight high resolution absorption cross sections by high resolution TOA solar flux
-     do idx=1,bnd_nbr
-        xsx_wgt_flx(idx)=abs_xsx_O2N2(idx)*flx_spc_dwn_TOA(idx)
-     enddo                  ! end loop over bnd
+     do bnd_idx=1,bnd_nbr
+        xsx_wgt_flx(bnd_idx)=abs_xsx_O2N2(bnd_idx)*flx_spc_dwn_TOA(bnd_idx)
+     enddo ! bnd_idx
   endif                     ! !WGT_TRN
   
   ! Rebin flux-weighted absorption cross sections
@@ -697,34 +812,34 @@ program O2X
   endif                     ! endif WGT_TRN
   
   ! Normalize flux-weighted absorption cross sections
-  do idx=1,bnd_nbr_CCM
-     flx_spc_dwn_TOA_CCM(idx)=flx_slr_frc_CCM(idx)*slr_cst_CCM/wvl_dlt_CCM(idx)
+  do bnd_idx=1,bnd_nbr_CCM
+     flx_spc_dwn_TOA_CCM(bnd_idx)=flx_slr_frc_CCM(bnd_idx)*slr_cst_CCM/wvl_dlt_CCM(bnd_idx)
      if (WGT_TRN) then
-        if (wgt_spc_CCM(idx) /= 0.0) then
-           abs_xsx_O2N2_CCM(idx)=xsx_wgt_flx_CCM(idx)/wgt_spc_CCM(idx)
+        if (wgt_spc_CCM(bnd_idx) /= 0.0) then
+           abs_xsx_O2N2_CCM(bnd_idx)=xsx_wgt_flx_CCM(bnd_idx)/wgt_spc_CCM(bnd_idx)
         else
            write (6,'(a,a,i2,a)') prg_nm(1:ftn_strlen(prg_nm)), &
-                ': WARNING wgt_spc_CCM(',idx,') = 0.0 Setting cross section equal to zero.'
-           abs_xsx_O2N2_CCM(idx)=0.0
+                ': WARNING wgt_spc_CCM(',bnd_idx,') = 0.0 Setting cross section equal to zero.'
+           abs_xsx_O2N2_CCM(bnd_idx)=0.0
         endif               ! endif not degenerate
      else
-        abs_xsx_O2N2_CCM(idx)=xsx_wgt_flx_CCM(idx)/flx_spc_dwn_TOA_CCM(idx)
+        abs_xsx_O2N2_CCM(bnd_idx)=xsx_wgt_flx_CCM(bnd_idx)/flx_spc_dwn_TOA_CCM(bnd_idx)
      endif                  ! endif WGT_TRN
-     abs_cff_mss_O2N2_CCM(idx)=abs_xsx_O2N2_CCM(idx)*Avagadro/mmw_O2N2
-     odal_O2N2_PUNC_O2_PUNP_N2_CCM(idx)=dble(abs_xsx_O2N2_CCM(idx))*dble(k_O2_O2) ! NB: Double precision arithmetic is required here
+     abs_cff_mss_O2N2_CCM(bnd_idx)=abs_xsx_O2N2_CCM(bnd_idx)*Avagadro/mmw_O2N2
+     odal_O2N2_PUNC_O2_PUNP_N2_CCM(bnd_idx)=dble(abs_xsx_O2N2_CCM(bnd_idx))*dble(k_O2_O2) ! NB: Double precision arithmetic is required here
      double_foo= &
-          odal_O2N2_PUNC_O2_PUNP_N2_CCM(idx)*dble(Avagadro)*dble(Avagadro)/(dble(mmw_O2)*dble(mmw_N2))
-     odal_O2N2_PUMC_O2_PUMP_N2_CCM(idx)=double_foo ! Defensive programming
-  enddo                     ! end loop over CCM bnd
+          odal_O2N2_PUNC_O2_PUNP_N2_CCM(bnd_idx)*dble(Avagadro)*dble(Avagadro)/(dble(mmw_O2)*dble(mmw_N2))
+     odal_O2N2_PUMC_O2_PUMP_N2_CCM(bnd_idx)=double_foo ! Defensive programming
+  enddo ! bnd_idx
   
   if (dbg_lvl == dbg_old) then
      ! Compare retrieved versus rebinned spectral fluxes
      write (6,'(3(a,1x))') 'idx','flx_spc rtr','flx_spc rbn'
      write (6,'(3(a,1x))') '   ','W m-2 m-1  ','W m-2 m-1  '
-     do idx=1,bnd_nbr_CCM
+     do bnd_idx=1,bnd_nbr_CCM
         write (6,'(i4,1x,2(es10.3,1x))') &
-             idx,flx_spc_dwn_TOA_CCM(idx),foo_CCM(idx)
-     enddo                  ! end loop over CCM bnd
+             bnd_idx,flx_spc_dwn_TOA_CCM(bnd_idx),foo_CCM(bnd_idx)
+     enddo ! bnd_idx
   endif                     ! endif dbg
   
   ! Add CCM grid to netCDF output file
@@ -790,10 +905,10 @@ program O2X
   if (rcd /= nf90_noerr) write (6,'(a,a,i4,a)') prg_nm(1:ftn_strlen(prg_nm)),': ERROR rcd = ',rcd,' on exit'
   
   ! Convert absorption coefficients to CGS and output block for radcsw
-  do idx=1,bnd_nbr_CCM
-     odal_O2O2_PUMC_O2_PUMP_O2_CCMCG(idx)=odal_O2O2_PUMC_O2_PUMP_O2_CCM(idx)*(100.0**5)/(1000.0**2) ! m5 kg-2 = m3 kg-1 O2 m2 kg-1 O2 --> cm5 g-2 = cm3 g-1 O2 cm2 g-1 O2 
-     odal_O2N2_PUMC_O2_PUMP_N2_CCMCG(idx)=odal_O2N2_PUMC_O2_PUMP_N2_CCM(idx)*(100.0**5)/(1000.0**2) ! m5 kg-2 = m3 kg-1 O2 m2 kg-1 O2 --> cm5 g-2 = cm3 g-1 O2 cm2 g-1 O2 
-  enddo                     ! end loop over CCM bnd
+  do bnd_idx=1,bnd_nbr_CCM
+     odal_O2O2_PUMC_O2_PUMP_O2_CCMCG(bnd_idx)=odal_O2O2_PUMC_O2_PUMP_O2_CCM(bnd_idx)*(100.0**5)/(1000.0**2) ! m5 kg-2 = m3 kg-1 O2 m2 kg-1 O2 --> cm5 g-2 = cm3 g-1 O2 cm2 g-1 O2 
+     odal_O2N2_PUMC_O2_PUMP_N2_CCMCG(bnd_idx)=odal_O2N2_PUMC_O2_PUMP_N2_CCM(bnd_idx)*(100.0**5)/(1000.0**2) ! m5 kg-2 = m3 kg-1 O2 m2 kg-1 O2 --> cm5 g-2 = cm3 g-1 O2 cm2 g-1 O2 
+  enddo ! bnd_idx
   nbr_dat_per_ln=4
   write (0,'(a)') 'c     O2X physics and forcing documented in Zender (1999), JGR, 104, D20, 24471--24484'
   write (0,'(a,a,a,a)') 'c     Data generated by ',prg_nm(1:ftn_strlen(prg_nm)),' on ',lcl_date_time
@@ -847,6 +962,6 @@ program O2X
   
 1000 continue
   
-  call exit(exit_status)
+  !call exit(exit_status)
 end program O2X
 

@@ -1018,12 +1018,6 @@ ${MY_BIN_DIR}/CFC12:	lib $(CFC12_OBJ)
 	${FC} -o $@ $(CFC12_OBJ) ${LDFLAGS} 
 	chmod 755 $@
 
-NO2_OBJ := 	${MY_OBJ_DIR}/NO2.o
-NO2:	${MY_BIN_DIR}/NO2
-${MY_BIN_DIR}/NO2:	lib $(NO2_OBJ) 
-	${FC} -o $@ $(NO2_OBJ) ${LDFLAGS}
-	chmod 755 $@
-
 H2OH2O_OBJ := 	${MY_OBJ_DIR}/H2OH2O.o
 H2OH2O:	${MY_BIN_DIR}/H2OH2O
 ${MY_BIN_DIR}/H2OH2O:	lib $(H2OH2O_OBJ) 
@@ -1034,6 +1028,24 @@ MIE2NC_OBJ := ${MY_OBJ_DIR}/mie2nc.o
 mie2nc:	${MY_BIN_DIR}/mie2nc
 ${MY_BIN_DIR}/mie2nc:	lib $(MIE2NC_OBJ) 
 	${FC} -o $@ $(MIE2NC_OBJ) ${LDFLAGS} 
+	chmod 755 $@
+
+NBM_OBJ := ${MY_OBJ_DIR}/nbm.o ${MY_OBJ_DIR}/disort.o ${MY_OBJ_DIR}/d1mach.o ${MY_OBJ_DIR}/r1mach.o ${MY_OBJ_DIR}/linpak.o
+nbm:	${MY_BIN_DIR}/nbm
+${MY_BIN_DIR}/nbm:	lib $(NBM_OBJ) 
+	${FC} -o $@ $(NBM_OBJ) ${LDFLAGS} 
+	chmod 755 ${MY_BIN_DIR}/nbm
+
+NO2_OBJ := 	${MY_OBJ_DIR}/NO2.o
+NO2:	${MY_BIN_DIR}/NO2
+${MY_BIN_DIR}/NO2:	lib $(NO2_OBJ) 
+	${FC} -o $@ $(NO2_OBJ) ${LDFLAGS}
+	chmod 755 $@
+
+O2X_OBJ := 	${MY_OBJ_DIR}/O2X.o
+O2X:	${MY_BIN_DIR}/O2X
+${MY_BIN_DIR}/O2X:	lib $(O2X_OBJ) 
+	${FC} -o $@ $(O2X_OBJ) ${LDFLAGS} 
 	chmod 755 $@
 
 SWNB_OBJ := ${MY_OBJ_DIR}/swnb.o ${MY_OBJ_DIR}/rt_utl.o ${MY_OBJ_DIR}/disort.o ${MY_OBJ_DIR}/d1mach.o ${MY_OBJ_DIR}/r1mach.o ${MY_OBJ_DIR}/linpak.o
@@ -1060,20 +1072,8 @@ ${MY_BIN_DIR}/disotest3:	lib $(DISOTEST3_OBJ)
 	${FC} -o $@ $(DISOTEST3_OBJ) ${LDFLAGS}
 	chmod 755 $@
 
-NBM_OBJ := ${MY_OBJ_DIR}/nbm.o ${MY_OBJ_DIR}/disort.o ${MY_OBJ_DIR}/d1mach.o ${MY_OBJ_DIR}/r1mach.o ${MY_OBJ_DIR}/linpak.o
-nbm:	${MY_BIN_DIR}/nbm
-${MY_BIN_DIR}/nbm:	lib $(NBM_OBJ) 
-	${FC} -o $@ $(NBM_OBJ) ${LDFLAGS} 
-	chmod 755 ${MY_BIN_DIR}/nbm
-
 # Target-specific variable values syntax TARGET ... : VARIABLE-ASSIGNMENT
 # Rules begin in leftmost column else interpreted as commands
-O2X : foo += bar
-O2X_OBJ := 	${MY_OBJ_DIR}/O2X.o
-O2X:	${MY_BIN_DIR}/O2X
-${MY_BIN_DIR}/O2X:	lib $(O2X_OBJ) 
-	${FC} -o $@ $(O2X_OBJ) ${LDFLAGS} 
-	chmod 755 $@
 
 bin : ${MDL_BIN_TRG}
 bin_cln: 

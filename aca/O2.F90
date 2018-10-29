@@ -135,11 +135,7 @@ program O2
   integer exit_status       ! [enm] Program exit status
   integer int_foo           ! [nbr] Integer
   integer opt_lng           ! [nbr] Length of option
-  integer rcd               ! [rcd] Return success code
   integer idx
-  
-  logical JPL15
-  logical WMO85
   
   integer bnd_dmn_id        ! dimension ID for bands
   integer grd_dmn_id        ! dimension ID for grid
@@ -190,23 +186,19 @@ program O2
   real,dimension(:),allocatable::wvl_max
   real,dimension(:),allocatable::wvl_min
   
-  logical cmd_ln_fl_in
-  logical cmd_ln_fl_out
+  ! Set defaults for command-line options 
+  character(sng_lng_dfl_fl)::drc_in='/data/zender/aca'//nlc       ! [sng] Input directory
+  character(sng_lng_dfl_fl)::drc_out=nlc ! [sng] Output directory
+  integer::rcd=nf90_noerr ! [rcd] Return success code
+  logical::cmd_ln_fl_in=.false.
+  logical::cmd_ln_fl_out=.false.
+  logical::JPL15=.false.
+  logical::WMO85=.true.
 
   ! Main code
-  
-  ! Initialize default values
-  drc_in='/data/zender/aca'//nlc ! [sng] Input directory
-  drc_out=''                ! [sng] Output directory
-
-  JPL15=.false.
-  WMO85=.true.
-  cmd_ln_fl_in=.false.
-  cmd_ln_fl_out=.false.
   dbg_lvl=dbg_off
   exit_status=0
   fl_slr=fl_slr_dfl
-  rcd=nf90_noerr              ! nf90_noerr == 0
   CVS_Date='$Date$'
   CVS_Revision='$Revision$'
   
