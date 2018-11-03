@@ -81,6 +81,7 @@ ssh : ${MY_SSH_DIR}/authorized_keys
 	-scp -p $^ dust.ess.uci.edu:.ssh
 	-scp -p $^ frazil.ess.uci.edu:.ssh
 	-scp -p $^ skyglow.ess.uci.edu:.ssh
+	-scp -p $^ sastrugi.ess.uci.edu:.ssh
 	-scp -p $^ katabatic.ess.uci.edu:.ssh
 	-scp -p $^ glace.ess.uci.edu:.ssh
 	-scp -p $^ grele.ess.uci.edu:.ssh
