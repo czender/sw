@@ -116,8 +116,6 @@ program O2
   character(sng_lng_dfl_fl)::arg_val=nlc      ! [sng] Command line argument value
   character cmd_ln*500      ! [sng] Command line
   character dsh_key*2       ! [sng] Command line dash and switch
-  character(sng_lng_dfl_fl)::drc_in=nlc       ! [sng] Input directory
-  character(sng_lng_dfl_fl)::drc_out=nlc      ! [sng] Output directory
   character(sng_lng_dfl_fl)::opt_sng=nlc      ! [sng] Option string
   character fl_in*80
   character fl_out*80
