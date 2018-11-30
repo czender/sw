@@ -1,3 +1,7 @@
+2018-11-30  Charlie Zender  <zender@uci.edu>
+
+	* Initialize srt_one(1)=1 in abs_xsx_get() and mlk_prm_get()
+
 2018-10-28  Charlie Zender  <zender@uci.edu>
 
 	* Change swnb2, O3.F90, and O2.F90 to use abs_xsx_get() access mechanism for O3 and O2

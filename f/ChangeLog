@@ -1,3 +1,7 @@
+2018-11-30  Charlie Zender  <zender@uci.edu>
+
+	* Initialize srt_one(1)=1
+
 2016-12-23  Charlie Zender  <zender@uci.edu>
 
 	* Makefile: PRC=D compiles with -fdefault-real-8 -fdefault-double-8
