@@ -7381,7 +7381,7 @@ scp netcdf_c++.*.foo dust.ess.uci.edu:Sites/tmp
 sudo make install
 
 # Do same for netCDF4 C
-sudo /bin/rm -r -f ${NETCDF4_ROOT}/include/netcdf.* ${NETCDF4_ROOT}/lib/libnetcdf.* 
+sudo /bin/rm -r -f ${NETCDF4_ROOT}/include/netcdf.h ${NETCDF4_ROOT}/include/netcdf_m*.h ${NETCDF4_ROOT}/lib/libnetcdf.* 
 cd ${DATA}/tmp/netcdf-c
 # NB: 20171001 make distclean must be run or unresolved link errors may occur
 make distclean

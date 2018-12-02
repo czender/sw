@@ -99,10 +99,10 @@ program NO2
   integer idx
   integer rcd               ! return success code
   
-  logical Cal87
-  logical JPL
-  logical NCAR
-  logical NOAA
+  logical flg_Cal87
+  logical flg_JPL
+  logical flg_NCAR
+  logical flg_NOAA
   logical std_tpt
   
   real float_foo
@@ -181,10 +181,10 @@ program NO2
   ! Main code
   
   ! Initialize default values
-  Cal87=.true.
-  JPL=.true.
-  NCAR=.false.
-  NOAA=.false.
+  flg_Cal87=.true.
+  flg_JPL=.true.
+  flg_NCAR=.false.
+  flg_NOAA=.false.
   dbg_lvl=dbg_off
   exit_status=0
   fl_in='/data/zender/tuv/DATAE1/NO2/NO2_jpl94.abs'
@@ -215,23 +215,23 @@ program NO2
         read (argv,'(f8.3)') float_foo
      endif
      if (argv(1:2) == '-H') then
-        NOAA=.true.
-        JPL=.not.NOAA
-        NCAR=.not.NOAA
+        flg_NOAA=.true.
+        flg_JPL=.not.flg_NOAA
+        flg_NCAR=.not.flg_NOAA
      endif
      if (argv(1:2) == '-i') then
         call getarg(arg+1,argv)
         read (argv,'(a)') fl_in
      endif
      if (argv(1:2) == '-J') then
-        JPL=.true.
-        NCAR=.not.JPL
-        NOAA=.not.JPL
+        flg_JPL=.true.
+        flg_NCAR=.not.flg_JPL
+        flg_NOAA=.not.flg_JPL
      endif
      if (argv(1:2) == '-N') then
-        NCAR=.true.
-        JPL=.not.NCAR
-        NOAA=.not.NCAR
+        flg_NCAR=.true.
+        flg_JPL=.not.flg_NCAR
+        flg_NOAA=.not.flg_NCAR
      endif
      if (argv(1:2) == '-o') then
         call getarg(arg+1,argv)
@@ -258,14 +258,14 @@ program NO2
      endif
   end do
   
-  if (JPL) then
+  if (flg_JPL) then
      bnd_nbr=bnd_nbr_JPL    ! [nbr] Number of bands
-  else if (NCAR) then
+  else if (flg_NCAR) then
      bnd_nbr=bnd_nbr_NCAR   ! [nbr] Number of bands
-  else if (NOAA) then
+  else if (flg_NOAA) then
      bnd_nbr=bnd_nbr_NOAA   ! [nbr] Number of bands
   else
-     stop 'One of JPL, NCAR, NOAA must be .true.'   
+     stop 'One of flg_JPL, flg_NCAR, flg_NOAA must be .true.'   
   endif                     ! endif
   
   ! Allocate space for dynamic arrays
@@ -295,16 +295,16 @@ program NO2
   call ftn_strnul(fl_slr)
   call ftn_strnul(fl_yld)
   call ftn_strcpy(src_fl_sng,'Original data file is ' // fl_in)
-  if (JPL) call ftn_strcpy(src_rfr_sng,'Data source is Schneider et al. (1987) (JPL)')
-  if (NCAR) call ftn_strcpy(src_rfr_sng,'Data source is Davidson et al. (198x) (NCAR) [263.8--648.8 nm (0.5nm), 273K]')
-  if (NOAA) call ftn_strcpy(src_rfr_sng,'Data source is Harder, Brault, Johnston and Mount (1997) (NOAA) ' // &
+  if (flg_JPL) call ftn_strcpy(src_rfr_sng,'Data source is Schneider et al. (1987) (JPL)')
+  if (flg_NCAR) call ftn_strcpy(src_rfr_sng,'Data source is Davidson et al. (198x) (NCAR) [263.8--648.8 nm (0.5nm), 273K]')
+  if (flg_NOAA) call ftn_strcpy(src_rfr_sng,'Data source is Harder, Brault, Johnston and Mount (1997) (NOAA) ' // &
        '[341.5--550.0 nm (0.001nm)]')
-  if (NCAR.and.std_tpt) then
+  if (flg_NCAR.and.std_tpt) then
      write (6,'(a)') 'WARNING: NCAR data does not yet have temperature dependence, std_tpt ignored'
   endif
   
   open (fl_yld_unit,file=fl_yld,status='old',iostat=rcd)
-  if (Cal87) then           ! Cal87 data
+  if (flg_Cal87) then           ! Cal87 data
      bnd_nbr=bnd_nbr_Cal87
      do idx=1,9
         read (fl_yld_unit,'(a80)') lbl
@@ -346,10 +346,10 @@ program NO2
      enddo
      wvl_grd_yyy(bnd_nbr+1)=wvl_max_yyy(bnd_nbr)
      
-  endif                     ! Cal87
+  endif                     ! flg_Cal87
   
   open (fl_in_unit,file=fl_in,status='old',iostat=rcd)
-  if (JPL) then             ! JPL data
+  if (flg_JPL) then             ! JPL data
      bnd_nbr=bnd_nbr_JPL
      do idx=1,44
         read (fl_in_unit,'(a80)') lbl
@@ -389,7 +389,7 @@ program NO2
         write (6,'(a30,1x,f7.3,a2)') 'Renormalized cross sections to',tpt_std,' K'
      endif
      
-  else if (NCAR) then       ! NCAR data
+  else if (flg_NCAR) then       ! NCAR data
      
      bnd_nbr=bnd_nbr_NCAR
      do bnd_idx=1,bnd_nbr
@@ -424,7 +424,7 @@ program NO2
         abs_xsx_dadT(bnd_idx)=0.0 ! no temperature dependence given for NCAR data
      enddo
      
-  else if (NOAA) then       ! NOAA data
+  else if (flg_NOAA) then       ! NOAA data
      
      bnd_nbr=bnd_nbr_NOAA
      do idx=1,10

@@ -312,7 +312,8 @@
 
 ; Save unreliable software until the end here so rest of stuff gets loaded
 ; tramp and preview are not likely to be installed on non-debian machines
-(require 'tex-site) ; Enable AUC TeX (fails on Cygwin?)
+; 20181201: tex-site not found with mac-ports
+;(require 'tex-site) ; Enable AUC TeX (fails on Cygwin?)
 (autoload 'LaTeX-preview-setup "preview") ; preview-latex
 (add-hook 'LaTeX-mode-hook #'LaTeX-preview-setup) ; preview-latex
 ; 20150623: loading Tramp hangs Emacs 24.5 on FC22

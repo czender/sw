@@ -1992,7 +1992,7 @@ program swnb2
   ! fl_HHCWC='abs_xsx_O3_WMO85.nc'//nlc
   fl_HHCWC='abs_xsx_O3_JPL15.nc'//nlc
   fl_O3='mlk_O3.nc'//nlc
-  fl_O2O2='abs_xsx_O2O2.nc'//nlc
+  fl_O2O2='abs_xsx_O2O2_GOB90.nc'//nlc
   fl_NO2='abs_xsx_NO2.nc'//nlc
   fl_CFC11='abs_xsx_CFC11_HTR16.nc'//nlc
   fl_CFC12='abs_xsx_CFC12_HTR16.nc'//nlc

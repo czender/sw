@@ -11,6 +11,10 @@
 handle SIGFPE stop
 handle SIGSEGV stop
 
+# 20181201 GDB instructions explain necessity of following line for MacOX > 10.12 at
+# https://sourceware.org/gdb/wiki/BuildingOnDarwin#Giving_gdb_permission_to_control_other_processes
+set startup-with-shell off
+
 # Catch c++ problems
 # Do not place in init file because it requires a process to debug and
 # then DDD will complain if it is started without a target process

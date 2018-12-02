@@ -190,8 +190,8 @@ program O2
   integer::rcd=nf90_noerr ! [rcd] Return success code
   logical::cmd_ln_fl_in=.false.
   logical::cmd_ln_fl_out=.false.
-  logical::JPL15=.false.
-  logical::WMO85=.true.
+  logical::flg_JPL15=.false.
+  logical::flg_WMO85=.true.
 
   ! Main code
   dbg_lvl=dbg_off
@@ -223,11 +223,11 @@ program O2
         else if (opt_sng == 'input' .or. opt_sng == 'fl_O2' .or. opt_sng == 'O2') then
            call ftn_arg_get(arg_idx,arg_val,fl_in) ! [sng] Ozone file
         else if (opt_sng == 'JPL15') then
-           JPL15=.true.
-           WMO85=.false.
+           flg_JPL15=.true.
+           flg_WMO85=.false.
         else if (opt_sng == 'WMO85') then
-           WMO85=.true.
-           JPL15=.false.
+           flg_WMO85=.true.
+           flg_JPL15=.false.
         else                ! Option not recognized
            arg_idx=arg_idx-1 ! [idx] Counting index
            call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
@@ -246,8 +246,8 @@ program O2
         call ftn_arg_get(arg_idx,arg_val,fl_in)
         cmd_ln_fl_in=.true.
      else if (dsh_key == '-J') then
-        JPL15=.true.
-        WMO85=.false.
+        flg_JPL15=.true.
+        flg_WMO85=.false.
      else if (dsh_key == '-o') then
         call ftn_arg_get(arg_idx,arg_val,fl_out)
         cmd_ln_fl_out=.true.
@@ -257,8 +257,8 @@ program O2
         write (6,'(a)') CVS_Id
         goto 1000
      else if (dsh_key == '-W') then
-        WMO85=.true.
-        JPL15=.false.
+        flg_WMO85=.true.
+        flg_JPL15=.false.
      else                   ! Option not recognized
         arg_idx=arg_idx-1   ! [idx] Counting index
         call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
@@ -270,12 +270,12 @@ program O2
   call ftn_strnul(fl_out)
   call ftn_strnul(fl_slr)
   call ftn_strcpy(src_fl_sng,'Original data file is ' // fl_in)
-  if (WMO85) then
+  if (flg_WMO85) then
      bnd_nbr=bnd_nbr_WMO85
      if (.not.cmd_ln_fl_in) fl_in=fl_in_WMO85//nlc
      if (.not.cmd_ln_fl_out) fl_out=fl_out_WMO85//nlc
      call ftn_strcpy(src_rfr_sng,'Data reference is WMO (1985) (WMO85)')
-  else if (JPL15) then
+  else if (flg_JPL15) then
      bnd_nbr=bnd_nbr_JPL15
      if (.not.cmd_ln_fl_in) fl_in=fl_in_JPL15//nlc
      if (.not.cmd_ln_fl_out) fl_out=fl_out_JPL15//nlc
@@ -314,7 +314,7 @@ program O2
   
   open (fl_in_unit,file=fl_in,status='old',iostat=rcd)
 
-  if (WMO85) then            ! WMO85 data
+  if (flg_WMO85) then            ! WMO85 data
      do idx=1,5
         read (fl_in_unit,'(a80)') lbl
      enddo
@@ -343,7 +343,7 @@ program O2
         abs_xsx_O3_warm(bnd_idx)=abs_xsx_O3_warm(bnd_idx)*1.0e-4 ! cm2 -> m2
      enddo
      
-  else if (JPL15) then            ! JPL15 data
+  else if (flg_JPL15) then            ! JPL15 data
 
      do idx=1,16
         read (fl_in_unit,'(a80)') lbl

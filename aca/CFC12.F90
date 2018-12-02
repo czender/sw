@@ -110,11 +110,11 @@ program CFC12
   character(sng_lng_dfl_fl)::src_rfr_sng
   
   ! HITRAN XSC format
-  character::brd_nm_htrn*3 ! [sng] Broadener (Air, N2, or self-broadened (if left blank))
-  character::chr_foo_htrn*4 ! [sng] Reserved for future use
-  character::mA_sng_htrn*2 ! [sng] mA
-  character::mlc_frm_htrn*20 ! [sng] Molecule chemical formula (right-justified)
-  character::mlc_nm_htrn*15 ! [sng] Molecule common name
+  character(3)::brd_nm_htrn ! [sng] Broadener (Air, N2, or self-broadened (if left blank))
+  character(4)::chr_foo_htrn ! [sng] Reserved for future use
+  character(2)::mA_sng_htrn ! [sng] mA
+  character(20)::mlc_frm_htrn ! [sng] Molecule chemical formula (right-justified)
+  character(15)::mlc_nm_htrn ! [sng] Molecule common name
   integer::bnd_nbr_htrn ! [nbr] Number of wavenumber bins
   integer::rfr_nbr_htrn ! [idx] Reference number (# of bibliographic reference in HITRAN GRH17 reference list)
   real::prs_htrn ! [Pa] Pressure
@@ -198,7 +198,7 @@ program CFC12
   
   logical::cmd_ln_fl_in=.false.
   logical::cmd_ln_fl_out=.false.
-  logical::HTR16=.true.
+  logical::flg_HTR16=.true.
   
   real::tpt_cold=tpt_cold_HTR16
   real::tpt_std=250.0 ! Temperature at which generic CFC12 cross sections will be archived
@@ -234,7 +234,7 @@ program CFC12
            call ftn_arg_get(arg_idx,arg_val,fl_in) ! [sng] CFC12 file
            cmd_ln_fl_in=.true.
         else if (opt_sng == 'HTR16') then
-           HTR16=.true.
+           flg_HTR16=.true.
         else                ! Option not recognized
            arg_idx=arg_idx-1 ! [idx] Counting index
            call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
@@ -253,7 +253,7 @@ program CFC12
         cmd_ln_fl_in=.true.
         call ftn_arg_get(arg_idx,arg_val,fl_in)
      else if (dsh_key == '-H') then
-        HTR16=.true.
+        flg_HTR16=.true.
      else if (dsh_key == '-o') then
         call ftn_arg_get(arg_idx,arg_val,fl_out)
         cmd_ln_fl_out=.true.
@@ -275,14 +275,14 @@ program CFC12
   call ftn_strnul(fl_out)
   call ftn_strnul(fl_slr)
   call ftn_strcpy(src_fl_sng,'Original data file is ' // fl_in)
-  if (HTR16) then
+  if (flg_HTR16) then
      bnd_nbr=bnd_nbr_HTR16
      tpt_cold=tpt_cold_HTR16
      tpt_warm=tpt_warm_HTR16
      if (.not.cmd_ln_fl_in) fl_in=fl_in_HTR16_cold//nlc
      if (.not.cmd_ln_fl_out) fl_out=fl_out_HTR16//nlc
      call ftn_strcpy(src_rfr_sng,'Data reference is HITRAN (2017) (HTR16)')
-  endif ! HTR16
+  endif ! flg_HTR16
 
   ! Compute quantities that may depend on command line input
   ! Prepend user-specified path, if any, to input data file names
@@ -295,7 +295,7 @@ program CFC12
   
   open (fl_in_unit,file=fl_in,status='old',iostat=rcd)
 
-  if (HTR16) then            ! HTR16 data
+  if (flg_HTR16) then            ! HTR16 data
 
      ! HITRAN data are in .xsc format described above
      ! First, read-in bnd_nbr in order to allocate memory
@@ -338,7 +338,7 @@ program CFC12
   allocate(wvn_min(bnd_nbr),stat=rcd)
   allocate(xsx_wgt_flx(bnd_nbr),stat=rcd)
 
-  if (HTR16) then            ! HTR16 data
+  if (flg_HTR16) then            ! HTR16 data
   
      read (fl_in_unit,*) (abs_xsx_cold(bnd_idx),bnd_idx=1,bnd_nbr)
      close (fl_in_unit)

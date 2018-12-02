@@ -166,9 +166,9 @@ program O3
   integer idx
   integer int_foo           ! [nbr] Integer
   
-  logical JPL15
-  logical HTR16
-  logical WMO85
+  logical flg_JPL15
+  logical flg_HTR16
+  logical flg_WMO85
   
   ! HITRAN XSC format
   character brd_nm_htrn*3 ! [sng] Broadener (Air, N2, or self-broadened (if left blank))
@@ -279,9 +279,9 @@ program O3
   ! Initialize default values
   CVS_Date='$Date$'
   CVS_Revision='$Revision$'
-  HTR16=.false.
-  JPL15=.false.
-  WMO85=.true.
+  flg_HTR16=.false.
+  flg_JPL15=.false.
+  flg_WMO85=.true.
   cmd_ln_fl_in=.false.
   cmd_ln_fl_out=.false.
   dbg_lvl=dbg_off
@@ -315,18 +315,19 @@ program O3
            call ftn_arg_get(arg_idx,arg_val,drc_out) ! [sng] Output directory
         else if (opt_sng == 'input' .or. opt_sng == 'fl_O3' .or. opt_sng == 'O3') then
            call ftn_arg_get(arg_idx,arg_val,fl_in) ! [sng] Ozone file
+           cmd_ln_fl_in=.true.
         else if (opt_sng == 'HTR16') then
-           HTR16=.true.
-           JPL15=.false.
-           WMO85=.false.
+           flg_HTR16=.true.
+           flg_JPL15=.false.
+           flg_WMO85=.false.
         else if (opt_sng == 'JPL15') then
-           HTR16=.false.
-           JPL15=.true.
-           WMO85=.false.
+           flg_HTR16=.false.
+           flg_JPL15=.true.
+           flg_WMO85=.false.
         else if (opt_sng == 'WMO85') then
-           HTR16=.false.
-           WMO85=.true.
-           JPL15=.false.
+           flg_HTR16=.false.
+           flg_WMO85=.true.
+           flg_JPL15=.false.
         else                ! Option not recognized
            arg_idx=arg_idx-1 ! [idx] Counting index
            call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
@@ -345,13 +346,13 @@ program O3
         call ftn_arg_get(arg_idx,arg_val,fl_in)
         cmd_ln_fl_in=.true.
      else if (dsh_key == '-J') then
-        HTR16=.false.
-        JPL15=.true.
-        WMO85=.false.
+        flg_HTR16=.false.
+        flg_JPL15=.true.
+        flg_WMO85=.false.
      else if (dsh_key == '-H') then
-        HTR16=.true.
-        JPL15=.false.
-        WMO85=.false.
+        flg_HTR16=.true.
+        flg_JPL15=.false.
+        flg_WMO85=.false.
      else if (dsh_key == '-o') then
         call ftn_arg_get(arg_idx,arg_val,fl_out)
         cmd_ln_fl_out=.true.
@@ -363,9 +364,9 @@ program O3
         write (6,'(a)') CVS_Id
         goto 1000
      else if (dsh_key == '-W') then
-        HTR16=.false.
-        WMO85=.true.
-        JPL15=.false.
+        flg_HTR16=.false.
+        flg_WMO85=.true.
+        flg_JPL15=.false.
      else                   ! Option not recognized
         arg_idx=arg_idx-1   ! [idx] Counting index
         call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
@@ -377,28 +378,28 @@ program O3
   call ftn_strnul(fl_out)
   call ftn_strnul(fl_slr)
   call ftn_strcpy(src_fl_sng,'Original data file is ' // fl_in)
-  if (WMO85) then
+  if (flg_WMO85) then
      bnd_nbr=bnd_nbr_WMO85
      tpt_cold=tpt_cold_WMO85
      tpt_warm=tpt_warm_WMO85
      if (.not.cmd_ln_fl_in) fl_in=fl_in_WMO85//nlc
      if (.not.cmd_ln_fl_out) fl_out=fl_out_WMO85//nlc
      call ftn_strcpy(src_rfr_sng,'Data reference is WMO (1985) (WMO85)')
-  else if (JPL15) then
+  else if (flg_JPL15) then
      bnd_nbr=bnd_nbr_JPL15
      tpt_cold=tpt_cold_JPL15
      tpt_warm=tpt_warm_JPL15
      if (.not.cmd_ln_fl_in) fl_in=fl_in_JPL15//nlc
      if (.not.cmd_ln_fl_out) fl_out=fl_out_JPL15//nlc
      call ftn_strcpy(src_rfr_sng,'Data reference is JPL (2015) (JPL15)')
-  else if (HTR16) then
+  else if (flg_HTR16) then
      bnd_nbr=bnd_nbr_HTR16
      tpt_cold=tpt_cold_HTR16
      tpt_warm=tpt_warm_HTR16
      if (.not.cmd_ln_fl_in) fl_in=fl_in_HTR16_cold//nlc
      if (.not.cmd_ln_fl_out) fl_out=fl_out_HTR16//nlc
      call ftn_strcpy(src_rfr_sng,'Data reference is HITRAN (2017) (HTR16)')
-  endif ! HTR16
+  endif ! flg_HTR16
 
   ! Compute quantities that may depend on command line input
   ! Prepend user-specified path, if any, to input data file names
@@ -437,7 +438,7 @@ program O3
   
   open (fl_in_unit,file=fl_in,status='old',iostat=rcd)
 
-  if (WMO85) then            ! WMO85 data
+  if (flg_WMO85) then            ! WMO85 data
      do idx=1,5
         read (fl_in_unit,'(a80)') lbl
      enddo
@@ -466,7 +467,7 @@ program O3
         abs_xsx_warm(bnd_idx)=abs_xsx_warm(bnd_idx)*1.0e-4 ! cm2 -> m2
      enddo
      
-  else if (HTR16) then            ! HTR16 data
+  else if (flg_HTR16) then            ! HTR16 data
 
      ! HITRAN data are in .xsc format described above
      read (fl_in_unit,'(a20,f10.3,f10.3,i7,f7.3,f6.3,e10.3,f3.0,a2,a15,a4,a3,a3)') &
@@ -523,7 +524,7 @@ program O3
         Rayleigh_sca_xsx(bnd_idx)=mss_val ! cm2 -> m2
      enddo
      
-  else if (JPL15) then            ! JPL15 data
+  else if (flg_JPL15) then            ! JPL15 data
 
      do idx=1,11
         read (fl_in_unit,'(a80)') lbl
@@ -743,7 +744,7 @@ program O3
   
   rcd=nf90_wrp_close(nc_id,fl_out,'Wrote results to') ! [fnc] Close file
   
-  if (.not.HTR16) then
+  if (.not.flg_HTR16) then
      
      ! Get CCM wavelength grid
      call wvl_grd_CCM_SW_mk(bnd_nbr_CCM,bnd_CCM,wvl_min_CCM,wvl_max_CCM,wvl_ctr_CCM,wvl_dlt_CCM)
@@ -843,7 +844,7 @@ program O3
      call dat_prn_f77(bnd_nbr_CCM,abs_cff_mss_CCM_CGS,nbr_dat_per_ln,'abO3'//char(0))
      call dat_prn_f90(bnd_nbr_CCM,abs_cff_mss_CCM_CGS,nbr_dat_per_ln,'abO3'//char(0))
      
-  endif ! HTR16
+  endif ! flg_HTR16
 
   ! De-allocate dynamic variables
   if (allocated(Rayleigh_sca_xsx)) deallocate(Rayleigh_sca_xsx,stat=rcd)

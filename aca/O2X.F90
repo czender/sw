@@ -13,6 +13,13 @@ program O2X
   ! cd ${HOME}/sw/aca; make -W O2X.F O2X; cd -
   ! cd ${HOME}/sw/aca; make OPTS=D O2X; cd -
   
+  ! Use HITRAN data
+  ! O2X --GOB90
+  ! O2X --HTR16
+  ! O2X -i ${DATA}/aca/abs_xsx_O2O2.txt -o ${DATA}/aca/abs_xsx_O2O2_GOB90.nc
+  ! Exclude 1.26 micron band
+  ! O2X -x -i ${DATA}/aca/abs_xsx_O2O2.txt -o ${DATA}/aca/abs_xsx_O2O2_xcl_1260nm.nc
+
   ! Usage:
   ! ncks -H -C -F -v wvl_ctr_CCM,flx_slr_frc_CCM,abs_xsx_O2O2_CCM ${DATA}/aca/abs_xsx_O2O2.nc
   ! ncks -H -C -F -d bnd,1.26e-6 -d bnd_CCM,1.26 -v wvl_ctr_CCM,flx_slr_frc_CCM,abs_xsx_O2O2_CCM,abs_xsx_O2O2 ${DATA}/aca/abs_xsx_O2O2.nc
@@ -20,19 +27,12 @@ program O2X
   ! ncks -H -C -F -d bnd,0.3e-6 -v abs_xsx_O2O2 ${DATA}/aca/abs_xsx_O2O2.nc
   ! ncks -H -C -F -d bnd,1.26e-6 -v odal_O2O2_PUMC_O2_PUMP_O2,odal_O2N2_PUMC_O2_PUMP_N2 ${DATA}/aca/abs_xsx_O2O2.nc
   ! ncks -H -C -F -d bnd,1.26e-6 -v odal_O2O2_PUMC_O2_PUMP_O2,odal_O2O2_PUNC_O2_PUNP_O2,odal_O2O2_PUMC_O2_PUMP_O2_CCM ${DATA}/aca/abs_xsx_O2O2.nc
-  ! ncks -H -C -F -v abs_xsx_O2O2 ${DATA}/aca/O2O2.nc
+  ! ncks -H -C -F -v abs_xsx_O2O2 ${DATA}/aca/abs_xsx_O2O2.nc
   ! ncks -H -C -F -d bnd_CCM,6 -v abs_xsx_O2O2_CCM ${DATA}/aca/abs_xsx_O2O2.nc
-  
-  ! Default
-  ! O2X 
-  ! O2X -i ${DATA}/aca/abs_xsx_O2O2.txt -o ${DATA}/aca/abs_xsx_O2O2.nc
-  
-  ! Exclude 1.26 micron band
-  ! O2X -x -i ${DATA}/aca/abs_xsx_O2O2.txt -o ${DATA}/aca/abs_xsx_O2O2_xcl_1260nm.nc
   
   ! NB: data were measured and are recorded as absorption cross section excess
   ! (relative to the absorption cross section of O2) per unit concentration of O2.
-  ! Thus typical numbers are O(1.0e-46), and must be handled in double precision.
+  ! Thus typical numbers are O(1.0e-46), and must be handled in double precision
   
   ! Currently the code processes input ASCII data files that look like:
   
@@ -44,8 +44,24 @@ program O2X
   !335.3   1.975e-47
   !...
   
-  ! or process input .cia ASCII data files from HITRAN that look like:
+  ! or, as of 201812, processes input .cia ASCII data files from HITRAN that look like:
+  ! Vertical bar placed on last character of each field
+  ! 1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+  ! O2-O2_2018.cia:
+  ! First format line, from RGR12, does not fit 2018 data:
+  ! ...mlc_frm_htrn....| wvn_min | wvn_max |bndnbr| tpt  | prs  | xsx_max | rsn|...cmt_htrn.........|rf|
+  ! Second format line is from https://hitran.org/data/CIA/CIA_Readme.pdf and fits 2018 data. No prs_htrn, rsn_nst_htrn is length 6, cmt_htrn is length 27:
+  ! ...mlc_frm_htrn....| wvn_min | wvn_max |bndnbr| tpt  | xsx_max | rsn |...cmt_htrn...............|rf|
+  !               O2-O2  1150.000  1950.000   4002  193.4 8.767E-45 0.500               P up to 4atm  2
+  ! O2-N2_2018.cia:
+  ! ...mlc_frm_htrn....| wvn_min | wvn_max |bndnbr| tpt  | xsx_max | rsn |...cmt_htrn...............|rf|
+  !               O2-N2  7450.1322 8487.4645   4237 293.00 9.349e-46 -.999           Fit to Mate 1999 10
 
+  !  1150.0000 -6.497E-48
+  !  1150.2000 -5.749E-48
+  !  1150.4000 -7.841E-48
+  ! ...
+ 
 #if 0
   From http://hitran.org/data/CIA/CIA_Readme.pdf
   "More complete details of the CIA data sets are presented in C. Richard, I.E. Gordon, L.S. Rothman, M. Abel, L. Frommhold, M. Gustafsson, et al, JQSRT 113, 1276-1285 (2012).
@@ -73,7 +89,7 @@ program O2X
 
   It is to be noted that the files may have many temperature–pressure sets for different spectral regions, as indicated by headers throughout the file. While the temperature–pressure (T,p) sets are reasonably complete for many species for an adequate simulation of atmospheric transmission in the spectral regions where those species are active, for other species an insufficiency of the (T,p) sets may become apparent. It is hoped that future measurements at extended sets of (T,p) combinations may help broaden the coverage in the database."
 
-20181029 : Noticed that many CIA cross-sections are negative!
+20181029: Many CIA cross-sections are negative!
 #endif /* !0 */
 
   use dbg_mdl ! [mdl] Debugging constants, prg_nm, dbg_lvl
@@ -95,8 +111,7 @@ program O2X
   character(len=*),parameter::CVS_Id='$Id$' ! [sng] CVS Identification
   character(len=*),parameter::sbr_nm='O2X' ! [sng] Subroutine name
   character(*),parameter::fl_in_GOB90='abs_xsx_O2O2.txt'
-  character(*),parameter::fl_in_HTR16_cold='O2O2_200.0_0.0_29164.0-40798.0_04.xsc'
-  character(*),parameter::fl_in_HTR16_warm='O2O2_300.0_0.0_29164.0-40798.0_04.xsc'
+  character(*),parameter::fl_in_HTR16_cold='O2-O2_2018.cia'
   character(*),parameter::fl_out_GOB90='abs_xsx_O2O2_GOB90.nc'
   character(*),parameter::fl_out_HTR16='abs_xsx_O2O2_HTR16.nc'
   character(*),parameter::fl_slr_dfl='spc_Kur95_01wvn.nc'
@@ -165,6 +180,19 @@ program O2X
   character(300)::src_wgt_sng
   character(sng_lng_dfl_fl)::lbl
   
+  ! HITRAN CIA format
+  real,parameter::mss_val_rsn_htrn=-0.999 ! [cm-1] Missing value for resolution (used when cross-sections are theoretical not measured)
+  character(27)::cmt_htrn ! [sng] Comments (such as pressure range of data)
+  character(20)::mlc_frm_htrn ! [sng] Molecule chemical formula (right-justified)
+  integer::bnd_nbr_htrn ! [nbr] Number of wavenumber bins
+  integer::rfr_nbr_htrn ! [idx] Reference number (# of bibliographic reference in HITRAN GRH17 reference list)
+  real::rsn_nst_htrn ! [cm-1] Instrument resolution (-0.999 is missing value)
+  real::tpt_htrn ! [K] Temperature
+  real::wvn_max_htrn ! [cm-1] Wavenumber at end of range
+  real::wvn_min_htrn ! [cm-1] Wavenumber at start of range
+  real::xsx_max_htrn ! [cm2 mlc-1] Maximum cross-section
+  real::wvn_rsn ! [cm-1] Wavenumber resolution
+
   integer bnd_dim_id        ! dimension ID for bands
   integer grd_dim_id        ! dimension ID for grid
   integer bnd_idx           ! counting index
@@ -282,7 +310,8 @@ program O2X
         else if (opt_sng == 'drc_out') then
            call ftn_arg_get(arg_idx,arg_val,drc_out) ! [sng] Output directory
         else if (opt_sng == 'input' .or. opt_sng == 'fl_O2O2' .or. opt_sng == 'O2O2') then
-           call ftn_arg_get(arg_idx,arg_val,fl_in) ! [sng] Ozone file
+           call ftn_arg_get(arg_idx,arg_val,fl_in) ! [sng] O2X file
+           cmd_ln_fl_in=.true.
         else if (opt_sng == 'HTR16') then
            flg_HTR16=.true.
            flg_GOB90=.false.
@@ -340,22 +369,6 @@ program O2X
      endif if_sgl_dsh       ! endif arg_val
   end do loop_while_options ! end while (arg_idx <= arg_nbr)
 
-  if (flg_GOB90) then
-     bnd_nbr=bnd_nbr_GOB90
-  else
-     stop 'flg_GOB90 is .false. but is only O2-O2 data source'
-  endif                     ! endif GOB90
-  
-  ! Compute quantities that may depend on command line input
-  ! Prepend user-specified path, if any, to input data file names
-  if (ftn_strlen(drc_in) > 0) then
-     call ftn_drcpfx(drc_in,fl_in) ! [sng] Input file
-     call ftn_drcpfx(drc_in,fl_slr) ! [sng] Solar spectrum file
-     call ftn_drcpfx(drc_in,fl_wgt) ! [sng] Weight file
-  endif                     ! endif drc_in
-  ! Prepend user-specified path, if any, to output data file names
-  if (ftn_strlen(drc_out) > 0) call ftn_drcpfx(drc_out,fl_out) ! [sng] Output file
-
   ! Compute any quantities that might depend on command line input
   call ftn_strnul(fl_in)
   call ftn_strnul(fl_out)
@@ -370,6 +383,17 @@ program O2X
      if (.not.cmd_ln_fl_in) fl_in=fl_in_GOB90//nlc
      if (.not.cmd_ln_fl_out) fl_out=fl_out_GOB90//nlc
      call ftn_strcpy(src_rfr_sng,'Data reference is Greenblatt et al. (1990) (GOB90)')
+     if (flg_ncl_1260nm_bnd) then
+        write (6,'(a)') 'Including 1.26 micron absorption band'
+     else
+        write (6,'(a)') 'Excluding 1.26 micron absorption band'
+     endif ! flg_ncl_1260nm_bnd
+     if (flg_ncl_1530nm_bnd) then
+        write (6,'(a)') 'Including 1.53 micron absorption band seen by MCB98'
+        stop 'ERROR: 1.53 micron absorption band not supported yet'
+     else
+        write (6,'(a)') 'Excluding 1.53 micron absorption band seen by MCB98'
+     endif ! flg_ncl_1530nm_bnd
   endif ! flg_GOB90
   if (flg_HTR16) then
      bnd_nbr=bnd_nbr_HTR16
@@ -378,18 +402,7 @@ program O2X
      if (.not.cmd_ln_fl_in) fl_in=fl_in_HTR16_cold//nlc
      if (.not.cmd_ln_fl_out) fl_out=fl_out_HTR16//nlc
      call ftn_strcpy(src_rfr_sng,'Data reference is HITRAN (2017) (HTR16)')
-  endif ! flg_GOB90
-  if (flg_ncl_1260nm_bnd) then
-     write (6,'(a)') 'Including 1.26 micron absorption band'
-  else
-     write (6,'(a)') 'Excluding 1.26 micron absorption band'
-  endif ! flg_ncl_1260nm_bnd
-  if (flg_ncl_1530nm_bnd) then
-     write (6,'(a)') 'Including 1.53 micron absorption band seen by MCB98'
-     stop 'ERROR: 1.53 micron absorption band not supported yet'
-  else
-     write (6,'(a)') 'Excluding 1.53 micron absorption band seen by MCB98'
-  endif ! flg_ncl_1530nm_bnd
+  endif ! flg_HTR16
   if (WGT_TRN) then
      call ftn_strcpy(src_wgt_sng,'CCM cross sections are averages of high resolution cross-sections ' &
              //'weighted by variable '//wgt_nm(1:ftn_strlen(wgt_nm))// &
@@ -398,6 +411,41 @@ program O2X
      call ftn_strcpy(src_wgt_sng,'CCM cross sections are averages of high resolution cross-sections ' &
              //'weighted by TOA solar spectral flux'//char(0))
   endif ! WGT_TRN
+
+  ! Compute quantities that may depend on command line input
+  ! Prepend user-specified path, if any, to input data file names
+  if (ftn_strlen(drc_in) > 0) then
+     call ftn_drcpfx(drc_in,fl_in) ! [sng] Input file
+     call ftn_drcpfx(drc_in,fl_slr) ! [sng] Solar spectrum file
+     call ftn_drcpfx(drc_in,fl_wgt) ! [sng] Weight file
+  endif                     ! endif drc_in
+  ! Prepend user-specified path, if any, to output data file names
+  if (ftn_strlen(drc_out) > 0) call ftn_drcpfx(drc_out,fl_out) ! [sng] Output file
+
+  open (fl_in_unit,file=fl_in,status='old',iostat=rcd)
+
+  if (flg_HTR16) then            ! HTR16 data
+
+     ! HITRAN data are in .cia format described above
+     ! First, read-in bnd_nbr in order to allocate memory
+     read (fl_in_unit,'(a20,f10.3,f10.3,i7,f7.3,e10.3,f6.0,a27,i3)') &
+          mlc_frm_htrn,wvn_min_htrn,wvn_max_htrn,bnd_nbr_htrn,tpt_htrn, &
+          xsx_max_htrn,rsn_nst_htrn,cmt_htrn,rfr_nbr_htrn
+
+     ! Sanity check
+     if (dbg_lvl >= dbg_fl) then
+     
+        write (6,'(a20,f10.3,f10.3,i7,f7.3,e10.3,f6.0,a27,i3)') &
+             mlc_frm_htrn,wvn_min_htrn,wvn_max_htrn,bnd_nbr_htrn,tpt_htrn, &
+             xsx_max_htrn,rsn_nst_htrn,cmt_htrn,rfr_nbr_htrn
+        
+     endif                     ! endif dbg
+
+     tpt_cold=tpt_htrn
+     bnd_nbr=bnd_nbr_htrn-1
+     write (6,'(a16,1x,a)') 'Read header from',fl_in(1:ftn_strlen(fl_in))
+
+  endif                     ! HTR16 data
 
   ! Allocate space for dynamic arrays
   allocate(abs_cff_mss_O2O2(bnd_nbr),stat=rcd)
@@ -539,7 +587,19 @@ program O2X
      enddo ! bnd_idx
      
   endif                     ! flg_GOB90
-  
+
+  if (flg_HTR16) then
+     do bnd_idx=1,1
+        read (fl_in_unit,'(a80)') lbl
+     enddo ! bnd_idx
+     lbl(1:1)=lbl(1:1) ! CEWI
+     do bnd_idx=1,bnd_nbr
+        read (fl_in_unit,*) &
+                   wvl_ctr(bnd_idx), &
+                   odal_O2O2_PUNC_O2_PUNP_O2(bnd_idx)
+     enddo ! bnd_idx
+  endif                     ! flg_HTR16
+
   close (fl_in_unit)
   write (6,'(a20,1x,a)') 'Read input data from',fl_in(1:ftn_strlen(fl_in))
   

@@ -73,7 +73,7 @@ contains
     !if (bnd_nbr>bnd_nbr_max) stop 'bnd_nbr>bnd_nbr_max'
     cnt_bnd(1)=bnd_nbr
     cnt_bndp(1)=bnd_nbr+1
-    srt_one(1)=1
+    srt_one(:)=1
     
     allocate(abs_xsx(bnd_nbr),stat=rcd)
     if(rcd /= 0) stop 'allocate() failed for abs_xsx'
@@ -191,7 +191,7 @@ contains
     rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr),sbr_nm//": inquire_dim bnd")
     !if (bnd_nbr>bnd_nbr_max) stop 'bnd_nbr>bnd_nbr_max'
     cnt_bnd(1)=bnd_nbr
-    srt_one(1)=1
+    srt_one(:)=1
     
     allocate(A_phi(bnd_nbr),stat=rcd)
     if(rcd /= 0) stop "allocate() failed for A_phi"
