@@ -128,9 +128,7 @@ program O2X
   real,parameter::mlt_fct=1.0e20 ! [frc]
   real,parameter::mss_val=nf90_fill_float ! Missing value = missing_value and/or _FillValue
   real,parameter::tpt_cold_GOB90=296.0
-  real,parameter::tpt_cold_HTR16=200.0
-  real,parameter::tpt_warm_GOB90=296.0
-  real,parameter::tpt_warm_HTR16=300.0
+  real,parameter::tpt_cold_HTR16=193.4 ! [K] 
 
   ! Locals with simple initialization and no command-line override
   ! integer::exit_status=0 ! [enm] Program exit status (non-standard Fortran)
@@ -172,7 +170,6 @@ program O2X
   real::N2_cll_prt_fsh=0.2 ! [frc] Efficiency of N2 (relative to O2) as a collision partner for O2 in the 1.26 micron band
   real::tpt_cold=tpt_cold_GOB90
   real::tpt_std=296.0 ! Temperature at which generic O2O2 cross sections will be archived
-  real::tpt_warm=tpt_warm_GOB90
   
   ! Local workspace
   character(sng_lng_dfl_fl)::src_fl_sng
@@ -220,6 +217,11 @@ program O2X
   integer wvl_max_id
   integer wvl_min_id
   integer wvl_dlt_id
+  integer wvn_ctr_id
+  integer wvn_grd_id
+  integer wvn_max_id
+  integer wvn_min_id
+  integer wvn_dlt_id
   
   real(selected_real_kind(p=12))::double_foo
   
@@ -254,6 +256,12 @@ program O2X
   real,dimension(:),allocatable::wvl_grd
   real,dimension(:),allocatable::wvl_max
   real,dimension(:),allocatable::wvl_min
+  real,dimension(:),allocatable::wvn     ! coordinate variable
+  real,dimension(:),allocatable::wvn_ctr
+  real,dimension(:),allocatable::wvn_dlt
+  real,dimension(:),allocatable::wvn_grd
+  real,dimension(:),allocatable::wvn_max
+  real,dimension(:),allocatable::wvn_min
   real,dimension(:),allocatable::xsx_wgt_flx
   
   integer bnd_nbr_CCM
@@ -379,7 +387,6 @@ program O2X
   if (flg_GOB90) then
      bnd_nbr=bnd_nbr_GOB90
      tpt_cold=tpt_cold_GOB90
-     tpt_warm=tpt_warm_GOB90
      if (.not.cmd_ln_fl_in) fl_in=fl_in_GOB90//nlc
      if (.not.cmd_ln_fl_out) fl_out=fl_out_GOB90//nlc
      call ftn_strcpy(src_rfr_sng,'Data reference is Greenblatt et al. (1990) (GOB90)')
@@ -398,7 +405,6 @@ program O2X
   if (flg_HTR16) then
      bnd_nbr=bnd_nbr_HTR16
      tpt_cold=tpt_cold_HTR16
-     tpt_warm=tpt_warm_HTR16
      if (.not.cmd_ln_fl_in) fl_in=fl_in_HTR16_cold//nlc
      if (.not.cmd_ln_fl_out) fl_out=fl_out_HTR16//nlc
      call ftn_strcpy(src_rfr_sng,'Data reference is HITRAN (2017) (HTR16)')
@@ -422,6 +428,7 @@ program O2X
   ! Prepend user-specified path, if any, to output data file names
   if (ftn_strlen(drc_out) > 0) call ftn_drcpfx(drc_out,fl_out) ! [sng] Output file
 
+  ! Open file to read header and obtain bnd_nbr if necessary
   open (fl_in_unit,file=fl_in,status='old',iostat=rcd)
 
   if (flg_HTR16) then            ! HTR16 data
@@ -435,10 +442,9 @@ program O2X
      ! Sanity check
      if (dbg_lvl >= dbg_fl) then
      
-        write (6,'(a20,f10.3,f10.3,i7,f7.3,e10.3,f6.0,a27,i3)') &
-             mlc_frm_htrn,wvn_min_htrn,wvn_max_htrn,bnd_nbr_htrn,tpt_htrn, &
+        write (6,'(a7,a20,f10.3,f10.3,i7,f7.3,e10.3,f6.0,a27,i3)') &
+             'DEBUG: ',mlc_frm_htrn,wvn_min_htrn,wvn_max_htrn,bnd_nbr_htrn,tpt_htrn, &
              xsx_max_htrn,rsn_nst_htrn,cmt_htrn,rfr_nbr_htrn
-        
      endif                     ! endif dbg
 
      tpt_cold=tpt_htrn
@@ -471,11 +477,17 @@ program O2X
   allocate(wvl_grd(bnd_nbr+1),stat=rcd)
   allocate(wvl_max(bnd_nbr),stat=rcd)
   allocate(wvl_min(bnd_nbr),stat=rcd)
+  allocate(wvn(bnd_nbr),stat=rcd)     ! coordinate variable
+  allocate(wvn_ctr(bnd_nbr),stat=rcd)
+  allocate(wvn_dlt(bnd_nbr),stat=rcd)
+  allocate(wvn_grd(bnd_nbr+1),stat=rcd)
+  allocate(wvn_max(bnd_nbr),stat=rcd)
+  allocate(wvn_min(bnd_nbr),stat=rcd)
   allocate(xsx_wgt_flx(bnd_nbr),stat=rcd)
   
-  open (fl_in_unit,file=fl_in,status='old',iostat=rcd)
-  
   if (flg_GOB90) then
+
+     ! File is already open, read all data
      do bnd_idx=1,7
         read (fl_in_unit,'(a80)') lbl
      enddo ! bnd_idx
@@ -554,17 +566,28 @@ program O2X
      ! A main advantage of odal_O2O2_PUMC_O2_PUMP_O2 is that using it requires no assumptions about O2-O2 concentration
      ! All one needs to know to use odal_O2O2_PUMC_O2_PUMP_O2 is the abundance of O2, which is trivial to derive
      ! Another advantage is that odal_O2O2_PUMC_O2_PUMP_O2 is always representable in single precision (4 byte) storage
-     
+
      ! Compute diagnostic variables
-     wvl_min(1)=wvl_ctr(1)-0.5*(wvl_ctr(2)-wvl_ctr(1))
+     wvl_grd(1)=wvl_ctr(1)-0.5*(wvl_ctr(2)-wvl_ctr(1))
      do bnd_idx=2,bnd_nbr
-        wvl_min(bnd_idx)=0.5*(wvl_ctr(bnd_idx-1)+wvl_ctr(bnd_idx))
+        wvl_grd(bnd_idx)=0.5*(wvl_ctr(bnd_idx-1)+wvl_ctr(bnd_idx))
      enddo ! bnd_idx
-     do bnd_idx=1,bnd_nbr-1
-        wvl_max(bnd_idx)=0.5*(wvl_ctr(bnd_idx)+wvl_ctr(bnd_idx+1))
-     enddo ! bnd_idx
-     wvl_max(bnd_nbr)=wvl_ctr(bnd_nbr)+0.5*(wvl_ctr(bnd_nbr)-wvl_ctr(bnd_nbr-1))
-     
+     wvl_grd(bnd_nbr+1)=wvl_ctr(bnd_nbr)+0.5*(wvl_ctr(bnd_nbr)-wvl_ctr(bnd_nbr-1))
+
+     do bnd_idx=1,bnd_nbr
+        wvl_min(bnd_idx)=wvl_grd(bnd_idx)
+        wvl_max(bnd_idx)=wvl_grd(bnd_idx+1)
+        wvl_ctr(bnd_idx)=0.5*(wvl_min(bnd_idx)+wvl_max(bnd_idx))
+        wvl(bnd_idx)=wvl_ctr(bnd_idx)
+        wvl_dlt(bnd_idx)=wvl_max(bnd_idx)-wvl_min(bnd_idx)
+     enddo
+
+     do bnd_idx=1,bnd_nbr
+        wvn_min(bnd_idx)=1.0/(100.0*wvl_max(bnd_idx))
+        wvn_max(bnd_idx)=1.0/(100.0*wvl_min(bnd_idx))
+        flx_bnd_pht_dwn_TOA(bnd_idx)=mss_val ! #/cm2/s -> #/m2/s
+     enddo
+
      do bnd_idx=1,bnd_nbr
         wvl(bnd_idx)=wvl_ctr(bnd_idx)
         bnd(bnd_idx)=wvl_ctr(bnd_idx)
@@ -586,19 +609,38 @@ program O2X
         endif               ! endelse wvl
      enddo ! bnd_idx
      
-  endif                     ! flg_GOB90
+  else if (flg_HTR16) then ! HTR16 data
 
-  if (flg_HTR16) then
-     do bnd_idx=1,1
-        read (fl_in_unit,'(a80)') lbl
-     enddo ! bnd_idx
-     lbl(1:1)=lbl(1:1) ! CEWI
      do bnd_idx=1,bnd_nbr
         read (fl_in_unit,*) &
-                   wvl_ctr(bnd_idx), &
+                   wvn_ctr(bnd_idx), &
                    odal_O2O2_PUNC_O2_PUNP_O2(bnd_idx)
      enddo ! bnd_idx
-  endif                     ! flg_HTR16
+
+     ! Convert input data to SI units where necessary
+     ! O2-O2 from reference 2 have 0.2 cm-1 resolution except at 1385.9 cm-1 which has 0.1 cm-1 resolution
+     ! Hence 4002 points cover 800 cm-1, wvn_rsn is not uniform throughout the measurements
+     ! wvn_rsn=(wvn_max_htrn-wvn_min_htrn)/(bnd_nbr-1)
+     wvn_grd(1)=wvn_ctr(1)-0.5*(wvn_ctr(2)-wvn_ctr(1))
+     do bnd_idx=2,bnd_nbr
+        wvn_grd(bnd_idx)=0.5*(wvn_ctr(bnd_idx-1)+wvn_ctr(bnd_idx))
+     enddo
+     wvn_grd(bnd_nbr+1)=wvn_ctr(bnd_nbr)+0.5*(wvn_ctr(bnd_nbr)-wvn_ctr(bnd_nbr-1))
+
+     do bnd_idx=1,bnd_nbr
+        wvn_min(bnd_idx)=wvn_grd(bnd_idx)
+        wvn_max(bnd_idx)=wvn_grd(bnd_idx+1)
+        wvn_ctr(bnd_idx)=0.5*(wvn_min(bnd_idx)+wvn_max(bnd_idx))
+        wvn(bnd_idx)=wvn_ctr(bnd_idx)
+        wvn_dlt(bnd_idx)=wvn_max(bnd_idx)-wvn_min(bnd_idx)
+     enddo
+     do bnd_idx=1,bnd_nbr
+        wvl_min(bnd_idx)=1.0/(100.0*wvn_max(bnd_idx))
+        wvl_max(bnd_idx)=1.0/(100.0*wvn_min(bnd_idx))
+        flx_bnd_pht_dwn_TOA(bnd_idx)=mss_val ! #/cm2/s -> #/m2/s
+     enddo
+
+  endif                     ! HTR16 data
 
   close (fl_in_unit)
   write (6,'(a20,1x,a)') 'Read input data from',fl_in(1:ftn_strlen(fl_in))
@@ -616,14 +658,11 @@ program O2X
      double_foo= &
           odal_O2N2_PUNC_O2_PUNP_N2(bnd_idx)*dble(Avagadro)*dble(Avagadro)/(dble(mmw_O2)*dble(mmw_N2))
      odal_O2N2_PUMC_O2_PUMP_N2(bnd_idx)=double_foo ! Defensive programming
-     wvl_dlt(bnd_idx)=wvl_max(bnd_idx)-wvl_min(bnd_idx)
-     wvl_grd(bnd_idx)=wvl_min(bnd_idx)
      nrg_pht(bnd_idx)=Planck*speed_of_light/wvl_ctr(bnd_idx)
      flx_bnd_dwn_TOA(bnd_idx)=flx_slr_frc(bnd_idx)*slr_cst_CCM
      flx_spc_dwn_TOA(bnd_idx)=flx_slr_frc(bnd_idx)*slr_cst_CCM/wvl_dlt(bnd_idx)
      flx_bnd_pht_dwn_TOA(bnd_idx)=flx_bnd_dwn_TOA(bnd_idx)/nrg_pht(bnd_idx)
   enddo ! bnd_idx
-  wvl_grd(bnd_nbr+1)=wvl_max(bnd_nbr)
   
   ! Compute index of refraction through dry air at STP (Len93 p. 155)
   do bnd_idx=1,bnd_nbr
@@ -679,6 +718,11 @@ program O2X
   rcd=rcd+nf90_def_var(nc_id,'wvl_max',nf90_float,bnd_dim_id,wvl_max_id)
   rcd=rcd+nf90_def_var(nc_id,'wvl_min',nf90_float,bnd_dim_id,wvl_min_id)
   rcd=rcd+nf90_def_var(nc_id,'wvl_dlt',nf90_float,bnd_dim_id,wvl_dlt_id)
+  rcd=rcd+nf90_def_var(nc_id,'wvn_ctr',nf90_float,bnd_dim_id,wvn_ctr_id)
+  rcd=rcd+nf90_def_var(nc_id,'wvn_grd',nf90_float,grd_dim_id,wvn_grd_id)
+  rcd=rcd+nf90_def_var(nc_id,'wvn_max',nf90_float,bnd_dim_id,wvn_max_id)
+  rcd=rcd+nf90_def_var(nc_id,'wvn_min',nf90_float,bnd_dim_id,wvn_min_id)
+  rcd=rcd+nf90_def_var(nc_id,'wvn_dlt',nf90_float,bnd_dim_id,wvn_dlt_id)
   
   ! Add global attributes
   rcd=rcd+nf90_put_att(nc_id,nf90_global,'CVS_Id',CVS_Id)
@@ -717,6 +761,11 @@ program O2X
   rcd=rcd+nf90_put_att(nc_id,wvl_max_id,'long_name','Band maximum wavelength')
   rcd=rcd+nf90_put_att(nc_id,wvl_min_id,'long_name','Band minimum wavelength')
   rcd=rcd+nf90_put_att(nc_id,wvl_dlt_id,'long_name','Bandwidth')
+  rcd=rcd+nf90_put_att(nc_id,wvn_ctr_id,'long_name','Band center wavenumber')
+  rcd=rcd+nf90_put_att(nc_id,wvn_grd_id,'long_name','Wavenumber grid')
+  rcd=rcd+nf90_put_att(nc_id,wvn_max_id,'long_name','Band maximum wavenumber')
+  rcd=rcd+nf90_put_att(nc_id,wvn_min_id,'long_name','Band minimum wavenumber')
+  rcd=rcd+nf90_put_att(nc_id,wvn_dlt_id,'long_name','Bandwidth')
   
   ! Add units
   rcd=rcd+nf90_put_att(nc_id,abs_cff_mss_O2O2_id,'units','meter2 kilogram-1')
@@ -740,6 +789,11 @@ program O2X
   rcd=rcd+nf90_put_att(nc_id,wvl_max_id,'units','meter')
   rcd=rcd+nf90_put_att(nc_id,wvl_min_id,'units','meter')
   rcd=rcd+nf90_put_att(nc_id,wvl_dlt_id,'units','meter')
+  rcd=rcd+nf90_put_att(nc_id,wvn_ctr_id,'units','centimeter-1')
+  rcd=rcd+nf90_put_att(nc_id,wvn_grd_id,'units','centimeter-1')
+  rcd=rcd+nf90_put_att(nc_id,wvn_max_id,'units','centimeter-1')
+  rcd=rcd+nf90_put_att(nc_id,wvn_min_id,'units','centimeter-1')
+  rcd=rcd+nf90_put_att(nc_id,wvn_dlt_id,'units','centimeter-1')
   
   ! All dimensions, variables, and attributes have been defined
   rcd=rcd+nf90_enddef(nc_id)
@@ -766,6 +820,11 @@ program O2X
   rcd=rcd+nf90_put_var(nc_id,wvl_max_id,wvl_max)
   rcd=rcd+nf90_put_var(nc_id,wvl_min_id,wvl_min)
   rcd=rcd+nf90_put_var(nc_id,wvl_dlt_id,wvl_dlt)
+  rcd=rcd+nf90_put_var(nc_id,wvn_ctr_id,wvn_ctr)
+  rcd=rcd+nf90_put_var(nc_id,wvn_grd_id,wvn_grd)
+  rcd=rcd+nf90_put_var(nc_id,wvn_max_id,wvn_max)
+  rcd=rcd+nf90_put_var(nc_id,wvn_min_id,wvn_min)
+  rcd=rcd+nf90_put_var(nc_id,wvn_dlt_id,wvn_dlt)
   
   rcd=rcd+nf90_close(nc_id)
   write (6,'(a28,1x,a)') 'Wrote results to netCDF file',fl_out(1:ftn_strlen(fl_out))
@@ -1018,6 +1077,12 @@ program O2X
   if (allocated(wvl_grd)) deallocate(wvl_grd,stat=rcd)
   if (allocated(wvl_max)) deallocate(wvl_max,stat=rcd)
   if (allocated(wvl_min)) deallocate(wvl_min,stat=rcd)
+  if (allocated(wvn)) deallocate(wvn,stat=rcd)     ! coordinate variable
+  if (allocated(wvn_ctr)) deallocate(wvn_ctr,stat=rcd)
+  if (allocated(wvn_dlt)) deallocate(wvn_dlt,stat=rcd)
+  if (allocated(wvn_grd)) deallocate(wvn_grd,stat=rcd)
+  if (allocated(wvn_max)) deallocate(wvn_max,stat=rcd)
+  if (allocated(wvn_min)) deallocate(wvn_min,stat=rcd)
   if (allocated(xsx_wgt_flx)) deallocate(xsx_wgt_flx,stat=rcd)
   
 1000 continue

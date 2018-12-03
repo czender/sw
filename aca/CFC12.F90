@@ -340,6 +340,7 @@ program CFC12
 
   if (flg_HTR16) then            ! HTR16 data
   
+     ! Cold file is already open, read all data then read warm file data
      read (fl_in_unit,*) (abs_xsx_cold(bnd_idx),bnd_idx=1,bnd_nbr)
      close (fl_in_unit)
      write (6,'(a20,1x,a)') 'Read input data from',fl_in(1:ftn_strlen(fl_in))
