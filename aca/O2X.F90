@@ -441,14 +441,13 @@ program O2X
 
      ! Sanity check
      if (dbg_lvl >= dbg_fl) then
-     
         write (6,'(a7,a20,f10.3,f10.3,i7,f7.3,e10.3,f6.0,a27,i3)') &
              'DEBUG: ',mlc_frm_htrn,wvn_min_htrn,wvn_max_htrn,bnd_nbr_htrn,tpt_htrn, &
              xsx_max_htrn,rsn_nst_htrn,cmt_htrn,rfr_nbr_htrn
      endif                     ! endif dbg
 
      tpt_cold=tpt_htrn
-     bnd_nbr=bnd_nbr_htrn-1
+     bnd_nbr=bnd_nbr_htrn
      write (6,'(a16,1x,a)') 'Read header from',fl_in(1:ftn_strlen(fl_in))
 
   endif                     ! HTR16 data
@@ -616,6 +615,14 @@ program O2X
                    wvn_ctr(bnd_idx), &
                    odal_O2O2_PUNC_O2_PUNP_O2(bnd_idx)
      enddo ! bnd_idx
+
+     ! Sanity check
+     if (dbg_lvl >= dbg_fl) then
+        do bnd_idx=1,bnd_nbr
+           write (6,'(a10,f10.3,a36,es10.3,a4)') &
+                'wvn_ctr = ',wvn_ctr(bnd_idx),' cm-1, odal_O2O2_PUNC_O2_PUNP_O2 = ',odal_O2O2_PUNC_O2_PUNP_O2(bnd_idx),' fxm' 
+        enddo
+     endif                     ! endif dbg
 
      ! Convert input data to SI units where necessary
      ! O2-O2 from reference 2 have 0.2 cm-1 resolution except at 1385.9 cm-1 which has 0.1 cm-1 resolution
