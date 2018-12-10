@@ -1250,7 +1250,7 @@ program clm
   allocate(cnc_N2O(lev_nbr),stat=rcd)
   allocate(cnc_NO2(lev_nbr),stat=rcd)
   allocate(cnc_O2(lev_nbr),stat=rcd)
-  allocate(cnc_O2O2(lev_nbr),stat=rcd)
+  allocate(cnc_O2O2(lev_nbr),stat=rcd) ! [mlc m-3] O2-O2 number concentration (Yes, units are mlc m-3 since rate constant is factored in)
   allocate(cnc_O2_cnc_N2(lev_nbr),stat=rcd) ! [mlc2 m-6] O2 number concentration times N2 number concentration
   allocate(cnc_O2_cnc_O2(lev_nbr),stat=rcd) ! [mlc2 m-6] O2 number concentration squared
   allocate(cnc_O2_npl_N2(lev_nbr),stat=rcd) ! [mlc2 m-5] O2 number concentration times N2 number path
@@ -2698,8 +2698,10 @@ program clm
   mpc_O2O2=0.0              ! [kg m-2]
   npc_O2O2=0.0              ! [mlc m-2]
   do idx=1,lev_nbr
-     cnc_O2O2(idx)=(k_O2_O2*cnc_O2(idx))*cnc_O2(idx) ! [mlc m-3] force multiplication to avoid overflow in single precision
-     npl_O2O2(idx)=cnc_O2O2(idx)*alt_dlt(idx) ! [mlc m-2]
+     ! 20181209: Until today, cnc_O2O2 & abs_xsx_O2O2 were multiplied/divided by k_O2_O2 to allow single precision cross-sections
+     !     cnc_O2O2(idx)=(k_O2_O2*cnc_O2(idx))*cnc_O2(idx) ! [mlc m-3] force multiplication order to avoid single precision overflow
+     cnc_O2O2(idx)=cnc_O2(idx)*cnc_O2(idx) ! [mlc2 m-6] force multiplication order to avoid single precision overflow
+     npl_O2O2(idx)=cnc_O2O2(idx)*alt_dlt(idx) ! [mlc2 m-5]
      mpl_O2O2(idx)=npl_O2O2(idx)*mmw_O2O2/Avagadro ! [kg m-2]
      dns_O2O2(idx)=mpl_O2O2(idx)/alt_dlt(idx) ! [kg m-3]
      q_O2O2(idx)=mpl_O2O2(idx)/mpl_mst_air(idx) ! [kg kg-1]
@@ -3037,7 +3039,7 @@ program clm
   rcd=nf90_wrp(nf90_def_var(nc_id,'cnc_N2O',nf90_float,lev_dmn_id,cnc_N2O_id),sbr_nm//": dv cnc_N2O")
   rcd=nf90_wrp(nf90_def_var(nc_id,'cnc_NO2',nf90_float,lev_dmn_id,cnc_NO2_id),sbr_nm//": dv cnc_NO2")
   rcd=nf90_wrp(nf90_def_var(nc_id,'cnc_O2',nf90_float,lev_dmn_id,cnc_O2_id),sbr_nm//": dv cnc_O2")
-  rcd=nf90_wrp(nf90_def_var(nc_id,'cnc_O2O2',nf90_float,lev_dmn_id,cnc_O2O2_id),sbr_nm//": dv cnc_O2O2")
+  rcd=nf90_wrp(nf90_def_var(nc_id,'cnc_O2O2',nf90_double,lev_dmn_id,cnc_O2O2_id),sbr_nm//": dv cnc_O2O2")
   rcd=nf90_wrp(nf90_def_var(nc_id,'cnc_O2_cnc_N2',nf90_double,lev_dmn_id,cnc_O2_cnc_N2_id),sbr_nm//": dv cnc_O2_cnc_N2")
   rcd=nf90_wrp(nf90_def_var(nc_id,'cnc_O2_cnc_O2',nf90_double,lev_dmn_id,cnc_O2_cnc_O2_id),sbr_nm//": dv cnc_O2_cnc_O2")
   rcd=nf90_wrp(nf90_def_var(nc_id,'cnc_O2_npl_N2',nf90_double,lev_dmn_id,cnc_O2_npl_N2_id),sbr_nm//": dv cnc_O2_npl_N2")
@@ -3187,7 +3189,7 @@ program clm
   rcd=nf90_wrp(nf90_def_var(nc_id,'npl_N2O',nf90_float,lev_dmn_id,npl_N2O_id),sbr_nm//": dv npl_N2O")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npl_NO2',nf90_float,lev_dmn_id,npl_NO2_id),sbr_nm//": dv npl_NO2")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npl_O2',nf90_float,lev_dmn_id,npl_O2_id),sbr_nm//": dv npl_O2")
-  rcd=nf90_wrp(nf90_def_var(nc_id,'npl_O2O2',nf90_float,lev_dmn_id,npl_O2O2_id),sbr_nm//": dv npl_O2O2")
+  rcd=nf90_wrp(nf90_def_var(nc_id,'npl_O2O2',nf90_double,lev_dmn_id,npl_O2O2_id),sbr_nm//": dv npl_O2O2")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npl_O3',nf90_float,lev_dmn_id,npl_O3_id),sbr_nm//": dv npl_O3")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npl_OH',nf90_float,lev_dmn_id,npl_OH_id),sbr_nm//": dv npl_OH")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npl_dry_air',nf90_float,lev_dmn_id,npl_dry_air_id),sbr_nm//": dv npl_dry_air")
@@ -4078,7 +4080,7 @@ program clm
   rcd=nf90_wrp(nf90_put_att(nc_id,cnc_H2O_id,'units','molecule meter-3'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,cnc_N2_id,'units','molecule meter-3'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,cnc_NO2_id,'units','molecule meter-3'),sbr_nm//": pa units in "//__FILE__)
-  rcd=nf90_wrp(nf90_put_att(nc_id,cnc_O2O2_id,'units','molecule meter-3'),sbr_nm//": pa units in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,cnc_O2O2_id,'units','molecule2 meter-6'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,cnc_O2_cnc_N2_id,'units','molecule2 meter-6'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,cnc_O2_cnc_O2_id,'units','molecule2 meter-6'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,cnc_O2_id,'units','molecule meter-3'),sbr_nm//": pa units in "//__FILE__)
@@ -4247,7 +4249,7 @@ program clm
   rcd=nf90_wrp(nf90_put_att(nc_id,npl_H2O_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npl_N2_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npl_NO2_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
-  rcd=nf90_wrp(nf90_put_att(nc_id,npl_O2O2_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
+  rcd=nf90_wrp(nf90_put_att(nc_id,npl_O2O2_id,'units','molecule2 meter-5'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npl_O2_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npl_O3_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,npl_OH_id,'units','molecule meter-2'),sbr_nm//": pa units in "//__FILE__)

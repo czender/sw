@@ -512,8 +512,8 @@ program CFC11
   rcd=nf90_wrp(nf90_put_att(nc_id,nf90_global,'src_fl_sng',src_fl_sng(1:ftn_strlen(src_fl_sng))),sbr_nm)
   
   ! Add english text descriptions
-  rcd=nf90_wrp(nf90_put_att(nc_id,tpt_cold_id,'long_name','Temperature of coldest CFC11 measurements'),sbr_nm)
-  rcd=nf90_wrp(nf90_put_att(nc_id,tpt_warm_id,'long_name','Temperature of warmest CFC11 measurements'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,tpt_cold_id,'long_name','Temperature of coldest CFC11 measurements employed'),sbr_nm)
+  rcd=nf90_wrp(nf90_put_att(nc_id,tpt_warm_id,'long_name','Temperature of warmest CFC11 measurements employed'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,tpt_std_id,'long_name','Temperature at which interpolated cross sections are archived'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,Rayleigh_sca_xsx_id,'long_name','Rayleigh scattering cross section'),sbr_nm)
   rcd=nf90_wrp(nf90_put_att(nc_id,abs_cff_mss_id,'long_name','CFC11 mass absorption coefficient'),sbr_nm)

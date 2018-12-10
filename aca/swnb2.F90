@@ -931,6 +931,7 @@ program swnb2
 
   ! O2-O2 input variables
   integer abs_xsx_O2O2_id
+  integer abs_xsx_O2O2_dadT_id
   integer wvl_grd_O2O2_id
   
   ! HC input variables
@@ -1391,7 +1392,9 @@ program swnb2
 
   ! O2-O2 input variables
   real abs_xsx_O2O2_dsk(bnd_nbr_O2O2_max)
+  real abs_xsx_O2O2_dadT_dsk(bnd_nbr_O2O2_max)
   real abs_xsx_O2O2(bnd_nbr_max)
+  real abs_xsx_O2O2_dadT(bnd_nbr_max)
   real wvl_grd_O2O2(bnd_nbr_O2O2_max+1)
   
   ! HC input variables
@@ -3177,9 +3180,11 @@ program swnb2
   cnt_bndp(1)=bnd_nbr_O2O2+1
   ! Get variable IDs
   rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O2O2',abs_xsx_O2O2_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O2O2_dadT',abs_xsx_O2O2_dadT_id)
   rcd=nf90_wrp_inq_varid(nc_id,'wvl_grd',wvl_grd_O2O2_id)
   ! Get data
   rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_O2O2_id,abs_xsx_O2O2_dsk,srt_one,cnt_bnd),"gv abs_xsx_O2O2_dsk")
+  rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_O2O2_dadT_id,abs_xsx_O2O2_dadT_dsk,srt_one,cnt_bnd),"gv abs_xsx_O2O2_dadT_dsk")
   rcd=nf90_wrp(nf90_get_var(nc_id,wvl_grd_O2O2_id,wvl_grd_O2O2,srt_one,cnt_bndp),"gv wvl_grd_O2O2")
   ! Close file
   rcd=nf90_wrp_close(nc_id,fl_O2O2,'Ingested') ! [fnc] Close file

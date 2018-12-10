@@ -1,3 +1,9 @@
+2018-12-10  Charlie Zender  <zender@uci.edu>
+
+	* Merge GOB90 and HTR16 data processing for O2X
+
+	* Eliminate use of k_O2_O2 equilibrium coefficient to scale cross-sections
+
 2018-12-02  Charlie Zender  <zender@uci.edu>
 
 	* Updating O2X.F90 to read CIA files
