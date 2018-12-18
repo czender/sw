@@ -1,3 +1,9 @@
+2018-12-17  Charlie Zender  <zender@uci.edu>
+
+	* Read-in massaged data of eight segments. Data are unreliable in UV/Vis. GOB90 looks better there.
+
+	* Utilize abs_xsx and deprecate odal_O2O2_PUNC_O2_PUNP_O2
+
 2018-12-10  Charlie Zender  <zender@uci.edu>
 
 	* Merge GOB90 and HTR16 data processing for O2X

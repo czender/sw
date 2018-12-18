@@ -168,7 +168,7 @@ program O2X
 
   logical::flg_GOB90=.true.
   logical::flg_HTR16=.false.
-  logical::flg_msg=.true.
+  logical::flg_msg=.true. ! [flg] Read massaged HITRAN CIA file
   logical::WGT_TRN=.false.
   logical::cmd_ln_fl_in=.false.
   logical::cmd_ln_fl_out=.false.
@@ -342,6 +342,10 @@ program O2X
         else if (opt_sng == 'GOB90') then
            flg_GOB90=.true.
            flg_HTR16=.false.
+        else if (opt_sng == 'msg' .or. opt_sng == 'massaged' .or. opt_sng == 'massage' ) then
+           flg_msg=.true.
+        else if (opt_sng == 'raw' .or. opt_sng == 'raw_CIA' .or. opt_sng == 'not_massaged' ) then
+           flg_msg=.false.
         else                ! Option not recognized
            arg_idx=arg_idx-1 ! [idx] Counting index
            call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
@@ -424,6 +428,11 @@ program O2X
      if (.not.cmd_ln_fl_in) fl_in=fl_in_HTR16_cold//nlc
      if (.not.cmd_ln_fl_out) fl_out=fl_out_HTR16//nlc
      call ftn_strcpy(src_rfr_sng,'Data reference is HITRAN (2017) (HTR16)')
+     if (flg_msg) then
+        write (6,'(a)') 'HITRAN CIA file assumed to be massaged'
+     else
+        write (6,'(a)') 'HITRAN CIA file assumed to be raw (not massaged)'
+     endif ! flg_msg
   endif ! flg_HTR16
   if (WGT_TRN) then
      call ftn_strcpy(src_wgt_sng,'CCM cross sections are averages of high resolution cross-sections ' &
@@ -475,8 +484,8 @@ program O2X
 
      if (flg_msg) then
         ! 20181213:
-        ! Above works fine to read one raw HITRAN CIA segment
-        ! Re-formatted raw HITRAN into massaged (_msg) file with pre-defined parameters
+        ! Above works fine to read one single raw HITRAN CIA segment
+        ! Massaged (_msg) file has numerous segments and some pre-defined parameters
         ! Overwrite dynamic values with those pre-defined _msg values now
         tpt_cold=tpt_cold_HTR16
         tpt_warm=tpt_warm_HTR16
@@ -619,27 +628,19 @@ program O2X
                 wvn_ctr(bnd_idx), & ! [cm-1]
                 abs_xsx_cold(bnd_idx), & ! [cm5 mlc-2]
                 abs_xsx_warm(bnd_idx) ! [cm5 mlc-2]
-
-           ! Sanity check
-           if (dbg_lvl >= dbg_fl) then
-!              do bnd_idx=1,bnd_nbr
-                 write (6,'(a10,f10.3,a36,es10.3,a10)') &
-                      'wvn_ctr = ',wvn_ctr(bnd_idx),' cm-1, abs_xsx_cold = ',abs_xsx_cold(bnd_idx),' cm5 mlc-2' 
-!              enddo
-           endif                     ! endif dbg
-
         enddo ! bnd_idx
-
-     else
+     else ! flg_msg
         do bnd_idx=1,bnd_nbr
            read (fl_in_unit,*) &
                 wvn_ctr(bnd_idx), & ! [cm-1]
                 abs_xsx_cold(bnd_idx) ! [cm5 mlc-2]
+
            abs_xsx_warm(bnd_idx)=abs_xsx_cold(bnd_idx) ! [cm5 mlc-2]
         enddo ! bnd_idx
      endif ! flg_msg
+
      ! Sanity check
-     if (dbg_lvl >= dbg_fl) then
+     if (dbg_lvl >= dbg_scl) then
         do bnd_idx=1,bnd_nbr
            write (6,'(a10,f10.3,a36,es10.3,a10)') &
                 'wvn_ctr = ',wvn_ctr(bnd_idx),' cm-1, abs_xsx_cold = ',abs_xsx_cold(bnd_idx),' cm5 mlc-2' 
@@ -718,10 +719,16 @@ program O2X
         ! HTR16 documents signifcant temperature dependence in some bands
         abs_xsx_dadT(bnd_idx)= & ! [m5 mlc-2 K-1]
              (abs_xsx_warm(bnd_idx)-abs_xsx_cold(bnd_idx))/ &
-             (tpt_warm-tpt_cold) 
+             dble(tpt_warm-tpt_cold) 
      endif ! tpt_warm
      abs_xsx(bnd_idx)=abs_xsx_cold(bnd_idx)+ &
-          (tpt_std-tpt_cold)*abs_xsx_dadT(bnd_idx)
+          dble(tpt_std-tpt_cold)*abs_xsx_dadT(bnd_idx)
+     if(abs_xsx(bnd_idx) <= 0.0) then
+        write (6,'(a65,f10.3,a36,es10.3,a10)') &
+             'WARNING: Zeroing temperature-adjusted cross-section at wvn_ctr = ',wvn_ctr(bnd_idx), &
+             ' cm-1, abs_xsx = ',abs_xsx(bnd_idx),' cm5 mlc-2' 
+        abs_xsx(bnd_idx)=0.0 ! [m5 mlc-2]
+     endif
   enddo                  ! end loop over bnd
 
   do bnd_idx=1,bnd_nbr
