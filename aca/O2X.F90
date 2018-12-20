@@ -168,7 +168,9 @@ program O2X
 
   logical::flg_GOB90=.true.
   logical::flg_HTR16=.false.
-  logical::flg_msg=.true. ! [flg] Read massaged HITRAN CIA file
+  logical::flg_msg=.true. ! [flg] Read massaged (not raw) HITRAN CIA file
+  logical::flg_set_cold=.false. ! [flg] Set all output to cold values
+  logical::flg_set_warm=.false. ! [flg] Set all output to warm values
   logical::WGT_TRN=.false.
   logical::cmd_ln_fl_in=.false.
   logical::cmd_ln_fl_out=.false.
@@ -346,6 +348,10 @@ program O2X
            flg_msg=.true.
         else if (opt_sng == 'raw' .or. opt_sng == 'raw_CIA' .or. opt_sng == 'not_massaged' ) then
            flg_msg=.false.
+        else if (opt_sng == 'set_cold') then
+           flg_set_cold=.true. ! [flg] Set all output to cold values
+        else if (opt_sng == 'set_warm') then
+           flg_set_warm=.true. ! [flg] Set all output to warm values
         else                ! Option not recognized
            arg_idx=arg_idx-1 ! [idx] Counting index
            call ftn_getarg_err(arg_idx,arg_val) ! [sbr] Error handler for getarg()
@@ -411,15 +417,15 @@ program O2X
      if (.not.cmd_ln_fl_out) fl_out=fl_out_GOB90//nlc
      call ftn_strcpy(src_rfr_sng,'Data reference is Greenblatt et al. (1990) (GOB90)')
      if (flg_ncl_1260nm_bnd) then
-        write (6,'(a)') 'Including 1.26 micron absorption band'
+        write (6,'(a)') 'CONFIG: Including 1.26 micron absorption band'
      else
-        write (6,'(a)') 'Excluding 1.26 micron absorption band'
+        write (6,'(a)') 'CONFIG: Excluding 1.26 micron absorption band'
      endif ! flg_ncl_1260nm_bnd
      if (flg_ncl_1530nm_bnd) then
-        write (6,'(a)') 'Including 1.53 micron absorption band seen by MCB98'
+        write (6,'(a)') 'CONFIG: Including 1.53 micron absorption band seen by MCB98'
         stop 'ERROR: 1.53 micron absorption band not supported yet'
      else
-        write (6,'(a)') 'Excluding 1.53 micron absorption band seen by MCB98'
+        write (6,'(a)') 'CONFIG: Excluding 1.53 micron absorption band seen by MCB98'
      endif ! flg_ncl_1530nm_bnd
   endif ! flg_GOB90
   if (flg_HTR16) then
@@ -429,9 +435,16 @@ program O2X
      if (.not.cmd_ln_fl_out) fl_out=fl_out_HTR16//nlc
      call ftn_strcpy(src_rfr_sng,'Data reference is HITRAN (2017) (HTR16)')
      if (flg_msg) then
-        write (6,'(a)') 'HITRAN CIA file assumed to be massaged'
+        write (6,'(a)') 'CONFIG: HITRAN CIA file assumed to be massaged'
      else
-        write (6,'(a)') 'HITRAN CIA file assumed to be raw (not massaged)'
+        write (6,'(a)') 'CONFIG: HITRAN CIA file assumed to be raw (not massaged)'
+     endif ! flg_msg
+     if (set_cold) then
+        write (6,'(a)') 'CONFIG: Using cold cross-sections for nominal and warm cross-sections'
+     elseif (set_warm) then
+        write (6,'(a)') 'CONFIG: Using warm cross-sections for nominal and cold cross-sections'
+     else
+        write (6,'(a)') 'CONFIG: Computing nominal and cold cross-sections from temperature dependence of cold and warm cross-sections'
      endif ! flg_msg
   endif ! flg_HTR16
   if (WGT_TRN) then
@@ -685,10 +698,20 @@ program O2X
      abs_xsx_warm(bnd_idx)=abs_xsx_warm(bnd_idx)*1.0e-10 ! [cm5 mlc-2] -> [m5 mlc-2]
   enddo ! bnd_idx
 
-  ! Noise correction: HITRAN data has numerous negative values presumably due to noisy instrumentation
+  ! Noise correction: HTR16 data has numerous negative values presumably due to noisy instrumentation
   do bnd_idx=1,bnd_nbr
-     abs_xsx_cold(bnd_idx)=max(abs_xsx_cold(bnd_idx),0.0)
-     abs_xsx_warm(bnd_idx)=max(abs_xsx_warm(bnd_idx),0.0)
+     if(abs_xsx_cold(bnd_idx) < 0.0) then
+        write (6,'(a55,f10.3,a17,es10.3,a10)') &
+             'INFO: Zeroing negative cold cross-section at wvn_ctr = ',wvn_ctr(bnd_idx), &
+             ' cm-1, abs_xsx = ',abs_xsx_cold(bnd_idx),' cm5 mlc-2' 
+        abs_xsx_cold(bnd_idx)=0.0 ! [m5 mlc-2]
+     endif
+     if(abs_xsx_warm(bnd_idx) < 0.0) then
+        write (6,'(a55,f10.3,a17,es10.3,a10)') &
+             'INFO: Zeroing negative warm cross-section at wvn_ctr = ',wvn_ctr(bnd_idx), &
+             ' cm-1, abs_xsx = ',abs_xsx_warm(bnd_idx),' cm5 mlc-2' 
+        abs_xsx_warm(bnd_idx)=0.0 ! [m5 mlc-2]
+     endif
      ! Ensure values are both zero or both non-zero so derived slope is not huge
      if(abs_xsx_cold(bnd_idx) == 0.0) abs_xsx_cold(bnd_idx)=abs_xsx_warm(bnd_idx)
      if(abs_xsx_warm(bnd_idx) == 0.0) abs_xsx_warm(bnd_idx)=abs_xsx_cold(bnd_idx)
@@ -710,6 +733,13 @@ program O2X
   ! Temperature dependence is strongest around 
   do bnd_idx=1,bnd_nbr
      abs_xsx_tpt_rfr(bnd_idx)=tpt_std ! Temperature at which generic abs_xsx array will be stored
+     if (flg_set_cold) then
+        tpt_warm=tpt_cold
+        abs_xsx_warm(bnd_idx)=abs_xsx_cold(bnd_idx)
+     else if (flg_set_warm) then
+        tpt_cold=tpt_warm
+        abs_xsx_cold(bnd_idx)=abs_xsx_warm(bnd_idx)
+     endif
      if(tpt_warm == tpt_cold) then
         ! Temperature dependence for GOB90 data not currently implemented
         ! GOB90 showed very little temperature dependence 
@@ -721,11 +751,17 @@ program O2X
              (abs_xsx_warm(bnd_idx)-abs_xsx_cold(bnd_idx))/ &
              dble(tpt_warm-tpt_cold) 
      endif ! tpt_warm
-     abs_xsx(bnd_idx)=abs_xsx_cold(bnd_idx)+ &
-          dble(tpt_std-tpt_cold)*abs_xsx_dadT(bnd_idx)
-     if(abs_xsx(bnd_idx) <= 0.0) then
-        write (6,'(a65,f10.3,a36,es10.3,a10)') &
-             'WARNING: Zeroing temperature-adjusted cross-section at wvn_ctr = ',wvn_ctr(bnd_idx), &
+     if (flg_set_cold.or.abs_xsx_warm(bnd_idx) == 0.0) then
+        abs_xsx(bnd_idx)=abs_xsx_cold(bnd_idx)
+     else if (flg_set_warm.or.abs_xsx_cold(bnd_idx) == 0.0) then
+        abs_xsx(bnd_idx)=abs_xsx_warm(bnd_idx)
+     else
+        abs_xsx(bnd_idx)=abs_xsx_cold(bnd_idx)+ &
+             dble(tpt_std-tpt_cold)*abs_xsx_dadT(bnd_idx)
+     endif
+     if(abs_xsx(bnd_idx) < 0.0) then
+        write (6,'(a75,f10.3,a17,es10.3,a10)') &
+             'WARNING: Zeroing negative temperature-adjusted cross-section at wvn_ctr = ',wvn_ctr(bnd_idx), &
              ' cm-1, abs_xsx = ',abs_xsx(bnd_idx),' cm5 mlc-2' 
         abs_xsx(bnd_idx)=0.0 ! [m5 mlc-2]
      endif

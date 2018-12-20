@@ -1,3 +1,7 @@
+2018-12-19  Charlie Zender  <zender@uci.edu>
+
+	* Implement set_warm and set_cold options to bypass temperature	slope method
+
 2018-12-17  Charlie Zender  <zender@uci.edu>
 
 	* Read-in massaged data of eight segments. Data are unreliable in UV/Vis. GOB90 looks better there.
