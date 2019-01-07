@@ -79,37 +79,38 @@ Now she runs Apache&nbsp;2.0.40 on RedHat Linux&nbsp;9.
 The physical machine <tt>dust</tt> was retired from active server duty 
 20041228, when it was replaced by <tt>sand</tt> which was
 renamed <tt>dust</tt>. 
-The original <tt>dust</tt> continued to run for many years under the
-alias <tt>dirt</tt>. 
+The original <tt>dust</tt> continued to run for many years in
+retirement under the alias <tt>dirt.ess.uci.edu</tt>. 
 </p>
 
-<p>From 20041228&mdash;20090206 the group
-  server <tt>dust.ess.uci.edu</tt> was the physical
-  machine <tt>sand.ess.uci.edu</tt>. 
+<p>From 20041228&mdash;20090206 the group server
+<tt>dust.ess.uci.edu</tt> was the physical machine <tt>sand.ess.uci.edu</tt>. 
 The hostname <tt>dust.ess.uci.edu</tt> became a &ldquo;virtual&rdquo;
-name (via a designated IP pointer) on 20050105. 
-Requests to <tt>dust</tt> are automatically routed to <tt>sand</tt>.
+name (via a designated IP pointer) on 20050105, and has remained
+virtual ever since.
+Requests to <tt>dust</tt> are automatically routed to the current
+real server.
 Using the <tt>dust</tt> address for URLs and web services provides 
-continuity with sites that link to <tt>dust</tt> and eliminates the need 
-to edit web pages everytime we changes physical web servers.
+continuity with sites that link to <tt>dust</tt> and eliminates the
+need to edit web pages everytime we changes physical web servers.
 </p>
 
-<tt>sand</tt> is a 64-bit AMD GNU/Linux system&mdash;complete independence from the  
-Wintel monopolies at last! 
+<tt>sand</tt> was a 64-bit AMD GNU/Linux system&mdash;complete
+independence from the Wintel monopolies at last! 
 Western Scientific sold me a dual AMD Opteron Processor 244
 (1.8&nbsp;MHz); 2&nbsp;GB RAM, with 2&times;250&nbsp;GB IDE disks
 for about $4000.
-The disks are mirrored to provide robust data storage.
+The disks were mirrored to provide robust data storage.
 Her original fans were noisy, like small jet engines under my desk.
 Western Scientific replaced those with quiet fans and now I'm happy.
 She originally ran Apache&nbsp;1.x on factory SuSE Linux Professional version&nbsp;9.0.  
-Now she runs Apache&nbsp;2.0.50 under Ubuntu's 64-bit Debian-based GNU/Linux distribution.  
+She last ran Apache&nbsp;2.0.50 under Ubuntu's 64-bit Debian-based GNU/Linux distribution.  
 Harry Mangalam installed a very fast eight disk RAID5 with 2&nbsp;TB capacity.
 In February, 2009, <tt>sand</tt> returned to private life and the
 group server became <tt>pbs</tt>.
 </p>
 
-<tt>pbs.ess.uci.edu</tt> became the group server on the afternoon of
+<tt>pbs.ess.uci.edu</tt> became the group server on the afternoon of 
 Friday, February&nbsp;6, 2009. 
 By that evening she had crashed and all data was completely
 inaccessible for about a week.
@@ -118,10 +119,11 @@ rack-mounted, uninterruptible, access-controlled server.
 Sometimes less planning is better.
 </p>
 
-<tt>pbs</tt> is a 64-bit AMD GNU/Linux system running Ubuntu&nbsp;8.10,
-Intrepid Ibex.
-It is the head node of the former cluster named <tt>pbs</tt>, and
-sits in CalIT2's server room. 
+<tt>pbs</tt> was originally a 64-bit AMD GNU/Linux system running
+Ubuntu&nbsp;8.10, Intrepid Ibex.
+It was the head node of the former cluster named <tt>pbs</tt>, and
+sat in CalIT2's server room in dedicated rack eventually donated by
+my group to CalIT2.
 <tt>pbs</tt> began life as the development cluster for the NCO/SDO
 project.
 Daniel Wang used <tt>pbs</tt> extensively while he wrote his thesis
@@ -142,38 +144,31 @@ to <tt>pbs1</tt>.
 
 On November&nbsp;22, 2011, <tt>dust</tt> was pointed to another
 machine reconfigured as <tt>pbs</tt>.
-This is a pure Apache2 web server based on a 2U&nbsp;Broadcom retiree
+This ws a pure Apache2 web server based on a 2U&nbsp;Broadcom retiree
 with dual Opterons and a 1.5&nbsp;TB <tt>mdadm</tt> RAID5. 
-It runs Ubuntu Lucid 10.04.3 LTS. 
-<tt>/home</tt>, currently on a single OS disk, is mirrored nightly to
-the RAID5. 
+It last ran Ubuntu Lucid 10.04.3 LTS. 
+<tt>/home</tt>, was a single OS disk, mirrored nightly to the RAID5. 
 The previous <tt>pbs</tt> became <tt>pbs4</tt>, a storage server for
 the BDUC cluster running gluster over RDMA/Infiniband.
-</p>
-
-The <tt>pbs</tt> ran for about four years until failing in about May
-2014. 
-It was a pure Apache2 web server based on a 2U&nbsp;Broadcom retiree
-with dual Opterons and a 1.5&nbsp;TB <tt>mdadm</tt> RAID5. 
-It runs Ubuntu Lucid 10.04.3 LTS. 
-<tt>/home</tt>, currently on a single OS disk, is mirrored nightly to
-the RAID5. 
-The previous <tt>pbs</tt> became <tt>pbs4</tt>, a storage server for
-the BDUC cluster running gluster over RDMA/Infiniband.
+The new <tt>pbs</tt> ran for about four years until failing in about
+May 2014.
+<p>
+Memory of the server configuration between May 2014 and October 2015
+has been lost.
+Perhaps there was no <tt>dust</tt> during this period, which was 
+difficult emotionally and financially.
 </p>
 
 On October&nbsp;12, 2015, <tt>firn.ess.uci.edu</tt> became <tt>dust</tt>.
 <tt>firn</tt> is a MacBook Pro with 16&nbsp;GB RAM that originally ran
-OS X 10.11, Mountain Lion, and then ran 10.12, Yosemite, and now runs
-MacOS Sierra.
+OS X 10.11, Mountain Lion, and now runs MacOS 10.14, Mojave.
+<tt>firn</tt> is truly portable, and during emergencies serves as my
+personal workstation.
+During such a period in late 2018, triggered by a coffee spill,
+I noticed that the casing of <tt>firn</tt> was warped, presumably
+a symptom of being constantly on, and sometimes pegged.
+Nevertheless, it continues to serve admirably.
 </p>
-
-<hr>
-<p>
-<p>Here are the 
-<a href="http://dust.ess.uci.edu/usage">usage statistics for
-<tt>dust.ess.uci.edu</tt></a>, courtesy of the
-<a href="http://www.mrunix.net/webalizer">webalizer</a>.
 
 <p>
 </p>

@@ -13,6 +13,7 @@
 
 # History:
 # 20171204: Updated for MacOSX 10.13.1 High Sierra
+# 20181219: Updated for MacOSX 10.14.1 Mojave
 
 # This is the main Apache HTTP server configuration file.  It contains the
 # configuration directives that give the server its instructions.
