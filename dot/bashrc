@@ -43,7 +43,7 @@ function fl_is_exe {
     fl=${1} # String substitution operator NeR98 p. 95, 98
     fl=${fl:?"ERROR: fl_is_exe() requires filename as argument"}
     test -f "${fl}" -a -x "${fl}"
-    # By default, functions return exit status of last command executed
+    # By default, Bash functions return exit status of last command executed
 } # end fl_is_exe()
 
 function lprpdf {
