@@ -518,6 +518,7 @@ int main(int argc,char **argv)
     const unsigned long long ulng_lng_bnr(std::abs(int_foo));
 #endif // !HAVE_LONG_LONG
     std::cout << "Binary of float " << flt_bnr << " is " << bit_sng_tpl(flt_bnr) << std::endl;
+    std::cout << "Exponent of float " << flt_bnr << " is " << bit_sng_tpl((unsigned int)flt_bnr<<1) << std::endl;
     std::cout << "Binary of double " << dbl_bnr << " is " << bit_sng_tpl(dbl_bnr) << std::endl;
     std::cout << "Binary of bool " << bln_bnr << " is " << bit_sng_tpl(bln_bnr) << std::endl;
     std::cout << "Binary of char " << chr_bnr << " is " << bit_sng_tpl(chr_bnr) << std::endl;
