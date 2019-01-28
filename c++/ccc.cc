@@ -518,7 +518,15 @@ int main(int argc,char **argv)
     const unsigned long long ulng_lng_bnr(std::abs(int_foo));
 #endif // !HAVE_LONG_LONG
     std::cout << "Binary of float " << flt_bnr << " is " << bit_sng_tpl(flt_bnr) << std::endl;
-    std::cout << "Exponent of float " << flt_bnr << " is " << bit_sng_tpl((unsigned int)flt_bnr<<1) << std::endl;
+    flt_foo=flt_bnr; // Copy memory so bitshifting exponent to byte boundary does not corrupt original
+    unsigned int u32_val=*(unsigned int *)(&flt_foo); // Reinterpret as integer (reinterpret_cast) also works
+    u32_val<<=1; // Bit-shift so exponent is on byte boundaries
+    unsigned char u8_val=*(unsigned char *)(&u32_val); // This should be the 8-bit exponent
+    int int32_val=(int)u8_val; // For printing
+    std::cout << "u32_val = " << u32_val << std::endl;
+    std::cout << "u8_val = " << u8_val << std::endl;
+    std::cout << "int32_val = " << int32_val << std::endl;
+    std::cout << "Binary of u8_val " << uchr_bnr << " is " << bit_sng_tpl(u8_val) << std::endl;
     std::cout << "Binary of double " << dbl_bnr << " is " << bit_sng_tpl(dbl_bnr) << std::endl;
     std::cout << "Binary of bool " << bln_bnr << " is " << bit_sng_tpl(bln_bnr) << std::endl;
     std::cout << "Binary of char " << chr_bnr << " is " << bit_sng_tpl(chr_bnr) << std::endl;
