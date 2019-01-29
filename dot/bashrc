@@ -599,7 +599,7 @@ case "${PVM_ARCH}" in
 	export PYTHONPATH=/usr/lib/portage/pym
 	export TEXMFDIR=/opt/local/share/texmf-texlive # One level above bibtex, tex,
 	
-	PATH=${PATH}\:/opt/local/libexec/gnubin # Up-to-date GNU commands from port install coreutils
+	PATH=${PATH}\:/opt/local/libexec/gnubin # Up-to-date GNU commands from GNU MacPorts coreutils
 	PATH=${PATH}\:/usr/local/bin # Custom-built 3rd party packages
 	PATH=${PATH}\:/opt/local/bin # MacPorts packages
 	PATH=${PATH}\:/opt/local/sbin # MacPorts packages
