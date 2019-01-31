@@ -26,8 +26,7 @@
 % Standard packages
 \usepackage{ifpdf} % Define \ifpdf
 \ifpdf % We are running PDFLaTeX
-\usepackage[pdftex]{graphicx} % Defines \includegraphics*
-\pdfcompresslevel=9
+\usepackage{graphicx} % Defines \includegraphics*
 \usepackage{thumbpdf} % Generate thumbnails
 \else % We are not running PDFLaTeX
 \usepackage{graphicx} % Defines \includegraphics*
@@ -62,8 +61,7 @@
 % pagecolor     Color for links to other pages
 % urlcolor      Color for linked URLs
 \ifpdf % We are running PDFLaTeX
-\usepackage[backref,breaklinks,colorlinks,citecolor=blue,linkcolor=blue,urlcolor=blue,hyperindex,plainpages=false,pdftex]{hyperref} % Hyper-references
-\pdfcompresslevel=9
+\usepackage[backref,breaklinks,colorlinks,citecolor=blue,linkcolor=blue,urlcolor=blue,hyperindex,plainpages=false]{hyperref} % Hyper-references
 \else % We are not running PDFLaTeX
 \usepackage[backref,breaklinks,colorlinks=false,hyperindex,plainpages=false]{hyperref} % Hyper-references
 \fi % endif PDFLaTeX
@@ -2885,7 +2883,7 @@ Purchased Amazon 20160627 \$64.02\\
 MAC Address: 203D669FD36F
 Join network and login to http://router.asus.com
 Custom Configuration:
-adm_logyn,adm_pw: admin, pw_lw
+adm\_logyn,adm\_pw: admin, pw\_lw
 SSID(2.4GHz)=honaunau
 SSID(5.0GHz)=nakili
 pw: hawaiian fish
@@ -2899,20 +2897,20 @@ Speedtest.net 20160724 5.0 GHz from aerosol in Ruby's room (ping,download,upload
 Speedtest.net 20160726 2.4 GHz from aerosol in Ruby's room, extender in Olivia's (ping,download,upload)=13ms,28 Mbps, 9.5 Mbps
 Speedtest.net 20160726 5.0 GHz from aerosol in Ruby's room, extender in Olivia's (ping,download,upload)=11ms,40 Mbps, 5.5 Mbps
 Factory Configuration:
-adm_logyn,adm_pw: admin, admin
-SSID(2.4G)=RT-AC1200_78_2G
-SSID(5.0G)=RT-AC1200_78_5G
-usr_pw: hundred_6955
+adm\_logyn,adm\_pw: admin, admin
+SSID(2.4G)=RT-AC1200\_78\_2G
+SSID(5.0G)=RT-AC1200\_78\_5G
+usr\_pw: hundred\_6955
 
 TP-Link AC750 WiFi Range Extender Model RE200 on Noria\\
 Purchased Amazon 20160724 \$30.00\\
 Serial Number: 2165587003498
 MAC Address: 18a6f7c600d8
-Default SSID (2.4 GHz): TP-LINK_Extender_2.4Ghz
-Default SSID (5.0 GHz): TP-LINK_Extender_5Ghz
+Default SSID (2.4 GHz): TP-LINK\_Extender\_2.4Ghz
+Default SSID (5.0 GHz): TP-LINK\_Extender\_5Ghz
 Default access:
 http://tplinkrepeater.net
-adm_logyn,adm_pw: admin, admin
+adm\_logyn,adm\_pw: admin, admin
 
 Netgear wireless router in SMU\\
 WGR614v7
@@ -3435,7 +3433,7 @@ Dell Service Tag: 2WW7M72 (old)
 Express Service Code: 6342585374
 20160307: Called to report inability to boot to BIOS
 20160315: Replaced with new system
-Case #: 926347479
+Case~\#: 926347479
 Phone: 1-800-822-8965
 \$3069
 MAC address: 525400602dae (WiFi)
