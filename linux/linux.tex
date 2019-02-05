@@ -5326,7 +5326,7 @@ scp -r 'dust.ess.uci.edu:${TEXMFDIR}/tex/latex/tocbibind' .;sudo mv tocbibind ${
 scp 'dust.ess.uci.edu:/data/zender/ps/erbe_b_sld012d_8589_0[17]_x_[LS]WCF.*' 'dust.ess.uci.edu:/data/zender/ps/erbe_b_8589_0[17]_[LS]WCF.*' 'dust.ess.uci.edu:/data/zender/ps/erbe_b_8589_SOLIN.*' ${DATA}/ps # ltx.tex, rt.tex
 scp dust.ess.uci.edu:/data/zender/ps/uci_fax.pdf dust.ess.uci.edu:/data/zender/ps/uci_loa.pdf dust.ess.uci.edu:/data/zender/ps/uci_mlg.xls dust.ess.uci.edu:/data/zender/ps/uci_ntr.pdf dust.ess.uci.edu:/data/zender/ps/uci_po.pdf dust.ess.uci.edu:/data/zender/ps/uci_rmb.pdf dust.ess.uci.edu:/data/zender/ps/uci_trv.pdf dust.ess.uci.edu:/data/zender/ps/sgn_csz.eps ${DATA}/ps # Forms
 rsync -r dust.ess.uci.edu:tex/bst ~/tex
-cd ~/tex;sudo mkdir ${TEXMFDIR}/bibtex/bst/csz;sudo cp bst/* ${TEXMFDIR}/bibtex/bst/csz
+cd ~/sw/tex;sudo mkdir ${TEXMFDIR}/bibtex/bst/csz;sudo cp bst/* ${TEXMFDIR}/bibtex/bst/csz
 # sudo chmod a+w /var/cache/fonts/ls-R
 # sudo chmod 666 /dev/dsp # Sound device mode 660 causes permissions errors
 # Make sure /cdrom is mount point for /dev/sg0 in /etc/fstab

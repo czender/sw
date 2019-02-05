@@ -2,7 +2,7 @@
 
 ! Purpose: Library of Fortran string manipulation routines
 
-! Copyright (C) 1997--2014 Charlie Zender
+! Copyright (C) 1997--present Charlie Zender
 ! License Summary: X11-style free, non-restrictive, non-copyleft. 
 ! Permission is hereby granted, free of charge, to any person obtaining a
 ! copy of this software and associated documentation files (the

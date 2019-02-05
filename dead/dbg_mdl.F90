@@ -4,7 +4,7 @@
 ! NB: This module contains generic debugging constants and routines
 ! It is intended for use in all Fortran90 applications and is thus application-independent
 
-! Copyright (C) 1997--2014 Charlie Zender
+! Copyright (C) 1997--present Charlie Zender
 ! License: This file is in the Public Domain
 
 ! Usage:

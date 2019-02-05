@@ -1,9 +1,9 @@
-! $Id$
+! $id$
 
 ! Purpose: Offline driver for aerosol microphysics, including
 ! Dust Entrainment And Deposition (DEAD) model
 
-! Copyright (C) 1998--2014 Charlie Zender
+! Copyright (C) 1998--present Charlie Zender
 ! License: GNU General Public License (GPL) Version 3
 ! See http://www.gnu.org/copyleft/gpl.html for full license text
 ! The original author of this software, Charlie Zender, seeks to improve
