@@ -305,7 +305,7 @@
 ;; ============================
 ;; End of Options Menu Settings
 ;(setq-default ispell-program-name "aspell") 
-(setq-default ispell-program-name "ispell") 
+(setq-default ispell-program-name "/opt/local/bin/ispell") 
 ;(custom-set-variables
 ;'(ispell-personal-dictionary "~/sw/elisp/ispell_english"))
 (custom-set-faces)
