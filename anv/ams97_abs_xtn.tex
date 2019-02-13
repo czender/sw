@@ -2,6 +2,8 @@
 
 % Purpose: Extended abstract for 1997 AMS mtg.
 
+% cd ~/sw/anv;make -W ams97_abs_xtn.tex ams97_abs_xtn.pdf;cd -
+
 \documentclass[twocolumn,twoside,final,10pt]{article}
 
 %%\ifphd{}{
@@ -23,14 +25,17 @@
 %%\singlespace         % RESTORES SINGLE SPACING
 %%\doublespace         % RESTORES DOUBLE SPACING
 
-\usepackage{natbib} % \cite commands from aguplus
+\usepackage{etoolbox} % \newbool, \setbool, \ifxxx
 \usepackage{graphicx} % defines \includegraphics*
-\usepackage{ifthen} % Boolean and programming commands
+%\usepackage{ifthen} % Boolean and programming commands
+\usepackage{natbib} % \cite commands from aguplus
 %\usepackage{longtable} % for long tables, like acronyms and symbols
 
-\usepackage{/home/zender/tex/csz} % all my local definitions
+\usepackage{csz} % Library of personal definitions
+\usepackage{abc} % Alphabet as three letter macros
+\usepackage{dmn} % Dimensional units
 %\usepackage{jrn_abb} % Define abbreviations used in bib.bib
-\input{/home/zender/tex/jgr_abb}
+%\input{/home/zender/tex/jgr_abb}
 
 %% NB: The \lefthead and \righthead will be automatically uppercased by
 %% the jgrga documentstyle 
@@ -163,7 +168,7 @@ parameterized from a cloud resolving cumulus ensemble model.
 The method emphasizes the following observed and modeled features of
 anvil lifecycle: a strong correlation between anvil growth and
 convective mass flux at anvil base, the excess of ice over supercooled
-liquid for $T < -5$~\degreee C, and the vertical distribution of
+liquid for $T < -5$~\dgrc, and the vertical distribution of
 condensate.  
 Five year integrations of the National Center for Atmospheric Research
 Community Climate Model (CCM2) show climate features sensitive to
@@ -206,9 +211,9 @@ Our modified version of the \cite{LeH80} conceptual model
 is shown in Figure~\ref{fig:cem}a. 
 \begin{figure}
 \begin{center}
-\includegraphics*[width=\halfwidth]{/home/zender/anv/anv_concept.eps}\vfill
+\includegraphics*[width=\halfwidth]{/Users/zender/data/fgr/anv/anv_concept.eps}\vfill
 \vskip .1in
-\includegraphics*[width=\halfwidth,height=.25\textheight]{/data2/zender/ps/cem_mc_diwpdt_c.eps}\vfill
+\includegraphics*[width=\halfwidth,height=.25\textheight]{/Users/zender/data/fgr/anv/cem_mc_diwpdt_c.eps}\vfill
 \end{center}
 \caption{
 (a) Conceptual model of the ice budget in ANV. 
@@ -280,16 +285,16 @@ logical step.
 Recent field observations and models \cite[e.g.,][]{SLT94,GMK95,GrM96}
 suggest that, above 500~mb, anvil condensate is dominated by ice.
 In terms of temperature, the complete phase transition may occur over
-only 5~\degreee K.  
+only 5~\dgrk.  
 This behavior is imposed on the GCM experiment in the present
 sensitivity study.
 The control model, denoted CCM, partitions diagnostic condensate
 between liquid and ice via   
 \begin{equation}
 \ficeccm = \cases{
-  0 & $T > - 10$~\degreee C \cr
-  -{T+10 \over 20} & $-10 \geq T \geq -30$~\degreee C \cr
-  1 & $T < -30$~\degreee C \cr}
+  0 & $T > - 10$~\dgrc \cr
+  -{T+10 \over 20} & $-10 \geq T \geq -30$~\dgrc \cr
+  1 & $T < -30$~\dgrc \cr}
 \label{eqn:ficeccm}
 \end{equation}
 The experiment, denoted ANV, restricts diagnostic liquid condensate
@@ -297,14 +302,14 @@ The experiment, denoted ANV, restricts diagnostic liquid condensate
 CCM (\ref{eqn:ficeccm}) according to
 \begin{equation}
 \ficeanv = \cases{
-  0 & $T > 0$~\degreee C \cr
-  -{T \over 5} & $0 \geq T \geq -5$~\degreee C \cr
-  1 & $T < -5$~\degreee C \cr}
+  0 & $T > 0$~\dgrc \cr
+  -{T \over 5} & $0 \geq T \geq -5$~\dgrc \cr
+  1 & $T < -5$~\dgrc \cr}
 \label{eqn:ficeanv}
 \end{equation}
-Since CCM classifies some condensate as cold as $-30~\degreee$C as
+Since CCM classifies some condensate as cold as $-30$\,\dgrc\ as
 liquid (\ref{eqn:ficeccm}), while ANV has no liquid colder than
-$-5$~\degreee C (\ref{eqn:ficeanv}), it is clear the ANV atmosphere
+$-5$~\dgrc (\ref{eqn:ficeanv}), it is clear the ANV atmosphere
 will contain much more ice than the CCM. 
 Since ice hydrometeors are prescribed to be larger than liquid, classifying
 more condensate as ice (\ref{eqn:ficeanv}) also decreases the
@@ -334,9 +339,9 @@ show very similar features in July.
 
 \begin{figure}
 \begin{center}
-\includegraphics*[width=\halfwidth]{/data2/zender/ps/spcp_85_8589_amip5_8589_xavg_01_QC.eps}\vfill
-\includegraphics*[width=\halfwidth]{/data2/zender/ps/spcp_85_8589_amip5_8589_xavg_01_QDIABAT.eps}\vfill
-\includegraphics*[width=\halfwidth]{/data2/zender/ps/spcp_85_8589_amip5_8589_xavg_01_T.eps}\vfill
+\includegraphics*[width=\halfwidth]{/Users/zender/data/fgr/anv/spcp_85_8589_amip5_8589_xavg_01_QC.eps}\vfill
+\includegraphics*[width=\halfwidth]{/Users/zender/data/fgr/anv/spcp_85_8589_amip5_8589_xavg_01_QDIABAT.eps}\vfill
+\includegraphics*[width=\halfwidth]{/Users/zender/data/fgr/anv/spcp_85_8589_amip5_8589_xavg_01_T.eps}\vfill
 \end{center}
 \caption{
 Change (ANV$-$CCM) in zonal average tropical thermodynamics due to
@@ -346,14 +351,14 @@ Shading indicates values $< 0$.
 (a) Condensate mixing ratio \qc\ (\mgxkg), contour interval is
 2~\mgxkg.
 (b) Diabatic heating \QT\ (\kxday). Contour interval is .1~\kxday.  
-(c) Temperature $T$ (\degreee K), contour interval is .1~\degreee K.
+(c) Temperature $T$ (\dgrk), contour interval is .1~\dgrk.
 \label{fig:xavg_8589}}   
 \end{figure}
 
 \begin{figure}
 \begin{center}
-\includegraphics*[width=\halfwidth]{/data2/zender/ps/spcp_85_8589_amip5_8589_01_LWCF.eps}\vfill
-\includegraphics*[width=\halfwidth]{/data2/zender/ps/spcp_85_8589_amip5_8589_pres_01_CHI.eps}\vfill
+\includegraphics*[width=\halfwidth]{/Users/zender/data/fgr/anv/spcp_85_8589_amip5_8589_01_LWCF.eps}\vfill
+\includegraphics*[width=\halfwidth]{/Users/zender/data/fgr/anv/spcp_85_8589_amip5_8589_pres_01_CHI.eps}\vfill
 \end{center}
 \caption{
 As in Figure~\ref{fig:xavg_8589} but for:
@@ -404,7 +409,7 @@ above 600~mb.
 
 Beneath 200~mb, change in \QT\ is dominated by change in latent
 heating \QL. 
-Convection intensifies from 0--10~\degreee N in ANV in both seasons,
+Convection intensifies from 0--10~\dgrn\ in ANV in both seasons,
 reflecting an enhanced ITCZ, notably over Micronesia, the east
 Indian Ocean, and northeast of Brazil. 
 Deep convection in the remainder of the ascending branch of the Hadley
@@ -415,7 +420,7 @@ Change in tropical water vapor (not shown) strongly resembles $\Delta
 \QL$.
 
 Figure~\ref{fig:xavg_8589}c shows ANV warms the 50~mb beneath the
-tropical tropopause by 2--3~$\degreee$K, roughly 5 times the standard
+tropical tropopause by 2--3~\dgrk, roughly 5 times the standard
 deviation of  zonal average monthly $T$ from a 10~yr AMIP CCM2
 simulation. 
 The increase in tropical upper tropospheric temperature includes
@@ -450,7 +455,7 @@ January 200~mb velocity potential $\chi$.
 %The prognostic anvil is less strongly coupled to SST.
 %Based on the 1987 El Ni\~no, the prognostic anvil formulation improves
 %longwave cloud radiative response to SST cooling but worsens response
-%to warming $> 2\ \degreee$C. 
+%to warming $> 2$\,\dgrc. 
 %In conjunction with weaker mass extinction of ice, this weakens the
 %feedback between longwave cloud forcing and convection over SST maxima.
 This change in large scale divergent motion shows the net response of
@@ -502,7 +507,7 @@ cloud parameterizations.
 %The authors wish to thank 
 
 % Bibliography
-\ifphd{}{\bibliographystyle{jas}}
-\ifphd{}{\bibliography{/home/zender/tex/bib}}
+\bibliographystyle{jas}
+\bibliography{bib}
 
-\ifphd{}{\end{document}}
+\end{document}
