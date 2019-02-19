@@ -5,7 +5,7 @@ program sng
   ! on the presence of external iargc() and getarg() routines normally supplied
   ! by Fortran compilers. 
 
-  ! Copyright (C) 1997--2018 Charlie Zender
+  ! Copyright (C) 1997--present Charlie Zender
   ! License: This file is in the Public Domain
 
   ! The original author of this software, Charlie Zender, wants to receive

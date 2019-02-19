@@ -8,7 +8,7 @@ program swnb2
   ! DISORT computes discrete ordinates radiative transfer solution
   ! I/O uses netCDF interface
 
-  ! Copyright (C) 1994--2018 Charlie Zender
+  ! Copyright (C) 1994--present Charlie Zender
   ! License: GNU General Public License (GPL) Version 3
   ! See http://www.gnu.org/copyleft/gpl.html for full license text
   ! The original author of this software, Charlie Zender, seeks to improve
@@ -3179,8 +3179,8 @@ program swnb2
   cnt_bnd(1)=bnd_nbr_O2O2
   cnt_bndp(1)=bnd_nbr_O2O2+1
   ! Get variable IDs
-  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O2O2',abs_xsx_O2O2_id)
-  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_O2O2_dadT',abs_xsx_O2O2_dadT_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx',abs_xsx_O2O2_id)
+  rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_dadT',abs_xsx_O2O2_dadT_id)
   rcd=nf90_wrp_inq_varid(nc_id,'wvl_grd',wvl_grd_O2O2_id)
   ! Get data
   rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_O2O2_id,abs_xsx_O2O2_dsk,srt_one,cnt_bnd),"gv abs_xsx_O2O2_dsk")

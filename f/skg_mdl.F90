@@ -2,7 +2,7 @@
 
 ! Purpose: Physical constants and anthropogenic parameters/assumptions related to skyglow
 
-! Copyright (C) 2016--2018 Charlie Zender
+! Copyright (C) 2016--present Charlie Zender
 ! This software is distributed under the terms of the GNU General Public License
 ! See http://www.gnu.org/copyleft/gpl.html for full license text
 

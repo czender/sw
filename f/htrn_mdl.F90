@@ -2,7 +2,7 @@
 
 ! Purpose: HITRAN constants and subroutines used by radiative transfer programs swnb, nbm, ck, lbl
 
-! Copyright (C) 1994--2018 Charlie Zender
+! Copyright (C) 1994--present Charlie Zender
 ! This software is distributed under the terms of the GNU General Public License (GPL) Version 3
 ! See http://www.gnu.org/copyleft/gpl.html for full license text
 

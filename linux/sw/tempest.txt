@@ -233,3 +233,24 @@ cd bin
 #***********************************************************************
 # 20181114: edison.nersc.gov, cori.nersc.gov
 #***********************************************************************
+
+#***********************************************************************
+# 20190215: edison.nersc.gov, cori.nersc.gov
+#***********************************************************************
+# Tempest 2.0 (with old build system)
+# 20190215: Works with one build of static executables
+# Linking may fail due to new NERSC libraries
+# However Makefile lacks "make clean"
+# Then erase installation and checkout again
+cd ${DATA}/tmp
+#git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+git pull
+git reset --hard origin/master
+make -f Makefile.gmake
+cd bin
+/bin/cp ${DATA}/tmp/tempestremap/bin/* ~/bin_edison
+/bin/cp ${DATA}/tmp/tempestremap/bin/* ~/bin_cori # Yes, it appears this works!
+#***********************************************************************
+# 20190215: edison.nersc.gov, cori.nersc.gov
+#***********************************************************************

@@ -439,12 +439,13 @@ program O2X
      else
         write (6,'(a)') 'CONFIG: HITRAN CIA file assumed to be raw (not massaged)'
      endif ! flg_msg
-     if (set_cold) then
+     if (flg_set_cold) then
         write (6,'(a)') 'CONFIG: Using cold cross-sections for nominal and warm cross-sections'
-     elseif (set_warm) then
+     elseif (flg_set_warm) then
         write (6,'(a)') 'CONFIG: Using warm cross-sections for nominal and cold cross-sections'
      else
-        write (6,'(a)') 'CONFIG: Computing nominal and cold cross-sections from temperature dependence of cold and warm cross-sections'
+        write (6,'(a)') 'CONFIG: Computing nominal and cold cross-sections from temperature dependence of ' &
+             //'cold and warm cross-sections'
      endif ! flg_msg
   endif ! flg_HTR16
   if (WGT_TRN) then

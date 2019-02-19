@@ -5077,6 +5077,9 @@ sudo dnf -y install http://sourceforge.net/projects/postinstaller/files/fedora/r
 # Acroread installation (necessary for newer PDF forms, installs 75 additional FC19 packages for FC20 installation)
 wget http://ardownload.adobe.com/pub/adobe/reader/unix/9.x/9.5.5/enu/AdbeRdr9.5.5-1_i486linux_enu.rpm
 
+# Upgrade all packages
+sudo dnf upgrade --refresh
+
 # Following task bar features activated at http://extensions.gnome.org
 # Suspend/Resume button
 # Weather
