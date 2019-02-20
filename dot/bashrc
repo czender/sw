@@ -23,6 +23,7 @@
 # scp -p ${HOME}/sw/dot/bashrc cheyenne.ucar.edu:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc cooley.alcf.anl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc dust.ess.uci.edu:.bashrc
+# scp -p ${HOME}/sw/dot/bashrc e3sm.ess.uci.edu:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc rhea.ccs.ornl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc roger-login.ncsa.illinois.edu:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc skyglow.ess.uci.edu:.bashrc
@@ -443,7 +444,7 @@ case "${PVM_ARCH}" in
 		neige* ) export OMP_NUM_THREADS='2' ; ;; # endif dual processor
 		aerosol* | firn* | frazil* | givre* | hpc* | jaws* | katabatic* | rigb* | sastrugi* | skyglow* ) export OMP_NUM_THREADS='4' ; ;; # endif quad processor
 		glace* | gplogin* | grele* | roulee* | snow* ) export OMP_NUM_THREADS='8' ; ;; # endif dual-quad processor
-		acme1* | aims4* | mirage* | pileus* | rhea* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-octet processor
+		acme1* | aims4* | e3sm* | mirage* | pileus* | rhea* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-octet processor
 		*cheyenne* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-hexadecimal processor
 	esac # endcase ${HOST}
 
@@ -514,7 +515,7 @@ case "${PVM_ARCH}" in
 	    *cheyenne* ) PATH=${PATH}\:/opt/pbs/bin ; ;; # NCAR cheyenne
 	    gplogin* | mirage* ) # x86-64
 		PATH=${PATH}\:${ICC_ROOT}/bin/intel64 ; ;; # endif greenplanet
-#	    frazil* | givre* | neige* | roulee* | skyglow ) 
+#	    e3sm* | frazil* | givre* | neige* | roulee* | skyglow ) 
 #		PATH=${PATH}\:/usr/local/cuda/bin ; ;; # endif CUDA
 	    pileus* ) PATH=${PATH}\:/opt/ACME/bin ; ;; # endif CADES
 	esac # endcase ${HOST}
@@ -549,7 +550,7 @@ case "${PVM_ARCH}" in
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${NETCDF4_ROOT}/lib
 	case "${HOST}" in 
-	    frazil* | givre* | roulee* | skyglow* ) # Fedora uses LIB64 directory
+	    e3sm* | frazil* | givre* | roulee* | skyglow* ) # Fedora uses LIB64 directory
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib64
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/lib64
 		;; # endif LIB64
@@ -821,7 +822,7 @@ case "${HOST}" in
     hpc* ) export LINUX_CC=${CC_pgcc} ; export LINUX_CXX=${CXX_pgCC} ; export LINUX_FC=${FC_pgf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # endif pgcc/pgCC/pgf95 MPICH2
 #   soot* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_g95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX=${LINUX_CXX} ;; # endif icc/icpc/g95 MPICH
     frazil* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran} ; ;; # endif clang/clang/gfortran
-    givre* | neige* | roulee* | skyglow* | snow* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # endif gcc/g++/gfortran OpenMPI
+    e3sm* | givre* | neige* | roulee* | skyglow* | snow* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # endif gcc/g++/gfortran OpenMPI
     blogin* | blues* | cooley* | mira* | rhea* | theta* | titan* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif gcc/g++/gfortran OpenMPI
     *cheyenne* | cori* | edison* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # endif gcc/g++/g95 MPICH 
@@ -836,8 +837,8 @@ export LAMMPICXX=${LINUX_CXX}
 case "${HOST}" in 
     ashes* ) export GCC_RCH_ARG='-march=pentium4' ; export ICC_RCH_ARG='-axW -mtune=pentium4' ; ;; # endif Pentium4-M
     aerosol* | firn* | jaws* | katabatic* | rigb* | sastrugi* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='' ; ;; # endif Intel Core i7
-    esqf* ) export GCC_RCH_ARG='-mtune=power4' ; export ICC_RCH_ARG='' ; ;; # endif Power4
-    frazil* | givre* | glace* | grele* | neige* | roulee* | skyglow* | snow* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-axP -mcpu=pentium4 -msse3' ; ;; # endif Core2 Extreme EMT64
+    esmf* ) export GCC_RCH_ARG='-mtune=power4' ; export ICC_RCH_ARG='' ; ;; # endif Power4
+    e3sm* | frazil* | givre* | glace* | grele* | neige* | roulee* | skyglow* | snow* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-axP -mcpu=pentium4 -msse3' ; ;; # endif Core2 Extreme EMT64
     gplogin* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-ipo -no-prec-div -Wl,-z,muldefs' ; ;; # endif Core2 Extreme EMT64
     mirage* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='-ipo -no-prec-div -Wl,-z,muldefs' ; ;; # endif Core2 Extreme EMT64
     lanina* ) export GCC_RCH_ARG='-march=k6-2' ; export ICC_RCH_ARG='' ; ;; # endif AMD K6-2
@@ -846,7 +847,7 @@ esac # endcase ${HOST}
 # Set ICC_ROOT, IFC_ROOT
 case "${HOST}" in
     aerosol* | firn* | jaws* | katabatic* | rigb* | sastrugi* ) export ICC_ROOT='' ; export IFC_ROOT='' ; ;; # endif IA32
-    frazil* | givre* | glace* | grele* | neige* | roulee* | skyglow* | snow* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # endif IA64
+    e3sm* | frazil* | givre* | glace* | grele* | neige* | roulee* | skyglow* | snow* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # endif IA64
     gplogin* ) export ICC_ROOT='/sopt/intel/Compiler/11.0/081' ; export IFC_ROOT='/sopt/intel/Compiler/11.0/081' ; ;; # endif EMT64 Rocks Cluster
     ipcc* ) export ICC_ROOT='/opt/intel/cce/9.1.038' ; export IFC_ROOT='/opt/intel/fce/9.1.032' ; ;; # endif IPCC
     hpc* ) export ICC_ROOT='/software/intel/cc' ; export IFC_ROOT='/software/intel/fc' ; ;; # endif HPC
@@ -979,7 +980,7 @@ case ${PVM_ARCH} in
 	case ${HOST} in
 	    aerosol* | roulee* ) export PRINTER='dell5130' ; ;; # Irvine home office
 #	    frazil* | givre* | glace* | gplogin* | grele* | skyglow* ) export PRINTER='hp4700' ; ;; # UCI Croul 3323 (my office)
-	    firn* | frazil* | givre* | glace* | gplogin* | grele* | neige* | sastrugi* | skyglow* ) export PRINTER='hpm600' ; ;; # UCI Croul mail room
+	    e3sm* | firn* | frazil* | givre* | glace* | gplogin* | grele* | neige* | sastrugi* | skyglow* ) export PRINTER='hpm600' ; ;; # UCI Croul mail room
 	esac # endcase ${HOST}
 	#export PRINTER='hp4350' # UCI Croul 3242 (common area)
 	#export PRINTER='hpm600' # UCI Croul mail room
@@ -1100,6 +1101,7 @@ alias gbsh="/bin/cp ${HOME}/sw/dot/bashrc.greenplanet ${HOME}/.bashrc;source ${H
 alias firn='ssh -Y firn.ess.uci.edu'
 alias sastrugi='ssh -Y sastrugi.ess.uci.edu'
 alias frazil='ssh -Y frazil.ess.uci.edu'
+alias e3sm='ssh -Y e3sm.ess.uci.edu'
 alias skyglow='ssh -Y skyglow.ess.uci.edu'
 alias givre='ssh -Y givre.ess.uci.edu'
 alias roulee='ssh -Y roulee.ess.uci.edu'
@@ -1286,7 +1288,7 @@ case ${PVM_ARCH} in
 #    export FER_PALETTE=". ${FER_DIR}/ppl ${HOME}/ferret/ppl" # palettes
 
     case ${HOST} in
-    aerosol* | firn* | frazil* | givre* | glace* | grele* | jaws* | katabatic* | rigb* | neige* | roulee* | sastrugi* | skyglow* )
+    aerosol* | e3sm* | firn* | frazil* | givre* | glace* | grele* | jaws* | katabatic* | rigb* | neige* | roulee* | sastrugi* | skyglow* )
 	export INTEL_LICENSE_FILE='/opt/intel/cc/9.0/licenses:/opt/intel/fc/9.0/licenses'
 	export LM_LICENSE_FILE='1700@ess1.ess.uci.edu'
     ;; # endif using network licenses
