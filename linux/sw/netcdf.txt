@@ -7387,7 +7387,7 @@ cd ${DATA}/tmp/netcdf-c
 make distclean
 git pull
 autoreconf -i -f
-# NB: --enable-cdf5 enables CDF5 format (disabled by default as of 4.5.0-rc3 20170930)
+# NB: --enable-cdf5 enables CDF5 format (disabled by default as of 4.5.0-rc3 20170930) and not re-enabled by default until netCDF 4.6.2
 # NB: --enable-cxx-4 enables new netCDF4 C++ API
 # NB: --enable-dap enables DAP
 # NB: --enable-hdf4 enables reading HDF4 files (created with SD (Scientific Data) API) through netCDF4 API. NB: requires separately building HDF4 and libmfhdf.a, and header mfhdf.h must also be installed
