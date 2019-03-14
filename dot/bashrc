@@ -192,7 +192,7 @@ export MY_LIB_DIR=${HOME}/lib
 export MY_OBJ_DIR=${HOME}/obj
 export MY_INC_DIR=${HOME}/include
 case "${HOST}" in
-    cooley* ) export MY_BIN_DIR="${HOME}/bin_cooley" ; MY_LIB_DIR="${HOME}/lib_cooley" ; MY_OBJ_DIR="${HOME}/obj_cooley" ; ;;
+    cooley* | cc[0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_cooley" ; MY_LIB_DIR="${HOME}/lib_cooley" ; MY_OBJ_DIR="${HOME}/obj_cooley" ; ;;
     cori* ) export MY_BIN_DIR="${HOME}/bin_cori" ; MY_LIB_DIR="${HOME}/lib_cori" ; MY_OBJ_DIR="${HOME}/obj_cori" ; ;;
     edison* ) export MY_BIN_DIR="${HOME}/bin_edison" ; MY_LIB_DIR="${HOME}/lib_edison" ; MY_OBJ_DIR="${HOME}/obj_edison" ; ;;
     mira* ) export MY_BIN_DIR="${HOME}/bin_mira" ; MY_LIB_DIR="${HOME}/lib_mira" ; MY_OBJ_DIR="${HOME}/obj_mira" ; ;;
@@ -396,7 +396,7 @@ case "${PVM_ARCH}" in
 	    bebop* | blues* | blogin* ) export DATA="/home/${USER}/data" ; ;; # endif ANL LCRC
 	    cg-gpu* ) export DATA="/home/${USER}/data" ; ;; # endif NCSA roger
 	    *cheyenne* ) export DATA="/glade/work/${USER}" ; ;; # endif NCAR
-	    cooley* | cc* ) export DATA="/projects/OceanClimate_2/${USER}" ; ;; # endif ANL ALCF 
+	    cooley* | cc* ) export DATA="${HOME}/data" ; ;; # endif ANL ALCF 
 	    cori* | edison* | hopper* | nid* ) export DATA="${HOME}/data" ; ;; # endif NERSC
 	    e3sm* ) export DATA="${HOME}/data" ; ;; # endif UCI
 	    gplogin* ) export DATA="/data/${USER}" ; ;; # endif EMT64 Rocks Cluster
@@ -867,7 +867,7 @@ fi # endif hostname
 
 # System-specific environments
 case "${HOST}" in
-    cooley* | cc* | mira* | theta* ) export PROJID='ClimateEnergy_2' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
+    cooley* | cc* | mira* | theta* ) export PROJID='OceanClimate_2' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
     cori* | edison* | hopper* | nid* ) export PROJID='acme' ; export DATA="${HOME}/data" ; ;;
     rhea* | titan* ) export PROJID='cli115' ; export DATA="/lustre/atlas/world-shared/${PROJID}/${USER}" ; ;; # endif OLCF
 esac # endcase ${HOST}
