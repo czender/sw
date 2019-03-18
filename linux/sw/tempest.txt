@@ -203,7 +203,7 @@ cd ${DATA}/tmp/tempestremap/build
 ../configure --prefix=${HOME}
 LDFLAGS='-lmkl' ../configure --prefix=${HOME}
 make all
-sudo make install
+make install
 
 configure: error: BLAS library not found
 Need lapack and blas!
