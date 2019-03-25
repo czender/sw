@@ -1164,6 +1164,10 @@ alias gtc='for rps in acd cf2 cf-conventions diwg jaws nco pnp prv rsr sw valley
 alias gtp='for rps in acd cf2 cf-conventions diwg jaws nco pnp prv rsr sw valleyfeverdata; do cd ~/${rps};echo "Pulling ${rps}...";git pull;done;cd'
 alias gtr='git reset --hard origin/master'
 
+# Total size of all files in directory, including symlinks:
+function fl_sz_drc { du -sbhL ${1} ; } # fl_sz_drc ${DATA}/maps
+# Total size of all files in list:
+function fl_sz_lst { du -ch ${1} | tail -1 | cut -f 1 ; } # fl_sz_lst `ls *.nc`
 function bin_obj_rm { rm "${HOME}/bin/${1} ${HOME}/obj/${1}.o ${HOME}/obj/${1}.d" ; }
 function dotgrep { 'egrep ${1} .[a-zA-Z]*' ; }
 function difffunc { diff -c -w ${1} ${2} | more ; } # -c = print 3 lines around diff, -w = ignore whitespace diffs
