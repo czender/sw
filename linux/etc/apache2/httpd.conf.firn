@@ -331,7 +331,10 @@ DirectoryIndex index.shtml index.html index.php
     Options Indexes
 </Directory>
 <Directory "/Users/zender/Sites/ess_eat">
-    Options Indexes
+    Options Indexes FollowSymLinks Multiviews
+</Directory>
+<Directory "/Users/zender/Sites/ess_rmt">
+    Options Indexes FollowSymLinks Multiviews
 </Directory>
 <Directory "/Users/zender/Sites/f">
     Options Indexes
