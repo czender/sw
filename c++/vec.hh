@@ -264,7 +264,7 @@ ntp_vec // [fnc] Project a vector onto another vector
     if(dbg_lvl >= dbg_sbr) err_prn(sbr_nm,"Un-reversing output grid");
     // rvr_vec(crd_out,out_nbr);
     rvr_vec(dat_out,out_nbr);
-  } // endif in_dcr
+  } // endif out_dcr
   
   if(dbg_lvl >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");
   return rcd;
