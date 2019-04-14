@@ -31,18 +31,22 @@ export USERNAME BASH_ENV PATH
 # startx
 
 # 20181201: Added by Anaconda3 5.3.1 installer
+# 20190411: This Conda block does not play well with development:
+# Today's misfortune has been modifying libnco only to see no affect on executables
+# This is because NCO has been linking to Anaconda libnco.a instead of ~/lib/libnco.a
+# As of today, comment-out entire conda block
 # >>> conda init >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$(CONDA_REPORT_ERRORS=false '/Users/zender/anaconda/bin/conda' shell.bash hook 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    \eval "$__conda_setup"
-else
-    if [ -f "/Users/zender/anaconda/etc/profile.d/conda.sh" ]; then
-        . "/Users/zender/anaconda/etc/profile.d/conda.sh"
-        CONDA_CHANGEPS1=false conda activate base
-    else
-        \export PATH="/Users/zender/anaconda/bin:$PATH"
-    fi
-fi
-unset __conda_setup
+#__conda_setup="$(CONDA_REPORT_ERRORS=false '/Users/zender/anaconda/bin/conda' shell.bash hook 2> /dev/null)"
+#if [ $? -eq 0 ]; then
+#    \eval "$__conda_setup"
+#else
+#    if [ -f "/Users/zender/anaconda/etc/profile.d/conda.sh" ]; then
+#        . "/Users/zender/anaconda/etc/profile.d/conda.sh"
+#        CONDA_CHANGEPS1=false conda activate base
+#    else
+#        \export PATH="/Users/zender/anaconda/bin:$PATH"
+#    fi
+#fi
+#unset __conda_setup
 # <<< conda init <<<
