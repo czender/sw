@@ -28,3 +28,6 @@ TAGS
 *.d
 *.mod
 *.o
+
+# Test files
+foo.nc
