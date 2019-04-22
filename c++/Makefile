@@ -1233,7 +1233,9 @@ ${MY_BIN_DIR}/gsl:	lib $(GSL_OBJ)
 
 # i18n needs only -lintl and ABI flags
 I18N_OBJ := ${MY_OBJ_DIR}/i18n.o
-I18N_LDFLAGS := -L${NETCDF_ROOT}/lib -lintl
+# 20190420: i18n no longer needs -lintl on Fedora
+#I18N_LDFLAGS := -L${NETCDF_ROOT}/lib -lintl
+I18N_LDFLAGS := 
 ifneq (${null},$(findstring AIX,${PVM_ARCH}))
  I18N_LDFLAGS := -L/usr/local/lib -lintl -qsuppress=1501-245
 endif # endif AIX
