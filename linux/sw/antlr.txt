@@ -361,3 +361,22 @@ make install
 # 20181023: aerosol.ess.uci.edu 
 #***********************************************************************
 
+#***********************************************************************
+# 20190511: cori.nersc.gov 
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+make
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20190511: cori.nersc.gov 
+#***********************************************************************
