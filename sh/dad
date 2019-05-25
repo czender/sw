@@ -1,7 +1,0 @@
-# $Id$
-
-# Purpose: Run networking startup scripts
-
-# Usage: Script must be run as root
-
-/etc/init.d/networking restart
