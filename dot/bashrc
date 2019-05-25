@@ -21,6 +21,7 @@
 # scp -p ${HOME}/sw/dot/bashrc bebop.lcrc.anl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc blues.lcrc.anl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc cheyenne.ucar.edu:.bashrc
+# scp -p ${HOME}/sw/dot/bashrc compy.pnl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc cooley.alcf.anl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc dust.ess.uci.edu:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc e3sm.ess.uci.edu:.bashrc
@@ -191,6 +192,7 @@ export MY_BIN_DIR=${HOME}/bin
 export MY_LIB_DIR=${HOME}/lib
 export MY_OBJ_DIR=${HOME}/obj
 export MY_INC_DIR=${HOME}/include
+# Some machines have machine-specific paths that override defaults above
 case "${HOST}" in
     cooley* | cc[0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_cooley" ; MY_LIB_DIR="${HOME}/lib_cooley" ; MY_OBJ_DIR="${HOME}/obj_cooley" ; ;;
     cori* ) export MY_BIN_DIR="${HOME}/bin_cori" ; MY_LIB_DIR="${HOME}/lib_cori" ; MY_OBJ_DIR="${HOME}/obj_cori" ; ;;
@@ -396,6 +398,7 @@ case "${PVM_ARCH}" in
 	    bebop* | blues* | blogin* ) export DATA="/home/${USER}/data" ; ;; # endif ANL LCRC
 	    cg-gpu* ) export DATA="/home/${USER}/data" ; ;; # endif NCSA roger
 	    *cheyenne* ) export DATA="/glade/work/${USER}" ; ;; # endif NCAR
+	    compy* ) export DATA="/home/${USER}/data" ; ;; # endif PNNL 
 	    cooley* | cc* ) export DATA="${HOME}/data" ; ;; # endif ANL ALCF 
 	    cori* | edison* | hopper* | nid* ) export DATA="${HOME}/data" ; ;; # endif NERSC
 	    e3sm* ) export DATA="${HOME}/data" ; ;; # endif UCI
@@ -445,7 +448,7 @@ case "${PVM_ARCH}" in
 		neige* ) export OMP_NUM_THREADS='2' ; ;; # endif dual processor
 		aerosol* | firn* | frazil* | givre* | hpc* | jaws* | katabatic* | rigb* | sastrugi* | skyglow* ) export OMP_NUM_THREADS='4' ; ;; # endif quad processor
 		glace* | gplogin* | grele* | roulee* | snow* ) export OMP_NUM_THREADS='8' ; ;; # endif dual-quad processor
-		acme1* | aims4* | e3sm* | mirage* | pileus* | rhea* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-octet processor
+		acme1* | aims4* | compy* | e3sm* | mirage* | pileus* | rhea* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-octet processor
 		*cheyenne* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-hexadecimal processor
 	esac # endcase ${HOST}
 
@@ -824,7 +827,7 @@ case "${HOST}" in
 #   soot* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_g95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX=${LINUX_CXX} ;; # endif icc/icpc/g95 MPICH
     frazil* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran} ; ;; # endif clang/clang/gfortran
     e3sm* | givre* | neige* | roulee* | skyglow* | snow* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # endif gcc/g++/gfortran OpenMPI
-    blogin* | blues* | cooley* | mira* | rhea* | theta* | titan* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif gcc/g++/gfortran OpenMPI
+    blogin* | blues* | compy* | cooley* | mira* | rhea* | theta* | titan* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif gcc/g++/gfortran OpenMPI
     *cheyenne* | cori* | edison* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # endif gcc/g++/g95 MPICH 
 esac # endcase ${HOST}
@@ -1061,6 +1064,7 @@ alias bc='bc -l' # -l = defines standard math library and sets scale to 20
 alias beepoff='xset b off' # Turn beep sound off for quiet work envionments
 alias cheyenne='ssh -Y cheyenne.ucar.edu' # Yubikey 5573
 alias mira='ssh -Y mira.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
+alias compy='ssh -Y compy.pnl.gov' # pyn_hgh + 6-digit fob code
 alias rhea='ssh -Y rhea.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
 alias titan='ssh -Y titan.ccs.ornl.gov' # pyn_mdm + 6-digit fob code
 alias acmetest='ssh -Y acmetest.ornl.gov' # then leapfrog to pileus

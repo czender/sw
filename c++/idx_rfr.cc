@@ -732,7 +732,7 @@ idx_rfr_LQB93_get // [fnc] Compute refractive indice for calcite or gypsum aeros
      Routine converts both to S_j before applying LQB93 algorithm
 
      20060620: Compared limestone generated from DA by this routine to QOL78.
-     The fit of DA to QOL78 figures is not expected to appears perfect 
+     The fit of DA to QOL78 figures is not expected to appear perfect 
      because QOL78 plot only the KK analysis results.
      To the extent intercomparison is possible, the DA reconstruction by this
      routine appears to be accurate.
