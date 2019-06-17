@@ -196,7 +196,6 @@ export MY_INC_DIR=${HOME}/include
 case "${HOST}" in
     cooley* | cc[0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_cooley" ; MY_LIB_DIR="${HOME}/lib_cooley" ; MY_OBJ_DIR="${HOME}/obj_cooley" ; ;;
     cori* ) export MY_BIN_DIR="${HOME}/bin_cori" ; MY_LIB_DIR="${HOME}/lib_cori" ; MY_OBJ_DIR="${HOME}/obj_cori" ; ;;
-    edison* ) export MY_BIN_DIR="${HOME}/bin_edison" ; MY_LIB_DIR="${HOME}/lib_edison" ; MY_OBJ_DIR="${HOME}/obj_edison" ; ;;
     mira* ) export MY_BIN_DIR="${HOME}/bin_mira" ; MY_LIB_DIR="${HOME}/lib_mira" ; MY_OBJ_DIR="${HOME}/obj_mira" ; ;;
     rhea* ) export MY_BIN_DIR="${HOME}/bin_rhea" ; MY_LIB_DIR="${HOME}/lib_rhea" ; MY_OBJ_DIR="${HOME}/obj_rhea" ; ;;
     theta* ) export MY_BIN_DIR="${HOME}/bin_theta" ; MY_LIB_DIR="${HOME}/lib_theta" ; MY_OBJ_DIR="${HOME}/obj_theta" ; ;;
@@ -398,9 +397,9 @@ case "${PVM_ARCH}" in
 	    bebop* | blues* | blogin* ) export DATA="/home/${USER}/data" ; ;; # endif ANL LCRC
 	    cg-gpu* ) export DATA="/home/${USER}/data" ; ;; # endif NCSA roger
 	    *cheyenne* ) export DATA="/glade/work/${USER}" ; ;; # endif NCAR
-	    compy* ) export DATA="/home/${USER}/data" ; ;; # endif PNNL 
+	    compy* ) export DATA="/compyfs/${USER}" ; ;; # endif PNNL 
 	    cooley* | cc* ) export DATA="${HOME}/data" ; ;; # endif ANL ALCF 
-	    cori* | edison* | hopper* | nid* ) export DATA="${HOME}/data" ; ;; # endif NERSC
+	    cori* | nid* ) export DATA="${HOME}/data" ; ;; # endif NERSC
 	    e3sm* ) export DATA="${HOME}/data" ; ;; # endif UCI
 	    gplogin* ) export DATA="/data/${USER}" ; ;; # endif EMT64 Rocks Cluster
 	    hpc* ) export DATA="/data/users/${USER}" ; ;; # endif hpc
@@ -414,11 +413,13 @@ case "${PVM_ARCH}" in
 # PKG_ROOT is usually argument to configure --prefix=${PKG_ROOT}
 # ROCKS_ROLLS_ROOT is where Rocks clusters put rolls
 	case "${HOST}" in 
+#	    compy* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # endif EMT64 Rocks Cluster
 	    gplogin* | mirage* | hpc* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # endif EMT64 Rocks Cluster
 	esac # endcase ${HOST}
 	case "${HOST}" in 
 	    aerosol* | firn* | jaws* | katabatic* | rigb* | sastrugi* ) PKG_ROOT='/opt/local' ; ;; # endif MAC OS X
 	    cg-gpu* ) PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # endif NCSA roger cluster
+#	    compy* ) PKG_ROOT='/opt' ; ;; # endif NCSA roger cluster
 	    gplogin* ) PKG_ROOT='/sopt' ; ;; # endif EMT64 Rocks Cluster
 	    mirage* ) PKG_ROOT='/fs/local' ; ;; # endif NCAR cluster
 	    hpc* ) PKG_ROOT='/software' ; ;; # endif Torque machines
@@ -463,12 +464,6 @@ case "${PVM_ARCH}" in
 	    glace* | grele* ) NCARG_ROOT='/usr/local/ncl-6.3.0' ; ;; # endif EMT64 Rocks Cluster
 	    gplogin* ) NCARG_ROOT='/sopt/ncl' ; ;; # endif EMT64 Rocks Cluster
 	esac # endcase ${HOST}
-	# Set PGI
-	case "${HOST}" in 
-	    gplogin* ) PGI_ROOT="${PKG_ROOT}/pgi-10.6" ; PGI_BIN_ROOT="${PGI_ROOT}/linux86-64/10.6" ; ;; # endif EMT64 Rocks Cluster
-	    ipcc* ) PGI_ROOT="${PKG_ROOT}/pgi" ; PGI_BIN_ROOT="${PGI_ROOT}/linux86-64/7.1-5" ; ;; # endif IPCC
-	    hpc* ) PGI_ROOT="${PKG_ROOT}/pgi" ; PGI_BIN_ROOT="${PGI_ROOT}/linux86-64/7.2-3" ; ;; # endif HPC
-	esac # endcase ${HOST}
 	# Set MPICH_ROOT
 	case "${HOST}" in 
 	    * ) MPICH_ROOT="${PKG_ROOT}/mpich" ; ;; # endif HPC and default
@@ -498,25 +493,19 @@ case "${PVM_ARCH}" in
 	fi # endif NCARG_ROOT
 	if [ -n "${ROCKS_ROLLS_ROOT}" ]; then
 		PATH=${PATH}\:${PKG_ROOT}/rocks/bin
-		PATH=${PATH}\:${MPICH_ROOT}/bin
-		PATH=${PATH}\:${TORQUE_ROOT}/bin
+#		PATH=${PATH}\:${MPICH_ROOT}/bin
+#		PATH=${PATH}\:${TORQUE_ROOT}/bin
 #		PATH=${PATH}\:${PKG_ROOT}/rocks/sbin
 #		PATH=${PATH}\:${PKG_ROOT}/pathscale/bin
 #		PATH=${PATH}\:${PKG_ROOT}/gridengine/bin/lx26-amd64
 #		PATH=${PATH}\:${PKG_ROOT}/ganglia/bin
 	fi # endif ROCKS_ROLLS_ROOT
-	if [ -n "${PGI_BIN_ROOT}" ]; then
-	    PATH=${PATH}\:${PGI_BIN_ROOT}/bin
-	fi # endif PGI_ROOT
 
-	case "${HOST}" in 
-	    neige* ) # x86-64
-		PATH=${PATH}\:/usr/local/android-sdk-linux_x86-1.0_r2
-		;; # endif G1-development machines
-	esac # endcase ${HOST}
 	case "${HOST}" in 
 	    acme1* | aims4* ) PATH=${PATH}\:/usr/local/e3sm_unified/envs/base/envs/e3sm_unified_1.2.5_py3.7_nox/bin ; ;; # endif LLNL
 	    *cheyenne* ) PATH=${PATH}\:/opt/pbs/bin ; ;; # NCAR cheyenne
+	    # Default compy PATH=/share/apps/modules/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/ganglia/bin:/opt/ganglia/sbin:/opt/pdsh/bin:/opt/rocks/bin:/opt/rocks/sbin:/qfs/people/zender/bin
+	    compy* ) PATH=${PATH}\:/share/apps/modules/bin\:/opt/rocks/bin ; ;; # PNNL compy
 	    gplogin* | mirage* ) # x86-64
 		PATH=${PATH}\:${ICC_ROOT}/bin/intel64 ; ;; # endif greenplanet
 #	    e3sm* | frazil* | givre* | neige* | roulee* | skyglow ) 
@@ -554,7 +543,7 @@ case "${PVM_ARCH}" in
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${NETCDF4_ROOT}/lib
 	case "${HOST}" in 
-	    e3sm* | frazil* | givre* | roulee* | skyglow* ) # Fedora uses LIB64 directory
+	    compy* | e3sm* | frazil* | givre* | roulee* | skyglow* ) # Fedora uses LIB64 directory
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib64
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/lib64
 		;; # endif LIB64
@@ -828,7 +817,7 @@ case "${HOST}" in
     frazil* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran} ; ;; # endif clang/clang/gfortran
     e3sm* | givre* | neige* | roulee* | skyglow* | snow* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # endif gcc/g++/gfortran OpenMPI
     blogin* | blues* | compy* | cooley* | mira* | rhea* | theta* | titan* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif gcc/g++/gfortran OpenMPI
-    *cheyenne* | cori* | edison* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
+    *cheyenne* | cori* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # endif gcc/g++/g95 MPICH 
 esac # endcase ${HOST}
 # LAMMPICC and LAMPICXX are OS-independent
@@ -871,7 +860,7 @@ fi # endif hostname
 # System-specific environments
 case "${HOST}" in
     cooley* | cc* | mira* | theta* ) export PROJID='OceanClimate_2' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
-    cori* | edison* | hopper* | nid* ) export PROJID='acme' ; export DATA="${HOME}/data" ; ;;
+    cori* | nid* ) export PROJID='acme' ; export DATA="${HOME}/data" ; ;;
     rhea* | titan* ) export PROJID='cli115' ; export DATA="/lustre/atlas/world-shared/${PROJID}/${USER}" ; ;; # endif OLCF
 esac # endcase ${HOST}
 
@@ -1077,7 +1066,6 @@ alias blues='ssh -Y blues.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias cooley='ssh -Y cooley.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
 alias theta='ssh -Y theta.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
 alias cori='ssh -Y cori.nersc.gov' # pw_hgh
-alias edison='ssh -Y edison.nersc.gov' # pw_hgh
 alias bsrc="source ${HOME}/.bashrc"
 alias chm='chmod 644 *.*' # Make readable
 alias cln='rm *~ .[a-zA-Z]~ \#\*\# core core.* *.tmp *foo foo* *.o *.bak *.trace gmeta aaaa* thumb???.png thumbdta.tex *-t.tex* *.bbl *.blg *.log *.glo *.aux *.dlog *.cp *.cps *.fn *.fns *.ky *.pg *.toc *.tp *.vr *.lof *.lot *.dvi *.ttt *.fff *.stackdump PET0.* fort.73'

@@ -263,3 +263,29 @@ conda install -c conda-forge tempest-remap
 #***********************************************************************
 # 20190412: sastrugi.ess.uci.edu
 #***********************************************************************
+
+#***********************************************************************
+# 20190525: compy.pnl.gov
+# Asked sysadmin to install libtool, lapack, and blas
+#***********************************************************************
+module purge
+module load gcc/8.1.0
+module load mvapich2/2.3.1 # Required for ncclimo/ncremap in MPI-mode
+module load netcdf/4.6.3
+
+cd ${DATA}/tmp
+#git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+git pull
+git reset --hard origin/master
+autoreconf -fi
+mkdir -p build
+cd ${DATA}/tmp/tempestremap/build
+LDFLAGS='-L/lib64' ../configure --prefix=${HOME} --with-netcdf=/share/apps/netcdf/4.6.3/gcc/8.1.0
+make all
+sudo make install
+# Finishes compiling but fails at link step for binaries with 'cannot find -lcurl' (which is in /lib64)
+#***********************************************************************
+# 20190525: compy.pnl.gov
+#***********************************************************************
+
