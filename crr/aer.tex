@@ -3462,7 +3462,7 @@ In this table Clay refers to particles with $\dmt < 5.8$\,\um.}%
 \begin{tabular}{r l l >{$}r<{$} >{$}l<{$} >{$}r<{$} >{$}l<{$} }
 \hline \rule{0.0ex}{\hlntblhdrskp}% 
 Type & Code & Minerological & \mbox{Size} & \mbox{GSD} & \mbox{Clay} & \mbox{Efficiency} \\[0.0ex]
-% fxm: Doublecheck that MBA97 used number median diameters not mass
+% fxm: Doublecheck that MBA97 used number-median diameters not mass
 % median diameters here
 & & Features & \dmtnma & \gsd & \mssfrccly & \hrzvrtprpfct \\[0.0ex]
 & & & \mbox{\um} & & \% & \mbox{\xcm} \\[0.0ex]
@@ -5441,7 +5441,7 @@ Note the similarity between these definitions and the definition of
 precipitation fluxes in
 (\ref{eqn:flx_mss_pcp_spc_dfn})--(\ref{eqn:flx_mss_pcp_vlm_dfn}).
 Integrating (\ref{eqn:flx_nbr_dps_spc_dfn}) over particle size 
-we obtain expression which defines the number mean deposition
+we obtain expression which defines the number-mean deposition
 velocity $\vlcdpsnbravg$
 \begin{eqnarray}
 \int_{0}^{\infty} \flxnbrdpsofdmt \,\dfr\dmt & = & 
@@ -5458,7 +5458,7 @@ The same integration procedure applied to
 \flxmssdps & = & - \vlcdpsmssavg \mssttl
 \label{eqn:flx_mss_dps_dfn}
 \end{eqnarray}
-The explicit definitions for the number mean and mass mean deposition
+The explicit definitions for the number-mean and mass-mean deposition
 velocities in (\ref{eqn:flx_nbr_dps_dfn}) and
 (\ref{eqn:flx_mss_dps_dfn}) are
 \begin{eqnarray}
@@ -6548,7 +6548,7 @@ otherwise noted.
 Having discussed the aerodynamic properties of particle-particle
 interactions we are now ready to formulate the problem of scavenging
 of aerosols by raindrops in a form suitable for numerical models.
-The problem is do determine the rate of removal of aerosols of a given
+The problem is to determine the rate of removal of aerosols of a given
 size distribution by a precipitation rate of a given intensity and
 size distribution.
 We shall adopt the convention that uppercase symbols refer to the
@@ -6723,9 +6723,10 @@ With the great uncertainties presented above firmly in mind, we are
 ready to define the \trmdfn{scavenging coefficient}, 
 $\scvcff$ as the first order removal rate of aerosol mass and number
 concentration.
-Noting that $\nbrscvaer = \dfr\dstnbr/\dfr\tm$ and$\mssscvaer = \dfr\dstmss/\dfr\tm$,
-(\ref{eqn:mss_scv_aer_dfn}) may be rewritten as first order loss
-equations in $\dstnbrofprt$ and $\dstmssofprt$, respectively
+Noting that $\nbrscvaer = \dfr\dstnbr/\dfr\tm$ and
+$\mssscvaer = \dfr\dstmss/\dfr\tm$, (\ref{eqn:mss_scv_aer_dfn})
+may be rewritten as first order loss equations in $\dstnbrofprt$ and
+$\dstmssofprt$, respectively 
 \begin{eqnarray}
 % SeP97 p. 1017, (20.53)
 \label{eqn:dst_scv_nbr_dfn}
@@ -6857,7 +6858,7 @@ into (\ref{eqn:scv_mss_dfn}) we obtain
 \end{eqnarray}
 where in the third step we removed the explicit dependence on
 $\scvcffofprt$ in the integrand by defining a new, integrated
-quantity, $\scvcffmssavg$, the \trmdfn{mass mean scavenging
+quantity, $\scvcffmssavg$, the \trmdfn{mass-mean scavenging
 coefficient}: 
 \begin{eqnarray}
 \scvcffmssavg & = & \frac{
@@ -6886,7 +6887,7 @@ aerosol mass concentration is
 The timescale for mass depletion of the entire aerosol distribution by
 wet scavenging is thus $\scvcffmssavg^{-1}$. 
 
-The \trmdfn{number mean scavenging coefficient} $\scvcffnbravg$
+The \trmdfn{number-mean scavenging coefficient} $\scvcffnbravg$
 (\xs) is defined by an analogous procedure.
 Beginning with (\ref{eqn:scv_nbr_dfn}) we have
 \begin{eqnarray}
@@ -6966,7 +6967,7 @@ Thus $\scvfshofprt$ depends explicitly only on particle size.
 The sign convention used in (\ref{eqn:scv_fsh_dfn}) ensures that
 $\scvfshofprt$ is negative definite. 
 
-The \trmdfn{mass mean scavenging efficiency} $\scvfshmssavg$
+The \trmdfn{mass-mean scavenging efficiency} $\scvfshmssavg$
 applies to the entire mass distribution. 
 The derivation of $\scvfshmssavg$ is analogous to
 (\ref{eqn:scv_fsh_dfn}), but begins with the time-dependent 
@@ -6985,7 +6986,7 @@ solution to total aerosol mass concentration (\ref{eqn:mss_ttl_sln}),
 & = & 1 - \me^{- \scvcffmssavg \dlttm }
 \label{eqn:scv_fsh_mss_avg_dfn}
 \end{eqnarray}
-The derivation of the \trmdfn{number mean scavenging efficiency}
+The derivation of the \trmdfn{number-mean scavenging efficiency}
 $\scvfshnbravg$ proceeds analogously from (\ref{eqn:nbr_ttl_sln}) and
 yields 
 \begin{eqnarray}
@@ -7031,7 +7032,7 @@ is accurate for rainwater.
 
 Figure~\ref{fgr:scv_cff_mss_nrm} shows the simulated $\scvcffbarofprt$ 
 for various lognormal size distributions of raindrops.
-The number median raindrop size and geometric standard deviation of 
+The number-median raindrop size and geometric standard deviation of 
 lognormal raindrop distributions used to simulate convective and
 stratiform rain events are $\dmtpcpnma = 1000$\,\um, $\gsdpcp = 1.86$
 and $\dmtpcpnma = 400$\,\um, $\gsdpcp = 1.86$, respectively
@@ -7047,7 +7048,7 @@ Precipitation-normalized scavenging coefficient
 $\scvcffbar$\,\xmm\ (same as \mSxkg) as a function of
 aerosol size $\dmtprt$ (\um) for polydisperse lognormal raindrop size  
 distributions.  
-Filled points are mass mean, precipitation-normalized scavenging
+Filled points are mass-mean, precipitation-normalized scavenging
 coefficients computed for a lognormal size distribution typical of
 far-traveled mineral dust aerosol.
 \label{fgr:scv_cff_mss_nrm}}
@@ -7066,10 +7067,8 @@ sizes $\dmtprt \lesssim 2$\,\um.
 
 Figure~\ref{fgr:scv_cff_mss_nrm} also shows that great care must be
 taken in discretizing the continuous equations of aerosol evolution.
-If any part of a size bin contains 
 Particles susceptible to inertial impaction ($\dmtprt \gtrsim 2$\,\um) 
 should not be placed in the same bin as smaller particles.
-For instance, if a binning approach is taken and a bin contains any
 Given the uncertainties involved in predicting or measuring the
 raindrop size distribution $\dstnbrpcpofdmt$, \cite{Sli84} recommends
 using the mass-weighted mean raindrop size $\dmtvwrpcp$ to determine
@@ -7135,7 +7134,7 @@ suppression tropical cyclone activity in the North Atlantic.
 \section{Hygroscopic Growth}\label{sxn:scv_hyg}
 Hygroscopic growth of aerosol must be considered in the formulation of
 precipitation scavenging.
-Swelling and coating of aerosol can increase the number median
+Swelling and coating of aerosol can increase the number-median
 diameter $\dmtnma$ of an aerosol distribution by a factor of two or
 more. 
 This increase in size will change the mean scavenging properties of
@@ -7148,7 +7147,7 @@ $\scvcffmssavg$.
 
 \symdfn{\scvcffofprt}{\xs}{Scavenging coefficient}{First order rate of
 mass and number removal of aerosol of size $\dmtprt$}
-\symdfn{\scvcffmssavg}{\xs}{Mass mean scavenging coefficient}{First
+\symdfn{\scvcffmssavg}{\xs}{Mass-mean scavenging coefficient}{First
 order rate coefficient for mass removal by wet scavenging}
 
 \chapter[Paleoclimate Aerosols]{Paleoclimate Aerosols}\label{sxn:pcl}
@@ -11629,8 +11628,9 @@ phase water is called \trmdfn{hygroscopic growth}.
 
 \cite{WKB98} provide parameterizations for the hygroscopic growth of
 \HdSOq\ and \NHqdSOq\ as a function of \RH\ alone.
-Consider a size distribution $\dstfnc (\dmt)$ of dry aerosol with number
-median diameter $\dmtnma$ and geometric standard deviation $\gsd$.
+Consider a size distribution $\dstfnc (\dmt)$ of dry aerosol with
+number-median diameter $\dmtnma$ and geometric standard deviation
+$\gsd$. 
 Our goal is to predict the corresponding size distribution of the
 aerosol in the wetted state, i.e., at any \RH\@.  
 Let $\dmtnmawet$ and $\gsdwet$ denote the wet median diameter and
