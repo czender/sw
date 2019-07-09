@@ -79,9 +79,7 @@ spc_bbd_cls::eval(const prc_cmp &wvl){ // [W m-2 m-1 sr-1] Specific intensity of
     dnm=std::exp(xpn)-1.0; // [frc] Denominator of Planck function
     ntn_bbd_wvl=2.0*hc2/(std::pow(wvl,PRC_CMP(5.0))*dnm); // [W m-2 m-1 sr-1] Specific intensity of blackbody radiation
   }else{
-    std::cerr << "spc_bbd_cls::eval(): tpt = " << tpt << " K" << std::endl;
-    std::cerr << "spc_bbd_cls::eval(): wvl = " << wvl*1.0e6 << " um" << std::endl;
-    std::cerr << "spc_bbd_cls::eval(): xpn = " << xpn << std::endl;
+    std::cerr << "spc_bbd_cls::eval(): tpt = " << tpt << " K, wvl = " << wvl*1.0e6 << " um, xpn = " << xpn << std::endl;
     wrn_prn("spc_bbd_cls::eval","Out of range, setting blackbody intensity to 0.0 W m-2 m-1 sr-1");
     ntn_bbd_wvl=0.0; // [W m-2 m-1 sr-1] Specific intensity of blackbody radiation
   } // end else

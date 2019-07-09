@@ -1,3 +1,7 @@
+2019-07-09  Charlie Zender  <zender@uci.edu>
+
+	* Consolidate warnings for spc_bbd_cls::eval()
+
 2015-01-22  Charlie Zender  <zender@uci.edu>
 
 	* ccc compiles, links, and executes well with clang on MacOSX
