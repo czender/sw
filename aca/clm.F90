@@ -3173,7 +3173,7 @@ program clm
   rcd=nf90_wrp(nf90_def_var(nc_id,'npc_N2O',nf90_float,npc_N2O_id),sbr_nm//": dv npc_N2O")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npc_NO2',nf90_float,npc_NO2_id),sbr_nm//": dv npc_NO2")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npc_O2',nf90_float,npc_O2_id),sbr_nm//": dv npc_O2")
-  rcd=nf90_wrp(nf90_def_var(nc_id,'npc_O2O2',nf90_float,npc_O2O2_id),sbr_nm//": dv npc_O2O2")
+  rcd=nf90_wrp(nf90_def_var(nc_id,'npc_O2O2',nf90_double,npc_O2O2_id),sbr_nm//": dv npc_O2O2")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npc_O3',nf90_float,npc_O3_id),sbr_nm//": dv npc_O3")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npc_OH',nf90_float,npc_OH_id),sbr_nm//": dv npc_OH")
   rcd=nf90_wrp(nf90_def_var(nc_id,'npc_dry_air',nf90_float,npc_dry_air_id),sbr_nm//": dv npc_dry_air")
