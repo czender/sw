@@ -69,6 +69,7 @@ spc_bbd_cls::eval(const prc_cmp &wvl){ // [W m-2 m-1 sr-1] Specific intensity of
   using phc::hc; // (1.986488377e-25) [J m] Planck constant times speed of light = hc
   using phc::hc2; // (5.9553531e-17) [J m2 s-1] Planck constant times speed of light squared = hc2
   xpn=hc/(wvl*cst_Boltzmann*tpt); // [frc] Exponent in Planck function
+  const unsigned short dbg_lvl(dbg_lvl_get()); // Debugging level
   // Guard against overflows
 #ifdef PRC_FLT
   const prc_cmp xpn_bnd(std::log(FLT_MAX)); // [frc] Maximum exponent in Planck function
@@ -79,8 +80,8 @@ spc_bbd_cls::eval(const prc_cmp &wvl){ // [W m-2 m-1 sr-1] Specific intensity of
     dnm=std::exp(xpn)-1.0; // [frc] Denominator of Planck function
     ntn_bbd_wvl=2.0*hc2/(std::pow(wvl,PRC_CMP(5.0))*dnm); // [W m-2 m-1 sr-1] Specific intensity of blackbody radiation
   }else{
-    std::cerr << "spc_bbd_cls::eval(): tpt = " << tpt << " K, wvl = " << wvl*1.0e6 << " um, xpn = " << xpn << std::endl;
-    wrn_prn("spc_bbd_cls::eval","Out of range, setting blackbody intensity to 0.0 W m-2 m-1 sr-1");
+    // 20190709: If warning is too annoying, adopt DISORT polynomial Planck function evaluation?
+    if(dbg_lvl > dbg_scl) std::cerr << "spc_bbd_cls::eval(): tpt = " << tpt << " K, wvl = " << wvl*1.0e6 << " um, xpn = " << xpn << ", approximate blackbody emission as 0.0 W m-2 m-1 sr-1" << std::endl;
     ntn_bbd_wvl=0.0; // [W m-2 m-1 sr-1] Specific intensity of blackbody radiation
   } // end else
   return ntn_bbd_wvl; // [W m-2 m-1 sr-1] Specific intensity of blackbody radiation

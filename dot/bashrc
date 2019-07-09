@@ -778,6 +778,7 @@ esac # endcase ${PVM_ARCH}
 # port select --list gcc
 # sudo port select --set gcc mp-gcc7
 # sudo port select --set gcc mp-gcc8
+# sudo port select --set gcc mp-gcc9
 AR='ar'
 #AR_macports='gcc-ar-mp-4.9'
 #AR_macports='gcc-ar-mp-5'
