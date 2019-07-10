@@ -78,6 +78,7 @@ sng2sng_map wvl_grd_cls::opt2abb_map_mk(){ // Create abbreviation map
   map_tmp.insert(sng2sng_map::value_type("RGL","regular"));
   map_tmp.insert(sng2sng_map::value_type("REG","regular"));
   map_tmp.insert(sng2sng_map::value_type("reg","regular"));
+  map_tmp.insert(sng2sng_map::value_type("wvn_rgl","wvn_rgl"));
   map_tmp.insert(sng2sng_map::value_type("sns","sensor"));
   map_tmp.insert(sng2sng_map::value_type("sensor","sensor"));
   map_tmp.insert(sng2sng_map::value_type("sensors","sensor"));
@@ -327,6 +328,25 @@ wvl_grd_cls::recompute(){ // [fnc] Recompute properties of object
       wvl_max[wvl_idx]=wvl_mnm+(wvl_idx+1)*wvl_ncr; // [m]
     } // end loop over wvl_idx
     wvl_max[wvl_nbr-1]=wvl_mxm; // [m] Ensure final wvl_max is not affected by roundoff
+  }else if(grd_sng == "wvn_rgl"){ // Regularly spaced wavenumber arrays
+    // Do not deallocate()/allocate() memory for regular grids here, see function header for why
+    wvn_mnm=0.01/wvl_mxm; // [cm-1] Minimum wavenumber
+    wvn_mxm=0.01/wvl_mnm; // [cm-1] Maximum wavenumber
+    wvn_nbr=wvl_nbr;
+    prc_cmp wvn_ncr=(wvn_mxm-wvn_mnm)/wvn_nbr; // [cm-1]
+    long wvn_idx; // [idx] Counting index for wvn
+    for(wvn_idx=0;wvn_idx<wvl_nbr;wvn_idx++){
+      wvn_min[wvn_idx]=wvn_mnm+wvn_idx*wvn_ncr; // [cm-1]
+      wvn_max[wvn_idx]=wvn_mnm+(wvn_idx+1)*wvn_ncr; // [cm-1]
+    } // end loop over wvn_idx
+    wvn_max[wvn_nbr-1]=wvn_mxm; // [m] Ensure final wvn_max is not affected by roundoff
+    // Reverse monotonicity so output increases with wavelength not wavenumber
+    rvr_vec(wvn_min,wvn_nbr);
+    rvr_vec(wvn_max,wvn_nbr);
+    for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
+      wvl_min[wvl_idx]=0.01/wvn_max[wvl_idx]; // [cm-1] -> [m]
+      wvl_max[wvl_idx]=0.01/wvn_min[wvl_idx]; // [cm-1] -> [m]
+    } // end loop over wvl_idx
   }else if(grd_sng == "WVL_DBG"){ // Wavelength grid for debugging
     wvl_mnm=0.18e-6; // [m]
     wvl_mxm=0.22e-6; // [m]
