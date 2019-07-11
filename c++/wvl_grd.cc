@@ -163,7 +163,7 @@ wvl_grd_cls::wvl_grd_cls // [fnc] Default constructor
   /* Allocate space here for user-specified grids only
      recompute() calls allocate() for all pre-defined grids
      Rationale is explained in recompute() */
-  if(grd_sng == "regular" || grd_sng == "logarithmic") rcd+=allocate(); // [fnc] Allocate dynamic memory for object
+  if(grd_sng == "regular" || grd_sng == "logarithmic" || grd_sng == "wvn_rgl") rcd+=allocate(); // [fnc] Allocate dynamic memory for object
   rcd+=recompute(); // [fnc] Recompute properties of object
   
   /* Ensure calling program values reflect pre-defined grid, if any */
