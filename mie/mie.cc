@@ -2888,6 +2888,8 @@ int main(int argc,char **argv)
   
   // Instantiate wavelength grid
   wvl_grd_cls wvlgrd(wvl_grd_sng,wvl_mnm,wvl_mxm,wvl_nbr); // [obj] Wavelength grid
+  if(dbg_lvl >= dbg_fl) std::cout << "quark1 wvl_mnm = " << wvl_mnm << ", wvl_mxm = " << wvl_mxm << std::endl;
+  if(dbg_lvl >= dbg_fl) std::cout << "Wavelength grid = " << wvlgrd << std::endl;
   // Update fields which may be overridden by constructors
   wvl_nbr=wvlgrd.wvl_nbr_get(); // [m] Number of wavelength bands
   wvl_dlt_mcr=1.0e6*(wvl_mxm-wvl_mnm); // [um] Bandwidth

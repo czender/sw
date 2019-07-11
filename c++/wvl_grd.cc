@@ -37,9 +37,9 @@ operator<< // [fnc] Stream insertion operator
       srm_out << "wvl_dbg = " << wvl_obj.wvl_ctr[wvl_idx_dbg]*1.0e6 << " um" << std::endl;
     } // endif flg_wvl_grd
     if(wvl_obj.flg_wvn_grd){
-      srm_out << "wvn_min = " << wvl_obj.wvn_min[0]*1.0e6 << " cm-1" << std::endl;
-      srm_out << "wvn_max = " << wvl_obj.wvn_max[wvl_nbr-1]*1.0e6 << " cm-1" << std::endl;
-      srm_out << "wvn_dbg = " << wvl_obj.wvn_ctr[wvl_idx_dbg]*1.0e6 << " cm-1" << std::endl;
+      srm_out << "wvn_min = " << wvl_obj.wvn_min[0] << " cm-1" << std::endl;
+      srm_out << "wvn_max = " << wvl_obj.wvn_max[wvl_nbr-1] << " cm-1" << std::endl;
+      srm_out << "wvn_dbg = " << wvl_obj.wvn_ctr[wvl_idx_dbg] << " cm-1" << std::endl;
     } // endif flg_wvn_grd
     if(wvl_obj.flg_frq_grd){
       srm_out << "frq_min = " << wvl_obj.frq_min[0]/1.0e12 << " THz" << std::endl;
@@ -335,14 +335,14 @@ wvl_grd_cls::recompute(){ // [fnc] Recompute properties of object
     wvn_nbr=wvl_nbr;
     prc_cmp wvn_ncr=(wvn_mxm-wvn_mnm)/wvn_nbr; // [cm-1]
     long wvn_idx; // [idx] Counting index for wvn
-    for(wvn_idx=0;wvn_idx<wvl_nbr;wvn_idx++){
+    for(wvn_idx=0;wvn_idx<wvn_nbr;wvn_idx++){
       wvn_min[wvn_idx]=wvn_mnm+wvn_idx*wvn_ncr; // [cm-1]
       wvn_max[wvn_idx]=wvn_mnm+(wvn_idx+1)*wvn_ncr; // [cm-1]
     } // end loop over wvn_idx
     wvn_max[wvn_nbr-1]=wvn_mxm; // [m] Ensure final wvn_max is not affected by roundoff
     // Reverse monotonicity so output increases with wavelength not wavenumber
-    rvr_vec(wvn_min,wvn_nbr);
-    rvr_vec(wvn_max,wvn_nbr);
+    //rvr_vec(wvn_min,wvn_nbr);
+    //rvr_vec(wvn_max,wvn_nbr);
     for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
       wvl_min[wvl_idx]=0.01/wvn_max[wvl_idx]; // [cm-1] -> [m]
       wvl_max[wvl_idx]=0.01/wvn_min[wvl_idx]; // [cm-1] -> [m]
