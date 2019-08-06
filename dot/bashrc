@@ -861,7 +861,7 @@ fi # endif hostname
 # System-specific environments
 case "${HOST}" in
     cooley* | cc* | mira* | theta* ) export PROJID='OceanClimate_2' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
-    cori* | nid* ) export PROJID='acme' ; export DATA="${HOME}/data" ; ;;
+    cori* | nid* ) export PROJID='acme' ; export DATA="${HOME}/data" ; export PATH="${PATH}:/opt/cray/pe/netcdf/4.6.3.0/bin" ; ;; # 20190806 need for ncgen
     rhea* | titan* ) export PROJID='cli115' ; export DATA="/lustre/atlas/world-shared/${PROJID}/${USER}" ; ;; # endif OLCF
 esac # endcase ${HOST}
 

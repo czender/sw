@@ -1,0 +1,66 @@
+# Use only on Cori at NERSC
+# /bin/cp ~/sw/dot/bashrc.ext ~/.bashrc.ext
+
+# begin .bashrc.ext
+[ -e $HOME/.dbgdot ] && echo "entering .bashrc.ext"
+ 
+# User additions to .bashrc go in this file
+
+# Un-comment and modify the following template for system-specific
+# personal settings.
+#
+if [ "$NERSC_HOST" == "cori" ]; then
+
+   export PATH="${PATH}:${HOME}/bin_cori"
+   export PATH="${PATH}:/opt/cray/pe/netcdf/4.6.3.0/bin" # 20190806 needed for ncgen
+   export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${HOME}/lib_cori"
+
+   export MY_BIN_DIR="${HOME}/bin_cori"
+   export MY_LIB_DIR="${HOME}/lib_cori"
+   export MY_OBJ_DIR="${HOME}/obj_cori"
+
+fi # !cori
+if [ "$NERSC_HOST" == "edison" ]; then
+
+   export PATH="${PATH}:${HOME}/bin_edison"
+   export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${HOME}/lib_edison"
+
+   export MY_BIN_DIR="${HOME}/bin_edison"
+   export MY_LIB_DIR="${HOME}/lib_edison"
+   export MY_OBJ_DIR="${HOME}/obj_edison"
+
+fi # !edison
+if [ "$NERSC_HOST" == "cori" ] || [ "$NERSC_HOST" == "edison" ] || [ "$NERSC_HOST" == "hopper" ]
+then
+   eval `dircolors -b` # Set environment variable LS_COLORS for ls
+
+   export DATA="${HOME}/data"
+   export PAGER='less' # Default pager (usually 'less' or 'more')
+
+   export PATH="${PATH}:${HOME}/sh"
+
+   export MY_INC_DIR="${HOME}/include"
+   export MY_MAN_DIR="${HOME}/man"
+
+   alias bsrc="source ${HOME}/.bashrc.ext"
+   alias cln='rm *~ .[a-zA-Z]~ \#\*\# core core.* *.tmp *foo foo* *.o *.bak *.trace gmeta aaaa* thumb???.png thumbdta.tex *-t.tex* *.bbl *.blg *.log *.glo *.aux *.dlog *.cp *.cps *.fn *.fns *.ky *.pg *.toc *.tp *.vr *.lof *.lot *.dvi *.ttt *.fff *.stackdump PET0.*'
+   alias dir='ls --color=auto -laF | more'
+   alias dze='cd ${DATA}' # ; function dzecp { cp ${1} ${DATA} ; }
+   alias dtm='cd ${DATA}/tmp' # ; function dtmcp { cp ${1} ${DATA}/tmp ; }
+   alias gtc='for rps in acd diwg nco pnp prv rsr sw; do cd ~/${rps};git commit -am "lazy commit";echo "Pushing ${rps}...";git push;done;cd -'
+   alias gtp='for rps in acd diwg nco pnp prv rsr sw; do cd ~/${rps};echo "Pulling ${rps}...";git pull;done;cd -'
+   alias h='history'
+   alias hdo='cd ${HOME}/dot' ; function hdocp { cp ${1} ${HOME}/dot ; }
+   alias hnc='cd ${HOME}/nco' ; function hnccp { cp ${1} ${HOME}/nco ; }
+   alias ls='ls --color=auto' # Use color if standard output is terminal
+   alias mv='mv -i' # -i = inquire
+   alias nvr='env | sort | more'
+   alias rm='rm -i' # -i = inquire
+   alias path="echo -e \${PATH//:/'\n'}" # NeR98 p. 102
+   alias ld_library_path="echo -e \${LD_LIBRARY_PATH//:/'\n'}" # NeR98 p. 102
+
+   function m { ${PAGER} ${*} ; }
+fi
+
+[ -e $HOME/.dbgdot ] && echo "exiting .bashrc.ext"
+# end .bashrc.ext
