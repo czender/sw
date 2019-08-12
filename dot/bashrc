@@ -145,10 +145,6 @@ else
     export PVM_ARCH=LINUX
 fi # endif pvmgetarch
 
-if fl_is_exe ${HOME}/nco/autobld/config.guess ; then
-    export GNU_TRP=`${HOME}/nco/autobld/config.guess` # GNU triplet
-fi # endif GNU_TRP
-
 # 19991201: Sometimes HOST is not set in qsub batch mode
 if [ -z "${HOST}" ]; then
     if fl_is_exe /bin/hostname ; then
@@ -160,6 +156,15 @@ if [ -z "${HOST}" ]; then
 	export HOST=`uname -n `
     fi # endif hostname exists
 fi # endif HOST
+
+if fl_is_exe ${HOME}/nco/autobld/config.guess ; then
+    # GNU triplet
+    # 20190812: cheyenne config.guess nearly hangs (minutes) with "fork: retry: No child processes"
+    case "${HOST}" in 
+	*cheyenne* ) export GNU_TRP='x86_64-unknown-linux-gnu' ; ;; # endif NCAR
+	* ) export GNU_TRP=`${HOME}/nco/autobld/config.guess`
+    esac # endcase ${HOST}
+fi # endif GNU_TRP
 
 # Use Tcsh-6.06 REMOTEHOST variable to set DISPLAY
 if [ -n "${REMOTEHOST}" ]; then
@@ -959,7 +964,7 @@ export TZ='PST8PDT'	# Colorado=MST7MDT, California=PST8PDT, Paris=CET-1CEST
 #export TZ='CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00' # Full POSIX style http://www.di-mgt.com.au/wclock/tz.html
 #export PS1='\u@\h:${PWD}\$ ' # Prompt user@host:cwd$ NeR98 p. 71 NB: single quotes
 #export EMACSLOADPATH='/data/${USER}/tramp/lisp' # Emacs load path
-#export MALLOC_CHECK_=1 # Enable rudimentary malloc() debugging
+#export MALLOC_CHECK_=1 # Rudimentary malloc() debugging
 
 # Derived universal environment variables
 export SVN_EDITOR="${EDITOR}" # Yet another default editor
