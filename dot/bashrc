@@ -558,7 +558,7 @@ case "${PVM_ARCH}" in
 	case "${HOST}" in 
 	    # 20130916: Support NCAR modules on cheyenne by removing custom environment variables
 	    acme1* | aims4* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/e3sm_unified/envs/base/envs/e3sm_unified_1.2.5_py3.7_nox/lib ; ;; # endif LLNL
-	    *cheyenne* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/u/apps/ch/opt/udunits/2.2.20/gnu/4.8.2/lib ; ;; # endif NCAR
+	    *cheyenne* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/u/apps/ch/opt/udunits/2.2.26/gnu/9.1.0/lib ; ;; # endif NCAR
 	    pileus* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/ACME/lib\:/opt/ACME/uvcdat-2.2-build/install/Externals/lib ; ;; # endif CADES
 	    rhea* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/sw/redhat6/udunits/2.1.24/rhel6.4_intel13.1.3/lib ; ;; # endif ORNL
 	esac # endcase ${HOST}
@@ -822,8 +822,8 @@ case "${HOST}" in
 #   soot* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_g95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX=${LINUX_CXX} ;; # endif icc/icpc/g95 MPICH
     frazil* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran} ; ;; # endif clang/clang/gfortran
     e3sm* | givre* | neige* | roulee* | skyglow* | snow* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # endif gcc/g++/gfortran OpenMPI
-    blogin* | blues* | compy* | cooley* | mira* | rhea* | theta* | titan* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif gcc/g++/gfortran OpenMPI
-    *cheyenne* | cori* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
+    blogin* | blues* | *cheyenne* | compy* | cooley* | cori* | mira* | rhea* | theta* | titan* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif gcc/g++/gfortran OpenMPI
+#    *cheyenne* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # endif gcc/g++/g95 MPICH 
 esac # endcase ${HOST}
 # LAMMPICC and LAMPICXX are OS-independent
