@@ -289,3 +289,21 @@ sudo make install
 # 20190525: compy.pnl.gov
 #***********************************************************************
 
+#***********************************************************************
+# 20190821: blues.lcrc.anl.gov x86_64/EMT64 CentOS7 gcc/gfortran 
+#***********************************************************************
+# Tempest 2.0
+# 20190821: 
+
+cd ${DATA}/tmp
+#git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+git pull
+git reset --hard origin/master
+autoreconf -fi
+make MPICXX=g++ CXX=g++ -f Makefile.gmake
+cd bin
+/bin/cp ${DATA}/tmp/tempestremap/bin/* ~/bin
+#***********************************************************************
+# 20190821: blues.lcrc.anl.gov x86_64/EMT64 CentOS7 gcc/gfortran 
+#***********************************************************************
