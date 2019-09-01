@@ -412,7 +412,7 @@ case "${PVM_ARCH}" in
 	    mirage* ) export DATA="/glade/scratch/${USER}" ; ;; # endif NCAR mirage
 	    mira* | theta* ) export DATA="/projects/ClimateEnergy_3/${USER}" ; ;; # endif ANL ALCF
 	    pileus* ) export DATA="/home/${USER}/data" ; ;; # endif CADES
-	    rhea* | titan* ) export DATA="/lustre/atlas/world-shared/cli115/${USER}" ; ;; # endif OLCF
+	    rhea* | titan* ) export DATA="/gpfs/alpine/world-shared/cli115/${USER}" ; ;; # endif OLCF
 	    * ) export DATA="/data/${USER}" ; ;; # endif default
 	esac # endcase ${HOST}
 # PKG_ROOT is where non-default sysadmin-installed packages reside
@@ -485,7 +485,7 @@ case "${PVM_ARCH}" in
 	esac # endcase ${HOST}
 	PATH=${PATH}\:/usr/local/bin
 	PATH=${PATH}\:/usr/local/sbin # Debian
-	PATH=${PATH}\:${HOME}/anaconda/bin # Needed for ESMF_RegridWeightGen
+	PATH=${PATH}\:${HOME}/anaconda/bin # Often needed for ESMF_RegridWeightGen
 	PATH=${PATH}\:/bin
 	PATH=${PATH}\:/sbin
 	PATH=${PATH}\:/usr/bin
@@ -868,7 +868,7 @@ fi # endif hostname
 case "${HOST}" in
     cooley* | cc* | mira* | theta* ) export PROJID='OceanClimate_2' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
     cori* | nid* ) export PROJID='acme' ; export DATA="${HOME}/data" ; export PATH="${PATH}:/opt/cray/pe/netcdf/4.6.3.0/bin" ; ;; # 20190806 need for ncgen
-    rhea* | titan* ) export PROJID='cli115' ; export DATA="/lustre/atlas/world-shared/${PROJID}/${USER}" ; ;; # endif OLCF
+    rhea* | titan* ) export PROJID='cli115' ; export DATA="/gpfs/alpine/world-shared/${PROJID}/${USER}" ; ;; # endif OLCF
 esac # endcase ${HOST}
 
 # Export the big three

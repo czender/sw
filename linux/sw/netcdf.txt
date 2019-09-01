@@ -7564,3 +7564,145 @@ http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
 # 20190429: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.3.1 netcdf-4.7.0 HDF4 git
 #***********************************************************************
 
+#***********************************************************************
+# 20190829: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.3.1 netcdf-4.7.1 HDF4 git
+#***********************************************************************
+sudo aptitude install antlr bison doxygen flex gcc g++ gsl-bin libgsl0-dev libcurl4-gnutls-dev libexpat1-dev libxml2-dev netcdf-bin udunits-bin libudunits2-0 libudunits2-dev # Install netCDF prequisites
+sudo yum install antlr antlr-C++ curl-devel libxml2-devel bison flex gcc gcc-c++ gcc-gfortran gsl gsl-devel librx librx-devel udunits2 udunits2-devel
+cd ${DATA}/tmp
+# svn co https://sub.unidata.ucar.edu/netcdf/trunk;mv trunk netcdf;/bin/cp ~/nco/autobld/ltmain.sh netcdf
+# git clone http://github.com/Unidata/netcdf-c.git
+# git clone http://github.com/Unidata/netcdf-fortran.git
+# git clone http://github.com/Unidata/netcdf-cxx4.git
+
+# 20140320: NB: NCO on FC20 works fine on HDF5 files with default system RPMs
+# However, examining HDF4 files (based on default HDF4 RPMs) causes HDF5 library errors
+# Not sure whether this is due to netcdf-4.3.2-rc1, system HDF5 (1.8.11) or what
+# Do know that hand-building HDF5 1.8.12 and rebuilding netCDF and NCO on that does solve problem
+# Conclusion: Best results with HDF4 files with hand-built HDF5 on FC20, though no need to hand-build HDF4
+
+/bin/rm -r -f ${DATA}/tmp/hdf5-1.8.19*
+# aptitude install libhdf4-alt-dev
+cd ${DATA}/tmp
+#wget -c ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-4/hdf5-1.8.19.tar.gz
+# https://support.hdfgroup.org/HDF5/release/obtainsrc518.html#src
+scp dust.ess.uci.edu:data/tmp/hdf5-1.8.19.tar.gz .
+tar xvzf hdf5-1.8.19.tar.gz
+# Build HDF5 first ('make install' installs locally)
+cd ${DATA}/tmp/hdf5-1.8.19
+make distclean
+bash # New shell level keeps environment variables sandboxed
+export GNU_TRP=`~/nco/autobld/config.guess`
+# NB: x86_64 compilations require -fPIC -m64 flags to avoid errors on shared libraries that link to libnetcdf, e.g., libnetcdf-perl: "/usr/bin/ld: /usr/local/lib/libnetcdf.a(putget.o): relocation R_X86_64_32S against `a local symbol' can not be used when making a shared object; recompile with -fPIC"
+export CC='gcc'
+export CFLAGS='-fPIC -m64'
+export CPPFLAGS=''
+export CXX='g++'
+export CXXFLAGS='-fPIC -m64'
+export FC='gfortran'
+export F77='gfortran'
+export F90='gfortran'
+export FCFLAGS=''
+export FFLAGS=''
+export F90FLAGS=''
+export LDFLAGS='-L/usr/local/lib'
+# Install HDF5 and netCDF4 in same directory for easier paths
+export NETCDF4_ROOT=/usr/local
+export HDF5_ROOT=${NETCDF4_ROOT}
+# HDF5 builds here unless otherwise specified
+# HDF5_ROOT=${DATA}/tmp/hdf5-1.8.19/hdf5
+# 20150622 Thread-safety is an HDF5 compile-time option
+# Provides multiple concurrent reads by serializing its internal library calls, sacrificing their built-in concurrency
+# Unclear whether this trade-off is worthwhile. Seems not to be.
+# https://www.hdfgroup.org/hdf5-quest.html#mthread
+# HDF5 --enable-threadsafe --with-pthread=$PTHREAD_DIR
+./configure --prefix=${HDF5_ROOT} --enable-cxx --enable-fortran > hdf5.configure.${GNU_TRP}.foo 2>&1
+# 20070507 HDF5 --enable-cxx conflicts with --enable-parallel
+# 20070507 HDF5 --enable-parallel requires parallel filesystem
+# ./configure --prefix=${HDF5_ROOT} --enable-fortran --enable-parallel
+make > hdf5.make.${GNU_TRP}.foo 2>&1
+# make check > hdf5.check.${GNU_TRP}.foo 2>&1
+scp hdf5.*.foo dust.ess.uci.edu:Sites/tmp
+sudo make install
+
+# Do same for netCDF4 Fortran
+sudo /bin/rm -f ${NETCDF4_ROOT}/include/netcdf.mod ${NETCDF4_ROOT}/lib/libnetcdff.* 
+cd ${DATA}/tmp/netcdf-fortran
+make distclean
+git pull
+autoreconf -i -f
+LDFLAGS='-L/usr/local/lib' ./configure --prefix=/usr/local > netcdff.configure.${GNU_TRP}.foo 2>&1
+mv -f config.log netcdff.config.log.${GNU_TRP}.foo
+make > netcdff.make.${GNU_TRP}.foo 2>&1
+make check > netcdff.check.${GNU_TRP}.foo 2>&1
+scp netcdff.*.foo dust.ess.uci.edu:Sites/tmp
+sudo make install
+sudo cp ${DATA}/tmp/netcdf-fortran/fortran/.libs/libnetcdff90.a ${NETCDF4_ROOT}/lib/libnetcdff90.a.gfortran
+sudo cp ${DATA}/tmp/netcdf-fortran/fortran/.libs/libnetcdff.a ${NETCDF4_ROOT}/lib/libnetcdff.a.gfortran
+sudo cp ${DATA}/tmp/netcdf-fortran/fortran/typesizes.mod ${NETCDF4_ROOT}/include/typesizes.mod.gfortran
+sudo cp ${DATA}/tmp/netcdf-fortran/fortran/netcdf.mod ${NETCDF4_ROOT}/include/netcdf.mod.gfortran
+make clean
+
+# Do same for netCDF4 CXX (old interface, still required by ESMF_RegridWeightGen and by TempestRemap):
+cd ${DATA}/tmp
+wget ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-cxx-4.2.tar.gz
+tar xvzf netcdf-cxx-4.2.tar.gz 
+cd ${DATA}/tmp/netcdf-cxx-4.2
+LDFLAGS='-L/usr/local/lib' ./configure --prefix=/usr/local > netcdf_cxx.configure.${GNU_TRP}.foo 2>&1
+make > netcdf_cxx.make.${GNU_TRP}.foo 2>&1
+mv -f config.log netcdf_cxx.config.log.${GNU_TRP}.foo
+make check > netcdf_cxx.check.${GNU_TRP}.foo 2>&1
+scp netcdf_cxx.*.foo dust.ess.uci.edu:Sites/tmp
+sudo make install
+
+# Do same for netCDF4 C++ (new interface)
+cd ${DATA}/tmp/netcdf-cxx4
+git pull
+autoreconf -i -f
+LDFLAGS='-L/usr/local/lib' ./configure --prefix=/usr/local > netcdf_c++.configure.${GNU_TRP}.foo 2>&1
+make > netcdf_c++.make.${GNU_TRP}.foo 2>&1
+mv -f config.log netcdf_c++.config.log.${GNU_TRP}.foo
+make check > netcdf_c++.check.${GNU_TRP}.foo 2>&1
+scp netcdf_c++.*.foo dust.ess.uci.edu:Sites/tmp
+sudo make install
+
+# Do same for netCDF4 C
+sudo /bin/rm -r -f ${NETCDF4_ROOT}/include/netcdf.h ${NETCDF4_ROOT}/include/netcdf_m*.h ${NETCDF4_ROOT}/lib/libnetcdf.* 
+cd ${DATA}/tmp/netcdf-c
+# NB: 20171001 make distclean must be run or unresolved link errors may occur
+make distclean
+git pull
+autoreconf -i -f
+# NB: --enable-cdf5 enables CDF5 format (disabled by default as of 4.5.0-rc3 20170930) and not re-enabled by default until netCDF 4.6.2
+# NB: --enable-cxx-4 enables new netCDF4 C++ API
+# NB: --enable-dap enables DAP
+# NB: --enable-hdf4 enables reading HDF4 files (created with SD (Scientific Data) API) through netCDF4 API. NB: requires separately building HDF4 and libmfhdf.a, and header mfhdf.h must also be installed
+# NB: --enable-hdf4 documented at http://www.unidata.ucar.edu/software/netcdf/docs/build_hdf4.html
+# NB: --enable-hdf4 documented requires libhdf.a, libdf.a, libjpeg.a (and netCDF configure does not itself add -ljpeg)
+# NB: --enable-logging allows HDF error message to print
+# NB: --enable-pnetcdf build with parallel I/O for classic files
+# NB: --enable-separate-fortran builds libnetcdff.a (default with shared libraries)
+# NB: --enable-shared builds shared libraries
+# NB: --enable-v2 enables the version 2 interface used by netcdf-perl (needed for htrn2nc.pl)
+# NB: --with-libcf builds libcf.a (apparently deprecated ~201307)
+# NB: --with-udunits builds libudunits2.a (apparently deprecated ~201307)
+# With HDF4 on FC26:
+CPPFLAGS='-I/usr/local/include -I/usr/include/hdf' LDFLAGS='-L/usr/local/lib -L/usr/lib64/hdf' LIBS='-ljpeg' ./configure --prefix=/usr/local --enable-shared --enable-cdf5 --enable-dap --enable-hdf4 --enable-logging --enable-netcdf4 --enable-v2 > netcdf.configure.${GNU_TRP}.foo 2>&1
+mv -f config.log netcdf.config.log.${GNU_TRP}.foo
+make > netcdf.make.${GNU_TRP}.foo 2>&1
+make check > netcdf.check.${GNU_TRP}.foo 2>&1
+scp netcdf.*.foo dust.ess.uci.edu:Sites/tmp
+sudo make install
+# NB: Fortran symbols do get munged into libnetcdf.a somehow
+sudo cp ${DATA}/tmp/netcdf-c/libsrc/.libs/libnetcdf3.a ${NETCDF4_ROOT}/lib/libnetcdf3.a.gcc
+sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libnetcdf4.a.gcc
+make clean
+exit # Return to previous shell level
+# Output saved to:
+http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+#***********************************************************************
+# 20190829: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.3.1 netcdf-4.7.1 HDF4 git
+#***********************************************************************
