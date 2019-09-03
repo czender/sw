@@ -28,6 +28,7 @@
 # scp -p ${HOME}/sw/dot/bashrc rhea.ccs.ornl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc roger-login.ncsa.illinois.edu:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc skyglow.ess.uci.edu:.bashrc
+# scp -p dust.ess.uci.edu:.bashrc ${HOME}/.bashrc 
 
 # RedHat Linux 7.x does not define PS1 in /etc/bashrc
 if [ -f /etc/bashrc ]; then
@@ -868,7 +869,7 @@ fi # endif hostname
 case "${HOST}" in
     cooley* | cc* | mira* | theta* ) export PROJID='OceanClimate_2' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
     cori* | nid* ) export PROJID='acme' ; export DATA="${HOME}/data" ; export PATH="${PATH}:/opt/cray/pe/netcdf/4.6.3.0/bin" ; ;; # 20190806 need for ncgen
-    rhea* | titan* ) export PROJID='cli115' ; export DATA="/gpfs/alpine/world-shared/${PROJID}/${USER}" ; ;; # endif OLCF
+    rhea* | titan* ) export PROJID='cli115' ; export DATA="/gpfs/alpine/world-shared/${PROJID}/${USER}" ; export LD_LIBRARY_PATH='/ccs/home/zender/lib_rhea:/ccs/proj/cli900/sw/rhea/e3sm-unified/base/envs/e3sm_unified_1.2.5_py3.7_nox/lib'\:${LD_LIBRARY_PATH} ; ;; # endif OLCF
 esac # endcase ${HOST}
 
 # Export the big three
