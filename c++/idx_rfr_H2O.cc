@@ -442,10 +442,10 @@ idx_rfr_H2O_ice_get // [fnc] Refractive index of liquid water
   if(wvl_ctr_mcr <= 167){
     // Temperature-independent for wavelengths 0.045--167.0 um
     for(idx=2;idx <= idx_rfr_H2O::nwvl;idx++)
-      if(wvl_ctr_mcr <= wvl_ice_tbl_mcr[idx]) break;
-    frac=std::log(wvl_ctr_mcr/wvl_ice_tbl_mcr[idx-1])/std::log(wvl_ice_tbl_mcr[idx]/wvl_ice_tbl_mcr[idx-1]);
-    mRe=tabRe[idx-1]+frac*(tabRe[idx]-tabRe[idx-1]);
-    mIm=tabIm[idx-1]*std::pow((tabIm[idx]/tabIm[idx-1]),frac);
+      if(wvl_ctr_mcr <= wvl_ice_tbl_mcr_War84[idx]) break;
+    frac=std::log(wvl_ctr_mcr/wvl_ice_tbl_mcr_War84[idx-1])/std::log(wvl_ice_tbl_mcr_War84[idx]/wvl_ice_tbl_mcr_War84[idx-1]);
+    mRe=tabRe_War84[idx-1]+frac*(tabRe_War84[idx]-tabRe_War84[idx-1]);
+    mIm=tabIm_War84[idx-1]*std::pow((tabIm_War84[idx]/tabIm_War84[idx-1]),frac);
   }else{
     // Temperature-dependent for wavelengths longer than 167.0 um
     if(tpt < tempRef[ntemp-1] || tpt > tempRef[0]){
