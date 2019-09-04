@@ -63,12 +63,14 @@ namespace idx_rfr_H2O{ // [nms] Water refractive index namespace
   const int idx_rfr_h2o_lqd_tbl_nbr(1261);
   const int idx_rfr_h2o_lqd_tbl_nbrp1(idx_rfr_h2o_lqd_tbl_nbr+1);
   const int ntemp(4);
-  const int nwvl(574); // NB: nwvl was 468 from 1984 compilation until 1995
-  const int nwvlp1(nwvl+1);
+  const int nwvl_War84(574); // NB: nwvl_War84 was 468 from 1984 compilation until 1995
+  const int nwvlp1_War84(nwvl_War84+1);
   const int nwvlPG(31);
   const int nwvlPGp1(nwvlPG+1);
   const int nwvlT(62);
   const int nwvlTp1(nwvlT+1);
+  const int nwvl_WaB08(486);
+  const int nwvlp1_WaB08(nwvl_WaB08+1);
   
   /* Notes:
     1. All one-dimensional arrays (except tempRef) have Fortran indexing
@@ -735,7 +737,7 @@ namespace idx_rfr_H2O{ // [nms] Water refractive index namespace
   }; // wvlPG
   
   // Wavelengths (microns)
-  const prc_cmp wvl_ice_tbl_mcr_WaB08[nwpl1]={
+  const prc_cmp wvl_ice_tbl_mcr_WaB08[nwvlp1_WaB08]={
     0.0,
     4.43000e-02,4.51000e-02,4.59000e-02,4.68000e-02,4.77000e-02,
     4.86000e-02,4.96000e-02,5.06000e-02,5.17000e-02,5.28000e-02,
@@ -835,8 +837,8 @@ namespace idx_rfr_H2O{ // [nms] Water refractive index namespace
     3.90000e+04,6.10000e+04,8.60000e+04,1.10000e+05,1.40000e+05,
     1.80000e+05,2.40000e+05,3.40000e+05,5.40000e+05,1.00000e+06,
     2.00000e+06
-    };//wvl_ice_tbl_wcr_WaB08
-  const prc_cmp wvl_ice_tbl_mcr_War84[nwvlp1]={
+    }; // wvl_ice_tbl_mcr_WaB08
+  const prc_cmp wvl_ice_tbl_mcr_War84[nwvlp1_War84]={
     0.0, 
     4.43000e-02,4.51000e-02,4.59000e-02,4.68000e-02,4.77000e-02,
     4.86000e-02,4.96000e-02,5.06000e-02,5.17000e-02,5.28000e-02,
@@ -974,8 +976,8 @@ namespace idx_rfr_H2O{ // [nms] Water refractive index namespace
     0.9000e+06,0.1000e+07,0.2000e+07,0.5000e+07,0.8600e+07
   }; // wvlT
   
-  // Real parts of the refractive index
-  const prc_cmp tabRe_WaB08[nwvlp1]={
+  // Real part of refractive index
+  const prc_cmp tabRe_WaB08[nwvlp1_WaB08]={
     0.0, 
     0.8228,0.8250,0.8255,0.8258,0.8263,
     0.8281,0.8347,0.8428,0.8483,0.8505,
@@ -1076,7 +1078,7 @@ namespace idx_rfr_H2O{ // [nms] Water refractive index namespace
     1.7861,1.7861,1.7861,1.7861,1.7861,
     1.7861
     };// tabRe_WaB08
-  const prc_cmp tabRe_War84[nwvlp1]={
+  const prc_cmp tabRe_War84[nwvlp1_War84]={
     0.0,
     0.83441,0.83676,0.83729,0.83771,0.83827,
     0.84038,0.84719,0.85522,0.86047,0.86248,
@@ -1195,8 +1197,8 @@ namespace idx_rfr_H2O{ // [nms] Water refractive index namespace
     1.83225,1.81914,1.82268,1.82961
   }; // tabRe_War84 
   
-  // Imaginary parts of the refractive index
-  const prc_cmp tabIm_WaB08[nwvlp1]={
+  // Imaginary part of refractive index
+  const prc_cmp tabIm_WaB08[nwvlp1_WaB08]={
     0.0, 
     1.6400e-01,1.7300e-01,1.8300e-01,1.9500e-01,2.0800e-01,
     2.2300e-01,2.4000e-01,2.5000e-01,2.5900e-01,2.6800e-01,
@@ -1297,7 +1299,7 @@ namespace idx_rfr_H2O{ // [nms] Water refractive index namespace
     9.6130e-05,1.0660e-04,1.3120e-04,1.8950e-04,3.3480e-04,
     6.5960e-04
     };// tabIm_WaB08
-  const prc_cmp tabIm_War84[nwvlp1]={
+  const prc_cmp tabIm_War84[nwvlp1_War84]={
     0.0, 
     1.64000e-01,1.73000e-01,1.83000e-01,1.95000e-01,2.08000e-01,
     2.23000e-01,2.40000e-01,2.50000e-01,2.59000e-01,2.68000e-01,

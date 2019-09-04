@@ -441,7 +441,7 @@ idx_rfr_H2O_ice_get // [fnc] Refractive index of liquid water
   
   if(wvl_ctr_mcr <= 167){
     // Temperature-independent for wavelengths 0.045--167.0 um
-    for(idx=2;idx <= idx_rfr_H2O::nwvl;idx++)
+    for(idx=2;idx <= idx_rfr_H2O::nwvl_War84;idx++)
       if(wvl_ctr_mcr <= wvl_ice_tbl_mcr_War84[idx]) break;
     frac=std::log(wvl_ctr_mcr/wvl_ice_tbl_mcr_War84[idx-1])/std::log(wvl_ice_tbl_mcr_War84[idx]/wvl_ice_tbl_mcr_War84[idx-1]);
     mRe=tabRe_War84[idx-1]+frac*(tabRe_War84[idx]-tabRe_War84[idx-1]);
@@ -520,7 +520,7 @@ prc_cmp arre(prc_cmp tpt_cls,prc_cmp wvl)
 void idx_rfr_H2O_tst()
 {
   /* Purpose: Test correct conversion of refractive index routines
-     Usage: Simply call idx_rfr_H2O_tst() to test RayWater, idx_rfr_H2O_lqd_get, idx_rfr_H2O_ice_get */
+     Usage: Simply call idx_rfr_H2O_tst() to test RayWater(), idx_rfr_H2O_lqd_get(), idx_rfr_H2O_ice_get() */
   int rcd(0); // [enm] Return success code
   
   const int wvl_nbr(10);
