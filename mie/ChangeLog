@@ -1,3 +1,8 @@
+2019-09-05  Charlie Zender  <zender@uci.edu>
+
+	* Finish implementing WaB08 refractive indices as default for h2o_ice
+	  War84/95 indices are still accessible via aerosol type h2o_War84
+
 2018-08-27  Charlie Zender  <zender@aerosol>
 
 	* Remove register storage class to comply with GCC std=c++11
