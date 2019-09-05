@@ -661,7 +661,6 @@ idx_rfr_DKS91_get // [fnc] Compute refractive indices for soot aerosol of DKS91
   // Output
   int rcd(0); // [enm] Return success code
   // Local
-  prc_cmp wvl_mcr; // [um] Wavelength
   std::string sbr_nm("idx_rfr_DKS91_get"); // [sng] Subroutine name
   if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Entering...");
   
@@ -669,7 +668,6 @@ idx_rfr_DKS91_get // [fnc] Compute refractive indices for soot aerosol of DKS91
 
   long wvl_idx;
   for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
-    wvl_mcr=1.0e6*wvl[wvl_idx]; // [um] Wavelength
     idx_rfr[wvl_idx]=std::complex<prc_cmp>(1.75,0.44); // [frc] CLV96 p. 23366
   } // end loop over wvl
   if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");

@@ -486,12 +486,12 @@ case "${PVM_ARCH}" in
 	esac # endcase ${HOST}
 	PATH=${PATH}\:/usr/local/bin
 	PATH=${PATH}\:/usr/local/sbin # Debian
-	PATH=${PATH}\:${HOME}/anaconda/bin # Often needed for ESMF_RegridWeightGen
 	PATH=${PATH}\:/bin
 	PATH=${PATH}\:/sbin
 	PATH=${PATH}\:/usr/bin
 	PATH=${PATH}\:/usr/sbin
 	PATH=${PATH}\:${X11}/bin
+	PATH=${PATH}\:${HOME}/anaconda/bin # Often needed for ESMF_RegridWeightGen
 	if [ -n "${MPI_ROOT}" ]; then
 		PATH=${PATH}\:${MPI_ROOT}/bin # OpenMPI
 	fi # endif MPI_ROOT

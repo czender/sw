@@ -293,7 +293,7 @@ idx_rfr_H2O_ice_get_WaB08 // [fnc] Refractive index of liquid water
 
   int rcd(0); // [enm] Return success code
   int idx;
-  prc_cmp mRe,mIm,yLo,yHi,frac;
+   prc_cmp mRe,mIm,frac;
   const prc_cmp wvl_ctr_mcr(wvl_ctr*1.0e6); // [m]->[um] Wavelength at band center
   
   if(wvl_ctr_mcr < 0.0443 || wvl_ctr_mcr > 2.0e6){
@@ -623,6 +623,8 @@ void idx_rfr_H2O_tst()
     std::cout << "idx_rfr_H2O_ice_get_WaB08 (im) = " << idx_rfr.imag() << std::endl;
     std::cout << std::endl;
   } // end loop over wvl
+
+  rcd+=rcd; // CEWI
 
 } // end idx_rfr_H2O_tst()
 

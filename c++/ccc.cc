@@ -1355,6 +1355,7 @@ int main(int argc,char **argv)
     idx_rfr_cls idx_rfr(sng_foo);
     std::cout << idx_rfr << std::endl;
     idx_rfr.tst(sng_foo,lng_foo);
+    idx_rfr_H2O_tst();
   } // end if dbg || tst_sng == "idx_rfr"
 
   if(dbg_lvl == dbg_old || tst_sng == "ld"){
