@@ -266,12 +266,61 @@ idx_rfr_H2O_lqd_get // [fnc] Refractive index of liquid water
 } // end idx_rfr_H2O_lqd_get()
 
 int // O [enm] Return success code
-idx_rfr_H2O_ice_get // [fnc] Refractive index of liquid water
+idx_rfr_H2O_ice_get_WaB08 // [fnc] Refractive index of liquid water
+(const prc_cmp wvl_ctr, // I [m] Wavelength at band center
+ std::complex<prc_cmp> *idx_rfr) // O [frc] Refractive index of ice water
+{
+  /* Purpose: Refractive index of ice from Warren and Brandt (2008)
+     1992MMDD--20190905: CSZ used idx_rfr_H2O_ice_get_War84() by default
+     20190905: New function idx_rfr_H2O_ice_get_WaB08() supercedes idx_rfr_H2O_ice_get_War84() by default
+
+     Calculates complex refractive index of ice between 45 nm and 8.6 m
+     Unlike War84, WaB08 has no temperature dependence
+     
+     Method :  tabular interpolation
+     (1) real index linearly in log(wavelength)
+     (2) log(imag. index) linearly in log(wavelength)
+     
+     Input parameters
+     wvl_ctr = Wavelength [m]
+     
+     Output
+     idx_rfr = Complex index of refraction (positive imaginary part)
+     
+     References: 
+     WaB08: 
+     Warren, S. G., and R. E. Brandt (2008), Optical constants of ice from the ultraviolet to the microwave: A revised compilation, J. Geophys. Res., 113(D14220), doi:10.1029/2007JD009744. */
+
+  int rcd(0); // [enm] Return success code
+  int idx;
+  prc_cmp mRe,mIm,yLo,yHi,frac;
+  const prc_cmp wvl_ctr_mcr(wvl_ctr*1.0e6); // [m]->[um] Wavelength at band center
+  
+  if(wvl_ctr_mcr < 0.0443 || wvl_ctr_mcr > 2.0e6){
+    std::cerr << "ERROR: No refractive index data for wavelength " << wvl_ctr_mcr << " um" << std::endl;
+    std::abort();
+  } // endif
+  
+  // Temperature-independent for all wavelengths
+  for(idx=2;idx <= idx_rfr_H2O::nwvl_WaB08;idx++)
+    if(wvl_ctr_mcr <= wvl_ice_tbl_mcr_WaB08[idx]) break;
+  frac=std::log(wvl_ctr_mcr/wvl_ice_tbl_mcr_WaB08[idx-1])/std::log(wvl_ice_tbl_mcr_WaB08[idx]/wvl_ice_tbl_mcr_WaB08[idx-1]);
+  mRe=tabRe_WaB08[idx-1]+frac*(tabRe_WaB08[idx]-tabRe_WaB08[idx-1]);
+  mIm=tabIm_WaB08[idx-1]*std::pow((tabIm_WaB08[idx]/tabIm_WaB08[idx-1]),frac);
+
+  *idx_rfr=std::complex<prc_cmp>(mRe,mIm);
+  return rcd;
+} // end idx_rfr_H2O_ice_get_WaB08()
+
+int // O [enm] Return success code
+idx_rfr_H2O_ice_get_War84 // [fnc] Refractive index of liquid water
 (const prc_cmp wvl_ctr, // I [m] Wavelength at band center
  const prc_cmp tpt, // I [K] Temperature
  std::complex<prc_cmp> *idx_rfr) // O [frc] Refractive index of ice water
 {
-  /* Purpose: Refractive index of ice
+  /* Purpose: Refractive index of ice from Warren (1984) as updated by Warren et al. in 1995 (see notes below)
+     1992MMDD--20190905: CSZ used idx_rfr_H2O_ice_get_War84() by default
+     20190905: New function idx_rfr_H2O_ice_get_WaB08() supercedes idx_rfr_H2O_ice_get_War84() by default
      Calculates complex refractive index of ice between 45 nm and 8.6 m
      Temperature dependence is included for 213 < T < 272 K for wvl_ctr > 167 um
      
@@ -470,7 +519,7 @@ idx_rfr_H2O_ice_get // [fnc] Refractive index of liquid water
   
   *idx_rfr=std::complex<prc_cmp>(mRe,mIm);
   return rcd;
-} // end idx_rfr_H2O_ice_get()
+} // end idx_rfr_H2O_ice_get_War84()
 
 prc_cmp ab(prc_cmp wvl,prc_cmp bet,prc_cmp wvlcen,prc_cmp del,prc_cmp gam)
 {
@@ -520,7 +569,7 @@ prc_cmp arre(prc_cmp tpt_cls,prc_cmp wvl)
 void idx_rfr_H2O_tst()
 {
   /* Purpose: Test correct conversion of refractive index routines
-     Usage: Simply call idx_rfr_H2O_tst() to test RayWater(), idx_rfr_H2O_lqd_get(), idx_rfr_H2O_ice_get() */
+     Usage: Simply call idx_rfr_H2O_tst() to test RayWater(), idx_rfr_H2O_lqd_get(), idx_rfr_H2O_ice_get_War84(), idx_rfr_H2O_ice_get_WaB08() */
   int rcd(0); // [enm] Return success code
   
   const int wvl_nbr(10);
@@ -551,17 +600,29 @@ void idx_rfr_H2O_tst()
     std::cout << std::endl;
   } // end loop over wvl
   
-  std::cout << ">>> Check idx_rfr_H2O_ice_get()" << std::endl;
+  std::cout << ">>> Check idx_rfr_H2O_ice_get_War84()" << std::endl;
   for(int wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
-    rcd=idx_rfr_H2O_ice_get // [fnc] Refractive index of ice water
+    rcd=idx_rfr_H2O_ice_get_War84 // [fnc] Refractive index of ice water
       (wvl_ctr[wvl_idx], // I [m] Wavelength at band center
        tpt[wvl_idx], // I [K] Temperature
        &idx_rfr); // O [frc] Refractive index of ice water
     std::cout << "Wavelength  = " << wvl_ctr[wvl_idx] << std::endl;
     std::cout << "Temperature = " << tpt[wvl_idx] << std::endl;
-    std::cout << "idx_rfr_H2O_ice_get (re) = " << idx_rfr.real() << std::endl;
-    std::cout << "idx_rfr_H2O_ice_get (im) = " << idx_rfr.imag() << std::endl;
+    std::cout << "idx_rfr_H2O_ice_get_War84 (re) = " << idx_rfr.real() << std::endl;
+    std::cout << "idx_rfr_H2O_ice_get_War84 (im) = " << idx_rfr.imag() << std::endl;
     std::cout << std::endl;
   } // end loop over wvl
-} // end idx_rfr_H2O_ice_get_tst()
+
+  std::cout << ">>> Check idx_rfr_H2O_ice_get_WaB08()" << std::endl;
+  for(int wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
+    rcd=idx_rfr_H2O_ice_get_WaB08 // [fnc] Refractive index of ice water
+      (wvl_ctr[wvl_idx], // I [m] Wavelength at band center
+       &idx_rfr); // O [frc] Refractive index of ice water
+    std::cout << "Wavelength  = " << wvl_ctr[wvl_idx] << std::endl;
+    std::cout << "idx_rfr_H2O_ice_get_WaB08 (re) = " << idx_rfr.real() << std::endl;
+    std::cout << "idx_rfr_H2O_ice_get_WaB08 (im) = " << idx_rfr.imag() << std::endl;
+    std::cout << std::endl;
+  } // end loop over wvl
+
+} // end idx_rfr_H2O_tst()
 

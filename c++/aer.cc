@@ -352,6 +352,7 @@ sng2mnr_sct_map aer_cls::mnr_map_mk(){ // Create abbreviation map
   using phc::spc_heat_CaCO3_sld; // () [J kg-1 K-1] Specific heat capacity of calcite (calcium carbonate) CRC95 p. 5-24
   using phc::spc_heat_CaSO4_sld; // () [J kg-1 K-1] Specific heat capacity of gypsum (hydrous calcium sulfate) CRC95 p. 5-9
   using phc::spc_heat_Fe2O3_sld; // () [J kg-1 K-1] Specific heat capacity of hematite (iron oxide) CRC95 p. 5-15
+  using phc::spc_heat_H2O_ice; // (2108.0) [J kg-1 K-1] Specific heat capacity of ice water (quora.com)
   using phc::spc_heat_H2O_lqd; // (4187.0) [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15 (fxm: better to derive this from density and volumetric spec. heat?)
   using phc::spc_heat_SiO2_sld; // (738962.0) [J kg-1 K-1] Specific heat capacity of quartz CRC95 p. 5-21
   using phc::spc_heat_dry_air; // (1004.697) [J kg-1 K-1] IrG81 p. 25
@@ -567,13 +568,21 @@ sng2mnr_sct_map aer_cls::mnr_map_mk(){ // Create abbreviation map
      mmw_Fe2O3, // (159.692e-03) [kg mol-1] Mean molecular weight
      spc_heat_Fe2O3_sld, // (650627.0) [J kg-1 K-1] Specific heat capacity of hematite (iron oxide) CRC95 p. 5-15
      dns_Fe2O3}, // (5260.0) [kg m-3] Density of hematite crystals (http://webmineral.com/data/Hematite.shtml)
+    {"h2o_War84", // [sng] Particle abbreviation
+     "H2O ice (War84)", // [sng] Particle description
+     "H2O", // [sng] Molecular composition
+     "Function ~/idx_rfr_H2O:idx_rfr_H2O_ice_get_War84()", // [sng] File containing refractive indices
+     (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
+     mmw_H2O, // [kg mol-1] Mean molecular weight
+     spc_heat_H2O_ice, // [J kg-1 K-1] Specific heat capacity of ice water 
+     dns_H2O_ice_std}, // (917.0) [kg m-3] Density of ice crystals (NGW03 p. 6)
     {"h2o_ice", // [sng] Particle abbreviation
      "H2O ice", // [sng] Particle description
      "H2O", // [sng] Molecular composition
-     "Function ~/idx_rfr_H2O:idx_rfr_H2O_ice_get()", // [sng] File containing refractive indices
+     "Function ~/idx_rfr_H2O:idx_rfr_H2O_ice_get_WaB08()", // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
      mmw_H2O, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     spc_heat_H2O_ice, // [J kg-1 K-1] Specific heat capacity of ice water 
      dns_H2O_ice_std}, // (917.0) [kg m-3] Density of ice crystals (NGW03 p. 6)
     {"h2o_lqd", // [sng] Particle abbreviation
      "H2O liquid", // [sng] Particle description

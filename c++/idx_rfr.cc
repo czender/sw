@@ -321,7 +321,8 @@ idx_rfr_cls::idx_rfr_get // [fnc] Return array of refractive indices
     // fxm: overload these functions to have array interface
     for(long wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
       if(abb == "h2o_lqd") rcd_lcl+=idx_rfr_H2O_lqd_get(wvl_ctr[wvl_idx],tpt,idx_rfr+wvl_idx);
-      if(abb == "h2o_ice") rcd_lcl+=idx_rfr_H2O_ice_get(wvl_ctr[wvl_idx],tpt,idx_rfr+wvl_idx);
+      if(abb == "h2o_ice") rcd_lcl+=idx_rfr_H2O_ice_get_WaB08(wvl_ctr[wvl_idx],idx_rfr+wvl_idx);
+      if(abb == "h2o_War84") rcd_lcl+=idx_rfr_H2O_ice_get_War84(wvl_ctr[wvl_idx],tpt,idx_rfr+wvl_idx);
     } // end loop over wvl 
     return rcd_lcl; // [enm] Return success code
   } // endif h2o_ice

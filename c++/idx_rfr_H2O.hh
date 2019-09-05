@@ -49,11 +49,16 @@ idx_rfr_H2O_lqd_get // [fnc] Refractive index of liquid water
 // end idx_rfr_H2O_lqd_get() prototype
 
 int // O [enm] Return success code
-idx_rfr_H2O_ice_get // [fnc] Refractive index of liquid water
+idx_rfr_H2O_ice_get_War84 // [fnc] Refractive index of liquid water
 (const prc_cmp wvl_ctr, // I [m] Wavelength at band center
  const prc_cmp tpt, // I [K] Temperature
  std::complex<prc_cmp> *idx_rfr); // O [frc] Refractive index of ice water
-// end idx_rfr_H2O_ice_get() prototype
+
+int // O [enm] Return success code
+idx_rfr_H2O_ice_get_WaB08 // [fnc] Refractive index of liquid water
+(const prc_cmp wvl_ctr, // I [m] Wavelength at band center
+ std::complex<prc_cmp> *idx_rfr); // O [frc] Refractive index of ice water
+// end idx_rfr_H2O_ice_get_W????() prototypes
 
 void idx_rfr_H2O_tst();
 

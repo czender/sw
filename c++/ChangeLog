@@ -1,3 +1,8 @@
+2019-09-05  Charlie Zender  <zender@uci.edu>
+
+	* Finish implementing WaB08 refractive indices as default for h2o_ice
+	  War84/95 indices are still accessible via aerosol type h2o_War84
+
 2019-09-04  Charlie Zender  <zender@uci.edu>
 
 	* Add WaB08 refractive indices, rename old tables _War84
