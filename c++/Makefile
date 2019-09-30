@@ -227,7 +227,7 @@ endif # end
 endif # endif NETCDF4
 
 # These tokens should not be altered by hand
-ifneq (${null},$(findstring LINUX,${PVM_ARCH}))
+ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSDMACOSX))
 # Decide among the plethora of Linux compilers
 ifndef LINUX_CXX
 # C++ compiler for Linux
