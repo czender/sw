@@ -607,3 +607,43 @@ make installcheck
 #***********************************************************************
 # 20170217: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 25 gcc/gfortran 6.3.1 netcdf-4.4.2-devel
 #***********************************************************************
+
+#***********************************************************************
+# 20191016: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.3.1 netcdf-4.7.2-devel
+#***********************************************************************
+# ESMF http://www.earthsystemmodeling.org
+# http://www.earthsystemcog.org/projects/regridweightgen/
+# Works fine with LINUX_FC=gfortran-mp-4.9 on aerosol (MACOSX)
+sudo dnf install netcdf-fortran netcdf-fortran-devel
+# dnf installs netcdf.mod in /usr/lib64/gfortran/modules/netcdf.mod
+sudo ln -s /usr/lib64/gfortran/modules/netcdf.mod /usr/include/netcdf.mod
+cd ${DATA}/tmp
+/bin/rm -r -f ${DATA}/esmf
+git clone -b ESMF_8_0_0 --depth 1 https://git.code.sf.net/p/esmf/esmf esmf
+cd ${DATA}/esmf
+export ESMF_BOPT='g' # Default is 'O' for optimized. 'g' builds debuggable library
+export ESMF_DIR='/data/zender/esmf'
+export ESMF_INSTALL_PREFIX='/usr/local'
+export ESMF_INSTALL_BINDIR='bin'
+export ESMF_INSTALL_DOCDIR='doc'
+export ESMF_INSTALL_HEADERDIR='include'
+export ESMF_INSTALL_LIBDIR='lib'
+export ESMF_INSTALL_MODDIR='include'
+export ESMF_LAPACK='internal'
+export ESMF_NETCDF='split'
+export ESMF_NETCDF_INCLUDE='/usr/include'
+export ESMF_NETCDF_LIBPATH='/usr/lib'
+export ESMF_NETCDF_LIBS='-lnetcdff -lnetcdf_c++ -lnetcdf'
+make clean
+make -j8
+make check
+
+# Run following command as root, meaning get a root terminal with 'sudo -s' then run 'make install'
+# 'sudo make install' would fail because it requires all environment variables be set. PITA.
+make install # Run as root (after defining above environment variables as root)
+make installcheck
+# Edit this if trying to install using sudo:
+# sudo ESMF_DIR='/data/zender/esmf' ESMF_INSTALL_PREFIX='/usr/local' ESMF_INSTALL_BINDIR='bin' ESMF_INSTALL_DOCDIR='doc' ESMF_INSTALL_HEADERDIR='include' ESMF_INSTALL_LIBDIR='lib' ESMF_INSTALL_MODDIR='include' make install
+#***********************************************************************
+# 20191016: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.3.1 netcdf-4.7.2-devel
+#***********************************************************************
