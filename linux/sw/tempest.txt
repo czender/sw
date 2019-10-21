@@ -407,7 +407,9 @@ CUBIT Geometry and Mesh Generation Toolkit from Sandia (superceded by Tempest?)
 Exodus Mesh format used by Tempest (.g files) 
 ICO Icosahedral
 GLL Gauss-Lobatto-Legendre
-CGLL Gauss-Lobatto-Legendre ?
+RLL is regular latitude/longitude (is uniform grid spacing in each direction)
+CGLL = continuous Galerkin on Gauss Lobatto Legendre nodes
+DGLL = discontinuous Galerkin on Gauss Lobatto Legendre nodes
 RLL Rectangular Latitude Longitude
 RRM Regionally Refined Model
 ne = number of edges?
