@@ -311,10 +311,33 @@ cd bin
 #***********************************************************************
 # 20191114: sastrugi.ess.uci.edu
 #***********************************************************************
-# Joeseph Kennedy finishes Tempest-remap conda package
-conda install -c conda-forge tempest-remap
+cd ${DATA}/tmp
+#git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+git pull
+git reset --hard origin/master
+autoreconf -fi
+configure --prefix=/usr/local --with-netcdf=/opt/local
+make
+sudo make install
 #***********************************************************************
 # 20191114: sastrugi.ess.uci.edu
+#***********************************************************************
+
+#***********************************************************************
+# 20191115: cori.nersc.gov
+#***********************************************************************
+cd ${DATA}/tmp
+#git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+git pull
+git reset --hard origin/master
+autoreconf -fi
+configure --prefix=${HOME}l--with-netcdf=/opt/cray/pe/netcdf/4.6.3.0/gnu/8.2
+make
+make install
+#***********************************************************************
+# 20191115: cori.nersc.gov
 #***********************************************************************
 
 #***********************************************************************
