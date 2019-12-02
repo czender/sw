@@ -283,7 +283,7 @@ mkdir -p build
 cd ${DATA}/tmp/tempestremap/build
 LDFLAGS='-L/lib64' ../configure --prefix=${HOME} --with-netcdf=/share/apps/netcdf/4.6.3/gcc/8.1.0
 make all
-sudo make install
+make install
 # Finishes compiling but fails at link step for binaries with 'cannot find -lcurl' (which is in /lib64)
 #***********************************************************************
 # 20190525: compy.pnl.gov
@@ -333,11 +333,27 @@ cd ${DATA}/tmp/tempestremap
 git pull
 git reset --hard origin/master
 autoreconf -fi
-configure --prefix=${HOME}l--with-netcdf=/opt/cray/pe/netcdf/4.6.3.0/gnu/8.2
+configure --prefix=${HOME} --with-netcdf=/opt/cray/pe/netcdf/4.6.3.0/gnu/8.2
 make
 make install
 #***********************************************************************
 # 20191115: cori.nersc.gov
+#***********************************************************************
+
+#***********************************************************************
+# 20191129: blues.lcrc.anl.gov x86_64/EMT64 CentOS7 gcc/gfortran 
+#***********************************************************************
+cd ${DATA}/tmp
+#git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+git pull
+git reset --hard origin/master
+autoreconf -fi
+configure --prefix=${HOME} --with-netcdf=/soft/spack-0.10.0/opt/spack/linux-centos6-x86_64/gcc-5.3.0/netcdf-4.4.1.1-2dtwbu4ojkwj5tqd4uqvomnu6ecmh6tx
+make
+make install
+#***********************************************************************
+# 20191129: blues.lcrc.anl.gov x86_64/EMT64 CentOS7 gcc/gfortran 
 #***********************************************************************
 
 #***********************************************************************
