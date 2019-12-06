@@ -2,8 +2,10 @@
 
 # Purpose: ssh configuration file
 
+# Usage: /bin/cp ~/sw/dot/config ~/.ssh/config
+
 # 20041229: Debian Ubuntu Linux times out ssh connections after about five minutes
+# 20191205: Update keep alive value as per https://bjornjohansen.no/ssh-timeout
 # These options should keep the ssh connection alive longer
 
-TCPKeepAlive=yes
-ServerAliveInterval=300
+ServerAliveInterval 120
