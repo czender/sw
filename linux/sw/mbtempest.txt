@@ -1,0 +1,15 @@
+#***********************************************************************
+# 20191208: sastrugi.ess.uci.edu
+# https://acme-climate.atlassian.net/wiki/spaces/ED/pages/932380820/Offline+remapping+workflow+with+mbtempest
+#***********************************************************************
+export CC=mpicc
+export CXX=mpicxx
+export FC=mpif90
+export HDF5_DIR=/usr/local/mpi
+export NETCDF_DIR=/usr/local/mpi
+cd ${DATA}/tmp
+git clone https://bitbucket.org/fathomteam/moab.git moab
+git checkout master
+#***********************************************************************
+# 20191208: sastrugi.ess.uci.edu
+#***********************************************************************
