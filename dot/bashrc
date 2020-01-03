@@ -1166,7 +1166,7 @@ alias x16='startx -- -bpp 16 :1' # Start 16 bpp display acessible as Ctl-Alt-F8
 # End section not yet merged with cshrc
 # 20180103: Omit these dirs pending new funding: terraref/extractors-environmental terraref/extractors-hyperspectral terraref/documentation
 alias gtc='for rps in acd cf2 cf-conventions diwg jaws nco pnp prv rsr sw valleyfeverdata; do cd ~/${rps};git commit -am "lazy commit";echo "Pushing ${rps}...";git push;done;cd'
-alias gtp='for rps in acd cf2 cf-conventions diwg jaws nco pnp prv rsr sw valleyfeverdata; do cd ~/${rps};echo "Pulling ${rps}...";git pull;done;cd'
+alias gtp='for rps in acd ccr cf2 cf-conventions diwg jaws nco pnp prv rsr sw valleyfeverdata; do cd ~/${rps};echo "Pulling ${rps}...";git pull;done;cd'
 alias gtr='git reset --hard origin/master'
 
 # Total size of all files in directory, including symlinks:
