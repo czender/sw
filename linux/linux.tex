@@ -4883,6 +4883,10 @@ sudo port install rx
 sudo port install udunits2
 #sudo port install nco
 
+# CCR
+sudo port install lz4 -y # CCR LZ4 library
+sudo port install libzstd-devel -y # CCR ZStandard library
+
 # ncdismember
 sudo port install py27-numpy
 sudo port install py27-netcdf4
@@ -5046,9 +5050,11 @@ sudo dnf install netcdf-perl -y # netCDF for htrn2nc.pl netcdf-perl only on Fedo
 sudo dnf install librx librx-devel -y # RX
 sudo dnf install texinfo-tex # TeXInfo, makeinfo
 sudo dnf install udunits2 udunits2-devel -y # UDUnits
-sudy dnf install protobuf -y # ncStream compiler for C++/Java/Python bindings
-sudy dnf install protobuf-c -y # ncStream compiler for C-bindings
-sudy dnf install protobuf-compiler -y # ncStream compiler
+sudo dnf install protobuf -y # ncStream compiler for C++/Java/Python bindings
+sudo dnf install protobuf-c -y # ncStream compiler for C-bindings
+sudo dnf install protobuf-compiler -y # ncStream compiler
+sudo dnf install lz4-devel -y # CCR LZ4 library
+sudo dnf install libzstd-devel -y # CCR ZStandard library
 # Science
 sudo dnf install hdf -y # HDF4
 sudo dnf install hdf-devel -y # HDF4 headers needed by, e.g., netCDF --enable-hdf4
@@ -5232,6 +5238,9 @@ sudo aptitude install doxygen libnetcdf6 libnetcdf-dev netcdf-bin # netCDF and D
 sudo aptitude install udunits libudunits2-0 libudunits2-dev # UDUnits
 # netcdf-perl needed by aca HITRAN programs
 sudo aptitude install libpdl-netcdf-perl libxml-simple-perl
+# Install CCR
+sudo aptitude install lz4 -y # CCR LZ4 library
+sudo aptitude install libzstd-devel -y # CCR ZStandard library
 # Install HDF4
 sudo aptitude install libhdf4-dev # For netCDF
 sudo aptitude install hdf4-tools 
