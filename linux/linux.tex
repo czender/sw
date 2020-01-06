@@ -5239,8 +5239,9 @@ sudo aptitude install udunits libudunits2-0 libudunits2-dev # UDUnits
 # netcdf-perl needed by aca HITRAN programs
 sudo aptitude install libpdl-netcdf-perl libxml-simple-perl
 # Install CCR
-sudo aptitude install lz4 -y # CCR LZ4 library
-sudo aptitude install libzstd-devel -y # CCR ZStandard library
+sudo aptitude install libbz2-dev # CCR BZIP2 library (only required if netCDF < 4.7.0? in whic case CCR is useless anyway)
+sudo aptitude install liblz4-dev # CCR LZ4 library
+sudo aptitude install libzstd-dev # CCR ZStandard library
 # Install HDF4
 sudo aptitude install libhdf4-dev # For netCDF
 sudo aptitude install hdf4-tools 
