@@ -327,6 +327,7 @@ sudo make install
 #***********************************************************************
 # 20191115: cori.nersc.gov
 #***********************************************************************
+module load gcc
 cd ${DATA}/tmp
 #git clone https://github.com/ClimateGlobalChange/tempestremap.git
 cd ${DATA}/tmp/tempestremap
@@ -354,6 +355,23 @@ make
 make install
 #***********************************************************************
 # 20191129: blues.lcrc.anl.gov x86_64/EMT64 CentOS7 gcc/gfortran 
+#***********************************************************************
+
+#***********************************************************************
+# 20200115: compy.nersc.gov
+#***********************************************************************
+module load gcc/8.1.0
+cd ${DATA}/tmp
+#git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+git pull
+git reset --hard origin/master
+autoreconf -fi
+configure --prefix=${HOME} --with-netcdf=/share/apps/netcdf/4.6.3/gcc/8.1.0
+make
+make install
+#***********************************************************************
+# 20200115: compy.nersc.gov
 #***********************************************************************
 
 #***********************************************************************
