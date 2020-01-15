@@ -299,9 +299,9 @@ The \cmdprn{TEXINPUTS} and \cmdprn{BIBINPUTS} environmental variables
 determine the \TeX\ search path.
 These should be set in startup files, e.g., \flidx{.bashrc}:
 \begin{verbatim}
-export TEXINPUTS=".:${HOME}/tex//:${HOME}/crr//:${DATA}/ps//: \
+export TEXINPUTS=".:${HOME}/texmf//:${HOME}/crr//:${DATA}/ps//: \
         ${TEXMFDIR}/pdftex//:${TEXMFDIR}/tex//::" 
-export BIBINPUTS=".:${HOME}/tex//:${TEXMFDIR}/bibtex//::"
+export BIBINPUTS=".:${HOME}/texmf//:${TEXMFDIR}/bibtex//::"
 \end{verbatim}
 % $: re-balance syntax highlighting
 If these variables are not set then packages must be in the current

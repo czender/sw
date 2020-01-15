@@ -1242,8 +1242,8 @@ esac # endcase ${PVM_ARCH}
 case ${PVM_ARCH} in
 # Place PDFTeX before TeX so, e.g., pdftexinfo.tex is loaded first
     AIX* | LINUX* | MACOSX* | SUN* | WIN32* )
-    export TEXINPUTS=".:${HOME}/sw/tex//:${HOME}/sw/crr//:${DATA}/fgr//:${DATA}/ps//:${TEXMFDIR}/pdftex//:${TEXMFDIR}/tex//::" # // is recursive, :: activates default system search paths
-    export BIBINPUTS=".:${HOME}/sw/tex//:${TEXMFDIR}/bibtex//::" # // is recursive, :: activates default system search paths
+    export TEXINPUTS=".:${HOME}/sw/tex//:${HOME}/sw/crr//:${HOME}/texmf//:${DATA}/fgr//:${DATA}/ps//:${TEXMFDIR}/pdftex//:${TEXMFDIR}/tex//::" # // is recursive, :: activates default system search paths
+    export BIBINPUTS=".:${HOME}/sw/tex//:${HOME}/texmf//:${TEXMFDIR}/bibtex//::" # // is recursive, :: activates default system search paths
 #    export TEXMFCNF=${TEXMFDIR}/web2c # One level above bibtex, tex,
 #    export THUMBPDF="--debug --verbose --device=mono" # Arguments to thumbpdf
     ;; # endif SUN* | LINUX* | AIX* | SGI* )
