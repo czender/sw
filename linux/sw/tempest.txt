@@ -375,6 +375,22 @@ make install
 #***********************************************************************
 
 #***********************************************************************
+# 20200115: skyglow.ess.uci.edu
+#***********************************************************************
+cd ${DATA}/tmp
+#git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+git pull
+git reset --hard origin/master
+autoreconf -fi
+configure --prefix=/usr/local --with-netcdf=/usr/local
+make
+sudo make install
+#***********************************************************************
+# 20200115: skyglow.ess.uci.edu
+#***********************************************************************
+
+#***********************************************************************
 # 20190912: Old TR notes from esmf.txt, copied here for convenience
 #***********************************************************************
 # NB: Tempest executables do not always (ever?) accept "--option=val" format, use "--option val" instead
