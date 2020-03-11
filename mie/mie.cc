@@ -4401,12 +4401,16 @@ int main(int argc,char **argv)
       {0,"flx_q_H2O_dps",NC_FLOAT,0,dmn_scl,"long_name","Moisture flux to atmosphere","units","kilogram meter-1 second-2"},
       {0,"pnt_typ_idx",NC_SHORT,0,dmn_scl,"long_name","Plant type index","units","index"},
       {0,"trn_fsh_vpr_soi_atm",NC_FLOAT,0,dmn_scl,"long_name","Transfer efficiency of vapor from soil to atmosphere","units","fraction"},
-      {0,"tpt_sfc",NC_FLOAT,0,dmn_scl,"long_name","Surface temperature","units","kelvin"},
-      {0,"tpt_sst",NC_FLOAT,0,dmn_scl,"long_name","Sea surface temperature","units","kelvin"},
-      {0,"tpt_ice",NC_FLOAT,0,dmn_scl,"long_name","Sea ice temperature","units","kelvin"},
+
+      {0,"tpt_aer",NC_FLOAT,0,dmn_scl,"long_name","\"Aerodynamic\" temperature at z=zpd+rgh_mmn","units","kelvin"},
+      {0,"tpt_ash",NC_FLOAT,0,dmn_scl,"long_name","\"Surface\" temperature at z=zpd+rgh_heat","units","kelvin"},
       {0,"tpt_gnd",NC_FLOAT,0,dmn_scl,"long_name","Ground temperature","units","kelvin"},
       {0,"tpt_gnd_mbl",NC_FLOAT,0,dmn_scl,"long_name","Ground temperature (mobilization)","units","kelvin"},
+      {0,"tpt_ice",NC_FLOAT,0,dmn_scl,"long_name","Sea ice temperature","units","kelvin"},
+      {0,"tpt_msv",NC_FLOAT,0,dmn_scl,"long_name","Radiative emission temperature","units","kelvin"},
+      {0,"tpt_sfc",NC_FLOAT,0,dmn_scl,"long_name","Surface temperature","units","kelvin"},
       {0,"tpt_soi",NC_FLOAT,0,dmn_scl,"long_name","Soil temperature","units","kelvin"},
+      {0,"tpt_sst",NC_FLOAT,0,dmn_scl,"long_name","Sea surface temperature","units","kelvin"},
       {0,"tpt_vgt",NC_FLOAT,0,dmn_scl,"long_name","Vegetation temperature","units","kelvin"},
       {0,"wnd_mrd_mdp",NC_FLOAT,0,dmn_scl,"long_name","Surface layer meridional wind speed","units","meter second-1"},
       {0,"wnd_mrd_rfr",NC_FLOAT,0,dmn_scl,"long_name","Reference level meridional wind speed","units","meter second-1"},
@@ -4437,12 +4441,15 @@ int main(int argc,char **argv)
     rcd=nco_put_var(nc_out,static_cast<std::string>("flx_q_H2O_dps"),flx_q_H2O_dps);
     rcd=nco_put_var(nc_out,static_cast<std::string>("pnt_typ_idx"),pnt_typ_idx);
     rcd=nco_put_var(nc_out,static_cast<std::string>("trn_fsh_vpr_soi_atm"),trn_fsh_vpr_soi_atm);
-    rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_sfc"),tpt_sfc);
-    rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_sst"),tpt_sst);
-    rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_ice"),tpt_ice);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_aer"),tpt_aer);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_ash"),tpt_ash);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_gnd"),tpt_gnd);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_gnd_mbl"),tpt_gnd_mbl);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_ice"),tpt_ice);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_msv"),tpt_msv);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_sfc"),tpt_sfc);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_soi"),tpt_soi);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_sst"),tpt_sst);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_vgt"),tpt_vgt);
     rcd=nco_put_var(nc_out,static_cast<std::string>("wnd_mrd_mdp"),wnd_mrd_mdp);
     rcd=nco_put_var(nc_out,static_cast<std::string>("wnd_mrd_rfr"),wnd_mrd_rfr);
