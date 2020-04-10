@@ -509,7 +509,7 @@ case "${PVM_ARCH}" in
 	fi # endif ROCKS_ROLLS_ROOT
 
 	case "${HOST}" in 
-	    acme1* | aims4* ) PATH=${PATH}\:/usr/local/e3sm_unified/envs/base/envs/e3sm_unified_1.2.5_py3.7_nox/bin ; ;; # endif LLNL
+	    acme1* | aims4* ) PATH=${PATH}\:/usr/local/e3sm_unified/envs/base/envs/e3sm_unified_1.3.0/bin ; ;; # endif LLNL
 	    *cheyenne* ) PATH=${PATH}\:/opt/pbs/bin ; ;; # NCAR cheyenne
 	    # Default compy PATH=/share/apps/modules/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/ganglia/bin:/opt/ganglia/sbin:/opt/pdsh/bin:/opt/rocks/bin:/opt/rocks/sbin:/qfs/people/zender/bin
 	    compy* ) PATH=${PATH}\:/share/apps/modules/bin\:/opt/rocks/bin ; ;; # PNNL compy
@@ -559,7 +559,7 @@ case "${PVM_ARCH}" in
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
 	case "${HOST}" in 
 	    # 20130916: Support NCAR modules on cheyenne by removing custom environment variables
-	    acme1* | aims4* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/e3sm_unified/envs/base/envs/e3sm_unified_1.2.5_py3.7_nox/lib ; ;; # endif LLNL
+	    acme1* | aims4* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/e3sm_unified/envs/base/envs/e3sm_unified_1.3.0/lib ; ;; # endif LLNL
 	    *cheyenne* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/u/apps/ch/opt/udunits/2.2.26/gnu/9.1.0/lib\:/glade/u/apps/ch/opt/gsl/2.4/gnu/6.3.0/lib ; ;; # endif NCAR
 	    pileus* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/ACME/lib\:/opt/ACME/uvcdat-2.2-build/install/Externals/lib ; ;; # endif CADES
 	    rhea* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/sw/redhat6/udunits/2.1.24/rhel6.4_intel13.1.3/lib ; ;; # endif ORNL
@@ -875,7 +875,7 @@ fi # endif hostname
 case "${HOST}" in
     cooley* | cc* | mira* | theta* ) export PROJID='OceanClimate_2' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
     cori* | nid* ) export PROJID='acme' ; export DATA="${HOME}/data" ; export PATH="${PATH}:/opt/cray/pe/netcdf/4.6.3.0/bin" ; ;; # 20190806 need for ncgen
-    rhea* | titan* ) export PROJID='cli115' ; export DATA="/gpfs/alpine/world-shared/${PROJID}/${USER}" ; export LD_LIBRARY_PATH='/ccs/home/zender/lib_rhea:/ccs/proj/cli900/sw/rhea/e3sm-unified/base/envs/e3sm_unified_1.2.5_py3.7_nox/lib'\:${LD_LIBRARY_PATH} ; ;; # endif OLCF
+    rhea* | titan* ) export PROJID='cli115' ; export DATA="/gpfs/alpine/world-shared/${PROJID}/${USER}" ; export LD_LIBRARY_PATH='/ccs/home/zender/lib_rhea:/ccs/proj/cli900/sw/rhea/e3sm-unified/base/envs/e3sm_unified_1.3.0/lib'\:${LD_LIBRARY_PATH} ; ;; # endif OLCF
 esac # endcase ${HOST}
 
 # Export the big three
