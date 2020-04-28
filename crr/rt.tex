@@ -58,7 +58,7 @@
 \ifpdf % PDFLaTeX
 \usepackage{graphicx} % Defines \includegraphics*
 \usepackage{thumbpdf} % Generate thumbnails
-\usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
+%\usepackage{epstopdf} % Convert .eps, if found, to .pdf when required
 \else % !PDFLaTeX
 \usepackage{graphicx} % Defines \includegraphics*
 \fi % !PDFLaTeX
@@ -404,8 +404,9 @@ of \trmidx{solid angle}, as in $\dfr\omega$.
 The reader should be careful not to misconstrue the two meanings.
 In this text we use $\omega$ only infrequently.
 
-Most radiative transfer literature use \trmdfn{wavelength} or
-\trmdfn{wavenumber}.
+Radiative transfer literature in the visible, infrared, and microwave
+regimes tends to use units of \trmdfn{wavelength},
+\trmdfn{wavenumber}, and frequency, respectively.
 Wavelength, $\wvl$ (m), measures the distance between two adjacent
 peaks or troughs in the wavefield.
 The universal relation between wavelength and frequency is
@@ -445,7 +446,8 @@ and energy in SI units (J) is obtained by using (\ref{eqn:wvn_dfn}) in
 \label{eqn:nrg_wvn_dfn}
 \end{eqnarray}
 
-There is another, distinct quantity also called \trmidx{wavenumber}. 
+There is another, distinct quantity also called \trmidx{wavenumber},
+though more precisely called \trmidx{angular wavenumber}.
 This secondary usage of wavenumber in this text is the traditional
 measure of spatial wave propagation and is denoted by $\wvnbr$. 
 \begin{eqnarray}
@@ -1258,11 +1260,14 @@ radiation as a function of temperature and wavelength
 \label{eqn:plk_dfn}
 \begin{align}
 \label{eqn:plk_frq_dfn}
-\plkfrq(\tpt,\frq) & = \frac{2 \cstplk \frq^{3}}{\cstspdlgt^{2} 
-( \me^{\cstplk \frq / \cstblt \tpt} - 1)} \\
+\plkfrq(\tpt,\frq) & = \frac{2 \cstplk \frq^{3}}
+{\cstspdlgt^{2}( \me^{\cstplk \frq / \cstblt \tpt} - 1)} \\
 \label{eqn:plk_wvl_dfn}
-\plkwvl(\tpt,\wvl) & = \frac{2 \cstplk \cstspdlgt^{2}}{\wvl^{5} 
-( \me^{\cstplk \cstspdlgt / \wvl \cstblt \tpt} - 1)}
+\plkwvl(\tpt,\wvl) & = \frac{2 \cstplk \cstspdlgt^{2}}
+{\wvl^{5} ( \me^{\cstplk \cstspdlgt / \wvl \cstblt \tpt} - 1)} \\
+\label{eqn:plk_wvn_dfn}
+\plkwvn(\tpt,\wvn) & = \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}
+{\me^{\cstplk \cstspdlgt \wvn / \cstblt \tpt} - 1}
 \end{align}
 \end{subequations}
 Blackbodies emit isotropically---this considerably simplifies 
@@ -1278,7 +1283,7 @@ The former predicts the blackbody radiance per unit frequency, while
 the latter predicts the blackbody radiance per unit wavelength.
 Of course these quantities are related since the blackbody energy
 within any given spectral band must be the same regardless of which
-formula is used to describe it.
+formula describes it.
 Expressed mathematically, this constraint means
 \begin{eqnarray}
 \plkfrq \,\dfr\frq & = & - \plkwvl \,\dfr\wvl
@@ -1300,6 +1305,53 @@ by using (\ref{eqn:wvl_dfn}) in (\ref{eqn:plk_frq_wvl_eqv})
 \label{eqn:plk_wvl_frq_dfn}
 \end{eqnarray}
 These relations are analogous to (\ref{eqn:flx_frq_wvl}).
+
+The Planck function (\ref{eqn:plk_dfn}) implicitly defines the
+\trmdfn{brightness temperature}.
+The brightness temperature $\tptbrt$ associated with an object with
+that emits a known radiance $\plkwvl$ or $\plkfrq$ is the temperature
+of the blackbody that would produce that radiance.
+Hence the brightness temperature is to radiance as the effective
+temperature is to flux.
+Both are characteristics are measured in terms of temperature, yet
+neither is the actual kinetic temperature of the object unless the
+object is a blackbody.
+These characteristics are most useful when the emissivity of the
+object is unknown.
+Inverting (\ref{eqn:plk_dfn}) yields the three analytic forms of
+$\tptbrt$: 
+\begin{subequations}
+\label{eqn:tpt_brt_dfn}
+\begin{align}
+\label{eqn:tpt_brt_frq_dfn}
+\plkfrq(\tptbrt,\frq) & = \frac{2 \cstplk \frq^{3}}{\cstspdlgt^{2} 
+( \me^{\cstplk \frq / \cstblt \tptbrt} - 1)} \nonumber \\
+\me^{\cstplk \frq / \cstblt \tptbrt} - 1 & =
+\frac{2 \cstplk \frq^{3}}{\plkfrq \cstspdlgt^{2}} \nonumber \\
+\frac{\cstplk \frq}{\cstblt \tptbrt} & =
+\ln \left( 1 + \frac{ 2 \cstplk \frq^{3}}{\plkfrq \cstspdlgt^{2}} \right) \nonumber \\
+\tptbrt(\plkfrq,\frq) & = \frac{\cstplk \frq}{\cstblt}
+\left[ \ln \left( 1 + \frac{ 2 \cstplk \frq^{3}}{\plkfrq \cstspdlgt^{2}} \right) \right]^{-1} \\
+\label{eqn:tpt_brt_wvl_dfn}
+\plkwvl(\tptbrt,\wvl) & = \frac{2 \cstplk \cstspdlgt^{2}}{\wvl^{5} 
+( \me^{\cstplk \cstspdlgt / \wvl \cstblt \tptbrt} - 1)} \nonumber \\
+\me^{\cstplk \cstspdlgt / \wvl \cstblt \tptbrt} - 1 & =
+\frac{2 \cstplk \cstspdlgt^{2}} {\plkwvl \wvl^{5}} \nonumber \\
+\frac{\cstplk \cstspdlgt}{\wvl \cstblt \tptbrt} & =
+\ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2}}{\plkwvl \wvl^{5}} \right) \nonumber \\
+\tptbrt(\plkwvl,\wvl) & = \frac{\cstplk \cstspdlgt}{\wvl \cstblt}
+\left[ \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2}}{\plkwvl \wvl^{5}} \right) \right]^{-1} \\
+\label{eqn:tpt_brt_wvn_dfn}
+\plkwvn(\tptbrt,\wvn) & = \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}
+{\me^{\cstplk \cstspdlgt \wvn / \cstblt \tptbrt} - 1} \nonumber \\
+\me^{\cstplk \cstspdlgt \wvn / \cstblt \tptbrt} - 1 & =
+\frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}{\plkwvn} \nonumber \\
+\frac{\cstplk \cstspdlgt \wvn}{\cstblt \tptbrt} & =
+\ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}{\plkwvn} \right) \nonumber \\
+\tptbrt(\plkwvn,\wvn) & = \frac{\cstplk \cstspdlgt \wvn}{\cstblt}
+\left[ \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}{\plkwvn} \right) \right]^{-1}
+\end{align}
+\end{subequations}
 
 The Planck function (\ref{eqn:plk_dfn}) has interesting behavior in
 both the high and the low energy photon limits. 
@@ -4883,8 +4935,8 @@ wavelengths depends on both $\msspth$ and $\rds$.
 If the microwave optical depth of the cloud is known, through any
 independent measurement, then we may use it to obtain $\msspth$ by
 inverting (\ref{eqn:tau_cld_ryl_lmt}).
-Fortunately $\tauextffc(\wvl)$ may be independently estimated through
-estimating the microwave \trmidx{brightness temperature} of clouds.
+Fortunately $\tauextffc(\wvl)$ may be independently estimated 
+using the microwave \trmidx{brightness temperature} of clouds.
 
 \subsection[Anomalous Diffraction Theory]{Anomalous Diffraction Theory}\label{sxn:adt}
 The full \trmidx{Mie theory} solutions are amenable to approximations
