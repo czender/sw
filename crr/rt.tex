@@ -418,8 +418,7 @@ where $\cstspdlgt$ is the \trmdfn{speed of light}.
 Since $\cstspdlgt$ depends on the medium, $\wvl$ also depends on the
 medium. 
 
-The \trmdfn{wavenumber} $\wvn$\,\xm, is exactly the inverse of
-wavelength 
+The \trmdfn{wavenumber} $\wvn$\,\xm, is exactly the inverse of wavelength 
 \begin{eqnarray}
 \wvn & \equiv & \frac{1}{\wvl} = \frac{\frq}{\cstspdlgt}
 \label{eqn:wvn_dfn}
@@ -431,20 +430,28 @@ $\wvn = \frq/\cstspdlgt$ so wavenumber $\wvn$ is indeed proportional
 to frequency (and thus to energy). 
 Historically spectroscopists have favored $\wvn$ rather than $\wvl$
 or $\frq$.
-Because of this history, it is much more common in the literature
-to find $\wvn$ expressed in CGS units of \xcm\ than in SI units of
-\xm. 
+Because of this history, it is more common for the literature to
+express $\wvn$ in CGS units of \xcm\ rather than SI units of \xm.
+Hereafter, this monograph assumes that $\wvn$ is in \xcm\ unless
+specifically stated otherwise.
 The CGS wavenumber is used analogously to frequency and to wavelength,
 i.e., to identify spectral regions.
 The energy of radiative transitions are commonly expressed in CGS
 wavenumber units. 
-The relation between $\wvn$ expressed in CGS wavenumber units (\xcm)
-and energy in SI units (J) is obtained by using (\ref{eqn:wvn_dfn}) in 
+The relations between $\wvn$ expressed in CGS wavenumber units (\xcm)
+and wavelength, frequency, and energy in SI units are obtained by using (\ref{eqn:wvn_dfn}) in 
 (\ref{eqn:nrg_dfn})
-\begin{eqnarray}
-\nrg & = & 100 \cstplk \cstspdlgt \frq
+\begin{subequations}
+\label{eqn:plk_wien_dfn}
+% cf ThS99 p. 94, KiK80 p. 94, GoY89 p. 30 (2.41)
+\begin{align}
 \label{eqn:nrg_wvn_dfn}
-\end{eqnarray}
+\frq & = \cstspdlgt / \wvl = 100 \cstspdlgt \wvn \\
+\wvl & = \cstspdlgt / \frq = 1 / ( 100 \wvn ) \\
+\wvn & = \frq / ( 100 \cstspdlgt ) = 1 / ( 100 \wvl ) \\
+\nrg & = \cstplk \frq = \cstplk \cstspdlgt / \wvl = 100 \cstplk \cstspdlgt \wvn
+\end{align}
+\end{subequations}
 
 There is another, distinct quantity also called \trmidx{wavenumber},
 though more precisely called \trmidx{angular wavenumber}.
@@ -1261,13 +1268,20 @@ radiation as a function of temperature and wavelength
 \begin{align}
 \label{eqn:plk_frq_dfn}
 \plkfrq(\tpt,\frq) & = \frac{2 \cstplk \frq^{3}}
-{\cstspdlgt^{2}( \me^{\cstplk \frq / \cstblt \tpt} - 1)} \\
+       {\cstspdlgt^{2}( \me^{\cstplk \frq / \cstblt \tpt} - 1)},
+       \qquad \mbox{\frq\ in \Hz, \plkfrq\ in \Hz$^{-1}$} \\
 \label{eqn:plk_wvl_dfn}
 \plkwvl(\tpt,\wvl) & = \frac{2 \cstplk \cstspdlgt^{2}}
-{\wvl^{5} ( \me^{\cstplk \cstspdlgt / \wvl \cstblt \tpt} - 1)} \\
+       {\wvl^{5} ( \me^{\cstplk \cstspdlgt / \wvl \cstblt \tpt} - 1)},
+       \qquad \mbox{\wvl\ in m, \plkwvl\ in m$^{-1}$} \\ 
 \label{eqn:plk_wvn_dfn}
 \plkwvn(\tpt,\wvn) & = \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}
-{\me^{\cstplk \cstspdlgt \wvn / \cstblt \tpt} - 1}
+       {\me^{\cstplk \cstspdlgt \wvn / \cstblt \tpt} - 1},
+       \qquad \mbox{\wvn\ in \xm, \plkwvn\ in (\xm)$^{-1}$} \\
+\label{eqn:plk_wvn_cgs_dfn}
+\plkwvn(\tpt,\wvn) & = \frac{2 \times 10^{8} \cstplk \cstspdlgt^{2} \wvn^{3}}
+       {\me^{100 \cstplk \cstspdlgt \wvn / \cstblt \tpt} - 1},
+       \qquad \mbox{\wvn\ in \xcm, \plkwvn\ in (\xcm)$^{-1}$}
 \end{align}
 \end{subequations}
 Blackbodies emit isotropically---this considerably simplifies 
@@ -1277,10 +1291,12 @@ great mysteries in experimental physics in the late 19th century.
 In fact, this discovery marked the beginning of the science of quantum 
 mechanics. 
 
-The relations (\ref{eqn:plk_frq_dfn}) and (\ref{eqn:plk_wvl_dfn})
-predict slightly different quantities. 
-The former predicts the blackbody radiance per unit frequency, while
-the latter predicts the blackbody radiance per unit wavelength.
+The relations (\ref{eqn:plk_frq_dfn})--(\ref{eqn:plk_wvn_cgs_dfn})
+predict slightly different quantities:
+$\plkfrq$ predicts the blackbody radiance per unit frequency,
+$\plkfrq$ predicts the blackbody radiance per unit wavelength,
+and the two expressions for $\plkwvn$ predict blackbody radiance per
+unit wavenumber in SI units (\xm) and CGS units (\xcm), respectively.
 Of course these quantities are related since the blackbody energy
 within any given spectral band must be the same regardless of which
 formula describes it.
@@ -1331,7 +1347,8 @@ $\tptbrt$:
 \frac{\cstplk \frq}{\cstblt \tptbrt} & =
 \ln \left( 1 + \frac{ 2 \cstplk \frq^{3}}{\plkfrq \cstspdlgt^{2}} \right) \nonumber \\
 \tptbrt(\plkfrq,\frq) & = \frac{\cstplk \frq}{\cstblt}
-\left[ \ln \left( 1 + \frac{ 2 \cstplk \frq^{3}}{\plkfrq \cstspdlgt^{2}} \right) \right]^{-1} \\
+\left[ \ln \left( 1 + \frac{ 2 \cstplk \frq^{3}}{\plkfrq \cstspdlgt^{2}} \right) \right]^{-1},
+\qquad \mbox{\frq\ in \Hz, \plkfrq\ in \Hz$^{-1}$} \\
 \label{eqn:tpt_brt_wvl_dfn}
 \plkwvl(\tptbrt,\wvl) & = \frac{2 \cstplk \cstspdlgt^{2}}{\wvl^{5} 
 ( \me^{\cstplk \cstspdlgt / \wvl \cstblt \tptbrt} - 1)} \nonumber \\
@@ -1340,7 +1357,8 @@ $\tptbrt$:
 \frac{\cstplk \cstspdlgt}{\wvl \cstblt \tptbrt} & =
 \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2}}{\plkwvl \wvl^{5}} \right) \nonumber \\
 \tptbrt(\plkwvl,\wvl) & = \frac{\cstplk \cstspdlgt}{\wvl \cstblt}
-\left[ \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2}}{\plkwvl \wvl^{5}} \right) \right]^{-1} \\
+\left[ \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2}}{\plkwvl \wvl^{5}} \right) \right]^{-1},
+\qquad \mbox{\wvl\ in m, \plkwvl\ in m$^{-1}$} \\ 
 \label{eqn:tpt_brt_wvn_dfn}
 \plkwvn(\tptbrt,\wvn) & = \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}
 {\me^{\cstplk \cstspdlgt \wvn / \cstblt \tptbrt} - 1} \nonumber \\
@@ -1349,7 +1367,12 @@ $\tptbrt$:
 \frac{\cstplk \cstspdlgt \wvn}{\cstblt \tptbrt} & =
 \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}{\plkwvn} \right) \nonumber \\
 \tptbrt(\plkwvn,\wvn) & = \frac{\cstplk \cstspdlgt \wvn}{\cstblt}
-\left[ \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}{\plkwvn} \right) \right]^{-1}
+\left[ \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}{\plkwvn} \right) \right]^{-1},
+\qquad \mbox{\wvn\ in \xm, \plkwvn\ in (\xm)$^{-1}$} \\
+\label{eqn:tpt_brt_wvn_cgs_dfn}
+\tptbrt(\plkwvn,\wvn) & = \frac{100 \cstplk \cstspdlgt \wvn}{\cstblt}
+\left[ \ln \left( 1 + \frac{2 \times 10^{8} \cstplk \cstspdlgt^{2} \wvn^{3}}{\plkwvn} \right) \right]^{-1},
+\qquad \mbox{\wvn\ in \xcm, \plkwvn\ in (\xcm)$^{-1}$}
 \end{align}
 \end{subequations}
 
@@ -1407,7 +1430,10 @@ and we obtain
 \frac{2 \frq^{2} \cstblt \tpt}{\cstspdlgt^{2} } \\
 \label{eqn:plk_wvl_ryl_jean_dfn}
 \plkwvl(\tpt,\wvl) & \approx  
-\frac{2 \cstspdlgt \cstblt \tpt}{\wvl^{4}}
+\frac{2 \cstspdlgt \cstblt \tpt}{\wvl^{4}} \\
+\label{eqn:plk_wvn_ryl_jean_dfn}
+\plkwvn(\tpt,\wvn) & \approx  
+\frac{2 \cstspdlgt \cstblt \tpt}{\wvn^{4}}
 \end{align}
 \end{subequations}
 
@@ -6517,7 +6543,7 @@ These molecules therefore have no rotational bands in their ground
 vibrational state.
 
 The factor of $\cstspdlgt$ on the RHS of (\ref{eqn:frq_rtt_trn_dfn}) 
-disappears if we work in wavenumber rather than frequency units.
+disappears if we work in SI wavenumber rather than frequency units.
 Using $\wvn = \frq / \cstspdlgt$ results in 
 \begin{eqnarray}
 \wvn & = & \Delta \nrgrtt = 2 \cstrtt ( \qntrtt + 1 )
