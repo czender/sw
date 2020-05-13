@@ -4921,15 +4921,18 @@ sudo port install -t ddd # Installation sudo
 # https://stackoverflow.com/questions/8361002/how-to-use-the-gcc-installed-in-macports
 # Compiler selection must be re-done after each OS upgrade (even minor ones)
 # This usually works fine for C-code, though causes link failure with C++ code (like antlr)
-sudo port install gcc9
-sudo port install clang-9.0
+#sudo port install gcc9
+sudo port install gcc10
+#sudo port install clang-9.0
+sudo port install clang-10
 # port select --list gcc
 # sudo port select --set gcc mp-gcc7
 # sudo port select --set gcc mp-gcc8
 # sudo port select --set gcc mp-gcc9
 # sudo port select --set gcc mp-gcc10
-# sudo port --list clang
+# port select --list clang
 # sudo port select --set clang mp-clang-9.0
+# sudo port select --set clang mp-clang-10
 sudo port select --set python python37
 
 sudo port selfupdate

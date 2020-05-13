@@ -610,7 +610,8 @@ ifeq (${OPTS},R)
  FFLAGS += -g
 endif
 ifeq (${OPTS},X)
- FFLAGS += -g -O -fbounds-check -pedantic -Wconversion -Werror -Wimplicit-interface -Wunderflow
+# FFLAGS += -g -O -fbounds-check -pedantic -Wconversion -Werror -Wimplicit-interface -Wunderflow
+ FFLAGS += -g -O -fbounds-check -pedantic -Wconversion -Wimplicit-interface -Wunderflow
 endif
 endif # end GNU Fortran Compiler
 # Intel (Kai) C Compiler
