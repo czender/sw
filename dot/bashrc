@@ -161,8 +161,10 @@ fi # endif HOST
 if fl_is_exe ${HOME}/nco/autobld/config.guess ; then
     # GNU triplet
     # 20190812: Linux config.guess nearly hangs (minutes) with "fork: retry: No child processes", MacOS is OK
+    # 20200513: MacOS config.guess on firn complains "fork: Resource temporarily unavailable"
     case "${HOST}" in 
-	firn* | sastrugi* ) export GNU_TRP=`${HOME}/nco/autobld/config.guess` ; ;;
+	firn* ) export GNU_TRP='x86_64-apple-darwin19.4.0' ; ;;
+	sastrugi* ) export GNU_TRP=`${HOME}/nco/autobld/config.guess` ; ;;
 	* ) export GNU_TRP='x86_64-unknown-linux-gnu' ; ;;
 #	* ) export GNU_TRP='20190814_config_guess_workaround' ; ;;
     esac # endcase ${HOST}
