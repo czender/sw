@@ -2,7 +2,7 @@
 
 // Purpose: Description (definition) of Markel and Shalaev (1999) Mie scattering solutions
 
-/* Copyright (C) 2005--2017 Charlie Zender, Jorge Talamantes, Vadim Markel, and Vladimir Shalaev
+/* Copyright (C) 2005--present Charlie Zender, Jorge Talamantes, Vadim Markel, and Vladimir Shalaev
    License: GNU General Public License (GPL) Version 3
    See http://www.gnu.org/copyleft/gpl.html for full license text */
 

@@ -2,7 +2,7 @@
 
 // Purpose:
 
-/* Copyright (C) 2005--2017 Charlie Zender, Jorge Talamantes
+/* Copyright (C) 2005--present Charlie Zender, Jorge Talamantes
    License: GNU General Public License (GPL) Version 3
    See http://www.gnu.org/copyleft/gpl.html for full license text */
 

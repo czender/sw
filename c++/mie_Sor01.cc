@@ -2,7 +2,7 @@
 
 // Purpose: Implementation of expressions for absorption and scattering cross sections of electromagnetic radiation by fractal aggregates.
 
-/* Copyright (C) 2005--2017 Charlie Zender and Jorge Talamantes
+/* Copyright (C) 2005--present Charlie Zender and Jorge Talamantes
    License: GNU General Public License (GPL) Version 3
    See http://www.gnu.org/copyleft/gpl.html for full license text */
 

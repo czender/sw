@@ -7,7 +7,7 @@
    dbg.hh is used to define global typedefs such as prc_cmp
    Thus dbg.hh must be first file in "personal header" section */
 
-/* Copyright (C) 1997--2017 Charlie Zender
+/* Copyright (C) 1997--present Charlie Zender
    License: GNU General Public License (GPL) Version 3
    See http://www.gnu.org/copyleft/gpl.html for full license text */
 

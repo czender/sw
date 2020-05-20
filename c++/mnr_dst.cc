@@ -2,7 +2,7 @@
 
 // Purpose: Mineral dust physics utilities for C++ programs
 
-/* Copyright (C) 1997--2017 Charlie Zender
+/* Copyright (C) 1997--present Charlie Zender
    License: GNU General Public License (GPL) Version 3
    See http://www.gnu.org/copyleft/gpl.html for full license text */
 

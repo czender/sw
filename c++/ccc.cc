@@ -2,7 +2,7 @@
 
 // Purpose: (1) C++ template (2) System testing (3) Library driver
 
-/* Copyright (C) 1997--2017 Charlie Zender
+/* Copyright (C) 1997--present Charlie Zender
    License: GNU General Public License (GPL) Version 3
    See http://www.gnu.org/copyleft/gpl.html for full license text
    The original author of this software, Charlie Zender, seeks to improve
@@ -2476,7 +2476,7 @@ EOF
   rcd=nco_close(nc_out); // [fnc] Close netCDF file
   std::cerr << "Wrote results to " << fl_out << std::endl;
   std::cerr << "ncks: ncks -C -F -d wvl,0.5e-6 -v wvl " << fl_out << std::endl;
-  std::cerr << "ncks: ncks --no-crd --prn --ftn --mtd --units --dmn wvl,0.5e-6 --var wvl " << fl_out << std::endl;
+  std::cerr << "ncks: ncks --no_crd --prn --ftn --mtd --units --dmn wvl,0.5e-6 --var wvl " << fl_out << std::endl;
 
   Exit_gracefully();
   return EXIT_SUCCESS;

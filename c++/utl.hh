@@ -2,7 +2,7 @@
 
 // Purpose: Utilities for libcsz_c++  
 
-/* Copyright (C) 1997--2017 Charlie Zender
+/* Copyright (C) 1997--present Charlie Zender
    This software is distributed under the terms of the General Public License
    See http://www.gnu.org/copyleft/gpl.html for full license text */
 
