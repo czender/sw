@@ -646,6 +646,15 @@ endif
 ifeq (clang,$(firstword ${CXX}))
  GCC_OR_CLANG := Y
 endif
+ifeq (clang++,$(firstword ${CXX}))
+ GCC_OR_CLANG := Y
+endif
+ifeq (clang-mp-10,$(firstword ${CXX}))
+ GCC_OR_CLANG := Y
+endif
+ifeq (clang++-mp-10,$(firstword ${CXX}))
+ GCC_OR_CLANG := Y
+endif
 ifeq (${GCC_OR_CLANG},Y)
 # Enable Large File Support (LFS) by default
  CPPFLAGS += -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
@@ -698,19 +707,22 @@ ifeq (${GCC_OR_CLANG},Y)
 # -Dinline=: inline is not an ANSI keyword, must undefine inline to work with -ansi
 # -fshort-enums: Make enums as short as possible, ususally non-int. Do not ever invoke this! This breaks ABI and causes subtle problems
 ifeq (${OMP},Y)
-ifneq (clang,$(firstword ${CXX}))
+ifeq (${null},$(findstring clang,${CXX}))
+# This is GCC block
 # 20140526 clang does not recognize/utilize -fopenmp
  OMP_FLG_C := -fopenmp
  OMP_FLG_F := -fopenmp
- LDFLAGS += -lgomp -lpthread
+ LDFLAGS += -lgomp -lpthreadf
  OMP_FLG_LD := -lgomp -lpthread
+else
+# Clang block
+# 20140531 avoid clang error that -O4 is ame as -O3
+ OMP_FLG_C := -fopenmp
+ OMP_FLG_F := -fopenmp
+ CFLAGS := $(subst -O4,-O3,${CFLAGS})
+ LDFLAGS += -lomp -lstdc++
 endif # endif clang
 endif # endif OMP
-ifeq (clang,$(firstword ${CXX}))
-# 20140531 avoid clang error that -O4 is ame as -O3
- CFLAGS := $(subst -O4,-O3,${CFLAGS})
- LDFLAGS += -lstdc++
-endif # endif clang
 ifeq (${OPTS},O)
  CFLAGS += -O -g ${GCC_RCH_ARG}
 endif

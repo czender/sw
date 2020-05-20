@@ -1,5 +1,7 @@
 2020-05-20  Charlie Zender  <zender@uci.edu>
 
+	* Fix OpenMP with clang
+
 	* Update copyright from --2017 to --present
 
 2019-09-05  Charlie Zender  <zender@uci.edu>
