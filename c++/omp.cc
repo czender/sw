@@ -36,8 +36,7 @@ openmp_ini // [fnc] Set up OpenMP multi-threading environment
 (const int thr_nbr) // I [nbr] User-requested thread number
 {
   /* Purpose: Initialize OpenMP multi-threading environment
-     Honor user-requested thread number, balance against known code efficiency,
-     print diagnostics */
+     Honor user-requested thread number, balance against known code efficiency, print diagnostics */
   // Output
   int thr_nbr_act=0; // O [nbr] Thread number in parallel regions
   // Local

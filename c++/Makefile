@@ -708,17 +708,20 @@ ifeq (${GCC_OR_CLANG},Y)
 # -fshort-enums: Make enums as short as possible, ususally non-int. Do not ever invoke this! This breaks ABI and causes subtle problems
 ifeq (${OMP},Y)
 ifeq (${null},$(findstring clang,${CXX}))
-# This is GCC block
-# 20140526 clang does not recognize/utilize -fopenmp
- OMP_FLG_C := -fopenmp
- OMP_FLG_F := -fopenmp
+# GCC block
+# 20200520 GCC supports OpenMP vector pipeline hints when compiled with -fopenmp-simd
+ OMP_FLG_C := -fopenmp -fopenmp-simd
+ OMP_FLG_F := -fopenmp -fopenmp-simd
  LDFLAGS += -lgomp -lpthreadf
  OMP_FLG_LD := -lgomp -lpthread
 else
 # Clang block
-# 20140531 avoid clang error that -O4 is ame as -O3
- OMP_FLG_C := -fopenmp
- OMP_FLG_F := -fopenmp
+# 20140526 clang does not recognize/utilize -fopenmp
+# 20200520 clang recognizes/utilizes -fopenmp
+# 20200520 clang supports OpenMP vector pipeline hints when compiled with -openmp-simd
+ OMP_FLG_C := -fopenmp -openmp-simd
+ OMP_FLG_F := -fopenmp -fopenmp-simd
+# 20140531 avoid clang error that -O4 is same as -O3
  CFLAGS := $(subst -O4,-O3,${CFLAGS})
  LDFLAGS += -lomp -lstdc++
 endif # endif clang
