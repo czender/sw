@@ -218,7 +218,7 @@ yyyymmdd2doy(const long yyyymmdd) // I [yyyymmdd] Date
     if(is_leap_yr(yyyy)) 
       doy++;
   //  print STDOUT "yyyymmdd2doy() reports \$yyyymmdd = $yyyymmdd, \$doy = $doy\n";
-    return doy;
+  return doy;
 } // end yyyymmdd2doy()
 
 short // O [day] Days in month

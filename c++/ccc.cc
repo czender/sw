@@ -1950,15 +1950,24 @@ int main(int argc,char **argv)
    typeid(unsigned short).name() = t */
   } // end if dbg || tst_sng == "rtti"
 
-  if(dbg_lvl == dbg_old || tst_sng == "spc_slr"){
-    std::cout << "Testing spc_slr class..." << std::endl;
-    // Instantiate solar flux source
-    spc_slr_cls flx_slr_src; // [sct] Solar flux source
-    // Print solar flux source object
-    std::cout << flx_slr_src; // [sct] Solar flux source
-    // Test solar flux source class for memory leaks by initializing lng_foo members
-    rcd+=spc_slr_cls::tst(lng_foo); // [sct] Solar flux source
-  } // end if dbg || tst_sng == "spc_slr"
+  if(dbg_lvl == dbg_old || tst_sng == "simd"){
+    // ccc --dbg=1 --tst=simd
+    std::cout << "Testing OpenMP SIMD implementation..." << std::endl; 
+#ifdef _OPENMP // OpenMP-compliant compilers define _OPENMP=YYYYMM = year and month of OpenMP specification
+    std::cout << "OpenMP Activation token _OPENMP is true" << std::endl; 
+    int dyn_thr(1); // [flg] Allow system to dynamically set number of threads
+    int ntg_OMP_NUM_THREADS=CEWI_int; // [nbr] OMP_NUM_THREADS environment variable
+    const int thr_nbr_max_fsh(4); // [nbr] Maximum number of threads program can use efficiently
+    const int thr_nbr_max(omp_get_max_threads()); // [nbr] Maximum number of threads system allows
+    const int prc_nbr_max(omp_get_num_procs()); // [nbr] Number of processors available
+    const std::string nvr_OMP_NUM_THREADS((std::getenv("OMP_NUM_THREADS")) ? std::getenv("OMP_NUM_THREADS") : ""); // [sng] Environment variable OMP_NUM_THREADS
+#else // !_OPENMP
+    std::cout << "OpenMP Activation token _OPENMP is false" << std::endl; 
+    std::cout << prg_nm_get() << ": INFO Not attempting OpenMP threading" << std::endl;
+#endif // !_OPENMP
+#ifdef _OPENMP // OpenMP-compliant compilers define _OPENMP=YYYYMM = year and month of OpenMP specification
+#endif // endif _OPENMP
+  } // end if dbg || tst_sng == "simd"
 
   if(dbg_lvl == dbg_old || tst_sng == "sizeof"){
     std::cout << "Testing dynamic sizing ability..." << std::endl;
@@ -1973,6 +1982,16 @@ int main(int argc,char **argv)
     std::cerr << "grd_typ_nbr = " << grd_typ_nbr << std::endl;
   } // end if dbg || tst_sng == "sizeof"
   
+  if(dbg_lvl == dbg_old || tst_sng == "spc_slr"){
+    std::cout << "Testing spc_slr class..." << std::endl;
+    // Instantiate solar flux source
+    spc_slr_cls flx_slr_src; // [sct] Solar flux source
+    // Print solar flux source object
+    std::cout << flx_slr_src; // [sct] Solar flux source
+    // Test solar flux source class for memory leaks by initializing lng_foo members
+    rcd+=spc_slr_cls::tst(lng_foo); // [sct] Solar flux source
+  } // end if dbg || tst_sng == "spc_slr"
+
   if(dbg_lvl == dbg_old || tst_sng == "sng" || tst_sng == "srm"){
     /* Test string and stream handling DeD97 p. 915, DeD01 p. 960
        ccc --tst=srm --sz_nbr=15 --dbl_foo=73.0e-73 --flt_foo=37.0e-37 --sng_foo=9223372036854775807

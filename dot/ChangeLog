@@ -1,3 +1,7 @@
+2020-05-29  Charlie Zender  <zender@uci.edu>
+
+	* Change from C++ -std=c++11 to -std=c++17
+
 2018-08-30  Charlie Zender  <zender@aerosol>
 
 	* Fix syntax bug in .emacs file that prevented full loading
