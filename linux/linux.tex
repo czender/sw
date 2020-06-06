@@ -7603,6 +7603,7 @@ aptitude install `apt-show-versions -u -b | grep unstable` # Upgrade unstable pa
 aptitude install foo # Locate, download, and install package foo
 aptitude install foo http://marillat.free.fr/ # Locate, download, and install package foo
 aptitude install foo=x.y # Locate, download, and install package foo version x.y
+aptitude purge ~o # Remove all obsolete aptitude packages
 aptitude remove foo # Uninstall foo-x.y.deb
 aptitude update # Resynchronize package index files from sources
 aptitude upgrade # Install newest versions of all packages currently installed
