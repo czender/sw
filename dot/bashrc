@@ -1079,7 +1079,7 @@ alias acme1='ssh -Y zender1@acme1.llnl.gov' # pw_hgh source /usr/local/uvcdat/la
 alias aims4='ssh -Y zender1@aims4.llnl.gov' # pw_hgh source /usr/local/uvcdat/latest/bin/setup_runtime.sh
 alias bebop='ssh -Y bebop.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias bm='cd ~/nco/bm;nco_bm.pl --regress ncks;cd -'
-alias blues='ssh -Y blues.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
+alias blues='ssh -Y ac.zender@blues.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias cooley='ssh -Y cooley.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
 alias theta='ssh -Y theta.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
 alias cori='ssh -Y cori.nersc.gov' # pw_hgh

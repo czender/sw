@@ -5163,11 +5163,20 @@ sudo aptitude install auctex preview-latex # Install Emacs add-ons
 sudo ln -s /usr/bin/mimencode /usr/local/bin/mmencode # Rmail uses mmencode
 emacs & # Edit dot files to contain new system name
 cd dot;make dot;. bashrc;cd # Install dot files, load custom bash settings
-ssh-keygen -t rsa # Generate RSA key
+ssh-keygen -t rsa # Generate default RSA key
+ssh-keygen -b 2048 -t rsa # Generate 2048-bit RSA key
+ssh-keygen -b 2048 -t rsa -f id_rsa_pph # Generate RSA key with specific filename passphrase
 ssh-keygen -t ecdsa # Generate DSA key
 ssh-vulnkey -a # Check keys for vulnerability
+ssh-keygen -p -f ~/.ssh/id_rsa # Add/change passphrase to key
 cd ~/dot;cp authorized_keys known_hosts ~/.ssh # Setup SSH
 chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys
+# 20200611 ALCF LCRF suggestions for OpenSSH permissions
+chmod go-w ~zender
+chmod 700 ~zender/.ssh
+chmod 600 ~zender/.ssh/id_rsa
+chmod 644 ~zender/.ssh/id_rsa.pub
+chmod 644 ~zender/.ssh/authorized_keys
 # Dell-specific packages http://linux.dell.com/wiki/index.php/Repository/firmware
 sudo wget -q -O - http://linux.dell.com/repo/firmware/bootstrap.cgi | bash
 sudo aptitude install firmware-addon-dell

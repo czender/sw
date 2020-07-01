@@ -9,3 +9,13 @@
 # These options should keep the ssh connection alive longer
 
 ServerAliveInterval 120
+
+Host bebop
+    HostName bebop.lcrc.anl.gov
+    User ac.zender
+    IdentityFile ~/.ssh/id_rsa_pph
+
+Host blues
+    HostName blues.lcrc.anl.gov
+    User ac.zender
+    IdentityFile ~/.ssh/id_rsa_pph
