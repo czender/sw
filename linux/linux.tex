@@ -5030,6 +5030,8 @@ sudo dnf install man-pages -y
 sudo dnf install kernel-devel -y
 sudo ln -s /usr/src/kernels/3.9.6-200.fc18.x86_64 /usr/src/linux # Update <version>.<release>-<arch> as necessary
 sudo dnf install ddd -y
+# Java for Panoply (and DDD?)
+sudo dnf install java-latest-openjdk.x86_64 -y
 # Install debugging information used by DDD?
 # sudo debuginfo-install nco # Do not do this without further testing
 # sudo dnf remove *-debuginfo # This removes all -debuginfo RPMs
