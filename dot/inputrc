@@ -12,3 +12,8 @@
 #set convert-meta off
 #set output-meta on
 set completion-ignore-case on
+
+# 2020-08-03
+# Help GDB understand common command-line abbreviations
+set expand-tilde on
+set editing-mode emacs
