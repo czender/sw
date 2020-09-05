@@ -1954,13 +1954,6 @@ int main(int argc,char **argv)
     // ccc --dbg=1 --tst=simd
     std::cout << "Testing OpenMP SIMD implementation..." << std::endl; 
 #ifdef _OPENMP // OpenMP-compliant compilers define _OPENMP=YYYYMM = year and month of OpenMP specification
-    std::cout << "OpenMP Activation token _OPENMP is true" << std::endl; 
-    int dyn_thr(1); // [flg] Allow system to dynamically set number of threads
-    int ntg_OMP_NUM_THREADS=CEWI_int; // [nbr] OMP_NUM_THREADS environment variable
-    const int thr_nbr_max_fsh(4); // [nbr] Maximum number of threads program can use efficiently
-    const int thr_nbr_max(omp_get_max_threads()); // [nbr] Maximum number of threads system allows
-    const int prc_nbr_max(omp_get_num_procs()); // [nbr] Number of processors available
-    const std::string nvr_OMP_NUM_THREADS((std::getenv("OMP_NUM_THREADS")) ? std::getenv("OMP_NUM_THREADS") : ""); // [sng] Environment variable OMP_NUM_THREADS
 #else // !_OPENMP
     std::cout << "OpenMP Activation token _OPENMP is false" << std::endl; 
     std::cout << prg_nm_get() << ": INFO Not attempting OpenMP threading" << std::endl;

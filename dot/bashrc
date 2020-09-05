@@ -599,7 +599,7 @@ case "${PVM_ARCH}" in
 	    cg1* ) export GCC_RCH_ARG='-mcpu=970' ; ;; # endif PowerPC 970
 	esac # endcase ${HOST}
 	export SYSTYPE='BSD' # Used by killproc
-	export PYTHONPATH=/usr/lib/portage/pym
+#	export PYTHONPATH=/usr/lib/portage/pym
 	export TEXMFDIR=/opt/local/share/texmf-texlive # One level above bibtex, tex,
 	
 	PATH=${PATH}\:/opt/local/libexec/gnubin # Up-to-date GNU commands from GNU MacPorts coreutils
