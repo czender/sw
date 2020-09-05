@@ -606,12 +606,12 @@ case "${PVM_ARCH}" in
 	PATH=${PATH}\:/usr/local/bin # Custom-built 3rd party packages
 	PATH=${PATH}\:/opt/local/bin # MacPorts packages
 	PATH=${PATH}\:/opt/local/sbin # MacPorts packages
-#	PATH=${PATH}\:${HOME}/anaconda/bin
 	PATH=${PATH}\:/usr/bin # OS X defaults
 	PATH=${PATH}\:/bin # OS X coreutils
 	PATH=${PATH}\:/usr/sbin # OS X root coreutils
 	PATH=${PATH}\:/sbin # OS X root coreutils
 	PATH=${PATH}\:/opt/X11/bin # X
+	PATH=${PATH}\:${HOME}/anaconda/bin
 	
 	MANPATH=${MANPATH}\:${HOME}/nco/man
 	MANPATH=${MANPATH}\:/usr/local/share/man
@@ -622,6 +622,7 @@ case "${PVM_ARCH}" in
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/local/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${HOME}/anaconda/lib
 
 # fxm: 20051022 Chris Knox says use DYLD_LIBRARY_PATH
 # fxm: 20140531 Unsure this is wise
