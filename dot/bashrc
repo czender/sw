@@ -447,6 +447,8 @@ case "${PVM_ARCH}" in
 	esac # endcase ${HOST}
 	export NETCDF_INC="${NETCDF_ROOT}/include"
 	export NETCDF_LIB="${NETCDF_ROOT}/lib"
+	# 20200906: Always export HDF5_PLUGIN_PATH (at least on MacOSX) for CCR
+	export HDF5_PLUGIN_PATH='/usr/local/hdf5/lib/plugin'
 	case "${HOST}" in 
 	    # 20130214: Support NCAR modules on cheyenne by removing custom environment variables?
 	    rhea* ) unset NETCDF_ROOT ; unset NETCDF4_ROOT ; unset NETCDF_INC ; unset NETCDF_LIB ; ;; # endif NCAR, ORNL
@@ -582,7 +584,9 @@ case "${PVM_ARCH}" in
 	export DATA=/Users/${USER}/data
 	export INFOPATH=./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/share/info
 	export NCARG_ROOT='/opt/local' # Port-installed
-	export NETCDF_ROOT=/opt/local
+	export NETCDF_ROOT=/opt/local # MacPorts
+	# 20200906: Always export HDF5_PLUGIN_PATH (at least on MacOSX) for CCR
+	export HDF5_PLUGIN_PATH='/usr/local/hdf5/lib/plugin'
 #	export NETCDF_INC=/opt/local/include
 #	export NETCDF_LIB=/opt/local/lib
 #	export NETCDF_INC=${HOME}/include
@@ -1037,13 +1041,12 @@ alias dze='cd ${DATA}' # ; function dzecp { cp ${1} ${DATA} ; }
 
 alias hbi='cd ${HOME}/bin' ; function hbicp { cp ${1} ${HOME}/bin ; }
 alias hac='cd ${HOME}/sw/aca' ; function haccp { cp ${1} ${HOME}/sw/aca ; }
+alias hcc='cd ${HOME}/ccr' ; function hcccp { cp ${1} ${HOME}/ccr ; }
 alias hcp='cd ${HOME}/sw/c++' ; function hcpcp { cp ${1} ${HOME}/sw/c++ ; }
 alias hcr='cd ${HOME}/sw/crr' ; function hcrcp { cp ${1} ${HOME}/sw/crr ; }
 alias hdo='cd ${HOME}/sw/dot' ; function hdocp { cp ${1} ${HOME}/sw/dot ; }
 alias hds='cd ${HOME}/sw/dst' ; function hdscp { cp ${1} ${HOME}/rsr/dst ; }
 alias hf='cd ${HOME}/sw/f' ; function hfcp { cp ${1} ${HOME}/sw/f ; }
-alias hic='cd ${HOME}/rsr/icr' ; function hiccp { cp ${1} ${HOME}/rsr/icr ; }
-alias hid='cd ${HOME}/sw/idl' ; function hidcp { cp ${1} ${HOME}/sw/idl ; }
 alias hjo='cd ${HOME}/prv/job' ; function hjocp { cp ${1} ${HOME}/prv/job ; }
 alias hjr='cd ${HOME}/prv/jrn' ; function hjrcp { cp ${1} ${HOME}/prv/jrn ; }
 alias hmi='cd ${HOME}/sw/mie' ; function hmicp { cp ${1} ${HOME}/sw/mie ; }

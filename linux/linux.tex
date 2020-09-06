@@ -4940,7 +4940,7 @@ sudo port install udunits2
 
 # CCR
 sudo port install lz4 # CCR LZ4 library
-sudo port install zstd-devel # CCR ZStandard library
+sudo port install zstd # CCR ZStandard library
 
 # ncdismember
 sudo port install py27-numpy
@@ -4982,6 +4982,10 @@ sudo port inactive
 sudo port uninstall inactive
 sudo port uninstall nco
 sudo port upgrade nco
+
+conda config --add channels conda-forge
+conda config --set channel_priority strict
+conda install -c conda-forge nco
 
 conda install -c conda-forge openmp
 
