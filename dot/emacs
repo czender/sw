@@ -49,7 +49,8 @@
 ;(setq delete-auto-save-files t) ; Delete auto-save files when a true save is done
 ;(setq tags-table-list (list "~/nco/bld/"))
 (setq inhibit-startup-message t)
-(setq global-auto-revert-mode t) ; 20180201 Synchronize buffers with current Git branch
+(setq auto-revert-use-notify nil) ; 20200915 auto-revert every five seconds instead of waiting for OS to communicate altered files to Emacs https://stackoverflow.com/questions/1480572/how-to-have-emacs-auto-refresh-all-buffers-when-files-have-changed-on-disk
+(setq global-auto-revert-mode t) ; 20180201 Synchronize buffers with current files on disk (useful when changing Git branches)
 (setq line-number-mode t) ; Display current line #
 (setq column-number-mode t) ; Display current column #
 (setq require-final-newline t) ; Always end a file with a newline

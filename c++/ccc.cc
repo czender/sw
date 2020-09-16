@@ -519,7 +519,7 @@ int main(int argc,char **argv)
 #endif // !HAVE_LONG_LONG
     std::cout << "Binary of float " << flt_bnr << " is " << bit_sng_tpl(flt_bnr) << std::endl;
     flt_foo=flt_bnr; // Copy memory so bitshifting exponent to byte boundary does not corrupt original
-    unsigned int u32_val=*(unsigned int *)(&flt_foo); // Reinterpret as integer (reinterpret_cast) also works
+    unsigned int u32_val=*(unsigned int *)(&flt_foo); // Reinterpret as integer (reinterpret_cast also works)
     u32_val<<=1; // Bit-shift so exponent is on byte boundaries
     unsigned char u8_val=*(unsigned char *)(&u32_val); // This should be the 8-bit exponent
     int int32_val=(int)u8_val; // For printing
@@ -546,6 +546,54 @@ int main(int argc,char **argv)
     std::cout << "Binary of unsigned short " << usht_bnr << " is " << bit_sng_tpl(usht_bnr) << std::endl;
   } // end if dbg || tst_sng == "bnr"
   
+  if(dbg_lvl == dbg_old || tst_sng == "uint"){
+    /* ccc --dbg=3 --int_foo=0x01
+       const int int_foo(0x01); // Hexadecimal notation */
+    std::cout << "Testing representation of all types as uint32, uint64..." << std::endl;
+    std::cout << "HINT: This shows how to encode typed values as uint32/uint64, e.g., for passing as HDF5 filter parameters..." << std::endl;
+    std::cout << "Seed values with --int_foo, e.g., ccc --tst=uint --int_foo=4" << std::endl;
+    const bool bln_bnr(true);
+    const char chr_bnr(int_foo);
+    const double dbl_bnr(dbl_foo);
+    const float flt_bnr(flt_foo);
+    const int int_bnr(int_foo);
+    const long lng_bnr(int_foo);
+    const short sht_bnr(int_foo);
+    const signed char schr_bnr(int_foo);
+    const unsigned char uchr_bnr(std::abs(int_foo));
+    const unsigned int uint_bnr(std::abs(int_foo));
+    const unsigned long ulng_bnr(std::abs(int_foo));
+    const unsigned short usht_bnr(std::abs(int_foo));
+#ifdef HAVE_LONG_LONG
+    // long long is ISO C99 standard but is neither ISO C++ nor ANSI C standard
+    const long long lng_lng_bnr(int_foo);
+    const unsigned long long ulng_lng_bnr(std::abs(int_foo));
+#endif // !HAVE_LONG_LONG
+    unsigned int ui32_val; // Target representation is four byte unsigned int
+    unsigned long long int ui64_val; // Target representation is eight byte unsigned long long int
+    ui32_val=*(unsigned int *)(&flt_bnr); // Reinterpret as ui32 (reinterpret_cast also works)
+    std::cout << "ui32 of float " << flt_bnr << "f is " << ui32_val << "u" << std::endl;
+    ui64_val=*(unsigned long long int *)(&dbl_bnr); // Reinterpret as ui64 (reinterpret_cast also works)
+    std::cout << "ui64 of double " << dbl_bnr << "d is " << ui64_val << "u" << std::endl;
+    ui32_val=*(unsigned int *)(&int_bnr);
+    std::cout << "ui32 of int " << int_bnr << " is " << ui32_val << "u" << std::endl;
+    std::cout << "ui32 of bool " << bln_bnr << "fxm is " << ui32_val << "u" << std::endl;
+    std::cout << "ui32 of char " << chr_bnr << "b is " << ui32_val << "u" << std::endl;
+    std::cout << "ui32 of long " << lng_bnr << " is " << ui32_val << "u" << std::endl;
+#ifdef HAVE_LONG_LONG
+    std::cout << "ui64 of long long " << lng_lng_bnr << "l is " << ui64_val << "u" << std::endl;
+#endif // !HAVE_LONG_LONG
+    std::cout << "ui32 of short " << sht_bnr << "s is " << ui32_val << "u" << std::endl;
+    std::cout << "ui32 of signed char " << schr_bnr << "b is " << ui32_val << "u" << std::endl;
+    std::cout << "ui32 of unsigned char " << uchr_bnr << "ub is " << ui32_val << "u" << std::endl;
+    std::cout << "ui32 of unsigned int " << uint_bnr << "u is " << ui32_val << "u" << std::endl;
+    std::cout << "ui32 of unsigned long " << ulng_bnr << "u is " << ui32_val << "u" << std::endl;
+#ifdef HAVE_LONG_LONG
+    std::cout << "ui64 of unsigned long long " << ulng_lng_bnr << "ul is " << ui64_val << "u" << std::endl;
+#endif // !HAVE_LONG_LONG
+    std::cout << "ui32 of unsigned short " << usht_bnr << "us is " << ui32_val << "u" << std::endl;
+  } // end if dbg || tst_sng == "uint"
+
   if(dbg_lvl == dbg_old || tst_sng == "cmp"){
     // ccc --dbg=3 --tst=cmp
     std::cout << "Testing compiler behavior..." << std::endl;
