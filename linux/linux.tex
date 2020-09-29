@@ -5007,6 +5007,11 @@ git clone git@github.com:raspstephan/ESS-Python-Tutorial.git
 conda install -c conda-forge xarray cartopy
 conda install -c conda-forge climlab
 
+# 2020020 Glace Ubuntu
+sudo aptitude update
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 7
+sudo update-alternatives --config gcc
+
 # Webserver
 # Ensure port 80 is open
 sudo apachectl start # Start web server
@@ -5317,7 +5322,7 @@ sudo aptitude install udunits libudunits2-0 libudunits2-dev # UDUnits
 # netcdf-perl needed by aca HITRAN programs
 sudo aptitude install libpdl-netcdf-perl libxml-simple-perl
 # Install CCR
-sudo aptitude install libbz2-dev # CCR BZIP2 library (only required if netCDF < 4.7.0? in whic case CCR is useless anyway)
+sudo aptitude install libbz2-dev # CCR BZIP2 library (only required if netCDF < 4.7.0? in which case CCR is useless anyway)
 sudo aptitude install liblz4-dev # CCR LZ4 library
 sudo aptitude install libzstd-dev # CCR ZStandard library
 # Install HDF4
