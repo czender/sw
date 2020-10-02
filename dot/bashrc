@@ -803,23 +803,27 @@ AR='ar'
 CC_clang='clang'
 CC_clang_macports='clang-mp-10'
 # 20150109: Introduce -D_DEFAULT_SOURCE in place of deprecated (as of gcc 4.9.2) -D_BSD_SOURCE -D_POSIX_SOURCE
-# 20201002: Drop -pedantic because that makes __USE_BSD and thus M_LN2 needed by CCR unfindable
+# 20201002: Drop -pedantic because that makes __USE_BSD and thus M_LN2 needed by CCR unfindable (reinstate because that did not work)
+# Conda compiler names explained at https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html
 #CC_gcc='gcc -std=c99 -pedantic -D_DEFAULT_SOURCE'
-CC_gcc='gcc -std=c99 -D_DEFAULT_SOURCE'
-CC_gcc_pre_4_9='gcc -std=c99 -D_BSD_SOURCE -D_POSIX_SOURCE'
-CC_gcc_macports='gcc-mp-10 -std=c99 -D_DEFAULT_SOURCE'
+CC_gcc='gcc -std=c99 -pedantic -D_DEFAULT_SOURCE'
+CC_gcc_pre_4_9='gcc -std=c99 -pedantic -D_BSD_SOURCE -D_POSIX_SOURCE'
+CC_gcc_conda='x86_64-conda-linux-gnu-gcc -std=c99 -pedantic -D_DEFAULT_SOURCE'
+CC_gcc_macports='gcc-mp-10 -std=c99 -pedantic -D_DEFAULT_SOURCE'
 CC_icc='icc -std=c99 -D_DEFAULT_SOURCE'
 CC_pathcc='pathcc -std=c99 -D_DEFAULT_SOURCE'
 CC_pgcc='pgcc -c9x -D_DEFAULT_SOURCE'
 CXX_clang='clang++ -std=c++17'
 CXX_clang_macports='clang++-mp-10 -std=c++17'
 CXX_gxx='g++ -std=c++17'
+CXX_gxx_conda='x86_64-conda-linux-gnu-g++ -std=c++17'
 CXX_gxx_macports='g++-mp-10 -std=c++17'
 CXX_icpc='icpc'
 CXX_pathCC='pathCC'
 CXX_pgCC='pgCC'
 FC_g95='g95'
 FC_gfortran='gfortran'
+FC_gfortran_conda='x86_64-conda-linux-gnu-gfortran'
 FC_gfortran_macports='gfortran-mp-10'
 FC_ifort='ifort'
 FC_pathf95='pathf95'
@@ -839,7 +843,8 @@ case "${HOST}" in
     hpc* ) export LINUX_CC=${CC_pgcc} ; export LINUX_CXX=${CXX_pgCC} ; export LINUX_FC=${FC_pgf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # endif pgcc/pgCC/pgf95 MPICH2
 #   soot* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_g95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX=${LINUX_CXX} ;; # endif icc/icpc/g95 MPICH
     frazil* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran} ; ;; # endif clang/clang/gfortran
-    e3sm* | skyglow* | snow* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # endif gcc/g++/gfortran OpenMPI
+    e3sm* ) export LINUX_CC=${CC_gcc_conda} ; export LINUX_CXX=${CXX_gxx_conda} ; export LINUX_FC=${FC_gfortran_conda} ; ;; # endif gcc/g++/gfortran Conda
+    skyglow* | snow* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # endif gcc/g++/gfortran OpenMPI
     blogin* | blues* | *cheyenne* | compy* | cooley* | cori* | mira* | rhea* | theta* | titan* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif gcc/g++/gfortran OpenMPI
 #    *cheyenne* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # endif gcc/g++/g95 MPICH 
