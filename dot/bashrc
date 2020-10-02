@@ -803,7 +803,7 @@ AR='ar'
 CC_clang='clang'
 CC_clang_macports='clang-mp-10'
 # 20150109: Introduce -D_DEFAULT_SOURCE in place of deprecated (as of gcc 4.9.2) -D_BSD_SOURCE -D_POSIX_SOURCE
-# 20201002: Drop -pedantic because that makes __USE_BSD and thus M_LN2 needed by CCR unfindable
+# 20201002: Drop default GCC argument -pedantic because that makes __USE_BSD and thus M_LN2 needed by CCR unfindable
 #CC_gcc='gcc -std=c99 -pedantic -D_DEFAULT_SOURCE'
 CC_gcc='gcc -std=c99 -D_DEFAULT_SOURCE'
 CC_gcc_pre_4_9='gcc -std=c99 -D_BSD_SOURCE -D_POSIX_SOURCE'
