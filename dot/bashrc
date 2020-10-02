@@ -427,6 +427,7 @@ case "${PVM_ARCH}" in
 	    gplogin* | mirage* | hpc* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # endif EMT64 Rocks Cluster
 	esac # endcase ${HOST}
 	case "${HOST}" in 
+	    e3sm* ) export PKG_ROOT="${HOME}/anaconda" ; ;; # endif Anaconda
 	    firn* | jaws* | katabatic* | rigb* | sastrugi* ) PKG_ROOT='/opt/local' ; ;; # endif MAC OS X
 	    cg-gpu* ) PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # endif NCSA roger cluster
 #	    compy* ) PKG_ROOT='/opt' ; ;; # endif NCSA roger cluster
@@ -487,6 +488,7 @@ case "${PVM_ARCH}" in
 		PATH=${PATH}\:/fs/local/bin\:/fs/local/32/bin
 		;; # endif NCAR cluster
 	esac # endcase ${HOST}
+	PATH=${PATH}\:${HOME}/anaconda/bin # Often needed for ESMF_RegridWeightGen
 	PATH=${PATH}\:/usr/local/bin
 	PATH=${PATH}\:/usr/local/sbin # Debian
 	PATH=${PATH}\:/bin
@@ -494,7 +496,6 @@ case "${PVM_ARCH}" in
 	PATH=${PATH}\:/usr/bin
 	PATH=${PATH}\:/usr/sbin
 	PATH=${PATH}\:${X11}/bin
-	PATH=${PATH}\:${HOME}/anaconda/bin # Often needed for ESMF_RegridWeightGen
 	if [ -n "${MPI_ROOT}" ]; then
 		PATH=${PATH}\:${MPI_ROOT}/bin # OpenMPI
 	fi # endif MPI_ROOT
@@ -523,6 +524,7 @@ case "${PVM_ARCH}" in
 	esac # endcase ${HOST}
 	
 	MANPATH=${MANPATH}\:${HOME}/nco/man
+	MANPATH=${MANPATH}\:${HOME}/anaconda/man
 	MANPATH=${MANPATH}\:/usr/local/man
 	MANPATH=${MANPATH}\:/usr/share/man
 	MANPATH=${MANPATH}\:/usr/man
@@ -549,6 +551,7 @@ case "${PVM_ARCH}" in
 	    gplogin* ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PGI}/linux86-64/7.2-3/lib ; ;;
 	    hpc* ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PGI}/linux86-64/7.2-3/lib ; ;;
 	esac # endcase ${HOST}
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${HOME}/anaconda/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${NETCDF4_ROOT}/lib
 	case "${HOST}" in 
