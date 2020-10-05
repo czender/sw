@@ -394,8 +394,12 @@ c     .. Local Scalars ..
       LOGICAL   COMPAR, CORINT, DELTAM, LYRCUT, PASS1
       INTEGER   IQ, IU, J, KCONV, L, LC, LEV, LU, MAZIM, NAZ, NCOL,
      &          NCOS, NCUT, NN, NS
-      REAL      ANGCOS, AZERR, AZTERM, BPLANK, COSPHI, DELM0, DITHER,
-     &          DUM, PI, RPD, SGN, TPLANK
+c     csz++
+c     20201005: gfortran started dying because scalar ANGCOS was used as argument to LEPOLY MU(:)
+c      REAL      ANGCOS, AZERR, AZTERM, BPLANK, COSPHI, DELM0, DITHER,
+      REAL      ANGCOS(1), AZERR, AZTERM, BPLANK, COSPHI, DELM0, DITHER,
+     &     DUM, PI, RPD, SGN, TPLANK
+c     csz--
 c     ..
 c     .. Local Arrays ..
 
@@ -622,7 +626,10 @@ c                             **     cosines
          IF( FBEAM.GT.0.0 ) THEN
 
             NCOS   = 1
-            ANGCOS = -UMU0
+c     csz++ 20201005
+c     ANGCOS = -UMU0
+            ANGCOS(1) = -UMU0
+c     csz-- 20201005
 
             CALL LEPOLY( NCOS, MAZIM, MXCMU, NSTR-1, ANGCOS, SQT, YLM0 )
 

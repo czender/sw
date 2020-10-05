@@ -228,7 +228,8 @@ comma := ,
 newline := \n
 
 # Source file names with directories removed
-MDL_SRC := H2OH2O.F90 NO2.F90 O2X.F90 O2.F90 O3.F90 CFC11.F90 CFC12.F90 clm.F90 htrn2nb.F machine.F mie2nc.F nbm.F swnb2.F90 swnb3.F90 bdref.f d1mach.f disort.f disort2.f linpak.f r1mach.f rdhtrn.f disort3.f disobrdf3.f bdref3.f errpack3.f lapack3.f linpak3.f rdi1mach3.f disotest3.f disobrdf3.f
+MDL_SRC := H2OH2O.F90 NO2.F90 O2X.F90 O2.F90 O3.F90 CFC11.F90 CFC12.F90 clm.F90 htrn2nb.F machine.F mie2nc.F nbm.F swnb2.F90 swnb3.F90 bdref.f d1mach.f disort.f disort2.f linpak.f r1mach.f rdhtrn.f
+# disort3.f disobrdf3.f bdref3.f errpack3.f lapack3.f linpak3.f rdi1mach3.f disotest3.f disobrdf3.f
 # Directories to search for source files
 MDL_PTH := . ${HOME}/include ${HOME}/sw/f
 # Dependency list for executable
@@ -1060,17 +1061,17 @@ ${MY_BIN_DIR}/swnb2:	lib $(SWNB2_OBJ)
 	${FC} -o $@ $(SWNB2_OBJ) ${LDFLAGS}
 	chmod 755 $@
 
-SWNB3_OBJ := ${MY_OBJ_DIR}/swnb3.o ${MY_OBJ_DIR}/disort3.o ${MY_OBJ_DIR}/rdi1mach3.o ${MY_OBJ_DIR}/lapack3.o ${MY_OBJ_DIR}/linpak3.o ${MY_OBJ_DIR}/bdref3.o ${MY_OBJ_DIR}/errpack3.o
-swnb3:	${MY_BIN_DIR}/swnb3
-${MY_BIN_DIR}/swnb3:	lib $(SWNB3_OBJ) 
-	${FC} -o $@ $(SWNB3_OBJ) ${LDFLAGS}
-	chmod 755 $@
+#SWNB3_OBJ := ${MY_OBJ_DIR}/swnb3.o ${MY_OBJ_DIR}/disort3.o ${MY_OBJ_DIR}/rdi1mach3.o ${MY_OBJ_DIR}/lapack3.o ${MY_OBJ_DIR}/linpak3.o ${MY_OBJ_DIR}/bdref3.o ${MY_OBJ_DIR}/errpack3.o
+#swnb3:	${MY_BIN_DIR}/swnb3
+#${MY_BIN_DIR}/swnb3:	lib $(SWNB3_OBJ) 
+#	${FC} -o $@ $(SWNB3_OBJ) ${LDFLAGS}
+#	chmod 755 $@
 
-DISOTEST3_OBJ := ${MY_OBJ_DIR}/disotest3.o ${MY_OBJ_DIR}/disort3.o ${MY_OBJ_DIR}/rdi1mach3.o ${MY_OBJ_DIR}/lapack3.o ${MY_OBJ_DIR}/linpak3.o ${MY_OBJ_DIR}/bdref3.o ${MY_OBJ_DIR}/errpack3.o ${MY_OBJ_DIR}/disobrdf3.o
-disotest3:	${MY_BIN_DIR}/disotest3
-${MY_BIN_DIR}/disotest3:	lib $(DISOTEST3_OBJ) 
-	${FC} -o $@ $(DISOTEST3_OBJ) ${LDFLAGS}
-	chmod 755 $@
+#DISOTEST3_OBJ := ${MY_OBJ_DIR}/disotest3.o ${MY_OBJ_DIR}/disort3.o ${MY_OBJ_DIR}/rdi1mach3.o ${MY_OBJ_DIR}/lapack3.o ${MY_OBJ_DIR}/linpak3.o ${MY_OBJ_DIR}/bdref3.o ${MY_OBJ_DIR}/errpack3.o ${MY_OBJ_DIR}/disobrdf3.o
+#disotest3:	${MY_BIN_DIR}/disotest3
+#${MY_BIN_DIR}/disotest3:	lib $(DISOTEST3_OBJ) 
+#	${FC} -o $@ $(DISOTEST3_OBJ) ${LDFLAGS}
+#	chmod 755 $@
 
 # Target-specific variable values syntax TARGET ... : VARIABLE-ASSIGNMENT
 # Rules begin in leftmost column else interpreted as commands
