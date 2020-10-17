@@ -1979,7 +1979,7 @@ program swnb2
   dbg_lvl=0                 ! Causes DDD source window to display this file
   
   ! Initialize default values
-  drc_in='/data/zender/aca'//nlc ! [sng] Input directory
+  drc_in='/Users/zender/data/aca'//nlc ! [sng] Input directory
   drc_out=''                ! [sng] Output directory
   fl_CO2='mlk_CO2.nc'//nlc
   fl_H2OH2O='abs_xsx_H2OH2O.nc'//nlc
