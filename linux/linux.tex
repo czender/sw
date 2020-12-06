@@ -33,7 +33,7 @@
 \fi % endif PDFLaTeX
 \usepackage{array} % Table and array extensions, e.g., column formatting
 \usepackage[dayofweek]{datetime} % \xxivtime, \ordinal
-\usepackage{natbib} % \cite commands from aguplus
+\usepackage{natbib} % \cite commands from aguplusj
 \usepackage{makeidx} % Index keyword processor: \printindex and \see
 \usepackage{mdwlist} % Compact list formats \itemize*, \enumerate*
 \usepackage{times} % Postscript Times-Roman font KoD99 p. 375
@@ -2875,7 +2875,7 @@ Purchased Amazon 20160627 \$91.00\\
 
 ASUS RT-AC1200 Dual Band wireless router on Noria\\
 Purchased Amazon 20160627 \$64.02\\
-MAC Address: 203D669FD36F
+MAC Address: 203D669FD36F\\
 Join network and login to http://router.asus.com
 Custom Configuration:
 adm\_logyn,adm\_pw: admin, pw\_lw
@@ -2913,8 +2913,8 @@ adm\_logyn,adm\_pw: admin, admin
 TP-Link extender Model RE650 (downstairs Zoom room)
 AC2600 MU-MIMO Wi-Fi Range Extender
 Purchased Amazon 20200413 \$110
-MAC Address: CC-32-E5-78-88-2C (2.4 GHz) Honaunau
-MAC Address: CC-32-E5-78-88-2D (5.0 GHz) Nakili
+MAC Address: CC32E578882C (2.4 GHz) Honaunau
+MAC Address: CC32E578882D (5.0 GHz) Nakili
 Original SSID: TP-LINK_Extender_2.4GHz
 Join network and login to http://tplinkrepeater.net
 adm\_logyn,adm\_pw: (none), pw\_lw
@@ -2923,8 +2923,8 @@ Google Play App: Tether (dml, pw_lw)
 TP-Link extender RE650 (upstairs)
 AC2600 MU-MIMO Wi-Fi Range Extender
 Purchased Amazon 20201101 \$100
-MAC Address:  1C-3B-F3-84-67-C8 (2.4 GHz) Honaunau (linked to downstairs RE650 repeater)
-MAC Address:  1C-3B-F3-84-67-C9 (5.0 GHz) Nakili
+MAC Address:  1C3BF38467C8 (2.4 GHz) Honaunau (linked to downstairs RE650 repeater)
+MAC Address:  1C3BF38467C9 (5.0 GHz) Nakili
 Original SSID: TP-LINK_Extender_2.4GHz
 Join network and login to http://tplinkrepeater.net
 adm\_logyn,adm\_pw: (none), pw\_lw
@@ -4936,7 +4936,7 @@ sudo port install texlive #
 sudo port install texlive-latex-extra # 
 sudo port install texlive-fonts-extra # ifsym, elvish, yfonts
 # port list texlive-* and not installed
-sudo port install auctex
+sudo port install opendetex
 # NCO
 sudo port install antlr
 sudo port install libdap
@@ -4977,11 +4977,13 @@ sudo port install clang-10
 # sudo port select --set gcc mp-gcc7
 # sudo port select --set gcc mp-gcc8
 # sudo port select --set gcc mp-gcc9
-# sudo port select --set gcc mp-gcc10
 # port select --list clang
+# port select --list llvm
 # sudo port select --set clang mp-clang-9.0
-# sudo port select --set clang mp-clang-10
-sudo port select --set python python37
+sudo port select --set gcc mp-gcc10
+sudo port select --set clang mp-clang-10
+sudo port select --set llvm mp-llvm-10 # this might cause big problems
+sudo port select --set python python38
 
 sudo port selfupdate
 #sudo port outdated
@@ -5662,7 +5664,7 @@ On \mchidx{elnino.ess.uci.edu}, K3b tends to work and
 \cmdprn{cdbakeoven} fails. 
 
 The \trmidx{KDE} CD/DVD-burning utility is called \trmidx{K3b}.
-It automatically loads when it detects a blank CD in a writable drive.
+<It automatically loads when it detects a blank CD in a writable drive.
 However, K3b does not have a completion meter and just hangs when it
 fails to burn CDs (at least under \trmidx{SuSE}.  
 This is annoying because one does not know whether the program is
