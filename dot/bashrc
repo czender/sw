@@ -205,6 +205,7 @@ export MY_OBJ_DIR=${HOME}/obj
 export MY_INC_DIR=${HOME}/include
 # Some machines have machine-specific paths that override defaults above
 case "${HOST}" in
+    andes* ) export MY_BIN_DIR="${HOME}/bin_andes" ; MY_LIB_DIR="${HOME}/lib_andes" ; MY_OBJ_DIR="${HOME}/obj_andes" ; ;;
     cooley* | cc[0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_cooley" ; MY_LIB_DIR="${HOME}/lib_cooley" ; MY_OBJ_DIR="${HOME}/obj_cooley" ; ;;
     cori* ) export MY_BIN_DIR="${HOME}/bin_cori" ; MY_LIB_DIR="${HOME}/lib_cori" ; MY_OBJ_DIR="${HOME}/obj_cori" ; ;;
     mira* ) export MY_BIN_DIR="${HOME}/bin_mira" ; MY_LIB_DIR="${HOME}/lib_mira" ; MY_OBJ_DIR="${HOME}/obj_mira" ; ;;
@@ -405,6 +406,7 @@ case "${PVM_ARCH}" in
 # https://stackoverflow.com/questions/4554718/how-to-use-patterns-in-the-case-statement-in-bash-scripting
 	case "${HOST}" in 
 	    acme1* ) export DATA="/export/${USER}/data" ; ;; # endif LLNL
+	    andes* | rhea* | titan* ) export DATA="/gpfs/alpine/world-shared/cli115/${USER}" ; ;; # endif OLCF
 	    bebop* | blues* | blogin* ) export DATA="/home/${USER}/data" ; ;; # endif ANL LCRC
 	    cg-gpu* ) export DATA="/home/${USER}/data" ; ;; # endif NCSA roger
 	    *cheyenne* ) export DATA="/glade/work/${USER}" ; ;; # endif NCAR
@@ -416,7 +418,6 @@ case "${PVM_ARCH}" in
 	    hpc* ) export DATA="/data/users/${USER}" ; ;; # endif hpc
 	    mirage* ) export DATA="/glade/scratch/${USER}" ; ;; # endif NCAR mirage
 	    mira* | theta* ) export DATA="/projects/ClimateEnergy_3/${USER}" ; ;; # endif ANL ALCF
-	    rhea* | titan* ) export DATA="/gpfs/alpine/world-shared/cli115/${USER}" ; ;; # endif OLCF
 	    * ) export DATA="/data/${USER}" ; ;; # endif default
 	esac # endcase ${HOST}
 # PKG_ROOT is where non-default sysadmin-installed packages reside
@@ -461,7 +462,7 @@ case "${PVM_ARCH}" in
 		ess1* ) export OMP_NUM_THREADS='1' ; ;; # endif uniprocessor
 		firn* | frazil* | hpc* | jaws* | katabatic* | rigb* | sastrugi* | skyglow* ) export OMP_NUM_THREADS='4' ; ;; # endif quad processor
 		glace* | gplogin* | grele* | snow* ) export OMP_NUM_THREADS='8' ; ;; # endif dual-quad processor
-		acme1* | compy* | e3sm* | mirage* | rhea* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-octet processor
+		acme1* | andes* | compy* | e3sm* | mirage* | rhea* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-octet processor
 		*cheyenne* ) export OMP_NUM_THREADS='16' ; ;; # endif dual-hexadecimal processor
 	esac # endcase ${HOST}
 
@@ -513,7 +514,7 @@ case "${PVM_ARCH}" in
 	fi # endif ROCKS_ROLLS_ROOT
 
 	case "${HOST}" in 
-	    acme1* ) PATH=${PATH}\:/usr/local/e3sm_unified/envs/base/envs/e3sm_unified_1.3.1.1/bin ; ;; # endif LLNL
+	    acme1* ) PATH=${PATH}\:/usr/local/e3sm_unified/envs/base/envs/e3sm_unified_1.3.1.2/bin ; ;; # endif LLNL
 	    *cheyenne* ) PATH=${PATH}\:/opt/pbs/bin ; ;; # NCAR cheyenne
 	    # Default compy PATH=/share/apps/modules/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/ganglia/bin:/opt/ganglia/sbin:/opt/pdsh/bin:/opt/rocks/bin:/opt/rocks/sbin:/qfs/people/zender/bin
 	    compy* ) PATH=${PATH}\:/share/apps/modules/bin\:/opt/rocks/bin ; ;; # PNNL compy
@@ -564,7 +565,7 @@ case "${PVM_ARCH}" in
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
 	case "${HOST}" in 
 	    # 20130916: Support NCAR modules on cheyenne by removing custom environment variables
-	    acme1* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/e3sm_unified/envs/base/envs/e3sm_unified_1.3.1.1/lib ; ;; # endif LLNL
+	    acme1* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/e3sm_unified/envs/base/envs/e3sm_unified_1.3.1.2/lib ; ;; # endif LLNL
 	    *cheyenne* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/u/apps/ch/opt/udunits/2.2.26/gnu/9.1.0/lib\:/glade/u/apps/ch/opt/gsl/2.4/gnu/6.3.0/lib ; ;; # endif NCAR
 	    rhea* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/sw/redhat6/udunits/2.1.24/rhel6.4_intel13.1.3/lib ; ;; # endif ORNL
 	esac # endcase ${HOST}
@@ -844,7 +845,7 @@ case "${HOST}" in
     frazil* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran} ; ;; # endif clang/clang/gfortran
     e3sm* ) export LINUX_CC=${CC_gcc_conda} ; export LINUX_CXX=${CXX_gxx_conda} ; export LINUX_FC=${FC_gfortran_conda} ; ;; # endif gcc/g++/gfortran Conda
     skyglow* | snow* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # endif gcc/g++/gfortran OpenMPI
-    blogin* | blues* | *cheyenne* | compy* | cooley* | cori* | mira* | rhea* | theta* | titan* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif gcc/g++/gfortran OpenMPI
+    andes* | blogin* | blues* | *cheyenne* | compy* | cooley* | cori* | mira* | rhea* | theta* | titan* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif gcc/g++/gfortran OpenMPI
 #    *cheyenne* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # endif icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # endif gcc/g++/g95 MPICH 
 esac # endcase ${HOST}
@@ -889,7 +890,7 @@ fi # endif hostname
 case "${HOST}" in
     cooley* | cc* | mira* | theta* ) export PROJID='OceanClimate_2' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
     cori* | nid* ) export PROJID='acme' ; export DATA="${HOME}/data" ; export PATH="${PATH}:/opt/cray/pe/netcdf/4.7.3.3/gnu/8.2/bin" ; export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/opt/cray/pe/netcdf/4.7.3.3/gnu/8.2/lib" ; ;; # 20190806 needed for ncgen
-    andes* | rhea* | titan* ) export PROJID='cli115' ; export DATA="/gpfs/alpine/world-shared/${PROJID}/${USER}" ; export LD_LIBRARY_PATH='/ccs/home/zender/lib_rhea:/ccs/proj/cli900/sw/rhea/e3sm-unified/base/envs/e3sm_unified_1.3.1.1/lib'\:${LD_LIBRARY_PATH} ; ;; # endif OLCF
+    andes* | rhea* | titan* ) export PROJID='cli115' ; export DATA="/gpfs/alpine/world-shared/${PROJID}/${USER}" ; export LD_LIBRARY_PATH='/ccs/home/zender/lib_rhea:/ccs/proj/cli900/sw/rhea/e3sm-unified/base/envs/e3sm_unified_1.3.1.2/lib'\:${LD_LIBRARY_PATH} ; ;; # endif OLCF
 esac # endcase ${HOST}
 
 # Export the big three
