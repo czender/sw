@@ -206,6 +206,8 @@ export MY_INC_DIR=${HOME}/include
 # Some machines have machine-specific paths that override defaults above
 case "${HOST}" in
     andes* ) export MY_BIN_DIR="${HOME}/bin_andes" ; MY_LIB_DIR="${HOME}/lib_andes" ; MY_OBJ_DIR="${HOME}/obj_andes" ; ;;
+    blues* | blogin* | b[0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_blues" ; MY_LIB_DIR="${HOME}/lib_blues" ; MY_OBJ_DIR="${HOME}/obj_blues" ; ;;
+    chrysalis* | chrlogin* | chr-[0123456789][0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_chrysalis" ; MY_LIB_DIR="${HOME}/lib_chrysalis" ; MY_OBJ_DIR="${HOME}/obj_chrysalis" ; ;;
     cooley* | cc[0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_cooley" ; MY_LIB_DIR="${HOME}/lib_cooley" ; MY_OBJ_DIR="${HOME}/obj_cooley" ; ;;
     cori* ) export MY_BIN_DIR="${HOME}/bin_cori" ; MY_LIB_DIR="${HOME}/lib_cori" ; MY_OBJ_DIR="${HOME}/obj_cori" ; ;;
     mira* ) export MY_BIN_DIR="${HOME}/bin_mira" ; MY_LIB_DIR="${HOME}/lib_mira" ; MY_OBJ_DIR="${HOME}/obj_mira" ; ;;
