@@ -693,3 +693,33 @@ exit # Exit new shell
 # 20161223: blues.lcrc.anl.gov 
 #***********************************************************************
 
+#***********************************************************************
+# 20201221: chrysalis.lcrc.anl.gov RHEL 8 gcc 9.2
+#***********************************************************************
+cd ${DATA}/tmp
+wget ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-2.2.28.tar.gz
+# scp dust.ess.uci.edu:/data/zender/tmp/udunits-2.2.28.tar.gz /data/zender/tmp
+# scp ~/data/tmp/udunits-2.2.28.tar.gz ac.zender@chrysalis.lcrc.anl.gov:data/tmp
+tar xvzf udunits-2.2.28.tar.gz
+cd udunits-2.2.28
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CXX='g++'
+export FC='gfortran'
+export F77='gfortran'
+export F90='gfortran'
+export LDFLAGS='-L/usr/lib64'
+export LIBS='-lexpat'
+make distclean 2>&1 >foo
+autoreconf -i -f
+./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --libdir=${MY_LIB_DIR}
+make
+make check # optional; requires CUNIT installation
+make install
+make install-info install-html install-pdf
+make clean
+exit # Exit new shell
+#***********************************************************************
+# 20201221: chrysalis.lcrc.anl.gov 
+#***********************************************************************
+
