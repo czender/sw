@@ -170,6 +170,10 @@
 
 (put 'erase-buffer 'disabled nil)
 
+; ChangeLog mode
+(setq add-log-mailing-address "zender@uci.edu") ; 20201231
+(setq add-log-full-name "Charlie Zender") ; 20201231
+
 ; Calendar and holidays related stuff
 ; Where are we? NCAR: 39°58'41" N - 105°16'29" W - 1865 m ASL
 ; Where are we? UCI: 

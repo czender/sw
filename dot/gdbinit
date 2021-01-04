@@ -13,6 +13,7 @@ handle SIGSEGV stop
 
 # 20181201 GDB instructions explain necessity of following line for MacOX > 10.12 at
 # https://sourceware.org/gdb/wiki/BuildingOnDarwin#Giving_gdb_permission_to_control_other_processes
+# 20210102 GDB 7.6 on e3sm.ess.uci.edu (CentOS) fails to execute this line
 set startup-with-shell off
 
 # Catch c++ problems
