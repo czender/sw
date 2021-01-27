@@ -4,10 +4,12 @@
 
 % Usage: 
 % cd ~/crr;make -W y2k.tex y2k.ps;cd -
-\documentclass[final,dvips]{foils}
+%\documentclass[final,dvips]{foils}
+\documentclass[12pt]{article}
 
 % Standard packages
 \usepackage[usenames]{color} % usenames allows, e.g., ``ForestGreen''
+\usepackage{etoolbox} % \newbool, \setbool, \ifxxx
 \usepackage{graphicx} % Defines \includegraphics*
 \usepackage{natbib} % \cite commands from aguplus
 \usepackage{array} % Table and array extensions, e.g., column formatting
@@ -15,7 +17,7 @@
 
 % Personal packages
 \usepackage{csz} % Library of personal definitions
-\usepackage{smn} % Seminar commands
+%\usepackage{smn} % Seminar commands
 \input{jgr_abb} % JGR-sanctioned journal abbreviations
 
 % Margins
@@ -27,16 +29,16 @@
 \footnotesep=0pt
 
 % FoilTeX macros
-\MyLogo{} % Appears bottom left corner every page
-\rightfooter{} % Pagenumber is the default
-\leftheader{} % Appears upper left
-\rightheader{} % Appears upper right
+%\MyLogo{} % Appears bottom left corner every page
+%\rightfooter{} % Pagenumber is the default
+%\leftheader{} % Appears upper left
+%\rightheader{} % Appears upper right
 
 \begin{document}
 \raggedright % Default is justified
 
-\foilhead{%\bgl
-\Large\textcolor{blue}{\hfill Opportunities \hfill}}\vspace{-0.5in}\large
+%\foilhead{%\bgl
+\Large\textcolor{blue}{\hfill Opportunities \hfill}\vspace{-0.5in}\large
 \begin{enumerate}
 \item Future Climate website \& consulting 
 \begin{enumerate}
@@ -82,8 +84,8 @@
 \end{enumerate}
 \end{enumerate}
 
-\rotatefoilhead{%\bgl
-\Large\textcolor{blue}{\hfill Jobs \hfill}}\vspace{-0.5in}\large
+%\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill Jobs \hfill}\vspace{-0.5in}\large
 \begin{table}
 \begin{center}
 \begin{tabular}[c]{ >{}p{5em}<{} || *{3}{>{}p{5em}<{}} } % KoD95 p. 94 describes '*' notation
@@ -104,8 +106,8 @@ Free Time & Lots & Little & Medium \\[1.0ex]
 \end{center}
 \end{table}
 
-\rotatefoilhead{%\bgl
-\Large\textcolor{blue}{\hfill NCAR Associate Scientist \hfill}}\vspace{-0.5in}\large
+%\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill NCAR Associate Scientist \hfill}\vspace{-0.5in}\large
 \begin{table}
 \begin{center}
 \begin{tabular}[c]{ r l }
@@ -120,8 +122,8 @@ Boulder & \\[1.0ex]
 \end{center}
 \end{table}
 
-\rotatefoilhead{%\bgl
-\Large\textcolor{blue}{\hfill Computer industry programmer \hfill}}\vspace{-0.5in}\large
+%\rotatefoilhead{%\bgl
+\Large\textcolor{blue}{\hfill Computer industry programmer \hfill}\vspace{-0.5in}\large
 \begin{table}
 \begin{center}
 \begin{tabular}[c]{ r l }
