@@ -1139,6 +1139,7 @@ alias ksrc="source ${HOME}/.profile"
 alias ls='ls -F' # -F = mark directories with /, links with @, etc.
 alias mirage='ssh -Y mirage0.ucar.edu'
 alias hpc='ssh -Y hpc.oit.uci.edu'
+alias hpc3='ssh -Y hpc3.rcic.uci.edu'
 alias mv='mv -i' # -i = inquire
 alias nvr='env | sort | more'
 alias panoply='java -jar /data/zender/tmp/PanoplyJ/jars/Panoply.jar'
