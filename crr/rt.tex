@@ -1381,7 +1381,7 @@ both the high and the low energy photon limits.
 In the high energy limit, known as \trmdfn{Wien's limit},
 the photon energy greatly exceeds the ambient thermal energy
 \begin{eqnarray}
-\cstplk \frqmshmax \gg \cstblt \tpt
+\cstplk \frq \gg \cstblt \tpt
 \label{eqn:wien_dfn}
 \end{eqnarray}
 In Wien's limit, (\ref{eqn:plk_dfn}) becomes
@@ -1401,12 +1401,15 @@ In Wien's limit, (\ref{eqn:plk_dfn}) becomes
 In the very low energy limit, known as the \trmdfn{Rayleigh-Jeans
 limit}, the photon energy is much less than the ambient thermal energy 
 \begin{eqnarray}
-\cstplk \frqmshmax & \ll & \cstblt \tpt
+\cstplk \frq & \ll & \cstblt \tpt
 \label{eqn:ryl_jean_dfn}
 \end{eqnarray}
 Thus in the Rayleigh-Jeans limit the arguments to the exponential in
 (\ref{eqn:plk_dfn}) are less than~$1$ so the exponentials may be
-expanded in Taylor series.
+expanded in Taylor series
+$\me^{\xxx} = 1 + \xxx + \xxx^{2}/2! + \cdots$.
+Due to (\ref{eqn:ryl_jean_dfn}), terms quadratic and higher become
+vanishingly small compared to the first two terms.
 Starting from (\ref{eqn:plk_frq_dfn}) 
 \begin{eqnarray}
 % cf ThS99 p. 94, KiK80 p. 94
@@ -1437,9 +1440,9 @@ and we obtain
 \end{align}
 \end{subequations}
 
-The frequency of extreme emission is obtained by taking the partial
-derivative of (\ref{eqn:plk_frq_dfn}) with respect to frequency with
-the temperature held constant
+The frequencies of extreme emission are obtained by taking
+the partial derivative of (\ref{eqn:plk_frq_dfn}) with respect to
+frequency with the temperature held constant
 \begin{eqnarray}
 \frac{\partial \plkfrq}{\partial \frq} 
 \bigg|_{\tpt}
