@@ -80,7 +80,7 @@ ssh : ${MY_SSH_DIR}/authorized_keys
 	-cp -f $(notdir $^) ${MY_SSH_DIR}
 	-scp -p $^ dust.ess.uci.edu:.ssh
 	-scp -p $^ e3sm.ess.uci.edu:.ssh
-	-scp -p $^ skyglow.ess.uci.edu:.ssh
+	-scp -p $^ hpc3.rcic.uci.edu:.ssh
 	-scp -p $^ frazil.ess.uci.edu:.ssh
 	-scp -p $^ sastrugi.ess.uci.edu:.ssh
 	-scp -p $^ katabatic.ess.uci.edu:.ssh
@@ -88,34 +88,35 @@ ssh : ${MY_SSH_DIR}/authorized_keys
 	-scp -p $^ grele.ess.uci.edu:.ssh
 	-scp -p $^ gplogin2.ps.uci.edu:.ssh
 	-scp -p $^ home.ps.uci.edu:.ssh
-	-scp -p $^ edison.nersc.gov:.ssh
 	-scp -p $^ blues.lcrc.anl.gov:.ssh
-#	-scp -p $^ givre.ess.uci.edu:.ssh
-#	-scp -p $^ snow.engin.umich.edu:.ssh
-#	-scp -p $^ pbs.ess.uci.edu:.ssh
-#	-scp -p $^ neige.ess.uci.edu:.ssh
-#	-scp -p $^ roulee.ess.uci.edu:.ssh
-#	-scp -p $^ hpc.oit.uci.edu:.ssh
-#	-scp -p $^ tephra.ess.uci.edu:.ssh
-#	-scp -p $^ virga.ess.uci.edu:.ssh
-#	-scp -p $^ seasalt.ess.uci.edu:.ssh
-#	-scp -p $^ lanina.ess.uci.edu:.ssh
-#	-scp -p $^ sand.ess.uci.edu:.ssh
+#	-scp -p $^ babyblue.ucar.edu:.ssh
 #	-scp -p $^ biogenic.ess.uci.edu:.ssh
-#	-scp -p $^ soot.ess.uci.edu:.ssh
+#	-scp -p $^ blackforest.ucar.edu:.ssh
+#	-scp -p $^ bluefire.ucar.edu:.ssh
+#	-scp -p $^ bluesky.ucar.edu:.ssh
+#	-scp -p $^ chinookfe.ucar.edu:.ssh
+#	-scp -p $^ edison.nersc.gov:.ssh
+#	-scp -p $^ elnino.ess.uci.edu:.ssh
+#	-scp -p $^ givre.ess.uci.edu:.ssh
 #	-scp -p $^ goldhill.cgd.ucar.edu:.ssh
 #	-scp -p $^ haze.ess.uci.edu:.ssh
-#	-scp -p $^ elnino.ess.uci.edu:.ssh
+#	-scp -p $^ hpc.oit.uci.edu:.ssh
 #	-scp -p $^ krein.math.uci.edu:.ssh
-#	-scp -p $^ nco.sourceforge.net:.ssh
+#	-scp -p $^ lanina.ess.uci.edu:.ssh
 #	-scp -p $^ longs.ucar.edu:.ssh
-#	-scp -p $^ tempest.ucar.edu:.ssh
-#	-scp -p $^ chinookfe.ucar.edu:.ssh
-#	-scp -p $^ blackforest.ucar.edu:.ssh
-#	-scp -p $^ bluesky.ucar.edu:.ssh
-#	-scp -p $^ bluefire.ucar.edu:.ssh
-#	-scp -p $^ babyblue.ucar.edu:.ssh
 #	-scp -p $^ mirage0.ucar.edu:.ssh
+#	-scp -p $^ nco.sourceforge.net:.ssh
+#	-scp -p $^ neige.ess.uci.edu:.ssh
+#	-scp -p $^ pbs.ess.uci.edu:.ssh
+#	-scp -p $^ roulee.ess.uci.edu:.ssh
+#	-scp -p $^ sand.ess.uci.edu:.ssh
+#	-scp -p $^ seasalt.ess.uci.edu:.ssh
+#	-scp -p $^ skyglow.ess.uci.edu:.ssh
+#	-scp -p $^ snow.engin.umich.edu:.ssh
+#	-scp -p $^ soot.ess.uci.edu:.ssh
+#	-scp -p $^ tempest.ucar.edu:.ssh
+#	-scp -p $^ tephra.ess.uci.edu:.ssh
+#	-scp -p $^ virga.ess.uci.edu:.ssh
 ssh_cln :
 	rm -f ${MY_SSH_DIR}/$@ 
 

@@ -5224,7 +5224,6 @@ sudo aptitude install auctex preview-latex # Install Emacs add-ons
 sudo ln -s /usr/bin/mimencode /usr/local/bin/mmencode # Rmail uses mmencode
 emacs & # Edit dot files to contain new system name
 cd dot;make dot;. bashrc;cd # Install dot files, load custom bash settings
-ssh-keygen -t rsa # Generate default RSA key
 ssh-keygen -b 2048 -t rsa # Generate 2048-bit RSA key
 ssh-keygen -b 2048 -t rsa -f id_rsa_pph # Generate RSA key with specific filename passphrase
 ssh-keygen -t ecdsa # Generate DSA key
