@@ -924,13 +924,14 @@ esac # endcase PVM_ARCH
 case ${PVM_ARCH} in
 # 20010707: SGI bash does not allow ulimit setting
 # 20030916: AIX bash does not allow ulimit setting
-# 20210215: LINUX hpc3 does not allow ulimit setting
     AIX* )
 	ulimit -c 0 # Maximum size of core files created
     ;; # endif CRAY | LINUX* | SUN* 
     CRAY | LINUX* | SUN* )
-	ulimit -s unlimited # Set soft stacksize limit to unlimited (cf. /etc/initscript)
-    ;; # endif CRAY | LINUX* | SUN* 
+	if [[ ! "${HOST}" =~ 'login-' ]]; then
+	    ulimit -s unlimited # Set soft stacksize limit to unlimited (cf. /etc/initscript)
+	fi # !HOST
+	;; # endif CRAY | LINUX* | SUN* 
 esac # endcase ${PVM_ARCH}
 
 # Per-shell variables
