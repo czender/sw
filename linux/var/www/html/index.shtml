@@ -32,7 +32,7 @@ scp -p ~/sw/linux/var/www/html/index.shtml dust.ess.uci.edu:Sites/index.shtml
 <a href="http://dust.ess.uci.edu/facts">FACTs</a> /
 <a href="http://nco.sf.net">NCO</a> /
 <a href="http://sourceforge.net/projects/nco">NCO Project</a> /
-<a href="http://www.ess.uci.edu/~zender">Zender</a>
+<a href="http://sites.ps.uci.edu/zender">Zender</a>
 </td></tr></table>
 
 <p><hr width="100%"></p>
@@ -45,7 +45,7 @@ scp -p ~/sw/linux/var/www/html/index.shtml dust.ess.uci.edu:Sites/index.shtml
 <li><a href="http://dust.ess.uci.edu/diwg">Dataset Interoperability Working Group (DIWG)</a></li>
 <li><a href="http://dust.ess.uci.edu/facts">Freely Available Community Texts (FACTs)</a></li>
 <li><a href="http://dust.ess.uci.edu/doc">Group Documentation</a></li>
-<li><a href="http://www.ess.uci.edu/~zender">Group Homepage</a></li>
+<li><a href="http://sites.ps.uci.edu/zender">Group Homepage</a></li>
 <li><a href="http://dust.ess.uci.edu/poetry">Group Poetry</a></li>
 <li><a href="http://hp4600.ess.uci.edu">Group Printer HP4700 (Croul 3223)</a></li>
 <!-- 
@@ -144,7 +144,7 @@ to <tt>pbs1</tt>.
 
 On November&nbsp;22, 2011, <tt>dust</tt> was pointed to another
 machine reconfigured as <tt>pbs</tt>.
-This ws a pure Apache2 web server based on a 2U&nbsp;Broadcom retiree
+This was a pure Apache2 web server based on a 2U&nbsp;Broadcom retiree
 with dual Opterons and a 1.5&nbsp;TB <tt>mdadm</tt> RAID5. 
 It last ran Ubuntu Lucid 10.04.3 LTS. 
 <tt>/home</tt>, was a single OS disk, mirrored nightly to the RAID5. 
@@ -161,13 +161,21 @@ difficult emotionally and financially.
 
 On October&nbsp;12, 2015, <tt>firn.ess.uci.edu</tt> became <tt>dust</tt>.
 <tt>firn</tt> is a MacBook Pro with 16&nbsp;GB RAM that originally ran
-OS X 10.11, Mountain Lion, and now runs MacOS 10.14, Mojave.
+OS X 10.11, Mountain Lion, and now runs MacOS 11.2, Big Sur.
 <tt>firn</tt> is truly portable, and during emergencies serves as my
 personal workstation.
 During such a period in late 2018, triggered by a coffee spill,
 I noticed that the casing of <tt>firn</tt> was warped, presumably
 a symptom of being constantly on, and sometimes pegged.
-Nevertheless, it continues to serve admirably.
+Nevertheless, <tt>firn</tt> has continued to serve admirably for six years.
+
+The cheap, third party RJ45<->USB adapters that I buy to connect
+<tt>firn</tt>'s USB2 port to the Internet require manual upgrading of
+the device drivers after every OS upgrade because Apple keeps its
+hardware interface logic proprietary.
+Because the third party adapters did not keep up with the
+Catalina-to-Big Sur transition, the Dust's static IP and webserver
+were offline from December, 2020 until March, 2021.
 </p>
 
 <p>
