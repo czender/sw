@@ -19,6 +19,7 @@
    Compilation:
    gcc -Wall -c -O -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
    gcc -Wall -c -g -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
+   gcc -Wall -c -g -D${PVM_ARCH} -fPIE ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
    pgcc -c -g -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
 
    pathcc -c -g -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
