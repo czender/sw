@@ -27,7 +27,7 @@
 # scp -p ${HOME}/sw/dot/bashrc cooley.alcf.anl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc dust.ess.uci.edu:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc e3sm.ess.uci.edu:.bashrc
-# scp -p ${HOME}/sw/dot/bashrc roger-login.ncsa.illinois.edu:.bashrc
+# scp -p ${HOME}/sw/dot/bashrc hpc3.rcic.uci.edu:.bashrc
 # scp -p dust.ess.uci.edu:.bashrc ${HOME}/.bashrc 
 
 # RedHat Linux 7.x does not define PS1 in /etc/bashrc
