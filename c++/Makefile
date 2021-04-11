@@ -712,7 +712,9 @@ ifeq (${null},$(findstring clang,${CXX}))
 # 20200520 GCC supports OpenMP vector pipeline hints when compiled with -fopenmp-simd
  OMP_FLG_C := -fopenmp -fopenmp-simd
  OMP_FLG_F := -fopenmp -fopenmp-simd
- LDFLAGS += -lgomp -lpthreadf
+# 20210321: -lpthreadf not found on glace running Ubuntu Xenial
+# LDFLAGS += -lgomp -lpthreadf
+ LDFLAGS += -lgomp
  OMP_FLG_LD := -lgomp -lpthread
 else
 # Clang block
