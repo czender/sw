@@ -426,8 +426,9 @@ case "${PVM_ARCH}" in
 #	    compy* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # endif UCI PS Rocks Cluster
 	    gplogin* | hpc* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # endif UCI PS Rocks Cluster
 	esac # endcase ${HOST}
+	export PKG_ROOT='/usr/local'
 	case "${HOST}" in 
-	    e3sm* ) export PKG_ROOT="${HOME}/anaconda" ; ;; # endif Anaconda
+#	    e3sm* ) export PKG_ROOT="${HOME}/anaconda" ; ;; # endif Anaconda
 	    firn* | jaws* | katabatic* | rigb* | sastrugi* ) PKG_ROOT='/opt/local' ; ;; # endif MAC OS X
 	    cg-gpu* ) PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # endif NCSA roger cluster
 #	    compy* ) PKG_ROOT='/opt' ; ;; # endif NCSA roger cluster
@@ -439,7 +440,7 @@ case "${PVM_ARCH}" in
 	export NETCDF4_ROOT="${PKG_ROOT}"
 	case "${HOST}" in 
 # Use local build rather than RPM to get linking correct
-	    gplogin* ) export NETCDF_ROOT="/home/pvicente/install/netcdf-4.3.0" ; export NETCDF4_ROOT="/home/pvicente/install/netcdf-4.3.0" ; ;; # endif UCI PS Rocks Cluster
+#	    gplogin* ) export NETCDF_ROOT="/home/pvicente/install/netcdf-4.3.0" ; export NETCDF4_ROOT="/home/pvicente/install/netcdf-4.3.0" ; ;; # endif UCI PS Rocks Cluster
 #	    gplogin* ) export HDF5_ROOT="${PKG_ROOT}/hdf5-1.8.11"; export NETCDF_ROOT="${PKG_ROOT}/netcdf/netcdf411-gcc-serial" ; export NETCDF4_ROOT="${PKG_ROOT}/netcdf/netcdf411-gcc-serial" ; ;; # endif UCI PS Rocks Cluster
 #	    gplogin* ) export HDF5_ROOT="${PKG_ROOT}/HDF5"; export NETCDF_ROOT="${PKG_ROOT}/ifort_icpc" ; export NETCDF4_ROOT="${PKG_ROOT}/ifort_icpc" ; ;; # endif UCI PS Rocks Cluster
 	    hpc* ) export NETCDF_ROOT="${PKG_ROOT}/netcdf" ; export NETCDF4_LIB="${PKG_ROOT}/netcdf4" ; ;; # endif HPC
