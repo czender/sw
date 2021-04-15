@@ -631,47 +631,27 @@ ifeq (${GCC_OR_CLANG},Y)
 # -Dinline=: inline is not an ANSI keyword, must undefine inline to work with -ansi
 # -fshort-enums: Make enums as short as possible, ususally non-int. Do not ever invoke this! This breaks ABI and causes subtle problems
 ifeq (${OMP},Y)
-ifneq (clang,$(firstword ${CXX}))
-# 20140526 clang does not recognize/utilize -fopenmp
- OMP_FLG_C := -fopenmp
- OMP_FLG_F := -fopenmp
- LDFLAGS += -lgomp -lpthread
+ifeq (${null},$(findstring clang,${CXX}))
+# GCC block
+# 20200520 GCC supports OpenMP vector pipeline hints when compiled with -fopenmp-simd
+ OMP_FLG_C := -fopenmp -fopenmp-simd
+ OMP_FLG_F := -fopenmp -fopenmp-simd
+# 20210321: -lpthreadf not found on glace running Ubuntu Xenial
+# LDFLAGS += -lgomp -lpthreadf
+ LDFLAGS += -lgomp
  OMP_FLG_LD := -lgomp -lpthread
+else
+# Clang block
+# 20140526 clang does not recognize/utilize -fopenmp
+# 20200520 clang recognizes/utilizes -fopenmp
+# 20200520 clang supports OpenMP vector pipeline hints when compiled with -openmp-simd
+ OMP_FLG_C := -fopenmp -fopenmp-simd
+ OMP_FLG_F := -fopenmp -fopenmp-simd
+# 20140531 avoid clang error that -O4 is same as -O3
+ CFLAGS := $(subst -O4,-O3,${CFLAGS})
+ LDFLAGS += -lomp -lstdc++
 endif # endif clang
 endif # endif OMP
-ifeq (clang,$(firstword ${CXX}))
-# 20140531 avoid clang error that -O4 is ame as -O3
- CFLAGS := $(subst -O4,-O3,${CFLAGS})
- LDFLAGS += -lstdc++
-endif # endif clang
-ifeq (${OMP},Y)
-ifneq (clang,$(firstword ${CXX}))
-# 20140526 clang does not recognize/utilize -fopenmp
- OMP_FLG_C := -fopenmp
- OMP_FLG_F := -fopenmp
- LDFLAGS += -lgomp -lpthread
- OMP_FLG_LD := -lgomp -lpthread
-endif # endif clang
-endif # endif OMP
-ifeq (clang,$(firstword ${CXX}))
-# 20140531 avoid clang error that -O4 is ame as -O3
- CFLAGS := $(subst -O4,-O3,${CFLAGS})
- LDFLAGS += -lstdc++
-endif # endif clang
-ifeq (${OMP},Y)
-ifneq (clang,$(firstword ${CXX}))
-# 20140526 clang does not recognize/utilize -fopenmp
- OMP_FLG_C := -fopenmp
- OMP_FLG_F := -fopenmp
- LDFLAGS += -lgomp -lpthread
- OMP_FLG_LD := -lgomp -lpthread
-endif # endif clang
-endif # endif OMP
-ifeq (clang,$(firstword ${CXX}))
-# 20140531 avoid clang error that -O4 is ame as -O3
- CFLAGS := $(subst -O4,-O3,${CFLAGS})
- LDFLAGS += -lstdc++
-endif # endif clang
 ifeq (${OPTS},O)
  CFLAGS += -O -g ${GCC_RCH_ARG}
 endif
