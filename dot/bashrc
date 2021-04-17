@@ -428,7 +428,7 @@ case "${PVM_ARCH}" in
 	esac # endcase ${HOST}
 	export PKG_ROOT='/usr/local'
 	case "${HOST}" in 
-#	    e3sm* ) export PKG_ROOT="${HOME}/anaconda" ; ;; # endif Anaconda
+	    e3sm* ) export PKG_ROOT="${HOME}/anaconda" ; ;; # endif Anaconda
 	    firn* | jaws* | katabatic* | rigb* | sastrugi* ) PKG_ROOT='/opt/local' ; ;; # endif MAC OS X
 	    cg-gpu* ) PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # endif NCSA roger cluster
 #	    compy* ) PKG_ROOT='/opt' ; ;; # endif NCSA roger cluster
@@ -478,6 +478,7 @@ case "${PVM_ARCH}" in
 	    TORQUE_ROOT="${ROCKS_ROLLS_ROOT}/torque"
 	fi # endif ROCKS_ROLLS_ROOT
 	
+	PATH=${PATH}\:${HOME}/anaconda/bin # Often needed for ESMF_RegridWeightGen
 	PATH=${PATH}\:/usr/local/bin
 	PATH=${PATH}\:/usr/local/sbin # Debian
 	PATH=${PATH}\:/bin
@@ -485,7 +486,6 @@ case "${PVM_ARCH}" in
 	PATH=${PATH}\:/usr/bin
 	PATH=${PATH}\:/usr/sbin
 	PATH=${PATH}\:${X11}/bin
-	PATH=${PATH}\:${HOME}/anaconda/bin # Often needed for ESMF_RegridWeightGen
 	if [ -n "${MPI_ROOT}" ]; then
 		PATH=${PATH}\:${MPI_ROOT}/bin # OpenMPI
 	fi # endif MPI_ROOT
@@ -513,12 +513,12 @@ case "${PVM_ARCH}" in
 #		PATH=${PATH}\:/usr/local/cuda/bin ; ;; # endif CUDA
 	esac # endcase ${HOST}
 	
+	MANPATH=${MANPATH}\:${HOME}/anaconda/man
 	MANPATH=${MANPATH}\:${HOME}/nco/man
 	MANPATH=${MANPATH}\:/usr/local/man
 	MANPATH=${MANPATH}\:/usr/share/man
 	MANPATH=${MANPATH}\:/usr/man
 	MANPATH=${MANPATH}\:${X11}/man
-	MANPATH=${MANPATH}\:${HOME}/anaconda/man
 	MANPATH=${MANPATH}\:/usr/lib/perl5/man
 #	MANPATH=${MANPATH}\:${PGI}/man
 	MANPATH=${MANPATH}\:${NCARG_ROOT}/man
@@ -536,6 +536,7 @@ case "${PVM_ARCH}" in
 	    gplogin* ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PGI}/linux86-64/7.2-3/lib ; ;;
 	    hpc* ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PGI}/linux86-64/7.2-3/lib ; ;;
 	esac # endcase ${HOST}
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${HOME}/anaconda/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${NETCDF4_ROOT}/lib
 	case "${HOST}" in 
@@ -546,7 +547,6 @@ case "${PVM_ARCH}" in
 	esac # endcase ${PVM_ARCH}
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${NCARG_ROOT}/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
-	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${HOME}/anaconda/lib
 	case "${HOST}" in 
 	    # 20130916: Support NCAR modules on cheyenne by removing custom environment variables
 	    acme1* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/e3sm_unified/envs/base/envs/e3sm_unified_1.4.0/lib ; ;; # endif LLNL

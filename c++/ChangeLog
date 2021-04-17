@@ -1,5 +1,7 @@
 2021-04-17  Charlie Zender  <zender@uci.edu>
 
+	* Fix gcc and clang OpenMP linking in c++ and mie Makefiles
+
 	* Look in ${DATA_RT} instead of /data/zender/aca for files
 
 2020-05-20  Charlie Zender  <zender@uci.edu>
