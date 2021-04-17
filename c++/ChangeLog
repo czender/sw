@@ -1,3 +1,7 @@
+2021-04-17  Charlie Zender  <zender@uci.edu>
+
+	* Look in ${DATA_RT} instead of /data/zender/aca for files
+
 2020-05-20  Charlie Zender  <zender@uci.edu>
 
 	* Fix OpenMP with clang

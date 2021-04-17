@@ -573,10 +573,10 @@ endif
 endif # endif Comeau C Compiler
 # GNU Compiler Collection or LLVM
 # 20140204: gcc and clang should receive identical options
-ifeq (g++,$(firstword ${CXX}))
+ifneq (${null},$(findstring g++,${CXX}))
  GCC_OR_CLANG := Y
 endif
-ifeq (clang,$(firstword ${CXX}))
+ifneq (${null},$(findstring clang,${CXX}))
  GCC_OR_CLANG := Y
 endif
 ifeq (${GCC_OR_CLANG},Y)
@@ -650,6 +650,7 @@ else
 # 20140531 avoid clang error that -O4 is same as -O3
  CFLAGS := $(subst -O4,-O3,${CFLAGS})
  LDFLAGS += -lomp -lstdc++
+ OMP_FLG_LD := -fopenmp
 endif # endif clang
 endif # endif OMP
 ifeq (${OPTS},O)
@@ -1227,6 +1228,9 @@ dbg:
 	@printf "NETCDF_LIB = ${NETCDF_LIB}\n"
 	@printf "NETCDF_ROOT = ${NETCDF_ROOT}\n"
 	@printf "OMP = ${OMP}\n"
+	@printf "OMP_FLG_C = ${OMP_FLG_C}\n"
+	@printf "OMP_FLG_F = ${OMP_FLG_F}\n"
+	@printf "OMP_FLG_LD = ${OMP_FLG_LD}\n"
 	@printf "OPTS = ${OPTS}\n"
 	@printf "PGI_RCH_ARG = ${PGI_RCH_ARG}\n"
 	@printf "PRC = ${PRC}\n"

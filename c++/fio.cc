@@ -15,9 +15,11 @@ fio::data_file_path_get // [fnc] Expand file path to include data directory
 (const std::string data_file) // [sng] File name
 {
   // Purpose: Expand file path to include data directory
+  const std::string nvr_DATA_RT((std::getenv("DATA_RT")) ? std::getenv("DATA_RT") : ""); // [sng] Environment variable DATA_RT
+  std::string drc_dat((nvr_DATA_RT.length() > 0) ? nvr_DATA_RT : "/data/zender/aca"); // [sng] Data directory
   std::string fl_nm_fll; // [sng] Full file name
   // fl_nm_fll=drc_pfx(data_path,data_file);
-  fl_nm_fll=drc_pfx("/data/zender/aca",data_file);
+  fl_nm_fll=drc_pfx(drc_dat,data_file);
   // if(!data_path.empty()) fl_nm_fll=drc_pfx(data_path,data_file);
   // if(data_path.empty()) fl_nm_fll=data_file;
   /* 20120409: ccc segfaults here for unknown reason
