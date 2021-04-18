@@ -938,14 +938,14 @@ blm_mbl
      Te = Emitting temperature = (FLWup/sigma)**0.25
      Tgcm = Ambient temperature = Air temperature at z=hgt_mdp
      For bare ground, Ts = Tg = Air temperature at z=rgh_heat (Bon96 p. 55)
-     For bare ground, Tg = potential temperture defined relative to local surface pressure */
+     For bare ground, Tg = potential temperature defined relative to local surface pressure */
   
   // Output
   int rcd(0); // O [rcd] Return success code
 
   // Local
   const prc_cmp eps_dbz(1.0e-6); // [frc] Prevents division by zero
-  const prc_cmp sfc_ems_gnd(0.96); // [frc] Surface emissivity of bare ground CCM:lsm/snoconi()
+  const prc_cmp msv_sfc_gnd(0.96); // [frc] Surface emissivity of bare ground CCM:lsm/snoconi()
   const prc_cmp wnd_min_mbl(1.0); // [m s-1] Minimum windspeed used for mobilization
   const long itr_max_gnd(12); // Maximum number of iterations for tpt_gnd loop
   const long sgn_chg_ctr_max(4); // Maximum number of sign changes in stability parameter
@@ -1022,7 +1022,7 @@ blm_mbl
   for(lon_idx=0;lon_idx<lon_nbr;lon_idx++){
     ppr_H2O_mdp[lon_idx]=q_H2O_vpr[lon_idx]*prs_mdp[lon_idx]/(eps_H2O+one_mns_eps_H2O*q_H2O_vpr[lon_idx]); // [Pa] Ambient vapor pressure of H2O
     
-    msv_gnd[lon_idx]=sfc_ems_gnd; // [frc] Ground emissivity
+    msv_gnd[lon_idx]=msv_sfc_gnd; // [frc] Ground emissivity
 
     mno_stb_prm[lon_idx]=min_cpv((hgt_mdp[lon_idx]-hgt_zpd[lon_idx])/mno_lng[lon_idx],1.0); // [frc]
     

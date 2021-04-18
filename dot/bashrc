@@ -785,7 +785,7 @@ AR='ar'
 #NM='nm'
 ##NM_macports='gcc-nm-mp-10'
 CC_clang='clang'
-CC_clang_macports='clang-mp-10'
+CC_clang_macports='clang-mp-11'
 # 20150109: Introduce -D_DEFAULT_SOURCE in place of deprecated (as of gcc 4.9.2) -D_BSD_SOURCE -D_POSIX_SOURCE
 # 20201002: Drop -pedantic because that makes __USE_BSD and thus M_LN2 needed by CCR unfindable (reinstate because that did not work)
 # Conda compiler names explained at https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html
@@ -797,7 +797,7 @@ CC_icc='icc -std=c99 -D_DEFAULT_SOURCE'
 CC_pathcc='pathcc -std=c99 -D_DEFAULT_SOURCE'
 CC_pgcc='pgcc -c9x -D_DEFAULT_SOURCE'
 CXX_clang='clang++ -std=c++17'
-CXX_clang_macports='clang++-mp-10 -std=c++17'
+CXX_clang_macports='clang++-mp-11 -std=c++17'
 CXX_gxx='g++ -std=c++17'
 CXX_gxx_conda='x86_64-conda-linux-gnu-g++ -std=c++17'
 CXX_gxx_macports='g++-mp-10 -std=c++17'

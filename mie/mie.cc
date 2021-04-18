@@ -411,6 +411,7 @@ int main(int argc,char **argv)
   prc_cmp mss_frc_snd(0.777); // [frc] Mass fraction sand
   prc_cmp mss_frc_cor(cmd_ln_dfl); // [frc] Mass fraction in core
   prc_cmp mss_frc_ncl(cmd_ln_dfl); // [frc] Mass fraction in inclusion
+  prc_cmp msv_sfc(1.0); // [frc] Surface emissivity
   prc_cmp ngl_dbg_dgr(0.0); // [dgr] Debugging angle
   prc_cmp oro(1.0); // [frc] Orography: ocean=0.0, land=1.0, sea ice=2.0
   prc_cmp prs_mdp(100825.0); // [Pa] Environmental pressure
@@ -604,6 +605,7 @@ int main(int argc,char **argv)
     {"mss_frc_snd",required_argument,0,0}, // [frc] Mass fraction sand
     {"mss_frc_cor",required_argument,0,0}, // [frc] Mass fraction in core
     {"mss_frc_ncl",required_argument,0,0}, // [frc] Mass fraction in inclusion
+    {"msv_sfc",required_argument,0,0}, // [frc] Surface emissivity
     {"lgn_nbr",required_argument,0,0}, // [nbr] Order of phase function Legendre expansion
     {"ngl_dbg_dgr",required_argument,0,0}, // [dgr] Debugging angle
     {"ngl_nbr",required_argument,0,0}, // [nbr] Number of polar angles in one hemisphere
@@ -810,6 +812,7 @@ int main(int argc,char **argv)
       if(opt_crr == "mss_frc_snd") mss_frc_snd=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [frc] Mass fraction sand
       if(opt_crr == "mss_frc_cor") mss_frc_cor=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [frc] Mass fraction in core
       if(opt_crr == "mss_frc_ncl") mss_frc_ncl=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [frc] Mass fraction in inclusion
+      if(opt_crr == "msv_sfc") msv_sfc=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [frc] Surface emissivity
       if(opt_crr == "ngl_dbg_dgr") ngl_dbg_dgr=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [dgr] Debugging angle
       if(opt_crr == "ngl_nbr") ngl_nbr=std::strtol(opt_sng.c_str(),(char **)NULL,10); // [nbr] Number of angles in Mie computation
       if(opt_crr == "no_abc_flg") abc_flg=false; // [flg] Alphabetize output with ncks 
@@ -4710,6 +4713,7 @@ int main(int argc,char **argv)
       {0,"wnd_frc_mbl",NC_FLOAT,0,dmn_scl,"long_name","Surface friction speed","units","meter second-1"},
       {0,"wnd_frc_dps",NC_FLOAT,0,dmn_scl,"long_name","Surface friction speed","units","meter second-1"},
       {0,"hgt_mdp",NC_FLOAT,0,dmn_scl,"long_name","Midlayer height above surface","units","meter"},
+      {0,"hgt_rfr",NC_FLOAT,0,dmn_scl,"long_name","Reference height (i.e., 10 m) at which surface winds are evaluated for dust mobilization","units","meter"},
       {0,"hgt_zpd_mbl",NC_FLOAT,0,dmn_scl,"long_name","Zero plane displacement height","units","meter"},
       {0,"hgt_zpd_dps",NC_FLOAT,0,dmn_scl,"long_name","Zero plane displacement height","units","meter"}
     }; // end var_mtd_sct var_mtd[]
@@ -4747,6 +4751,7 @@ int main(int argc,char **argv)
     rcd=nco_put_var(nc_out,static_cast<std::string>("wnd_frc_mbl"),wnd_frc_mbl);
     rcd=nco_put_var(nc_out,static_cast<std::string>("wnd_frc_dps"),wnd_frc_dps);
     rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_mdp"),hgt_mdp);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_rfr"),hgt_rfr);
     rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_zpd_mbl"),hgt_zpd_mbl);
     rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_zpd_dps"),hgt_zpd_dps);
   } // endif true
