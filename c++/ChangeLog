@@ -1,3 +1,7 @@
+2021-04-18  Charlie Zender  <zender@uci.edu>
+
+	* Compile with clang-11 (links, though still segfaults on MacOS), and gcc (works on cori, glace)
+
 2021-04-17  Charlie Zender  <zender@uci.edu>
 
 	* Fix gcc and clang OpenMP linking in c++ and mie Makefiles
