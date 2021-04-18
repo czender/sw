@@ -1832,7 +1832,7 @@ int main(int argc,char **argv)
 
   /* Default reference height at 10 m works for atmospheric aerosol, not for snow
      For snow simulations we often want layer thicknesses much less than 10 m
-     Assume that mid-layer thicknesses < 10 m indicate primary interest is snow 
+     Assume that mid-layer thicknesses < 10 m indicates primary interest is snow 
      In that case, reset reference height to small value */
   prc_cmp snw_hgt; // [m] Geometric bulk thickness of snow
   if(hgt_rfr > hgt_mdp){
@@ -2149,7 +2149,7 @@ int main(int argc,char **argv)
   prc_cmp tpt_aer; // [K] "Aerodynamic" temperature at z=zpd+rgh_mmn
   prc_cmp tpt_ash; // [K] "Surface" temperature at z=zpd+rgh_heat
   prc_cmp tpt_ash_p2m; // [K] "Screen" temperature at z=zpd+rgh_heat+2m
-  prc_cmp tpt_msv; // [K] Radiative emission temperature
+  prc_cmp tpt_ffc; // [K] Radiative effective temperature
   prc_cmp wnd_str_mrd; // [kg m-1 s-2] Meridional wind stress
   prc_cmp wnd_str_znl; // [kg m-1 s-2] Zonal wind stress
   rcd+=flx_sfc_lnd
@@ -2194,8 +2194,8 @@ int main(int argc,char **argv)
      &tpt_aer, // O [K] "Aerodynamic" temperature at z=zpd+rgh_mmn
      &tpt_ash, // O [K] "Surface" temperature at z=zpd+rgh_heat
      &tpt_ash_p2m, // O [K] "Screen" temperature at z=zpd+rgh_heat+2m
+     &tpt_ffc, // O [K] Radiative effective temperature
      &tpt_gnd, // I/O [K] Ground temperature
-     &tpt_msv, // O [K] Radiative emission temperature
      &tpt_vgt, // I/O [K] Vegetation temperature
      &wnd_frc_mbl, // O [m s-1] Surface friction velocity
      &wnd_str_mrd, // O [kg m-1 s-2] Meridional wind stress
@@ -3136,7 +3136,7 @@ int main(int argc,char **argv)
     std::cout << "  Latent heat = " << flx_ltn << " W m-2, Sensible heat to atmosphere = " << flx_sns_atm << " W m-2, Sensible heat to soil = " << flx_sns_gnd << " W m-2, Flux snow melt = " << flx_snw_mlt << " W m-2" << std::endl;
     std::cout << "  Water vapor flux to atmosphere = " << flx_q_H2O*1.0e6 << " mg m-2 s-1" << std::endl;
     std::cout << "  Temperatures at z = " << hgt_mdp << " m: T = " << tpt_mdp << " K, Tv = " << tpt_vrt_mdp << " K, Theta = " << tpt_ptn_mdp << " K, Thetav = " << tpt_ptn_vrt_mdp << " K" << std::endl;
-    std::cout << "  Temperatures: GCM = " << tpt_mdp << " K, Screen (z0h+d+2m) = " << tpt_ash_p2m << " K, Aerodynamic (z0m+d)= " << tpt_aer << " K, Surface (z0h+d) = " << tpt_ash << " K, Vegetation = " << tpt_vgt << " K, Ground = " << tpt_gnd << " K, Soil = " << tpt_soi << " K, Radiative = " << tpt_msv << " K" << std::endl;
+    std::cout << "  Temperatures: GCM = " << tpt_mdp << " K, Screen (z0h+d+2m) = " << tpt_ash_p2m << " K, Aerodynamic (z0m+d)= " << tpt_aer << " K, Surface (z0h+d) = " << tpt_ash << " K, Vegetation = " << tpt_vgt << " K, Ground = " << tpt_gnd << " K, Soil = " << tpt_soi << " K, Effective = " << tpt_ffc << " K" << std::endl;
     std::cout << "Surface Exchange Properties:" << std::endl;
     std::cout << "  Roughness lengths: Mobilization = " << rgh_mmn_mbl << " m, Smooth = " << rgh_mmn_smt << " m, Deposition = " << rgh_mmn_dps << " m" << std::endl; 
     std::cout << "  Transfer properties between hgt_mdp = " << hgt_mdp << " m and z0m+zpd = " << hgt_asm << " m, and z0h+zpd = z0v+zpd = " << hgt_ash << " m:" << std::endl;
@@ -4404,10 +4404,10 @@ int main(int argc,char **argv)
 
       {0,"tpt_aer",NC_FLOAT,0,dmn_scl,"long_name","\"Aerodynamic\" temperature at z=zpd+rgh_mmn","units","kelvin"},
       {0,"tpt_ash",NC_FLOAT,0,dmn_scl,"long_name","\"Surface\" temperature at z=zpd+rgh_heat","units","kelvin"},
+      {0,"tpt_ffc",NC_FLOAT,0,dmn_scl,"long_name","Radiative effective temperature","units","kelvin"},
       {0,"tpt_gnd",NC_FLOAT,0,dmn_scl,"long_name","Ground temperature","units","kelvin"},
       {0,"tpt_gnd_mbl",NC_FLOAT,0,dmn_scl,"long_name","Ground temperature (mobilization)","units","kelvin"},
       {0,"tpt_ice",NC_FLOAT,0,dmn_scl,"long_name","Sea ice temperature","units","kelvin"},
-      {0,"tpt_msv",NC_FLOAT,0,dmn_scl,"long_name","Radiative emission temperature","units","kelvin"},
       {0,"tpt_sfc",NC_FLOAT,0,dmn_scl,"long_name","Surface temperature","units","kelvin"},
       {0,"tpt_soi",NC_FLOAT,0,dmn_scl,"long_name","Soil temperature","units","kelvin"},
       {0,"tpt_sst",NC_FLOAT,0,dmn_scl,"long_name","Sea surface temperature","units","kelvin"},
@@ -4443,10 +4443,10 @@ int main(int argc,char **argv)
     rcd=nco_put_var(nc_out,static_cast<std::string>("trn_fsh_vpr_soi_atm"),trn_fsh_vpr_soi_atm);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_aer"),tpt_aer);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_ash"),tpt_ash);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_ffc"),tpt_ffc);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_gnd"),tpt_gnd);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_gnd_mbl"),tpt_gnd_mbl);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_ice"),tpt_ice);
-    rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_msv"),tpt_msv);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_sfc"),tpt_sfc);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_soi"),tpt_soi);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_sst"),tpt_sst);

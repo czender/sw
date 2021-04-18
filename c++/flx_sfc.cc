@@ -146,8 +146,8 @@ flx_sfc_lnd
  prc_cmp *tpt_aer, // O [K] "Aerodynamic" temperature at z=zpd+rgh_mmn
  prc_cmp *tpt_ash, // O [K] "Surface" temperature at z=zpd+rgh_heat
  prc_cmp *tpt_ash_p2m, // O [K] "Screen" temperature at z=zpd+rgh_heat+2m
+ prc_cmp *tpt_ffc, // O [K] Radiative effective temperature
  prc_cmp *tpt_gnd, // I/O [K] Ground temperature
- prc_cmp *tpt_msv, // O [K] Radiative emission temperature
  prc_cmp *tpt_vgt, // I/O [K] Vegetation temperature
  prc_cmp *wnd_frc, // O [m s-1] Surface friction velocity
  prc_cmp *wnd_str_mrd, // O [kg m-1 s-2] Meridional wind stress
@@ -861,7 +861,7 @@ flx_sfc_lnd
     flx_sns_atm_cnp[lon_idx]=flx_sns_gnd(lon_idx,idx_vgt); // [W m-2] Canopy heat storage (currently defined = 0.0)
     flx_sns_gnd_ttl[lon_idx]=flx_sns_gnd(lon_idx,idx_gnd)-flx_snw_mlt[lon_idx]; // [W m-2] Sensible heat flux to soil
     flx_LW_upw_sfc[lon_idx]=msv_gnd[lon_idx]*flx_LW_dwn_sfc[lon_idx]+flx_LW_net_ttl[lon_idx]; // [W m-2] Longwave upwelling flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 fxm: implement correct formulae for vegetated surfaces as well
-    tpt_msv[lon_idx]=std::pow(flx_LW_upw_sfc[lon_idx]/cst_Stefan_Boltzmann,0.25); // [K] Radiative emission temperature
+    tpt_ffc[lon_idx]=std::pow(flx_LW_upw_sfc[lon_idx]/cst_Stefan_Boltzmann,0.25); // [K] Radiative effective temperature
     wnd_str_znl[lon_idx]=-dns_mdp[lon_idx]*cff_xch_mmn[lon_idx]*wnd_mdp_bnd[lon_idx]*wnd_znl_mdp[lon_idx]; // [kg m-1 s-2] Zonal wind stress Bon96 p. 54
     wnd_str_mrd[lon_idx]=-dns_mdp[lon_idx]*cff_xch_mmn[lon_idx]*wnd_mdp_bnd[lon_idx]*wnd_mrd_mdp[lon_idx]; // [kg m-1 s-2] Meridional wind stress Bon96 p. 54
 
