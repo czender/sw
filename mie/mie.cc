@@ -248,7 +248,7 @@ int main(int argc,char **argv)
   enum cnt_rgm_bll_crc{SeP97,FuS70,ZSK94,ZhC99};
   //  const std::string flx_cnt_rgm_bll_crc_sng[4]={"Seinfeld and Pandis (1997)","Fuchs and Sutugin (1970)","Fuchs and Sutugin (1970)","Fuchs and Sutugin (1970)"};
   int cnt_rgm_bll_crc(FuS70); // default
-  cnt_rgm_bll_crc=cnt_rgm_bll_crc; // default fxm: CEWI Not completely implemented yet
+  cnt_rgm_bll_crc=1.0*cnt_rgm_bll_crc; // default fxm: CEWI Not completely implemented yet
 
   // Environment
   std::string nvr_DATA((std::getenv("DATA")) ? std::getenv("DATA") : ""); // [sng] Environment variable DATA
@@ -2147,7 +2147,8 @@ int main(int argc,char **argv)
   prc_cmp flx_snw_mlt; // [W m-2] Snow melt heat flux
   prc_cmp rss_aer_heat; // [s m-1] Aerodynamic resistance to heat transfer
   prc_cmp rss_aer_mmn; // [s m-1] Aerodynamic resistance to momentum transfer
-  prc_cmp rss_aer_mmn_ntr; // [s m-1] Neutral aerodynamic resistance to momentum transfer
+  // 20210418: fill-in rss_aer_mmn_ntr
+  prc_cmp rss_aer_mmn_ntr(cmd_ln_dfl); // [s m-1] Neutral aerodynamic resistance to momentum transfer
   prc_cmp rss_aer_vpr; // [s m-1] Aerodynamic resistance to vapor transfer
   prc_cmp tpt_aer; // [K] "Aerodynamic" temperature at z=zpd+rgh_mmn
   prc_cmp tpt_ash; // [K] "Surface" temperature at z=zpd+rgh_heat
