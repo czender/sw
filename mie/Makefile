@@ -11,6 +11,8 @@
 # 32-bit ABI on NCAR AIX systems:
 # NETCDF_LIB=/usr/local/lib32/r4i4 make --jobs=1 ABI=32 OPTS=D;cd -
 
+# cd ~/sw/mie;GSL_INC='/global/common/sw/cray/cnl7/haswell/gsl/2.5/gcc/8.3.0/yfdt2hw/include' GSL_LIB='/global/common/sw/cray/cnl7/haswell/gsl/2.5/gcc/8.3.0/yfdt2hw/lib -lgsl' NETCDF_INC='/opt/cray/pe/netcdf/4.7.3.3/gnu/8.2/include' NETCDF_LIB='/opt/cray/pe/netcdf/4.7.3.3/gnu/8.2/lib' UDUNITS2_PATH='/global/common/sw/cray/cnl7/haswell/udunits2/2.2.24/gcc/8.2.0/y4j6eez' make all;cd - # Cori
+
 # Top-level tokens defining directory structure
 # These tokens may be over-ridden by environment variables or when invoking make, e.g. make DODS=Y
 ifndef MY_BIN_DIR
@@ -539,7 +541,7 @@ CXX := ${LINUX_CXX}
 CC := ${LINUX_CC}
 CPP := ${CXX}
 CPP_TKN_OS +=
-CPPFLAGS += ${CPP_TKN} ${CPP_TKN_OS} ${CPP_PTH} -I${NETCDF_INC} 
+CPPFLAGS += ${CPP_TKN} ${CPP_TKN_OS} ${CPP_PTH} -I${NETCDF_INC} ${GSL_INC}
 FC := ${LINUX_FC}
 LD := ld
 LDFLAGS += -L${MY_LIB_DIR} -lcsm_c++ -lcsz_c++ -lnco_c++ ${NC_LDFLAGS} ${NC_LIBS}
