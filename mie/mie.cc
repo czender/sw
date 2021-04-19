@@ -1289,7 +1289,12 @@ int main(int argc,char **argv)
   const prc_cmp *sz_ctr=psd_szgrd.sz_ctr_get(); // [m] Size at bin center
   const prc_cmp *sz_grd=psd_szgrd.sz_grd_get(); // [m] Size grid
   const prc_cmp *sz_dlt=psd_szgrd.sz_dlt_get(); // [m] Width of size bin
-  const long sz_idx_dbg=vec_val2idx(sz_ctr,sz_nbr,sz_dbg); // [idx] Size bin for debugging
+  /* 20210418: Conflict between GCC and Clang OpenMP implementations
+     GCC disallows const scalars to be specificially enumerated in OpenMP shared ("error: 'sz_idx_dbg' is predetermined 'shared' for 'shared'")
+     Clang requires const scalars to be specificially enumerated in OpenMP shared
+     Workaround: declare sz_idx_dbg, wvl_bnd_sz_nbr, wvl_idx_dbg as non-const */
+  //  const long sz_idx_dbg=vec_val2idx(sz_ctr,sz_nbr,sz_dbg); // [idx] Size bin for debugging
+  long sz_idx_dbg=vec_val2idx(sz_ctr,sz_nbr,sz_dbg); // [idx] Size bin for debugging
 
   // Define radius grid
   prc_cmp *rds_ctr=new prc_cmp[sz_nbr]; // [m] Radius at bin center
@@ -2916,7 +2921,9 @@ int main(int argc,char **argv)
   const prc_cmp *wvn_max=wvlgrd.wvn_max_get(); // [cm-1] Maximum wavenumber in band
   const prc_cmp *wvn_min=wvlgrd.wvn_min_get(); // [cm-1] Minimum wavenumber in band
   // Derive debugging information
-  const long wvl_idx_dbg=vec_val2idx(wvl_ctr,wvl_nbr,wvl_dbg); // [idx] Debugging wavelength bin
+  // 20210418: Explanation for non-const wvl_idx_dbg is near sz_idx_dbg declaration
+  // const long wvl_idx_dbg=vec_val2idx(wvl_ctr,wvl_nbr,wvl_dbg); // [idx] Debugging wavelength bin
+  long wvl_idx_dbg=vec_val2idx(wvl_ctr,wvl_nbr,wvl_dbg); // [idx] Debugging wavelength bin
 
   // Instantiate spectral solar irradiance sources
   spc_slr_cls flx_slr_src(slr_spc_key,slr_cst,fl_slr_spc); // [sct] Solar flux source
@@ -3070,7 +3077,9 @@ int main(int argc,char **argv)
     assert(rds_mnt[sz_idx] >= rds_cor[sz_idx]);
   } // end loop over sz
 
-  const long wvl_bnd_sz_nbr(wvl_nbr*bnd_nbr*sz_nbr); // [nbr] Number of wavelength/band/size loops
+  // 20210418: Explanation for non-const wvl_bnd_sz_nbr is near sz_idx_dbg declaration
+  //const long wvl_bnd_sz_nbr(wvl_nbr*bnd_nbr*sz_nbr); // [nbr] Number of wavelength/band/size loops
+  long wvl_bnd_sz_nbr(wvl_nbr*bnd_nbr*sz_nbr); // [nbr] Number of wavelength/band/size loops
   const prc_cmp sz_prm_dbg(2.0*mth::cst_M_PIl*rds_ctr[sz_idx_dbg]/wvl_ctr[wvl_idx_dbg]); // [frc] Size parameter at debug size, wavelength
   const prc_cmp sz_prm_rds_min_wvl_max(2.0*mth::cst_M_PIl*rds_min[0]/wvl_max[wvl_nbr-1]); // [frc] Size parameter, smallest particle, longest wavelength
   const prc_cmp sz_prm_rds_max_wvl_min(2.0*mth::cst_M_PIl*rds_max[sz_nbr-1]/wvl_min[0]); // [frc] Size parameter, largest particle, shortest wavelength
