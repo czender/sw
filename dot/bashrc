@@ -422,22 +422,26 @@ case "${PVM_ARCH}" in
 # PKG_ROOT is where non-default sysadmin-installed packages reside
 # PKG_ROOT is usually argument to configure --prefix=${PKG_ROOT}
 # ROCKS_ROLLS_ROOT is where Rocks clusters put rolls
+# 20210420 HPCs that use modules should have no PKG_ROOT defined because there is no single location for all packages
 	case "${HOST}" in 
-#	    compy* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # endif UCI PS Rocks Cluster
 	    gplogin* | hpc* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # endif UCI PS Rocks Cluster
 	esac # endcase ${HOST}
-	export PKG_ROOT='/usr/local'
 	case "${HOST}" in 
 	    e3sm* ) export PKG_ROOT="${HOME}/anaconda" ; ;; # endif Anaconda
 	    firn* | jaws* | katabatic* | rigb* | sastrugi* ) PKG_ROOT='/opt/local' ; ;; # endif MAC OS X
 	    cg-gpu* ) PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # endif NCSA roger cluster
-#	    compy* ) PKG_ROOT='/opt' ; ;; # endif NCSA roger cluster
 	    gplogin* ) PKG_ROOT='/sopt' ; ;; # endif UCI PS Rocks Cluster
 	    hpc* ) PKG_ROOT='/software' ; ;; # endif Torque machines
 	    * ) PKG_ROOT='/usr/local' ; ;; # endif default
 	esac # endcase ${HOST}
-	export NETCDF_ROOT="${PKG_ROOT}"
-	export NETCDF4_ROOT="${PKG_ROOT}"
+	if [ -n "${NETCDF_ROOT}" ]; then
+	    # Some modules, e.g., on compy, define NETCDF_ROOT, so use that
+	    export NETCDF_ROOT="${NETCDF_ROOT}"
+	elif [ -n "${PKG_ROOT}" ]; then
+	    export NETCDF_ROOT="${PKG_ROOT}"
+	else
+	    export NETCDF4_ROOT='/usr/local'
+	fi # !NETCDF_ROOT
 	case "${HOST}" in 
 # Use local build rather than RPM to get linking correct
 #	    gplogin* ) export NETCDF_ROOT="/home/pvicente/install/netcdf-4.3.0" ; export NETCDF4_ROOT="/home/pvicente/install/netcdf-4.3.0" ; ;; # endif UCI PS Rocks Cluster
