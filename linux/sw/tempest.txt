@@ -424,6 +424,24 @@ make install
 #***********************************************************************
 
 #***********************************************************************
+# 20210423: glace.ess.uci.edu
+#***********************************************************************
+cd ${DATA}/tmp
+sudo aptitude install liblapack liblapack-dev # glace, Ubuntu
+#git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+git pull
+git reset --hard origin/master
+autoreconf -fi
+# Not working: fails to find 
+configure --prefix=/usr/local --with-netcdf=/usr/local --with-blas=/usr --with-lapack=/usr 
+make
+sudo make install
+#***********************************************************************
+# 20210423: glace.ess.uci.edu
+#***********************************************************************
+
+#***********************************************************************
 # 20190912: Old TR notes from esmf.txt, copied here for convenience
 #***********************************************************************
 # NB: Tempest executables do not always (ever?) accept "--option=val" format, use "--option val" instead
