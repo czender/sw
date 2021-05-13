@@ -793,9 +793,10 @@ CC_clang_macports='clang-mp-11'
 # 20150109: Introduce -D_DEFAULT_SOURCE in place of deprecated (as of gcc 4.9.2) -D_BSD_SOURCE -D_POSIX_SOURCE
 # 20201002: Drop -pedantic because that makes __USE_BSD and thus M_LN2 needed by CCR unfindable (reinstate because that did not work)
 # Conda compiler names explained at https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html
+# 20210513: Drop -std=c99 for Conda since Conda defaults to -std=gnu11
 CC_gcc='gcc -std=c99 -pedantic -D_DEFAULT_SOURCE'
 CC_gcc_pre_4_9='gcc -std=c99 -pedantic -D_BSD_SOURCE -D_POSIX_SOURCE'
-CC_gcc_conda='x86_64-conda-linux-gnu-gcc -std=c99 -pedantic -D_DEFAULT_SOURCE'
+CC_gcc_conda='x86_64-conda-linux-gnu-gcc -pedantic -D_DEFAULT_SOURCE'
 CC_gcc_macports='gcc-mp-10 -std=c99 -pedantic -D_DEFAULT_SOURCE'
 CC_icc='icc -std=c99 -D_DEFAULT_SOURCE'
 CC_pathcc='pathcc -std=c99 -D_DEFAULT_SOURCE'
@@ -1159,7 +1160,7 @@ alias x16='startx -- -bpp 16 :1' # Start 16 bpp display acessible as Ctl-Alt-F8
 # End section not yet merged with cshrc
 # 20180103: Omit these dirs pending new funding: terraref/extractors-environmental terraref/extractors-hyperspectral terraref/documentation
 alias gtc='for rps in acd cf2 cf-conventions diwg jaws nco pnp prv rsr sw valleyfeverdata; do cd ~/${rps};git commit -am "lazy commit";echo "Pushing ${rps}...";git push;done;cd'
-alias gtp='for rps in acd ccr cf2 cf-conventions diwg jaws nco pnp prv rsr sw valleyfeverdata; do cd ~/${rps};echo "Pulling ${rps}...";git pull;done;cd'
+alias gtp='for rps in acd ccr cf2 cf-conventions diwg jaws nco nco-feedback pnp prv rsr sw valleyfeverdata; do cd ~/${rps};echo "Pulling ${rps}...";git pull;done;cd'
 alias gtr='git reset --hard origin/master'
 
 # Total size of all files in directory, including symlinks:
