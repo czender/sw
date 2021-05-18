@@ -262,7 +262,7 @@ ngl_grd_get // [fnc] Create angular grid
     ngl_dgr[ngl_idx]=ngl[ngl_idx]*180.0/mth::cst_M_PIl; // [dgr] Scattering angle
   } // end loop over ngl
 
-  if(dbg_lvl == dbg_crr){
+  if(dbg_lvl == dbg_vrb){
     /* 20080123 Verified Lobatto abscissae and weights (for L=5) exactly match
        http://mathworld.wolfram.com/LobattoQuadrature.html */
     std::cout << "ngl_dlt_ttl = " << ngl_dlt_ttl << std::endl; // [rdn] Angle grid span

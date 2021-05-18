@@ -146,8 +146,8 @@ flx_sfc_lnd
  prc_cmp *tpt_aer, // O [K] "Aerodynamic" temperature at z=zpd+rgh_mmn
  prc_cmp *tpt_ash, // O [K] "Surface" temperature at z=zpd+rgh_heat
  prc_cmp *tpt_ash_p2m, // O [K] "Screen" temperature at z=zpd+rgh_heat+2m
+ prc_cmp *tpt_ffc, // O [K] Radiative effective temperature
  prc_cmp *tpt_gnd, // I/O [K] Ground temperature
- prc_cmp *tpt_msv, // O [K] Radiative emission temperature
  prc_cmp *tpt_vgt, // I/O [K] Vegetation temperature
  prc_cmp *wnd_frc, // O [m s-1] Surface friction velocity
  prc_cmp *wnd_str_mrd, // O [kg m-1 s-2] Meridional wind stress
@@ -861,7 +861,7 @@ flx_sfc_lnd
     flx_sns_atm_cnp[lon_idx]=flx_sns_gnd(lon_idx,idx_vgt); // [W m-2] Canopy heat storage (currently defined = 0.0)
     flx_sns_gnd_ttl[lon_idx]=flx_sns_gnd(lon_idx,idx_gnd)-flx_snw_mlt[lon_idx]; // [W m-2] Sensible heat flux to soil
     flx_LW_upw_sfc[lon_idx]=msv_gnd[lon_idx]*flx_LW_dwn_sfc[lon_idx]+flx_LW_net_ttl[lon_idx]; // [W m-2] Longwave upwelling flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 fxm: implement correct formulae for vegetated surfaces as well
-    tpt_msv[lon_idx]=std::pow(flx_LW_upw_sfc[lon_idx]/cst_Stefan_Boltzmann,0.25); // [K] Radiative emission temperature
+    tpt_ffc[lon_idx]=std::pow(flx_LW_upw_sfc[lon_idx]/cst_Stefan_Boltzmann,0.25); // [K] Radiative effective temperature
     wnd_str_znl[lon_idx]=-dns_mdp[lon_idx]*cff_xch_mmn[lon_idx]*wnd_mdp_bnd[lon_idx]*wnd_znl_mdp[lon_idx]; // [kg m-1 s-2] Zonal wind stress Bon96 p. 54
     wnd_str_mrd[lon_idx]=-dns_mdp[lon_idx]*cff_xch_mmn[lon_idx]*wnd_mdp_bnd[lon_idx]*wnd_mrd_mdp[lon_idx]; // [kg m-1 s-2] Meridional wind stress Bon96 p. 54
 
@@ -938,14 +938,14 @@ blm_mbl
      Te = Emitting temperature = (FLWup/sigma)**0.25
      Tgcm = Ambient temperature = Air temperature at z=hgt_mdp
      For bare ground, Ts = Tg = Air temperature at z=rgh_heat (Bon96 p. 55)
-     For bare ground, Tg = potential temperture defined relative to local surface pressure */
+     For bare ground, Tg = potential temperature defined relative to local surface pressure */
   
   // Output
   int rcd(0); // O [rcd] Return success code
 
   // Local
   const prc_cmp eps_dbz(1.0e-6); // [frc] Prevents division by zero
-  const prc_cmp sfc_ems_gnd(0.96); // [frc] Surface emissivity of bare ground CCM:lsm/snoconi()
+  const prc_cmp msv_sfc_gnd(0.96); // [frc] Surface emissivity of bare ground CCM:lsm/snoconi()
   const prc_cmp wnd_min_mbl(1.0); // [m s-1] Minimum windspeed used for mobilization
   const long itr_max_gnd(12); // Maximum number of iterations for tpt_gnd loop
   const long sgn_chg_ctr_max(4); // Maximum number of sign changes in stability parameter
@@ -1022,7 +1022,7 @@ blm_mbl
   for(lon_idx=0;lon_idx<lon_nbr;lon_idx++){
     ppr_H2O_mdp[lon_idx]=q_H2O_vpr[lon_idx]*prs_mdp[lon_idx]/(eps_H2O+one_mns_eps_H2O*q_H2O_vpr[lon_idx]); // [Pa] Ambient vapor pressure of H2O
     
-    msv_gnd[lon_idx]=sfc_ems_gnd; // [frc] Ground emissivity
+    msv_gnd[lon_idx]=msv_sfc_gnd; // [frc] Ground emissivity
 
     mno_stb_prm[lon_idx]=min_cpv((hgt_mdp[lon_idx]-hgt_zpd[lon_idx])/mno_lng[lon_idx],1.0); // [frc]
     

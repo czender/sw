@@ -248,7 +248,7 @@ int main(int argc,char **argv)
   enum cnt_rgm_bll_crc{SeP97,FuS70,ZSK94,ZhC99};
   //  const std::string flx_cnt_rgm_bll_crc_sng[4]={"Seinfeld and Pandis (1997)","Fuchs and Sutugin (1970)","Fuchs and Sutugin (1970)","Fuchs and Sutugin (1970)"};
   int cnt_rgm_bll_crc(FuS70); // default
-  cnt_rgm_bll_crc=cnt_rgm_bll_crc; // default fxm: CEWI Not completely implemented yet
+  cnt_rgm_bll_crc=1.0*cnt_rgm_bll_crc; // default fxm: CEWI Not completely implemented yet
 
   // Environment
   std::string nvr_DATA((std::getenv("DATA")) ? std::getenv("DATA") : ""); // [sng] Environment variable DATA
@@ -411,6 +411,7 @@ int main(int argc,char **argv)
   prc_cmp mss_frc_snd(0.777); // [frc] Mass fraction sand
   prc_cmp mss_frc_cor(cmd_ln_dfl); // [frc] Mass fraction in core
   prc_cmp mss_frc_ncl(cmd_ln_dfl); // [frc] Mass fraction in inclusion
+  prc_cmp msv_sfc(1.0); // [frc] Surface emissivity
   prc_cmp ngl_dbg_dgr(0.0); // [dgr] Debugging angle
   prc_cmp oro(1.0); // [frc] Orography: ocean=0.0, land=1.0, sea ice=2.0
   prc_cmp prs_mdp(100825.0); // [Pa] Environmental pressure
@@ -604,6 +605,7 @@ int main(int argc,char **argv)
     {"mss_frc_snd",required_argument,0,0}, // [frc] Mass fraction sand
     {"mss_frc_cor",required_argument,0,0}, // [frc] Mass fraction in core
     {"mss_frc_ncl",required_argument,0,0}, // [frc] Mass fraction in inclusion
+    {"msv_sfc",required_argument,0,0}, // [frc] Surface emissivity
     {"lgn_nbr",required_argument,0,0}, // [nbr] Order of phase function Legendre expansion
     {"ngl_dbg_dgr",required_argument,0,0}, // [dgr] Debugging angle
     {"ngl_nbr",required_argument,0,0}, // [nbr] Number of polar angles in one hemisphere
@@ -810,6 +812,7 @@ int main(int argc,char **argv)
       if(opt_crr == "mss_frc_snd") mss_frc_snd=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [frc] Mass fraction sand
       if(opt_crr == "mss_frc_cor") mss_frc_cor=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [frc] Mass fraction in core
       if(opt_crr == "mss_frc_ncl") mss_frc_ncl=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [frc] Mass fraction in inclusion
+      if(opt_crr == "msv_sfc") msv_sfc=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [frc] Surface emissivity
       if(opt_crr == "ngl_dbg_dgr") ngl_dbg_dgr=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [dgr] Debugging angle
       if(opt_crr == "ngl_nbr") ngl_nbr=std::strtol(opt_sng.c_str(),(char **)NULL,10); // [nbr] Number of angles in Mie computation
       if(opt_crr == "no_abc_flg") abc_flg=false; // [flg] Alphabetize output with ncks 
@@ -1286,7 +1289,12 @@ int main(int argc,char **argv)
   const prc_cmp *sz_ctr=psd_szgrd.sz_ctr_get(); // [m] Size at bin center
   const prc_cmp *sz_grd=psd_szgrd.sz_grd_get(); // [m] Size grid
   const prc_cmp *sz_dlt=psd_szgrd.sz_dlt_get(); // [m] Width of size bin
-  const long sz_idx_dbg=vec_val2idx(sz_ctr,sz_nbr,sz_dbg); // [idx] Size bin for debugging
+  /* 20210418: Conflict between GCC and Clang OpenMP implementations
+     GCC disallows const scalars to be specificially enumerated in OpenMP shared ("error: 'sz_idx_dbg' is predetermined 'shared' for 'shared'")
+     Clang requires const scalars to be specificially enumerated in OpenMP shared
+     Workaround: declare sz_idx_dbg, wvl_bnd_sz_nbr, wvl_idx_dbg as non-const */
+  //  const long sz_idx_dbg=vec_val2idx(sz_ctr,sz_nbr,sz_dbg); // [idx] Size bin for debugging
+  long sz_idx_dbg=vec_val2idx(sz_ctr,sz_nbr,sz_dbg); // [idx] Size bin for debugging
 
   // Define radius grid
   prc_cmp *rds_ctr=new prc_cmp[sz_nbr]; // [m] Radius at bin center
@@ -1832,7 +1840,7 @@ int main(int argc,char **argv)
 
   /* Default reference height at 10 m works for atmospheric aerosol, not for snow
      For snow simulations we often want layer thicknesses much less than 10 m
-     Assume that mid-layer thicknesses < 10 m indicate primary interest is snow 
+     Assume that mid-layer thicknesses < 10 m indicates primary interest is snow 
      In that case, reset reference height to small value */
   prc_cmp snw_hgt; // [m] Geometric bulk thickness of snow
   if(hgt_rfr > hgt_mdp){
@@ -2144,12 +2152,13 @@ int main(int argc,char **argv)
   prc_cmp flx_snw_mlt; // [W m-2] Snow melt heat flux
   prc_cmp rss_aer_heat; // [s m-1] Aerodynamic resistance to heat transfer
   prc_cmp rss_aer_mmn; // [s m-1] Aerodynamic resistance to momentum transfer
-  prc_cmp rss_aer_mmn_ntr; // [s m-1] Neutral aerodynamic resistance to momentum transfer
+  // 20210418: fill-in rss_aer_mmn_ntr
+  prc_cmp rss_aer_mmn_ntr(cmd_ln_dfl); // [s m-1] Neutral aerodynamic resistance to momentum transfer
   prc_cmp rss_aer_vpr; // [s m-1] Aerodynamic resistance to vapor transfer
   prc_cmp tpt_aer; // [K] "Aerodynamic" temperature at z=zpd+rgh_mmn
   prc_cmp tpt_ash; // [K] "Surface" temperature at z=zpd+rgh_heat
   prc_cmp tpt_ash_p2m; // [K] "Screen" temperature at z=zpd+rgh_heat+2m
-  prc_cmp tpt_msv; // [K] Radiative emission temperature
+  prc_cmp tpt_ffc; // [K] Radiative effective temperature
   prc_cmp wnd_str_mrd; // [kg m-1 s-2] Meridional wind stress
   prc_cmp wnd_str_znl; // [kg m-1 s-2] Zonal wind stress
   rcd+=flx_sfc_lnd
@@ -2194,8 +2203,8 @@ int main(int argc,char **argv)
      &tpt_aer, // O [K] "Aerodynamic" temperature at z=zpd+rgh_mmn
      &tpt_ash, // O [K] "Surface" temperature at z=zpd+rgh_heat
      &tpt_ash_p2m, // O [K] "Screen" temperature at z=zpd+rgh_heat+2m
+     &tpt_ffc, // O [K] Radiative effective temperature
      &tpt_gnd, // I/O [K] Ground temperature
-     &tpt_msv, // O [K] Radiative emission temperature
      &tpt_vgt, // I/O [K] Vegetation temperature
      &wnd_frc_mbl, // O [m s-1] Surface friction velocity
      &wnd_str_mrd, // O [kg m-1 s-2] Meridional wind stress
@@ -2912,7 +2921,9 @@ int main(int argc,char **argv)
   const prc_cmp *wvn_max=wvlgrd.wvn_max_get(); // [cm-1] Maximum wavenumber in band
   const prc_cmp *wvn_min=wvlgrd.wvn_min_get(); // [cm-1] Minimum wavenumber in band
   // Derive debugging information
-  const long wvl_idx_dbg=vec_val2idx(wvl_ctr,wvl_nbr,wvl_dbg); // [idx] Debugging wavelength bin
+  // 20210418: Explanation for non-const wvl_idx_dbg is near sz_idx_dbg declaration
+  // const long wvl_idx_dbg=vec_val2idx(wvl_ctr,wvl_nbr,wvl_dbg); // [idx] Debugging wavelength bin
+  long wvl_idx_dbg=vec_val2idx(wvl_ctr,wvl_nbr,wvl_dbg); // [idx] Debugging wavelength bin
 
   // Instantiate spectral solar irradiance sources
   spc_slr_cls flx_slr_src(slr_spc_key,slr_cst,fl_slr_spc); // [sct] Solar flux source
@@ -3066,7 +3077,9 @@ int main(int argc,char **argv)
     assert(rds_mnt[sz_idx] >= rds_cor[sz_idx]);
   } // end loop over sz
 
-  const long wvl_bnd_sz_nbr(wvl_nbr*bnd_nbr*sz_nbr); // [nbr] Number of wavelength/band/size loops
+  // 20210418: Explanation for non-const wvl_bnd_sz_nbr is near sz_idx_dbg declaration
+  //const long wvl_bnd_sz_nbr(wvl_nbr*bnd_nbr*sz_nbr); // [nbr] Number of wavelength/band/size loops
+  long wvl_bnd_sz_nbr(wvl_nbr*bnd_nbr*sz_nbr); // [nbr] Number of wavelength/band/size loops
   const prc_cmp sz_prm_dbg(2.0*mth::cst_M_PIl*rds_ctr[sz_idx_dbg]/wvl_ctr[wvl_idx_dbg]); // [frc] Size parameter at debug size, wavelength
   const prc_cmp sz_prm_rds_min_wvl_max(2.0*mth::cst_M_PIl*rds_min[0]/wvl_max[wvl_nbr-1]); // [frc] Size parameter, smallest particle, longest wavelength
   const prc_cmp sz_prm_rds_max_wvl_min(2.0*mth::cst_M_PIl*rds_max[sz_nbr-1]/wvl_min[0]); // [frc] Size parameter, largest particle, shortest wavelength
@@ -3136,7 +3149,7 @@ int main(int argc,char **argv)
     std::cout << "  Latent heat = " << flx_ltn << " W m-2, Sensible heat to atmosphere = " << flx_sns_atm << " W m-2, Sensible heat to soil = " << flx_sns_gnd << " W m-2, Flux snow melt = " << flx_snw_mlt << " W m-2" << std::endl;
     std::cout << "  Water vapor flux to atmosphere = " << flx_q_H2O*1.0e6 << " mg m-2 s-1" << std::endl;
     std::cout << "  Temperatures at z = " << hgt_mdp << " m: T = " << tpt_mdp << " K, Tv = " << tpt_vrt_mdp << " K, Theta = " << tpt_ptn_mdp << " K, Thetav = " << tpt_ptn_vrt_mdp << " K" << std::endl;
-    std::cout << "  Temperatures: GCM = " << tpt_mdp << " K, Screen (z0h+d+2m) = " << tpt_ash_p2m << " K, Aerodynamic (z0m+d)= " << tpt_aer << " K, Surface (z0h+d) = " << tpt_ash << " K, Vegetation = " << tpt_vgt << " K, Ground = " << tpt_gnd << " K, Soil = " << tpt_soi << " K, Radiative = " << tpt_msv << " K" << std::endl;
+    std::cout << "  Temperatures: GCM = " << tpt_mdp << " K, Screen (z0h+d+2m) = " << tpt_ash_p2m << " K, Aerodynamic (z0m+d)= " << tpt_aer << " K, Surface (z0h+d) = " << tpt_ash << " K, Vegetation = " << tpt_vgt << " K, Ground = " << tpt_gnd << " K, Soil = " << tpt_soi << " K, Effective = " << tpt_ffc << " K" << std::endl;
     std::cout << "Surface Exchange Properties:" << std::endl;
     std::cout << "  Roughness lengths: Mobilization = " << rgh_mmn_mbl << " m, Smooth = " << rgh_mmn_smt << " m, Deposition = " << rgh_mmn_dps << " m" << std::endl; 
     std::cout << "  Transfer properties between hgt_mdp = " << hgt_mdp << " m and z0m+zpd = " << hgt_asm << " m, and z0h+zpd = z0v+zpd = " << hgt_ash << " m:" << std::endl;
@@ -3440,7 +3453,7 @@ int main(int argc,char **argv)
   // NB: CL1 Parallelization is NOT READY YET
 #ifdef _OPENMP // OpenMP
 #ifdef PARALLELIZE_OVER_CL1
-#pragma omp parallel for default(none) firstprivate(rcd) private(abs_fct_MaS99_scl,asm_prm_scl,bck_hms_scl,bnd_idx,ngl_idx,phz_fnc_crr,plz_crr,q_abs,q_bck,q_ext,q_sct,spk_val,sz_idx,wgt_xsa,wvl_idx) shared(abs_cff_vlm,abs_fct_MaS99,abs_fsh,abs_fsh_ffc,abs_ncl_wk_mdm_flg,asm_prm,asm_prm_fsh,bch_flg,bck_cff_vlm,bck_fsh,bck_fsh_ffc,bnd_ctr,bnd_nbr,cnc_sph,coat_flg,dbg_io,dbg_lvl,dbg_off,dbg_old,dbg_scl,dmn_frc,dns_prt,ext_cff_vlm,ext_fsh,ext_fsh_ffc,ffc_mdm_typ,flx_wgt_frc,flx_slr_frc_bnd,flx_IR_frc_bnd,flx_wgt_frc_bnd,idx_rfr_cor_bnd,idx_rfr_ffc_bnd,idx_rfr_mdm_bnd,idx_rfr_mnt_bnd,idx_rfr_mtx_bnd,idx_rfr_ncl_bnd,idx_rfr_prt_bnd,lgn_nbr,lng_foo,mie_flg,ngl,ngl_dlt,ngl_nbr,phz_fnc_ffc,phz_fnc_dgn,plz_dgn,prg_mtr_rsn,rds_cor,rds_mnt,sbr_nm,sca_cff_vlm,sca_fsh,sca_fsh_ffc,slf_tst_flg,slf_tst_typ,slv_sng,std::cerr,sz_ctr_sph,sz_nbr,sz_prm_rsn_usr_spc,tst_sng,vlm_sph,vlm_frc_ncl,wgt_vlm,wvl_bnd_sz_idx,wvl_bnd_sz_nbr,wvl_idx_dbg,wvl_nbr,xsa_sph)
+#pragma omp parallel for default(none) firstprivate(rcd) private(abs_fct_MaS99_scl,asm_prm_scl,bck_hms_scl,bnd_idx,ngl_idx,phz_fnc_crr,plz_crr,q_abs,q_bck,q_ext,q_sct,spk_val,sz_idx,wgt_xsa,wvl_idx) shared(abs_cff_vlm,abs_fct_MaS99,abs_fsh,abs_fsh_ffc,abs_ncl_wk_mdm_flg,asm_prm,asm_prm_fsh,bch_flg,bck_cff_vlm,bck_fsh,bck_fsh_ffc,bnd_ctr,bnd_nbr,cnc_sph,coat_flg,dbg_io,dbg_lvl,dbg_off,dbg_old,dbg_scl,dmn_frc,dns_prt,ext_cff_vlm,ext_fsh,ext_fsh_ffc,ffc_mdm_typ,flx_wgt_frc,flx_slr_frc_bnd,flx_IR_frc_bnd,flx_wgt_frc_bnd,idx_rfr_cor_bnd,idx_rfr_ffc_bnd,idx_rfr_mdm_bnd,idx_rfr_mnt_bnd,idx_rfr_mtx_bnd,idx_rfr_ncl_bnd,idx_rfr_prt_bnd,lgn_nbr,lng_foo,mie_flg,ngl,ngl_dlt,ngl_nbr,phz_fnc_ffc,phz_fnc_dgn,plz_dgn,prg_mtr_rsn,rds_cor,rds_mnt,sbr_nm,sca_cff_vlm,sca_fsh,sca_fsh_ffc,slf_tst_flg,slf_tst_typ,slv_sng,std::cerr,sz_ctr_sph,sz_idx_dbg,sz_nbr,sz_prm_rsn_usr_spc,tst_sng,vlm_sph,vlm_frc_ncl,wgt_vlm,wvl_bnd_sz_idx,wvl_bnd_sz_nbr,wvl_idx_dbg,wvl_nbr,xsa_sph)
 #endif // !PARALLELIZE_OVER_CL1
 #endif // !_OpenMP
   for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){ // CL1: Start outermost loop
@@ -3567,14 +3580,14 @@ int main(int argc,char **argv)
 #endif // PARALLELIZE_OVER_CL3
 #ifdef _OPENMP // OpenMP
 #ifdef PARALLELIZE_OVER_CL2
-#pragma omp parallel for default(none) firstprivate(rcd) private(abs_fct_MaS99_scl,asm_prm_scl,bck_hms_scl,bnd_idx,ngl_idx,phz_fnc_crr,plz_crr,q_abs,q_bck,q_ext,q_sct,spk_val,sz_idx,wgt_xsa) shared(abs_cff_vlm,abs_fct_MaS99,abs_fsh,abs_fsh_ffc,abs_ncl_wk_mdm_flg,asm_prm,asm_prm_fsh,bch_flg,bck_cff_vlm,bck_fsh,bck_fsh_ffc,bnd_ctr,bnd_nbr,cnc_sph,coat_flg,dbg_lvl,dmn_frc,dns_prt,ext_cff_vlm,ext_fsh,ext_fsh_ffc,ffc_mdm_typ,flx_wgt_frc,flx_slr_frc_bnd,flx_IR_frc_bnd,flx_wgt_frc_bnd,idx_rfr_cor_bnd,idx_rfr_ffc_bnd,idx_rfr_mdm_bnd,idx_rfr_mnt_bnd,idx_rfr_mtx_bnd,idx_rfr_ncl_bnd,idx_rfr_prt_bnd,lgn_nbr,lng_foo,mie_flg,ngl,ngl_dlt,ngl_nbr,phz_fnc_ffc,phz_fnc_dgn,plz_dgn,rds_cor,rds_mnt,sca_cff_vlm,sca_fsh,sca_fsh_ffc,slf_tst_flg,slf_tst_typ,slv_sng,std::cerr,sz_ctr_sph,sz_nbr,sz_prm_rsn_usr_spc,tst_sng,vlm_sph,vlm_frc_ncl,wgt_vlm,wvl_bnd_sz_idx,wvl_idx,wvl_nbr,xsa_sph)
+#pragma omp parallel for default(none) firstprivate(rcd) private(abs_fct_MaS99_scl,asm_prm_scl,bck_hms_scl,bnd_idx,ngl_idx,phz_fnc_crr,plz_crr,q_abs,q_bck,q_ext,q_sct,spk_val,sz_idx,wgt_xsa) shared(abs_cff_vlm,abs_fct_MaS99,abs_fsh,abs_fsh_ffc,abs_ncl_wk_mdm_flg,asm_prm,asm_prm_fsh,bch_flg,bck_cff_vlm,bck_fsh,bck_fsh_ffc,bnd_ctr,bnd_nbr,cnc_sph,coat_flg,dbg_lvl,dmn_frc,dns_prt,ext_cff_vlm,ext_fsh,ext_fsh_ffc,ffc_mdm_typ,flx_wgt_frc,flx_slr_frc_bnd,flx_IR_frc_bnd,flx_wgt_frc_bnd,idx_rfr_cor_bnd,idx_rfr_ffc_bnd,idx_rfr_mdm_bnd,idx_rfr_mnt_bnd,idx_rfr_mtx_bnd,idx_rfr_ncl_bnd,idx_rfr_prt_bnd,lgn_nbr,lng_foo,mie_flg,ngl,ngl_dlt,ngl_nbr,phz_fnc_ffc,phz_fnc_dgn,plz_dgn,rds_cor,rds_mnt,sca_cff_vlm,sca_fsh,sca_fsh_ffc,slf_tst_flg,slf_tst_typ,slv_sng,std::cerr,sz_ctr_sph,sz_idx_dbg,sz_nbr,sz_prm_rsn_usr_spc,tst_sng,vlm_sph,vlm_frc_ncl,wgt_vlm,wvl_bnd_sz_idx,wvl_bnd_sz_nbr,wvl_idx,wvl_idx_dbg,wvl_nbr,xsa_sph)
 #endif // !PARALLELIZE_OVER_CL2
 #endif // !_OpenMP
     for(bnd_idx=0;bnd_idx<bnd_nbr;bnd_idx++){ // CL2: Start middle loop
 
 #ifdef _OPENMP // OpenMP
 #ifdef PARALLELIZE_OVER_CL3
-#pragma omp parallel for default(none) firstprivate(rcd) private(abs_fct_MaS99_scl,asm_prm_scl,bck_hms_scl,ngl_idx,phz_fnc_crr,plz_crr,q_abs,q_bck,q_ext,q_sct,spk_val,sz_idx,wgt_xsa) shared(abs_cff_vlm,abs_fct_MaS99,abs_fsh,abs_fsh_ffc,abs_ncl_wk_mdm_flg,asm_prm,asm_prm_fsh,bch_flg,bck_cff_vlm,bck_fsh,bck_fsh_ffc,bnd_ctr,bnd_idx,bnd_nbr,cnc_sph,coat_flg,dbg_io,dbg_lvl,dbg_off,dbg_old,dbg_scl,dmn_frc,dns_prt,ext_cff_vlm,ext_fsh,ext_fsh_ffc,ffc_mdm_typ,flx_IR_frc_bnd,flx_slr_frc_bnd,flx_wgt_frc,flx_wgt_frc_bnd,idx_rfr_cor_bnd,idx_rfr_ffc_bnd,idx_rfr_mdm_bnd,idx_rfr_mnt_bnd,idx_rfr_mtx_bnd,idx_rfr_ncl_bnd,idx_rfr_prt_bnd,lgn_nbr,lng_foo,mie_flg,ngl,ngl_dlt,ngl_nbr,phz_fnc_ffc,phz_fnc_dgn,plz_dgn,prg_mtr_rsn,rds_cor,rds_mnt,sbr_nm,sca_cff_vlm,sca_fsh,sca_fsh_ffc,slf_tst_flg,slf_tst_typ,slv_sng,std::cerr,sz_ctr_sph,sz_nbr,sz_prm_rsn_usr_spc,tst_sng,vlm_sph,vlm_frc_ncl,wgt_vlm,wvl_bnd_sz_idx,wvl_idx,wvl_idx_dbg,wvl_nbr,xsa_sph)
+#pragma omp parallel for default(none) firstprivate(rcd) private(abs_fct_MaS99_scl,asm_prm_scl,bck_hms_scl,ngl_idx,phz_fnc_crr,plz_crr,q_abs,q_bck,q_ext,q_sct,spk_val,sz_idx,wgt_xsa) shared(abs_cff_vlm,abs_fct_MaS99,abs_fsh,abs_fsh_ffc,abs_ncl_wk_mdm_flg,asm_prm,asm_prm_fsh,bch_flg,bck_cff_vlm,bck_fsh,bck_fsh_ffc,bnd_ctr,bnd_idx,bnd_nbr,cnc_sph,coat_flg,dbg_io,dbg_lvl,dbg_off,dbg_old,dbg_scl,dmn_frc,dns_prt,ext_cff_vlm,ext_fsh,ext_fsh_ffc,ffc_mdm_typ,flx_IR_frc_bnd,flx_slr_frc_bnd,flx_wgt_frc,flx_wgt_frc_bnd,idx_rfr_cor_bnd,idx_rfr_ffc_bnd,idx_rfr_mdm_bnd,idx_rfr_mnt_bnd,idx_rfr_mtx_bnd,idx_rfr_ncl_bnd,idx_rfr_prt_bnd,lgn_nbr,lng_foo,mie_flg,ngl,ngl_dlt,ngl_nbr,phz_fnc_ffc,phz_fnc_dgn,plz_dgn,prg_mtr_rsn,rds_cor,rds_mnt,sbr_nm,sca_cff_vlm,sca_fsh,sca_fsh_ffc,slf_tst_flg,slf_tst_typ,slv_sng,std::cerr,sz_ctr_sph,sz_idx_dbg,sz_nbr,sz_prm_rsn_usr_spc,tst_sng,vlm_sph,vlm_frc_ncl,wgt_vlm,wvl_bnd_sz_idx,wvl_bnd_sz_nbr,wvl_idx,wvl_idx_dbg,wvl_nbr,xsa_sph)
 #endif // !PARALLELIZE_OVER_CL3
 #endif // endif OpenMP
       for(sz_idx=0;sz_idx<sz_nbr;sz_idx++){ // CL3: Start innermost loop
@@ -4404,10 +4417,10 @@ int main(int argc,char **argv)
 
       {0,"tpt_aer",NC_FLOAT,0,dmn_scl,"long_name","\"Aerodynamic\" temperature at z=zpd+rgh_mmn","units","kelvin"},
       {0,"tpt_ash",NC_FLOAT,0,dmn_scl,"long_name","\"Surface\" temperature at z=zpd+rgh_heat","units","kelvin"},
+      {0,"tpt_ffc",NC_FLOAT,0,dmn_scl,"long_name","Radiative effective temperature","units","kelvin"},
       {0,"tpt_gnd",NC_FLOAT,0,dmn_scl,"long_name","Ground temperature","units","kelvin"},
       {0,"tpt_gnd_mbl",NC_FLOAT,0,dmn_scl,"long_name","Ground temperature (mobilization)","units","kelvin"},
       {0,"tpt_ice",NC_FLOAT,0,dmn_scl,"long_name","Sea ice temperature","units","kelvin"},
-      {0,"tpt_msv",NC_FLOAT,0,dmn_scl,"long_name","Radiative emission temperature","units","kelvin"},
       {0,"tpt_sfc",NC_FLOAT,0,dmn_scl,"long_name","Surface temperature","units","kelvin"},
       {0,"tpt_soi",NC_FLOAT,0,dmn_scl,"long_name","Soil temperature","units","kelvin"},
       {0,"tpt_sst",NC_FLOAT,0,dmn_scl,"long_name","Sea surface temperature","units","kelvin"},
@@ -4443,10 +4456,10 @@ int main(int argc,char **argv)
     rcd=nco_put_var(nc_out,static_cast<std::string>("trn_fsh_vpr_soi_atm"),trn_fsh_vpr_soi_atm);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_aer"),tpt_aer);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_ash"),tpt_ash);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_ffc"),tpt_ffc);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_gnd"),tpt_gnd);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_gnd_mbl"),tpt_gnd_mbl);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_ice"),tpt_ice);
-    rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_msv"),tpt_msv);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_sfc"),tpt_sfc);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_soi"),tpt_soi);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_sst"),tpt_sst);
@@ -4710,6 +4723,7 @@ int main(int argc,char **argv)
       {0,"wnd_frc_mbl",NC_FLOAT,0,dmn_scl,"long_name","Surface friction speed","units","meter second-1"},
       {0,"wnd_frc_dps",NC_FLOAT,0,dmn_scl,"long_name","Surface friction speed","units","meter second-1"},
       {0,"hgt_mdp",NC_FLOAT,0,dmn_scl,"long_name","Midlayer height above surface","units","meter"},
+      {0,"hgt_rfr",NC_FLOAT,0,dmn_scl,"long_name","Reference height (i.e., 10 m) at which surface winds are evaluated for dust mobilization","units","meter"},
       {0,"hgt_zpd_mbl",NC_FLOAT,0,dmn_scl,"long_name","Zero plane displacement height","units","meter"},
       {0,"hgt_zpd_dps",NC_FLOAT,0,dmn_scl,"long_name","Zero plane displacement height","units","meter"}
     }; // end var_mtd_sct var_mtd[]
@@ -4747,6 +4761,7 @@ int main(int argc,char **argv)
     rcd=nco_put_var(nc_out,static_cast<std::string>("wnd_frc_mbl"),wnd_frc_mbl);
     rcd=nco_put_var(nc_out,static_cast<std::string>("wnd_frc_dps"),wnd_frc_dps);
     rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_mdp"),hgt_mdp);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_rfr"),hgt_rfr);
     rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_zpd_mbl"),hgt_zpd_mbl);
     rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_zpd_dps"),hgt_zpd_dps);
   } // endif true

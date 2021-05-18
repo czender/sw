@@ -422,24 +422,29 @@ case "${PVM_ARCH}" in
 # PKG_ROOT is where non-default sysadmin-installed packages reside
 # PKG_ROOT is usually argument to configure --prefix=${PKG_ROOT}
 # ROCKS_ROLLS_ROOT is where Rocks clusters put rolls
+# 20210420 HPCs that use modules should have no PKG_ROOT defined because there is no single location for all packages
 	case "${HOST}" in 
-#	    compy* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # endif UCI PS Rocks Cluster
 	    gplogin* | hpc* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # endif UCI PS Rocks Cluster
 	esac # endcase ${HOST}
 	case "${HOST}" in 
 	    e3sm* ) export PKG_ROOT="${HOME}/anaconda" ; ;; # endif Anaconda
 	    firn* | jaws* | katabatic* | rigb* | sastrugi* ) PKG_ROOT='/opt/local' ; ;; # endif MAC OS X
 	    cg-gpu* ) PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # endif NCSA roger cluster
-#	    compy* ) PKG_ROOT='/opt' ; ;; # endif NCSA roger cluster
 	    gplogin* ) PKG_ROOT='/sopt' ; ;; # endif UCI PS Rocks Cluster
 	    hpc* ) PKG_ROOT='/software' ; ;; # endif Torque machines
 	    * ) PKG_ROOT='/usr/local' ; ;; # endif default
 	esac # endcase ${HOST}
-	export NETCDF_ROOT="${PKG_ROOT}"
-	export NETCDF4_ROOT="${PKG_ROOT}"
+	if [ -n "${NETCDF_ROOT}" ]; then
+	    # Some modules, e.g., on compy, define NETCDF_ROOT, so use that
+	    export NETCDF_ROOT="${NETCDF_ROOT}"
+	elif [ -n "${PKG_ROOT}" ]; then
+	    export NETCDF_ROOT="${PKG_ROOT}"
+	else
+	    export NETCDF4_ROOT='/usr/local'
+	fi # !NETCDF_ROOT
 	case "${HOST}" in 
 # Use local build rather than RPM to get linking correct
-	    gplogin* ) export NETCDF_ROOT="/home/pvicente/install/netcdf-4.3.0" ; export NETCDF4_ROOT="/home/pvicente/install/netcdf-4.3.0" ; ;; # endif UCI PS Rocks Cluster
+#	    gplogin* ) export NETCDF_ROOT="/home/pvicente/install/netcdf-4.3.0" ; export NETCDF4_ROOT="/home/pvicente/install/netcdf-4.3.0" ; ;; # endif UCI PS Rocks Cluster
 #	    gplogin* ) export HDF5_ROOT="${PKG_ROOT}/hdf5-1.8.11"; export NETCDF_ROOT="${PKG_ROOT}/netcdf/netcdf411-gcc-serial" ; export NETCDF4_ROOT="${PKG_ROOT}/netcdf/netcdf411-gcc-serial" ; ;; # endif UCI PS Rocks Cluster
 #	    gplogin* ) export HDF5_ROOT="${PKG_ROOT}/HDF5"; export NETCDF_ROOT="${PKG_ROOT}/ifort_icpc" ; export NETCDF4_ROOT="${PKG_ROOT}/ifort_icpc" ; ;; # endif UCI PS Rocks Cluster
 	    hpc* ) export NETCDF_ROOT="${PKG_ROOT}/netcdf" ; export NETCDF4_LIB="${PKG_ROOT}/netcdf4" ; ;; # endif HPC
@@ -477,6 +482,7 @@ case "${PVM_ARCH}" in
 	    TORQUE_ROOT="${ROCKS_ROLLS_ROOT}/torque"
 	fi # endif ROCKS_ROLLS_ROOT
 	
+	PATH=${PATH}\:${HOME}/anaconda/bin # Often needed for ESMF_RegridWeightGen
 	PATH=${PATH}\:/usr/local/bin
 	PATH=${PATH}\:/usr/local/sbin # Debian
 	PATH=${PATH}\:/bin
@@ -484,7 +490,6 @@ case "${PVM_ARCH}" in
 	PATH=${PATH}\:/usr/bin
 	PATH=${PATH}\:/usr/sbin
 	PATH=${PATH}\:${X11}/bin
-	PATH=${PATH}\:${HOME}/anaconda/bin # Often needed for ESMF_RegridWeightGen
 	if [ -n "${MPI_ROOT}" ]; then
 		PATH=${PATH}\:${MPI_ROOT}/bin # OpenMPI
 	fi # endif MPI_ROOT
@@ -512,12 +517,12 @@ case "${PVM_ARCH}" in
 #		PATH=${PATH}\:/usr/local/cuda/bin ; ;; # endif CUDA
 	esac # endcase ${HOST}
 	
+	MANPATH=${MANPATH}\:${HOME}/anaconda/man
 	MANPATH=${MANPATH}\:${HOME}/nco/man
 	MANPATH=${MANPATH}\:/usr/local/man
 	MANPATH=${MANPATH}\:/usr/share/man
 	MANPATH=${MANPATH}\:/usr/man
 	MANPATH=${MANPATH}\:${X11}/man
-	MANPATH=${MANPATH}\:${HOME}/anaconda/man
 	MANPATH=${MANPATH}\:/usr/lib/perl5/man
 #	MANPATH=${MANPATH}\:${PGI}/man
 	MANPATH=${MANPATH}\:${NCARG_ROOT}/man
@@ -535,6 +540,7 @@ case "${PVM_ARCH}" in
 	    gplogin* ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PGI}/linux86-64/7.2-3/lib ; ;;
 	    hpc* ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PGI}/linux86-64/7.2-3/lib ; ;;
 	esac # endcase ${HOST}
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${HOME}/anaconda/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${NETCDF4_ROOT}/lib
 	case "${HOST}" in 
@@ -545,7 +551,6 @@ case "${PVM_ARCH}" in
 	esac # endcase ${PVM_ARCH}
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${NCARG_ROOT}/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
-	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${HOME}/anaconda/lib
 	case "${HOST}" in 
 	    # 20130916: Support NCAR modules on cheyenne by removing custom environment variables
 	    acme1* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/e3sm_unified/envs/base/envs/e3sm_unified_1.4.0/lib ; ;; # endif LLNL
@@ -784,19 +789,20 @@ AR='ar'
 #NM='nm'
 ##NM_macports='gcc-nm-mp-10'
 CC_clang='clang'
-CC_clang_macports='clang-mp-10'
+CC_clang_macports='clang-mp-11'
 # 20150109: Introduce -D_DEFAULT_SOURCE in place of deprecated (as of gcc 4.9.2) -D_BSD_SOURCE -D_POSIX_SOURCE
 # 20201002: Drop -pedantic because that makes __USE_BSD and thus M_LN2 needed by CCR unfindable (reinstate because that did not work)
 # Conda compiler names explained at https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html
+# 20210513: Drop -std=c99 for Conda since Conda defaults to -std=gnu11
 CC_gcc='gcc -std=c99 -pedantic -D_DEFAULT_SOURCE'
 CC_gcc_pre_4_9='gcc -std=c99 -pedantic -D_BSD_SOURCE -D_POSIX_SOURCE'
-CC_gcc_conda='x86_64-conda-linux-gnu-gcc -std=c99 -pedantic -D_DEFAULT_SOURCE'
+CC_gcc_conda='x86_64-conda-linux-gnu-gcc -pedantic -D_DEFAULT_SOURCE'
 CC_gcc_macports='gcc-mp-10 -std=c99 -pedantic -D_DEFAULT_SOURCE'
 CC_icc='icc -std=c99 -D_DEFAULT_SOURCE'
 CC_pathcc='pathcc -std=c99 -D_DEFAULT_SOURCE'
 CC_pgcc='pgcc -c9x -D_DEFAULT_SOURCE'
 CXX_clang='clang++ -std=c++17'
-CXX_clang_macports='clang++-mp-10 -std=c++17'
+CXX_clang_macports='clang++-mp-11 -std=c++17'
 CXX_gxx='g++ -std=c++17'
 CXX_gxx_conda='x86_64-conda-linux-gnu-g++ -std=c++17'
 CXX_gxx_macports='g++-mp-10 -std=c++17'
@@ -1154,7 +1160,7 @@ alias x16='startx -- -bpp 16 :1' # Start 16 bpp display acessible as Ctl-Alt-F8
 # End section not yet merged with cshrc
 # 20180103: Omit these dirs pending new funding: terraref/extractors-environmental terraref/extractors-hyperspectral terraref/documentation
 alias gtc='for rps in acd cf2 cf-conventions diwg jaws nco pnp prv rsr sw valleyfeverdata; do cd ~/${rps};git commit -am "lazy commit";echo "Pushing ${rps}...";git push;done;cd'
-alias gtp='for rps in acd ccr cf2 cf-conventions diwg jaws nco pnp prv rsr sw valleyfeverdata; do cd ~/${rps};echo "Pulling ${rps}...";git pull;done;cd'
+alias gtp='for rps in acd ccr cf2 cf-conventions diwg jaws nco nco-feedback pnp prv rsr sw valleyfeverdata; do cd ~/${rps};echo "Pulling ${rps}...";git pull;done;cd'
 alias gtr='git reset --hard origin/master'
 
 # Total size of all files in directory, including symlinks:

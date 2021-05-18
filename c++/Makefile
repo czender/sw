@@ -28,6 +28,8 @@
 # cd ~/sw/c++;GSL_INC='/contrib/gsl-1.12/include' GSL_LIB='/contrib/gsl-1.12/lib -lgsl' NETCDF_LIB='/usr/local/lib64/r4i4'  make --jobs=1 OPTS=D ABI=64 all;cd -
 # 64-bit ABI netCDF4 on NCAR AIX systems (bluefire):
 # cd ~/sw/c++;CURL_LIB='/contrib/curl/7.21.2/lib' GSL_INC='/contrib/gsl-1.12/include' GSL_LIB='/contrib/gsl-1.12/lib -lgsl' HDF5_ROOT='/contrib/hdf5-1.8.7_seq' NETCDF_ROOT='/contrib/netcdf/4.1.3_seq' SZ_LIB='/contrib/szip/lib' make --jobs=1 ABI=64 NETCDF4=Y OPTS=D SZ=Y all;cd -
+# cd ~/sw/c++;NETCDF_INC='/share/apps/netcdf/4.6.3/gcc/8.1.0/include' NETCDF_LIB='/share/apps/netcdf/4.6.3/gcc/8.1.0/lib' UDUNITS2_PATH='/share/apps/udunits/2.2.26' make all;cd - # Compy
+# cd ~/sw/c++;GSL_INC='/global/common/sw/cray/cnl7/haswell/gsl/2.5/gcc/8.3.0/yfdt2hw/include' GSL_LIB='/global/common/sw/cray/cnl7/haswell/gsl/2.5/gcc/8.3.0/yfdt2hw/lib -lgsl' NETCDF_INC='/opt/cray/pe/netcdf/4.7.3.3/gnu/8.2/include' NETCDF_LIB='/opt/cray/pe/netcdf/4.7.3.3/gnu/8.2/lib' UDUNITS2_PATH='/global/common/sw/cray/cnl7/haswell/udunits2/2.2.24/gcc/8.2.0/y4j6eez' make all;cd - # Cori
 
 # Makefile conventions for optimization levels (OPTS levels)
 # OPTS=O: Optimize: Produce symbol tables, use architecture-specific speed-ups
@@ -640,19 +642,10 @@ endif
 endif # endif Comeau C Compiler
 # GNU Compiler Collection or LLVM
 # 20140204: gcc and clang should receive identical options
-ifeq (g++,$(firstword ${CXX}))
+ifneq (${null},$(findstring g++,${CXX}))
  GCC_OR_CLANG := Y
 endif
-ifeq (clang,$(firstword ${CXX}))
- GCC_OR_CLANG := Y
-endif
-ifeq (clang++,$(firstword ${CXX}))
- GCC_OR_CLANG := Y
-endif
-ifeq (clang-mp-10,$(firstword ${CXX}))
- GCC_OR_CLANG := Y
-endif
-ifeq (clang++-mp-10,$(firstword ${CXX}))
+ifneq (${null},$(findstring clang,${CXX}))
  GCC_OR_CLANG := Y
 endif
 ifeq (${GCC_OR_CLANG},Y)
@@ -726,6 +719,7 @@ else
 # 20140531 avoid clang error that -O4 is same as -O3
  CFLAGS := $(subst -O4,-O3,${CFLAGS})
  LDFLAGS += -lomp -lstdc++
+ OMP_FLG_LD := -fopenmp
 endif # endif clang
 endif # endif OMP
 ifeq (${OPTS},O)
@@ -1421,6 +1415,9 @@ dbg:
 	@printf "NETCDF_LIB = ${NETCDF_LIB}\n"
 	@printf "NETCDF_ROOT = ${NETCDF_ROOT}\n"
 	@printf "OMP = ${OMP}\n"
+	@printf "OMP_FLG_C = ${OMP_FLG_C}\n"
+	@printf "OMP_FLG_F = ${OMP_FLG_F}\n"
+	@printf "OMP_FLG_LD = ${OMP_FLG_LD}\n"
 	@printf "OPTS = ${OPTS}\n"
 	@printf "PGI_RCH_ARG = ${PGI_RCH_ARG}\n"
 	@printf "PRC = ${PRC}\n"

@@ -424,6 +424,40 @@ make install
 #***********************************************************************
 
 #***********************************************************************
+# 20210423: glace.ess.uci.edu
+#***********************************************************************
+cd ${DATA}/tmp
+sudo aptitude install liblapack liblapack-dev # glace, Ubuntu
+#git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+git pull
+git reset --hard origin/master
+autoreconf -fi
+# Not working: fails to find 
+configure --prefix=/usr/local --with-netcdf=/usr/local --with-blas=/usr --with-lapack=/usr 
+make
+sudo make install
+#***********************************************************************
+# 20210423: glace.ess.uci.edu
+#***********************************************************************
+
+#***********************************************************************
+# 20210508: sastrugi.ess.uci.edu
+#***********************************************************************
+cd ${DATA}/tmp
+#git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+git pull
+git reset --hard origin/master
+autoreconf -fi
+CC=${LINUX_CC} CXX=${LINUX_CXX} configure --prefix=/usr/local --with-netcdf=/opt/local
+make
+sudo make install
+#***********************************************************************
+# 20210508: sastrugi.ess.uci.edu
+#***********************************************************************
+
+#***********************************************************************
 # 20190912: Old TR notes from esmf.txt, copied here for convenience
 #***********************************************************************
 # NB: Tempest executables do not always (ever?) accept "--option=val" format, use "--option val" instead
@@ -594,7 +628,7 @@ time ncks -D 5 -O --map=${DATA}/rgr/map_ne120np4_to_181x360_aave.nc ${DATA}/ne12
 
 # ne30 to fv129x256
 # acme 5m54s
-time acme_regrid --weight-file ${DATA}/rgr/map_ne30np4_to_fv129x256_aave.150418.nc --input ${DATA}/ne30/raw/ne30_gx1.B1850c5d.cam.h0.0005-01.nc --output ${DATA}/ne30/rgr/ne30_gx1.B1850c5d.cam.h0.0005-01.acme.nc
+time acme_regrid --weight-file ${DATA}/rgr/map_ne30np4_to_fv129x256_aave.150418.nc --input ${DATA}v/ne30/raw/ne30_gx1.B1850c5d.cam.h0.0005-01.nc --output ${DATA}/ne30/rgr/ne30_gx1.B1850c5d.cam.h0.0005-01.acme.nc
 # ncl 0m57s
 time ncl 'wgtfile="/lustre/atlas/proj-shared/cli115/zender/rgr/map_ne30np4_to_fv129x256_aave.150418.nc"' 'srcfile="/lustre/atlas/proj-shared/cli115/zender/ne30/raw/ne30_gx1.B1850c5d.cam.h0.0005-01.nc"' /lustre/atlas/proj-shared/cli115/zender/rgr/regridfile.ncl
 /bin/mv ${DATA}/ne30/raw/ne30_gx1.B1850c5d.cam.h0.0005-01-remap.nc ${DATA}/ne30/rgr/ne30_gx1.B1850c5d.cam.h0.0005-01.ncl.nc
@@ -608,7 +642,7 @@ time ncra -D 3 -O ${DATA}/ne120/raw/b1850c5.cam.h0.*.nc ${DATA}/ne120/rgr/b1850c
 time ncra --flt -D 3 -O ${DATA}/ne120/raw/b1850c5.cam.h0.*.nc ${DATA}/ne120/rgr/b1850c5_clm.nc > ~/foo 2>&1 & # 103m08s 4.4.9 (averaging 12 files) peak sst mmr 29GB
 time ncra -D 3 -O ${DATA}/ne30/raw/ne30_gx1.B1850c5d.cam.h0.0005-??.nc ${DATA}/ne30/rgr/b1850c5_clm.nc # 00m37s 4.3.9
 time ncra -D 3 -O ${DATA}/ne30/raw/ne30_gx1.B1850c5d.cam.h0.0005-??.nc ${DATA}/ne30/rgr/b1850c5_clm.nc # 01m07s 4.4.8
-time ncwa -D 3 -O ${DATA}/ne120/raw/b1850c5.cam.h0.0001-01.nc ${DATA}/ne120/rgr/b1850c5.cam.h0.0001-01_xy.nc # 05m29s 4.3.9
+time ncwa -D 3 -O ${DATA}/ne120/raw/b1850c5.cam.h0.0001-01.nc ${DATA}/ne120/rgr/b1850c5.cam.h0.000v1-01_xy.nc # 05m29s 4.3.9
 
 # Mark Taylor (and John Truesdale) wrote and use NCL script regridfile.ncl:
 # titan:~taylorm/cam/ncl/regridfile.ncl # MAT personal copy

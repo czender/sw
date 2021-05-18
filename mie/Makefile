@@ -11,6 +11,8 @@
 # 32-bit ABI on NCAR AIX systems:
 # NETCDF_LIB=/usr/local/lib32/r4i4 make --jobs=1 ABI=32 OPTS=D;cd -
 
+# cd ~/sw/mie;GSL_INC='/global/common/sw/cray/cnl7/haswell/gsl/2.5/gcc/8.3.0/yfdt2hw/include' GSL_LIB='/global/common/sw/cray/cnl7/haswell/gsl/2.5/gcc/8.3.0/yfdt2hw/lib -lgsl' NETCDF_INC='/opt/cray/pe/netcdf/4.7.3.3/gnu/8.2/include' NETCDF_LIB='/opt/cray/pe/netcdf/4.7.3.3/gnu/8.2/lib' UDUNITS2_PATH='/global/common/sw/cray/cnl7/haswell/udunits2/2.2.24/gcc/8.2.0/y4j6eez' make all;cd - # Cori
+
 # Top-level tokens defining directory structure
 # These tokens may be over-ridden by environment variables or when invoking make, e.g. make DODS=Y
 ifndef MY_BIN_DIR
@@ -539,7 +541,7 @@ CXX := ${LINUX_CXX}
 CC := ${LINUX_CC}
 CPP := ${CXX}
 CPP_TKN_OS +=
-CPPFLAGS += ${CPP_TKN} ${CPP_TKN_OS} ${CPP_PTH} -I${NETCDF_INC} 
+CPPFLAGS += ${CPP_TKN} ${CPP_TKN_OS} ${CPP_PTH} -I${NETCDF_INC} ${GSL_INC}
 FC := ${LINUX_FC}
 LD := ld
 LDFLAGS += -L${MY_LIB_DIR} -lcsm_c++ -lcsz_c++ -lnco_c++ ${NC_LDFLAGS} ${NC_LIBS}
@@ -573,10 +575,10 @@ endif
 endif # endif Comeau C Compiler
 # GNU Compiler Collection or LLVM
 # 20140204: gcc and clang should receive identical options
-ifeq (g++,$(firstword ${CXX}))
+ifneq (${null},$(findstring g++,${CXX}))
  GCC_OR_CLANG := Y
 endif
-ifeq (clang,$(firstword ${CXX}))
+ifneq (${null},$(findstring clang,${CXX}))
  GCC_OR_CLANG := Y
 endif
 ifeq (${GCC_OR_CLANG},Y)
@@ -631,47 +633,28 @@ ifeq (${GCC_OR_CLANG},Y)
 # -Dinline=: inline is not an ANSI keyword, must undefine inline to work with -ansi
 # -fshort-enums: Make enums as short as possible, ususally non-int. Do not ever invoke this! This breaks ABI and causes subtle problems
 ifeq (${OMP},Y)
-ifneq (clang,$(firstword ${CXX}))
-# 20140526 clang does not recognize/utilize -fopenmp
- OMP_FLG_C := -fopenmp
- OMP_FLG_F := -fopenmp
- LDFLAGS += -lgomp -lpthread
+ifeq (${null},$(findstring clang,${CXX}))
+# GCC block
+# 20200520 GCC supports OpenMP vector pipeline hints when compiled with -fopenmp-simd
+ OMP_FLG_C := -fopenmp -fopenmp-simd
+ OMP_FLG_F := -fopenmp -fopenmp-simd
+# 20210321: -lpthreadf not found on glace running Ubuntu Xenial
+# LDFLAGS += -lgomp -lpthreadf
+ LDFLAGS += -lgomp
  OMP_FLG_LD := -lgomp -lpthread
+else
+# Clang block
+# 20140526 clang does not recognize/utilize -fopenmp
+# 20200520 clang recognizes/utilizes -fopenmp
+# 20200520 clang supports OpenMP vector pipeline hints when compiled with -openmp-simd
+ OMP_FLG_C := -fopenmp -fopenmp-simd
+ OMP_FLG_F := -fopenmp -fopenmp-simd
+# 20140531 avoid clang error that -O4 is same as -O3
+ CFLAGS := $(subst -O4,-O3,${CFLAGS})
+ LDFLAGS += -lomp -lstdc++
+ OMP_FLG_LD := -fopenmp
 endif # endif clang
 endif # endif OMP
-ifeq (clang,$(firstword ${CXX}))
-# 20140531 avoid clang error that -O4 is ame as -O3
- CFLAGS := $(subst -O4,-O3,${CFLAGS})
- LDFLAGS += -lstdc++
-endif # endif clang
-ifeq (${OMP},Y)
-ifneq (clang,$(firstword ${CXX}))
-# 20140526 clang does not recognize/utilize -fopenmp
- OMP_FLG_C := -fopenmp
- OMP_FLG_F := -fopenmp
- LDFLAGS += -lgomp -lpthread
- OMP_FLG_LD := -lgomp -lpthread
-endif # endif clang
-endif # endif OMP
-ifeq (clang,$(firstword ${CXX}))
-# 20140531 avoid clang error that -O4 is ame as -O3
- CFLAGS := $(subst -O4,-O3,${CFLAGS})
- LDFLAGS += -lstdc++
-endif # endif clang
-ifeq (${OMP},Y)
-ifneq (clang,$(firstword ${CXX}))
-# 20140526 clang does not recognize/utilize -fopenmp
- OMP_FLG_C := -fopenmp
- OMP_FLG_F := -fopenmp
- LDFLAGS += -lgomp -lpthread
- OMP_FLG_LD := -lgomp -lpthread
-endif # endif clang
-endif # endif OMP
-ifeq (clang,$(firstword ${CXX}))
-# 20140531 avoid clang error that -O4 is ame as -O3
- CFLAGS := $(subst -O4,-O3,${CFLAGS})
- LDFLAGS += -lstdc++
-endif # endif clang
 ifeq (${OPTS},O)
  CFLAGS += -O -g ${GCC_RCH_ARG}
 endif
@@ -1247,6 +1230,9 @@ dbg:
 	@printf "NETCDF_LIB = ${NETCDF_LIB}\n"
 	@printf "NETCDF_ROOT = ${NETCDF_ROOT}\n"
 	@printf "OMP = ${OMP}\n"
+	@printf "OMP_FLG_C = ${OMP_FLG_C}\n"
+	@printf "OMP_FLG_F = ${OMP_FLG_F}\n"
+	@printf "OMP_FLG_LD = ${OMP_FLG_LD}\n"
 	@printf "OPTS = ${OPTS}\n"
 	@printf "PGI_RCH_ARG = ${PGI_RCH_ARG}\n"
 	@printf "PRC = ${PRC}\n"
