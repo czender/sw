@@ -794,12 +794,12 @@ CC_clang_macports='clang-mp-11'
 # 20201002: Drop -pedantic because that makes __USE_BSD and thus M_LN2 needed by CCR unfindable (reinstate because that did not work)
 # Conda compiler names explained at https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html
 # 20210513: Drop -std=c99 for Conda since Conda defaults to -std=gnu11
-CC_gcc='gcc -std=c99 -pedantic -D_DEFAULT_SOURCE'
+CC_gcc='gcc -std=gnu11 -pedantic -D_DEFAULT_SOURCE'
 CC_gcc_pre_4_9='gcc -std=c99 -pedantic -D_BSD_SOURCE -D_POSIX_SOURCE'
 CC_gcc_conda='x86_64-conda-linux-gnu-gcc -pedantic -D_DEFAULT_SOURCE'
-CC_gcc_macports='gcc-mp-10 -std=c99 -pedantic -D_DEFAULT_SOURCE'
-CC_icc='icc -std=c99 -D_DEFAULT_SOURCE'
-CC_pathcc='pathcc -std=c99 -D_DEFAULT_SOURCE'
+CC_gcc_macports='gcc-mp-10 -std=gnu11 -pedantic -D_DEFAULT_SOURCE'
+CC_icc='icc -std=gnu11 -D_DEFAULT_SOURCE'
+CC_pathcc='pathcc -std=gnu11 -D_DEFAULT_SOURCE'
 CC_pgcc='pgcc -c9x -D_DEFAULT_SOURCE'
 CXX_clang='clang++ -std=c++17'
 CXX_clang_macports='clang++-mp-11 -std=c++17'
