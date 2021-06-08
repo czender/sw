@@ -163,7 +163,7 @@ if fl_is_exe ${HOME}/nco/autobld/config.guess ; then
     # 20190812: Linux config.guess nearly hangs (minutes) with "fork: retry: No child processes", MacOS is OK
     # 20200513: MacOS config.guess on firn complains "fork: Resource temporarily unavailable"
     case "${HOST}" in 
-	firn* ) export GNU_TRP='x86_64-apple-darwin19.4.0' ; ;;
+	firn* ) export GNU_TRP='x86_64-apple-darwin20.5.0' ; ;;
 	sastrugi* ) export GNU_TRP=`${HOME}/nco/autobld/config.guess` ; ;;
 	* ) export GNU_TRP='x86_64-unknown-linux-gnu' ; ;;
 #	* ) export GNU_TRP='20190814_config_guess_workaround' ; ;;
@@ -428,7 +428,8 @@ case "${PVM_ARCH}" in
 	esac # endcase ${HOST}
 	case "${HOST}" in 
 	    e3sm* ) export PKG_ROOT="${HOME}/anaconda" ; ;; # endif Anaconda
-	    firn* | jaws* | katabatic* | rigb* | sastrugi* ) PKG_ROOT='/opt/local' ; ;; # endif MAC OS X
+	    firn* | jaws* | katabatic* | rigb* ) PKG_ROOT='/opt/local' ; ;; # endif MAC OS MacPorts
+	    sastrugi* ) PKG_ROOT='/usr/local' ; ;; # endif MAC OS Homebrew
 	    cg-gpu* ) PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # endif NCSA roger cluster
 	    gplogin* ) PKG_ROOT='/sopt' ; ;; # endif UCI PS Rocks Cluster
 	    hpc* ) PKG_ROOT='/software' ; ;; # endif Torque machines
@@ -452,7 +453,7 @@ case "${PVM_ARCH}" in
 	esac # endcase ${HOST}
 	export NETCDF_INC="${NETCDF_ROOT}/include"
 	export NETCDF_LIB="${NETCDF_ROOT}/lib"
-	# 20200906: Always export HDF5_PLUGIN_PATH (at least on MacOSX) for CCR
+	# 20200906: Always export HDF5_PLUGIN_PATH (at least on MacOS) for CCR
 	export HDF5_PLUGIN_PATH='/usr/local/hdf5/lib/plugin'
 
 # OpenMP
@@ -568,12 +569,14 @@ case "${PVM_ARCH}" in
 #	export http_proxy='http://proxy.ujf-grenoble.fr/auto-proxy.pac'
 	;; # endif LINUX*
     
-    MACOSX* ) # MACOSX on PowerPC and (beginning 20140529), x86_64 machines
+    MACOS* ) # MACOSX on PowerPC and (beginning 20140529), x86_64 machines
 	export DATA=/Users/${USER}/data
 	export INFOPATH=./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/share/info
-	export NCARG_ROOT='/opt/local' # Port-installed
-	export NETCDF_ROOT=/opt/local # MacPorts
-	# 20200906: Always export HDF5_PLUGIN_PATH (at least on MacOSX) for CCR
+#	export NCARG_ROOT='/opt/local' # Port-installed
+#	export NETCDF_ROOT=/opt/local # MacPorts
+	export NCARG_ROOT='/usr/local' # Port-installed
+	export NETCDF_ROOT=/usr/local # MacPorts
+	# 20200906: Always export HDF5_PLUGIN_PATH (at least on MacOS) for CCR
 	export HDF5_PLUGIN_PATH='/usr/local/hdf5/lib/plugin'
 #	export NETCDF_INC=/opt/local/include
 #	export NETCDF_LIB=/opt/local/lib
@@ -594,14 +597,20 @@ case "${PVM_ARCH}" in
 #	export PYTHONPATH=/usr/lib/portage/pym
 	export TEXMFDIR=/opt/local/share/texmf-texlive # One level above bibtex, tex,
 	
+	case "${HOST}" in 
+	    sastrugi* ) # MacOS Homebrew
+		# Required to build nco.pdf due to ancient Xcode CLT TeXInfo
+		PATH='/usr/local/Cellar/texinfo/6.7/bin'\:${PATH} ; ;;
+	esac # !HOST
+	PATH=${PATH}\:/usr/local/opt/coreutils/libexec/gnubin # Up-to-date GNU commands from GNU Homebrew coreutils
 	PATH=${PATH}\:/opt/local/libexec/gnubin # Up-to-date GNU commands from GNU MacPorts coreutils
 	PATH=${PATH}\:/usr/local/bin # Custom-built 3rd party packages
 	PATH=${PATH}\:/opt/local/bin # MacPorts packages
 	PATH=${PATH}\:/opt/local/sbin # MacPorts packages
-	PATH=${PATH}\:/usr/bin # OS X defaults
-	PATH=${PATH}\:/bin # OS X coreutils
-	PATH=${PATH}\:/usr/sbin # OS X root coreutils
-	PATH=${PATH}\:/sbin # OS X root coreutils
+	PATH=${PATH}\:/usr/bin # MacOS defaults
+	PATH=${PATH}\:/bin # MacOS coreutils
+	PATH=${PATH}\:/usr/sbin # MacOS root coreutils
+	PATH=${PATH}\:/sbin # MacOS root coreutils
 	PATH=${PATH}\:/opt/X11/bin # X
 	PATH=${PATH}\:${HOME}/anaconda/bin
 	
@@ -619,7 +628,7 @@ case "${PVM_ARCH}" in
 # fxm: 20051022 Chris Knox says use DYLD_LIBRARY_PATH
 # fxm: 20140531 Unsure this is wise
 #	export DYLD_LIBRARY_PATH=${LD_LIBRARY_PATH}
-	;; # endif MACOSX*
+	;; # endif MACOS*
     
     SGI* ) # SGI6, SGI64, SGIMP64
 	export DATA="/ptmp/${USER}"
@@ -789,6 +798,7 @@ AR='ar'
 #NM='nm'
 ##NM_macports='gcc-nm-mp-10'
 CC_clang='clang'
+CC_clang_homebrew='clang'
 CC_clang_macports='clang-mp-11'
 # 20150109: Introduce -D_DEFAULT_SOURCE in place of deprecated (as of gcc 4.9.2) -D_BSD_SOURCE -D_POSIX_SOURCE
 # 20201002: Drop -pedantic because that makes __USE_BSD and thus M_LN2 needed by CCR unfindable (reinstate because that did not work)
@@ -797,14 +807,17 @@ CC_clang_macports='clang-mp-11'
 CC_gcc='gcc -std=gnu11 -pedantic -D_DEFAULT_SOURCE'
 CC_gcc_pre_4_9='gcc -std=c99 -pedantic -D_BSD_SOURCE -D_POSIX_SOURCE'
 CC_gcc_conda='x86_64-conda-linux-gnu-gcc -pedantic -D_DEFAULT_SOURCE'
+CC_gcc_homebrew='gcc-11 -std=gnu11 -pedantic -D_DEFAULT_SOURCE'
 CC_gcc_macports='gcc-mp-10 -std=gnu11 -pedantic -D_DEFAULT_SOURCE'
 CC_icc='icc -std=gnu11 -D_DEFAULT_SOURCE'
 CC_pathcc='pathcc -std=gnu11 -D_DEFAULT_SOURCE'
 CC_pgcc='pgcc -c9x -D_DEFAULT_SOURCE'
 CXX_clang='clang++ -std=c++17'
+CXX_clang_homebrew='clang++ -std=c++17'
 CXX_clang_macports='clang++-mp-11 -std=c++17'
 CXX_gxx='g++ -std=c++17'
 CXX_gxx_conda='x86_64-conda-linux-gnu-g++ -std=c++17'
+CXX_gxx_homebrew='g++-11 -std=c++17'
 CXX_gxx_macports='g++-mp-10 -std=c++17'
 CXX_icpc='icpc'
 CXX_pathCC='pathCC'
@@ -812,6 +825,7 @@ CXX_pgCC='pgCC'
 FC_g95='g95'
 FC_gfortran='gfortran'
 FC_gfortran_conda='x86_64-conda-linux-gnu-gfortran'
+FC_gfortran_homebrew='gfortran-11'
 FC_gfortran_macports='gfortran-mp-10'
 FC_ifort='ifort'
 FC_pathf95='pathf95'
@@ -822,7 +836,8 @@ FC_pgf95='pgf95'
 # and, sometimes, compiler (icc finds mpi.h automatically, gcc needs help)
 case "${HOST}" in
 #    firn* | sastrugi* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif clang/clang/macports
-    firn* | sastrugi* ) export LINUX_CC=${CC_clang_macports} ; export LINUX_CXX=${CXX_clang_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif clang/clang/macports
+    firn* ) export LINUX_CC=${CC_clang_macports} ; export LINUX_CXX=${CXX_clang_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif clang/clang/macports
+    sastrugi* ) export LINUX_CC=${CC_clang_homebrew} ; export LINUX_CXX=${CXX_clang_homebrew} ; export LINUX_FC=${FC_gfortran_homebrew} ; ;; # endif clang/clang/homebrew
 #    firn* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif clang/clang/macports
     dhcp* | jaws* | katabatic* | rigb* ) export LINUX_CC=${CC_gcc_macports} ; export LINUX_CXX=${CXX_gxx_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # endif all MacPorts
     glace* | grele* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC="${LINUX_CC} -I/usr/include/mpich2" ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK -I/usr/include/mpich2" ;; # endif gcc/g++/gfortran MPICH2
@@ -1142,7 +1157,7 @@ alias snow='ssh -Y snow.engin.umich.edu'
 # However, ssh -X also completely bogs-down 1 core on local MacBookPro regardless of whether or not any X windows displaying
 # After killing X on MBP, remote clients cannot serve X windows locally, must instead re-connect with ssh -X. Conundrum!
 #alias ssh='ssh -X' # -X = enable X11 forwarding on remote machine
-alias ssh='ssh -Y' # -Y = enable trusted X11 forwarding on remote machine, required for MacOSX connections
+alias ssh='ssh -Y' # -Y = enable trusted X11 forwarding on remote machine, required for MacOS connections
 alias temperature='finger temperature@atd.ucar.edu'
 alias topz='top -U${USER}' # -Uusername
 alias uncompress='gunzip'
@@ -1235,7 +1250,7 @@ esac # endcase ${PVM_ARCH}
 # TeX installation
 case ${PVM_ARCH} in
 # Place PDFTeX before TeX so, e.g., pdftexinfo.tex is loaded first
-    AIX* | LINUX* | MACOSX* | SUN* | WIN32* )
+    AIX* | LINUX* | MACOS* | SUN* | WIN32* )
     export TEXINPUTS=".:${HOME}/sw/tex//:${HOME}/sw/crr//:${HOME}/texmf//:${DATA}/fgr//:${DATA}/ps//:${TEXMFDIR}/tex//::" # // is recursive, :: activates default system search paths
     export BIBINPUTS=".:${HOME}/sw/tex//:${HOME}/texmf//:${TEXMFDIR}/bibtex//::" # // is recursive, :: activates default system search paths
 #    export TEXMFCNF=${TEXMFDIR}/web2c # One level above bibtex, tex,
@@ -1259,11 +1274,11 @@ case ${PVM_ARCH} in
 #	alias make='gmake --jobs=4'
 	alias make='gmake'
 	;; # endif AIX*
-    MACOSX* )
+    MACOS* )
 	alias make='gmake'
 	alias time='gtime'
 	alias ldd='otool -L'
-	;; # endif MACOSX*
+	;; # endif MACOS*
 esac # endcase ${PVM_ARCH}
 
 # Licenses for IDL and PGI are handled by FlexLM

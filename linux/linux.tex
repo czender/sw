@@ -4948,6 +4948,41 @@ cd
 \end{verbatim}
 
 \begin{verbatim}
+# Begin Mac OS Homebrew installation procedure on sastrugi.ess.uci.edu 20210606
+# Compilers and system
+brew install gcc
+brew install coreutils # /usr/local/opt/coreutils/libexec/gnubin
+brew install autoconf
+brew install automake
+#brew install llvm # keg-only (needed?)
+#brew install bison # keg-only
+#brew install flex # keg-only
+
+# Software development
+brew install emacs # brew services start emacs
+brew install mactex # TeXLive
+eval "$(/usr/libexec/path_helper)" # Required after installing MacTeX
+brew install aspell
+brew install ispell
+brew install opendetex
+brew install texinfo # Keg-only: PATH='/usr/local/Cellar/texinfo/6.7/bin'\:${PATH}
+brew install perl
+
+# NCO
+brew install antlr2 # Keg-only: Use private build in ${HOME}
+brew install libdap
+brew install gsl
+brew install netcdf # Lacks HDF4 support (use Anaconda instead?)
+brew install udunits
+#brew install nco
+
+# CCR
+brew install lz4 # CCR LZ4 library
+brew install zstd # CCR ZStandard library
+
+# Utilities
+brew install ncview
+
 # Begin Mac OS X installation procedure on aerosol.ess.uci.edu 20140529
 # Install Xcode
 # Install MacPorts
