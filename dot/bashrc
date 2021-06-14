@@ -600,7 +600,8 @@ case "${PVM_ARCH}" in
 	case "${HOST}" in 
 	    sastrugi* ) # MacOS Homebrew
 		# Required to build nco.pdf due to ancient Xcode CLT TeXInfo
-		PATH='/usr/local/Cellar/texinfo/6.7/bin'\:${PATH} ; ;;
+		PATH='/usr/local/opt/llvm/bin'\:${PATH} # Required for OpenMP-enabled clang
+		PATH='/usr/local/Cellar/texinfo/6.7/bin'\:${PATH} ; ;; # Required for nco.texi
 	esac # !HOST
 	PATH=${PATH}\:/usr/local/opt/coreutils/libexec/gnubin # Up-to-date GNU commands from GNU Homebrew coreutils
 	PATH=${PATH}\:/opt/local/libexec/gnubin # Up-to-date GNU commands from GNU MacPorts coreutils
