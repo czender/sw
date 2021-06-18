@@ -59,6 +59,7 @@ flx_sfc_lnd // Surface fluxes over land
  const prc_cmp *hgt_mdp, // I [m] Midlayer height above surface
  const prc_cmp *hgt_zpd, // I [m] Zero plane displacement
  const prc_cmp *lvl_dlt_snw, // I [m] Soil layer thickness including snow
+ const prc_cmp *msv_sfc, // I [frc] Surface emissivity
  const prc_cmp *prs_mdp, // I [Pa] Pressure
  const prc_cmp *q_H2O_vpr, // I [kg kg-1] Specific humidity
  const prc_cmp *rgh_mmn, // I [m] Roughness length momentum

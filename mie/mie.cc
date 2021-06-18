@@ -2172,6 +2172,7 @@ int main(int argc,char **argv)
      &hgt_mdp, // I [m] Midlayer height above surface
      &hgt_zpd_mbl, // I [m] Zero plane displacement
      &lvl_dlt_snw, // I [m] Soil layer thickness including snow
+     &msv_sfc, // I [frc] Surface emissivity
      &prs_mdp, // I [Pa] Pressure
      &q_H2O_vpr, // I [kg kg-1] Specific humidity
      &rgh_mmn_mbl, // I [m] Roughness length momentum
@@ -4699,19 +4700,24 @@ int main(int argc,char **argv)
       {0,"hgt_ash",NC_FLOAT,0,dmn_scl,"long_name","Apparent sink for heat","units","meter"},
       {0,"hgt_asm",NC_FLOAT,0,dmn_scl,"long_name","Apparent sink for momentum","units","meter"},
       {0,"hgt_asv",NC_FLOAT,0,dmn_scl,"long_name","Apparent sink for vapor","units","meter"},
+      {0,"hgt_mdp",NC_FLOAT,0,dmn_scl,"long_name","Midlayer height above surface","units","meter"},
+      {0,"hgt_rfr",NC_FLOAT,0,dmn_scl,"long_name","Reference height (i.e., 10 m) at which surface winds are evaluated for dust mobilization","units","meter"},
+      {0,"hgt_zpd_dps",NC_FLOAT,0,dmn_scl,"long_name","Zero plane displacement height","units","meter"},
+      {0,"hgt_zpd_mbl",NC_FLOAT,0,dmn_scl,"long_name","Zero plane displacement height","units","meter"},
       {0,"lnd_frc_dry",NC_FLOAT,0,dmn_scl,"long_name","Dry land fraction","units","fraction"},
       {0,"lnd_frc_mbl",NC_FLOAT,0,dmn_scl,"long_name","Bare ground fraction","units","fraction"},
-      {0,"mno_lng_mbl",NC_FLOAT,0,dmn_scl,"long_name","Monin-Obukhov length","units","meter"},
       {0,"mno_lng_dps",NC_FLOAT,0,dmn_scl,"long_name","Monin-Obukhov length","units","meter"},
+      {0,"mno_lng_mbl",NC_FLOAT,0,dmn_scl,"long_name","Monin-Obukhov length","units","meter"},
+      {0,"msv_sfc",NC_FLOAT,0,dmn_scl,"long_name","Surface emissivity","units","fraction"},
       {0,"prs_mdp",NC_FLOAT,0,dmn_scl,"long_name","Midlayer pressure","units","pascal"},
       {0,"prs_ntf",NC_FLOAT,0,dmn_scl,"long_name","Surface pressure","units","pascal"},
       {0,"q_H2O_vpr",NC_FLOAT,0,dmn_scl,"long_name","Specific humidity","units","kilogram kilogram-1"},
       {0,"qst_H2O_ice",NC_FLOAT,0,dmn_scl,"long_name","Saturated specific humidity of H2O w/r/t ice","units","kilogram kilogram-1"},
       {0,"qst_H2O_lqd",NC_FLOAT,0,dmn_scl,"long_name","Saturated specific humidity of H2O w/r/t liquid","units","kilogram kilogram-1"},
       {0,"rgh_heat",NC_FLOAT,0,dmn_scl,"long_name","Roughness length heat","units","meter"},
-      {0,"rgh_mmn_smt",NC_FLOAT,0,dmn_scl,"long_name","Roughness length momentum of smooth erodible surfaces","units","meter"},
-      {0,"rgh_mmn_mbl",NC_FLOAT,0,dmn_scl,"long_name","Roughness length momentum","units","meter"},
       {0,"rgh_mmn_dps",NC_FLOAT,0,dmn_scl,"long_name","Roughness length momentum","units","meter"},
+      {0,"rgh_mmn_mbl",NC_FLOAT,0,dmn_scl,"long_name","Roughness length momentum","units","meter"},
+      {0,"rgh_mmn_smt",NC_FLOAT,0,dmn_scl,"long_name","Roughness length momentum of smooth erodible surfaces","units","meter"},
       {0,"rgh_vpr",NC_FLOAT,0,dmn_scl,"long_name","Roughness length vapor","units","meter"},
       {0,"svp_H2O_ice",NC_FLOAT,0,dmn_scl,"long_name","Saturation vapor pressure of H2O w/r/t ice","units","pascal"},
       {0,"svp_H2O_lqd",NC_FLOAT,0,dmn_scl,"long_name","Saturation vapor pressure of H2O w/r/t liquid","units","pascal"},
@@ -4720,12 +4726,8 @@ int main(int argc,char **argv)
       {0,"tpt_ptn_vrt_mdp",NC_FLOAT,0,dmn_scl,"long_name","Virtual potential temperature","units","kelvin"},
       {0,"tpt_vrt",NC_FLOAT,0,dmn_scl,"long_name","Virtual temperature","units","kelvin"},
       {0,"tpt_vrt_mdp",NC_FLOAT,0,dmn_scl,"long_name","Virtual temperature","units","kelvin"},
-      {0,"wnd_frc_mbl",NC_FLOAT,0,dmn_scl,"long_name","Surface friction speed","units","meter second-1"},
       {0,"wnd_frc_dps",NC_FLOAT,0,dmn_scl,"long_name","Surface friction speed","units","meter second-1"},
-      {0,"hgt_mdp",NC_FLOAT,0,dmn_scl,"long_name","Midlayer height above surface","units","meter"},
-      {0,"hgt_rfr",NC_FLOAT,0,dmn_scl,"long_name","Reference height (i.e., 10 m) at which surface winds are evaluated for dust mobilization","units","meter"},
-      {0,"hgt_zpd_mbl",NC_FLOAT,0,dmn_scl,"long_name","Zero plane displacement height","units","meter"},
-      {0,"hgt_zpd_dps",NC_FLOAT,0,dmn_scl,"long_name","Zero plane displacement height","units","meter"}
+      {0,"wnd_frc_mbl",NC_FLOAT,0,dmn_scl,"long_name","Surface friction speed","units","meter second-1"}
     }; // end var_mtd_sct var_mtd[]
     const int var_mtd_nbr(sizeof(var_mtd)/sizeof(var_mtd_sct)); // [nbr] Number of variables in array
     rcd=nco_var_dfn(nc_out,var_mtd,var_mtd_nbr,dmn_nbr_max); // [fnc] Define variables in output netCDF file
@@ -4737,19 +4739,24 @@ int main(int argc,char **argv)
     rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_ash"),hgt_ash);
     rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_asm"),hgt_asm);
     rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_asv"),hgt_asv);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_mdp"),hgt_mdp);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_rfr"),hgt_rfr);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_zpd_dps"),hgt_zpd_dps);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_zpd_mbl"),hgt_zpd_mbl);
     rcd=nco_put_var(nc_out,static_cast<std::string>("lnd_frc_dry"),lnd_frc_dry);
     rcd=nco_put_var(nc_out,static_cast<std::string>("lnd_frc_mbl"),lnd_frc_mbl);
-    rcd=nco_put_var(nc_out,static_cast<std::string>("mno_lng_mbl"),mno_lng_mbl);
     rcd=nco_put_var(nc_out,static_cast<std::string>("mno_lng_dps"),mno_lng_dps);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("mno_lng_mbl"),mno_lng_mbl);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("msv_sfc"),msv_sfc);
     rcd=nco_put_var(nc_out,static_cast<std::string>("prs_mdp"),prs_mdp);
     rcd=nco_put_var(nc_out,static_cast<std::string>("prs_ntf"),prs_ntf);
     rcd=nco_put_var(nc_out,static_cast<std::string>("q_H2O_vpr"),q_H2O_vpr);
     rcd=nco_put_var(nc_out,static_cast<std::string>("qst_H2O_ice"),qst_H2O_ice);
     rcd=nco_put_var(nc_out,static_cast<std::string>("qst_H2O_lqd"),qst_H2O_lqd);
     rcd=nco_put_var(nc_out,static_cast<std::string>("rgh_heat"),rgh_heat);
-    rcd=nco_put_var(nc_out,static_cast<std::string>("rgh_mmn_smt"),rgh_mmn_smt);
-    rcd=nco_put_var(nc_out,static_cast<std::string>("rgh_mmn_mbl"),rgh_mmn_mbl);
     rcd=nco_put_var(nc_out,static_cast<std::string>("rgh_mmn_dps"),rgh_mmn_dps);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("rgh_mmn_mbl"),rgh_mmn_mbl);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("rgh_mmn_smt"),rgh_mmn_smt);
     rcd=nco_put_var(nc_out,static_cast<std::string>("rgh_vpr"),rgh_vpr);
     rcd=nco_put_var(nc_out,static_cast<std::string>("svp_H2O_ice"),svp_H2O_ice);
     rcd=nco_put_var(nc_out,static_cast<std::string>("svp_H2O_lqd"),svp_H2O_lqd);
@@ -4758,12 +4765,8 @@ int main(int argc,char **argv)
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_ptn_vrt_mdp"),tpt_ptn_vrt_mdp);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_vrt"),tpt_vrt);
     rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_vrt_mdp"),tpt_vrt_mdp);
-    rcd=nco_put_var(nc_out,static_cast<std::string>("wnd_frc_mbl"),wnd_frc_mbl);
     rcd=nco_put_var(nc_out,static_cast<std::string>("wnd_frc_dps"),wnd_frc_dps);
-    rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_mdp"),hgt_mdp);
-    rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_rfr"),hgt_rfr);
-    rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_zpd_mbl"),hgt_zpd_mbl);
-    rcd=nco_put_var(nc_out,static_cast<std::string>("hgt_zpd_dps"),hgt_zpd_dps);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("wnd_frc_mbl"),wnd_frc_mbl);
   } // endif true
 
   if(true){ // New scope to hide re-declaration of var_mtd[] structure

@@ -114,6 +114,7 @@ flx_sfc_lnd
  const prc_cmp *flx_SW_net_vgt, // I [W m-2] Solar flux absorbed by vegetation
  const prc_cmp *hgt_mdp, // I [m] Midlayer height above surface
  const prc_cmp *hgt_zpd, // I [m] Zero plane displacement
+ const prc_cmp *msv_sfc, // I [frc] Surface emissivity
  const prc_cmp *lvl_dlt_snw, // I [m] Soil layer thickness including snow
  const prc_cmp *prs_mdp, // I [Pa] Pressure
  const prc_cmp *q_H2O_vpr, // I [kg kg-1] Specific humidity
@@ -174,8 +175,7 @@ flx_sfc_lnd
      Suffix gnd quantity evaluated at ground
      Suffix vgt quantity evaluated in vegetation
      Suffix sfc quantity evaluated at surface (i.e., gnd or vgt, depending)
-     Currently, we neglect the effects of vegetation
-  */
+     Currently, we neglect the effects of vegetation */
   
   /* Named surface type indices idx_vgt and idx_gnd enumerate the two layers
      where the surface budget equation is solved iteratively, in the order
@@ -183,8 +183,7 @@ flx_sfc_lnd
      Over bare ground, first iterative loop computes ground to atmosphere exchange
      Second iterative loop is not executed
      Over vegetation, first iterative loop computes vegetation to atmosphere exchange
-     Second iterative loop computes ground to vegetation exchange
- */
+     Second iterative loop computes ground to vegetation exchange */
   
   // Output
   int rcd(0); // O [rcd] Return success code
@@ -259,6 +258,7 @@ flx_sfc_lnd
   std::valarray<prc_cmp> mno_stb_prm_old(lon_nbr); // [frc] Monin Obukhov stability parameter old
   std::valarray<prc_cmp> msv_gnd(lon_nbr); // [frc] Ground emissivity
   std::valarray<prc_cmp> msv_vgt(lon_nbr); // [frc] Vegetation emissivity
+  std::valarray<prc_cmp> msv_gnd_usr(lon_nbr); // [frc] Ground emissivity
   std::valarray<prc_cmp> nrg_bdg(lon_nbr); // [W m-2] Surface energy budget
   prc_cmp nrg_bdg_dlt; // [W m-2 K-1] Temperature derivative of surface energy budget
   std::valarray<prc_cmp> ppr_H2O_cnp(lon_nbr); // [Pa] Canopy vapor pressure of H2O
@@ -315,8 +315,14 @@ flx_sfc_lnd
     
     hgt_cnp[lon_idx]=hvt[pnt_typ_idx[lon_idx]]; // [m] Canopy height 
     
+    // Default ground emissivity
     msv_gnd[lon_idx]=sfc_ems_snw*snw_frc[lon_idx]+
       sfc_ems[soi_typ[lon_idx]]*(1.0-snw_frc[lon_idx]); // [frc] Ground emissivity
+    if(msv_sfc[lon_idx] != 1.0){
+      // Override default with user-specified emissivity for bare ground
+      msv_gnd[lon_idx]=sfc_ems_snw*snw_frc[lon_idx]+
+	msv_sfc[lon_idx]*(1.0-snw_frc[lon_idx]); // [frc] Ground emissivity
+    } // !msv_sfc
     msv_vgt[lon_idx]=msv_gnd[lon_idx]; // [frc] Vegetation emissivity fxm: implement plant type dependence
 
     mno_stb_prm[lon_idx]=min_cpv((hgt_mdp[lon_idx]-hgt_zpd[lon_idx])/mno_lng[lon_idx],1.0); // [frc]
@@ -1018,7 +1024,7 @@ blm_mbl
   const std::string prg_nm(prg_nm_get()); // Program name
   const unsigned short dbg_lvl(dbg_lvl_get()); // Debugging level
   
-  // Initialize variables which normally would be available in LSM
+  // Initialize variables that normally would be available in LSM
   for(lon_idx=0;lon_idx<lon_nbr;lon_idx++){
     ppr_H2O_mdp[lon_idx]=q_H2O_vpr[lon_idx]*prs_mdp[lon_idx]/(eps_H2O+one_mns_eps_H2O*q_H2O_vpr[lon_idx]); // [Pa] Ambient vapor pressure of H2O
     
