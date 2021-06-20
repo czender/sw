@@ -920,11 +920,11 @@ flx_sfc_lnd
       prc_cmp sum_RHS;
       sum_LHS=flx_SW_net_gnd[lon_idx]+flx_SW_net_vgt[lon_idx]+msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2]
       sum_RHS=flx_LW_msn_sfc[lon_idx]+flx_sns_atm_ttl[lon_idx]+flx_sns_gnd_ttl[lon_idx]+flx_ltn_evp_gnd_atm[lon_idx]+flx_snw_mlt[lon_idx]; // [W m-2]
-      (void)std::fprintf(stderr,"LW(upw) = LW(msn) + LW(rfl): %8.3f = %8.3f + %8.3f\n",flx_LW_upw_sfc[lon_idx],flx_LW_msn_sfc[lon_idx],flx_LW_rfl_sfc[lon_idx]);
-      (void)std::fprintf(stderr,"SW(abs)  +  LW(abs) = SW(abs)  + a*LW(dwn)=  LHS\n");
-      (void)std::fprintf(stderr,"                      %8.3f + %8.3f = %8.3f\n",flx_SW_net_gnd[lon_idx]+flx_SW_net_vgt[lon_idx],msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx],sum_LHS);
-      (void)std::fprintf(stderr," LW(msn) +  H(atm)  +  H(soi)  +  L(atm)  +  M(snw)  =  RHS\n");
-      (void)std::fprintf(stderr,"%8.3f + %8.3f + %8.3f + %8.3f + %8.3f = %8.3f\n",flx_LW_msn_sfc[lon_idx],flx_sns_atm_ttl[lon_idx],flx_sns_gnd_ttl[lon_idx],flx_ltn_evp_gnd_atm[lon_idx],flx_snw_mlt[lon_idx],sum_RHS);
+      (void)std::fprintf(stderr," LW(msn) +  LW(rfl) =  LW(upw)\n%8.3f + %8.3f = %8.3f\n",flx_LW_msn_sfc[lon_idx],flx_LW_rfl_sfc[lon_idx],flx_LW_upw_sfc[lon_idx]);
+      (void)std::fprintf(stderr," LHS     =  SW(abs) +  LW(abs) = SW(abs)  + a*LW(dwn)\n");
+      (void)std::fprintf(stderr,"%8.3f = %8.3f + %8.3f\n",sum_LHS,flx_SW_net_gnd[lon_idx]+flx_SW_net_vgt[lon_idx],msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx]);
+      (void)std::fprintf(stderr," RHS     =  LW(msn) +  H(atm)  +  H(soi)  +  L(atm)  +  M(snw)\n");
+      (void)std::fprintf(stderr,"%8.3f = %8.3f + %8.3f + %8.3f + %8.3f + %8.3f\n",sum_RHS,flx_LW_msn_sfc[lon_idx],flx_sns_atm_ttl[lon_idx],flx_sns_gnd_ttl[lon_idx],flx_ltn_evp_gnd_atm[lon_idx],flx_snw_mlt[lon_idx]);
     } // end if dbg
 
   } // end loop over lon
