@@ -103,6 +103,7 @@ namespace phc{ // [nms] Physical constant namespace
   const double mmw_kaolinite(258.16e-03); // (258.16e-03) [kg mol-1] Mean molecular weight of Kaolinite http://webmineral.com/data/Kaolinite.shtml
   const double mmw_montmorillonite(549.07e-03); // (549.07e-03) [kg mol-1] Mean molecular weight of Montmorillonite http://webmineral.com/data/Montmorillonite.shtml
   const double mss_earth(5.98e+24); // (5.98e+24) [kg] Mass of the Earth
+  const prc_cmp msv_snw_std(0.97); // [frc] Emissivity of snow CCM:lsm/snoconi
   const double prs_1000(100000.0); // (100000.0) [Pa] Reference pressure for potential temperature
   const double prs_HITRAN(101325.0); // (101325.0) [Pa] Reference pressure for HITRAN database
   const double prs_STP(101325.0); // (101325.0) [Pa] Standard mean sea-level pressure
@@ -187,6 +188,7 @@ namespace phc{ // [nms] Physical constant namespace
   const prc_cmp dns_lac_BoB052(2000.0); // (2000.0) [kg m-3] Density of soot BoB05 p. 50 Tbl. 6 
   const prc_cmp dns_lac_ZGD09(1322.0); // (1322.0) [kg m-3] Density of soot ZGD09 (tuned so ChC90 MAC = 7500 m2 kg-1 at 550 nm)
   const prc_cmp dns_lac_std(1800.0); // (1800.0) [kg m-3] Standard density of soot
+
   const prc_cmp rhd_NH4HSO4_std(0.40); // (0.40) [frc] Relative humidity at deliquescence of NH4HSO4 Yu PhD Tbl. 4.2
   const prc_cmp rhd_NH4NH4SO4_std(0.80); // (0.80) [frc] Relative humidity at deliquescence of NH4NH4SO4 Yu PhD Tbl. 4.2
   const prc_cmp rhd_NH4NO3_std(0.62); // (0.62) [frc] Relative humidity at deliquescence of NH4NO3 Yu PhD Tbl. 4.2

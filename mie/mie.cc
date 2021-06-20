@@ -411,7 +411,8 @@ int main(int argc,char **argv)
   prc_cmp mss_frc_snd(0.777); // [frc] Mass fraction sand
   prc_cmp mss_frc_cor(cmd_ln_dfl); // [frc] Mass fraction in core
   prc_cmp mss_frc_ncl(cmd_ln_dfl); // [frc] Mass fraction in inclusion
-  prc_cmp msv_sfc(1.0); // [frc] Surface emissivity
+  prc_cmp msv_gnd(cmd_ln_dfl); // [frc] Bare ground emissivity
+  prc_cmp msv_snw(cmd_ln_dfl); // [frc] Emissivity of snow
   prc_cmp ngl_dbg_dgr(0.0); // [dgr] Debugging angle
   prc_cmp oro(1.0); // [frc] Orography: ocean=0.0, land=1.0, sea ice=2.0
   prc_cmp prs_mdp(100825.0); // [Pa] Environmental pressure
@@ -605,7 +606,8 @@ int main(int argc,char **argv)
     {"mss_frc_snd",required_argument,0,0}, // [frc] Mass fraction sand
     {"mss_frc_cor",required_argument,0,0}, // [frc] Mass fraction in core
     {"mss_frc_ncl",required_argument,0,0}, // [frc] Mass fraction in inclusion
-    {"msv_sfc",required_argument,0,0}, // [frc] Surface emissivity
+    {"msv_gnd",required_argument,0,0}, // [frc] Bare ground emissivity
+    {"msv_snw",required_argument,0,0}, // [frc] Snow emissivity
     {"lgn_nbr",required_argument,0,0}, // [nbr] Order of phase function Legendre expansion
     {"ngl_dbg_dgr",required_argument,0,0}, // [dgr] Debugging angle
     {"ngl_nbr",required_argument,0,0}, // [nbr] Number of polar angles in one hemisphere
@@ -812,7 +814,8 @@ int main(int argc,char **argv)
       if(opt_crr == "mss_frc_snd") mss_frc_snd=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [frc] Mass fraction sand
       if(opt_crr == "mss_frc_cor") mss_frc_cor=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [frc] Mass fraction in core
       if(opt_crr == "mss_frc_ncl") mss_frc_ncl=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [frc] Mass fraction in inclusion
-      if(opt_crr == "msv_sfc") msv_sfc=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [frc] Surface emissivity
+      if(opt_crr == "msv_gnd") msv_gnd=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [frc] Bare ground emissivity
+      if(opt_crr == "msv_snw") msv_snw=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [frc] Snow emissivity
       if(opt_crr == "ngl_dbg_dgr") ngl_dbg_dgr=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [dgr] Debugging angle
       if(opt_crr == "ngl_nbr") ngl_nbr=std::strtol(opt_sng.c_str(),(char **)NULL,10); // [nbr] Number of angles in Mie computation
       if(opt_crr == "no_abc_flg") abc_flg=false; // [flg] Alphabetize output with ncks 
@@ -1963,6 +1966,8 @@ int main(int argc,char **argv)
   prc_cmp wnd_frc_mbl; // [m s-1] Surface friction velocity for erodible surface
   prc_cmp mno_lng_mbl(-15.0); // [m] Monin-Obukhov length for erodible surface
   prc_cmp tpt_gnd_mbl(tpt_gnd); // [K] Ground temperature for erodible surface
+  using lsm::sfc_ems; // [frc] Bare ground emissivity
+  if(msv_gnd == cmd_ln_dfl) msv_gnd=sfc_ems[soi_typ]; // [frc] Bare ground emissivity
   rcd+=blm_mbl
     (lon_nbr, // I [nbr] Size of arrays
      &cnd_trm_soi, // I [W m-1 K-1] Soil thermal conductivity
@@ -1972,6 +1977,7 @@ int main(int argc,char **argv)
      &hgt_mdp, // I [m] Midlayer height above surface
      &hgt_zpd_mbl, // I [m] Zero plane displacement for erodible surface
      &lvl_dlt_snw, // I [m] Soil layer thickness including snow
+     &msv_gnd, // I [frc] Bare ground emissivity
      &prs_mdp, // I [Pa] Pressure
      &q_H2O_vpr, // I [kg kg-1] Specific humidity
      &rgh_mmn_mbl, // I [m] Roughness length momentum for erodible surface
@@ -2140,6 +2146,9 @@ int main(int argc,char **argv)
      &vgt); // O [flg] "Vegetated" flag
 
   // Everything else    
+  using phc::msv_snw_std; // [frc] Emissivity of snow CCM:lsm/snoconi
+  if(msv_snw == cmd_ln_dfl) msv_snw=msv_snw_std; // [frc] Snow emissivity
+
   prc_cmp cff_xch_heat; // [frc] Exchange coefficient for heat transfer
   prc_cmp cff_xch_mmn; // [frc] Exchange coefficient for momentum transfer
   prc_cmp cff_xch_mmn_ntr; // [frc] Neutral drag coefficient hgt_mdp to z0m+zpd 
@@ -2150,6 +2159,7 @@ int main(int argc,char **argv)
   prc_cmp flx_sns_atm; // [W m-2] Sensible heat flux to atmosphere
   prc_cmp flx_sns_gnd; // [W m-2] Sensible heat flux to soil
   prc_cmp flx_snw_mlt; // [W m-2] Snow melt heat flux
+  prc_cmp msv_sfc; // [frc] Surface (bare ground+snow) emissivity
   prc_cmp rss_aer_heat; // [s m-1] Aerodynamic resistance to heat transfer
   prc_cmp rss_aer_mmn; // [s m-1] Aerodynamic resistance to momentum transfer
   // 20210418: fill-in rss_aer_mmn_ntr
@@ -2172,7 +2182,8 @@ int main(int argc,char **argv)
      &hgt_mdp, // I [m] Midlayer height above surface
      &hgt_zpd_mbl, // I [m] Zero plane displacement
      &lvl_dlt_snw, // I [m] Soil layer thickness including snow
-     &msv_sfc, // I [frc] Surface emissivity
+     &msv_gnd, // I [frc] Bare ground emissivity
+     &msv_snw, // I [frc] Snow emissivity
      &prs_mdp, // I [Pa] Pressure
      &q_H2O_vpr, // I [kg kg-1] Specific humidity
      &rgh_mmn_mbl, // I [m] Roughness length momentum
@@ -2198,6 +2209,7 @@ int main(int argc,char **argv)
      &flx_sns_gnd, // O [W m-2] Sensible heat flux to soil
      &flx_snw_mlt, // O [W m-2] Snow melt heat flux
      &mno_lng_mbl, // I/O [m] Monin-Obukhov length
+     &msv_sfc, // O [frc] Surface (bare ground+snow) emissivity
      &rss_aer_heat, // O [s m-1] Aerodynamic resistance to heat transfer
      &rss_aer_mmn, // O [s m-1] Aerodynamic resistance to momentum transfer
      &rss_aer_vpr, // O [s m-1] Aerodynamic resistance to vapor transfer
@@ -3120,8 +3132,7 @@ int main(int argc,char **argv)
     std::cout << "  Dry land fraction = " << lnd_frc_dry << ", Bare ground fraction = " << lnd_frc_mbl << std::endl;
     std::cout << "  "+sfc_typ_dsc_get(sfc_typ) << std::endl;
     using lsm::rgh_lng; // [m] Roughness length momentum
-    using lsm::sfc_ems; // [frc] Surface emissivity
-    std::cout << "  Sub-grid \"soil type\" properties: Type " << soi_typ << " = " << soi_typ_sng_get(soi_typ) << ", Bare surface roughness = " << rgh_lng[soi_typ] << " m, Surface emissivity = " << sfc_ems[soi_typ] << std::endl;
+    std::cout << "  Sub-grid \"soil type\" properties: Type " << soi_typ << " = " << soi_typ_sng_get(soi_typ) << ", Bare surface roughness = " << rgh_lng[soi_typ] << " m, Bare ground emissivity = " << msv_gnd << std::endl;
     std::cout << "  Soil texture: " << mss_frc_cly*100.0 << "% clay, " << mss_frc_slt*100.0 << "% silt, " << mss_frc_snd*100.0 << "% sand" << std::endl;
     std::cout << "  Snow height (liquid) = " << snw_hgt_lqd*100.0 << " cm, Snow height (geometric) = " << snw_hgt*100.0 << " cm, Snow fraction = " << snw_frc << std::endl;
     std::cout << "  Roughness length deposition = " << rgh_mmn_dps << " m, Zero-plane displacement height deposition = " << hgt_zpd_dps << " m" << std::endl; 
@@ -4708,7 +4719,9 @@ int main(int argc,char **argv)
       {0,"lnd_frc_mbl",NC_FLOAT,0,dmn_scl,"long_name","Bare ground fraction","units","fraction"},
       {0,"mno_lng_dps",NC_FLOAT,0,dmn_scl,"long_name","Monin-Obukhov length","units","meter"},
       {0,"mno_lng_mbl",NC_FLOAT,0,dmn_scl,"long_name","Monin-Obukhov length","units","meter"},
-      {0,"msv_sfc",NC_FLOAT,0,dmn_scl,"long_name","Surface emissivity","units","fraction"},
+      {0,"msv_gnd",NC_FLOAT,0,dmn_scl,"long_name","Bare ground emissivity","units","fraction"},
+      {0,"msv_sfc",NC_FLOAT,0,dmn_scl,"long_name","Surface (bare ground+snow) emissivity","units","fraction"},
+      {0,"msv_snw",NC_FLOAT,0,dmn_scl,"long_name","Snow emissivity","units","fraction"},
       {0,"prs_mdp",NC_FLOAT,0,dmn_scl,"long_name","Midlayer pressure","units","pascal"},
       {0,"prs_ntf",NC_FLOAT,0,dmn_scl,"long_name","Surface pressure","units","pascal"},
       {0,"q_H2O_vpr",NC_FLOAT,0,dmn_scl,"long_name","Specific humidity","units","kilogram kilogram-1"},
@@ -4747,7 +4760,9 @@ int main(int argc,char **argv)
     rcd=nco_put_var(nc_out,static_cast<std::string>("lnd_frc_mbl"),lnd_frc_mbl);
     rcd=nco_put_var(nc_out,static_cast<std::string>("mno_lng_dps"),mno_lng_dps);
     rcd=nco_put_var(nc_out,static_cast<std::string>("mno_lng_mbl"),mno_lng_mbl);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("msv_gnd"),msv_gnd);
     rcd=nco_put_var(nc_out,static_cast<std::string>("msv_sfc"),msv_sfc);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("msv_snw"),msv_snw);
     rcd=nco_put_var(nc_out,static_cast<std::string>("prs_mdp"),prs_mdp);
     rcd=nco_put_var(nc_out,static_cast<std::string>("prs_ntf"),prs_ntf);
     rcd=nco_put_var(nc_out,static_cast<std::string>("q_H2O_vpr"),q_H2O_vpr);

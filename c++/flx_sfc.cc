@@ -114,8 +114,9 @@ flx_sfc_lnd
  const prc_cmp *flx_SW_net_vgt, // I [W m-2] Solar flux absorbed by vegetation
  const prc_cmp *hgt_mdp, // I [m] Midlayer height above surface
  const prc_cmp *hgt_zpd, // I [m] Zero plane displacement
- const prc_cmp *msv_sfc, // I [frc] Surface emissivity
  const prc_cmp *lvl_dlt_snw, // I [m] Soil layer thickness including snow
+ const prc_cmp *msv_gnd, // I [frc] Bare ground emissivity
+ const prc_cmp *msv_snw, // I [frc] Snow emissivity
  const prc_cmp *prs_mdp, // I [Pa] Pressure
  const prc_cmp *q_H2O_vpr, // I [kg kg-1] Specific humidity
  const prc_cmp *rgh_mmn, // I [m] Roughness length momentum
@@ -134,13 +135,14 @@ flx_sfc_lnd
  prc_cmp *cff_xch_mmn, // O [frc] Exchange coefficient for momentum transfer
  prc_cmp *cff_xch_mmn_ntr, // O [frc] Neutral drag coefficient hgt_mdp to z0m+zpd 
  prc_cmp *cff_xch_vpr, // O [frc] Exchange coefficient for vapor transfer
- prc_cmp *flx_LW_upw_sfc, // O [W m-2] Longwave upwelling flux at surface
+ prc_cmp *flx_LW_upw_sfc, // O [W m-2] Longwave upwelling (emission+reflection) flux at surface
  prc_cmp *flx_ltn, // O [W m-2] Latent heat flux to atmosphere
  prc_cmp *flx_q_H2O, // O [kg m-2 s-1] Moisture flux to atmosphere
  prc_cmp *flx_sns_atm_ttl, // O [W m-2] Sensible heat flux to atmosphere
  prc_cmp *flx_sns_gnd_ttl, // O [W m-2] Sensible heat flux to soil
  prc_cmp *flx_snw_mlt, // O [W m-2] Snow melt heat flux
  prc_cmp *mno_lng, // I/O [m] Monin-Obukhov length
+ prc_cmp *msv_sfc, // O [frc] Surface (bare bare ground+snow) emissivity
  prc_cmp *rss_aer_heat_sfc, // O [s m-1] Aerodynamic resistance to heat transfer
  prc_cmp *rss_aer_mmn_sfc, // O [s m-1] Aerodynamic resistance to momentum transfer
  prc_cmp *rss_aer_vpr_sfc, // O [s m-1] Aerodynamic resistance to vapor transfer
@@ -191,7 +193,6 @@ flx_sfc_lnd
   // Local
   const prc_cmp eps_dbz(1.0e-6); // [frc] Prevents division by zero
   const prc_cmp rss_sfc_vpr_snw(150.0); // [s m-1] Surface resistance to vapor transfer through snow Bon96 p. 56, Fgr. 17 p. 57
-  const prc_cmp sfc_ems_snw(0.97); // [frc] Emissivity of snow CCM:lsm/snoconi
   const prc_cmp svp_H2O_frz(svp_H2O_lqd_PrK78_fst_scl(0.0)); // [Pa] Saturation vapor pressure of H2O at freezing point
   const prc_cmp wnd_cnp_prm_cst(3.0); // [frc] Canopy wind parameter Bon96 p. 63, Bru82 p. 102
   const prc_cmp wnd_mdp_min(1.0); // [m s-1] Minimum surface layer mean wind speed
@@ -219,6 +220,8 @@ flx_sfc_lnd
   std::valarray<prc_cmp> flx_LW_net_cff_a(lon_nbr); // [W m-2] a in FLWnet = a + b*T^4 Bon96 p. 45
   std::valarray<prc_cmp> flx_LW_net_cff_b(lon_nbr); // [W m-2 K-4] b in FLWnet = a + b*T^4 Bon96 p. 45
   std::valarray<prc_cmp> flx_LW_net_ttl(lon_nbr); // [W m-2] Total net longwave flux to atmosphere
+  std::valarray<prc_cmp> flx_LW_ems_sfc(lon_nbr); // [W m-2] Longwave emitted flux at surface
+  std::valarray<prc_cmp> flx_LW_rfl_sfc(lon_nbr); // [W m-2] Longwave reflected flux at surface
   a2d_cls<prc_cmp> flx_SW_net(lon_nbr,2); // [W m-2] Solar flux absorbed at surface
   a2d_cls<prc_cmp> flx_sns_gnd(lon_nbr,2); // [W m-2] Sensible heat flux to soil Bon96 p. 64
   std::valarray<prc_cmp> flx_sns_gnd_cff_a(lon_nbr); // [W m-2] a in Fgnd = a + b*Tg Bon96 p. 64
@@ -256,9 +259,7 @@ flx_sfc_lnd
   prc_cmp mno_stb_crc_tmp5; // Term in stability correction computation
   std::valarray<prc_cmp> mno_stb_prm(lon_nbr); // [frc] Monin-Obukhov stability parameter 
   std::valarray<prc_cmp> mno_stb_prm_old(lon_nbr); // [frc] Monin Obukhov stability parameter old
-  std::valarray<prc_cmp> msv_gnd(lon_nbr); // [frc] Ground emissivity
   std::valarray<prc_cmp> msv_vgt(lon_nbr); // [frc] Vegetation emissivity
-  std::valarray<prc_cmp> msv_gnd_usr(lon_nbr); // [frc] Ground emissivity
   std::valarray<prc_cmp> nrg_bdg(lon_nbr); // [W m-2] Surface energy budget
   prc_cmp nrg_bdg_dlt; // [W m-2 K-1] Temperature derivative of surface energy budget
   std::valarray<prc_cmp> ppr_H2O_cnp(lon_nbr); // [Pa] Canopy vapor pressure of H2O
@@ -316,14 +317,10 @@ flx_sfc_lnd
     hgt_cnp[lon_idx]=hvt[pnt_typ_idx[lon_idx]]; // [m] Canopy height 
     
     // Default ground emissivity
-    msv_gnd[lon_idx]=sfc_ems_snw*snw_frc[lon_idx]+
-      sfc_ems[soi_typ[lon_idx]]*(1.0-snw_frc[lon_idx]); // [frc] Ground emissivity
-    if(msv_sfc[lon_idx] != 1.0){
-      // Override default with user-specified emissivity for bare ground
-      msv_gnd[lon_idx]=sfc_ems_snw*snw_frc[lon_idx]+
-	msv_sfc[lon_idx]*(1.0-snw_frc[lon_idx]); // [frc] Ground emissivity
-    } // !msv_sfc
-    msv_vgt[lon_idx]=msv_gnd[lon_idx]; // [frc] Vegetation emissivity fxm: implement plant type dependence
+    msv_sfc[lon_idx]=msv_snw[lon_idx]*snw_frc[lon_idx]+
+      msv_gnd[lon_idx]*(1.0-snw_frc[lon_idx]); // [frc] Surface (bare ground+snow) emissivity
+
+    msv_vgt[lon_idx]=msv_sfc[lon_idx]; // [frc] Vegetation emissivity fxm: implement plant type dependence
 
     mno_stb_prm[lon_idx]=min_cpv((hgt_mdp[lon_idx]-hgt_zpd[lon_idx])/mno_lng[lon_idx],1.0); // [frc]
     
@@ -444,21 +441,39 @@ flx_sfc_lnd
     if(vgt[lon_idx]){
       flx_LW_net_cff_a[lon_idx]= // [W m-2] a in FLWnet = a + b*Tg^4 Bon96 p. 45
 	-msv_vgt[lon_idx]
-	*(1.0+(1.0-msv_vgt[lon_idx])*(1.0-msv_gnd[lon_idx]))
+	*(1.0+(1.0-msv_vgt[lon_idx])*(1.0-msv_sfc[lon_idx]))
 	*flx_LW_dwn_sfc[lon_idx]
-	-msv_vgt[lon_idx]*msv_gnd[lon_idx]*cst_Stefan_Boltzmann
+	-msv_vgt[lon_idx]*msv_sfc[lon_idx]*cst_Stefan_Boltzmann
 	*std::pow(tpt_gnd[lon_idx],PRC_CMP(4.0));
       flx_LW_net_cff_b[lon_idx]= // [W m-2 K-4] b in FLWnet = a + b*Tg^4 Bon96 p. 45
-	+(2.0-msv_vgt[lon_idx]*(1.0-msv_gnd[lon_idx]))
+	+(2.0-msv_vgt[lon_idx]*(1.0-msv_sfc[lon_idx]))
 	*msv_vgt[lon_idx]
 	*cst_Stefan_Boltzmann;
       // Canopy heat flux directly to sub-surface soil is zero, since all heat must pass through ground level first
       flx_sns_gnd_cff_b[lon_idx]=0.0; // [W m-2 K-1] b in Fgnd = a + b*Tg Bon96 p. 64
       flx_sns_gnd_cff_a[lon_idx]=0.0; // [W m-2] a in Fgnd = a + b*Tg Bon96 p. 64
     }else{
-      // F(LW net) = -msv*Fdwn + msv*sigma*Tg^4 = a + b*Tg^4 Bon96 p. 45
-      flx_LW_net_cff_a[lon_idx]=-msv_gnd[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2] a in FLWnet = a + b*Tg^4 Bon96 p. 45
-      flx_LW_net_cff_b[lon_idx]=msv_gnd[lon_idx]*cst_Stefan_Boltzmann; // [W m-2 K-4] b in FLWnet = a + b*Tg^4 Bon96 p. 45
+      /* 20210618
+	 F(LW net) = LWupw - LWdwn = Reflected up + Emitted up - Absorbed down
+	 Assuming absorptivity = emissivity then reflected = 1 - msv_sfc and
+	 LWupw = (1.0-msv)*Fdwn + msv*sigma*Tg^4
+	 LWdwn = LWdwn
+	 F(LW net) = (1.0-msv)*Fdwn + msv*sigma*Tg^4 - Fdwn
+	           = Fdwn -msv*Fdwn + msv*sigma*Tg^4 - Fdwn
+                   = -msv*Fdwn + msv*sigma*Tg^4 
+		   = a + b*Tg^4 Bon96 p. 45
+	 where
+	   a = -msv*Fdwn
+	   b = msv*sigma
+	 Formula may look physically incorrect, yet is correct due to cancellation of Fdwn
+	 Inverting for Fupw in terms of Fnet,
+
+	 Fupw = Fnet + Fdwn 
+	      = -msv*Fdwn + msv*sigma*Tg^4 + Fdwn
+	      = (1.0-msv)*Fdwn + msv*sigma*Tg^4
+              = Reflected Up + Emitted Up */
+      flx_LW_net_cff_a[lon_idx]=-msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2] a in FLWnet = a + b*Tg^4 Bon96 p. 45
+      flx_LW_net_cff_b[lon_idx]=msv_sfc[lon_idx]*cst_Stefan_Boltzmann; // [W m-2 K-4] b in FLWnet = a + b*Tg^4 Bon96 p. 45
       
       // F(sns heat dwn into soil) = 2*k*(Tg-T1)/dz = a + b*Tg Bon96 p. 64
       flx_sns_gnd_cff_b[lon_idx]=2.0*cnd_trm_soi[lon_idx]/lvl_dlt_snw[lon_idx]; // [W m-2 K-1] b in Fgnd = a + b*Tg Bon96 p. 64
@@ -477,7 +492,7 @@ flx_sfc_lnd
     if(dbg_lvl == dbg_crr){
       (void)std::fprintf(stderr,"%s fluxes from %s():\n",(vgt[lon_idx] ? "Vegetation" : "Ground"),sbr_nm.c_str());
       (void)std::fprintf(stderr,"%3s %9s %8s %7s %7s %7s %8s %8s %8s %8s %8s\n",
-		    "itr","mno_lng","mno_stb","wnd_frc","  Ts   "," LW(up)"," H(atm)"," H(soi)","   L   ","nrg_bdg","  eps  ");
+		    "itr","mno_lng","mno_stb","wnd_frc","  Ts   ","LW(ems)"," H(atm)"," H(soi)","   L   ","nrg_bdg","  eps  ");
       (void)std::fprintf(stderr,"%3s %9s %8s %7s %7s %7s %8s %8s %8s %8s %8s\n",
 		    "    ","   m   ","  frc  "," m s-1 ","   K   "," W m-2 "," W m-2 "," W m-2 "," W m-2 "," W m-2 ","  frc  ");
     } // end if dbg
@@ -724,10 +739,14 @@ flx_sfc_lnd
       if(dbg_lvl == dbg_crr){
 	// NB: Fluxes reported here have not been adjusted for snowmelt yet
 	// NB: LW up flux here assumes non-vegetated fxm
-	flx_LW_upw_sfc[lon_idx]=msv_gnd[lon_idx]*flx_LW_dwn_sfc[lon_idx]+flx_LW_net(lon_idx,lvl_idx); // [W m-2] Longwave upwelling flux to atmosphere Bon96 p. 40 Fig. 12, p. 44
+	// 20210618 Emissivity factor was incorrectly applied to Fdwn in below line for ~25 years
+	//flx_LW_upw_sfc[lon_idx]=flx_LW_net(lon_idx,lvl_idx)+msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44
+	flx_LW_upw_sfc[lon_idx]=flx_LW_net(lon_idx,lvl_idx)+flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44
+	flx_LW_rfl_sfc[lon_idx]=(1.0-msv_sfc[lon_idx])*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave reflected flux at surface
+	flx_LW_ems_sfc[lon_idx]=flx_LW_upw_sfc[lon_idx]-flx_LW_rfl_sfc[lon_idx]; // [W m-2] Longwave emitted flux at surface
 	flx_sns_gnd_ttl[lon_idx]=flx_sns_gnd(lon_idx,lvl_idx); // [W m-2] Sensible heat flux to soil
 	(void)std::fprintf(stderr,"%3ld %9.3f %8.3f %7.4f %7.3f %7.3f %8.3f %8.3f %8.3f %8.3f %8.6f\n",
-		      itr_idx,mno_lng[lon_idx],mno_stb_prm[lon_idx],wnd_frc[lon_idx],tpt_sfc[lon_idx],flx_LW_upw_sfc[lon_idx],flx_sns_atm_tmp,flx_sns_gnd_ttl[lon_idx],flx_vpr_tmp,nrg_bdg[lon_idx],eps_crr);
+		      itr_idx,mno_lng[lon_idx],mno_stb_prm[lon_idx],wnd_frc[lon_idx],tpt_sfc[lon_idx],flx_LW_ems_sfc[lon_idx],flx_sns_atm_tmp,flx_sns_gnd_ttl[lon_idx],flx_vpr_tmp,nrg_bdg[lon_idx],eps_crr);
       } // end if dbg
       if(itr_idx > itr_max_sfc){
 	std::cerr << "Final: tpt_sfc = " << tpt_sfc[lon_idx] << " K, mno_lng = " << mno_lng[lon_idx] << " m, eps_crr = " << eps_crr << std::endl;
@@ -751,9 +770,9 @@ flx_sfc_lnd
     // Use iterated tpt_vgt to initialize coefficients for fluxes at tpt_gnd
     if(vgt[lon_idx]){
       flx_LW_net_cff_a[lon_idx]= // [W m-2] a in FLWnet = a + b*Tg^4 Bon96 p. 45
-	-msv_gnd[lon_idx]*(1.0-msv_vgt[lon_idx])*flx_LW_dwn_sfc[lon_idx] 
-	-msv_gnd[lon_idx]*msv_vgt[lon_idx]*cst_Stefan_Boltzmann*std::pow(tpt_vgt[lon_idx],PRC_CMP(4.0));
-      flx_LW_net_cff_b[lon_idx]=msv_gnd[lon_idx]*cst_Stefan_Boltzmann; // [W m-2 K-4] b in FLWnet = a + b*Tg^4 Bon96 p. 45
+	-msv_sfc[lon_idx]*(1.0-msv_vgt[lon_idx])*flx_LW_dwn_sfc[lon_idx] 
+	-msv_sfc[lon_idx]*msv_vgt[lon_idx]*cst_Stefan_Boltzmann*std::pow(tpt_vgt[lon_idx],PRC_CMP(4.0));
+      flx_LW_net_cff_b[lon_idx]=msv_sfc[lon_idx]*cst_Stefan_Boltzmann; // [W m-2 K-4] b in FLWnet = a + b*Tg^4 Bon96 p. 45
       flx_sns_atm_cff_b[lon_idx]=dns_mdp[lon_idx]*spc_heat_dry_air/rss_aer_heat(lon_idx,idx_gnd); // [W m-2 K-1] b in SH = a + b*Ts Bon96 p. 55, 69, 70
       flx_sns_atm_cff_a[lon_idx]=-tpt_ash[lon_idx]*flx_sns_atm_cff_b[lon_idx]; // [W m-2] a in SH = a + b*Ts Bon96 p. 55, 69, 70
       flx_ltn_evp_cff_b[lon_idx]=dns_mdp[lon_idx]*spc_heat_dry_air/(cst_psych[lon_idx]*(rss_aer_vpr(lon_idx,idx_gnd)+rss_sfc_vpr[lon_idx])); // [W m-2 Pa-1] b in LHE = a + b*e(Ts) Bon96 p. 55
@@ -769,7 +788,7 @@ flx_sfc_lnd
       if(dbg_lvl == dbg_crr){
 	(void)std::fprintf(stderr,"Ground fluxes from %s():\n",sbr_nm.c_str());
 	(void)std::fprintf(stderr,"%3s %9s %8s %7s %7s %7s %8s %8s %8s %8s %8s\n",
-			   "itr","mno_lng","mno_stb","wnd_frc","  Ts   "," LW(up)"," H(atm)"," H(soi)","   L   ","nrg_bdg","  eps  ");
+			   "itr","mno_lng","mno_stb","wnd_frc","  Ts   ","LW(ems)"," H(atm)"," H(soi)","   L   ","nrg_bdg","  eps  ");
 	(void)std::fprintf(stderr,"%3s %9s %8s %7s %7s %7s %8s %8s %8s %8s %8s\n",
 			   "    ","   m   ","  frc  "," m s-1 ","   K   "," W m-2 "," W m-2 "," W m-2 "," W m-2 "," W m-2 ","  frc  ");
       } // end if dbg
@@ -813,10 +832,14 @@ flx_sfc_lnd
 	if(dbg_lvl == dbg_crr){
 	  // NB: Fluxes reported here have not been adjusted for snowmelt yet
 	  // fxm: LW flux here is ground flux 
-	  flx_LW_upw_sfc[lon_idx]=msv_gnd[lon_idx]*flx_LW_dwn_sfc[lon_idx]+flx_LW_net(lon_idx,lvl_idx); // [W m-2] Longwave upwelling flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 
+	  // 20210618 Emissivity factor was incorrectly applied to Fdwn in below line for ~25 years
+	  //flx_LW_upw_sfc[lon_idx]=flx_LW_net(lon_idx,lvl_idx)+msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 
+	  flx_LW_upw_sfc[lon_idx]=flx_LW_net(lon_idx,lvl_idx)+flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 
+	  flx_LW_rfl_sfc[lon_idx]=(1.0-msv_sfc[lon_idx])*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave reflected flux at surface
+	  flx_LW_ems_sfc[lon_idx]=flx_LW_upw_sfc[lon_idx]-flx_LW_rfl_sfc[lon_idx]; // [W m-2] Longwave emitted flux at surface
 	  flx_sns_gnd_ttl[lon_idx]=flx_sns_gnd(lon_idx,lvl_idx); // [W m-2] Sensible heat flux to soil
 	  (void)std::fprintf(stderr,"%3ld %9.3f %8.3f %7.4f %7.3f %7.3f %8.3f %8.3f %8.3f %8.3f %8.6f\n",
-			itr_idx,mno_lng[lon_idx],mno_stb_prm[lon_idx],wnd_frc[lon_idx],tpt_sfc[lon_idx],flx_LW_upw_sfc[lon_idx],flx_sns_atm_tmp,flx_sns_gnd_ttl[lon_idx],flx_vpr_tmp,nrg_bdg[lon_idx],eps_crr);
+			itr_idx,mno_lng[lon_idx],mno_stb_prm[lon_idx],wnd_frc[lon_idx],tpt_sfc[lon_idx],flx_LW_ems_sfc[lon_idx],flx_sns_atm_tmp,flx_sns_gnd_ttl[lon_idx],flx_vpr_tmp,nrg_bdg[lon_idx],eps_crr);
 	} // end if dbg
 	if(itr_idx > itr_max_gnd){
 	  std::cerr << "Final: tpt_gnd = " << tpt_gnd[lon_idx] << " K, mno_lng = " << mno_lng[lon_idx] << " m, eps_crr = " << eps_crr << std::endl;
@@ -866,7 +889,11 @@ flx_sfc_lnd
     flx_ltn_evp_gnd_atm[lon_idx]=flx_ltn_evp(lon_idx,idx_gnd); // [W m-2] Ground evaporation flux to atmosphere
     flx_sns_atm_cnp[lon_idx]=flx_sns_gnd(lon_idx,idx_vgt); // [W m-2] Canopy heat storage (currently defined = 0.0)
     flx_sns_gnd_ttl[lon_idx]=flx_sns_gnd(lon_idx,idx_gnd)-flx_snw_mlt[lon_idx]; // [W m-2] Sensible heat flux to soil
-    flx_LW_upw_sfc[lon_idx]=msv_gnd[lon_idx]*flx_LW_dwn_sfc[lon_idx]+flx_LW_net_ttl[lon_idx]; // [W m-2] Longwave upwelling flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 fxm: implement correct formulae for vegetated surfaces as well
+    // 20210618 Emissivity factor was incorrectly applied to Fdwn in below line for ~25 years
+    //flx_LW_upw_sfc[lon_idx]=flx_LW_net_ttl[lon_idx]+msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 fxm: implement correct formulae for vegetated surfaces as well
+    flx_LW_upw_sfc[lon_idx]=flx_LW_net_ttl[lon_idx]+flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 fxm: implement correct formulae for vegetated surfaces as well
+    flx_LW_rfl_sfc[lon_idx]=(1.0-msv_sfc[lon_idx])*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave reflected flux at surface
+    flx_LW_ems_sfc[lon_idx]=flx_LW_upw_sfc[lon_idx]-flx_LW_rfl_sfc[lon_idx]; // [W m-2] Longwave emitted flux at surface
     tpt_ffc[lon_idx]=std::pow(flx_LW_upw_sfc[lon_idx]/cst_Stefan_Boltzmann,0.25); // [K] Radiative effective temperature
     wnd_str_znl[lon_idx]=-dns_mdp[lon_idx]*cff_xch_mmn[lon_idx]*wnd_mdp_bnd[lon_idx]*wnd_znl_mdp[lon_idx]; // [kg m-1 s-2] Zonal wind stress Bon96 p. 54
     wnd_str_mrd[lon_idx]=-dns_mdp[lon_idx]*cff_xch_mmn[lon_idx]*wnd_mdp_bnd[lon_idx]*wnd_mrd_mdp[lon_idx]; // [kg m-1 s-2] Meridional wind stress Bon96 p. 54
@@ -892,12 +919,12 @@ flx_sfc_lnd
     if(dbg_lvl == dbg_crr){
       prc_cmp sum_LHS;
       prc_cmp sum_RHS;
-      sum_LHS=flx_SW_net_gnd[lon_idx]+flx_SW_net_vgt[lon_idx]+msv_gnd[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2]
-      sum_RHS=flx_LW_upw_sfc[lon_idx]+flx_sns_atm_ttl[lon_idx]+flx_sns_gnd_ttl[lon_idx]+flx_ltn_evp_gnd_atm[lon_idx]+flx_snw_mlt[lon_idx]; // [W m-2]
-      (void)std::fprintf(stderr,"SW(abs)  + aLW(dwn) =  LHS\n");
-      (void)std::fprintf(stderr,"%8.3f + %8.3f = %8.3f\n",flx_SW_net_gnd[lon_idx]+flx_SW_net_vgt[lon_idx],msv_gnd[lon_idx]*flx_LW_dwn_sfc[lon_idx],sum_LHS);
-      (void)std::fprintf(stderr," LW(up)  +  H(atm)  +  H(soi)  +  L(atm)  +  M(snw)  =  RHS\n");
-      (void)std::fprintf(stderr,"%8.3f + %8.3f + %8.3f + %8.3f + %8.3f = %8.3f\n",flx_LW_upw_sfc[lon_idx],flx_sns_atm_ttl[lon_idx],flx_sns_gnd_ttl[lon_idx],flx_ltn_evp_gnd_atm[lon_idx],flx_snw_mlt[lon_idx],sum_RHS);
+      sum_LHS=flx_SW_net_gnd[lon_idx]+flx_SW_net_vgt[lon_idx]+msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2]
+      sum_RHS=flx_LW_ems_sfc[lon_idx]+flx_sns_atm_ttl[lon_idx]+flx_sns_gnd_ttl[lon_idx]+flx_ltn_evp_gnd_atm[lon_idx]+flx_snw_mlt[lon_idx]; // [W m-2]
+      (void)std::fprintf(stderr,"SW(abs)  + a*LW(dwn)=  LHS\n");
+      (void)std::fprintf(stderr,"%8.3f + %8.3f = %8.3f\n",flx_SW_net_gnd[lon_idx]+flx_SW_net_vgt[lon_idx],msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx],sum_LHS);
+      (void)std::fprintf(stderr," LW(ems) +  H(atm)  +  H(soi)  +  L(atm)  +  M(snw)  =  RHS\n");
+      (void)std::fprintf(stderr,"%8.3f + %8.3f + %8.3f + %8.3f + %8.3f = %8.3f\n",flx_LW_ems_sfc[lon_idx],flx_sns_atm_ttl[lon_idx],flx_sns_gnd_ttl[lon_idx],flx_ltn_evp_gnd_atm[lon_idx],flx_snw_mlt[lon_idx],sum_RHS);
     } // end if dbg
 
   } // end loop over lon
@@ -915,6 +942,7 @@ blm_mbl
  const prc_cmp *hgt_mdp, // I [m] Midlayer height above surface
  const prc_cmp *hgt_zpd, // I [m] Zero plane displacement
  const prc_cmp *lvl_dlt, // I [m] Soil layer thickness
+ const prc_cmp *msv_gnd, // I [frc] Bare ground emissivity
  const prc_cmp *prs_mdp, // I [Pa] Pressure
  const prc_cmp *q_H2O_vpr, // I [kg kg-1] Specific humidity
  const prc_cmp *rgh_mmn, // I [m] Roughness length momentum
@@ -951,7 +979,6 @@ blm_mbl
 
   // Local
   const prc_cmp eps_dbz(1.0e-6); // [frc] Prevents division by zero
-  const prc_cmp msv_sfc_gnd(0.96); // [frc] Surface emissivity of bare ground CCM:lsm/snoconi()
   const prc_cmp wnd_min_mbl(1.0); // [m s-1] Minimum windspeed used for mobilization
   const long itr_max_gnd(12); // Maximum number of iterations for tpt_gnd loop
   const long sgn_chg_ctr_max(4); // Maximum number of sign changes in stability parameter
@@ -960,13 +987,16 @@ blm_mbl
   prc_cmp cnd_heat_sfc_mdp; // [m s-1] Sensible heat conductance surface air to midlayer air
   prc_cmp cnd_vpr_gnd_sfc; // [m s-1] Water vapor conductance ground to surface air Bon96 p. 60, Fgr. 17 p. 57
   prc_cmp cnd_vpr_sfc_mdp; // [m s-1] Water vapor conductance surface air to midlayer air Bon96 p. 60, Fgr. 17 p. 57
+
   prc_cmp cnd_vpr_ttl; // [m s-1] Sum of conductances
   std::valarray<prc_cmp> cst_psych(lon_nbr); // [Pa K-1] Psychrometric constant
   std::valarray<prc_cmp> dsvpdt_H2O_gnd(lon_nbr); // [Pa K-1] Derivative of saturation vapor pressure over planar condensed water, ground
   std::valarray<prc_cmp> flx_LW_net(lon_nbr); // [W m-2] Net longwave flux to atmosphere
   std::valarray<prc_cmp> flx_LW_net_cff_a(lon_nbr); // [W m-2] a in FLWnet = a + b*T^4 Bon96 p. 45
   std::valarray<prc_cmp> flx_LW_net_cff_b(lon_nbr); // [W m-2 K-4] b in FLWnet = a + b*T^4 Bon96 p. 45
-  std::valarray<prc_cmp> flx_LW_upw_sfc(lon_nbr); // [W m-2] Longwave upwelling flux at surface
+  std::valarray<prc_cmp> flx_LW_upw_sfc(lon_nbr); // [W m-2] Longwave upwelling (emission+reflection) flux at surface
+  std::valarray<prc_cmp> flx_LW_ems_sfc(lon_nbr); // [W m-2] Longwave emitted flux at surface
+  std::valarray<prc_cmp> flx_LW_rfl_sfc(lon_nbr); // [W m-2] Longwave reflected flux at surface
   std::valarray<prc_cmp> flx_ltn_evp(lon_nbr); // [W m-2] Evaporation flux to atmosphere
   std::valarray<prc_cmp> flx_ltn_evp_cff_a(lon_nbr); // [W m-2] a in LHE = a + b*e(Ts) Bon96 p. 55
   std::valarray<prc_cmp> flx_ltn_evp_cff_b(lon_nbr); // [W m-2 Pa-1] b in LHE = a + b*e(Ts) Bon96 p. 55
@@ -994,7 +1024,7 @@ blm_mbl
   prc_cmp mno_stb_crc_tmp5; // Term in stability correction computation
   std::valarray<prc_cmp> mno_stb_prm(lon_nbr); // [frc] Monin-Obukhov stability parameter 
   std::valarray<prc_cmp> mno_stb_prm_old(lon_nbr); // [frc] Monin Obukhov stability parameter old
-  std::valarray<prc_cmp> msv_gnd(lon_nbr); // [frc] Ground emissivity
+  std::valarray<prc_cmp> msv_sfc(lon_nbr); // [frc] Surface (bare ground+snow) emissivity
   std::valarray<prc_cmp> nrg_bdg(lon_nbr); // [W m-2] Surface energy budget
   prc_cmp nrg_bdg_dlt; // [W m-2 K-1] Temperature derivative of surface energy budget
   std::valarray<prc_cmp> ppr_H2O_cnp(lon_nbr); // [Pa] Canopy vapor pressure of H2O
@@ -1028,10 +1058,10 @@ blm_mbl
   for(lon_idx=0;lon_idx<lon_nbr;lon_idx++){
     ppr_H2O_mdp[lon_idx]=q_H2O_vpr[lon_idx]*prs_mdp[lon_idx]/(eps_H2O+one_mns_eps_H2O*q_H2O_vpr[lon_idx]); // [Pa] Ambient vapor pressure of H2O
     
-    msv_gnd[lon_idx]=msv_sfc_gnd; // [frc] Ground emissivity
-
     mno_stb_prm[lon_idx]=min_cpv((hgt_mdp[lon_idx]-hgt_zpd[lon_idx])/mno_lng[lon_idx],1.0); // [frc]
     
+    msv_sfc[lon_idx]=msv_gnd[lon_idx]; // [frc] Surface (bare ground+snow) emissivity
+
     rgh_heat[lon_idx]=rgh_mmn[lon_idx]; // [m] Roughness length heat
     
     tpt_vrt[lon_idx]=tpt_mdp[lon_idx]*(1.0+eps_H2O_rcp_m1*q_H2O_vpr[lon_idx]); // [K] Virtual temperature
@@ -1078,8 +1108,8 @@ blm_mbl
     
     // F(LW net) = -msv*Fdwn + msv*sigma*Tg^4 = a + b*Tg^4 Bon96 p. 45
     // F(sns heat dwn into soil) = 2*k*(Tg-T1)/dz = a + b*Tg Bon96 p. 64
-    flx_LW_net_cff_a[lon_idx]=-msv_gnd[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2] a in FLWnet = a + b*Tg^4 Bon96 p. 45
-    flx_LW_net_cff_b[lon_idx]=msv_gnd[lon_idx]*cst_Stefan_Boltzmann; // [W m-2 K-4] b in FLWnet = a + b*Tg^4 Bon96 p. 45
+    flx_LW_net_cff_a[lon_idx]=-msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2] a in FLWnet = a + b*Tg^4 Bon96 p. 45
+    flx_LW_net_cff_b[lon_idx]=msv_sfc[lon_idx]*cst_Stefan_Boltzmann; // [W m-2 K-4] b in FLWnet = a + b*Tg^4 Bon96 p. 45
     
     flx_sns_gnd_cff_b[lon_idx]=2.0*cnd_trm_soi[lon_idx]/lvl_dlt[lon_idx]; // [W m-2 K-1] b in Fgnd = a + b*Tg Bon96 p. 64
     flx_sns_gnd_cff_a[lon_idx]=-flx_sns_gnd_cff_b[lon_idx]*tpt_soi[lon_idx]; // [W m-2] a in Fgnd = a + b*Tg Bon96 p. 64
@@ -1268,9 +1298,12 @@ blm_mbl
 	   Unlike flx_sfc_lnd(), blm_mbl() does not update fluxes after updating 
 	   ground temperature each iteration.
 	   Thus, these two routines show different flux diagnostics, but do produce
-	   identical, BFB results.
-	*/
-	flx_LW_upw_sfc[lon_idx]=msv_gnd[lon_idx]*flx_LW_dwn_sfc[lon_idx]+flx_LW_net[lon_idx]; // [W m-2] Longwave upwelling flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 
+	   identical, BFB results. */
+	// 20210618 Emissivity factor was incorrectly applied to Fdwn in below line for ~25 years
+	//flx_LW_upw_sfc[lon_idx]=flx_LW_net[lon_idx]+msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 
+	flx_LW_upw_sfc[lon_idx]=flx_LW_net[lon_idx]+flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 
+	flx_LW_rfl_sfc[lon_idx]=(1.0-msv_sfc[lon_idx])*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave reflected flux at surface
+	flx_LW_ems_sfc[lon_idx]=flx_LW_upw_sfc[lon_idx]-flx_LW_rfl_sfc[lon_idx]; // [W m-2] Longwave emitted flux at surface
 	(void)std::fprintf(stderr,"%3ld %9.3f %8.3f %7.4f %7.3f %7.3f %8.3f %8.3f %8.3f %8.3f %8.6f\n",
 		      itr_idx,mno_lng[lon_idx],mno_stb_prm[lon_idx],wnd_frc[lon_idx],tpt_gnd[lon_idx],flx_LW_upw_sfc[lon_idx],flx_sns_atm_tmp,flx_sns_gnd[lon_idx],flx_vpr_tmp,nrg_bdg[lon_idx],eps_crr);
       } // end if dbg
@@ -1285,11 +1318,15 @@ blm_mbl
     if(dbg_lvl == dbg_sbr){
       prc_cmp sum_LHS;
       prc_cmp sum_RHS;
-      flx_LW_upw_sfc[lon_idx]=msv_gnd[lon_idx]*flx_LW_dwn_sfc[lon_idx]+flx_LW_net[lon_idx]; // [W m-2] Longwave upwelling flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 
-      sum_LHS=flx_SW_net[lon_idx]+msv_gnd[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2]
+      // 20210618 Emissivity factor was incorrectly applied to Fdwn in below line for ~25 years
+      //flx_LW_upw_sfc[lon_idx]=flx_LW_net[lon_idx]+msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 
+      flx_LW_upw_sfc[lon_idx]=flx_LW_net[lon_idx]+flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 
+      flx_LW_rfl_sfc[lon_idx]=(1.0-msv_sfc[lon_idx])*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave reflected flux at surface
+      flx_LW_ems_sfc[lon_idx]=flx_LW_upw_sfc[lon_idx]-flx_LW_rfl_sfc[lon_idx]; // [W m-2] Longwave emitted flux at surface
+      sum_LHS=flx_SW_net[lon_idx]+msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2]
       sum_RHS=flx_LW_upw_sfc[lon_idx]+flx_sns_atm[lon_idx]+flx_sns_gnd[lon_idx]+flx_ltn_evp[lon_idx]; // [W m-2]
-      (void)std::fprintf(stderr,"SW(abs)  + aLW(dwn) =  LHS\n");
-      (void)std::fprintf(stderr,"%8.3f + %8.3f = %8.3f\n",flx_SW_net[lon_idx],msv_gnd[lon_idx]*flx_LW_dwn_sfc[lon_idx],sum_LHS);
+      (void)std::fprintf(stderr,"SW(abs)  + a*LW(dwn) =  LHS\n");
+      (void)std::fprintf(stderr,"%8.3f + %8.3f = %8.3f\n",flx_SW_net[lon_idx],msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx],sum_LHS);
       (void)std::fprintf(stderr," LW(up)  +  H(atm)  +  H(soi)  +  L(atm)  =  RHS\n");
       (void)std::fprintf(stderr,"%8.3f + %8.3f + %8.3f + %8.3f = %8.3f\n",flx_LW_upw_sfc[lon_idx],flx_sns_atm[lon_idx],flx_sns_gnd[lon_idx],flx_ltn_evp[lon_idx],sum_RHS);
     } // end if dbg
@@ -1314,7 +1351,7 @@ blm_glb // Solve boundary layer meteorology on global scale
  const prc_cmp *tpt_sfc, // I [K] Surface temperature
  const prc_cmp *wnd_mrd_mdp, // I [m s-1] Surface layer meridional wind speed
  const prc_cmp *wnd_znl_mdp, // I [m s-1] Surface layer zonal wind speed
- prc_cmp *flx_LW_upw_sfc_dps, // O [W m-2] Longwave upwelling flux at surface
+ prc_cmp *flx_LW_upw_sfc_dps, // O [W m-2] Longwave upwelling (emission+reflection) flux at surface
  prc_cmp *flx_ltn_dps, // O [W m-2] Latent heat flux to atmosphere
  prc_cmp *flx_q_H2O_dps, // O [kg m-2 s-1] Moisture flux to atmosphere
  prc_cmp *flx_sns_atm_dps, // O [W m-2] Sensible heat flux to atmosphere
@@ -1401,7 +1438,7 @@ blm_glb // Solve boundary layer meteorology on global scale
      tpt_sfc, // I [K] Surface temperature
      wnd_mrd_mdp, // I [m s-1] Surface layer meridional wind speed
      wnd_znl_mdp, // I [m s-1] Surface layer zonal wind speed
-     flx_LW_upw_sfc_dps, // O [W m-2] Longwave upwelling flux at surface
+     flx_LW_upw_sfc_dps, // O [W m-2] Longwave upwelling (emission+reflection) flux at surface
      flx_ltn_dps, // O [W m-2] Latent heat flux to atmosphere
      flx_q_H2O_dps, // O [kg m-2 s-1] Moisture flux to atmosphere
      flx_sns_atm_dps, // O [W m-2] Sensible heat flux to atmosphere
@@ -1423,7 +1460,7 @@ blm_glb // Solve boundary layer meteorology on global scale
      tpt_sfc, // I [K] Surface temperature
      wnd_mrd_mdp, // I [m s-1] Surface layer meridional wind speed
      wnd_znl_mdp, // I [m s-1] Surface layer zonal wind speed
-     flx_LW_upw_sfc_dps, // O [W m-2] Longwave upwelling flux at surface
+     flx_LW_upw_sfc_dps, // O [W m-2] Longwave upwelling (emission+reflection) flux at surface
      flx_ltn_dps, // O [W m-2] Latent heat flux to atmosphere
      flx_q_H2O_dps, // O [kg m-2 s-1] Moisture flux to atmosphere
      flx_sns_atm_dps, // O [W m-2] Sensible heat flux to atmosphere
@@ -1447,7 +1484,7 @@ blm_glb // Solve boundary layer meteorology on global scale
      tpt_sfc, // I [K] Sea surface temperature
      wnd_mrd_mdp, // I [m s-1] Surface layer meridional wind speed
      wnd_znl_mdp, // I [m s-1] Surface layer zonal wind speed
-     flx_LW_upw_sfc_dps, // O [W m-2] Longwave upwelling flux at surface
+     flx_LW_upw_sfc_dps, // O [W m-2] Longwave upwelling (emission+reflection) flux at surface
      flx_ltn_dps, // O [W m-2] Latent heat flux to atmosphere
      flx_q_H2O_dps, // O [kg m-2 s-1] Moisture flux to atmosphere
      flx_sns_atm_dps, // O [W m-2] Sensible heat flux to atmosphere
@@ -1484,7 +1521,7 @@ blm_ice
  const prc_cmp *tpt_sfc, // I [K] Surface temperature
  const prc_cmp *wnd_mrd_mdp, // I [m s-1] Surface layer meridional wind speed
  const prc_cmp *wnd_znl_mdp, // I [m s-1] Surface layer zonal wind speed
- prc_cmp *flx_LW_upw_sfc, // O [W m-2] Longwave upwelling flux at surface
+ prc_cmp *flx_LW_upw_sfc, // O [W m-2] Longwave upwelling (emission+reflection) flux at surface
  prc_cmp *flx_ltn, // O [W m-2] Latent heat flux to atmosphere
  prc_cmp *flx_q_H2O, // O [kg m-2 s-1] Moisture flux to atmosphere
  prc_cmp *flx_sns_atm, // O [W m-2] Sensible heat flux to atmosphere
@@ -1659,7 +1696,7 @@ blm_ice
 	  flx_sns_atm[lon_idx]=-spc_heat_mst_air*wnd_str[lon_idx]*tpt_scl[lon_idx]/wnd_frc[lon_idx]; // [W m-2] Sensible heat flux to atmosphere
 	  // fxm: units problem again with flx_ltn
 	  flx_ltn[lon_idx]=-ltn_heat_trn*wnd_str[lon_idx]*vpr_scl[lon_idx]/wnd_frc[lon_idx]; // [W m-2] Latent heat flux to atmosphere
-	  flx_LW_upw_sfc[lon_idx]=cst_Stefan_Boltzmann*std::pow(tpt_sfc[lon_idx],PRC_CMP(4.0)); // [W m-2] Longwave upwelling flux to atmosphere
+	  flx_LW_upw_sfc[lon_idx]=cst_Stefan_Boltzmann*std::pow(tpt_sfc[lon_idx],PRC_CMP(4.0)); // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere
 	  (void)std::fprintf(stderr,"%3ld %9.3f %8.3f %7.4f %7.3f %7.3f %8.3f %8.3f %8.3f %8.3f %8.6f\n",
 			itr_idx,mno_lng[lon_idx],mno_stb_prm[lon_idx],wnd_frc[lon_idx],wnd_rfr_ntr[lon_idx],1000.0*xch_cff_mmn_ntr_sqrt*xch_cff_mmn_ntr_sqrt,1000.0*xch_cff_mmn_sqrt*xch_cff_mmn_sqrt,flx_sns_atm[lon_idx],flx_ltn[lon_idx],flx_LW_upw_sfc[lon_idx],eps_crr);
 	} // end if dbg
@@ -1685,7 +1722,7 @@ blm_ice
 	 Define positive latent and sensible heat as upwards into atmosphere */
       flx_sns_atm[lon_idx]=-spc_heat_mst_air*wnd_str[lon_idx]*tpt_scl[lon_idx]/wnd_frc[lon_idx]; // [W m-2] Sensible heat flux to atmosphere
       flx_ltn[lon_idx]=-ltn_heat_trn*wnd_str[lon_idx]*vpr_scl[lon_idx]/wnd_frc[lon_idx]; // [W m-2] Latent heat flux to atmosphere
-      flx_LW_upw_sfc[lon_idx]=cst_Stefan_Boltzmann*std::pow(tpt_sfc[lon_idx],PRC_CMP(4.0)); // [W m-2] Longwave upwelling flux to atmosphere
+      flx_LW_upw_sfc[lon_idx]=cst_Stefan_Boltzmann*std::pow(tpt_sfc[lon_idx],PRC_CMP(4.0)); // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere
 
       /* Following Geleyn (1988), interpolate tpt_sfc to fixed height hgt_rfr_tpt
 	 Compute function of exchange coefficients
@@ -1727,7 +1764,7 @@ blm_lnd
  const prc_cmp *tpt_sfc, // I [K] Surface temperature
  const prc_cmp *wnd_mrd_mdp, // I [m s-1] Surface layer meridional wind speed
  const prc_cmp *wnd_znl_mdp, // I [m s-1] Surface layer zonal wind speed
- prc_cmp *flx_LW_upw_sfc, // O [W m-2] Longwave upwelling flux at surface
+ prc_cmp *flx_LW_upw_sfc, // O [W m-2] Longwave upwelling (emission+reflection) flux at surface
  prc_cmp *flx_ltn, // O [W m-2] Latent heat flux to atmosphere
  prc_cmp *flx_q_H2O, // O [kg m-2 s-1] Moisture flux to atmosphere
  prc_cmp *flx_sns_atm, // O [W m-2] Sensible heat flux to atmosphere
@@ -1898,7 +1935,7 @@ blm_lnd
 	  flx_sns_atm[lon_idx]=-spc_heat_mst_air*wnd_str[lon_idx]*tpt_scl[lon_idx]/wnd_frc[lon_idx]; // [W m-2] Sensible heat flux to atmosphere
 	  // fxm: units problem again with flx_ltn
 	  flx_ltn[lon_idx]=-ltn_heat_trn*wnd_str[lon_idx]*vpr_scl[lon_idx]/wnd_frc[lon_idx]; // [W m-2] Latent heat flux to atmosphere
-	  flx_LW_upw_sfc[lon_idx]=cst_Stefan_Boltzmann*std::pow(tpt_sfc[lon_idx],PRC_CMP(4.0)); // [W m-2] Longwave upwelling flux to atmosphere
+	  flx_LW_upw_sfc[lon_idx]=cst_Stefan_Boltzmann*std::pow(tpt_sfc[lon_idx],PRC_CMP(4.0)); // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere
 	  (void)std::fprintf(stderr,"%3ld %9.3f %8.3f %7.4f %7.3f %7.3f %8.3f %8.3f %8.3f %8.3f %8.6f\n",
 			itr_idx,mno_lng[lon_idx],mno_stb_prm[lon_idx],wnd_frc[lon_idx],wnd_rfr_ntr[lon_idx],1000.0*xch_cff_mmn_ntr_sqrt*xch_cff_mmn_ntr_sqrt,1000.0*xch_cff_mmn_sqrt*xch_cff_mmn_sqrt,flx_sns_atm[lon_idx],flx_ltn[lon_idx],flx_LW_upw_sfc[lon_idx],eps_crr);
 	} // end if dbg
@@ -1924,7 +1961,7 @@ blm_lnd
 	 Define positive latent and sensible heat as upwards into atmosphere */
       flx_sns_atm[lon_idx]=-spc_heat_mst_air*wnd_str[lon_idx]*tpt_scl[lon_idx]/wnd_frc[lon_idx]; // [W m-2] Sensible heat flux to atmosphere
       flx_ltn[lon_idx]=-ltn_heat_trn*wnd_str[lon_idx]*vpr_scl[lon_idx]/wnd_frc[lon_idx]; // [W m-2] Latent heat flux to atmosphere
-      flx_LW_upw_sfc[lon_idx]=cst_Stefan_Boltzmann*std::pow(tpt_sfc[lon_idx],PRC_CMP(4.0)); // [W m-2] Longwave upwelling flux to atmosphere
+      flx_LW_upw_sfc[lon_idx]=cst_Stefan_Boltzmann*std::pow(tpt_sfc[lon_idx],PRC_CMP(4.0)); // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere
 
       /* Following Geleyn (1988), interpolate tpt_sfc to fixed height hgt_rfr_tpt
 	 Compute function of exchange coefficients
@@ -1967,7 +2004,7 @@ blm_ocn
  const prc_cmp *tpt_sfc, // I [K] Surface temperature
  const prc_cmp *wnd_mrd_mdp, // I [m s-1] Surface layer meridional wind speed
  const prc_cmp *wnd_znl_mdp, // I [m s-1] Surface layer zonal wind speed
- prc_cmp *flx_LW_upw_sfc, // O [W m-2] Longwave upwelling flux at surface
+ prc_cmp *flx_LW_upw_sfc, // O [W m-2] Longwave upwelling (emission+reflection) flux at surface
  prc_cmp *flx_ltn, // O [W m-2] Latent heat flux to atmosphere
  prc_cmp *flx_q_H2O, // O [kg m-2 s-1] Moisture flux to atmosphere
  prc_cmp *flx_sns_atm, // O [W m-2] Sensible heat flux to atmosphere
@@ -2155,7 +2192,7 @@ blm_ocn
 	  flx_sns_atm[lon_idx]=-spc_heat_mst_air*wnd_str[lon_idx]*tpt_scl[lon_idx]/wnd_frc[lon_idx]; // [W m-2] Sensible heat flux to atmosphere
 	  // fxm: units problem again with flx_ltn
 	  flx_ltn[lon_idx]=-ltn_heat_trn*wnd_str[lon_idx]*vpr_scl[lon_idx]/wnd_frc[lon_idx]; // [W m-2] Latent heat flux to atmosphere
-	  flx_LW_upw_sfc[lon_idx]=cst_Stefan_Boltzmann*std::pow(tpt_sfc[lon_idx],PRC_CMP(4.0)); // [W m-2] Longwave upwelling flux to atmosphere
+	  flx_LW_upw_sfc[lon_idx]=cst_Stefan_Boltzmann*std::pow(tpt_sfc[lon_idx],PRC_CMP(4.0)); // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere
 	  (void)std::fprintf(stderr,"%3ld %9.3f %8.3f %7.4f %7.3f %7.3f %8.3f %8.3f %8.3f %8.3f %8.6f\n",
 			itr_idx,mno_lng[lon_idx],mno_stb_prm[lon_idx],wnd_frc[lon_idx],wnd_rfr_ntr[lon_idx],1000.0*xch_cff_mmn_ntr_sqrt*xch_cff_mmn_ntr_sqrt,1000.0*xch_cff_mmn_sqrt*xch_cff_mmn_sqrt,flx_sns_atm[lon_idx],flx_ltn[lon_idx],flx_LW_upw_sfc[lon_idx],eps_crr);
 	} // end if dbg
@@ -2181,7 +2218,7 @@ blm_ocn
 	 Define positive latent and sensible heat as upwards into atmosphere */
       flx_sns_atm[lon_idx]=-spc_heat_mst_air*wnd_str[lon_idx]*tpt_scl[lon_idx]/wnd_frc[lon_idx]; // [W m-2] Sensible heat flux to atmosphere
       flx_ltn[lon_idx]=-ltn_heat_trn*wnd_str[lon_idx]*vpr_scl[lon_idx]/wnd_frc[lon_idx]; // [W m-2] Latent heat flux to atmosphere
-      flx_LW_upw_sfc[lon_idx]=cst_Stefan_Boltzmann*std::pow(tpt_sfc[lon_idx],PRC_CMP(4.0)); // [W m-2] Longwave upwelling flux to atmosphere
+      flx_LW_upw_sfc[lon_idx]=cst_Stefan_Boltzmann*std::pow(tpt_sfc[lon_idx],PRC_CMP(4.0)); // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere
 
       /* Following Geleyn (1988), interpolate tpt_sfc to fixed height hgt_rfr_tpt
 	 Compute function of exchange coefficients

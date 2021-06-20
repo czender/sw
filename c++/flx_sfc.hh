@@ -59,7 +59,8 @@ flx_sfc_lnd // Surface fluxes over land
  const prc_cmp *hgt_mdp, // I [m] Midlayer height above surface
  const prc_cmp *hgt_zpd, // I [m] Zero plane displacement
  const prc_cmp *lvl_dlt_snw, // I [m] Soil layer thickness including snow
- const prc_cmp *msv_sfc, // I [frc] Surface emissivity
+ const prc_cmp *msv_gnd, // I [frc] Bare ground emissivity
+ const prc_cmp *msv_snw, // I [frc] Snow emissivity
  const prc_cmp *prs_mdp, // I [Pa] Pressure
  const prc_cmp *q_H2O_vpr, // I [kg kg-1] Specific humidity
  const prc_cmp *rgh_mmn, // I [m] Roughness length momentum
@@ -85,6 +86,7 @@ flx_sfc_lnd // Surface fluxes over land
  prc_cmp *flx_sns_gnd_ttl, // O [W m-2] Sensible heat flux to soil
  prc_cmp *flx_snw_mlt, // O [W m-2] Snow melt heat flux
  prc_cmp *mno_lng, // I/O [m] Monin-Obukhov length
+ prc_cmp *msv_sfc, // O [frc] Surface (ground+snow) emissivity
  prc_cmp *rss_aer_heat_sfc, // O [s m-1] Aerodynamic resistance to heat transfer
  prc_cmp *rss_aer_mmn_sfc, // O [s m-1] Aerodynamic resistance to momentum transfer
  prc_cmp *rss_aer_vpr_sfc, // O [s m-1] Aerodynamic resistance to vapor transfer
@@ -109,6 +111,7 @@ blm_mbl // Boundary layer meteorology over dust surfaces
  const prc_cmp *hgt_mdp, // I [m] Midlayer height above surface
  const prc_cmp *hgt_zpd, // I [m] Zero plane displacement
  const prc_cmp *lvl_dlt, // I [m] Soil layer thickness
+ const prc_cmp *msv_gnd, // I [frc] Bare ground emissivity
  const prc_cmp *prs_mdp, // I [Pa] Pressure
  const prc_cmp *q_H2O_vpr, // I [kg kg-1] Specific humidity
  const prc_cmp *rgh_mmn, // I [m] Roughness length momentum
