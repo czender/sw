@@ -169,7 +169,6 @@ flx_sfc_lnd
   // Theory and algorithms: Bonan (1996) CCM:lsm/surtem()
   // Dependencies: <phys_cst.hh>,<tdy.hh>
   using lsm::hvt; // [m] Height at top of canopy
-  using lsm::sfc_ems; // [frc] Surface emissivity
   using lsm::dleaf; // [m] Characteristic leaf dimension
  
   /* Notes on algorithm:
@@ -220,7 +219,7 @@ flx_sfc_lnd
   std::valarray<prc_cmp> flx_LW_net_cff_a(lon_nbr); // [W m-2] a in FLWnet = a + b*T^4 Bon96 p. 45
   std::valarray<prc_cmp> flx_LW_net_cff_b(lon_nbr); // [W m-2 K-4] b in FLWnet = a + b*T^4 Bon96 p. 45
   std::valarray<prc_cmp> flx_LW_net_ttl(lon_nbr); // [W m-2] Total net longwave flux to atmosphere
-  std::valarray<prc_cmp> flx_LW_ems_sfc(lon_nbr); // [W m-2] Longwave emitted flux at surface
+  std::valarray<prc_cmp> flx_LW_msn_sfc(lon_nbr); // [W m-2] Longwave emitted flux at surface
   std::valarray<prc_cmp> flx_LW_rfl_sfc(lon_nbr); // [W m-2] Longwave reflected flux at surface
   a2d_cls<prc_cmp> flx_SW_net(lon_nbr,2); // [W m-2] Solar flux absorbed at surface
   a2d_cls<prc_cmp> flx_sns_gnd(lon_nbr,2); // [W m-2] Sensible heat flux to soil Bon96 p. 64
@@ -492,7 +491,7 @@ flx_sfc_lnd
     if(dbg_lvl == dbg_crr){
       (void)std::fprintf(stderr,"%s fluxes from %s():\n",(vgt[lon_idx] ? "Vegetation" : "Ground"),sbr_nm.c_str());
       (void)std::fprintf(stderr,"%3s %9s %8s %7s %7s %7s %8s %8s %8s %8s %8s\n",
-		    "itr","mno_lng","mno_stb","wnd_frc","  Ts   ","LW(ems)"," H(atm)"," H(soi)","   L   ","nrg_bdg","  eps  ");
+		    "itr","mno_lng","mno_stb","wnd_frc","  Ts   ","LW(msn)"," H(atm)"," H(soi)","   L   ","nrg_bdg","  eps  ");
       (void)std::fprintf(stderr,"%3s %9s %8s %7s %7s %7s %8s %8s %8s %8s %8s\n",
 		    "    ","   m   ","  frc  "," m s-1 ","   K   "," W m-2 "," W m-2 "," W m-2 "," W m-2 "," W m-2 ","  frc  ");
     } // end if dbg
@@ -743,10 +742,10 @@ flx_sfc_lnd
 	//flx_LW_upw_sfc[lon_idx]=flx_LW_net(lon_idx,lvl_idx)+msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44
 	flx_LW_upw_sfc[lon_idx]=flx_LW_net(lon_idx,lvl_idx)+flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44
 	flx_LW_rfl_sfc[lon_idx]=(1.0-msv_sfc[lon_idx])*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave reflected flux at surface
-	flx_LW_ems_sfc[lon_idx]=flx_LW_upw_sfc[lon_idx]-flx_LW_rfl_sfc[lon_idx]; // [W m-2] Longwave emitted flux at surface
+	flx_LW_msn_sfc[lon_idx]=flx_LW_upw_sfc[lon_idx]-flx_LW_rfl_sfc[lon_idx]; // [W m-2] Longwave emitted flux at surface
 	flx_sns_gnd_ttl[lon_idx]=flx_sns_gnd(lon_idx,lvl_idx); // [W m-2] Sensible heat flux to soil
 	(void)std::fprintf(stderr,"%3ld %9.3f %8.3f %7.4f %7.3f %7.3f %8.3f %8.3f %8.3f %8.3f %8.6f\n",
-		      itr_idx,mno_lng[lon_idx],mno_stb_prm[lon_idx],wnd_frc[lon_idx],tpt_sfc[lon_idx],flx_LW_ems_sfc[lon_idx],flx_sns_atm_tmp,flx_sns_gnd_ttl[lon_idx],flx_vpr_tmp,nrg_bdg[lon_idx],eps_crr);
+		      itr_idx,mno_lng[lon_idx],mno_stb_prm[lon_idx],wnd_frc[lon_idx],tpt_sfc[lon_idx],flx_LW_msn_sfc[lon_idx],flx_sns_atm_tmp,flx_sns_gnd_ttl[lon_idx],flx_vpr_tmp,nrg_bdg[lon_idx],eps_crr);
       } // end if dbg
       if(itr_idx > itr_max_sfc){
 	std::cerr << "Final: tpt_sfc = " << tpt_sfc[lon_idx] << " K, mno_lng = " << mno_lng[lon_idx] << " m, eps_crr = " << eps_crr << std::endl;
@@ -788,7 +787,7 @@ flx_sfc_lnd
       if(dbg_lvl == dbg_crr){
 	(void)std::fprintf(stderr,"Ground fluxes from %s():\n",sbr_nm.c_str());
 	(void)std::fprintf(stderr,"%3s %9s %8s %7s %7s %7s %8s %8s %8s %8s %8s\n",
-			   "itr","mno_lng","mno_stb","wnd_frc","  Ts   ","LW(ems)"," H(atm)"," H(soi)","   L   ","nrg_bdg","  eps  ");
+			   "itr","mno_lng","mno_stb","wnd_frc","  Ts   ","LW(msn)"," H(atm)"," H(soi)","   L   ","nrg_bdg","  eps  ");
 	(void)std::fprintf(stderr,"%3s %9s %8s %7s %7s %7s %8s %8s %8s %8s %8s\n",
 			   "    ","   m   ","  frc  "," m s-1 ","   K   "," W m-2 "," W m-2 "," W m-2 "," W m-2 "," W m-2 ","  frc  ");
       } // end if dbg
@@ -836,10 +835,10 @@ flx_sfc_lnd
 	  //flx_LW_upw_sfc[lon_idx]=flx_LW_net(lon_idx,lvl_idx)+msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 
 	  flx_LW_upw_sfc[lon_idx]=flx_LW_net(lon_idx,lvl_idx)+flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 
 	  flx_LW_rfl_sfc[lon_idx]=(1.0-msv_sfc[lon_idx])*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave reflected flux at surface
-	  flx_LW_ems_sfc[lon_idx]=flx_LW_upw_sfc[lon_idx]-flx_LW_rfl_sfc[lon_idx]; // [W m-2] Longwave emitted flux at surface
+	  flx_LW_msn_sfc[lon_idx]=flx_LW_upw_sfc[lon_idx]-flx_LW_rfl_sfc[lon_idx]; // [W m-2] Longwave emitted flux at surface
 	  flx_sns_gnd_ttl[lon_idx]=flx_sns_gnd(lon_idx,lvl_idx); // [W m-2] Sensible heat flux to soil
 	  (void)std::fprintf(stderr,"%3ld %9.3f %8.3f %7.4f %7.3f %7.3f %8.3f %8.3f %8.3f %8.3f %8.6f\n",
-			itr_idx,mno_lng[lon_idx],mno_stb_prm[lon_idx],wnd_frc[lon_idx],tpt_sfc[lon_idx],flx_LW_ems_sfc[lon_idx],flx_sns_atm_tmp,flx_sns_gnd_ttl[lon_idx],flx_vpr_tmp,nrg_bdg[lon_idx],eps_crr);
+			itr_idx,mno_lng[lon_idx],mno_stb_prm[lon_idx],wnd_frc[lon_idx],tpt_sfc[lon_idx],flx_LW_msn_sfc[lon_idx],flx_sns_atm_tmp,flx_sns_gnd_ttl[lon_idx],flx_vpr_tmp,nrg_bdg[lon_idx],eps_crr);
 	} // end if dbg
 	if(itr_idx > itr_max_gnd){
 	  std::cerr << "Final: tpt_gnd = " << tpt_gnd[lon_idx] << " K, mno_lng = " << mno_lng[lon_idx] << " m, eps_crr = " << eps_crr << std::endl;
@@ -893,7 +892,7 @@ flx_sfc_lnd
     //flx_LW_upw_sfc[lon_idx]=flx_LW_net_ttl[lon_idx]+msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 fxm: implement correct formulae for vegetated surfaces as well
     flx_LW_upw_sfc[lon_idx]=flx_LW_net_ttl[lon_idx]+flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 fxm: implement correct formulae for vegetated surfaces as well
     flx_LW_rfl_sfc[lon_idx]=(1.0-msv_sfc[lon_idx])*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave reflected flux at surface
-    flx_LW_ems_sfc[lon_idx]=flx_LW_upw_sfc[lon_idx]-flx_LW_rfl_sfc[lon_idx]; // [W m-2] Longwave emitted flux at surface
+    flx_LW_msn_sfc[lon_idx]=flx_LW_upw_sfc[lon_idx]-flx_LW_rfl_sfc[lon_idx]; // [W m-2] Longwave emitted flux at surface
     tpt_ffc[lon_idx]=std::pow(flx_LW_upw_sfc[lon_idx]/cst_Stefan_Boltzmann,0.25); // [K] Radiative effective temperature
     wnd_str_znl[lon_idx]=-dns_mdp[lon_idx]*cff_xch_mmn[lon_idx]*wnd_mdp_bnd[lon_idx]*wnd_znl_mdp[lon_idx]; // [kg m-1 s-2] Zonal wind stress Bon96 p. 54
     wnd_str_mrd[lon_idx]=-dns_mdp[lon_idx]*cff_xch_mmn[lon_idx]*wnd_mdp_bnd[lon_idx]*wnd_mrd_mdp[lon_idx]; // [kg m-1 s-2] Meridional wind stress Bon96 p. 54
@@ -920,12 +919,12 @@ flx_sfc_lnd
       prc_cmp sum_LHS;
       prc_cmp sum_RHS;
       sum_LHS=flx_SW_net_gnd[lon_idx]+flx_SW_net_vgt[lon_idx]+msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2]
-      sum_RHS=flx_LW_ems_sfc[lon_idx]+flx_sns_atm_ttl[lon_idx]+flx_sns_gnd_ttl[lon_idx]+flx_ltn_evp_gnd_atm[lon_idx]+flx_snw_mlt[lon_idx]; // [W m-2]
-      (void)std::fprintf(stderr,"LW(upw) = LW(ems) + LW(rfl): %8.3f = %8.3f + %8.3f\n",flx_LW_upw_sfc[lon_idx],flx_LW_ems_sfc[lon_idx],flx_LW_rfl_sfc[lon_idx]);
+      sum_RHS=flx_LW_msn_sfc[lon_idx]+flx_sns_atm_ttl[lon_idx]+flx_sns_gnd_ttl[lon_idx]+flx_ltn_evp_gnd_atm[lon_idx]+flx_snw_mlt[lon_idx]; // [W m-2]
+      (void)std::fprintf(stderr,"LW(upw) = LW(msn) + LW(rfl): %8.3f = %8.3f + %8.3f\n",flx_LW_upw_sfc[lon_idx],flx_LW_msn_sfc[lon_idx],flx_LW_rfl_sfc[lon_idx]);
       (void)std::fprintf(stderr,"SW(abs)  +  LW(abs) = SW(abs)  + a*LW(dwn)=  LHS\n");
       (void)std::fprintf(stderr,"                      %8.3f + %8.3f = %8.3f\n",flx_SW_net_gnd[lon_idx]+flx_SW_net_vgt[lon_idx],msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx],sum_LHS);
-      (void)std::fprintf(stderr," LW(ems) +  H(atm)  +  H(soi)  +  L(atm)  +  M(snw)  =  RHS\n");
-      (void)std::fprintf(stderr,"%8.3f + %8.3f + %8.3f + %8.3f + %8.3f = %8.3f\n",flx_LW_ems_sfc[lon_idx],flx_sns_atm_ttl[lon_idx],flx_sns_gnd_ttl[lon_idx],flx_ltn_evp_gnd_atm[lon_idx],flx_snw_mlt[lon_idx],sum_RHS);
+      (void)std::fprintf(stderr," LW(msn) +  H(atm)  +  H(soi)  +  L(atm)  +  M(snw)  =  RHS\n");
+      (void)std::fprintf(stderr,"%8.3f + %8.3f + %8.3f + %8.3f + %8.3f = %8.3f\n",flx_LW_msn_sfc[lon_idx],flx_sns_atm_ttl[lon_idx],flx_sns_gnd_ttl[lon_idx],flx_ltn_evp_gnd_atm[lon_idx],flx_snw_mlt[lon_idx],sum_RHS);
     } // end if dbg
 
   } // end loop over lon
@@ -996,7 +995,7 @@ blm_mbl
   std::valarray<prc_cmp> flx_LW_net_cff_a(lon_nbr); // [W m-2] a in FLWnet = a + b*T^4 Bon96 p. 45
   std::valarray<prc_cmp> flx_LW_net_cff_b(lon_nbr); // [W m-2 K-4] b in FLWnet = a + b*T^4 Bon96 p. 45
   std::valarray<prc_cmp> flx_LW_upw_sfc(lon_nbr); // [W m-2] Longwave upwelling (emission+reflection) flux at surface
-  std::valarray<prc_cmp> flx_LW_ems_sfc(lon_nbr); // [W m-2] Longwave emitted flux at surface
+  std::valarray<prc_cmp> flx_LW_msn_sfc(lon_nbr); // [W m-2] Longwave emitted flux at surface
   std::valarray<prc_cmp> flx_LW_rfl_sfc(lon_nbr); // [W m-2] Longwave reflected flux at surface
   std::valarray<prc_cmp> flx_ltn_evp(lon_nbr); // [W m-2] Evaporation flux to atmosphere
   std::valarray<prc_cmp> flx_ltn_evp_cff_a(lon_nbr); // [W m-2] a in LHE = a + b*e(Ts) Bon96 p. 55
@@ -1304,7 +1303,7 @@ blm_mbl
 	//flx_LW_upw_sfc[lon_idx]=flx_LW_net[lon_idx]+msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 
 	flx_LW_upw_sfc[lon_idx]=flx_LW_net[lon_idx]+flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 
 	flx_LW_rfl_sfc[lon_idx]=(1.0-msv_sfc[lon_idx])*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave reflected flux at surface
-	flx_LW_ems_sfc[lon_idx]=flx_LW_upw_sfc[lon_idx]-flx_LW_rfl_sfc[lon_idx]; // [W m-2] Longwave emitted flux at surface
+	flx_LW_msn_sfc[lon_idx]=flx_LW_upw_sfc[lon_idx]-flx_LW_rfl_sfc[lon_idx]; // [W m-2] Longwave emitted flux at surface
 	(void)std::fprintf(stderr,"%3ld %9.3f %8.3f %7.4f %7.3f %7.3f %8.3f %8.3f %8.3f %8.3f %8.6f\n",
 		      itr_idx,mno_lng[lon_idx],mno_stb_prm[lon_idx],wnd_frc[lon_idx],tpt_gnd[lon_idx],flx_LW_upw_sfc[lon_idx],flx_sns_atm_tmp,flx_sns_gnd[lon_idx],flx_vpr_tmp,nrg_bdg[lon_idx],eps_crr);
       } // end if dbg
@@ -1323,7 +1322,7 @@ blm_mbl
       //flx_LW_upw_sfc[lon_idx]=flx_LW_net[lon_idx]+msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 
       flx_LW_upw_sfc[lon_idx]=flx_LW_net[lon_idx]+flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave upwelling (emission+reflection) flux to atmosphere Bon96 p. 40 Fig. 12, p. 44 
       flx_LW_rfl_sfc[lon_idx]=(1.0-msv_sfc[lon_idx])*flx_LW_dwn_sfc[lon_idx]; // [W m-2] Longwave reflected flux at surface
-      flx_LW_ems_sfc[lon_idx]=flx_LW_upw_sfc[lon_idx]-flx_LW_rfl_sfc[lon_idx]; // [W m-2] Longwave emitted flux at surface
+      flx_LW_msn_sfc[lon_idx]=flx_LW_upw_sfc[lon_idx]-flx_LW_rfl_sfc[lon_idx]; // [W m-2] Longwave emitted flux at surface
       sum_LHS=flx_SW_net[lon_idx]+msv_sfc[lon_idx]*flx_LW_dwn_sfc[lon_idx]; // [W m-2]
       sum_RHS=flx_LW_upw_sfc[lon_idx]+flx_sns_atm[lon_idx]+flx_sns_gnd[lon_idx]+flx_ltn_evp[lon_idx]; // [W m-2]
       (void)std::fprintf(stderr,"SW(abs)  + a*LW(dwn) =  LHS\n");
