@@ -192,8 +192,8 @@ endif # endif NETCDFF
 
 # Derived-tokens based on primary tokens
 # These tokens should not be altered by hand
-# Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, FREEBSD, MACOSX, and WIN32
-ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSDMACOSXWIN32))
+# Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, FREEBSD, MACOS, and WIN32
+ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSDMACOSWIN32))
 # Decide among the plethora of Linux compilers
 ifndef LINUX_CXX
 # C++ compiler for Linux
@@ -482,8 +482,8 @@ ${MY_OBJ_DIR}/%.o : %.f
 endif
 # endif CRAY
 
-# Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOSX
-ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSDMACOSX))
+# Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOS
+ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSDMACOS))
 CXX := ${LINUX_CXX}
 CC := ${LINUX_CC}
 CPP := ${CC}
@@ -555,7 +555,7 @@ ifeq (${OPTS},X)
  FFLAGS += -finteger=-2147483648 -flogical=none -freal=nan -fpointer=invalid
 endif
 endif # end G95 Compiler
-# GNU Fortran Compiler (called as gfortran-mp-4.9 on MACOSX)
+# GNU Fortran Compiler (called as gfortran-mp-4.9 on MACOS)
 ifneq (${null},$(findstring gfortran,${FC}))
  FFLAGS := -ffixed-line-length-132 -Wall
 ifeq (${OMP},Y)
@@ -776,7 +776,7 @@ ifeq (${MPI},Y)
  FC := $(subst ifort,mpif90,${FC})
 endif # endif MPI
 endif
-# endif LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOSX
+# endif LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOS
 
 ifeq (${UNAMES},IRIX64)
 CXX := CC

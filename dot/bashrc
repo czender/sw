@@ -569,7 +569,7 @@ case "${PVM_ARCH}" in
 #	export http_proxy='http://proxy.ujf-grenoble.fr/auto-proxy.pac'
 	;; # endif LINUX*
     
-    MACOS* ) # MACOSX on PowerPC and (beginning 20140529), x86_64 machines
+    MACOS* ) # MACOS on PowerPC and (beginning 20140529), x86_64 machines
 	export DATA=/Users/${USER}/data
 	export INFOPATH=./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/share/info
 #	export NCARG_ROOT='/opt/local' # Port-installed

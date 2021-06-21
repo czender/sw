@@ -78,11 +78,12 @@ if [ -f /bin/uname -o -f /usr/bin/uname \
 # 20160421 csz++ Implement LINUXPPC
 	Linux,ppc64 )         ARCH=LINUXPPC64 ;;
 # csz--
-# 20020812 csz++ Implement MACOSX
-	Darwin,Power* )         ARCH=MACOSX ;;
+# 20020812 csz++ Implement MACOS
+# 20210621 csz++ Change MACOSX to MACOS
+	Darwin,Power* )         ARCH=MACOS ;;
 # csz--
 # 20100705 csz++ Implement OS X on PC chips
-	Darwin,x86_64 )         ARCH=MACOSX ;;
+	Darwin,x86_64 )         ARCH=MACOS ;;
 # csz--
 # 20020812 csz++ deprecate SX3 in favor of NECSX
 #	SUPER-UX,SX-3 )         ARCH=SX3 ;;

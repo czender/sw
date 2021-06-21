@@ -535,8 +535,8 @@ ${MY_OBJ_DIR}/%.o : %.f
 endif
 # endif CRAY
 
-# Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOSX
-ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSDMACOSX))
+# Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOS
+ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSDMACOS))
 CXX := ${LINUX_CXX}
 CC := ${LINUX_CC}
 CPP := ${CXX}
@@ -545,9 +545,9 @@ CPPFLAGS += ${CPP_TKN} ${CPP_TKN_OS} ${CPP_PTH} -I${NETCDF_INC} ${GSL_INC}
 FC := ${LINUX_FC}
 LD := ld
 LDFLAGS += -L${MY_LIB_DIR} -lcsm_c++ -lcsz_c++ -lnco_c++ ${NC_LDFLAGS} ${NC_LIBS}
-ifeq (${PVM_ARCH},MACOSX)
+ifeq (${PVM_ARCH},MACOS)
  LDFLAGS += -lresolv
-endif # endif MACOSX
+endif # endif MACOS
 LEX := flex
 LINT := lint
 YACC := bison
@@ -869,7 +869,7 @@ ifeq (${OMP},Y)
  LDFLAGS := ${OMP_FLG_C} ${LDFLAGS}
 endif # endif OMP
 endif
-# endif LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOSX
+# endif LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOS
 
 ifeq (${PVM_ARCH},NECSX)
 ifeq (${OMP},Y)
