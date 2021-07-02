@@ -4,7 +4,7 @@
 # Allow for precedence of user-modified files, different search paths
 # This Makefile requires GNU make, AT&T Berkeley-style make will not parse it
 
-# Copyright (C) 1994--2015 Charlie Zender
+# Copyright (C) 1994--present Charlie Zender
 # You may copy, distribute, and/or modify this software under the terms of the GNU General Public License (GPL) Version 3
 # See http://www.gnu.org/copyleft/gpl.html for full license text
 
@@ -587,7 +587,8 @@ endif # end G95 Compiler
 # GNU Fortran Compiler (called as gfortran-mp-4.9 on MACOS)
 ifneq (${null},$(findstring gfortran,${FC}))
 # 20150122 -fcray-pointer needed for CRM use of pointer keyword in getmem.F
- FFLAGS := -ffixed-line-length-132 -Wall -fcray-pointer
+# 20210621 -fallow-argument-mismatch required for GCC10+ though non-existant in GCC9- :(
+ FFLAGS := -fallow-argument-mismatch -ffixed-line-length-132 -Wall -fcray-pointer
 ifeq (${OMP},Y)
  OMP_FLG_C := -fopenmp
  OMP_FLG_F := -fopenmp

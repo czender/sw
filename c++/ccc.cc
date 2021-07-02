@@ -453,7 +453,7 @@ int main(int argc,char **argv)
   std::cerr << prg_nm_get() << ": INFO Ingested " << fl_in << std::endl;
 
   // Main body of code 
-  dbg_lvl_tst();
+  if(dbg_lvl >= dbg_sbr) dbg_lvl_tst();
   //  prc_cmp tpt_d2d[bnd_nbr][sz_nbr]; // [K] Temperature (dynamic 2-dimensional)
   //  std::vector< std::vector<prc_cmp> > tpt(bnd_nbr,std::vector<prc_cmp>(sz_nbr)); // [K] Temperature (vector 2-dimensional)
   std::vector<prc_cmp> tpt_v1d(bnd_nbr*sz_nbr); // [K] Temperature (vector 1-dimensional)

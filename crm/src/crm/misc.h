@@ -1,8 +1,9 @@
 c     $Header$ -*-fortran-*-
 
 #ifndef MISC_SET
-#define MISC_SET
-#define NCPREC NF_FLOAT
+# define MISC_SET
+c#define NCPREC NF_FLOAT
+#define NCPREC NF_DOUBLE
 #define PVP 
 #ifdef CRAY
 #define REALTYPE MPI_REAL

@@ -1029,7 +1029,7 @@ int main(int argc,char **argv)
   const prc_cmp one_plus_mie_cnv_eps(1.0+mie_cnv_eps); // [frc] Mie convergence precision factor
 
   // Main code  
-  if(dbg_lvl > dbg_fl) dbg_lvl_tst();
+  if(dbg_lvl > dbg_sbr) dbg_lvl_tst();
   if(!wrn_ntp_flg) wrn_prn(sbr_nm,"Turning off verbose error reports from ntp_vec()");
 
   // Initialize thread information
