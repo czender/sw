@@ -128,7 +128,7 @@ wnd_frc_thr_get
 		    "idx ","itr ","dmt_ctr","   K   "," Rprx  "," Re*t  ","  uprx ","  u*t  ","  eps  ");
       (void)std::fprintf(stderr,"%4s %4s %7s %7s %8s %8s %8s %8s %8s\n",
 		    "    ","    ","  um   ","       ","  frc  ","  frc  "," m s-1 "," m s-1 ","  frc  ");
-    } // end if dbg
+    } // !dbg_lvl
     ryn_nbr_frc_thr_prx[idx]=0.38+1331.0*std::pow(PRC_CMP(100.0)*dmt_ctr[idx],PRC_CMP(1.56)); // [frc] "B" MaB95 p. 16417 (5)
     if(ryn_nbr_frc_thr_prx[idx] < 10.0){
       if(ryn_nbr_frc_thr_prx[idx] < 0.03) wrn_prn(prg_nm,sbr_nm,"ryn_nbr_frc_thr_prx[idx] < 0.03");
@@ -347,19 +347,20 @@ int frc_thr_ncr_drg_get
   // Local
   const std::string prg_nm(prg_nm_get()); // Program name
   const std::string sbr_nm("frc_thr_ncr_drg_get"); // Subroutine name
+  const unsigned short dbg_lvl(dbg_lvl_get()); // Debugging level
   int rcd(0); // O [rcd] Return success code
   long lon_idx; // Counting index for lon
   // Main Code
   const prc_cmp rgh_mmn_mbl_max(0.005); // [m] Roughness length momentum for erodible surfaces, maximum value allowed MaB95 p. 16420, GMB98 p. 6205
   const prc_cmp wnd_frc_fsh_frc_min(1.0e-3); // O [frc] Efficient fraction of wind friction
   if(rgh_mmn_mbl >= rgh_mmn_mbl_max){
-    wrn_prn(prg_nm,sbr_nm,"Reducing rgh_mmn_mbl from user-specified value of "+nbr2sng(rgh_mmn_mbl)+" m to maximum permissible value of "+nbr2sng(rgh_mmn_mbl_max)+" m for drag-partition computation only. Change should only affect dust production threshold velocities and turbulent fluxes on surfaces completely dominated by non-erodible surfaces.");
+    if(dbg_lvl >= dbg_sbr) wrn_prn(prg_nm,sbr_nm,"Reducing rgh_mmn_mbl from user-specified value of "+nbr2sng(rgh_mmn_mbl)+" m to maximum permissible value of "+nbr2sng(rgh_mmn_mbl_max)+" m for drag-partition computation only. Change should only affect dust production threshold velocities and turbulent fluxes on surfaces completely dominated by non-erodible surfaces.");
   } // endif
   for(lon_idx=0;lon_idx<lon_nbr;lon_idx++){
     wnd_frc_fsh_frc[lon_idx]= // [frc] Efficient fraction of wind friction MaB95 p. 16420, GMB98 p. 6207
       +1.0-std::log(rgh_mmn_mbl/rgh_mmn_smt)/std::log(0.35*std::pow(PRC_CMP(0.1)/rgh_mmn_smt,PRC_CMP(0.8)));
     if(wnd_frc_fsh_frc[lon_idx] <= 0.0){
-      wrn_prn(prg_nm,sbr_nm,"Setting wnd_frc_fsh_frc to "+nbr2sng(wnd_frc_fsh_frc_min)+" instead of computed value of "+nbr2sng(wnd_frc_fsh_frc)+" to avoid invalid range of MaB95 parameterization.");
+      if(dbg_lvl >= dbg_sbr) wrn_prn(prg_nm,sbr_nm,"Setting wnd_frc_fsh_frc to "+nbr2sng(wnd_frc_fsh_frc_min)+" instead of computed value of "+nbr2sng(wnd_frc_fsh_frc[lon_idx])+" to avoid invalid range of MaB95 parameterization.");
       wnd_frc_fsh_frc[lon_idx]=wnd_frc_fsh_frc_min; // [frc] Efficient fraction of wind friction MaB95 p. 16420, GMB98 p. 6207
     } // endif
     assert(wnd_frc_fsh_frc[lon_idx] <= 1.0);

@@ -2009,7 +2009,7 @@ int main(int argc,char **argv)
      &wnd_frc_mbl); // I [m s-1] Surface friction velocity
   wnd_rfr_mbl=wnd_mdp-mmn_dlt; // [m s-1] Wind speed at reference height
   if(wnd_rfr_mbl < wnd_min_mbl){
-    std::cerr << prg_nm_get() << ": WARNING " << sbr_nm << ": Reset U(10 m) for mobilization from " << wnd_rfr_mbl << " m s-1 to " << wnd_min_mbl << " m s-1" << std::endl;
+    if(dbg_lvl >= dbg_sbr) std::cerr << prg_nm_get() << ": INFO " << sbr_nm << ": Reset U(10 m) for mobilization from " << wnd_rfr_mbl << " m s-1 to " << wnd_min_mbl << " m s-1" << std::endl;
     wnd_rfr_mbl=wnd_min_mbl;
   } // endif
   assert(wnd_rfr_mbl >= 0.0);
@@ -2264,7 +2264,7 @@ int main(int argc,char **argv)
      &wnd_str_znl_dps); // O [kg m-1 s-2] Zonal wind stress
   assert(rgh_mmn_dps > 0.0 && rgh_mmn_dps < 10.0);
   assert(hgt_zpd_dps >= 0.0 && hgt_zpd_dps < 30.0 && hgt_zpd_dps < hgt_mdp);
-  std::cerr << prg_nm << ": WARNING hgt_rfr = " << hgt_rfr << " m, wnd_mdp = " << wnd_mdp << " m s-1, wnd_rfr_dps = " << wnd_rfr_dps << " m s-1" << std::endl;
+  if(dbg_lvl >= dbg_sbr) std::cerr << prg_nm << ": INFO hgt_rfr = " << hgt_rfr << " m, wnd_mdp = " << wnd_mdp << " m s-1, wnd_rfr_dps = " << wnd_rfr_dps << " m s-1" << std::endl;
   assert(wnd_rfr_dps >= 0.0 && (wnd_rfr_dps < wnd_mdp || wnd_mdp <= 1.0));
   if(hgt_zpd_dps_cmd_ln != cmd_ln_dfl) hgt_zpd_dps=hgt_zpd_dps_cmd_ln; // [m]
   if(rgh_mmn_dps_cmd_ln != cmd_ln_dfl) rgh_mmn_dps=rgh_mmn_dps_cmd_ln; // [m]

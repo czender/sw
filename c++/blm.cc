@@ -458,6 +458,7 @@ int wnd_rfr_get
   // Dependencies: phys_cst.hh
   using phc::cst_von_krm_rcp; // (2.5) [frc] Reciprocal of Von Karman's constant
   using blm::wnd_min_dps; // (1.0) [m s-1] Minimum windspeed used for deposition Bon96 p. 51
+  const unsigned short dbg_lvl(dbg_lvl_get()); // Debugging level
   // Local
   a2d_cls<prc_cmp> mno_stb_crc_mmn(lon_nbr,2); // [frc] Monin-Obukhov stability correction term
   a2d_cls<prc_cmp> mno_stb_prm(lon_nbr,2); // [frc] Monin-Obukhov stability parameter 
@@ -505,7 +506,7 @@ int wnd_rfr_get
     if(wnd_rfr[lon_idx] < 0.0){
       prc_cmp wnd_rfr_tmp(wnd_rfr[lon_idx]);
       wnd_rfr[lon_idx]=wnd_mdp[lon_idx]-wnd_frc[lon_idx]*cst_von_krm_rcp*tmp4;
-      std::cerr << prg_nm_get() << ": WARNING wnd_rfr_get(): Using neutral stability assumption changes U(10 m) from " << wnd_rfr_tmp << " m s-1 to " << wnd_rfr[lon_idx] << " m s-1" << std::endl;
+      if(dbg_lvl >= dbg_sbr) std::cerr << prg_nm_get() << ": WARNING wnd_rfr_get(): Using neutral stability assumption changes U(10 m) from " << wnd_rfr_tmp << " m s-1 to " << wnd_rfr[lon_idx] << " m s-1" << std::endl;
     } // endif 
     // Set reference wind speed to minimum-allowed value
     wnd_rfr[lon_idx]=max_cpv(wnd_rfr[lon_idx],wnd_min_dps); // [m s-1]
