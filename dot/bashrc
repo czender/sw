@@ -410,7 +410,7 @@ case "${PVM_ARCH}" in
 	    cg-gpu* ) export DATA="/home/${USER}/data" ; ;; # NCSA roger
 	    *cheyenne* ) export DATA="/glade/work/${USER}" ; ;; # NCAR
 	    chrysalis* ) export DATA="${HOME}/data" ; ;; # ANL LCRC
-	    compy* ) export DATA="/compyfs/${USER}/data" ; ;; # PNNL 
+	    compy* ) export DATA="/qfs/people/${USER}/data" ; ;; # PNNL 
 	    cooley* | cc* ) export DATA="${HOME}/data" ; ;; # ANL ALCF 
 	    cori* | nid* ) export DATA="${HOME}/data" ; ;; # NERSC
 	    e3sm* ) export DATA="${HOME}/data" ; ;; # UCI
