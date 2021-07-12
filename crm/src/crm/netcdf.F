@@ -130,6 +130,8 @@ c     Local variables
       integer bnd_dim_id        ! Dimension ID for bnd
       integer dim_plevp_bnd(2)  ! Dimension IDs
       integer dim_plev_bnd(2)  ! Dimension IDs
+c      integer,dimension(2) dim_plevp_bnd  ! Dimension IDs
+c      integer,dimension(2) dim_plev_bnd  ! Dimension IDs
 
       integer flx_SW_abs_atm_id
       integer flx_NIR_abs_atm_id

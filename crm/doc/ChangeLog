@@ -1,3 +1,13 @@
+2021-07-12  Charlie Zender  <zender@uci.edu>
+
+	* Hand-tagged and released as crm-2.1.9 (crm-20210712) using these commands:
+	cd ~/sw/crm;git commit -am 'Preparing crm-2.1.9 release';git push
+	git tag -a crm-2.1.9-ccm-3.6 -m 'Version crm-2.1.9-ccm-3.6 tag:	CRM Idyllwild';git push --tags
+	cd ~/sw;tar cvzf ~/crm.tar.gz --exclude='.#*' --exclude='*~' --exclude='*.MOD' --exclude='TAGS' --exclude='*.o' --exclude='*.d' --exclude='*.mod' --exclude='.cvsignore' --exclude='.svn' ./crm;cd -
+	scp ~/crm.tar.gz dust.ess.uci.edu:Sites/crm
+	ssh dust.ess.uci.edu "ln -s Sites/crm/crm.tar.gz Sites/crm/crm-2.1.9-ccm-3.6.tar.gz"
+	scp ~/sw/crm/doc/index.shtml ~/sw/crm/doc/FAQ ~/sw/crm/doc/README ~/sw/crm/doc/INSTALL ~/sw/crm/doc/LICENSE ~/sw/crm/doc/LICENSE.ccm3 ~/sw/crm/doc/LICENSE.crm ~/sw/crm/doc/ChangeLog ~/sw/crm/doc/VERSION dust.ess.uci.edu:Sites/crm
+
 2015-10-22  Charlie Zender  <zender@uci.edu>
 
 	* Hand-tagged and released as crm-2.1.8 (crm-20151022) using these commands:

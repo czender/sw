@@ -131,6 +131,15 @@ file.</h2>
 -->
 
 <p>
+2021/07/12: 
+CRM&nbsp;2.1.9 is released.
+Executable tested on MacOS with <tt>gfortran</tt> compiler.
+Numerics work but netCDF output fails, unsure why.
+Makefile assumes GCC version >= 10.
+If using earlier versions, set the GCC10 variable to 'N', e.g.,
+<tt>cd ~/crm/bld;make GCC10=N</tt>.
+
+<p>
 2015/10/22: 
 CRM&nbsp;2.1.8 is released.
 Executable tested and working on Mac OS X with <tt>gfortran</tt> compiler.
