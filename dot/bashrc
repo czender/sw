@@ -1367,6 +1367,7 @@ if bsh_mjr_vrs_ge_2; then
 	alias path="echo -e \${PATH//:/'\n'}" # NeR98 p. 102
 	alias manpath="echo -e \${MANPATH//:/'\n'}" # NeR98 p. 102
 	alias ld_library_path="echo -e \${LD_LIBRARY_PATH//:/'\n'}" # NeR98 p. 102
+	alias llp="echo -e \${LD_LIBRARY_PATH//:/'\n'}" # NeR98 p. 102
     fi # endif
 fi # endif
 
