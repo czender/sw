@@ -8,10 +8,10 @@
 ; cd ~/sw/anl;ncl < mie_xv.ncl
 ; cd ~/sw/anl;ncl 'dvc="x11"' mie_xv.ncl
 ; cd ~/sw/anl;ncl 'dvc="x11"' 'fld_nm="alb_spc_snw"' mie_xv.ncl
-; cd ~/sw/anl;ncl 'fl_in_nm="/data/zender/aca/aer_h2o_ice_snw.nc"' 'fl_out_nm="/data/zender/ps/mie_xv"' 'fld_nm="alb_spc_snw"' 'dvc="x11"' mie_xv.ncl
-; cd ~/sw/anl;ncl flg_GWM94="True" 'fl_out_nm="/data/zender/ps/mie_xv"' 'fld_nm="alb_spc_snw"' 'dvc="x11"' mie_xv.ncl
-; cd ~/sw/anl;ncl flg_crc=False flg_ZGD09=True 'fl_out_nm="/data/zender/ps/mie_xv"' 'fld_nm="alb_spc_snw"' 'ttl_sng="Measured + Modeled Snow Albedo"' 'y_ttl_sng="Lab Snow Diffuse Albedo"' 'dvc="x11"' mie_xv.ncl
-; cd ~/sw/anl;ncl 'fl_in_nm="/data/zender/aca/aer_h2o_ice_snw.nc"' 'fl_out_nm="/data/zender/ps/mie_xv"' 'fld_nm="alb_spc_snw"' 'dvc="x11"' mie_xv.ncl
+; cd ~/sw/anl;ncl 'fl_in_nm="../../data/aca/aer_h2o_ice_snw.nc"' 'fl_out_nm="../../data/ps/mie_xv"' 'fld_nm="alb_spc_snw"' 'dvc="x11"' mie_xv.ncl
+; cd ~/sw/anl;ncl flg_GWM94="True" 'fl_out_nm="../../data/ps/mie_xv"' 'fld_nm="alb_spc_snw"' 'dvc="x11"' mie_xv.ncl
+; cd ~/sw/anl;ncl flg_crc=False flg_ZGD09=True 'fl_out_nm="../../data/ps/mie_xv"' 'fld_nm="alb_spc_snw"' 'ttl_sng="Measured + Modeled Snow Albedo"' 'y_ttl_sng="Lab Snow Diffuse Albedo"' 'dvc="x11"' mie_xv.ncl
+; cd ~/sw/anl;ncl 'fl_in_nm="../../data/aca/aer_h2o_ice_snw.nc"' 'fl_out_nm="../../data/ps/mie_xv"' 'fld_nm="alb_spc_snw"' 'dvc="x11"' mie_xv.ncl
 ; cd ~/sw/anl;ncl dff=True 'dvc="x11"' mie_xv.ncl
 ; cd ~/sw/anl;ncl flg_clr="False" mie_xv.ncl
 
@@ -22,7 +22,7 @@ load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/contributed.ncl"
 
 ; Personal headers
-if(.not.isvar("csz_ncl")) then load "${HOME}/sw/ncl/csz.ncl" end if
+if(.not.isvar("csz_ncl")) then load "../ncl/csz.ncl" end if
 
 ; Initialize some fields
 prg_nm="mie_xv" ; [sng] Program name
@@ -73,7 +73,7 @@ end if; !flg_ZGD09
 sym_sng=""
 units_sng=""
 ; Set fld_sng, units_sng, and, maybe, cnt_lvl, scl_fct
-if(.not.isvar("fld_prp_ncl")) then load "${HOME}/sw/ncl/fld_prp.ncl" end if
+if(.not.isvar("fld_prp_ncl")) then load "../ncl/fld_prp.ncl" end if
 if(.not.isvar("fld_sng")) then fld_sng=fld_nm end if
 if(.not.isvar("ttl_sng")) then ttl_sng=fld_sng end if
 if(.not.isvar("y_ttl_sng")) then y_ttl_sng=fld_sng+" "+sym_sng end if
@@ -94,8 +94,8 @@ idx_topm6=ord_nbr-7 ; [idx]
 
 ; Handle pre-defined dataset groups ("campaigns")
 if (flg_ZGD09) then
-;   if(.not.isvar(snw_rfl_ncl)) then load "$HOME/anl/snw_rfl.ncl" end if
-   load "$HOME/anl/snw_rfl.ncl"
+;   if(.not.isvar(snw_rfl_ncl)) then load "../anl/snw_rfl.ncl" end if
+   load "../anl/snw_rfl.ncl"
    print("quark 1 Input data file 0 = "+fl_in(0))
 end if ; end if flg_ZGD09
 if (flg_GWM94) then
@@ -104,13 +104,13 @@ if (flg_GWM94) then
    if(.not.isvar("ord_nbr_plt")) then ord_nbr_plt=4 end if ; [nbr] Ordinates plotted: ord_nbr_plt <= ord_nbr
    fl_nbr=mdl_nbr
    fl_in=new(mdl_nbr,string)
-   fl_in(idx_top)="/data/zender/icr/swnb_prp_dff_030_100.nc"
+   fl_in(idx_top)="../../data/icr/swnb_prp_dff_030_100.nc"
    ;      fl_in(idx_topm1)="/home/zender/swnb_prp_dff_100.nc"
-   fl_in(idx_topm1)="/data/zender/icr/swnb_prp_dff_045_100.nc"
-   fl_in(idx_topm2)="/data/zender/icr/swnb_sal_dff_045_100.nc"
-   ;      fl_in(idx_topm2)="/data/zender/icr/swnb_prp_mie_045_100.nc"
-   ;   fl_in(idx_topm2)="/data/zender/icr/swnb_prp_dff_noatm_045_100.nc"
-   fl_in(idx_topm3)="/data/zender/icr/swnb_prp_drc_045_100.nc"
+   fl_in(idx_topm1)="../../data/icr/swnb_prp_dff_045_100.nc"
+   fl_in(idx_topm2)="../../data/icr/swnb_sal_dff_045_100.nc"
+   ;      fl_in(idx_topm2)="../../data/icr/swnb_prp_mie_045_100.nc"
+   ;   fl_in(idx_topm2)="../../data/icr/swnb_prp_dff_noatm_045_100.nc"
+   fl_in(idx_topm3)="../../data/icr/swnb_prp_drc_045_100.nc"
    fl_in(idx_topm4)=fl_in(idx_top)
    fl_in(idx_topm5)=fl_in(idx_top)
    fl_in(idx_topm6)=fl_in(idx_top)
@@ -312,7 +312,7 @@ if (flg_GWM94) then
    data_obs(idx_GWM94,:)=alb_GWM94
    data_obs_rng(idx_GWM94,:)=alb_sd_GWM94
    
-   ; Code for adding whiskers to points taken from ~/ppr_ZeM06/nco_fgr.ncl
+   ; Code for adding whiskers to points taken from ~/ZeM06/nco_fgr.ncl
    ; Draw range bars
    rsr_rng=True ; Polyline modifications desired
    rsr_rng@gsLineThicknessF=1.5 ; Line thicker

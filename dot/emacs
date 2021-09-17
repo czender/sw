@@ -45,6 +45,7 @@
 ; Various settings formerly placed in defaults.el
 ; Alter auto-save behavior 20030808 when ashes started munging files
 (setq auto-save-default t) ; Auto-save every buffer
+(desktop-save-mode 1) ; 20210914 Allow buffers from last session to be reloaded
 (setq auto-save-interval 300) ; Number of characters before autosave
 ;(setq delete-auto-save-files t) ; Delete auto-save files when a true save is done
 ;(setq tags-table-list (list "~/nco/bld/"))

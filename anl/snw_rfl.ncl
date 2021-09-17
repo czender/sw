@@ -604,73 +604,73 @@ fl_in=new(mdl_nbr,string)
 ; Best estimate of everything (bee): SSA, density, phb_he
 if(.not.isvar("flg_bee")) then flg_bee=False end if
 if(flg_bee) then 
-   fl_in(idx_mpr_ppb_000p0)="/data/zender/icr/swnb_lgge_bee_ppb_000.0.nc"
-   fl_in(idx_mpr_ppb_250p0)="/data/zender/icr/swnb_lgge_bee_ppb_250.0.nc"
-   fl_in(idx_mpr_ppb_750p0)="/data/zender/icr/swnb_lgge_bee_ppb_750.0.nc"
-   fl_in(idx_mpr_ppm_001p5)="/data/zender/icr/swnb_lgge_bee_ppm_001.5.nc"
-   fl_in(idx_mpr_ppm_007p5)="/data/zender/icr/swnb_lgge_bee_ppm_007.5.nc"
-   fl_in(idx_mpr_ppm_015p9)="/data/zender/icr/swnb_lgge_bee_ppm_015.9.nc"
-   fl_in(idx_mpr_ppm_221p0)="/data/zender/icr/swnb_lgge_bee_ppm_221.0.nc"
+   fl_in(idx_mpr_ppb_000p0)="../../data/icr/swnb_lgge_bee_ppb_000.0.nc"
+   fl_in(idx_mpr_ppb_250p0)="../../data/icr/swnb_lgge_bee_ppb_250.0.nc"
+   fl_in(idx_mpr_ppb_750p0)="../../data/icr/swnb_lgge_bee_ppb_750.0.nc"
+   fl_in(idx_mpr_ppm_001p5)="../../data/icr/swnb_lgge_bee_ppm_001.5.nc"
+   fl_in(idx_mpr_ppm_007p5)="../../data/icr/swnb_lgge_bee_ppm_007.5.nc"
+   fl_in(idx_mpr_ppm_015p9)="../../data/icr/swnb_lgge_bee_ppm_015.9.nc"
+   fl_in(idx_mpr_ppm_221p0)="../../data/icr/swnb_lgge_bee_ppm_221.0.nc"
 end if; !flg_bee
 
 ; New best estimate of everything (tst): SSA, density, phb_he
 if(.not.isvar("flg_tst")) then flg_tst=False end if
 if(flg_tst) then 
-   fl_in(idx_mpr_ppb_000p0)="/data/zender/icr/swnb_lgge_tst_ppb_000.0.nc"
-   fl_in(idx_mpr_ppb_250p0)="/data/zender/icr/swnb_lgge_tst_ppb_250.0.nc"
-   fl_in(idx_mpr_ppb_750p0)="/data/zender/icr/swnb_lgge_tst_ppb_750.0.nc"
-   fl_in(idx_mpr_ppm_001p5)="/data/zender/icr/swnb_lgge_tst_ppm_001.5.nc"
-   fl_in(idx_mpr_ppm_007p5)="/data/zender/icr/swnb_lgge_tst_ppm_007.5.nc"
-   fl_in(idx_mpr_ppm_015p9)="/data/zender/icr/swnb_lgge_tst_ppm_015.9.nc"
-   fl_in(idx_mpr_ppm_221p0)="/data/zender/icr/swnb_lgge_tst_ppm_221.0.nc"
+   fl_in(idx_mpr_ppb_000p0)="../../data/icr/swnb_lgge_tst_ppb_000.0.nc"
+   fl_in(idx_mpr_ppb_250p0)="../../data/icr/swnb_lgge_tst_ppb_250.0.nc"
+   fl_in(idx_mpr_ppb_750p0)="../../data/icr/swnb_lgge_tst_ppb_750.0.nc"
+   fl_in(idx_mpr_ppm_001p5)="../../data/icr/swnb_lgge_tst_ppm_001.5.nc"
+   fl_in(idx_mpr_ppm_007p5)="../../data/icr/swnb_lgge_tst_ppm_007.5.nc"
+   fl_in(idx_mpr_ppm_015p9)="../../data/icr/swnb_lgge_tst_ppm_015.9.nc"
+   fl_in(idx_mpr_ppm_221p0)="../../data/icr/swnb_lgge_tst_ppm_221.0.nc"
 end if; !flg_tst
 
 ; Nominal SSA
 if(.not.isvar("flg_nmn")) then flg_nmn=False end if
 if(flg_nmn) then 
-fl_in(idx_mpr_ppb_000p0)="/data/zender/icr/swnb_lgge_100um_ppb_000.0.nc"
-fl_in(idx_mpr_ppb_250p0)="/data/zender/icr/swnb_lgge_100um_ppb_250.0.nc"
-fl_in(idx_mpr_ppb_750p0)="/data/zender/icr/swnb_lgge_100um_ppb_750.0.nc"
-fl_in(idx_mpr_ppm_001p5)="/data/zender/icr/swnb_lgge_100um_ppm_001.5.nc"
-fl_in(idx_mpr_ppm_007p5)="/data/zender/icr/swnb_lgge_100um_ppm_007.5.nc"
-fl_in(idx_mpr_ppm_015p9)="/data/zender/icr/swnb_lgge_100um_ppm_015.9.nc"
-fl_in(idx_mpr_ppm_221p0)="/data/zender/icr/swnb_lgge_100um_ppm_221.0.nc"
+fl_in(idx_mpr_ppb_000p0)="../../data/icr/swnb_lgge_100um_ppb_000.0.nc"
+fl_in(idx_mpr_ppb_250p0)="../../data/icr/swnb_lgge_100um_ppb_250.0.nc"
+fl_in(idx_mpr_ppb_750p0)="../../data/icr/swnb_lgge_100um_ppb_750.0.nc"
+fl_in(idx_mpr_ppm_001p5)="../../data/icr/swnb_lgge_100um_ppm_001.5.nc"
+fl_in(idx_mpr_ppm_007p5)="../../data/icr/swnb_lgge_100um_ppm_007.5.nc"
+fl_in(idx_mpr_ppm_015p9)="../../data/icr/swnb_lgge_100um_ppm_015.9.nc"
+fl_in(idx_mpr_ppm_221p0)="../../data/icr/swnb_lgge_100um_ppm_221.0.nc"
 end if; !flg_nmn
 
 ; Measured SSA
 if(.not.isvar("flg_ssa_obs")) then flg_ssa_obs=False end if
 if(flg_ssa_obs) then 
-   fl_in(idx_mpr_ppb_000p0)="/data/zender/icr/swnb_lgge_ssa_obs_ppb_000.0.nc"
-   fl_in(idx_mpr_ppb_250p0)="/data/zender/icr/swnb_lgge_ssa_obs_ppb_250.0.nc"
-   fl_in(idx_mpr_ppb_750p0)="/data/zender/icr/swnb_lgge_ssa_obs_ppb_750.0.nc"
-   fl_in(idx_mpr_ppm_001p5)="/data/zender/icr/swnb_lgge_ssa_obs_ppm_001.5.nc"
-   fl_in(idx_mpr_ppm_007p5)="/data/zender/icr/swnb_lgge_ssa_obs_ppm_007.5.nc"
-   fl_in(idx_mpr_ppm_015p9)="/data/zender/icr/swnb_lgge_ssa_obs_ppm_015.9.nc"
-   fl_in(idx_mpr_ppm_221p0)="/data/zender/icr/swnb_lgge_ssa_obs_ppm_221.0.nc"
+   fl_in(idx_mpr_ppb_000p0)="../../data/icr/swnb_lgge_ssa_obs_ppb_000.0.nc"
+   fl_in(idx_mpr_ppb_250p0)="../../data/icr/swnb_lgge_ssa_obs_ppb_250.0.nc"
+   fl_in(idx_mpr_ppb_750p0)="../../data/icr/swnb_lgge_ssa_obs_ppb_750.0.nc"
+   fl_in(idx_mpr_ppm_001p5)="../../data/icr/swnb_lgge_ssa_obs_ppm_001.5.nc"
+   fl_in(idx_mpr_ppm_007p5)="../../data/icr/swnb_lgge_ssa_obs_ppm_007.5.nc"
+   fl_in(idx_mpr_ppm_015p9)="../../data/icr/swnb_lgge_ssa_obs_ppm_015.9.nc"
+   fl_in(idx_mpr_ppm_221p0)="../../data/icr/swnb_lgge_ssa_obs_ppm_221.0.nc"
 end if; !flg_ssa_obs
 
 ; Impurity optical properties: phb_he
 if(.not.isvar("flg_phb_he")) then flg_phb_he=False end if
 if(flg_phb_he) then 
-   fl_in(idx_mpr_ppb_000p0)="/data/zender/icr/swnb_lgge_100um_phb_he_ppb_000.0.nc"
-   fl_in(idx_mpr_ppb_250p0)="/data/zender/icr/swnb_lgge_100um_phb_he_ppb_250.0.nc"
-   fl_in(idx_mpr_ppb_750p0)="/data/zender/icr/swnb_lgge_100um_phb_he_ppb_750.0.nc"
-   fl_in(idx_mpr_ppm_001p5)="/data/zender/icr/swnb_lgge_100um_phb_he_ppm_001.5.nc"
-   fl_in(idx_mpr_ppm_007p5)="/data/zender/icr/swnb_lgge_100um_phb_he_ppm_007.5.nc"
-   fl_in(idx_mpr_ppm_015p9)="/data/zender/icr/swnb_lgge_100um_phb_he_ppm_015.9.nc"
-   fl_in(idx_mpr_ppm_221p0)="/data/zender/icr/swnb_lgge_100um_phb_he_ppm_221.0.nc"
+   fl_in(idx_mpr_ppb_000p0)="../../data/icr/swnb_lgge_100um_phb_he_ppb_000.0.nc"
+   fl_in(idx_mpr_ppb_250p0)="../../data/icr/swnb_lgge_100um_phb_he_ppb_250.0.nc"
+   fl_in(idx_mpr_ppb_750p0)="../../data/icr/swnb_lgge_100um_phb_he_ppb_750.0.nc"
+   fl_in(idx_mpr_ppm_001p5)="../../data/icr/swnb_lgge_100um_phb_he_ppm_001.5.nc"
+   fl_in(idx_mpr_ppm_007p5)="../../data/icr/swnb_lgge_100um_phb_he_ppm_007.5.nc"
+   fl_in(idx_mpr_ppm_015p9)="../../data/icr/swnb_lgge_100um_phb_he_ppm_015.9.nc"
+   fl_in(idx_mpr_ppm_221p0)="../../data/icr/swnb_lgge_100um_phb_he_ppm_221.0.nc"
 end if; !flg_phb_he
 
 ; Impurity optical properties: phb_low
 if(.not.isvar("flg_phb_low")) then flg_phb_low=False end if
 if(flg_phb_low) then 
-   fl_in(idx_mpr_ppb_000p0)="/data/zender/icr/swnb_lgge_100um_phb_low_ppb_000.0.nc"
-   fl_in(idx_mpr_ppb_250p0)="/data/zender/icr/swnb_lgge_100um_phb_low_ppb_250.0.nc"
-   fl_in(idx_mpr_ppb_750p0)="/data/zender/icr/swnb_lgge_100um_phb_low_ppb_750.0.nc"
-   fl_in(idx_mpr_ppm_001p5)="/data/zender/icr/swnb_lgge_100um_phb_low_ppm_001.5.nc"
-   fl_in(idx_mpr_ppm_007p5)="/data/zender/icr/swnb_lgge_100um_phb_low_ppm_007.5.nc"
-   fl_in(idx_mpr_ppm_015p9)="/data/zender/icr/swnb_lgge_100um_phb_low_ppm_015.9.nc"
-   fl_in(idx_mpr_ppm_221p0)="/data/zender/icr/swnb_lgge_100um_phb_low_ppm_221.0.nc"
+   fl_in(idx_mpr_ppb_000p0)="../../data/icr/swnb_lgge_100um_phb_low_ppb_000.0.nc"
+   fl_in(idx_mpr_ppb_250p0)="../../data/icr/swnb_lgge_100um_phb_low_ppb_250.0.nc"
+   fl_in(idx_mpr_ppb_750p0)="../../data/icr/swnb_lgge_100um_phb_low_ppb_750.0.nc"
+   fl_in(idx_mpr_ppm_001p5)="../../data/icr/swnb_lgge_100um_phb_low_ppm_001.5.nc"
+   fl_in(idx_mpr_ppm_007p5)="../../data/icr/swnb_lgge_100um_phb_low_ppm_007.5.nc"
+   fl_in(idx_mpr_ppm_015p9)="../../data/icr/swnb_lgge_100um_phb_low_ppm_015.9.nc"
+   fl_in(idx_mpr_ppm_221p0)="../../data/icr/swnb_lgge_100um_phb_low_ppm_221.0.nc"
 end if; !flg_phb_low
 
 if(isvar("wvl_sng")) then delete(wvl_sng) end if 
