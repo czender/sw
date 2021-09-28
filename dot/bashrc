@@ -163,8 +163,7 @@ if fl_is_exe ${HOME}/nco/autobld/config.guess ; then
     # 20190812: Linux config.guess nearly hangs (minutes) with "fork: retry: No child processes", MacOS is OK
     # 20200513: MacOS config.guess on firn complains "fork: Resource temporarily unavailable"
     case "${HOST}" in 
-	firn* ) export GNU_TRP='x86_64-apple-darwin20.5.0' ; ;;
-	sastrugi* ) export GNU_TRP=`${HOME}/nco/autobld/config.guess` ; ;;
+	firn* | sastrugi* ) export GNU_TRP=`${HOME}/nco/autobld/config.guess` ; ;;
 	* ) export GNU_TRP='x86_64-unknown-linux-gnu' ; ;;
 #	* ) export GNU_TRP='20190814_config_guess_workaround' ; ;;
     esac # endcase ${HOST}
@@ -428,8 +427,8 @@ case "${PVM_ARCH}" in
 	esac # endcase ${HOST}
 	case "${HOST}" in 
 	    e3sm* ) export PKG_ROOT="${HOME}/anaconda" ; ;; # Anaconda
-	    firn* | jaws* | katabatic* | rigb* ) PKG_ROOT='/opt/local' ; ;; # MAC OS MacPorts
-	    sastrugi* ) PKG_ROOT='/usr/local' ; ;; # MAC OS Homebrew
+	    jaws* | katabatic* | rigb* ) PKG_ROOT='/opt/local' ; ;; # MAC OS MacPorts
+	    firn* | sastrugi* ) PKG_ROOT='/usr/local' ; ;; # MAC OS Homebrew
 	    cg-gpu* ) PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # NCSA roger cluster
 	    gplogin* ) PKG_ROOT='/sopt' ; ;; # UCI PS Rocks Cluster
 	    hpc* ) PKG_ROOT='/software' ; ;; # Torque machines
@@ -587,13 +586,13 @@ case "${PVM_ARCH}" in
 	export TEXMFDIR=/opt/local/share/texmf-texlive # One level above bibtex, tex,
 	
 	case "${HOST}" in 
-	    sastrugi* ) # MacOS Homebrew
+	    firn* | sastrugi* ) # MacOS Homebrew
 		# Required to build nco.pdf due to ancient Xcode CLT TeXInfo
 		PATH='/usr/local/opt/llvm/bin'\:${PATH} # Required for OpenMP-enabled clang
 		PATH='/usr/local/Cellar/texinfo/6.8/bin'\:${PATH} ; ;; # Required for nco.texi
 	esac # !HOST
 	PATH=${PATH}\:/usr/local/opt/coreutils/libexec/gnubin # Up-to-date GNU commands from GNU Homebrew coreutils
-	PATH=${PATH}\:/opt/local/libexec/gnubin # Up-to-date GNU commands from GNU MacPorts coreutils
+	#PATH=${PATH}\:/opt/local/libexec/gnubin # Up-to-date GNU commands from GNU MacPorts coreutils
 	PATH=${PATH}\:/usr/local/bin # Custom-built 3rd party packages
 	PATH=${PATH}\:/opt/local/bin # MacPorts packages
 	PATH=${PATH}\:/opt/local/sbin # MacPorts packages
@@ -835,10 +834,9 @@ FC_pgf95='pgf95'
 # MPI_CC and MPI_CXX depend upon MPICH version (MPICH or MPICH2)
 # and, sometimes, compiler (icc finds mpi.h automatically, gcc needs help)
 case "${HOST}" in
-#    firn* | sastrugi* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # clang/clang/macports
-    firn* ) export LINUX_CC=${CC_clang_macports} ; export LINUX_CXX=${CXX_clang_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # clang/clang/macports
-    sastrugi* ) export LINUX_CC=${CC_clang_homebrew} ; export LINUX_CXX=${CXX_clang_homebrew} ; export LINUX_FC=${FC_gfortran_homebrew} ; ;; # clang/clang/homebrew
+#    firn* ) export LINUX_CC=${CC_clang_macports} ; export LINUX_CXX=${CXX_clang_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # clang/clang/macports
 #    firn* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # clang/clang/macports
+    firn* | sastrugi* ) export LINUX_CC=${CC_clang_homebrew} ; export LINUX_CXX=${CXX_clang_homebrew} ; export LINUX_FC=${FC_gfortran_homebrew} ; ;; # clang/clang/homebrew
     dhcp* | jaws* | katabatic* | rigb* ) export LINUX_CC=${CC_gcc_macports} ; export LINUX_CXX=${CXX_gxx_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # all MacPorts
     glace* | grele* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC="${LINUX_CC} -I/usr/include/mpich2" ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK -I/usr/include/mpich2" ;; # gcc/g++/gfortran MPICH2
     gplogin* ) export LINUX_CC=${CC_icc/icc/mpicc} ; export LINUX_CXX=${CXX_icpc/icpc/mpiCC} ; export LINUX_FC=${FC_ifort/ifort/mpif90} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icc/icpc/ifort OpenMPI	
