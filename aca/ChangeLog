@@ -1,3 +1,7 @@
+2021-10-05  Charlie Zender  <zender@uci.edu>
+
+	* Verify that swnb2 still works on LGGE snowpack profiles, once	profiles are regenerated to include newer constituents (CO, etc.)
+
 2019-07-09  Charlie Zender  <zender@uci.edu>
 
 	* Write npc_O2O2 as nf90_double not nf90_float to avoid overflow

@@ -6889,6 +6889,11 @@ program swnb2
            ! CCY83 p. 136 (B22), CAM3 p. 115 (4.223)
            trn_dff_spc_snw_nxt=trn_dff_spc_snw_crr*tmp_fct_mtx_nvr*trn_dff_spc_snw(bnd_idx,levp_snw_idx)
            
+           if (rfl_dff_spc_snw_nxt > 1.0) stop 'rfl_dff_spc_snw_nxt > 1.0'
+           if (rfl_dff_spc_snw_nxt < 0.0) stop 'rfl_dff_spc_snw_nxt < 0.0'
+           if (trn_dff_spc_snw_nxt > 1.0) stop 'trn_dff_spc_snw_nxt > 1.0'
+           if (trn_dff_spc_snw_nxt < 0.0) stop 'trn_dff_spc_snw_nxt < 0.0'
+
            ! Direct transmittance of direct beam
            trn_drc_drc_nxt=trn_drc_drc_crr*trn_drc_drc(bnd_idx,levp_snw_idx)
            ! NB: 
