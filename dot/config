@@ -9,6 +9,7 @@
 # These options should keep the ssh connection alive longer
 
 ServerAliveInterval 120
+ServerAliveCountMax 5
 
 Host bebop
     HostName bebop.lcrc.anl.gov
