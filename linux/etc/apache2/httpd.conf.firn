@@ -1,6 +1,6 @@
 # $Header$
 
-# Purpose: Apache configuration for Zender group server (MacOSX)
+# Purpose: Apache configuration for Zender group server (MacOS)
 
 # Usage:
 # diff ~/sw/linux/etc/apache2/httpd.conf.firn /etc/apache2/httpd.conf
