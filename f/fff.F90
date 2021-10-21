@@ -125,7 +125,7 @@ program fff
   integer,parameter::lon_nbr_max=128 ! [nbr] Maximum number of longitudes
 
   ! Set defaults for command-line options 
-  character(80)::drc_in='/home/zender/nco/data'//nlc ! [sng] Input directory
+  character(80)::drc_in='/Users/zender/nco/data'//nlc ! [sng] Input directory
   character(80)::drc_out='' ! [sng] Output directory
   character(80)::fl_in='in.nc'//nlc ! [sng] Input file
   character(80)::fl_out='foo.nc'//nlc ! [sng] Output file
@@ -182,6 +182,7 @@ program fff
   integer::three_dmn_var_id ! [id] Variable ID
   integer::nf90_r8 ! [enm] External netCDF type for r8 kind
   ! netCDF4 
+  integer::hdr_pad=0 ! [B] Pad at end of header section
   integer::dfl_lvl=0 ! [enm] Deflate level
   integer::flg_shf=1 ! [flg] Turn on netCDF4 shuffle filter
   integer::flg_dfl=1 ! [flg] Turn on netCDF4 deflate filter
@@ -238,7 +239,7 @@ program fff
         else if (opt_sng == 'dbl' .or. opt_sng == 'dbl_foo' ) then
            call ftn_arg_get(arg_idx,arg_val,dbl_foo) ! [frc] Double
         else if (opt_sng == 'dfl' .or. opt_sng == 'deflate' ) then
-           call ftn_arg_get(arg_idx,arg_val,dfl_lvl) ! [enm] Deflate level
+           call ftn_arg_get(arg_idx,arg_val,dfl_lvl) ! [sng] DEFLATE level
         else if (opt_sng == 'drc_in') then
            call ftn_arg_get(arg_idx,arg_val,drc_in) ! [sng] Input directory
         else if (opt_sng == 'drc_out') then
@@ -251,6 +252,8 @@ program fff
            call ftn_arg_get(arg_idx,arg_val,cmp_prc_foo) ! [frc] Computational precision
         else if (opt_sng == 'flt' .or. opt_sng == 'flt_foo' ) then
            call ftn_arg_get(arg_idx,arg_val,flt_foo) ! [frc] Float
+        else if (opt_sng == 'hdr_pad' .or. opt_sng == 'header_pad' ) then
+           call ftn_arg_get(arg_idx,arg_val,hdr_pad) ! [B] Pad at end of header section
         else if (opt_sng == 'int' .or. opt_sng == 'int_foo' ) then
            call ftn_arg_get(arg_idx,arg_val,int_foo) ! [nbr] Integer
         else if (opt_sng == 'lgc' .or. opt_sng == 'lgc_foo' ) then
@@ -269,6 +272,12 @@ program fff
            fl_out_fmt=nf90_format_classic ! [enm] Output file format
         else if (dsh_key == '-4') then
            fl_out_fmt=nf90_format_netcdf4 ! [enm] Output file format
+        else if (dsh_key == '-5') then
+           fl_out_fmt=nf90_format_64bit_data ! [enm] Output file format
+        else if (dsh_key == '-6') then
+           fl_out_fmt=nf90_format_64bit_offset ! [enm] Output file format
+        else if (dsh_key == '-7') then
+           fl_out_fmt=nf90_format_netcdf4_classic ! [enm] Output file format
         else if (dsh_key == '-D') then
            call ftn_arg_get(arg_idx,arg_val,dbg_lvl) ! [enm] Debugging level
         else if (dsh_key == '-f') then
@@ -544,7 +553,11 @@ program fff
   rcd=nf90_wrp(nf90_put_att(nc_id,scalar_var_id,'units','unknown'),sbr_nm//': put_att scalar_var in '//__FILE__)
   rcd=nf90_wrp(nf90_put_att(nc_id,three_dmn_var_id,'units','unknown'),sbr_nm//': put_att three_dmn_var in '//__FILE__)
   ! Now that all dimensions, variables, and attributes have been defined, make call to end define mode
-  rcd=nf90_wrp(nf90_enddef(nc_id),sbr_nm//': enddef in '//__FILE__) 
+  if(hdr_pad == 0) then
+     rcd=nf90_wrp(nf90_enddef(nc_id),sbr_nm//': enddef in '//__FILE__) 
+  else
+     rcd=nf90_wrp(nf90_enddef(nc_id,h_minfree=hdr_pad),sbr_nm//': enddef hdr_pad in '//__FILE__) 
+  endif
   ! Write data
   rcd=nf90_wrp(nf90_put_var(nc_id,lat_id,lat),sbr_nm//': put_var lat in '//__FILE__)
   rcd=nf90_wrp(nf90_put_var(nc_id,lev_id,lev),sbr_nm//': put_var lev in '//__FILE__)
