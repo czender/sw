@@ -182,11 +182,11 @@ program fff
   integer::three_dmn_var_id ! [id] Variable ID
   integer::nf90_r8 ! [enm] External netCDF type for r8 kind
   ! netCDF4 
-  integer::hdr_pad=0 ! [B] Pad at end of header section
   integer::dfl_lvl=0 ! [enm] Deflate level
   integer::flg_shf=1 ! [flg] Turn on netCDF4 shuffle filter
   integer::flg_dfl=1 ! [flg] Turn on netCDF4 deflate filter
   integer::fl_out_fmt=nco_format_undefined ! [enm] Output file format
+  integer::hdr_pad=0 ! [B] Pad at end of header section
   integer::nf90_create_mode=nf90_clobber ! [enm] Mode flag for nf90_create() call
 
   ! Allocatable variables
@@ -494,6 +494,8 @@ program fff
   if (fl_out_fmt == nco_format_undefined) fl_out_fmt=nf90_format_netcdf4 ! [enm] Output file format
   if (fl_out_fmt == nf90_format_64bit) then
      nf90_create_mode=nf90_create_mode+nf90_64bit_offset
+  else if (fl_out_fmt == nf90_format_64bit_data) then
+     nf90_create_mode=nf90_create_mode+nf90_64bit_data
   else if (fl_out_fmt == nf90_format_netcdf4) then
      nf90_create_mode=nf90_create_mode+nf90_netcdf4
   else if (fl_out_fmt == nf90_format_netcdf4_classic) then

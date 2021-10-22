@@ -713,6 +713,7 @@ program swnb2
   integer::flg_shf=1 ! [flg] Turn on netCDF4 shuffle filter
   integer::flg_dfl=1 ! [flg] Turn on netCDF4 deflate filter
   integer::fl_out_fmt=nco_format_undefined ! [enm] Output file format
+  integer::hdr_pad=0 ! [B] Pad at end of header section
   integer::nf90_create_mode=nf90_clobber ! [enm] Mode flag for nf90_create() call
   
   ! netCDF output variables not contained in input files
@@ -2206,6 +2207,8 @@ program swnb2
            flg_xtr_aer_snw=.true. ! [flg] Extrapolate surface aerosol into snowpack
         else if (opt_sng == 'force_lqd_phz' .or. opt_sng == 'frc_lqd') then
            force_lqd_phz=.true. ! [flg] Force liquid phase
+        else if (opt_sng == 'hdr_pad' .or. opt_sng == 'header_pad' ) then
+           call ftn_arg_get(arg_idx,arg_val,hdr_pad) ! [B] Pad at end of header section
         else if (opt_sng == 'lat_dgr' .or. opt_sng == 'lat') then ! [dgr] Latitude
            cmd_ln_lat_dgr=.true.
            call ftn_arg_get(arg_idx,arg_val,lat_dgr_cmd_ln)
@@ -2335,6 +2338,12 @@ program swnb2
         fl_out_fmt=nf90_format_classic ! [enm] Output file format
      else if (dsh_key == '-4') then
         fl_out_fmt=nf90_format_netcdf4 ! [enm] Output file format
+     else if (dsh_key == '-5') then
+        fl_out_fmt=nf90_format_64bit_data ! [enm] Output file format
+     else if (dsh_key == '-6') then
+        fl_out_fmt=nf90_format_64bit_offset ! [enm] Output file format
+     else if (dsh_key == '-7') then
+        fl_out_fmt=nf90_format_netcdf4_classic ! [enm] Output file format
      else if (dsh_key == '-A') then
         flg_aer=.false.
      else if (dsh_key == '-a') then
@@ -7701,6 +7710,8 @@ program swnb2
      if (fl_out_fmt == nco_format_undefined) fl_out_fmt=nf90_format_classic ! [enm] Output file format
      if (fl_out_fmt == nf90_format_64bit) then
         nf90_create_mode=nf90_create_mode+nf90_64bit_offset
+     else if (fl_out_fmt == nf90_format_64bit_data) then
+        nf90_create_mode=nf90_create_mode+nf90_64bit_data
      else if (fl_out_fmt == nf90_format_netcdf4) then
         nf90_create_mode=nf90_create_mode+nf90_netcdf4
      else if (fl_out_fmt == nf90_format_netcdf4_classic) then
@@ -8954,7 +8965,11 @@ program swnb2
      rcd=nf90_wrp(nf90_put_att(nc_id,levp_id,'positive','down'),sbr_nm//': pa long_name in '//__FILE__)
 
      ! All dimensions, variables, and attributes have been defined
-     rcd=nf90_wrp(nf90_enddef(nc_id),sbr_nm//': enddef in '//__FILE__) 
+     if(hdr_pad == 0) then
+        rcd=nf90_wrp(nf90_enddef(nc_id),sbr_nm//': enddef in '//__FILE__) 
+     else
+        rcd=nf90_wrp(nf90_enddef(nc_id,h_minfree=hdr_pad),sbr_nm//': enddef hdr_pad in '//__FILE__) 
+     endif
      
      ! Write data
      if (flg_mie) then
@@ -9278,7 +9293,11 @@ program swnb2
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_chn_dwn_TOA',nf90_float,chn_dmn_id,flx_chn_dwn_TOA_id),sbr_nm//': dv flx_chn_dwn_TOA')
      rcd=nf90_wrp(nf90_def_var(nc_id,'flx_chn_upw_TOA',nf90_float,chn_dmn_id,flx_chn_upw_TOA_id),sbr_nm//': dv flx_chn_upw_TOA')
      rcd=nf90_wrp(nf90_def_var(nc_id,'rfl_chn_TOA',nf90_float,dim_azi_plr_chn,rfl_chn_TOA_id),sbr_nm//': dv rfl_chn_TOA')
-     rcd=nf90_wrp(nf90_enddef(nc_id),sbr_nm//': enddef in '//__FILE__) 
+     if(hdr_pad == 0) then
+        rcd=nf90_wrp(nf90_enddef(nc_id),sbr_nm//': enddef in '//__FILE__) 
+     else
+        rcd=nf90_wrp(nf90_enddef(nc_id,h_minfree=hdr_pad),sbr_nm//': enddef hdr_pad in '//__FILE__) 
+     endif
      rcd=nf90_wrp(nf90_put_var(nc_id,slr_zen_ngl_cos_id,slr_zen_ngl_cos),sbr_nm//': pv slr_zen_ngl_cos in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,lon_dgr_id,lon_dgr),sbr_nm//': pv lon_dgr in '//__FILE__)
      rcd=nf90_wrp(nf90_put_var(nc_id,lat_dgr_id,lat_dgr),sbr_nm//': pv lat_dgr in '//__FILE__)
