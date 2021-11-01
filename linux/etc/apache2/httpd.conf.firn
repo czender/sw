@@ -15,7 +15,8 @@
 # 20171204: Updated for MacOSX 10.13.1 High Sierra
 # 20181219: Updated for MacOSX 10.14.1 Mojave
 # 20191016: Updated for MacOSX 10.15.1 Catalina
-# 20210316: Updated for MacOSX 11.2.3 Big Sur
+# 20210316: Updated for MacOS  11.2.3  Big Sur
+# 20211027: Re-add PHP for MacOS 11.6  Big Sur
 
 # This is the main Apache HTTP server configuration file.  It contains the
 # configuration directives that give the server its instructions.
