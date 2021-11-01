@@ -15,7 +15,8 @@
 # 20171204: Updated for MacOSX 10.13.1 High Sierra
 # 20181219: Updated for MacOSX 10.14.1 Mojave
 # 20191016: Updated for MacOSX 10.15.1 Catalina
-# 20210316: Updated for MacOSX 11.2.3 Big Sur
+# 20210316: Updated for MacOS  11.2.3  Big Sur
+# 20211027: Re-add PHP for MacOS 11.6  Big Sur
 
 # This is the main Apache HTTP server configuration file.  It contains the
 # configuration directives that give the server its instructions.
@@ -194,7 +195,8 @@ LoadModule alias_module libexec/apache2/mod_alias.so
 #LoadModule rewrite_module libexec/apache2/mod_rewrite.so
 #csz++
 #csz++ 20190418 I have always turned-on PHP7 but UCI threatened to shut-down firn because Apple's PHP has CERT vulnerabilities
-#LoadModule php7_module libexec/apache2/libphp7.so
+#csz++ 20211027 Apache not working well, presumably PHP has fixed the CERT, so restart PHP
+LoadModule php7_module libexec/apache2/libphp7.so
 #LoadModule perl_module libexec/apache2/mod_perl.so
 LoadModule hfs_apple_module libexec/apache2/mod_hfs_apple.so
 
