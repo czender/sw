@@ -1,3 +1,4 @@
+MAILTO=""
 # Default crontab file
 #
 # This file is used by the cron program to determine when certain programs
@@ -21,3 +22,6 @@
 #0 9 * * * /bin/calendar 
 #1 9 * * * /usr/local/bin/msgs -q 
 #0 9 * * * /cgd/home/zender/scripts/getweather.sh
+# csz 20211102 dust.ess.uci.edu refresh web-server at midnight
+# sudo cp /Users/zender/sw/dot/crontab /etc
+0 0 * * * apachectl restart
