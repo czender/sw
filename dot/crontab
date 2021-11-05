@@ -24,4 +24,4 @@ MAILTO=""
 #0 9 * * * /cgd/home/zender/scripts/getweather.sh
 # csz 20211102 dust.ess.uci.edu refresh web-server at midnight
 # sudo cp /Users/zender/sw/dot/crontab /etc
-0 0 * * * apachectl restart
+#0 0 * * * apachectl restart
