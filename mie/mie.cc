@@ -3515,13 +3515,6 @@ int main(int argc,char **argv)
 	flx_wgt_frc_bnd=flx_IR_frc_bnd; // [frc] Radiant flux weighting factor
 	flx_wgt_frc=flx_IR_frc[wvl_idx]; // [frc] Radiant flux weighting factor
 	wrn_prn(prg_nm,sbr_nm,"Using LW weights in partly solar wavelength band:");
-	std::cerr << "Solar--Longwave boundary is " << bnd_SW_LW*1.0e6 << " um" << std::endl;
-	std::cerr << "Straddled by wvl[" << wvl_idx << "] = " << wvl_min[wvl_idx]*1.0e6 << "--" << wvl_max[wvl_idx]*1.0e6 << " um = " << wvn_min[wvl_idx] << "--" << wvn_max[wvl_idx] << " cm-1" << std::endl;
-	std::cerr << "idx\tbnd_min\tbnd_max\twvn_min\twvn_max\tSW_wgt\tLW_wgt" << std::endl;
-	std::cerr << "idx\tum\tum\tcm-1\tcm-1\t\t" << std::endl;
-	for(bnd_idx=0;bnd_idx<bnd_nbr;bnd_idx++){
-	  std::cerr << bnd_idx << "\t" << bnd_min[bnd_idx]*1.0e6 << "\t" << bnd_max[bnd_idx]*1.0e6 << "\t" << bnd_min_wvn[bnd_idx] << "\t" << bnd_max_wvn[bnd_idx] << "\t" << flx_slr_frc_bnd[bnd_idx] << "\t" << flx_IR_frc_bnd[bnd_idx] << std::endl;
-	} // end loop over bnd
       }else if(wvl_ctr[wvl_idx] < bnd_SW_LW){
 	/* Spectral region completely solar */
 	flx_wgt_frc_bnd=flx_slr_frc_bnd; // [frc] Radiant flux weighting factor
@@ -3532,12 +3525,19 @@ int main(int argc,char **argv)
 	  for(bnd_idx=0;bnd_idx<bnd_nbr;bnd_idx++) flx_slr_frc_bnd[bnd_idx]=1.0; // [frc] Fraction of solar flux in band
 	  // Weight over wavelength bin is sum of bnd_nbr band weights to give band-equal weighting
 	  flx_wgt_frc=bnd_nbr*1.0; // [frc] Radiant flux weighting factor
-	} // endif
+	} // !wvl_ctr
       }else{
 	/* Spectral region completely infrared */
 	flx_wgt_frc_bnd=flx_IR_frc_bnd; // [frc] Radiant flux weighting factor
 	flx_wgt_frc=flx_IR_frc[wvl_idx]; // [frc] Radiant flux weighting factor
       } // endif
+      std::cerr << "Solar--Longwave boundary is " << bnd_SW_LW*1.0e6 << " um" << std::endl;
+      std::cerr << "Straddled by wvl[" << wvl_idx << "] = " << wvl_min[wvl_idx]*1.0e6 << "--" << wvl_max[wvl_idx]*1.0e6 << " um = " << wvn_min[wvl_idx] << "--" << wvn_max[wvl_idx] << " cm-1" << std::endl;
+      std::cerr << "idx\tbnd_min\tbnd_max\twvn_min\twvn_max\tSW_wgt\tLW_wgt" << std::endl;
+      std::cerr << "idx\tum\tum\tcm-1\tcm-1\t\t" << std::endl;
+      for(bnd_idx=0;bnd_idx<bnd_nbr;bnd_idx++){
+	std::cerr << bnd_idx << "\t" << bnd_min[bnd_idx]*1.0e6 << "\t" << bnd_max[bnd_idx]*1.0e6 << "\t" << bnd_min_wvn[bnd_idx] << "\t" << bnd_max_wvn[bnd_idx] << "\t" << flx_slr_frc_bnd[bnd_idx] << "\t" << flx_IR_frc_bnd[bnd_idx] << std::endl;
+      } // !bnd_idx
     }else if(spc_wgt_sng == "Reflectance"){ // endif spc_wgt_sng == "Default"
       err_prn(prg_nm,sbr_nm,"spc_wgt_sng == Reflectance weight not implemented yet");
     }else{ // endif spc_wgt_sng == "Reflectance"
@@ -5154,7 +5154,7 @@ int main(int argc,char **argv)
       {0,"dst_vlm",NC_FLOAT,1,dmn_sz,"long_name","Volume distribution","units","meter3 meter-3 meter-1"},
       {0,"dst_xsa",NC_FLOAT,1,dmn_sz,"long_name","Cross-Sectional area distribution","units","meter2 meter-3 meter-1"},
       {0,"flx_IR_frc",nco_xtyp,1,dmn_wvl,"long_name","Fraction of terrestrial flux in band","units","fraction"},
-      {0,"flx_IR_frc_ttl",nco_xtyp,0,dmn_scl,"long_name","Fraction of terrestrial flux in band","units","fraction"},
+      {0,"flx_IR_frc_ttl",nco_xtyp,0,dmn_scl,"long_name","Total terrestrial flux in all bands, normalized by blackbody flux","units","fraction"},
       {0,"flx_slr",nco_xtyp,1,dmn_wvl,"long_name","Absolute solar flux in band","units","watt meter-2"},
       {0,"flx_slr_frc",nco_xtyp,1,dmn_wvl,"long_name","Fraction of solar flux in band","units","fraction"},
       {0,"flx_slr_frc_blr",nco_xtyp,1,dmn_wvl,"long_name","Fraction of solar flux at shorter wavelengths","units","fraction"},
