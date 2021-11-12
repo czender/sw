@@ -655,6 +655,11 @@ else
  OMP_FLG_LD := -fopenmp
 endif # endif clang
 endif # endif OMP
+ifneq (${null},$(findstring conda,${CXX}))
+# 20211112 e3sm.ess.uci.edu conda compilers/linkers need -lpthread or else emit errors like
+# undefined reference to symbol 'pthread_create@@GLIBC_2.2.5', 'DSO missing from command line'
+ LDFLAGS += -lpthread
+endif
 ifeq (${OPTS},O)
  CFLAGS += -O -g ${GCC_RCH_ARG}
 endif
