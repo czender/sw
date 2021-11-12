@@ -112,6 +112,8 @@ sng2sng_map wvl_grd_cls::opt2abb_map_mk(){ // Create abbreviation map
   map_tmp.insert(sng2sng_map::value_type("CCM_LW","CAM_LW"));
   map_tmp.insert(sng2sng_map::value_type("CCSM_LW","CAM_LW"));
   map_tmp.insert(sng2sng_map::value_type("RRTM_LW","RRTM_LW"));
+  map_tmp.insert(sng2sng_map::value_type("RRTMG_LW","RRTMG_LW"));
+  map_tmp.insert(sng2sng_map::value_type("RRTMGP_LW","RRTMGP_LW"));
   map_tmp.insert(sng2sng_map::value_type("RRTM_SW","RRTM_SW"));
   map_tmp.insert(sng2sng_map::value_type("LW","CAM_LW"));
   map_tmp.insert(sng2sng_map::value_type("lw","CAM_LW"));
@@ -571,6 +573,46 @@ wvl_grd_cls::recompute(){ // [fnc] Recompute properties of object
       wvl_max[wvl_idx]=0.01/wvn_min_RRTM_LW[wvl_idx]; // [cm-1] -> [m]
     } // end loop over wvl_idx
     // end RRTM_LW-specific initialization
+  }else if(grd_sng == "RRTMG_LW"){ // 
+    /* RRTMG spectral grid from Zach Wolff 20211112
+       Only difference from RRTM_LW grid is interface at 2380 (not 2390) cm-1
+       ~/mpas/src/core_seaice/column/constants/cice/ice_constants_colpkg.F90 */
+
+    const prc_cmp wvn_min_RRTMG_LW[]={  10.0, 350.0, 500.0, 630.0, 700.0, 820.0, 980.0,1080.0,
+				      1180.0,1390.0,1480.0,1800.0,2080.0,2250.0,2380.0,2600.0}; // [cm-1]
+    const prc_cmp wvn_max_RRTMG_LW[]={ 350.0, 500.0, 630.0, 700.0, 820.0, 980.0,1080.0,1180.0,
+				      1390.0,1480.0,1800.0,2080.0,2250.0,2380.0,2600.0,3250.0}; // [cm-1]
+    const long wvl_nbr_RRTMG_LW(sizeof(wvn_min_RRTMG_LW)/sizeof(prc_cmp));
+    if(wvl_nbr != wvl_nbr_RRTMG_LW){
+      rcd+=deallocate(); // [fnc] Free dynamic memory of object
+      wvl_nbr=wvl_nbr_RRTMG_LW; // [nbr]
+    } // endif
+    rcd+=allocate(); // [fnc] Allocate dynamic memory for object
+    for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
+      wvl_min[wvl_idx]=0.01/wvn_max_RRTMG_LW[wvl_idx]; // [cm-1] -> [m]
+      wvl_max[wvl_idx]=0.01/wvn_min_RRTMG_LW[wvl_idx]; // [cm-1] -> [m]
+    } // !wvl_idx
+    // !RRTMG_LW-specific initialization
+  }else if(grd_sng == "RRTMGP_LW"){ // 
+    /* RRTMGP spectral grid from Zach Wolff 20211112
+       Differences from RRTMG_LW grid are interfaces at 250 (not 350) cm-1, 2390 (not 2380) cm-1, and 2680 (not 2600) cm-1
+       ~/mpas/src/core_seaice/column/constants/cice/ice_constants_colpkg.F90 */
+
+    const prc_cmp wvn_min_RRTMGP_LW[]={  10.0, 250.0, 500.0, 630.0, 700.0, 820.0, 980.0,1080.0,
+				       1180.0,1390.0,1480.0,1800.0,2080.0,2250.0,2390.0,2680.0}; // [cm-1]
+    const prc_cmp wvn_max_RRTMGP_LW[]={ 250.0, 500.0, 630.0, 700.0, 820.0, 980.0,1080.0,1180.0,
+				       1390.0,1480.0,1800.0,2080.0,2250.0,2390.0,2680.0,3250.0}; // [cm-1]
+    const long wvl_nbr_RRTMGP_LW(sizeof(wvn_min_RRTMGP_LW)/sizeof(prc_cmp));
+    if(wvl_nbr != wvl_nbr_RRTMGP_LW){
+      rcd+=deallocate(); // [fnc] Free dynamic memory of object
+      wvl_nbr=wvl_nbr_RRTMGP_LW; // [nbr]
+    } // endif
+    rcd+=allocate(); // [fnc] Allocate dynamic memory for object
+    for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
+      wvl_min[wvl_idx]=0.01/wvn_max_RRTMGP_LW[wvl_idx]; // [cm-1] -> [m]
+      wvl_max[wvl_idx]=0.01/wvn_min_RRTMGP_LW[wvl_idx]; // [cm-1] -> [m]
+    } // !wvl_idx
+    // !RRTMGP_LW-specific initialization
   }else if(grd_sng == "RRTM_SW"){ // 
     /* RRTM spectral grid from Rachel Scanza 20120323
        NB: RRTM_SW increases monotonically with wavenumber except for last bin */

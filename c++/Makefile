@@ -714,7 +714,9 @@ else
 # 20140526 clang does not recognize/utilize -fopenmp
 # 20200520 clang recognizes/utilizes -fopenmp
 # 20200520 clang supports OpenMP vector pipeline hints when compiled with -openmp-simd
- OMP_FLG_C := -fopenmp -fopenmp-simd
+# 20211112 MacOS clang does not support OpenMP, must use Homebrew llvm + libomp as per
+# https://stackoverflow.com/questions/43555410/enable-openmp-support-in-clang-in-mac-os-x-sierra-mojave
+OMP_FLG_C := -fopenmp -fopenmp-simd
  OMP_FLG_F := -fopenmp -fopenmp-simd
 # 20140531 avoid clang error that -O4 is same as -O3
  CFLAGS := $(subst -O4,-O3,${CFLAGS})
