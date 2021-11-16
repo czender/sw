@@ -4,12 +4,14 @@
 [core]
 	editor = emacs
 	excludesfile = ~/.gitignore
+	autocrlf = false
+	safecrlf = false
 [web]
 	browser = google-chrome
 [push]
-	default = matching
+	default = nothing
 [color]
-	ui = auto
+	ui = true
 [color "branch"]
 	current = yellow bold
 	local = green bold
@@ -28,3 +30,6 @@
 	user = czender
 [url "https://github.com/"]
      insteadOf = gh:
+[pull]
+	rebase = false
+	ff = only
