@@ -25,11 +25,11 @@ spc_bbd_cls::spc_bbd_cls(const prc_cmp tpt_arg) // Default constructor
   rcd+=recompute(); // [fnc] Recompute properties of object
 
   nst_nbr++; // [nbr] Number of instantiated class members
-} // end spc_bbd_cls::spc_bbd_cls()
+} // !spc_bbd_cls::spc_bbd_cls()
 
 spc_bbd_cls::~spc_bbd_cls(){ // Destructor
   nst_nbr--; // [nbr] Number of instantiated class members
-} // end spc_bbd_cls destructor
+} // !spc_bbd_cls destructor
 
 prc_cmp spc_bbd_cls::flx_ttl()const{return flx_hms;} // [W m-2] Hemispheric blackbody irradiance
 
@@ -43,10 +43,10 @@ spc_bbd_cls::tpt_set(const prc_cmp &tpt_arg) // [K] Blackbody temperature
 
   assert(tpt_arg >= 0.0);
   if(tpt_arg > tpt_max) err_prn(sbr_nm,"tpt_arg too large for natural source, exiting");
-  tpt=tpt_arg; // [W m-2] Solar constant
+  tpt=tpt_arg; // [K] Temperature
   rcd+=recompute(); // [fnc] Recompute properties of object
   return rcd; // [enm] Return success code
-} // end spc_bbd_cls::tpt_set()
+} // !spc_bbd_cls::tpt_set()
 
 int // [enm] Return success code
 spc_bbd_cls::recompute(){ // [fnc] Recompute properties of object
@@ -57,14 +57,84 @@ spc_bbd_cls::recompute(){ // [fnc] Recompute properties of object
   using phc::cst_Stefan_Boltzmann; // (5.67032e-8) [W m-2 K-4] Stefan-Boltzmann constant GoY89 p. 462
   // Blackbodies emit isotropically so hemispheric irradiance is pi times radiance
   flx_hms=cst_Stefan_Boltzmann*std::pow(tpt,4.0); // [W m-2] Hemispheric blackbody irradiance = cst_stf_blt * T^4
-  ntn_ntg=flx_hms/mth::cst_M_PIl; // [W m-2 sr-1] Intensity of blackbody radiation = (cst_stf_blt*T^4)/pi
+  ntn_bbd_ntg=flx_hms/mth::cst_M_PIl; // [W m-2 sr-1] Intensity of blackbody radiation = (cst_stf_blt*T^4)/pi
 
   return rcd; // [enm] Return success code
-} // end spc_bbd_cls::recompute()
+} // !spc_bbd_cls::recompute()
+
+int // [enm] Return success code
+spc_bbd_cls::plk_ntg_evl // [fnc] Compute integral of Planck function between two wavenumbers
+(prc_cmp plk_ntg){ // [W m-2 sr-1] Integrated blackbody emission between wavenumbers
+
+  // Set private members which lack set() functions
+  std::string sbr_nm("spc_bbd_cls::planck_xpn()"); // [sng] Subroutine name
+
+  using mth::cst_M_PIl; // (3.1415926535897932384626433832795029L) [frc] 3
+  using phc::cst_Stefan_Boltzmann; // (5.67032e-8) [W m-2 K-4] Stefan-Boltzmann constant GoY89 p. 462
+
+  /* Original DISORT documentation and new variable names:
+     A1,2,... : Power series coefficients
+     C2       : h * c / k, in units cm*K (h = Plancks constant, c = speed of light, k = Boltzmann constant)
+     D(I)     : Exponential series expansion of integral of Planck function from WNUMLO (i=1) or WNUMHI (i=2) to infinity
+     EPSIL    : Smallest number such that 1+EPSIL .GT. 1 on computer
+     EX       : EXP( - V(I) )
+     EXM      : EX**M
+     MMAX     : No. of terms to take in exponential series
+     MV       : Multiples of V(I)
+     P(I)     : Power series expansion of integral of Planck function from zero to WNUMLO (I=1) or WNUMHI (I=2)
+     PI       : 3.14159...
+     SIGMA    : Stefan-Boltzmann constant (W/m**2/K**4)
+     SIGDPI   : SIGMA / PI
+     SMALLV   : Number of times the power series is used (0,1,2)
+     V(I)     : C2 * (WNUMLO(I=1) or WNUMHI(I=2)) / temperature
+     VCUT     : Power-series cutoff point
+     VCP      : Exponential series cutoff points
+     VMAX     : Largest allowable argument of EXP function */
+
+  const prc_cmp A1(1.0/3.0); // [] Power series coefficient
+  const prc_cmp A2(-1.0/8.0); // [] Power series coefficient
+  const prc_cmp A3(1.0/60.0); // [] Power series coefficient
+  const prc_cmp A4(-1.0/5040.0); // [] Power series coefficient
+  const prc_cmp A5(1.0/272160.0); // [] Power series coefficient
+  const prc_cmp A6(-1.0/13305600.0); // [] Power series coefficient
+
+  int i; // []
+  int k; // []
+  int m; // []
+  int MMAX; // [] No. of terms to take in exponential series
+  int SMALLV; // [] Number of times the power series is used (0,1,2)
+  
+  const prc_cmp C2(1.438786); // [] h * c / k, in units cm*K (h = Plancks constant, c = speed of light, k = Boltzmann constant)
+  const prc_cmp VCUT(1.5); // [] Power-series cutoff point
+  const prc_cmp VCP[7]={10.25,5.7,3.9,2.9,2.3,1.9,0.0}; // [] Exponential series cutoff points
+
+  const prc_cmp CONC(15.0/(cst_M_PIl*cst_M_PIl*cst_M_PIl*cst_M_PIl)); // [] 
+  const prc_cmp SIGDPI(cst_Stefan_Boltzmann/cst_M_PIl); // [] SIGMA / PI
+  prc_cmp DEL; // [] 
+  prc_cmp EPSIL; // [] Smallest number such that 1+EPSIL .GT. 1 on computer
+  prc_cmp EX; // [] EXP( - V(I) )
+  prc_cmp EXM; // [] EX**M
+  prc_cmp HH; // [] 
+  prc_cmp MV; // [] Multiples of V(I)
+  prc_cmp VAL; // [] 
+  prc_cmp VAL0; // [] 
+  prc_cmp VMAX; // [] Largest allowable argument of EXP function */
+  
+  prc_cmp D[2]; // [] Exponential series expansion of integral of Planck function from WNUMLO (i=0) or WNUMHI (i=1) to infinity
+  prc_cmp P[2]; // [] Power series expansion of integral of Planck function from zero to WNUMLO (I=0) or WNUMHI (I=1)
+  prc_cmp V[2]; // [] C2 * (WNUMLO(I=1) or WNUMHI(I=2)) / temperature
+  
+  if(tpt < 1.0e-4){
+    plk_ntg=0.0; // [W m-2 sr-1]
+    return rcd;
+  } // !tpt
+
+  return rcd; // [enm] Return success code
+} // !spc_bbd_cls::plk_ntg_evl()
 
 prc_cmp // [W m-2 m-1 sr-1] Specific intensity of blackbody radiation
 spc_bbd_cls::eval(const prc_cmp &wvl){ // [W m-2 m-1 sr-1] Specific intensity of blackbody radiation
-  // Compute specific intensity of radiation at wavelength wvl emitted by blackbody of temperature tpt
+  // Evaluate (compute) specific intensity of radiation at wavelength wvl emitted by blackbody of temperature tpt
   using phc::cst_Boltzmann; // (1.38063e-23) [J K-1] Boltzmann's constant
   using phc::hc; // (1.986488377e-25) [J m] Planck constant times speed of light = hc
   using phc::hc2; // (5.9553531e-17) [J m2 s-1] Planck constant times speed of light squared = hc2
@@ -83,9 +153,9 @@ spc_bbd_cls::eval(const prc_cmp &wvl){ // [W m-2 m-1 sr-1] Specific intensity of
     // 20190709: If warning is too annoying, adopt DISORT polynomial Planck function evaluation?
     if(dbg_lvl > dbg_scl) std::cerr << "spc_bbd_cls::eval(): tpt = " << tpt << " K, wvl = " << wvl*1.0e6 << " um, xpn = " << xpn << ", approximate blackbody emission as 0.0 W m-2 m-1 sr-1" << std::endl;
     ntn_bbd_wvl=0.0; // [W m-2 m-1 sr-1] Specific intensity of blackbody radiation
-  } // end else
+  } // !xpn
   return ntn_bbd_wvl; // [W m-2 m-1 sr-1] Specific intensity of blackbody radiation
-} // end spc_bbd_cls::eval()
+} // !spc_bbd_cls::eval()
 
 int // O [enm] Return success code
 spc_bbd_cls::flx_frc_get // [fnc] Fraction of blackbody emission in given spectral region
@@ -103,7 +173,7 @@ spc_bbd_cls::flx_frc_get // [fnc] Fraction of blackbody emission in given spectr
      to discretize the Planck function.
      bnd_nbr needs to be fairly large to accurately integrate the Planck
      function over wide spectral bands.
-     fxm: find fast routine that optimizes quadrature of Planck function */
+     fxm: Implement fast routine that optimizes quadrature of Planck function */
      
   std::string sbr_nm("spc_bbd_cls::flx_frc_get"); // [sng] Subroutine name
   long bnd_idx; // [idx] Counting index for bnd
@@ -132,13 +202,13 @@ spc_bbd_cls::flx_frc_get // [fnc] Fraction of blackbody emission in given spectr
     wvlgrd.wvl_grd_min_max_set(wvl_min[wvl_idx],wvl_max[wvl_idx]);
     for(bnd_idx=0;bnd_idx<bnd_nbr;bnd_idx++){
       ntn_ttl+=eval(bnd_ctr[bnd_idx])*bnd_dlt[bnd_idx]; // [W m-2 sr-1] Radiance in specified spectral region
-    } // end loop over bnd
+    } // !bnd_idx
     // Convert [W m-2 sr-1] -> [frc] for fractional blackbody emission
-    flx_IR_frc[wvl_idx]=ntn_ttl/ntn_ntg; // [frc] Fraction of infrared flux in band
-  } // end loop over wvl
+    flx_IR_frc[wvl_idx]=ntn_ttl/ntn_bbd_ntg; // [frc] Fraction of infrared flux in band
+  } // !wvl_idx
   
   return rcd; // [enm] Return success code
-} // end spc_bbd_cls::flx_frc_get()
+} // !spc_bbd_cls::flx_frc_get()
 
 prc_cmp // [frc] Fraction of blackbody emission in given spectral region
 spc_bbd_cls::flx_frc_get // [fnc] Fraction of blackbody emission in given spectral region
@@ -160,5 +230,127 @@ spc_bbd_cls::flx_frc_get // [fnc] Fraction of blackbody emission in given spectr
      &flx_IR_frc); // O [frc] Fraction of IR flux in band
 
   return flx_IR_frc; // [frc] Fraction of IR flux in band
-} // end spc_bbd_cls::flx_frc_get()
+} // !spc_bbd_cls::flx_frc_get()
 
+int // O [enm] Return success code
+flx_frc_get_WiW76 // [fnc] Fraction of blackbody emission in given spectral region
+(const prc_cmp *wvn_grd, // I [cm-1] Wavenumber at band interfaces
+ const long &wvn_nbr, // I [nbr] Number of wavenumber bands (interfaces minus one)
+ const prc_cmp &tpt, // I [K] Temperature
+ prc_cmp *flx_bbd_frc) // O [frc] Fraction of infrared flux in band
+{
+  /* Purpose: Compute fraction of blackbody emission in each band of wavenumber grid wvn_grd
+     Routine uses following nomentclature (consistent with mie()):
+     wvn_grd[wvn_nbr+1]: User-specified input/output grid in CGS wavenumber [cm-1]
+     flx_bbd_frc[wvn_nbr]: [frc] Fraction of infrared flux in band
+     
+     Routine supports two normalization options:
+     flx_frc_nrm: Re-normalize absolute fractions to sum to unity. This normalization ensures all thermal emission is represented in wvl_grd. The sum of flx_bbd_frc is exactly one.
+     flx_frc_abs: Return absolute flux fractions. The fractions will sum to unity iff the grid spans all thermal wavelengths
+     
+     Assumptions:
+     Wavenumber grid is contiguous, monotonic, and non-overlapping
+     This allows planck_integral_WiW76() for each interior wavenumber interface to be re-used
+     Wavenumber grid and temperature, together, are in Earth's parameter space */
+     
+  using mth::cst_M_PIl; // (3.1415926535897932384626433832795029L) [frc] 3
+  using phc::cst_Stefan_Boltzmann; // (5.67032e-8) [W m-2 K-4] Stefan-Boltzmann constant GoY89 p. 462
+
+  std::string sbr_nm("spc_bbd_cls::flx_frc_get_WiW76"); // [sng] Subroutine name
+  std::string nrm_typ_sng("flx_frc_nrm"); // [sng] Normalization type
+  int rcd(0); // [enm] Return code
+  
+  double *ntn_bbd_blr=new double[wvn_nbr+1]; // [W m-2 sr-1] Integrated radiance bluer than corresponding wavenumber
+
+  double ntn_bbd_ntg; // [W m-2 sr-1] Total integrated intensity of blackbody radiation = (cst_stf_blt*T^4)/pi
+  double ntn_bbd_rsl; // [W m-2 sr-1] Integrated radiance resolved in single band
+  double ntn_bbd_rsl_ttl; // [W m-2 sr-1] Total integrated radiance resolved in wavenumber grid
+  double flx_bbd_frc_mss_blr; // [frc] Fractional "missing" radiance bluer (shorter wavelengths/larger wavenumbers) than wavenumber grid
+  double flx_bbd_frc_mss_rdr; // [frc] Fractional "missing" radiance redder (longer wavelengths/smaller wavenumbers) than wavenumber grid
+
+  long wvn_idx; // [idx] Counting index for wvn
+
+  ntn_bbd_ntg=cst_Stefan_Boltzmann*std::pow(tpt,4.0)/cst_M_PIl; // [W m-2 sr-1] Intensity of blackbody radiation = (cst_stf_blt*T^4)/pi
+
+  for(wvn_idx=0;wvn_idx<=wvn_nbr;wvn_idx++){ // NB: wvn_nbr+1 iterations
+
+    // Wavenumbers must increase monotonically to prevent negative flux fractions
+    if(wvn_idx != wvn_nbr)
+      if(wvn_grd[wvn_idx+1] <= wvn_grd[wvn_idx]) err_prn(sbr_nm,"wvn_min > wvn_max");
+    
+    // Compute integral of Planck function from wvn_lo to infinity
+    ntn_bbd_blr[wvn_idx]=planck_integral_WiW76
+      (wvn_grd[wvn_idx], // [cm-1] Lower limit of Planck integral in wavenumbers
+       tpt); // [K] Temperature
+
+  } // !wvn_idx
+
+  // Total integrated radiance resolved in wavenumber grid
+  ntn_bbd_rsl_ttl=ntn_bbd_blr[0]-ntn_bbd_blr[wvn_nbr];
+
+  // Fractional "missing" radiance bluer (shorter wavelengths/larger wavenumbers) than wavenumber grid
+  flx_bbd_frc_mss_blr=ntn_bbd_blr[wvn_nbr]/ntn_bbd_ntg;
+
+  // Fractional "missing" radiance redder (longer wavelengths/smaller wavenumbers) than wavenumber grid
+  flx_bbd_frc_mss_rdr=(ntn_bbd_ntg-ntn_bbd_blr[0])/ntn_bbd_ntg;
+
+  for(wvn_idx=0;wvn_idx<wvn_nbr;wvn_idx++){
+
+    // Integrated radiance resolved in band is difference of consecutive half-open radiances to infinity
+    ntn_bbd_rsl=ntn_bbd_blr[wvn_idx+1]-ntn_bbd_blr[wvn_idx];
+
+    // Normalize [W m-2 sr-1] -> [frc] for fractional blackbody radiance/emission/flux
+    if(nrm_typ_sng == "flx_frc_nrm") flx_bbd_frc[wvn_idx]=ntn_bbd_rsl/ntn_bbd_rsl_ttl; 
+    else if(nrm_typ_sng == "flx_frc_abs") flx_bbd_frc[wvn_idx]=ntn_bbd_rsl/ntn_bbd_ntg;
+    else err_prn(sbr_nm,"unknown normalization type "+nrm_typ_sng);
+
+  } // !wvn_idx
+
+  delete []ntn_bbd_blr; // [W m-2 sr-1] Integrated radiance bluer than corresponding wavenumber
+
+  return rcd; // [enm] Return success code
+} // !spc_bbd_cls::flx_frc_get_WiW76()
+
+double // [W m-2 sr-1] Integrated Planck function radiance from wvn_lo to infinity
+planck_integral_WiW76 // [fnc] Compute integral of Planck function from wvn_lo to infinity
+(double wvn_lo, // [cm-1] Lower limit of Planck integral in wavenumbers
+ double tpt){ // [K] Temperature
+  /* Compute integral of Planck spectral radiance from wvn_lo [cm-1] to infinity
+     Result in [W m-2 sr-1] is valid for [10 < wvn_lo < 10000 cm-1 at Earth's temperatures
+     Result in [W m-2 sr-1] is valid for [0.2 < wvl_lo < 500 um at Earth's temperatures
+     Theory devised by Widger, W. K. and Woodall, M. P., Integration of the Planck blackbody radiation function, Bulletin of the Am. Meteorological Society, 57, 10, 1217-1219, Oct. 1976
+     Based on C++ implementation from
+     https://www.spectralcalc.com/blackbody/inband_radiance.html
+     NB: For consistency with original sources, this function returns integrated radiance
+     Multiply result by pi to convert returned integrated radiance into hemispheric irradiance */
+
+  using phc::cst_Boltzmann; // (1.38063e-23) [J K-1] Boltzmann's constant (2018 SI NIST)
+  using phc::cst_Planck; // (6.62606876e-34) [J s] Planck's constant (CODATA, 2018 SI NIST) (exact)
+  using phc::speed_of_light; // (2.99792458e+08) [m s-1] Speed of light in vacuo (CODATA, 2018 SI NIST)
+
+  const double spd_lgt_sqr(speed_of_light*speed_of_light); // [m2 s-2] Speed of light squared
+  const double plk_spd_rcp_blt(cst_Planck*speed_of_light/cst_Boltzmann); // Radiation constant C1 from WiW76 (generally called c2 in other work)
+
+  double x_abc=plk_spd_rcp_blt*100*wvn_lo/tpt; // [frc] Dimensionless abscissa (spectral coordinate) of integral
+  // Compute re-used powers of x_abc, the dimensionless spectral coordinate
+  double x_abc_sqr=x_abc*x_abc;
+  double x_abc_cbd=x_abc*x_abc_sqr;
+  
+  /* How many terms of sum are needed?
+     WiW76 shows that fewer than 200 terms suffice for NSD=10 in Earth's LW region [180 < T < 350 K], [3 < wvl < 100 um]
+     Impose arbitrary maximum of 512 terms */
+  double itr_nbr_dbl=2.0+20.0/x_abc;
+  itr_nbr_dbl=(itr_nbr_dbl < 512) ? itr_nbr_dbl : 512;
+  int itr_nbr=int(itr_nbr_dbl);
+  
+  // Sum series
+  double srs_sum=0;
+  for(int itr_idx=1;itr_idx<itr_nbr;itr_idx++){
+    double dn=1.0/itr_idx;
+    srs_sum+=exp(-itr_idx*x_abc)*(x_abc_cbd+(3.0*x_abc_sqr+6.0*(x_abc+dn)*dn)*dn)*dn;
+  } // !itr_idx
+  
+  // Return result in units of [W m2 sr-1]
+  const double two_plk_spd_sqr(2.0*cst_Planck*spd_lgt_sqr); // [] Radiation constant C2 in WiW76 (often called c1L in other work)
+  return two_plk_spd_sqr*pow(tpt/plk_spd_rcp_blt,4)*srs_sum;
+} // !planck_integral_WiW76()

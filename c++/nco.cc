@@ -14,8 +14,7 @@
    nco.cc contains netCDF dependencies, so it is not appropriate to bundle nco.o into libcsz_c++
    Instead, nco.o is bundled into libcsm_c++
    Ideally, nco.cc should be completely generic to netCDF, and have no model-specific functions
-   In the meantime, nco.cc is a convenient location to prototype "stand-alone" modules so it belongs in libcsm_c++
-*/
+   In the meantime, nco.cc is a convenient location to prototype "stand-alone" modules so it belongs in libcsm_c++ */
 
 #include <nco.hh> // netCDF utilities
 
@@ -530,7 +529,7 @@ rfl_frs // [fnc] Fresnel reflectance
     rfl_prp[idx]=(cos_ngl_inc-idx_rfr_rlt[idx]*cos_ngl_rfr)/(cos_ngl_inc+idx_rfr_rlt[idx]*cos_ngl_rfr); // [frc] Reflectance of electric field amplitude orthogonal to plane of incidence BoH83 p. 35 (2.69), ThS99 p. 508 (E.17.5)
     trn_prl[idx]=PRC_CMP(2.0)*cos_ngl_inc/(cos_ngl_rfr+idx_rfr_rlt[idx]*cos_ngl_inc); // [frc] Transmittance of electric field amplitude parallel to plane of incidence BoH83 p. 35 (2.68), ThS99 p. 508 (E.17.5)
     trn_prp[idx]=PRC_CMP(2.0)*cos_ngl_inc/(cos_ngl_inc+idx_rfr_rlt[idx]*cos_ngl_rfr); // [frc] Transmittance of electric field amplitude orthogonal to plane of incidence BoH83 p. 35 (2.70), ThS99 p. 508 (E.17.5)
-  } // end loop over wvl
+  } // !idx
 
   // Compute flux reflectance and flux transmittance
   prc_cmp *rfl_flx_prl=new prc_cmp[wvl_nbr]; // [frc] Flux reflectance of parallel polarization state
@@ -567,7 +566,7 @@ rfl_frs // [fnc] Fresnel reflectance
     trn_flx_prp_cpx=idx_rfr_rlt[idx]*norm(trn_prp[idx])*cos_ngl_rfr/cos_ngl_inc; // [frc] Flux transmittance of perpindicular polarization state
     trn_flx_prl[idx]=trn_flx_prl_cpx.real(); // [frc] Flux transmittance of parallel polarization state
     trn_flx_prp[idx]=trn_flx_prp_cpx.real(); // [frc] Flux transmittance of perpindicular polarization state
-  } // end loop over wvl
+  } // !idx
 
   // Sanity check
   // In order to conserve energy, flux transmittance should be one minus corresponding flux reflectance
@@ -576,7 +575,7 @@ rfl_frs // [fnc] Fresnel reflectance
   for(idx=0;idx<wvl_nbr;idx++){
     rfl_flx_frs[idx]=0.5*(rfl_flx_prl[idx]+rfl_flx_prp[idx]); // [frc] Flux reflectance of unpolarized light, Fresnel ThS99 p. 509
     trn_flx_frs[idx]=0.5*(trn_flx_prl[idx]+trn_flx_prp[idx]); // [frc] Flux transmittance of unpolarized light, Fresnel ThS99 p. 509
-  } // end loop over wvl
+  } // !idx
 
   if(true){
     std::cout << "Fresnel reflectance:" << std::endl;

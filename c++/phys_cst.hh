@@ -34,18 +34,24 @@ namespace phc{ // [nms] Physical constant namespace
 
 // Fundamental constants
 
-  // const double cst_Boltzmann(1.3806503e-23); // (1.3806503e-23) [J K-1] Boltzmann's constant MoT00 p. BG11
-  //  const double speed_of_light(2.99792458e+08); // (2.99792458e+08) [m s-1] Speed of light in vacuo (CODATA)
-  //  const double cst_Planck(6.62606876e-34); // (6.62606876e-34) [J s] Planck's constant (CODATA)
-  //  const double cst_Gravitation(6.673e-11); // (6.673e-11) [N m2 kg-2] Universal gravitational constant (CODATA)
+  // 2018 SI NIST definition refers to
+  // doi:10.1088/1681-7575/aa950a (see also https://www.nist.gov/si-redefinition/meet-constants)
   //  const double cst_Avagadro(6.02214199e+23); // (6.02214199e+23) [mlc mol-1] Avagadro's number (CODATA)
+  //const double cst_Avagadro(6.022045e+23); // (6.022045e+23) [mlc mol-1] Avagadro's number (CCM?)
+  const double cst_Avagadro(6.02214076e+23); // (6.02214076e+23) [mlc mol-1] Avagadro's number 2018 SI NIST
+  // const double cst_Boltzmann(1.3806503e-23); // (1.3806503e-23) [J K-1] Boltzmann's constant MoT00 p. BG11
+  //const double cst_Boltzmann(1.38063e-23); // (1.38063e-23) [J K-1] Boltzmann's constant (CCM?)
+  const double cst_Boltzmann(1.380649e-23); // (1.380649e-23) [J K-1] Boltzmann's constant (2018 SI NIST)
+  // const double cst_Planck(6.62620e-34); // (6.62620e-34) [J s] Planck's constant (CCM?)
+  const double cst_Planck(6.62606876e-34); // (6.62606876e-34) [J s] Planck's constant (CODATA, 2018 SI NIST) (exact)
+  //  const double speed_of_light(2.99793e+08); // (2.99792458e+08) [m s-1] Speed of light in vacuo (???)
+  const double speed_of_light(2.99792458e+08); // (2.99792458e+08) [m s-1] Speed of light in vacuo (CODATA, 2018 SI NIST)
+
+  //  const double cst_Gravitation(6.673e-11); // (6.673e-11) [N m2 kg-2] Universal gravitational constant (CODATA)
   //  const double gas_cst_unv(8.314472); // (8.314472) [J mol-1 K-1] Universal gas constant (CODATA)
   const double cff_hnr_HNO3_H2O_298K(2.1e5); // (2.1e5) [mol ltr-1 atm-1] Henry's Law coefficient of HNO3 in liquid water at 298K SeP97 p. 341 Table 6.2
-  const double cst_Avagadro(6.022045e+23); // (6.022045e+23) [mlc mol-1] Avagadro's number
-  const double cst_Boltzmann(1.38063e-23); // (1.38063e-23) [J K-1] Boltzmann's constant
   const double cst_Gravitation(6.672e-11); // (6.672e-11) [N m2 kg-2] Universal gravitational constant
   const double cst_Loschmidt(2.6871e+25); // (2.6871e+25) [mlc m-3] Loschmidt's number (molecules of air per cubic meter at STP) (NB: this is derivable in principle)
-  const double cst_Planck(6.62620e-34); // (6.62620e-34) [J s] Planck's constant
   const double cst_Stefan_Boltzmann(5.67032e-8); // (5.67032e-8) [W m-2 K-4] Stefan-Boltzmann constant GoY89 p. 462
   const double cst_von_krm(0.4); // (0.4) [frc] Von Karman's constant
   const double dmt_cll_CO2(3.34e-10); // (3.34e-10) [m] Collision diameter of CO2 CRC95 p. 6-244
@@ -54,7 +60,7 @@ namespace phc{ // [nms] Physical constant namespace
   const double dmt_cll_O2(2.98e-10); // (2.98e-10) [m] Collision diameter of O2 CRC95 p. 6-244
   const double dmt_cll_air(3.46e-10); // (3.46e-10) [m] Mean collision diameter of air SeP97 p. 1292 Table A.7
   const double gas_cst_unv(8.31441); // (8.31441) [J mol-1 K-1] Universal gas constant
-  const double grv_sfc_mean(9.80665); // (9.80665) [m s-2] Mean gravitational acceleration at Earth's surface
+  const double grv_sfc_mean(9.80665); // (9.80665) [m s-2] Mean gravitational acceleration at Earth's surface (RRTMGP)
   const double hc(1.986488377e-25); // (1.986488377e-25) [J m] Planck constant times speed of light = hc
   const double hc2(5.9553531e-17); // (5.9553531e-17) [J m2 s-1] Planck constant times speed of light squared = hc2
   const double joules_per_calorie(4.1855); // (4.1855) [J cal-1] Cal = energy to heat 1g H20 1C @ 15C
@@ -74,6 +80,7 @@ namespace phc{ // [nms] Physical constant namespace
   const double mmw_Cl(35.4527e-03); // (35.4527e-03) [kg mol-1] Mean molecular weight of Cl IUPAC
   const double mmw_Fe(55.847e-03); // (55.847e-03) [kg mol-1] Mean molecular weight of Fe IUPAC
   const double mmw_H(1.00794e-03); // (1.00794e-03) [kg mol-1] Mean molecular weight of H IUPAC
+  //  const double mmw_H2O(1.8016-02); // (1.8016e-02) [kg mol-1] Mean molecular weight of H2O 2018 SI NIST
   const double mmw_H2O(1.8015259e-02); // (1.8015259e-02) [kg mol-1] Mean molecular weight of H2O HITRAN96
   const double mmw_H2O2(3.4005480e-02); // (3.4005480e-02) [kg mol-1] Mean molecular weight of H2O2 HITRAN96
   const double mmw_H2OH2O(36.03e-03); // (36.03e-3) [kg mol-1] Mean molecular weight of H2OH2O
@@ -98,6 +105,7 @@ namespace phc{ // [nms] Physical constant namespace
   const double mmw_S(32.066e-03); // (32.066e-03) [kg mol-1] Mean molecular weight of S IUPAC
   const double mmw_SO2(6.4046674e-02); // (6.4046674e-02) [kg mol-1] Mean molecular weight of SO2 HITRAN96
   const double mmw_Si(28.0855e-03); // (28.0855) [kg mol-1] Mean molecular weight of Si IUPAC
+  // const double mmw_dry_air(28.964e-03); // (28.964e-3) [kg mol-1] (2018 SI NIST RRTMGP)
   const double mmw_dry_air(28.9644e-03); // (28.9644e-3) [kg mol-1] (Source: radcsw.F in CCM2/3)
   const double mmw_illite(389.34e-03); // (389.34e-03) [kg mol-1] Mean molecular weight of Illite http://webmineral.com/data/Illite.shtml
   const double mmw_kaolinite(258.16e-03); // (258.16e-03) [kg mol-1] Mean molecular weight of Kaolinite http://webmineral.com/data/Kaolinite.shtml
@@ -118,7 +126,6 @@ namespace phc{ // [nms] Physical constant namespace
   const double spc_heat_H2SO4_lqd(1416.2); // (1416.2) [J kg-1 K-1] Specific heat capacity of sulfuric acid CRC95 p. 6-145
   const double spc_heat_HNO3_lqd(1744.1); // (1744.1) [J kg-1 K-1] Specific heat capacity of nitric acid CRC95 p. 6-145
   const double spc_heat_NaCl_sld(854.0); // (854.0) [J kg-1 K-1] Specific heat capacity of sodium chloride http://www.crystran.co.uk/nacldata.htm
-  const double speed_of_light(2.99793e+08); // (2.99792458e+08) [m s-1] Speed of light in vacuo (???)
   const double ssh_H2O_sln_crc(0.98); // (0.98) [frc] Salinity correction to saturation specific humidity of H2O LaP81 p. 328 CCM:dom/flxoce()
   const double tpt_298(298.00); // (298.00) [K] Standard temperature for Henry's Law
   const double tpt_HITRAN(296.0); // (296.0) [K] Reference temperature for HITRAN database
@@ -243,6 +250,7 @@ namespace phc{ // [nms] Physical constant namespace
   const double g_rcp_R_dry(grv_sfc_mean/gas_cst_dry_air); // (0.03416356) [m K-1] for computing lapse rates
   const double one_mns_eps_H2O(1.0-eps_H2O); // (0.378) [frc] 1 - eps_H2O Constant for saturation specific humidity
   const double spc_heat_H2O_vpr(4.0*gas_cst_H2O); // (1850.0) [J kg-1 K-1] IrG81 pp. 77, 245
+  //const double spc_heat_dry_air(1004.64); // (1004.64) [J kg-1 K-1] RRTMGP
   const double spc_heat_dry_air(7.0*gas_cst_dry_air/2.0); // (1004.697) [J kg-1 K-1] IrG81 p. 25
   const double spc_heat_SiO2_sld(1000.0*44.4/mmw_SiO2); // (738962.0) [J kg-1 K-1] Specific heat capacity of quartz CRC95 p. 5-21
   const double spc_heat_Fe2O3_sld(1000.0*103.9/mmw_Fe2O3); // (650627.0) [J kg-1 K-1] Specific heat capacity of hematite (iron oxide) CRC95 p. 5-15

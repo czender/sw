@@ -3515,6 +3515,7 @@ int main(int argc,char **argv)
 	flx_wgt_frc_bnd=flx_IR_frc_bnd; // [frc] Radiant flux weighting factor
 	flx_wgt_frc=flx_IR_frc[wvl_idx]; // [frc] Radiant flux weighting factor
 	wrn_prn(prg_nm,sbr_nm,"Using LW weights in partly solar wavelength band:");
+	std::cerr << "bnd_ctr[0] = " << bnd_ctr[0]*1.0e6 << " um, " << "bnd_ctr[" << bnd_nbr-1 << "] = " << bnd_ctr[bnd_nbr-1]*1.0e6 << " um" << std::endl;
 	std::cerr << "Solar--Longwave boundary is " << bnd_SW_LW*1.0e6 << " um" << std::endl;
 	std::cerr << "Straddled by wvl[" << wvl_idx << "] = " << wvl_min[wvl_idx]*1.0e6 << "--" << wvl_max[wvl_idx]*1.0e6 << " um = " << wvn_min[wvl_idx] << "--" << wvn_max[wvl_idx] << " cm-1" << std::endl;
 	std::cerr << "idx\tbnd_min\tbnd_max\twvn_min\twvn_max\tSW_wgt\tLW_wgt" << std::endl;
@@ -3537,12 +3538,12 @@ int main(int argc,char **argv)
 	/* Spectral region completely infrared */
 	flx_wgt_frc_bnd=flx_IR_frc_bnd; // [frc] Radiant flux weighting factor
 	flx_wgt_frc=flx_IR_frc[wvl_idx]; // [frc] Radiant flux weighting factor
-      } // endif
+      } // !wvl_ctr
     }else if(spc_wgt_sng == "Reflectance"){ // endif spc_wgt_sng == "Default"
       err_prn(prg_nm,sbr_nm,"spc_wgt_sng == Reflectance weight not implemented yet");
-    }else{ // endif spc_wgt_sng == "Reflectance"
+    }else{ // !spc_wgt_sng == "Reflectance"
       err_prn(prg_nm,sbr_nm,"Unknown spc_wgt_sng");
-    } // endif spc_wgt_sng == "Default"
+    } // !spc_wgt_sng == "Default"
     assert(flx_wgt_frc > 0.0 || wvl_nbr*bnd_nbr == 1);
     
     // Weight refractive indices over current spectral interval

@@ -1689,6 +1689,13 @@ Substituting this into (\ref{eqn:stf_blt_1}) we obtain
 \label{eqn:stf_blt_2}
 \end{eqnarray}
 
+The definite integral in (\ref{eqn:stf_blt_2}) can lead to several
+results.
+Solving this integral yields the Stefan-Boltzmann Law, while replacing
+the lower limit with some definite frequency~$\frq$ leads to efficient
+methods for obtaining the integrated blackbody emission over a narrow
+band, $[\frqone,\frqtwo]$, which we will return to below.
+
 The definite integral in (\ref{eqn:stf_blt_2}) is $\mpi^{4}/15$. 
 Proving this is a classic problem in mathematical physics which
 involves the \trmidx{Riemann zeta function} (and thus prime number
@@ -1878,6 +1885,51 @@ One must remember that $\plkfnc$ is the broadband
 (spectrally-integrated) intensity and that $\flxupwplk$ is the 
 broadband hemispheric irradiance
 (spectrally-and-angularly-integrated).  
+
+\subsubsection[Band-integrated Emission]{Band-integrated Emission}\label{sxn:msn}
+As mentioned above, the integral in (\ref{eqn:stf_blt_2}) is needed
+for efficient evaluation of band-integrated blackbody emission.
+The integrated power emitted from the half-open band from lower
+frequency bound $\frqone$ to infinity is
+\begin{eqnarray}
+\flxupwplkbnd
+& = & \frac{2 \mpi \cstplk}{\cstspdlgt^{2}} 
+\int_{\frqone}^{\infty} 
+\left( \frac{\cstblt \tpt}{\cstplk} \right)^{3}
+\frac{\xxx^{3}}{\me^{\xxx} - 1} \, \frac{\cstblt \tpt}{\cstplk} \,\dfr\xxx
+\nonumber \\
+& = & \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}} 
+\int_{\frqone}^{\infty} 
+\frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx
+\label{eqn:plk_ntg_frq}
+\end{eqnarray}
+where, as before, $\xxx \equiv \cstplk \frq/\cstblt \tpt$.
+We will develop an analytic series expansion for this one-sided
+integral following the method of \cite{WiW76}.
+Here $\flxupwplkbnd$~[\wxmS] is the hemispherically integrated,
+frequency integrated, irradiance emitted by a blackbody over the range
+$[\frqone,\infty]$.
+
+Line-by-line and ESM radiation codes tend to express radiative
+quantities in CGS wavenumbers because those are the units of the
+measurements stored in the HITRAN spectroscopic database. 
+Hence this section will be presented in wavenumbers as well, to
+facilitate direct application to ESM radiation parameterizations.
+First we re-cast (\ref{eqn:plk_ntg_frq}) into units of CGS wavenumbers
+with a definite lower bound $\wvnone$:
+% fxm: convert this to wavenumbers
+\begin{eqnarray}
+\flxupwplkbnd
+& = & \frac{2 \mpi \cstplk}{\cstspdlgt^{2}} 
+\int_{\wvnone}^{\infty} 
+\left( \frac{\cstblt \tpt}{\cstplk} \right)^{3}
+\frac{\xxx^{3}}{\me^{\xxx} - 1} \, \frac{\cstblt \tpt}{\cstplk} \,\dfr\xxx
+\nonumber \\
+& = & \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}} 
+\int_{\wvnone}^{\infty} 
+\frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx
+\label{eqn:plk_ntg_wvn}
+\end{eqnarray}
 
 \subsubsection[Luminosity]{Luminosity}\label{sxn:lmn}
 The total thermal emission of a body (e.g., star or planet) is called  

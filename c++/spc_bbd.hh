@@ -75,16 +75,29 @@ private:
   double xpn; // [frc] Exponent in Planck function
   double dnm; // [frc] Denominator of Planck function
   double ntn_bbd_wvl; // [W m-2 m-1 sr-1] Specific intensity of blackbody radiation
-  double ntn_ntg; // [W m-2 sr-1] Intensity of blackbody radiation = (cst_stf_blt*T^4)/pi
+  double ntn_bbd_ntg; // [W m-2 sr-1] Intensity of blackbody radiation = (cst_stf_blt*T^4)/pi
   double flx_hms; // [W m-2] Hemispheric blackbody irradiance = cst_stf_blt*T^4
   long bnd_nbr; // [nbr] Number of bands to discretize Planck function
 
   // Private member functions
   int recompute(); // [fnc] Recompute properties of object
+  int plk_ntg_evl // [fnc] Planck function integrated between two wavelengths
+  (prc_cmp plk_ntg); // [W m-2 sr-1]) Planck function integrated between two wavelengths
 
-}; // end class spc_bbd_cls
+}; // !spc_bbd_cls
 
 // Declare functions with C++ linkages
+double // [W m-2 sr-1] Integrated Planck function radiance from wvn_lo to infinity
+planck_integral_WiW76 // [fnc] Compute integral of Planck function from wvn_lo to infinity
+(double wvn_lo, // [cm-1] Lower limit of Planck integral in wavenumbers
+ double tpt); // [K] Temperature
+
+int // O [enm] Return success code
+flx_frc_get_WiW76 // [fnc] Fraction of blackbody emission in given spectral region
+(const prc_cmp *wvn_grd, // I [cm-1] Wavenumber at band interfaces
+ const long &wvn_nbr, // I [nbr] Number of wavenumber bands (interfaces minus one)
+ const prc_cmp &tpt, // I [K] Temperature
+ prc_cmp *flx_bbd_frc); // O [frc] Fraction of infrared flux in band
 
 // Define inline'd functions in header so source is visible to calling files
 

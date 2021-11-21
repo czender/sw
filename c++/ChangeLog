@@ -1,3 +1,9 @@
+2021-11-21  Charlie Zender  <zender@uci.edu>
+
+	* Implement flx_frc_get_WiW76() interface to planck_integral_WiW76()
+
+	* Implement planck_integral_WiW76() from Widger and Woodell (1976)
+
 2021-06-18  Charlie Zender  <zender@uci.edu>
 
 	* Implement user-specifiable surface emissivity via --msv_sfc for flx_sfc_lnd()
