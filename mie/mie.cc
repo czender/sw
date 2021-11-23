@@ -2960,8 +2960,7 @@ int main(int argc,char **argv)
   prc_cmp *flx_bbd_frc=new prc_cmp[wvl_nbr]; // [frc] Fraction of blackbody flux in band (non-normalized)
   prc_cmp *flx_bbd_frc_nrm=new prc_cmp[wvl_nbr]; // [frc] Normalized fraction of infrared flux in band
   rcd+=spc_bbd.flx_bbd_frc_get(wvl_min,wvl_max,wvl_nbr,flx_bbd_frc); // [frc] Fraction of blackbody flux in band
-  for(int wvn_idx=0;wvn_idx<=wvn_nbr;wvn_idx++) std::cout << "mie: DEBUG wvn_grd[ " << wvn_idx << "] = " << wvn_grd[wvn_idx] << std::endl;
-  rcd+=flx_bbd_frc_get_WiW76(wvn_grd,wvn_nbr,tpt_bbd_wgt,flx_bbd_frc); // [frc] Fraction of blackbody flux in band
+  //for(int wvn_idx=0;wvn_idx<=wvn_nbr;wvn_idx++) std::cout << "mie: DEBUG wvn_grd[ " << wvn_idx << "] = " << wvn_grd[wvn_idx] << std::endl;
 
   // Irradiance diagnostics for solar and infrared wavelengths
   prc_cmp *flx_slr=new prc_cmp[wvl_nbr]; // [W m-2] Solar flux in band
@@ -3997,6 +3996,7 @@ int main(int argc,char **argv)
   prc_cmp flx_bbd_frc_ttl(0.0); // [frc] Diagnostic total of flx_wgt_frc
   prc_cmp flx_bbd_frc_nrm_ttl(0.0); // [frc] Diagnostic total of flx_bbd_frc_nrm
   if(spc_bbd.flx_bbd_frc_get(wvl_mnm,wvl_mxm) > 0.0){
+    rcd+=flx_bbd_frc_get_WiW76(wvn_grd,wvn_nbr,tpt_bbd_wgt,flx_bbd_frc); // [frc] Fraction of blackbody flux in band
     for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
       flx_bbd_frc_ttl+=flx_bbd_frc[wvl_idx]; // [frc] Diagnostic total of flux_wgt_frc
       abs_cff_mss_bb_LW+=abs_cff_mss[wvl_idx]*flx_bbd_frc[wvl_idx]; // [m2 kg-1]

@@ -253,11 +253,16 @@ flx_bbd_frc_get_WiW76 // [fnc] Fraction of blackbody emission in given spectral 
      This allows planck_integral_WiW76() for each interior wavenumber interface to be re-used
      Wavenumber grid and temperature, together, are in Earth's parameter space */
      
+  // These constants are only used diagnostically in this routine
   using mth::cst_M_PIl; // (3.1415926535897932384626433832795029L) [frc] 3
   using phc::cst_Stefan_Boltzmann; // (5.67032e-8) [W m-2 K-4] Stefan-Boltzmann constant GoY89 p. 462
+  using phc::cst_Boltzmann; // (1.38063e-23) [J K-1] Boltzmann's constant (2018 SI NIST)
+  using phc::cst_Planck; // (6.62606876e-34) [J s] Planck's constant (CODATA, 2018 SI NIST) (exact)
+  using phc::speed_of_light; // (2.99792458e+08) [m s-1] Speed of light in vacuo (CODATA, 2018 SI NIST)
+
 
   std::string sbr_nm("flx_bbd_frc_get_WiW76"); // [sng] Subroutine name
-  std::string nrm_typ_sng("flx_frc_nrm"); // [sng] Normalization type
+  std::string nrm_typ_sng("flx_frc_abs"); // [sng] Normalization type
   int rcd(0); // [enm] Return code
   
   double *ntn_bbd_blr=new double[wvn_nbr+1]; // [W m-2 sr-1] Integrated radiance bluer than corresponding wavenumber
@@ -297,7 +302,7 @@ flx_bbd_frc_get_WiW76 // [fnc] Fraction of blackbody emission in given spectral 
   for(wvn_idx=0;wvn_idx<wvn_nbr;wvn_idx++){
 
     // Integrated radiance resolved in band is difference of consecutive half-open radiances to infinity
-    ntn_bbd_rsl=ntn_bbd_blr[wvn_idx+1]-ntn_bbd_blr[wvn_idx];
+    ntn_bbd_rsl=ntn_bbd_blr[wvn_idx]-ntn_bbd_blr[wvn_idx+1];
 
     // Normalize [W m-2 sr-1] -> [frc] for fractional blackbody radiance/emission/flux
     if(nrm_typ_sng == "flx_frc_nrm") flx_bbd_frc[wvn_idx]=ntn_bbd_rsl/ntn_bbd_rsl_ttl; 
@@ -308,13 +313,15 @@ flx_bbd_frc_get_WiW76 // [fnc] Fraction of blackbody emission in given spectral 
 
   if(dbg_lvl_get() >= dbg_off){
     std::cout << "Diagnostics from " << sbr_nm << std::endl;
+    std::cout << "Temperature = " << tpt << " K" << std::endl;
+    std::cout << "Blackbody hemispheric irradiance = cst_stf_blt*T^4 = " << cst_Stefan_Boltzmann*std::pow(tpt,4.0) << " W m-2" << std::endl;
     std::cout << "Intensity of blackbody radiation = (cst_stf_blt*T^4)/pi = " << ntn_bbd_ntg << " W m-2 sr-1" << std::endl;
     std::cout << "Fractional missing radiance bluer (shorter wavelengths/larger wavenumbers) than wavenumber grid = " << flx_bbd_frc_mss_blr << std::endl;
     std::cout << "Fractional missing radiance redder (longer wavelengths/smaller wavenumbers) than wavenumber grid = " << flx_bbd_frc_mss_rdr << std::endl;
   
-    std::cout << "idx\twvn_grd\tbbd_blr" << std::endl;
-    std::cout << "   \t cm-1  \tW m-2 sr-1" << std::endl;
-    for(wvn_idx=0;wvn_idx<wvn_nbr;wvn_idx++) std::cout << wvn_idx << "\t" << wvn_grd[wvn_idx] << "\t" << ntn_bbd_blr[wvn_idx] << std::endl;
+    std::cout << "idx\twvn_grd\t x_abc \tbbd_blr\tbbd_rdr" << std::endl;
+    std::cout << "   \t cm-1  \t  frc  \tW/m2/sr\tW/m2/sr" << std::endl;
+    for(wvn_idx=0;wvn_idx<=wvn_nbr;wvn_idx++) std::cout << wvn_idx << "\t" << wvn_grd[wvn_idx] << "\t" << cst_Planck*speed_of_light*wvn_grd[wvn_idx]*100/(cst_Boltzmann*tpt) << "\t" << ntn_bbd_blr[wvn_idx] << "\t" << ntn_bbd_ntg-ntn_bbd_blr[wvn_idx] << std::endl;
 
     std::cout << "idx\twvn_min\twvn_max\tflx_bbd_frc" << std::endl;
     std::cout << "   \t cm-1  \t cm-1  \t    frc    " << std::endl;
@@ -353,9 +360,20 @@ planck_integral_WiW76 // [fnc] Compute integral of Planck function from wvn_lo t
   
   /* How many terms of sum are needed?
      WiW76 shows that fewer than 200 terms suffice for NSD=10 in Earth's LW region [180 < T < 350 K], [3 < wvl < 100 um]
-     Impose arbitrary maximum of 512 terms */
+     Following Wiw76 Figure 1, impose arbitrary maximum of 512 terms 
+     20211123: 
+     wvn=10cm-1 at 300 K = x_abc = 0.048 produces physically realistic (positive) bbd_rdr for itr_nbr=8, 16, 32 terms
+     wvn=10cm-1 at 300 K = x_abc = 0.048 produces (physically unrealistic (negative) bbd_rdr for itr_nbr=64, 128, 256, 512 terms (example shown below)
+     Hence more terms are not a panacaea
+     DISORT uses ~six terms in "power series" method, so set itr_nbr_max to 8
+     Moreover DISORT switches from "power series" method to "exponential series" method for x (aka VCUT) < 1.5
+     fxm: Implementing "exponential series" method for x_abc < ~1.5 seems most appropriate
+     idx	wvn_grd	 x_abc 	bbd_blr	bbd_rdr
+   	        cm-1  	  frc  	W/m2/sr	W/m2/sr
+     0          10	0.048	146.199	-0.00068208 */
+  const int itr_nbr_max(8); // [nbr] Maximum number of terms in power series method
   double itr_nbr_dbl=2.0+20.0/x_abc;
-  itr_nbr_dbl=(itr_nbr_dbl < 512) ? itr_nbr_dbl : 512;
+  itr_nbr_dbl=(itr_nbr_dbl < itr_nbr_max) ? itr_nbr_dbl : itr_nbr_max;
   int itr_nbr=int(itr_nbr_dbl);
   
   // Sum series
