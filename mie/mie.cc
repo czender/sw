@@ -440,7 +440,7 @@ int main(int argc,char **argv)
   prc_cmp sz_mxm_mcr(1.1); // [um] Maximum size in distribution
   prc_cmp sz_prm_rsn_usr_spc(0.1); // [m m-1] Size parameter resolution, user specified
   prc_cmp tm_dlt(1200.0); // [s] Timestep
-  prc_cmp tpt_bbd_wgt(273.15); // [K] Blackbody temperature of radiation
+  prc_cmp tpt_bbd_wgt(cmd_ln_dfl); // [K] Blackbody temperature of radiation
   prc_cmp tpt_gnd(300.0); // [K] Ground temperature
   prc_cmp tpt_ice(tpt_frz_pnt); // [K] Ice temperature
   prc_cmp tpt_mdp(300.0); // [K] Environmental temperature
@@ -2953,10 +2953,15 @@ int main(int argc,char **argv)
   delete flx_slr_src_LaN68; // [sct] Solar flux source LaN68
   delete flx_slr_src_ThD71; // [sct] Solar flux source ThD71
 
-  // Infrared spectral irrandiance
+  // Infrared spectral irradiance
+  // Default is to Planck-weight by temperature of specified surface type
+  if(tpt_bbd_wgt == cmd_ln_dfl) tpt_bbd_wgt=tpt_sfc; // [K] Blackbody temperature of radiation
   spc_bbd_cls spc_bbd(tpt_bbd_wgt); // [bbd] Blackbody spectrum object
-  prc_cmp *flx_IR_frc=new prc_cmp[wvl_nbr]; // [frc] Fraction of infrared flux in band
-  rcd+=spc_bbd.flx_frc_get(wvl_min,wvl_max,wvl_nbr,flx_IR_frc); // [frc] Fraction of infrared flux in band
+  prc_cmp *flx_bbd_frc=new prc_cmp[wvl_nbr]; // [frc] Fraction of blackbody flux in band (non-normalized)
+  prc_cmp *flx_bbd_frc_nrm=new prc_cmp[wvl_nbr]; // [frc] Normalized fraction of infrared flux in band
+  rcd+=spc_bbd.flx_bbd_frc_get(wvl_min,wvl_max,wvl_nbr,flx_bbd_frc); // [frc] Fraction of blackbody flux in band
+  for(int wvn_idx=0;wvn_idx<=wvn_nbr;wvn_idx++) std::cout << "mie: DEBUG wvn_grd[ " << wvn_idx << "] = " << wvn_grd[wvn_idx] << std::endl;
+  rcd+=flx_bbd_frc_get_WiW76(wvn_grd,wvn_nbr,tpt_bbd_wgt,flx_bbd_frc); // [frc] Fraction of blackbody flux in band
 
   // Irradiance diagnostics for solar and infrared wavelengths
   prc_cmp *flx_slr=new prc_cmp[wvl_nbr]; // [W m-2] Solar flux in band
@@ -3123,7 +3128,7 @@ int main(int argc,char **argv)
     std::cout << "  Solar spectrum is " << flx_slr_src.dsc_get() << " from " << (flx_slr_src.fl_slr_spc_get() != "" ? flx_slr_src.fl_slr_spc_get() : " a function") << std::endl;
     std::cout << "  Fraction of solar flux in " << wvl_mnm*1.0e6 << "--" << wvl_mxm*1.0e6 << " um is " << flx_slr_src.flx_frc_get(wvl_min[wvl_idx_dbg],wvl_max[wvl_idx_dbg]) << std::endl;
     std::cout << "  Blackbody temperature of particles = " << tpt_prt << " K" << std::endl;
-    std::cout << "  Blackbody temperature of radiation = " << tpt_bbd_wgt << " K, hemispheric blackbody emission = " << spc_bbd.flx_ttl() << " W m-2, fraction in " << wvl_mnm*1.0e6 << "--" << wvl_mxm*1.0e6 << " um is " << spc_bbd.flx_frc_get(wvl_mnm,wvl_mxm) << " = " << spc_bbd.flx_ttl()*spc_bbd.flx_frc_get(wvl_mnm,wvl_mxm) << " W m-2" << std::endl;
+    std::cout << "  Blackbody temperature of radiation = " << tpt_bbd_wgt << " K, hemispheric blackbody emission = " << spc_bbd.flx_ttl() << " W m-2, fraction in " << wvl_mnm*1.0e6 << "--" << wvl_mxm*1.0e6 << " um is " << spc_bbd.flx_bbd_frc_get(wvl_mnm,wvl_mxm) << " = " << spc_bbd.flx_ttl()*spc_bbd.flx_bbd_frc_get(wvl_mnm,wvl_mxm) << " W m-2" << std::endl;
     std::cout << "  Pressure = " << prs_mdp/100.0 << " mb, Temperature = " << tpt_mdp << " K, Density = " << dns_mdp << " kg m-3" << std::endl;
     std::cout << "  Relative humidity w/r/t liquid H2O: = " << RH_lqd << ", ice H2O = " << RH_ice << ", q(H2O) = " << q_H2O_vpr << " kg kg-1" << std::endl;
     std::cout << "  Kinematic vsc. = " << vsc_knm_atm << " m2 s-1, Dynamic vsc. = " << vsc_dyn_atm << " kg m-1 s-1, Mean free path of air = " << mfp_atm << " m" << std::endl;
@@ -3351,7 +3356,7 @@ int main(int argc,char **argv)
   prc_cmp *bnd_min=new prc_cmp[bnd_nbr]; // [m] Minimum wavelength in band
   prc_cmp *bnd_max=new prc_cmp[bnd_nbr]; // [m] Maximum wavelength in band
   prc_cmp *flx_slr_frc_bnd=new prc_cmp[bnd_nbr]; // [frc] Fraction of solar flux in band
-  prc_cmp *flx_IR_frc_bnd=new prc_cmp[bnd_nbr]; // [frc] Fraction of infrared flux in band
+  prc_cmp *flx_bbd_frc_bnd=new prc_cmp[bnd_nbr]; // [frc] Fraction of blackbody flux in band
   std::complex<prc_cmp> *idx_rfr_cor_bnd=new std::complex<prc_cmp>[bnd_nbr]; // [frc] Refractive index of core
   std::complex<prc_cmp> *idx_rfr_ffc_bnd=new std::complex<prc_cmp>[bnd_nbr]; // [frc] Effective refractive index of particle
   std::complex<prc_cmp> *idx_rfr_mdm_bnd=new std::complex<prc_cmp>[bnd_nbr]; // [frc] Refractive index of medium
@@ -3465,7 +3470,7 @@ int main(int argc,char **argv)
   // NB: CL1 Parallelization is NOT READY YET
 #ifdef _OPENMP // OpenMP
 #ifdef PARALLELIZE_OVER_CL1
-#pragma omp parallel for default(none) firstprivate(rcd) private(abs_fct_MaS99_scl,asm_prm_scl,bck_hms_scl,bnd_idx,ngl_idx,phz_fnc_crr,plz_crr,q_abs,q_bck,q_ext,q_sct,spk_val,sz_idx,wgt_xsa,wvl_idx) shared(abs_cff_vlm,abs_fct_MaS99,abs_fsh,abs_fsh_ffc,abs_ncl_wk_mdm_flg,asm_prm,asm_prm_fsh,bch_flg,bck_cff_vlm,bck_fsh,bck_fsh_ffc,bnd_ctr,bnd_nbr,cnc_sph,coat_flg,dbg_io,dbg_lvl,dbg_off,dbg_old,dbg_scl,dmn_frc,dns_prt,ext_cff_vlm,ext_fsh,ext_fsh_ffc,ffc_mdm_typ,flx_wgt_frc,flx_slr_frc_bnd,flx_IR_frc_bnd,flx_wgt_frc_bnd,idx_rfr_cor_bnd,idx_rfr_ffc_bnd,idx_rfr_mdm_bnd,idx_rfr_mnt_bnd,idx_rfr_mtx_bnd,idx_rfr_ncl_bnd,idx_rfr_prt_bnd,lgn_nbr,lng_foo,mie_flg,ngl,ngl_dlt,ngl_nbr,phz_fnc_ffc,phz_fnc_dgn,plz_dgn,prg_mtr_rsn,rds_cor,rds_mnt,sbr_nm,sca_cff_vlm,sca_fsh,sca_fsh_ffc,slf_tst_flg,slf_tst_typ,slv_sng,std::cerr,sz_ctr_sph,sz_idx_dbg,sz_nbr,sz_prm_rsn_usr_spc,tst_sng,vlm_sph,vlm_frc_ncl,wgt_vlm,wvl_bnd_sz_idx,wvl_bnd_sz_nbr,wvl_idx_dbg,wvl_nbr,xsa_sph)
+#pragma omp parallel for default(none) firstprivate(rcd) private(abs_fct_MaS99_scl,asm_prm_scl,bck_hms_scl,bnd_idx,ngl_idx,phz_fnc_crr,plz_crr,q_abs,q_bck,q_ext,q_sct,spk_val,sz_idx,wgt_xsa,wvl_idx) shared(abs_cff_vlm,abs_fct_MaS99,abs_fsh,abs_fsh_ffc,abs_ncl_wk_mdm_flg,asm_prm,asm_prm_fsh,bch_flg,bck_cff_vlm,bck_fsh,bck_fsh_ffc,bnd_ctr,bnd_nbr,cnc_sph,coat_flg,dbg_io,dbg_lvl,dbg_off,dbg_old,dbg_scl,dmn_frc,dns_prt,ext_cff_vlm,ext_fsh,ext_fsh_ffc,ffc_mdm_typ,flx_wgt_frc,flx_slr_frc_bnd,flx_bbd_frc_bnd,flx_wgt_frc_bnd,idx_rfr_cor_bnd,idx_rfr_ffc_bnd,idx_rfr_mdm_bnd,idx_rfr_mnt_bnd,idx_rfr_mtx_bnd,idx_rfr_ncl_bnd,idx_rfr_prt_bnd,lgn_nbr,lng_foo,mie_flg,ngl,ngl_dlt,ngl_nbr,phz_fnc_ffc,phz_fnc_dgn,plz_dgn,prg_mtr_rsn,rds_cor,rds_mnt,sbr_nm,sca_cff_vlm,sca_fsh,sca_fsh_ffc,slf_tst_flg,slf_tst_typ,slv_sng,std::cerr,sz_ctr_sph,sz_idx_dbg,sz_nbr,sz_prm_rsn_usr_spc,tst_sng,vlm_sph,vlm_frc_ncl,wgt_vlm,wvl_bnd_sz_idx,wvl_bnd_sz_nbr,wvl_idx_dbg,wvl_nbr,xsa_sph)
 #endif // !PARALLELIZE_OVER_CL1
 #endif // !_OpenMP
   for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){ // CL1: Start outermost loop
@@ -3481,7 +3486,7 @@ int main(int argc,char **argv)
     } // end loop over bnd
     
     rcd+=flx_slr_src.flx_frc_get(bnd_min,bnd_max,bnd_nbr,flx_slr_frc_bnd); // [frc] Fraction of solar flux in band
-    rcd+=spc_bbd.flx_frc_get(bnd_min,bnd_max,bnd_nbr,flx_IR_frc_bnd); // [frc] Fraction of infrared flux in band
+    rcd+=spc_bbd.flx_bbd_frc_get(bnd_min,bnd_max,bnd_nbr,flx_bbd_frc_bnd); // [frc] Fraction of blackbody flux in band
 
     // Assign refractive indices
     rcd+=cmp_cor.idx_rfr_get(bnd_ctr,idx_rfr_cor_bnd,bnd_nbr,wrn_ntp_flg); // [frc] Refractive index of core
@@ -3512,8 +3517,8 @@ int main(int argc,char **argv)
       // Default weight is spectral flux (Planck or Rayleigh weighting)
       if(bnd_ctr[0] < bnd_SW_LW && bnd_ctr[bnd_nbr-1] > bnd_SW_LW){
 	/* Spectral region straddles solar and infrared */
-	flx_wgt_frc_bnd=flx_IR_frc_bnd; // [frc] Radiant flux weighting factor
-	flx_wgt_frc=flx_IR_frc[wvl_idx]; // [frc] Radiant flux weighting factor
+	flx_wgt_frc_bnd=flx_bbd_frc_bnd; // [frc] Radiant flux weighting factor
+	flx_wgt_frc=flx_bbd_frc[wvl_idx]; // [frc] Radiant flux weighting factor
 	wrn_prn(prg_nm,sbr_nm,"Using LW weights in partly solar wavelength band:");
 	std::cerr << "bnd_ctr[0] = " << bnd_ctr[0]*1.0e6 << " um, " << "bnd_ctr[" << bnd_nbr-1 << "] = " << bnd_ctr[bnd_nbr-1]*1.0e6 << " um" << std::endl;
 	std::cerr << "Solar--Longwave boundary is " << bnd_SW_LW*1.0e6 << " um" << std::endl;
@@ -3521,7 +3526,7 @@ int main(int argc,char **argv)
 	std::cerr << "idx\tbnd_min\tbnd_max\twvn_min\twvn_max\tSW_wgt\tLW_wgt" << std::endl;
 	std::cerr << "idx\tum\tum\tcm-1\tcm-1\t\t" << std::endl;
 	for(bnd_idx=0;bnd_idx<bnd_nbr;bnd_idx++){
-	  std::cerr << bnd_idx << "\t" << bnd_min[bnd_idx]*1.0e6 << "\t" << bnd_max[bnd_idx]*1.0e6 << "\t" << bnd_min_wvn[bnd_idx] << "\t" << bnd_max_wvn[bnd_idx] << "\t" << flx_slr_frc_bnd[bnd_idx] << "\t" << flx_IR_frc_bnd[bnd_idx] << std::endl;
+	  std::cerr << bnd_idx << "\t" << bnd_min[bnd_idx]*1.0e6 << "\t" << bnd_max[bnd_idx]*1.0e6 << "\t" << bnd_min_wvn[bnd_idx] << "\t" << bnd_max_wvn[bnd_idx] << "\t" << flx_slr_frc_bnd[bnd_idx] << "\t" << flx_bbd_frc_bnd[bnd_idx] << std::endl;
 	} // !bnd_idx
       }else if(wvl_ctr[wvl_idx] < bnd_SW_LW){
 	/* Spectral region completely solar */
@@ -3536,14 +3541,15 @@ int main(int argc,char **argv)
 	} // !wvl_ctr
       }else{
 	/* Spectral region completely infrared */
-	flx_wgt_frc_bnd=flx_IR_frc_bnd; // [frc] Radiant flux weighting factor
-	flx_wgt_frc=flx_IR_frc[wvl_idx]; // [frc] Radiant flux weighting factor
+	flx_wgt_frc_bnd=flx_bbd_frc_bnd; // [frc] Radiant flux weighting factor
+	flx_wgt_frc=flx_bbd_frc[wvl_idx]; // [frc] Radiant flux weighting factor
       } // !wvl_ctr
     }else if(spc_wgt_sng == "Reflectance"){ // endif spc_wgt_sng == "Default"
       err_prn(prg_nm,sbr_nm,"spc_wgt_sng == Reflectance weight not implemented yet");
     }else{ // !spc_wgt_sng == "Reflectance"
       err_prn(prg_nm,sbr_nm,"Unknown spc_wgt_sng");
     } // !spc_wgt_sng == "Default"
+    //    for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++) std::cout << "DEBUG flx_bbd_frc[ " << wvl_idx << "] = " << flx_bbd_frc[wvl_idx] << std::endl;
     assert(flx_wgt_frc > 0.0 || wvl_nbr*bnd_nbr == 1);
     
     // Weight refractive indices over current spectral interval
@@ -3593,14 +3599,14 @@ int main(int argc,char **argv)
 #endif // PARALLELIZE_OVER_CL3
 #ifdef _OPENMP // OpenMP
 #ifdef PARALLELIZE_OVER_CL2
-#pragma omp parallel for default(none) firstprivate(rcd) private(abs_fct_MaS99_scl,asm_prm_scl,bck_hms_scl,bnd_idx,ngl_idx,phz_fnc_crr,plz_crr,q_abs,q_bck,q_ext,q_sct,spk_val,sz_idx,wgt_xsa) shared(abs_cff_vlm,abs_fct_MaS99,abs_fsh,abs_fsh_ffc,abs_ncl_wk_mdm_flg,asm_prm,asm_prm_fsh,bch_flg,bck_cff_vlm,bck_fsh,bck_fsh_ffc,bnd_ctr,bnd_nbr,cnc_sph,coat_flg,dbg_lvl,dmn_frc,dns_prt,ext_cff_vlm,ext_fsh,ext_fsh_ffc,ffc_mdm_typ,flx_wgt_frc,flx_slr_frc_bnd,flx_IR_frc_bnd,flx_wgt_frc_bnd,idx_rfr_cor_bnd,idx_rfr_ffc_bnd,idx_rfr_mdm_bnd,idx_rfr_mnt_bnd,idx_rfr_mtx_bnd,idx_rfr_ncl_bnd,idx_rfr_prt_bnd,lgn_nbr,lng_foo,mie_flg,ngl,ngl_dlt,ngl_nbr,phz_fnc_ffc,phz_fnc_dgn,plz_dgn,rds_cor,rds_mnt,sca_cff_vlm,sca_fsh,sca_fsh_ffc,slf_tst_flg,slf_tst_typ,slv_sng,std::cerr,sz_ctr_sph,sz_idx_dbg,sz_nbr,sz_prm_rsn_usr_spc,tst_sng,vlm_sph,vlm_frc_ncl,wgt_vlm,wvl_bnd_sz_idx,wvl_bnd_sz_nbr,wvl_idx,wvl_idx_dbg,wvl_nbr,xsa_sph)
+#pragma omp parallel for default(none) firstprivate(rcd) private(abs_fct_MaS99_scl,asm_prm_scl,bck_hms_scl,bnd_idx,ngl_idx,phz_fnc_crr,plz_crr,q_abs,q_bck,q_ext,q_sct,spk_val,sz_idx,wgt_xsa) shared(abs_cff_vlm,abs_fct_MaS99,abs_fsh,abs_fsh_ffc,abs_ncl_wk_mdm_flg,asm_prm,asm_prm_fsh,bch_flg,bck_cff_vlm,bck_fsh,bck_fsh_ffc,bnd_ctr,bnd_nbr,cnc_sph,coat_flg,dbg_lvl,dmn_frc,dns_prt,ext_cff_vlm,ext_fsh,ext_fsh_ffc,ffc_mdm_typ,flx_wgt_frc,flx_slr_frc_bnd,flx_bbd_frc_bnd,flx_wgt_frc_bnd,idx_rfr_cor_bnd,idx_rfr_ffc_bnd,idx_rfr_mdm_bnd,idx_rfr_mnt_bnd,idx_rfr_mtx_bnd,idx_rfr_ncl_bnd,idx_rfr_prt_bnd,lgn_nbr,lng_foo,mie_flg,ngl,ngl_dlt,ngl_nbr,phz_fnc_ffc,phz_fnc_dgn,plz_dgn,rds_cor,rds_mnt,sca_cff_vlm,sca_fsh,sca_fsh_ffc,slf_tst_flg,slf_tst_typ,slv_sng,std::cerr,sz_ctr_sph,sz_idx_dbg,sz_nbr,sz_prm_rsn_usr_spc,tst_sng,vlm_sph,vlm_frc_ncl,wgt_vlm,wvl_bnd_sz_idx,wvl_bnd_sz_nbr,wvl_idx,wvl_idx_dbg,wvl_nbr,xsa_sph)
 #endif // !PARALLELIZE_OVER_CL2
 #endif // !_OpenMP
     for(bnd_idx=0;bnd_idx<bnd_nbr;bnd_idx++){ // CL2: Start middle loop
 
 #ifdef _OPENMP // OpenMP
 #ifdef PARALLELIZE_OVER_CL3
-#pragma omp parallel for default(none) firstprivate(rcd) private(abs_fct_MaS99_scl,asm_prm_scl,bck_hms_scl,ngl_idx,phz_fnc_crr,plz_crr,q_abs,q_bck,q_ext,q_sct,spk_val,sz_idx,wgt_xsa) shared(abs_cff_vlm,abs_fct_MaS99,abs_fsh,abs_fsh_ffc,abs_ncl_wk_mdm_flg,asm_prm,asm_prm_fsh,bch_flg,bck_cff_vlm,bck_fsh,bck_fsh_ffc,bnd_ctr,bnd_idx,bnd_nbr,cnc_sph,coat_flg,dbg_io,dbg_lvl,dbg_off,dbg_old,dbg_scl,dmn_frc,dns_prt,ext_cff_vlm,ext_fsh,ext_fsh_ffc,ffc_mdm_typ,flx_IR_frc_bnd,flx_slr_frc_bnd,flx_wgt_frc,flx_wgt_frc_bnd,idx_rfr_cor_bnd,idx_rfr_ffc_bnd,idx_rfr_mdm_bnd,idx_rfr_mnt_bnd,idx_rfr_mtx_bnd,idx_rfr_ncl_bnd,idx_rfr_prt_bnd,lgn_nbr,lng_foo,mie_flg,ngl,ngl_dlt,ngl_nbr,phz_fnc_ffc,phz_fnc_dgn,plz_dgn,prg_mtr_rsn,rds_cor,rds_mnt,sbr_nm,sca_cff_vlm,sca_fsh,sca_fsh_ffc,slf_tst_flg,slf_tst_typ,slv_sng,std::cerr,sz_ctr_sph,sz_idx_dbg,sz_nbr,sz_prm_rsn_usr_spc,tst_sng,vlm_sph,vlm_frc_ncl,wgt_vlm,wvl_bnd_sz_idx,wvl_bnd_sz_nbr,wvl_idx,wvl_idx_dbg,wvl_nbr,xsa_sph)
+#pragma omp parallel for default(none) firstprivate(rcd) private(abs_fct_MaS99_scl,asm_prm_scl,bck_hms_scl,ngl_idx,phz_fnc_crr,plz_crr,q_abs,q_bck,q_ext,q_sct,spk_val,sz_idx,wgt_xsa) shared(abs_cff_vlm,abs_fct_MaS99,abs_fsh,abs_fsh_ffc,abs_ncl_wk_mdm_flg,asm_prm,asm_prm_fsh,bch_flg,bck_cff_vlm,bck_fsh,bck_fsh_ffc,bnd_ctr,bnd_idx,bnd_nbr,cnc_sph,coat_flg,dbg_io,dbg_lvl,dbg_off,dbg_old,dbg_scl,dmn_frc,dns_prt,ext_cff_vlm,ext_fsh,ext_fsh_ffc,ffc_mdm_typ,flx_bbd_frc_bnd,flx_slr_frc_bnd,flx_wgt_frc,flx_wgt_frc_bnd,idx_rfr_cor_bnd,idx_rfr_ffc_bnd,idx_rfr_mdm_bnd,idx_rfr_mnt_bnd,idx_rfr_mtx_bnd,idx_rfr_ncl_bnd,idx_rfr_prt_bnd,lgn_nbr,lng_foo,mie_flg,ngl,ngl_dlt,ngl_nbr,phz_fnc_ffc,phz_fnc_dgn,plz_dgn,prg_mtr_rsn,rds_cor,rds_mnt,sbr_nm,sca_cff_vlm,sca_fsh,sca_fsh_ffc,slf_tst_flg,slf_tst_typ,slv_sng,std::cerr,sz_ctr_sph,sz_idx_dbg,sz_nbr,sz_prm_rsn_usr_spc,tst_sng,vlm_sph,vlm_frc_ncl,wgt_vlm,wvl_bnd_sz_idx,wvl_bnd_sz_nbr,wvl_idx,wvl_idx_dbg,wvl_nbr,xsa_sph)
 #endif // !PARALLELIZE_OVER_CL3
 #endif // endif OpenMP
       for(sz_idx=0;sz_idx<sz_nbr;sz_idx++){ // CL3: Start innermost loop
@@ -3696,9 +3702,9 @@ int main(int argc,char **argv)
 	  //	     cnc_nbr_sph_rsl_frc=1.0; // [frc] Resolved fraction of number concentration
 	  dns_prt=1.0; // [kg m-3] Density of particle
 	  flx_wgt_frc=bnd_nbr; // [frc] Radiant flux weighting factor
-	  // flx_wgt_frc_bnd points to flx_slr_frc_bnd or flx_IR_frc_bnd so change those
+	  // flx_wgt_frc_bnd points to flx_slr_frc_bnd or flx_bbd_frc_bnd so change those
 	  flx_slr_frc_bnd[bnd_idx]=1.0; // [frc] Fraction of solar flux in band
-	  flx_IR_frc_bnd[bnd_idx]=1.0; // [frc] Fraction of infrared flux in band
+	  flx_bbd_frc_bnd[bnd_idx]=1.0; // [frc] Fraction of blackbody flux in band
 	} /* endif tst_sng=="psd_ntg_dgn" */
 	
 	/* wgt_xsa weights size distribution by cross-sectional area and spectral flux
@@ -3905,7 +3911,7 @@ int main(int argc,char **argv)
   delete []bnd_min; // [m] Minimum wavelength in band
   delete []bnd_max; // [m] Maximum wavelength in band
   delete []flx_slr_frc_bnd; // [frc] Fraction of solar flux in band
-  delete []flx_IR_frc_bnd; // [frc] Fraction of infrared flux in band
+  delete []flx_bbd_frc_bnd; // [frc] Fraction of blackbody flux in band
   delete []idx_rfr_cor_bnd; // [frc] Refractive index of core
   delete []idx_rfr_ffc_bnd; // [frc] Effective refractive index of particle
   delete []idx_rfr_mdm_bnd; // [frc] Refractive index of medium
@@ -3988,16 +3994,21 @@ int main(int argc,char **argv)
   
   // Compute broadband LW mass absorption coefficients, e.g., CCM:physics/cldems()/kabsl
   prc_cmp abs_cff_mss_bb_LW(0.0); // [m2 kg-1] Broadband longwave mass absorption coefficient
-  prc_cmp flx_IR_frc_ttl(0.0); // [frc] Diagnostic total of flx_wgt_frc
-  if(spc_bbd.flx_frc_get(wvl_mnm,wvl_mxm) > 0.0){
+  prc_cmp flx_bbd_frc_ttl(0.0); // [frc] Diagnostic total of flx_wgt_frc
+  prc_cmp flx_bbd_frc_nrm_ttl(0.0); // [frc] Diagnostic total of flx_bbd_frc_nrm
+  if(spc_bbd.flx_bbd_frc_get(wvl_mnm,wvl_mxm) > 0.0){
     for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
-      flx_IR_frc_ttl+=flx_IR_frc[wvl_idx]; // [frc] Diagnostic total of flux_wgt_frc
-      abs_cff_mss_bb_LW+=abs_cff_mss[wvl_idx]*flx_IR_frc[wvl_idx]; // [m2 kg-1]
-    } // end loop over wvl 
+      flx_bbd_frc_ttl+=flx_bbd_frc[wvl_idx]; // [frc] Diagnostic total of flux_wgt_frc
+      abs_cff_mss_bb_LW+=abs_cff_mss[wvl_idx]*flx_bbd_frc[wvl_idx]; // [m2 kg-1]
+    } // !wvl_idx
+    for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
+      flx_bbd_frc_nrm[wvl_idx]=flx_bbd_frc[wvl_idx]/flx_bbd_frc_ttl; // [frc] Normalized fractional flx_bbd_frc
+      flx_bbd_frc_nrm_ttl+=flx_bbd_frc_nrm[wvl_idx]; // [frc] Diagnostic total of flx_bbd_frc_nrm
+    } // !wvl_idx
     // Normalize by contributing fraction in order to improve estimate of broadband total
-    abs_cff_mss_bb_LW=abs_cff_mss_bb_LW/flx_IR_frc_ttl; // [m2 kg-1]
+    abs_cff_mss_bb_LW=abs_cff_mss_bb_LW/flx_bbd_frc_ttl; // [m2 kg-1]
     // Safest to archive bogus abs_cff_mss_bb_LW when full LW spectrum was not specified, or when overlapping spectra, e.g., CAM_LW, cause fraction to exceed 1.0
-    if(flx_IR_frc_ttl < 0.9 || flx_IR_frc_ttl > 1.0) abs_cff_mss_bb_LW=1.0e36; // [m2 kg-1]
+    if(flx_bbd_frc_ttl < 0.9 || flx_bbd_frc_ttl > 1.0) abs_cff_mss_bb_LW=1.0e36; // [m2 kg-1]
   } // endif
 
   /* Nomenclature:
@@ -5154,8 +5165,10 @@ int main(int argc,char **argv)
       {0,"dst_sfc",NC_FLOAT,1,dmn_sz,"long_name","Surface area distribution","units","meter2 meter-3 meter-1"},
       {0,"dst_vlm",NC_FLOAT,1,dmn_sz,"long_name","Volume distribution","units","meter3 meter-3 meter-1"},
       {0,"dst_xsa",NC_FLOAT,1,dmn_sz,"long_name","Cross-Sectional area distribution","units","meter2 meter-3 meter-1"},
-      {0,"flx_IR_frc",nco_xtyp,1,dmn_wvl,"long_name","Fraction of terrestrial flux in band","units","fraction"},
-      {0,"flx_IR_frc_ttl",nco_xtyp,0,dmn_scl,"long_name","Total terrestrial flux in all bands, normalized by blackbody flux","units","fraction"},
+      {0,"flx_bbd_frc",nco_xtyp,1,dmn_wvl,"long_name","Absolute (non-normalized) fraction of terrestrial flux in band","units","fraction"},
+      {0,"flx_bbd_frc_nrm",nco_xtyp,1,dmn_wvl,"long_name","Normalized (so grid contains all terrestrial flux) fraction of terrestrial flux in band","units","fraction"},
+      {0,"flx_bbd_frc_ttl",nco_xtyp,0,dmn_scl,"long_name","Total terrestrial flux in all bands, normalized by blackbody flux","units","fraction"},
+      {0,"flx_bbd_frc_nrm_ttl",nco_xtyp,0,dmn_scl,"long_name","Total normalized terrestrial flux in all bands (should be 1.0)","units","fraction"},
       {0,"flx_slr",nco_xtyp,1,dmn_wvl,"long_name","Absolute solar flux in band","units","watt meter-2"},
       {0,"flx_slr_frc",nco_xtyp,1,dmn_wvl,"long_name","Fraction of solar flux in band","units","fraction"},
       {0,"flx_slr_frc_blr",nco_xtyp,1,dmn_wvl,"long_name","Fraction of solar flux at shorter wavelengths","units","fraction"},
@@ -5332,8 +5345,10 @@ int main(int argc,char **argv)
     rcd=nco_put_var(nc_out,static_cast<std::string>("dst_sfc"),dst_sfc); delete []dst_sfc;
     rcd=nco_put_var(nc_out,static_cast<std::string>("dst_vlm"),dst_vlm); delete []dst_vlm;
     rcd=nco_put_var(nc_out,static_cast<std::string>("dst_xsa"),dst_xsa); delete []dst_xsa;
-    rcd=nco_put_var(nc_out,static_cast<std::string>("flx_IR_frc"),flx_IR_frc); delete []flx_IR_frc;
-    rcd=nco_put_var(nc_out,static_cast<std::string>("flx_IR_frc_ttl"),flx_IR_frc_ttl);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("flx_bbd_frc"),flx_bbd_frc); delete []flx_bbd_frc;
+    rcd=nco_put_var(nc_out,static_cast<std::string>("flx_bbd_frc_nrm"),flx_bbd_frc_nrm); delete []flx_bbd_frc_nrm;
+    rcd=nco_put_var(nc_out,static_cast<std::string>("flx_bbd_frc_ttl"),flx_bbd_frc_ttl);
+    rcd=nco_put_var(nc_out,static_cast<std::string>("flx_bbd_frc_nrm_ttl"),flx_bbd_frc_nrm_ttl);
     rcd=nco_put_var(nc_out,static_cast<std::string>("flx_slr"),flx_slr); delete []flx_slr;
     rcd=nco_put_var(nc_out,static_cast<std::string>("flx_slr_frc"),flx_slr_frc); delete []flx_slr_frc;
     rcd=nco_put_var(nc_out,static_cast<std::string>("flx_slr_frc_blr"),flx_slr_frc_blr); delete []flx_slr_frc_blr;

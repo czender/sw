@@ -158,11 +158,11 @@ spc_bbd_cls::eval(const prc_cmp &wvl){ // [W m-2 m-1 sr-1] Specific intensity of
 } // !spc_bbd_cls::eval()
 
 int // O [enm] Return success code
-spc_bbd_cls::flx_frc_get // [fnc] Fraction of blackbody emission in given spectral region
+spc_bbd_cls::flx_bbd_frc_get // [fnc] Fraction of blackbody emission in given spectral region
 (const prc_cmp *wvl_min, // I [m] Minimum wavelength
  const prc_cmp *wvl_max, // I [m] Maximum wavelength
  const long &wvl_nbr, // I [nbr] Number of wavelength bands
- prc_cmp *flx_IR_frc, // O [frc] Fraction of infrared flux in band
+ prc_cmp *flx_bbd_frc, // O [frc] Fraction of blackbody flux in band
  const long &bnd_nbr_arg) // I [nbr] Number of bands to discretize Planck function
 {
   /* Purpose: Compute fraction of blackbody emission in given spectral region
@@ -175,7 +175,7 @@ spc_bbd_cls::flx_frc_get // [fnc] Fraction of blackbody emission in given spectr
      function over wide spectral bands.
      fxm: Implement fast routine that optimizes quadrature of Planck function */
      
-  std::string sbr_nm("spc_bbd_cls::flx_frc_get"); // [sng] Subroutine name
+  std::string sbr_nm("spc_bbd_cls::flx_bbd_frc_get"); // [sng] Subroutine name
   long bnd_idx; // [idx] Counting index for bnd
   long wvl_idx; // [idx] Counting index for wvl
   double ntn_ttl; // [W m-2 sr-1] Radiance in specified spectral region
@@ -204,14 +204,14 @@ spc_bbd_cls::flx_frc_get // [fnc] Fraction of blackbody emission in given spectr
       ntn_ttl+=eval(bnd_ctr[bnd_idx])*bnd_dlt[bnd_idx]; // [W m-2 sr-1] Radiance in specified spectral region
     } // !bnd_idx
     // Convert [W m-2 sr-1] -> [frc] for fractional blackbody emission
-    flx_IR_frc[wvl_idx]=ntn_ttl/ntn_bbd_ntg; // [frc] Fraction of infrared flux in band
+    flx_bbd_frc[wvl_idx]=ntn_ttl/ntn_bbd_ntg; // [frc] Fraction of blackbody flux in band
   } // !wvl_idx
   
   return rcd; // [enm] Return success code
-} // !spc_bbd_cls::flx_frc_get()
+} // !spc_bbd_cls::flx_bbd_frc_get()
 
 prc_cmp // [frc] Fraction of blackbody emission in given spectral region
-spc_bbd_cls::flx_frc_get // [fnc] Fraction of blackbody emission in given spectral region
+spc_bbd_cls::flx_bbd_frc_get // [fnc] Fraction of blackbody emission in given spectral region
 (const prc_cmp &wvl_min, // I [m] Minimum wavelength
  const prc_cmp &wvl_max) // I [m] Maximum wavelength
 {
@@ -219,30 +219,30 @@ spc_bbd_cls::flx_frc_get // [fnc] Fraction of blackbody emission in given spectr
      Routine is simply a wrapper for array routine
      Error checking done in array routine */
 
-  prc_cmp flx_IR_frc; // [frc] Fraction of IR flux in band
+  prc_cmp flx_bbd_frc; // [frc] Fraction of blackbody flux in band
   long wvl_nbr(1L); // [nbr] Number of wavelength bands
-  std::string sbr_nm("spc_bbd_cls::flx_frc_get"); // [sng] Subroutine name
+  std::string sbr_nm("spc_bbd_cls::flx_bbd_frc_get"); // [sng] Subroutine name
 
-  rcd+=flx_frc_get // [fnc] Fraction of blackbody emission in given spectral region
+  rcd+=flx_bbd_frc_get // [fnc] Fraction of blackbody emission in given spectral region
     (&wvl_min, // I [m] Minimum wavelength
      &wvl_max, // I [m] Maximum wavelength
      wvl_nbr, // I [nbr] Number of wavelength bands
-     &flx_IR_frc); // O [frc] Fraction of IR flux in band
+     &flx_bbd_frc); // O [frc] Fraction of blackbody flux in band
 
-  return flx_IR_frc; // [frc] Fraction of IR flux in band
-} // !spc_bbd_cls::flx_frc_get()
+  return flx_bbd_frc; // [frc] Fraction of blackbody flux in band
+} // !spc_bbd_cls::flx_bbd_frc_get()
 
 int // O [enm] Return success code
-flx_frc_get_WiW76 // [fnc] Fraction of blackbody emission in given spectral region
+flx_bbd_frc_get_WiW76 // [fnc] Fraction of blackbody emission in given spectral region
 (const prc_cmp *wvn_grd, // I [cm-1] Wavenumber at band interfaces
  const long &wvn_nbr, // I [nbr] Number of wavenumber bands (interfaces minus one)
  const prc_cmp &tpt, // I [K] Temperature
- prc_cmp *flx_bbd_frc) // O [frc] Fraction of infrared flux in band
+ prc_cmp *flx_bbd_frc) // O [frc] Fraction of blackbody flux in band
 {
   /* Purpose: Compute fraction of blackbody emission in each band of wavenumber grid wvn_grd
      Routine uses following nomentclature (consistent with mie()):
      wvn_grd[wvn_nbr+1]: User-specified input/output grid in CGS wavenumber [cm-1]
-     flx_bbd_frc[wvn_nbr]: [frc] Fraction of infrared flux in band
+     flx_bbd_frc[wvn_nbr]: [frc] Fraction of blackbody flux in band
      
      Routine supports two normalization options:
      flx_frc_nrm: Re-normalize absolute fractions to sum to unity. This normalization ensures all thermal emission is represented in wvl_grd. The sum of flx_bbd_frc is exactly one.
@@ -256,7 +256,7 @@ flx_frc_get_WiW76 // [fnc] Fraction of blackbody emission in given spectral regi
   using mth::cst_M_PIl; // (3.1415926535897932384626433832795029L) [frc] 3
   using phc::cst_Stefan_Boltzmann; // (5.67032e-8) [W m-2 K-4] Stefan-Boltzmann constant GoY89 p. 462
 
-  std::string sbr_nm("spc_bbd_cls::flx_frc_get_WiW76"); // [sng] Subroutine name
+  std::string sbr_nm("flx_bbd_frc_get_WiW76"); // [sng] Subroutine name
   std::string nrm_typ_sng("flx_frc_nrm"); // [sng] Normalization type
   int rcd(0); // [enm] Return code
   
@@ -306,10 +306,25 @@ flx_frc_get_WiW76 // [fnc] Fraction of blackbody emission in given spectral regi
 
   } // !wvn_idx
 
+  if(dbg_lvl_get() >= dbg_off){
+    std::cout << "Diagnostics from " << sbr_nm << std::endl;
+    std::cout << "Intensity of blackbody radiation = (cst_stf_blt*T^4)/pi = " << ntn_bbd_ntg << " W m-2 sr-1" << std::endl;
+    std::cout << "Fractional missing radiance bluer (shorter wavelengths/larger wavenumbers) than wavenumber grid = " << flx_bbd_frc_mss_blr << std::endl;
+    std::cout << "Fractional missing radiance redder (longer wavelengths/smaller wavenumbers) than wavenumber grid = " << flx_bbd_frc_mss_rdr << std::endl;
+  
+    std::cout << "idx\twvn_grd\tbbd_blr" << std::endl;
+    std::cout << "   \t cm-1  \tW m-2 sr-1" << std::endl;
+    for(wvn_idx=0;wvn_idx<wvn_nbr;wvn_idx++) std::cout << wvn_idx << "\t" << wvn_grd[wvn_idx] << "\t" << ntn_bbd_blr[wvn_idx] << std::endl;
+
+    std::cout << "idx\twvn_min\twvn_max\tflx_bbd_frc" << std::endl;
+    std::cout << "   \t cm-1  \t cm-1  \t    frc    " << std::endl;
+    for(wvn_idx=0;wvn_idx<wvn_nbr;wvn_idx++) std::cout << wvn_idx << "\t" << wvn_grd[wvn_idx] << "\t" << wvn_grd[wvn_idx+1] << "\t" << flx_bbd_frc[wvn_idx] << std::endl;
+  } // !dbg
+
   delete []ntn_bbd_blr; // [W m-2 sr-1] Integrated radiance bluer than corresponding wavenumber
 
   return rcd; // [enm] Return success code
-} // !spc_bbd_cls::flx_frc_get_WiW76()
+} // !spc_bbd_cls::flx_bbd_frc_get_WiW76()
 
 double // [W m-2 sr-1] Integrated Planck function radiance from wvn_lo to infinity
 planck_integral_WiW76 // [fnc] Compute integral of Planck function from wvn_lo to infinity

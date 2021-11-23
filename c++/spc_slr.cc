@@ -761,7 +761,7 @@ spc_slr_cls::spc_slr_raw_fl_get // [fnc] Load raw solar spectrum data from file
     std::cout << "idx\twvl_min\twvl_max\tflx_frc_blr" << std::endl;
     std::cout << "   \t  um   \t  um   \t    frc    " << std::endl;
     for(idx=0;idx<wvl_nbr;idx++) std::cout << idx << "\t" << wvl_min[idx]*1.0e6 << "\t" << wvl_max[idx]*1.0e6 << "\t" << flx_frc_blr[idx] << std::endl;
-  } // end if dbg
+  } // !dbg
 
   if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");
   return rcd; // [enm] Return success code

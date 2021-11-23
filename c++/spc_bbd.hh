@@ -46,16 +46,16 @@ public:
   prc_cmp eval(const prc_cmp &wvl); // [W m-2 m-1 sr-1] Specific intensity of blackbody radiation
 
   prc_cmp // [frc] Fraction of blackbody emission in given spectral region
-  flx_frc_get // [fnc] Fraction of blackbody emission in given spectral region
+  flx_bbd_frc_get // [fnc] Fraction of blackbody emission in given spectral region
   (const prc_cmp &wvl_min, // [m] Minimum wavelength
    const prc_cmp &wvl_max); // [m] Maximum wavelength
 
   int // O [enm] Return success code
-  flx_frc_get // [fnc] Fraction of blackbody emission in given spectral region
+  flx_bbd_frc_get // [fnc] Fraction of blackbody emission in given spectral region
   (const prc_cmp *wvl_min, // I [m] Minimum wavelength
    const prc_cmp *wvl_max, // I [m] Maximum wavelength
    const long &wvl_nbr, // I [nbr] Number of wavelength bands
-   prc_cmp *flx_IR_frc, // O [frc] Fraction of infrared flux in band
+   prc_cmp *flx_bbd_frc, // O [frc] fraction of blackbody flux in band
    const long &bnd_nbr_arg=bnd_nbr_dfl); // I [nbr] Number of bands to discretize Planck function
 
   prc_cmp flx_ttl()const; // [W m-2] Hemispheric blackbody irradiance
@@ -93,11 +93,11 @@ planck_integral_WiW76 // [fnc] Compute integral of Planck function from wvn_lo t
  double tpt); // [K] Temperature
 
 int // O [enm] Return success code
-flx_frc_get_WiW76 // [fnc] Fraction of blackbody emission in given spectral region
+flx_bbd_frc_get_WiW76 // [fnc] Fraction of blackbody emission in given spectral region
 (const prc_cmp *wvn_grd, // I [cm-1] Wavenumber at band interfaces
  const long &wvn_nbr, // I [nbr] Number of wavenumber bands (interfaces minus one)
  const prc_cmp &tpt, // I [K] Temperature
- prc_cmp *flx_bbd_frc); // O [frc] Fraction of infrared flux in band
+ prc_cmp *flx_bbd_frc); // O [frc] fraction of blackbody flux in band
 
 // Define inline'd functions in header so source is visible to calling files
 
