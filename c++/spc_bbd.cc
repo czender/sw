@@ -91,6 +91,7 @@ spc_bbd_cls::plk_ntg_evl // [fnc] Compute integral of Planck function between tw
      VCP      : Exponential series cutoff points
      VMAX     : Largest allowable argument of EXP function */
 
+#if 0
   const prc_cmp A1(1.0/3.0); // [] Power series coefficient
   const prc_cmp A2(-1.0/8.0); // [] Power series coefficient
   const prc_cmp A3(1.0/60.0); // [] Power series coefficient
@@ -123,6 +124,7 @@ spc_bbd_cls::plk_ntg_evl // [fnc] Compute integral of Planck function between tw
   prc_cmp D[2]; // [] Exponential series expansion of integral of Planck function from WNUMLO (i=0) or WNUMHI (i=1) to infinity
   prc_cmp P[2]; // [] Power series expansion of integral of Planck function from zero to WNUMLO (I=0) or WNUMHI (I=1)
   prc_cmp V[2]; // [] C2 * (WNUMLO(I=1) or WNUMHI(I=2)) / temperature
+#endif // !0
   
   if(tpt < 1.0e-4){
     plk_ntg=0.0; // [W m-2 sr-1]

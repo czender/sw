@@ -474,8 +474,8 @@ int main(int argc,char **argv)
       for(sz_idx=0;sz_idx<sz_nbr;sz_idx++){
 	tpt_a2d(bnd_idx,sz_idx)=bnd_idx*sz_nbr+sz_idx; // [K] Temperature (array two-dimensional)
 	std::cout << "tpt_a2d(" << bnd_idx << "," << sz_idx << ") = " << tpt_a2d(bnd_idx,sz_idx) << std::endl;
-      } // end loop over lon
-    } // end loop over bnd
+      } // !sz_idx
+    } // !bnd_idx
     // Print contents using overloaded stream insertion operator
     std::cout << tpt_a2d << std::endl; // [fnc]
     // std::cout << "Access a2d_cls out of range: " << tpt_a2d(bnd_nbr*sz_nbr) << std::endl; // [fnc]

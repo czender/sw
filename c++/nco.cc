@@ -170,7 +170,7 @@ aer_htg // [fnc] Determine aerosol heating characteristics
     htg_aer_prt[idx]=nrg_dps_prt[idx]/(spc_heat_aer*mss[idx]); // [K s-1] Aerosol heating rate per particle
     // Maximum temperature change assumes no evaporation or diffusion of heat
     tpt_dlt_aer_max[idx]=htg_aer_prt[idx]*tm_rrd; // [K] Temperature change, maximum
-  } // end loop over sz
+  } // !sz
   nrg_dps_dgn=slr_cst*mss_rsl*abs_cff_mss; // [J s-1 m-3] Energy deposition rate, diagnostic
   htg_aer_dgn=slr_cst*mss_rsl*abs_cff_mss/(spc_heat_aer*mss_rsl); // [K s-1] Aerosol heating rate, total
   tpt_dlt_aer_ttl=htg_aer_dgn*tm_rrd; // [K] Temperature change, total
@@ -213,7 +213,7 @@ aer_htg // [fnc] Determine aerosol heating characteristics
       dsvddt_H2O=dsvddt_H2O_PrK78_fst_scl(tpt_mdp); // [kg m-3 K-1] Derivative of saturation vapor density over planar liquid water
       err_prn(sbr_nm,"Wet heating physics not implemented yet...");
     } // endelse flg_dry
-  } // end loop over sz
+  } // !sz
 
   /* Determine temperature change of air in limit of complete conduction from particles to air
      Aerosol mass mixing ratios are typically O(10^-9) (micrograms per kilogram)
@@ -381,7 +381,7 @@ rnd_chm // [fnc] Raindrop chemistry
   for(idx=0;idx<sz_nbr;idx++){
     mss_C_aqs[idx]=0.0; // [kg] Aqueous mass of C per particle
     cnc_mss_C_aqs_ttl+=mss_C_aqs[idx]; // [kg m-3] Mass concentration of aqueous C
-  } // end loop over sz
+  } // !sz
 
   // Output module results
   const int sz_dmn(nco_inq_dimid(nc_out,static_cast<std::string>("sz"))); // [dmn] Size dimension
@@ -504,7 +504,7 @@ rfl_frs // [fnc] Fresnel reflectance
     ngl_rfr_dgr[idx]=180.0*ngl_rfr[idx].real()/mth::cst_M_PIl; // [dgr] Angle of refraction, real component
     ngl_brw[idx]=std::atan(idx_rfr_rlt[idx].real()); // [rdn] Brewster angle BoH83 p. 36 (2.71.5)
     ngl_brw_dgr[idx]=180.0*ngl_brw[idx]/mth::cst_M_PIl; // [dgr] Brewster angle
-  } // end loop over wvl
+  } // !wvl
 
   /* Compute reflectance properties for all wavelengths for each polarization state
      Use relative index of refraction to save some operations
@@ -605,7 +605,7 @@ rfl_frs // [fnc] Fresnel reflectance
 	 rfl_flx_frs[idx], // I [frc] Approximation to target argument
 	 PRC_CMP(1.0e-4), // I [frc] Relative precision
 	 "Vetting flux reflectance"); // I [sng] Descriptive message of context
-    } // end loop over wvl
+    } // !wvl
   } // endif
 
   // Delete obsolete arrays
@@ -651,6 +651,101 @@ rfl_frs // [fnc] Fresnel reflectance
 
   if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");
   return rcd; // [enm] Return success code
-} // end rfl_frs()
+} // !rfl_frs()
+
+int // O [enm] Return success code
+plk_tbl_mk // [fnc] Build lookup-table for Planck function
+(const int &nc_out, // I [fl] netCDF file for output 
+ const int &dmn_nbr_max, // I [nbr] Maximum number of dimensions allowed in single variable in output file
+ const prc_cmp &tpt_min, // I [K] Minimum temperature in Planck-weight table
+ const prc_cmp &tpt_max, // I [K] Maximum temperature in Planck-weight table
+ const prc_cmp *wvn_grd, // I [cm-1] Wavenumber at band interfaces
+ const long &wvn_nbr) // I [nbr] Number of wavenumber bands (interfaces minus one)
+{
+  /* Purpose: Build lookup-table for fast evaluation of spectral Planck-weights
+     Table records absolute (fractional?) weights of integrated Planck-radiance along two axes, wavenumer bin and temperature
+     For each temperature between tpt_min and tpt_max (tpt_nbr=tpt_max-tpt_min+1), table records weights for all wvn_nbr bands of spectral grid
+     Spectral Planck-weights at arbitrary temperature tpt_min <= tpt_in <= tpt_max can be interpolated as follows:
+     int tpt_idx_fst=(int)tpt_min
+     int tpt_lo=(int)tpt_in
+     int tpt_idx_lo=tpt_in+tpt_idx_fst
+     tpt_wgt_lo=tpt_in-tpt_lo
+     tpt_wgt_hi=1.0-tpt_wgt_lo
+     flx_frc_bbd(tpt_in)=tpt_wgt_lo*flx_frc_bbd[tpt_idx_lo]+(1.0-tpt_wgt_lo)*flx_frc_bbd[tpt_idx_lo+1]
+     Assumptions:
+     Temperature grid is quantized to integer values
+     Finer resolution would incur floating point arithmetic penalty to locate bounding rows
+
+     nc_out is modified as variables are defined
+     Other routines can read this lookup table */
+
+  int rcd(0); // Return success code
+  // Local
+  const std::string sbr_nm("plk_tbl_mk"); // [sng] Name of subroutine
+  if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Entering...");
+
+  const std::string dmn_rcd("wvl"); // [sng] Record dimension name
+  const nc_type nco_xtyp(nco_get_xtype(static_cast<prc_cmp>(1.0))); // [enm] External netCDF type
+  
+  const int tpt_idx_fst=static_cast<int>(tpt_min); // [nbr] First row/column/element of table (i.e., tpt[0]) corresponds to temperature (int)tpt_min
+  const int tpt_nbr=(tpt_max-tpt_min+1); // [nbr] Number of temperatures to consider
+
+  a2d_cls<prc_cmp> flx_bbd_frc_nrm(wvn_nbr,tpt_nbr); // [frc] Normalized fraction of blackbody flux in spectral band
+
+  prc_cmp *tpt=new prc_cmp[tpt_nbr]; // [K] Temperature
+
+  long tpt_idx; // [idx] Counting index for temperature
+
+  for(tpt_idx=0;tpt_idx<tpt_nbr;tpt_idx++){
+    // Get fraction of blackbody flux in band
+    tpt[tpt_idx]=int(tpt_min)+tpt_idx;
+    rcd+=flx_bbd_frc_get_WiW76(wvn_grd,wvn_nbr,tpt[tpt_idx],&flx_bbd_frc_nrm(0,tpt_idx));
+  } // !tpt_idx
+
+  // Sanity check
+
+  if(true){
+    std::cout << "Planck-weight table:" << std::endl;
+  } // endif true
+
+  // Delete obsolete arrays
+
+  // Output results of module
+  rcd=nco_redef(nc_out,NC_EINDEFINE); // [fnc] Put open netCDF dataset into define mode
+
+  const int tpt_dmn(nco_def_dim(nc_out,static_cast<std::string>("tpt"),dmn_rcd == "tpt" ? NC_UNLIMITED : tpt_nbr)); // [dmn] Temperature dimension
+  const int wvn_dmn(nco_def_dim(nc_out,static_cast<std::string>("wvn"),dmn_rcd == "wvn" ? NC_UNLIMITED : wvn_nbr)); // [dmn] Wavenumber dimension
+  const int wvn_grd_dmn(nco_def_dim(nc_out,static_cast<std::string>("wvn_grd"),dmn_rcd == "wvn_grd" ? NC_UNLIMITED : wvn_nbr+1)); // [dmn] Wavenumber grid dimension
+
+  const int *dmn_wvn(&wvn_dmn); // Pointer to wavenumber dimension
+  const int *dmn_wvn_grd(&wvn_grd_dmn); // Pointer to wavenumber grid dimension
+  const int *dmn_tpt(&tpt_dmn); // Pointer to temperature dimension
+  const int *dmn_scl((int *)NULL); // [dmn] Dummy dimension for scalars CLIP
+  // Derived dimensions
+  const int dmn_wvn_tpt[2]={wvn_dmn,tpt_dmn}; // [dmn] 
+
+  var_mtd_sct var_mtd[]={
+    {0,"tpt",nco_xtyp,1,dmn_tpt,"long_name","Temperature","units","kelvin"},
+    {0,"tpt_min",NC_FLOAT,0,dmn_scl,"long_name","Minimum temperature in Planck-weight table","units","kelvin"},
+    {0,"tpt_max",NC_FLOAT,0,dmn_scl,"long_name","Maximum temperature in Planck-weight table","units","kelvin"},
+    {0,"tpt_nbr",NC_FLOAT,0,dmn_scl,"long_name","Number of temperatures in Planck-weight table","units","number"},
+    {0,"flx_bbd_frc_nrm",nco_xtyp,2,dmn_wvn_tpt,"long_name","Normalized fraction of blackbody flux in spectral band","units","fraction"},
+  }; // !var_mtd_sct var_mtd[]
+  const int var_mtd_nbr(sizeof(var_mtd)/sizeof(var_mtd_sct)); // [nbr] Number of variables in array
+  rcd+=nco_var_dfn(nc_out,var_mtd,var_mtd_nbr,dmn_nbr_max); // [fnc] Define variables in output netCDF file
+
+  rcd=nco_enddef(nc_out); // [fnc] Leave define mode
+
+  // After writing, delete arrays 
+  rcd=nco_put_var(nc_out,static_cast<std::string>("tpt"),tpt); delete []tpt;
+  rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_min"),tpt_min);
+  rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_max"),tpt_max);
+  rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_nbr"),tpt_nbr);
+  rcd=nco_put_var(nc_out,static_cast<std::string>("flx_bbd_frc_nrm"),&flx_bbd_frc_nrm(0,0));
+  //  rcd=nco_put_var(nc_out,static_cast<std::string>("tpt"),tpt); delete []tpt;
+
+  if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");
+  return rcd; // [enm] Return success code
+} // !plk_tbl_mk()
 
 // Global functions with C++ linkages end

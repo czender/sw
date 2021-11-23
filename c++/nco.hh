@@ -25,10 +25,12 @@
 #include <gsl/gsl_complex_math.h> // GNU Scientific Library complex math functions
 
 // Personal headers
+#include <a2d.hh> // Two dimensional arrays
 #include <dbg.hh> // Debugging constants
 #include <mth.hh> // Mathematical utilities, constants
 #include <utl.hh> // err_prn(), wrn_prn(), Exit_gracefully()
 #include <aer.hh> // Aerosol physics
+#include <spc_bbd.hh> // Blackbody spectra
 #include <spc_slr.hh> // Solar spectra
 #include <psd.hh> // Particle size distributions
 #include <tdy.hh> // Atmospheric thermodynamics
@@ -67,7 +69,7 @@ aer_htg // [fnc] Determine aerosol heating characteristics
  const prc_cmp &abs_cff_mss, // I [m2 kg-1] Mass absorption coefficient
  const prc_cmp &mss_rsl, // I [kg m-3] Mass concentration resolved
  const prc_cmp &ss_co_alb); // I [frc] Single scattering co-albedo
-// end aer_htg() prototype
+// !aer_htg()
 
 int // O [enm] Return success code
 rnd_chm // [fnc] Raindrop chemistry
@@ -79,7 +81,17 @@ rnd_chm // [fnc] Raindrop chemistry
  const prc_cmp *mss, // I [kg] Mass 
  const prc_cmp *rds_ctr, // I [m] Radius at bin center
  const prc_cmp &vmr_CO2); // [mlc mlc-1] Volume mixing ratio of CO2
-// end rnd_chm() prototype
+// !rnd_chm()
+
+int // O [enm] Return success code
+plk_tbl_mk // [fnc] Build lookup-table for Planck function
+(const int &nc_out, // I [fl] netCDF file for output 
+ const int &dmn_nbr_max, // I [nbr] Maximum number of dimensions allowed in single variable in output file
+ const prc_cmp &tpt_min, // I [K] Minimum temperature in Planck-weight table
+ const prc_cmp &tpt_max, // I [K] Maximum temperature in Planck-weight table
+ const prc_cmp *wvn_grd, // I [cm-1] Wavenumber at band interfaces
+ const long &wvn_nbr); // I [nbr] Number of wavenumber bands (interfaces minus one)
+// !plk_tbl_mk()
 
 int // O [enm] Return success code
 rfl_frs // [fnc] Fresnel reflectance
@@ -89,7 +101,7 @@ rfl_frs // [fnc] Fresnel reflectance
  const std::complex<prc_cmp> *idx_rfr_1, // I [frc] Refractive index of transmitted medium
  const std::complex<prc_cmp> *idx_rfr_2, // I [frc] Refractive index of incident medium
  const prc_cmp &slr_zen_ngl_cos); // I [frc] Cosine solar zenith angle
-// end rfl_frs() prototype
+// !rfl_frs()
 
 // Define inline'd functions in header so source is visible to calling files
 

@@ -4,7 +4,7 @@
    Weight properties by radiant flux, either TOA solar spectrum or Planck function
    High resolution template for developing coarse resolution aerosol parameterizations */
 
-/* Copyright (C) 1997--2014 Charlie Zender
+/* Copyright (C) 1997--present Charlie Zender
    You may copy, distribute, and/or modify this software under the terms of the GNU General Public License (GPL) Version 3
    See http://www.gnu.org/copyleft/gpl.html for full license text
    The original author of this software, Charlie Zender, wants to improve it
@@ -444,6 +444,8 @@ int main(int argc,char **argv)
   prc_cmp tpt_gnd(300.0); // [K] Ground temperature
   prc_cmp tpt_ice(tpt_frz_pnt); // [K] Ice temperature
   prc_cmp tpt_mdp(300.0); // [K] Environmental temperature
+  prc_cmp tpt_min(180.0); // [K] Minimum temperature in Planck-weight table
+  prc_cmp tpt_max(340.0); // I [K] Maximum temperature in Planck-weight table
   prc_cmp tpt_prt(273.15); // [K] Particle temperature
   prc_cmp tpt_soi(297.0); // [K] Soil temperature
   prc_cmp tpt_sst(300.0); // [K] Sea surface temperature
@@ -650,6 +652,8 @@ int main(int argc,char **argv)
     {"tpt_gnd",required_argument,0,0}, // [K] Ground temperature
     {"tpt_ice",required_argument,0,0}, // [K] Ice temperature
     {"tpt_mdp",required_argument,0,0}, // [K] Environmental temperature
+    {"tpt_min",required_argument,0,0}, // [K] Minimum temperature in Planck-weight table
+    {"tpt_max",required_argument,0,0}, // [K] Maximum temperature in Planck-weight table
     {"tpt_soi",required_argument,0,0}, // [K] Soil temperature
     {"tpt_sst",required_argument,0,0}, // [K] Sea surface temperature
     {"tpt_vgt",required_argument,0,0}, // [K] Vegetation temperature
@@ -860,6 +864,8 @@ int main(int argc,char **argv)
       if(opt_crr == "tpt_gnd") tpt_gnd=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [K] Ground temperature
       if(opt_crr == "tpt_ice") tpt_ice=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [K] Ice temperature
       if(opt_crr == "tpt_mdp") tpt_mdp=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [K] Environmental temperature
+      if(opt_crr == "tpt_min") tpt_min=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [K] Minimum temperature in Planck-weight table
+      if(opt_crr == "tpt_max") tpt_max=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [K] Maximum temperature in Planck-weight table
       if(opt_crr == "tpt_soi") tpt_soi=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [K] Soil temperature
       if(opt_crr == "tpt_sst") tpt_sst=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [K] Sea surface temperature
       if(opt_crr == "tpt_vgt") tpt_vgt=static_cast<prc_cmp>(std::strtod(opt_sng.c_str(),(char **)NULL)); // [K] Vegetation temperature
@@ -4009,7 +4015,7 @@ int main(int argc,char **argv)
     abs_cff_mss_bb_LW=abs_cff_mss_bb_LW/flx_bbd_frc_ttl; // [m2 kg-1]
     // Safest to archive bogus abs_cff_mss_bb_LW when full LW spectrum was not specified, or when overlapping spectra, e.g., CAM_LW, cause fraction to exceed 1.0
     if(flx_bbd_frc_ttl < 0.9 || flx_bbd_frc_ttl > 1.0) abs_cff_mss_bb_LW=1.0e36; // [m2 kg-1]
-  } // endif
+  } // !spc_bbd.flx_bbd_frc_get(wvl_mnm,wvl_mxm)
 
   /* Nomenclature:
      ext_cff_mss [m2 kg-1] is extinction  per unit mass     of aerosol (not air)
@@ -4362,8 +4368,19 @@ int main(int argc,char **argv)
        rfl_gnd_dff, // I [frc] Diffuse reflectance of ground (beneath snow)
        rt_obj, // I [rt] Radiative transfer object
        slr_zen_ngl_cos); // I [frc] Cosine solar zenith angle
-  } // endif mie_flg
+  } // !mie_flg
   
+  if(tst_sng == "plk_tbl"){
+    rcd+= // O [enm] Return success code
+      plk_tbl_mk // [fnc] Build lookup-table for Planck function
+      (nc_out, // I [fl] netCDF file for output 
+       dmn_nbr_max, // I [nbr] Maximum number of dimensions allowed in single variable in output file
+       tpt_min, // I [K] Minimum temperature in Planck-weight table
+       tpt_max, // I [K] Maximum temperature in Planck-weight table
+       wvn_grd, // I [cm-1] Wavenumber at band interfaces
+       wvn_nbr); // I [nbr] Number of wavenumber bands (interfaces minus one)
+  } // !tst_sng
+
   // Diagnose aerosol heating
   // fxm: Input is consistent with multi-modal distributions except passing psd_lst[0]
   if((dbg_lvl == dbg_old || tst_sng == "htg") && mie_flg){
@@ -4388,7 +4405,7 @@ int main(int argc,char **argv)
        abs_cff_mss[wvl_idx_dbg], // I [m2 kg-1] Mass absorption coefficient
        mss_rsl, // I [kg m-3] Mass concentration resolved
        ss_co_alb[wvl_idx_dbg]); // I [frc] Single scattering co-albedo
-  } // endif aer_htg
+  } // !aer_htg
   
   if(dbg_lvl == dbg_old || tst_sng == "lbl"){
     std::cout << "Testing line-by-line and HITRAN routines..." << std::endl;
@@ -4556,7 +4573,7 @@ int main(int argc,char **argv)
       rcd=nco_put_var(nc_out,static_cast<std::string>("cll_fsh_mpc"),&cll_fsh_mpc(0,0));
       rcd=nco_put_var(nc_out,static_cast<std::string>("cll_fsh_ntc"),&cll_fsh_ntc(0,0));
       rcd=nco_put_var(nc_out,static_cast<std::string>("stk_nbr_rlt"),&stk_nbr_rlt(0,0));
-    } // endif dmn_nbr_max >= 2
+    } // !dmn_nbr_max
 
     // After writing, delete dynamic arrays 
     rcd=nco_put_var(nc_out,static_cast<std::string>("cnc_nbr_pcp_anl"),cnc_nbr_pcp_anl);
