@@ -342,7 +342,7 @@ planck_integral_WiW76 // [fnc] Compute integral of Planck function from wvn_lo t
   /* Compute integral of Planck spectral radiance from wvn_lo [cm-1] to infinity
      Result in [W m-2 sr-1] is valid for [10 < wvn_lo < 10000 cm-1 at Earth's temperatures
      Result in [W m-2 sr-1] is valid for [0.2 < wvl_lo < 500 um at Earth's temperatures
-     Theory devised by Widger, W. K. and Woodall, M. P., Integration of the Planck blackbody radiation function, Bulletin of the Am. Meteorological Society, 57, 10, 1217-1219, Oct. 1976
+     Theory from Widger, W. K. and Woodall, M. P., Integration of the Planck blackbody radiation function, Bulletin of the Am. Meteorological Society, 57, 10, 1217-1219, Oct. 1976
      Based on C++ implementation from
      https://www.spectralcalc.com/blackbody/inband_radiance.html
      NB: For consistency with original sources, this function returns integrated radiance
@@ -374,16 +374,33 @@ planck_integral_WiW76 // [fnc] Compute integral of Planck function from wvn_lo t
    	        cm-1  	  frc  	W/m2/sr	W/m2/sr
      0          10	0.048	146.199	-0.00068208 */
   const int itr_nbr_max(8); // [nbr] Maximum number of terms in power series method
+  //std::string mth_sng("mth_WiW76_eqn6"); // [sng] Method of WiW76 Equation (6) (only)
+  std::string mth_sng("mth_WiW76_appn"); // [sng] Method of WiW76 Appendix
+
+  double itr_rcp_dbl; // [frc] Reciprocal of iteration index in double precision
+
   double itr_nbr_dbl=2.0+20.0/x_abc;
   itr_nbr_dbl=(itr_nbr_dbl < itr_nbr_max) ? itr_nbr_dbl : itr_nbr_max;
   int itr_nbr=int(itr_nbr_dbl);
-  
-  // Sum series
+
+  // Initialize series sum
   double srs_sum=0;
-  for(int itr_idx=1;itr_idx<itr_nbr;itr_idx++){
-    double dn=1.0/itr_idx;
-    srs_sum+=exp(-itr_idx*x_abc)*(x_abc_cbd+(3.0*x_abc_sqr+6.0*(x_abc+dn)*dn)*dn)*dn;
-  } // !itr_idx
+
+  if(mth_sng == "mth_WiW76_eqn6"){
+    // Method of Equation 6 evaluates all four terms as series expansions
+    for(int itr_idx=1;itr_idx<itr_nbr;itr_idx++){
+      itr_rcp_dbl=1.0/itr_idx;
+      srs_sum+=exp(-itr_idx*x_abc)*(x_abc_cbd+(3.0*x_abc_sqr+6.0*(x_abc+itr_rcp_dbl)*itr_rcp_dbl)*itr_rcp_dbl)*itr_rcp_dbl;
+    } // !itr_idx
+  }else if(mth_sng == "mth_WiW76_appn"){
+    // Method in Appendix evaluates first term in Equantion (6) analytically, and remaining three terms as series expansions
+    // Converges to 10 significant digits with 10-30% fewer terms than mth_WiW76_eqn6
+    srs_sum+=-x_abc_cbd*log(1.0-exp(-x_abc));
+    for(int itr_idx=1;itr_idx<itr_nbr;itr_idx++){
+      itr_rcp_dbl=1.0/itr_idx;
+      srs_sum+=exp(-itr_idx*x_abc)*((3.0*x_abc_sqr+6.0*(x_abc+itr_rcp_dbl)*itr_rcp_dbl)*itr_rcp_dbl)*itr_rcp_dbl;
+    } // !itr_idx
+  } // !mth_sng
   
   // Return result in units of [W m2 sr-1]
   const double two_plk_spd_sqr(2.0*cst_Planck*spd_lgt_sqr); // [] Radiation constant C2 in WiW76 (often called c1L in other work)
