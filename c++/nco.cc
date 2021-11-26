@@ -690,7 +690,7 @@ plk_tbl_mk // [fnc] Build lookup-table for Planck function
   const int tpt_idx_fst=static_cast<int>(tpt_min); // [nbr] First row/column/element of table (i.e., tpt[0]) corresponds to temperature (int)tpt_min
   const int tpt_nbr=(tpt_max-tpt_min+1); // [nbr] Number of temperatures to consider
 
-  a2d_cls<prc_cmp> flx_bbd_frc_nrm(wvn_nbr,tpt_nbr); // [frc] Normalized fraction of blackbody flux in spectral band
+  a2d_cls<prc_cmp> flx_bbd_frc_nrm(tpt_nbr,wvn_nbr); // [frc] Normalized fraction of blackbody flux in spectral band
 
   prc_cmp *tpt=new prc_cmp[tpt_nbr]; // [K] Temperature
 
@@ -699,7 +699,7 @@ plk_tbl_mk // [fnc] Build lookup-table for Planck function
   for(tpt_idx=0;tpt_idx<tpt_nbr;tpt_idx++){
     // Get fraction of blackbody flux in band
     tpt[tpt_idx]=int(tpt_min)+tpt_idx;
-    rcd+=flx_bbd_frc_get_WiW76(wvn_grd,wvn_nbr,tpt[tpt_idx],&flx_bbd_frc_nrm(0,tpt_idx));
+    rcd+=flx_bbd_frc_get_WiW76(wvn_grd,wvn_nbr,tpt[tpt_idx],&flx_bbd_frc_nrm(tpt_idx,0));
   } // !tpt_idx
 
   // Sanity check
@@ -710,9 +710,10 @@ plk_tbl_mk // [fnc] Build lookup-table for Planck function
 
   // Delete obsolete arrays
 
-  // Output results of module
-  rcd=nco_redef(nc_out,NC_EINDEFINE); // [fnc] Put open netCDF dataset into define mode
+  // [fnc] Put open netCDF dataset into define mode
+  rcd=nco_redef(nc_out,NC_EINDEFINE);
 
+  // Define new dimensions
   const int tpt_dmn(nco_def_dim(nc_out,static_cast<std::string>("tpt"),dmn_rcd == "tpt" ? NC_UNLIMITED : tpt_nbr)); // [dmn] Temperature dimension
   const int wvn_dmn(nco_def_dim(nc_out,static_cast<std::string>("wvn"),dmn_rcd == "wvn" ? NC_UNLIMITED : wvn_nbr)); // [dmn] Wavenumber dimension
   const int wvn_grd_dmn(nco_def_dim(nc_out,static_cast<std::string>("wvn_grd"),dmn_rcd == "wvn_grd" ? NC_UNLIMITED : wvn_nbr+1)); // [dmn] Wavenumber grid dimension
@@ -722,26 +723,25 @@ plk_tbl_mk // [fnc] Build lookup-table for Planck function
   const int *dmn_tpt(&tpt_dmn); // Pointer to temperature dimension
   const int *dmn_scl((int *)NULL); // [dmn] Dummy dimension for scalars CLIP
   // Derived dimensions
-  const int dmn_wvn_tpt[2]={wvn_dmn,tpt_dmn}; // [dmn] 
+  const int dmn_tpt_wvn[2]={tpt_dmn,wvn_dmn}; // [dmn] 
 
+  // Output results of module
   var_mtd_sct var_mtd[]={
     {0,"tpt",nco_xtyp,1,dmn_tpt,"long_name","Temperature","units","kelvin"},
     {0,"tpt_min",NC_FLOAT,0,dmn_scl,"long_name","Minimum temperature in Planck-weight table","units","kelvin"},
     {0,"tpt_max",NC_FLOAT,0,dmn_scl,"long_name","Maximum temperature in Planck-weight table","units","kelvin"},
     {0,"tpt_nbr",NC_FLOAT,0,dmn_scl,"long_name","Number of temperatures in Planck-weight table","units","number"},
-    {0,"flx_bbd_frc_nrm",nco_xtyp,2,dmn_wvn_tpt,"long_name","Normalized fraction of blackbody flux in spectral band","units","fraction"},
+    {0,"flx_bbd_frc_nrm_tbl",nco_xtyp,2,dmn_tpt_wvn,"long_name","Normalized fraction of blackbody flux in spectral band","units","fraction"},
   }; // !var_mtd_sct var_mtd[]
   const int var_mtd_nbr(sizeof(var_mtd)/sizeof(var_mtd_sct)); // [nbr] Number of variables in array
   rcd+=nco_var_dfn(nc_out,var_mtd,var_mtd_nbr,dmn_nbr_max); // [fnc] Define variables in output netCDF file
-
-  rcd=nco_enddef(nc_out); // [fnc] Leave define mode
 
   // After writing, delete arrays 
   rcd=nco_put_var(nc_out,static_cast<std::string>("tpt"),tpt); delete []tpt;
   rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_min"),tpt_min);
   rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_max"),tpt_max);
   rcd=nco_put_var(nc_out,static_cast<std::string>("tpt_nbr"),tpt_nbr);
-  rcd=nco_put_var(nc_out,static_cast<std::string>("flx_bbd_frc_nrm"),&flx_bbd_frc_nrm(0,0));
+  rcd=nco_put_var(nc_out,static_cast<std::string>("flx_bbd_frc_nrm_tbl"),&flx_bbd_frc_nrm(0,0));
   //  rcd=nco_put_var(nc_out,static_cast<std::string>("tpt"),tpt); delete []tpt;
 
   if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");

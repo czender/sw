@@ -1248,7 +1248,6 @@ int main(int argc,char **argv)
     prc_cmp sfc_spc_m2xkg(sfc_spc_cm2xg*0.1); // [cm2 g-1 -> m2 kg-1]
     prc_cmp rds_swa_tmp(3.0/(dns_prt*sfc_spc_m2xkg)); // [m]
     rds_nma_mcr=1.0e6*swa2nma(rds_swa_tmp,gsd_anl_dfl); // [m->um] Number median radius analytic, microns
-    //    std::cout << "quark foo = " << foo << std::endl;
   } // endif sfc_spc
   if(rds_swa_mcr != cmd_ln_dfl) rds_nma_mcr=swa2nma(rds_swa_mcr,gsd_anl_dfl); // [um] Number median radius analytic, microns
   if(rds_vma_mcr != cmd_ln_dfl) rds_nma_mcr=vma2nma(rds_vma_mcr,gsd_anl_dfl); // [um] Number median radius analytic, microns
@@ -4295,7 +4294,7 @@ int main(int argc,char **argv)
     rcd=nco_put_vara_crd(nc_out,static_cast<std::string>("sz_grd"),sz_nbr+1,sz_grd);
     rcd=nco_put_vara_crd(nc_out,static_cast<std::string>("wvl"),wvl_nbr,wvl);
     rcd=nco_put_vara_crd(nc_out,static_cast<std::string>("wvl_grd"),wvl_nbr+1,wvl_grd);
-  } // endif true
+  } // !true
 
   // Call modules which implement their own output, then write everything else
 
@@ -4371,6 +4370,7 @@ int main(int argc,char **argv)
   } // !mie_flg
   
   if(tst_sng == "plk_tbl"){
+    //std::cout << "quark1" << std::endl;
     rcd+= // O [enm] Return success code
       plk_tbl_mk // [fnc] Build lookup-table for Planck function
       (nc_out, // I [fl] netCDF file for output 
