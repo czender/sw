@@ -1888,7 +1888,8 @@ broadband hemispheric irradiance
 
 \subsubsection[Band-integrated Emission]{Band-integrated Emission}\label{sxn:msn}
 As mentioned above, the integral in (\ref{eqn:stf_blt_2}) is needed
-for efficient evaluation of band-integrated blackbody emission.
+for efficient evaluation of band-integrated blackbody radiance and
+emission.
 The integrated power emitted from the half-open band from lower
 frequency bound $\frqone$ to infinity is
 \begin{eqnarray}
@@ -1913,23 +1914,49 @@ $[\frqone,\infty]$.
 Line-by-line and ESM radiation codes tend to express radiative
 quantities in CGS wavenumbers because those are the units of the
 measurements stored in the HITRAN spectroscopic database. 
-Hence this section will be presented in wavenumbers as well, to
-facilitate direct application to ESM radiation parameterizations.
-First we re-cast (\ref{eqn:plk_ntg_frq}) into units of CGS wavenumbers
-with a definite lower bound $\wvnone$:
+Hence this section will be presented in a form that applies to
+frequency, SI wavenumbers, and CGS wavenumbers as well, to
+facilitate direct application to ESM radiation parameterizations. 
+First we re-cast (\ref{eqn:plk_ntg_frq}) into a form with the
+generic radiation constants $\rdncstone$ and~$\rdncsttwo$, and
+with a non-zero lower bound $\wvnone$:
 % fxm: convert this to wavenumbers
 \begin{eqnarray}
-\flxupwplkbnd
-& = & \frac{2 \mpi \cstplk}{\cstspdlgt^{2}} 
-\int_{\wvnone}^{\infty} 
-\left( \frac{\cstblt \tpt}{\cstplk} \right)^{3}
-\frac{\xxx^{3}}{\me^{\xxx} - 1} \, \frac{\cstblt \tpt}{\cstplk} \,\dfr\xxx
-\nonumber \\
-& = & \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}} 
-\int_{\wvnone}^{\infty} 
-\frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx
 \label{eqn:plk_ntg_wvn}
+\flxupwplkbnd
+& = & \rdncstone
+\int_{\wvnone}^{\infty} 
+\frac{\wvn^{3}}{\exp(\rdncsttwo\wvn/\tpt) - 1} \,\dfr\wvn \\
+\label{eqn:plk_ntg_xxx}
+& = & \rdncstone
+\int_{\xxxone}^{\infty} 
+\frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx
 \end{eqnarray}
+where
+\begin{subequations}
+\label{eqn:rdn_cst_dfn}
+\begin{align}
+\label{eqn:rdn_cst_one_frq_dfn}
+\rdncstone & = \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}},
+\rdncsttwo = \cstplk / \cstblt,
+      \xxx = \cstplk \frq / \cstblt \tpt,
+               \qquad \mbox{\frq\ in \Hz, \plkfrq\ in \Hz$^{-1}$} \\
+\label{eqn:rdn_cst_one_wvn_dfn}
+\rdncstone & = \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}},
+\rdncsttwo = \cstplk \cstspdlgt / \cstblt,
+      \xxx = \cstplk \cstspdlgt \wvn / \cstblt \tpt,
+               \qquad \mbox{\wvn\ in \xm, \plkwvn\ in (\xm)$^{-1}$} \\
+\label{eqn:rdn_cst_one_wvn_cgs_dfn}
+\rdncstone & = \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}},
+\rdncsttwo = 100 \cstplk \cstspdlgt / \cstblt,
+      \xxx = 100 \cstplk \cstspdlgt \wvn / \cstblt \tpt,
+               \qquad \mbox{\wvn\ in \xcm, \plkwvn\ in (\xcm)$^{-1}$}
+\end{align}
+\end{subequations}
+$\rdncstone$ is outside the definite integral and must be identical
+for any form of the independent variable for wavelength.
+$\rdncsttwo$ is inside the definite integral, and depends on the units 
+of the independent variable.
 
 \subsubsection[Luminosity]{Luminosity}\label{sxn:lmn}
 The total thermal emission of a body (e.g., star or planet) is called  

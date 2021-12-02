@@ -262,7 +262,6 @@ flx_bbd_frc_get_WiW76 // [fnc] Fraction of blackbody emission in given spectral 
   using phc::cst_Planck; // (6.62606876e-34) [J s] Planck's constant (CODATA, 2018 SI NIST) (exact)
   using phc::speed_of_light; // (2.99792458e+08) [m s-1] Speed of light in vacuo (CODATA, 2018 SI NIST)
 
-
   std::string sbr_nm("flx_bbd_frc_get_WiW76"); // [sng] Subroutine name
   std::string nrm_typ_sng("flx_frc_abs"); // [sng] Normalization type
   int rcd(0); // [enm] Return code
