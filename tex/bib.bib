@@ -16176,6 +16176,40 @@ Maring, H., D. L. Savoie, M. A. Izaguirre, L. Custals, and J. S. Reid, Mineral D
   annote = 	 {ppc cmp}
 }
 
+@inproceedings{PCR17,
+  author = {Pereira, Rui and Couto, Marco and Ribeiro, Francisco and Rua, Rui and Cunha, J\'{a}come and Fernandes, Jo\~{a}o Paulo and Saraiva, Jo\~{a}o},
+  title = {Energy Efficiency across Programming Languages: How Do Energy, Time, and Memory Relate?},
+  key =		 {Pereira17},
+  year = 2017,
+  isbn = 9781450355254,
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
+  url = {https://doi.org/10.1145/3136014.3136031},
+  doi = {10.1145/3136014.3136031},
+  abstract = {This paper presents a study of the runtime, memory usage and energy consumption of twenty seven well-known software languages. We monitor the performance of such languages using ten different programming problems, expressed in each of the languages. Our results show interesting findings, such as, slower/faster languages consuming less/more energy, and how memory usage influences energy consumption. Finally, we show how to use our results to provide software engineers support to decide which language to use when energy efficiency is a concern. },
+  booktitle = {Proceedings of the 10th ACM SIGPLAN International Conference on Software Language Engineering},
+  pages = {256--267},
+  numpages = 12,
+  keywords = {Language Benchmarking, Energy Efficiency, Programming Languages, Green Software},
+  location = {Vancouver, BC, Canada},
+  series = {SLE 2017},
+  annote = 	 {grn cmp}
+}
+
+@article{PCR21,
+  title = {Ranking programming languages by energy efficiency},
+  author = {Rui Pereira and Marco Couto and Francisco Ribeiro and Rui Rua and Jácome Cunha and João Paulo Fernandes and João Saraiva},
+  journal = {Science of Computer Programming},
+  key =		 {Pereira21},
+  volume = {205},
+  pages = {102609},
+  year = {2021},
+  issn = {0167-6423},
+  doi = {https://doi.org/10.1016/j.scico.2021.102609},
+  url = {https://www.sciencedirect.com/science/article/pii/S0167642321000022},
+  annote = 	 {grn cmp}
+}
+
 @Article{DCG19,
   author =	 {Xavier Delaunay and Aur\'{é}lie Courtois and Flavien Gouillon},
   title =	 {Evaluation of lossless and lossy algorithms for the compression of scientific datasets in netCDF-4 or HDF5 files},
@@ -16192,11 +16226,41 @@ Maring, H., D. L. Savoie, M. A. Izaguirre, L. Custals, and J. S. Reid, Mineral D
   annote =       {ppc cssi bg}
 }
 
+@Article{KRD21,
+  author = 	 {Kl\"{o}wer, Milan and Razinger, M. and Dominguez, J.~J. and P. D\"{u}ben and T. Palmer},
+  title = 	 {Compressing atmospheric data into its real information content.},
+  journal = 	 {Nat.\ Comput.\ Sci.},
+  year = 	 2021,
+  key = 	 {Klower21},
+  volume = 	 1,
+  pages = 	 {713--724},
+  month = 	 {Nov},
+  URL =          {https://doi.org/10.1038/s43588-021-00156-2},
+  DOI =          {10.1038/s43588-021-00156-2},
+  annote =       {ppc cssi cmp grn}
+}
+
+@Article{HaB21,
+  author = 	 {Dorit M. Hammerling and Allison H. Baker},
+  title = 	 {Advancing data compression via noise detection},
+  journal = 	 {Nat.\ Comput.\ Sci.},
+  year = 	 2021,
+  key = 	 {Hammerling21},
+  volume = 	 1,
+  pages = 	 {711--712},
+  month = 	 {Nov},
+  URL =          {https://doi.org/10.1038/s43588-021-00167-z},
+  DOI =          {10.1038/s43588-021-00167-z},
+  annote =       {ppc cssi cmp grn}
+}
+
 @Article{PNF20,
   author = 	 {Andrew Poppick and Joseph Nardi and Noah Feldman and Allison H. Baker and Alexander Pinard and Dorit M. Hammerling},
   title = 	 {A Statistical Analysis of Lossily Compressed Climate Model Data},
-  journal = 	 {Submitted to Comput.\ Geosci.},
+  journal = 	 {Comput.\ Geosci.},
   year = 	 2020,
+  volume = 	 145,
+  number = 	 104599,
   key = 	 {poppick20},
   annote = 	 {ppc rvw cssi bg}
 }
@@ -16357,6 +16421,15 @@ Maring, H., D. L. Savoie, M. A. Izaguirre, L. Custals, and J. S. Reid, Mineral D
   title = 	 {Snappy: A fast compressor/decompressor},
   howpublished = {\url{https://github.com/google/snappy}},
   annote = 	 {cssi cmp}
+}
+
+@Misc{ccr,
+  key = 	 {CCR20},
+  author = 	 {Charles S. Zender and Edward J. Hartnett},
+  title = 	 {Community Codec Repository},
+  year = 	 2020,
+  howpublished = {\url{http://github/ccr/ccr}},
+  annote = 	 {ppc cmp ccr}
 }
 
 @Misc{unidata,
@@ -27464,8 +27537,26 @@ Zender, C.~S. (2016), Bit Grooming: Statistically accurate precision-preserving 
                   Hartnett, E. J. and C. S. Zender (2021), Additional netCDF Compression Options with the Community Codec Repository (CCR), Proceedings of the 37th AMS Conference on Environmental Information Processing Technologies (EIPT), Paper 573, January 10--15 (virtual). American Meteorological Society Annual Meeting, AMS Press, Boston, MA.},
   latexnote =    {\noindent% HaZ21
                   Hartnett, E.~J. and \textbf{C.~S. Zender} (2021), Additional netCDF Compression Options with the Community Codec Repository (CCR), \textit{Proceedings of the 37th AMS Conference on Environmental Information Processing Technologies (EIPT)}, Paper~573, January 10--15 (virtual). American Meteorological Society Annual Meeting, AMS Press, Boston,~MA.},
-  wwwnote =      {scp ~/foo dust.ess.uci.edu:Sites/ppr/ppr_HaZ21.bib},
-  annote =	 {vf csz ccd}
+  annote =	 {cmp csz ccr}
+}
+
+@InProceedings{HZF21,
+  author =	 {Edward J. Hartnett and Charles S. Zender and Ward Fisher and Dennis Heimbigner and Hang Lei and Brian Curtis and Kyle Gerheiser},
+  title =        {Quantization and Next-Generation Zlib Compression for Fully Backward-Compatible, Faster, and More Effective Data Compression in NetCDF Files},
+  booktitle =	 {Proceedings of the },
+  key =		 {Hartnett21},
+  year =	 2021,
+  organization = {American Geophysical Union},
+  location =	 {December 13--17},
+  address =	 {New Orleans,~LA},
+  DOI =          {fxm},
+  urlcsz =       {http://dust.ess.uci.edu/ppr/ppr_HZF21.pdf},
+  urlcsz2 =      {http://dust.ess.uci.edu/smn/smn_ccr_agu_202112.pdf},
+  txtnote =      {\noindent% HZF21
+                  Hartnett, E. J., C. S. Zender, W. Fisher, D. Heimbigner, H. Lei, B. Curtis, and K. Gerheiser (2021), Quantization and Next-Generation Zlib Compression for Fully Backward-Compatible, Faster, and More Effective Data Compression in NetCDF Files},
+  latexnote =    {\noindent% HZF21
+                  Hi},
+  annote =	 {cmp csz ccr}
 }
 
 @article{SMP21,
