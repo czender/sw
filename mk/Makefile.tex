@@ -130,7 +130,7 @@ endif
 
 # DVI method after 20170926
 %.dvi : %.tex
-	-${LUALATEX} $*.tex
+	-${LUALATEX} --output-format=dvi $*.tex
 	-${BIBTEX} $*
 	-${MAKEINDEX} $*
 
