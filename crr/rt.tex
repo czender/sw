@@ -2051,7 +2051,7 @@ Consider a generic geometric series with indices arranged as in the second form 
 \end{eqnarray}
 Note that mutual cancellation of all terms except the first and the last on the RHS in the penultimate step of the derivation.
 We can check our work by solving for the closed-form summation of the series of interest (\ref{eqn:tyl_mcl_srs}).
-Setting the first term $\aaa = 1$ in (\ref{eqn:geo_srs}) and the constant ratio~$\rrr$ between terms to $\rrr = \yyy = \me^{-\xxx}$ yields $(1-\me^{-\xxx})^{-1}$ which is the starting point and the correct sum of (\ref{eqn:tyl_mcl_srs}).
+Setting the first term $\aaa = 1$ in (\ref{eqn:geo_srs}), the constant ratio~$\rrr$ between terms to $\rrr = \yyy = \me^{-\xxx}$, and the number of terms $\nnn \rightarrow \infty$, yields $(1-\me^{-\xxx})^{-1}$, the starting point and correct sum of (\ref{eqn:tyl_mcl_srs}).
 
 We now substitute the Maclaurin series (\ref{eqn:tyl_mcl_srs}) into 
 the indefinite integral in (\ref{eqn:plk_ntg_xxx_ngt})
@@ -2073,35 +2073,64 @@ $\kkk = 0$ to $\kkk = 1$ to simplify the algebraic form of the power series.
 At first the evaluation of (\ref{eqn:tyl_mcl_new}) may seem more daunting than
 (\ref{eqn:plk_ntg_xxx_ngt}).
 
-Mercifully, each term of (\ref{eqn:tyl_mcl_new}) amenable to integration by parts.
-This technique re-expresses integrals of the form $\int \uuu\,\dfr\vvv$ by the equivalent form $\uuu\vvv - \int \vvv\,\dfr\uuu$.
-The first term of (\ref{eqn:tyl_mcl_new}) can be expressed in this form by defining the change of variables $\uuu = \xxx^{3}$, $\dfr\vvv = \me^{-\xxx}$ so that $\dfr\uuu = 3\xxx^{2}$, $\vvv = -\me^{-\xxx}$.
+Mercifully, each term of (\ref{eqn:tyl_mcl_new}) is amenable to integration by parts.
+This technique expresses integrals of the form $\int \uuu\,\dfr\vvv$ in the equivalent form $\uuu\vvv - \int \vvv\,\dfr\uuu$.
+The general term in (\ref{eqn:tyl_mcl_new}) has the form
+$\int \xxx^{3}\me^{\mmm\xxx} \,\dfr\xxx$ where $\mmm$ is a negative integer.
+We first define the change of variables $\uuu = \xxx^{3}$, $\dfr\vvv = \me^{\mmm\xxx}\,\dfr\xxx$ so that $\dfr\uuu = 3\xxx^{2}\,\dfr\xxx$, $\vvv = \mmm^{-1}\me^{\mmm\xxx}$.
 Integrating by parts we obtain
 \begin{eqnarray}
-\int_{\xxxone}^{\infty} \xxx^{3}\me^{-\kkk\xxx} \,\dfr\xxx  
+\int_{\xxxone}^{\infty} \xxx^{3}\me^{\mmm\xxx} \,\dfr\xxx  
 & = &
 \int_{\xxxone}^{\infty} \uuu\,\dfr\vvv \quad = \quad
 \uuu\vvv \bigg|_{\xxxone}^{\infty} - \int_{\xxxone}^{\infty} \vvv\,\dfr\uuu \nonumber \\
 & = &
--\xxx^{3}\me^{-\xxx}\bigg|_{\xxxone}^{\infty} + 
-\int_{\xxxone}^{\infty} 3\xxx^{2}\me^{-\xxx} \,\dfr\xxx \nonumber \\
+\xxx^{3}\mmm^{-1}\me^{\mmm\xxx}\bigg|_{\xxxone}^{\infty} - 
+\int_{\xxxone}^{\infty} 3\xxx^{2} \mmm^{-1}\me^{\mmm\xxx} \,\dfr\xxx \nonumber \\
 & = &
--\xxx^{3}\me^{-\xxx}\bigg|_{\xxxone}^{\infty} + 
-3 \left( \int_{\xxxone}^{\infty} 3\xxx^{2}\me^{-\xxx} \,\dfr\xxx \right)
-\label{eqn:ply_fct_srs}
+\me^{\mmm\xxx}\xxx^{3}\mmm^{-1}\bigg|_{\xxxone}^{\infty} - 
+3\mmm^{-1} \int_{\xxxone}^{\infty} \xxx^{2}\me^{\mmm\xxx} \,\dfr\xxx
+\label{eqn:srs_ntg_itr1}
 \end{eqnarray}
-
-We can expand the integrand of (\ref{eqn:plk_ntg_xxx}) into an
-infinite series based on polynomial factorization
+The first integration by parts yields a new indefinite integral identical to the original integral except second order in $\xxx$, one less than the cubic order of the original.
+By induction, we will reach a solvable integrand (of order zero in $\xxx$) if we iterate this procedure a total of three times.
+Similar to the first iteration, the next change of variables is
+$\uuu = \xxx^{2}$, $\dfr\vvv = \me^{\mmm\xxx}\,\dfr\xxx$ so that $\dfr\uuu = 2\xxx\,\dfr\xxx$, $\vvv = \mmm^{-1}\me^{\mmm\xxx}$.
 \begin{eqnarray}
-\yyy^{2} - 1 & = & (\yyy - 1)(\yyy + 1) \nonumber \\
-\yyy^{3} - 1 & = & (\yyy - 1)(\yyy^{2} + \yyy + 1) \nonumber \\
-\yyy^{\nnn} - 1 & = & (\yyy - 1)(\yyy^{\nnn-1} + \yyy^{n-2} + \cdots + \yyy^{2} + \yyy + 1) \nonumber \\
-\yyy^{\nnn} - 1 & = & (\yyy - 1) \sum_{\kkk=0}^{\kkk=\nnn-1} \yyy^{\kkk} \nonumber \\
-\yyy - 1 & = & (\yyy^{\nnn} - 1) \bigg/ \sum_{\kkk=0}^{\kkk=\nnn-1} \yyy^{\kkk} \nonumber \\
-\frac{1}{\yyy - 1} & = & (\yyy^{\nnn} - 1)^{-1} \sum_{\kkk=0}^{\kkk=\nnn-1} \yyy^{\kkk}
-\label{eqn:ply_fct_srs}
+\int_{\xxxone}^{\infty} \xxx^{3}\me^{\mmm\xxx} \,\dfr\xxx  
+& = &
+\me^{\mmm\xxx}\xxx^{3}\mmm^{-1} - 3\mmm^{-1}\xxx^{2} \mmm^{-1}\me^{\mmm\xxx} \bigg|_{\xxxone}^{\infty} + 3\mmm^{-1} \int_{\xxxone}^{\infty} 2\xxx\mmm^{-1}\me^{\mmm\xxx} \,\dfr\xxx \nonumber \\
+& = &
+\me^{\mmm\xxx}(\xxx^{3}\mmm^{-1} - 3\xxx^{2}\mmm^{-2}) \bigg|_{\xxxone}^{\infty} + 6\mmm^{-2} \int_{\xxxone}^{\infty} \xxx\me^{\mmm\xxx} \,\dfr\xxx
+\label{eqn:srs_ntg_itr2}
 \end{eqnarray}
+The final integration by parts is similar to the previous iterations, only with
+$\uuu = \xxx$, $\dfr\vvv = \me^{\mmm\xxx}\,\dfr\xxx$ so that $\dfr\uuu = \dfr\xxx$, $\vvv = \mmm^{-1}\me^{\mmm\xxx}$.
+\begin{eqnarray}
+\int_{\xxxone}^{\infty} \xxx^{3}\me^{\mmm\xxx} \,\dfr\xxx  
+& = &
+\me^{\mmm\xxx}(\xxx^{3}\mmm^{-1} - 3\xxx^{2}\mmm^{-2} + 6\mmm^{-2}\xxx\mmm^{-1}) \bigg|_{\xxxone}^{\infty} - 6\mmm^{-2} \int_{\xxxone}^{\infty} \mmm^{-1}\me^{\mmm\xxx} \,\dfr\xxx \nonumber \\
+& = &
+\me^{\mmm\xxx}(\xxx^{3}\mmm^{-1} - 3\xxx^{2}\mmm^{-2} + 6\xxx\mmm^{-3}) \bigg|_{\xxxone}^{\infty} - 6\mmm^{-3} \int_{\xxxone}^{\infty} \me^{\mmm\xxx} \,\dfr\xxx \nonumber \\
+& = &
+\me^{\mmm\xxx}(\xxx^{3}\mmm^{-1} - 3\xxx^{2}\mmm^{-2} + 6\xxx\mmm^{-3}) \bigg|_{\xxxone}^{\infty} - 6\mmm^{-3} \mmm^{-1} \me^{\mmm\xxx} \bigg|_{\xxxone}^{\infty} \nonumber \\
+& = &
+\me^{\mmm\xxx}(\xxx^{3}\mmm^{-1} - 3\xxx^{2}\mmm^{-2} + 6\xxx\mmm^{-3} - 6\mmm^{-4}) \bigg|_{\xxxone}^{\infty} \nonumber \\
+& = &
+\lim_{\xxx \rightarrow \infty} ( \me^{\mmm\xxx} ) \cdot 
+\lim_{\xxx \rightarrow \infty} (\xxx^{3}\mmm^{-1} - 3\xxx^{2}\mmm^{-2} + 6\xxx\mmm^{-3} - 6\mmm^{-4}) \nonumber \\
+& &
+{} - \me^{\mmm\xxxone}(\xxxone^{3}\mmm^{-1} - 3\xxxone^{2}\mmm^{-2} + 6\xxxone\mmm^{-3} - 6\mmm^{-4}) \nonumber \\
+& = &
+0 \cdot \lim_{\xxx \rightarrow \infty} (\xxx^{3}\mmm^{-1} - 3\xxx^{2}\mmm^{-2} + 6\xxx\mmm^{-3} - 6\mmm^{-4}) \nonumber \\
+& &
+{} - \me^{\mmm\xxxone}(\xxxone^{3}\mmm^{-1} - 3\xxxone^{2}\mmm^{-2} + 6\xxxone\mmm^{-3} - 6\mmm^{-4}) \nonumber \\
+& = &
+{} - \me^{\mmm\xxxone}(\xxxone^{3}\mmm^{-1} - 3\xxxone^{2}\mmm^{-2} + 6\xxxone\mmm^{-3} - 6\mmm^{-4})
+\label{eqn:srs_ntg_itr3}
+\end{eqnarray}
+We used the fact that $\mmm$ is a negative integer, and thus 
+$\lim_{\xxx \rightarrow \infty} \me^{\mmm\xxx} \rightarrow 0$ faster than polynomial terms in $\xxx \rightarrow \infty$. 
 
 \subsubsection[Luminosity]{Luminosity}\label{sxn:lmn}
 The total thermal emission of a body (e.g., star or planet) is called  
