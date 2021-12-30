@@ -2126,11 +2126,29 @@ $\uuu = \xxx$, $\dfr\vvv = \me^{\mmm\xxx}\,\dfr\xxx$ so that $\dfr\uuu = \dfr\xx
 & &
 {} - \me^{\mmm\xxxone}(\xxxone^{3}\mmm^{-1} - 3\xxxone^{2}\mmm^{-2} + 6\xxxone\mmm^{-3} - 6\mmm^{-4}) \nonumber \\
 & = &
-{} - \me^{\mmm\xxxone}(\xxxone^{3}\mmm^{-1} - 3\xxxone^{2}\mmm^{-2} + 6\xxxone\mmm^{-3} - 6\mmm^{-4})
+{} - \me^{-\kkk\xxxone}[\xxxone^{3}(-\kkk)^{-1} - 3\xxxone^{2}(-\kkk)^{-2} + 6\xxxone(-\kkk)^{-3} - 6(-\kkk)^{-4}] \nonumber \\
+& = &
+\me^{-\kkk\xxxone}(\xxxone^{3}\kkk^{-1} + 3\xxxone^{2}\kkk^{-2} + 6\xxxone\kkk^{-3} + 6\kkk^{-4})
 \label{eqn:srs_ntg_itr3}
 \end{eqnarray}
-We used the fact that $\mmm$ is a negative integer, and thus 
-$\lim_{\xxx \rightarrow \infty} \me^{\mmm\xxx} \rightarrow 0$ faster than polynomial terms in $\xxx \rightarrow \infty$. 
+When evaluating the upper limit of integration we used the fact that $\mmm$ is a negative integer thus 
+$\lim_{\xxx \rightarrow \infty} \me^{\mmm\xxx} \rightarrow 0$ faster than the polynomial terms in $\xxx \rightarrow \infty$. 
+In the final step we replaced the negative-definite integer $\mmm$ by the positive-definite integer $\kkk \equiv -\mmm$.
+
+We now assemble the closed-form solution to the integral of the 
+the entire geometric series (\ref{eqn:tyl_mcl_new}) from the term-by-term intregral-solutions given in (\ref{eqn:srs_ntg_itr3}).
+\begin{eqnarray}
+\int_{\xxxone}^{\infty} 
+\frac{\xxx^{3}\me^{-\xxx}}{1 - \me^{-\xxx}} \,\dfr\xxx
+ & = &
+\int_{\xxxone}^{\infty} \sum_{\kkk=1}^{\kkk=\infty} \xxx^{3}\me^{-\kkk\xxx} \, \dfr\xxx \nonumber \\
+ & = &
+\sum_{\kkk=1}^{\kkk=\infty} \me^{-\kkk\xxxone}(\xxxone^{3}\kkk^{-1} + 3\xxxone^{2}\kkk^{-2} + 6\xxxone\kkk^{-3} + 6\kkk^{-4})
+\nonumber \\
+ & = &
+\label{eqn:tyl_mcl_sln_fll}
+\end{eqnarray}
+
 
 \subsubsection[Luminosity]{Luminosity}\label{sxn:lmn}
 The total thermal emission of a body (e.g., star or planet) is called  
