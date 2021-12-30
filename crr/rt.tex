@@ -1956,12 +1956,101 @@ where
                \qquad \mbox{\wvn\ in \xcm}
 \end{align}
 \end{subequations}
-$\rdncstone$ is outside the definite integral and is identical for all
+Here $\rdncstone$ is outside the definite integral and is identical for all
 forms of the independent variable for frequency. 
-$\rdncsttwo$ is inside the definite integral, and depends on the units 
+By contrast, $\rdncsttwo$ is inside the definite integral, and depends on the units 
 of the independent variable.
 
-We can expand the integrand of (\ref{eqn:rdn_cst_dfn}) into an
+The independent variable $\xxx$ represents a positive-definite frequency, wavelength, or wavenumber (\ref{eqn:rdn_cst_dfn}).
+The values of frequency and wavenumber of interest in planetary radiative transfer usually lead to $\xxx \gg 1$.
+However, the denominator of (\ref{eqn:plk_ntg_xxx}) contains the unwieldy term $\me^{\xxx}$ which overflows for large values of~$\xxx$.
+To eliminate this computational difficulty, we render the integrand in (\ref{eqn:plk_ntg_xxx}) in terms of (computationally well-behaved) negative exponentials:
+\begin{eqnarray}
+\label{eqn:plk_ntg_xxx_ngt}
+\int_{\xxxone}^{\infty} 
+\frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx 
+& = &
+\int_{\xxxone}^{\infty} 
+\left( \frac{\me^{-\xxx}}{\me^{-\xxx}} \right) \cdot
+\frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx \nonumber \\
+& = &
+\int_{\xxxone}^{\infty}
+\frac{\xxx^{3} \me^{-\xxx}}{\me^{-\xxx}(\me^{\xxx} - 1)} \,\dfr\xxx \nonumber \\
+& = &
+\int_{\xxxone}^{\infty}
+\frac{\xxx^{3} \me^{-\xxx}}{1 - \me^{-\xxx}} \,\dfr\xxx
+\end{eqnarray}
+
+We can rewrite the integrand of (\ref{eqn:plk_ntg_xxx_ngt}) as an
+infinite series by using the Taylor-Maclaurin expansion of the factor
+$(1 - \me^{-\xxx})^{-1}$.
+Using the substitution $\yyy = \me^{-\xxx}$, we find the Maclaurin
+power series by adding successive derivatives of the equivalent
+function $(1-\yyy)^{-1}$ evaluated at $\yyy = 0$ times the 
+independent variable raised to an arithmetically increasing power 
+for each successive term, normalized by the factorial of the term:
+\begin{eqnarray}
+  (1-\me^{-\xxx})^{-1} & \equiv & (1-\yyy)^{-1} \nonumber \\
+  & \equiv & \left. \sum_{\kkk=0}^{\kkk=\infty}
+  \frac{\dfr^{\kkk}}{\dfr \yyy^{\kkk}} (1 - \yyy)^{-1} \right|_{\yyy=0}
+  \cdot \frac{\yyy^{\kkk}}{\kkk!} \nonumber \\
+  & = & 
+  (1 - \yyy)^{-1} \bigg|_{\yyy=0} \cdot \frac{\yyy^{0}}{0!} + 
+  (-1)(1 - \yyy)^{-2}(-1) \bigg|_{\yyy=0} \cdot \frac{\yyy^{1}}{1!} + \nonumber \\
+  & & 
+  % {} so ``+'' gets binary not unary operator spacing KoD95 p. 136
+  {} (-1)(-2)(1 - \yyy)^{-3}(-1) \bigg|_{\yyy=0} \cdot \frac{\yyy^{2}}{2!} + 
+  (-1)(-2)(-3)(1 - \yyy)^{-4}(-1) \bigg|_{\yyy=0} \cdot \frac{\yyy^{3}}{3!} + \ldots \nonumber \\ 
+  & & 
+  \ldots + 
+  (-1)(-2)(-3) \cdots (-\kkk - 2)(-\kkk - 1)(-\kkk) (1 - \yyy)^{-\kkk}(-1) \bigg|_{\yyy=0} \cdot \frac{\yyy^{\kkk}}{\kkk!} + \ldots \nonumber \\
+  & = & 
+  (1)^{-1} \cdot \frac{1}{1} + 
+  (-1)(1)^{-2}(-1) \cdot \frac{\yyy}{1} + 
+  (-1)(-2)(1)^{-3}(-1) \cdot \frac{\yyy^{2}}{2!} + \nonumber \\
+  & & 
+  {} + (-1)(-2)(-3)(1)^{-4}(-1) \cdot \frac{\yyy^{3}}{3!} + \ldots \nonumber \\
+  & & 
+  \ldots + (-1)(-2)(-3) \cdots (-\kkk - 2)(-\kkk - 1)(-\kkk) (1)^{-(\kkk+1)} (-1) \cdot \frac{\yyy^{\kkk}}{\kkk!} + \ldots
+  \nonumber \\
+  & = & 
+  1 + 
+  (-1)^{2} \cdot (1!) \cdot \yyy + 
+  (-1)^{4} \cdot (2!) \cdot \frac{\yyy^{2}}{2!} + 
+  (-1)^{6} \cdot (3!) \cdot \frac{\yyy^{3}}{3!} + \ldots \nonumber \\
+  & & 
+  \ldots + (-1)^{-2\kkk} \cdot (\kkk!) \cdot \frac{\yyy^{\kkk}}{\kkk!} + \ldots \nonumber \\
+  & = & 
+  1 + \yyy + \yyy^{2} + \yyy^{3} + \ldots + \yyy^{\kkk} + \ldots \nonumber \\
+  & = & 
+  \sum_{\kkk=0}^{\kkk=\infty} \yyy^{\kkk} \quad = \quad \sum_{\kkk=0}^{\kkk=\infty} (\me^{-\xxx})^{\kkk} \nonumber \\  
+  & = & 
+  \sum_{\kkk=0}^{\kkk=\infty} \me^{-\kkk\xxx}
+\label{eqn:tyl_mcl_srs}
+\end{eqnarray}
+The Maclaurin series (\ref{eqn:tyl_mcl_srs}) for the function $(1 - \yyy)^{-1}$ is seen to be a simple power series.
+The constant ratio between terms of this power series is $\yyy = \me^{-\xxx}$.
+The radius of convergence of (\ref{eqn:tyl_mcl_srs}) is $|\yyy| = |\me^{-\xxx}| < 1$ due to the singularity of the function at $\yyy = \me^{-\xxx} = 1$.
+Hence the infinite series (\ref{eqn:tyl_mcl_srs}) is a valid representation of the function $(1 - \me^{-\xxx})^{-1}$ for $\xxx > 0$.
+This includes all physically realistic values of frequency, wavenumber, and wavelength.
+
+We now substitute the Maclaurin series (\ref{eqn:tyl_mcl_srs}) into 
+the indefinite integral in (\ref{eqn:plk_ntg_xxx_ngt})
+\begin{eqnarray}
+\int_{\xxxone}^{\infty} 
+\frac{\xxx^{3}\me^{-\xxx}}{1 - \me^{-\xxx}} \,\dfr\xxx
+& = &
+\int_{\xxxone}^{\infty} \xxx^{3}\me^{-\xxx} \sum_{\kkk=0}^{\kkk=\infty} \me^{-\kkk\xxx} \,\dfr\xxx \nonumber \\
+& = &
+\int_{\xxxone}^{\infty} \xxx^{3}\me^{-\xxx} ( 1 + \me^{-\xxx} + \me^{-2\xxx} + \me^{-3\xxx} + \ldots + \me^{-\kkk\xxx} + \ldots ) \,\dfr\xxx \nonumber \\
+& = &
+\int_{\xxxone}^{\infty} ( \xxx^{3}\me^{-\xxx} + \xxx^{3}\me^{-2\xxx} + \xxx^{3}\me^{-3\xxx} + \xxx^{3}\me^{-4\xxx} + \ldots + \xxx^{3}\me^{-(\kkk+1)\xxx} + \ldots ) \,\dfr\xxx \nonumber \\
+& = &
+\int_{\xxxone}^{\infty} \sum_{\kkk=0}^{\kkk=\infty} \xxx^{3}\me^{-(\kkk+1)\xxx} \,\dfr\xxx  
+\label{eqn:tyl_mcl_new}
+\end{eqnarray}
+
+We can expand the integrand of (\ref{eqn:plk_ntg_xxx}) into an
 infinite series based on polynomial factorization
 \begin{eqnarray}
 \yyy^{2} - 1 & = & (\yyy - 1)(\yyy + 1) \nonumber \\
@@ -1971,50 +2060,6 @@ infinite series based on polynomial factorization
 \yyy - 1 & = & (\yyy^{\nnn} - 1) \bigg/ \sum_{\kkk=0}^{\kkk=\nnn-1} \yyy^{\kkk} \nonumber \\
 \frac{1}{\yyy - 1} & = & (\yyy^{\nnn} - 1)^{-1} \sum_{\kkk=0}^{\kkk=\nnn-1} \yyy^{\kkk}
 \label{eqn:ply_fct_srs}
-\end{eqnarray}
-We can rewrite the integrand of (\ref{eqn:rdn_cst_dfn}) as an
-infinite series by using the Taylor-Maclaurin expansion of
-$(\me^{\xxx}-1)^{-1}$.
-Using the substitution $\yyy = \me^{\xxx}$, we find the Maclaurin
-series by adding successive derivatives of the equivalent
-function $(\yyy-1)^{-1}$  evaluated at $\yyy = 0$, normalized by the 
-factorial of the term:
-\begin{eqnarray}
-  (\me^{\xxx}-1)^{-1} & \equiv & (\yyy-1)^{-1} \nonumber \\
-  & \equiv & \left. \sum_{\kkk=0}^{\kkk=\infty}
-  \frac{\dfr^{\kkk}}{\dfr \yyy^{\kkk}} (\yyy - 1)^{-1} \right|_{\yyy=0}
-  \cdot \frac{\yyy^{\kkk}}{\kkk!} \nonumber \\
-  & = & 
-  (\yyy - 1)^{-1} \bigg|_{\yyy=0} \cdot \frac{\yyy^{0}}{0!} + 
-  (-1)(\yyy - 1)^{-2}(1) \bigg|_{\yyy=0} \cdot \frac{\yyy^{1}}{1!} + \nonumber \\
-  & & 
-  % {} so ``+'' gets binary not unary operator spacing KoD95 p. 136
-  {} (-1)(-2)(\yyy - 1)^{-3}(1) \bigg|_{\yyy=0} \cdot \frac{\yyy^{2}}{2!} + 
-  (-1)(-2)(-3)(\yyy - 1)^{-4}(1) \bigg|_{\yyy=0} \cdot \frac{\yyy^{3}}{3!} + \ldots \nonumber \\ 
-  & & 
-  \ldots + 
-  (-1)(-2)(-3) \cdots (-\kkk - 2)(-\kkk - 1)(-\kkk) (\yyy - 1)^{-\kkk}(1) \bigg|_{\yyy=0} \cdot \frac{\yyy^{\kkk}}{\kkk!} + \ldots \nonumber \\
-  & = & 
-  (-1)^{-1} \cdot \frac{1}{1} + 
-  (-1)(-1)^{-2} \cdot \frac{\yyy}{1} + 
-  (-1)(-2)(-1)^{-3} \cdot \frac{\yyy^{2}}{2!} + \nonumber \\
-  & & 
-  {} + (-1)(-2)(-3)(-1)^{-4} \cdot \frac{\yyy^{3}}{3!} + \ldots \nonumber \\
-  & & 
-  \ldots + (-1)(-2)(-3) \cdots (-\kkk - 2)(-\kkk - 1)(-\kkk) (-1)^{-(\kkk+1)} \cdot \frac{\yyy^{\kkk}}{\kkk!} + \ldots
-  \nonumber \\
-  & = & 
-  (-1)^{-1} + 
-  (-1)^{-3} \cdot (1!) \cdot \yyy + 
-  (-1)^{-5} \cdot (2!) \cdot \frac{\yyy^{2}}{2!} + 
-  (-1)^{-7} \cdot (3!) \cdot \frac{\yyy^{3}}{3!} + \ldots \nonumber \\
-  & & 
-  \ldots + (-1)^{-2(\kkk+1)} \cdot (\kkk!) \cdot \frac{\yyy^{\kkk}}{\kkk!} + \ldots \nonumber \\
-  & = & 
-  (-1) \cdot \left( 1 + \yyy + \yyy^{2} + \yyy^{3} + \ldots + \yyy^{\kkk} + \ldots \right) \nonumber \\
-  & = & 
-  - \sum_{\kkk=0}^{\kkk=\infty} \yyy^{\kkk}
-  \label{eqn:tyl_mcl_srs}
 \end{eqnarray}
 
 \subsubsection[Luminosity]{Luminosity}\label{sxn:lmn}
