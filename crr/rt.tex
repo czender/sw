@@ -2143,12 +2143,31 @@ the entire geometric series (\ref{eqn:tyl_mcl_new}) from the term-by-term intreg
  & = &
 \int_{\xxxone}^{\infty} \sum_{\kkk=1}^{\kkk=\infty} \xxx^{3}\me^{-\kkk\xxx} \, \dfr\xxx \nonumber \\
  & = &
-\sum_{\kkk=1}^{\kkk=\infty} \me^{-\kkk\xxxone}(\xxxone^{3}\kkk^{-1} + 3\xxxone^{2}\kkk^{-2} + 6\xxxone\kkk^{-3} + 6\kkk^{-4})
-\nonumber \\
+\sum_{\kkk=1}^{\kkk=\infty} \me^{-\kkk\xxxone}(\xxxone^{3}\kkk^{-1} + 3\xxxone^{2}\kkk^{-2} + 6\xxxone\kkk^{-3} + 6\kkk^{-4}) \nonumber \\
  & = &
+\me^{-\xxxone}(\xxxone^{3}\cdot 1^{-1} + 3\xxxone^{2}\cdot 1^{-2} + 6\xxxone\cdot  1^{-3} + 6\cdot 1^{-4}) + \nonumber \\
+ & &
+\me^{-2\xxxone}(\xxxone^{3}\cdot 2^{-1} + 3\xxxone^{2}\cdot 2^{-2} + 6\xxxone\cdot  2^{-3} + 6\cdot 2^{-4}) + \nonumber \\
+ & &
+\me^{-3\xxxone}(\xxxone^{3}\cdot 3^{-1} + 3\xxxone^{2}\cdot 3^{-2} + 6\xxxone\cdot  3^{-3} + 6\cdot 3^{-4}) + \cdots \nonumber \\
+ & &
+\me^{-\kkk\xxxone}[\xxxone^{3}\kkk^{-1} + 3\xxxone^{2}\kkk^{-1}\kkk^{-1} + 6\kkk^{-3}(\xxxone + \kkk^{-1})] + \cdots \nonumber \\
+ & = &
+\me^{-\xxxone}(\xxxone^{3} + 3\xxxone^{2} + 6\xxxone + 6) + \nonumber \\
+ & &
+\me^{-2\xxxone}(\xxxone^{3}/2 + 3\xxxone^{2}/4 + 3\xxxone/4 + 3/8) + \nonumber \\
+ & &
+\me^{-3\xxxone}(\xxxone^{3}/3 + \xxxone^{2}/3 + 2\xxxone/9 + 2/27) + \cdots \nonumber \\
+ & &
+\me^{-\kkk\xxxone}\kkk^{-1}\{\xxxone^{3} + \kkk^{-1}[3\xxxone^{2} + 6\kkk^{-1}(\xxxone + \kkk^{-1})]\} + \cdots \nonumber \\
+ & = &
+\sum_{\kkk=1}^{\kkk=\infty} \me^{-\kkk\xxxone}\kkk^{-1}\{\xxxone^{3} + \kkk^{-1}[3\xxxone^{2} + 6\kkk^{-1}(\xxxone + \kkk^{-1})]\}
 \label{eqn:tyl_mcl_sln_fll}
 \end{eqnarray}
+The last form of (\ref{eqn:tyl_mcl_sln_fll}) expresses the formula for each term in terms of $\kkk^{-1}$.
+This is a more computationally optimized formula than (\ref{eqn:srs_ntg_itr3}) because it requires computing only a single power of $\kkk$ for each term.
 
+One further computational optimization can be made.
 
 \subsubsection[Luminosity]{Luminosity}\label{sxn:lmn}
 The total thermal emission of a body (e.g., star or planet) is called  
