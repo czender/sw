@@ -2000,28 +2000,28 @@ for each successive term, normalized by the factorial of the term:
   & & 
   % {} so ``+'' gets binary not unary operator spacing KoD95 p. 136
   {} (-1)(-2)(1 - \yyy)^{-3}(-1) \bigg|_{\yyy=0} \cdot \frac{\yyy^{2}}{2!} + 
-  (-1)(-2)(-3)(1 - \yyy)^{-4}(-1) \bigg|_{\yyy=0} \cdot \frac{\yyy^{3}}{3!} + \ldots \nonumber \\ 
+  (-1)(-2)(-3)(1 - \yyy)^{-4}(-1) \bigg|_{\yyy=0} \cdot \frac{\yyy^{3}}{3!} + \cdots \nonumber \\ 
   & & 
-  \ldots + 
+  \cdots + 
   (-1)(-2)(-3) \cdots (-\kkk - 2)(-\kkk - 1)(-\kkk) (1 - \yyy)^{-\kkk}(-1) \bigg|_{\yyy=0} \cdot \frac{\yyy^{\kkk}}{\kkk!} + \ldots \nonumber \\
   & = & 
   (1)^{-1} \cdot \frac{1}{1} + 
   (-1)(1)^{-2}(-1) \cdot \frac{\yyy}{1} + 
   (-1)(-2)(1)^{-3}(-1) \cdot \frac{\yyy^{2}}{2!} + \nonumber \\
   & & 
-  {} + (-1)(-2)(-3)(1)^{-4}(-1) \cdot \frac{\yyy^{3}}{3!} + \ldots \nonumber \\
+  {} + (-1)(-2)(-3)(1)^{-4}(-1) \cdot \frac{\yyy^{3}}{3!} + \cdots \nonumber \\
   & & 
-  \ldots + (-1)(-2)(-3) \cdots (-\kkk - 2)(-\kkk - 1)(-\kkk) (1)^{-(\kkk+1)} (-1) \cdot \frac{\yyy^{\kkk}}{\kkk!} + \ldots
+  \ldots + (-1)(-2)(-3) \cdots (-\kkk - 2)(-\kkk - 1)(-\kkk) (1)^{-(\kkk+1)} (-1) \cdot \frac{\yyy^{\kkk}}{\kkk!} + \cdots
   \nonumber \\
   & = & 
   1 + 
   (-1)^{2} \cdot (1!) \cdot \yyy + 
   (-1)^{4} \cdot (2!) \cdot \frac{\yyy^{2}}{2!} + 
-  (-1)^{6} \cdot (3!) \cdot \frac{\yyy^{3}}{3!} + \ldots \nonumber \\
+  (-1)^{6} \cdot (3!) \cdot \frac{\yyy^{3}}{3!} + \cdots \nonumber \\
   & & 
-  \ldots + (-1)^{-2\kkk} \cdot (\kkk!) \cdot \frac{\yyy^{\kkk}}{\kkk!} + \ldots \nonumber \\
+  \cdots + (-1)^{-2\kkk} \cdot (\kkk!) \cdot \frac{\yyy^{\kkk}}{\kkk!} + \cdots \nonumber \\
   & = & 
-  1 + \yyy + \yyy^{2} + \yyy^{3} + \ldots + \yyy^{\kkk} + \ldots \nonumber \\
+  1 + \yyy + \yyy^{2} + \yyy^{3} + \cdots + \yyy^{\kkk} + \cdots \nonumber \\
   & = & 
   \sum_{\kkk=0}^{\kkk=\infty} \yyy^{\kkk} \quad = \quad \sum_{\kkk=0}^{\kkk=\infty} (\me^{-\xxx})^{\kkk} \nonumber \\  
   & = & 
@@ -2038,14 +2038,14 @@ Consider a generic geometric series with indices arranged as in the second form 
 \begin{eqnarray}
 \sum_{\kkk=1}^{\kkk=\nnn} \aaa\rrr^{\kkk - 1}
 & \equiv & \aaa + \aaa\rrr + \aaa\rrr^{2} + \aaa\rrr^{3} + \cdots + \aaa\rrr^{\nnn-3} + \aaa\rrr^{\nnn-2} + \aaa\rrr^{\nnn-1} \nonumber \\ 
-(1 - \rrr)\sum_{\kkk=1}^{\kkk=\nnn} \aaa\rrr^{(\kkk - 1)} 
+(1 - \rrr)\sum_{\kkk=1}^{\kkk=\nnn} \aaa\rrr^{\kkk - 1} 
 & = &
 (1 - \rrr) ( \aaa + \aaa\rrr + \aaa\rrr^{2} + \aaa\rrr^{3} + \cdots + \aaa\rrr^{\nnn-3} + \aaa\rrr^{\nnn-2} + \aaa\rrr^{\nnn-1} ) \nonumber \\
 & = &
 \aaa + \aaa\rrr + \aaa\rrr^{2} + \aaa\rrr^{3} + \cdots + \aaa\rrr^{\nnn-3} +\aaa\rrr^{\nnn-2} + \aaa\rrr^{\nnn-1} \nonumber \\
 & & {} - \aaa\rrr - \aaa\rrr^{2} - \aaa\rrr^{3} - \cdots - \aaa\rrr^{\nnn-3} -\aaa\rrr^{\nnn-2} - \aaa\rrr^{\nnn-1} - \aaa\rrr^{\nnn} \nonumber \\
 & = & \aaa - \aaa\rrr^{\nnn} \nonumber \\
-\sum_{\kkk=1}^{\kkk=\nnn} \aaa\rrr^{(\kkk - 1)}
+\sum_{\kkk=1}^{\kkk=\nnn} \aaa\rrr^{\kkk - 1}
 & = & \frac{\aaa (1 - \rrr^{\nnn})}{1 - \rrr}
 \label{eqn:geo_srs}
 \end{eqnarray}
@@ -2061,9 +2061,9 @@ the indefinite integral in (\ref{eqn:plk_ntg_xxx_ngt})
 & = &
 \int_{\xxxone}^{\infty} \xxx^{3}\me^{-\xxx} \sum_{\kkk=0}^{\kkk=\infty} \me^{-\kkk\xxx} \,\dfr\xxx \nonumber \\
 & = &
-\int_{\xxxone}^{\infty} \xxx^{3}\me^{-\xxx} ( 1 + \me^{-\xxx} + \me^{-2\xxx} + \me^{-3\xxx} + \ldots + \me^{-\kkk\xxx} + \ldots ) \,\dfr\xxx \nonumber \\
+\int_{\xxxone}^{\infty} \xxx^{3}\me^{-\xxx} ( 1 + \me^{-\xxx} + \me^{-2\xxx} + \me^{-3\xxx} + \cdots + \me^{-\kkk\xxx} + \cdots ) \,\dfr\xxx \nonumber \\
 & = &
-\int_{\xxxone}^{\infty} ( \xxx^{3}\me^{-\xxx} + \xxx^{3}\me^{-2\xxx} + \xxx^{3}\me^{-3\xxx} + \xxx^{3}\me^{-4\xxx} + \ldots + \xxx^{3}\me^{-(\kkk+1)\xxx} + \ldots ) \,\dfr\xxx \nonumber \\
+\int_{\xxxone}^{\infty} ( \xxx^{3}\me^{-\xxx} + \xxx^{3}\me^{-2\xxx} + \xxx^{3}\me^{-3\xxx} + \xxx^{3}\me^{-4\xxx} + \cdots + \xxx^{3}\me^{-(\kkk+1)\xxx} + \cdots ) \,\dfr\xxx \nonumber \\
 & = &
 \int_{\xxxone}^{\infty} \sum_{\kkk=1}^{\kkk=\infty} \xxx^{3}\me^{-\kkk\xxx} \,\dfr\xxx  
 \label{eqn:tyl_mcl_new}
@@ -2189,6 +2189,11 @@ $\ln(1 - \yyy) = - \sum_{\kkk=1}^{\kkk=\infty} \yyy^{\kkk}/\kkk$.
 \kkk^{-2}\sum_{\kkk=1}^{\kkk=\infty} \me^{-\kkk\xxxone}[3\xxxone^{2} + 6\kkk^{-1}(\xxxone + \kkk^{-1})]
 \label{eqn:tyl_mcl_sln_opt}
 \end{eqnarray}
+The first term on the RHS is exact.
+The infinite series on the RHS must be approximated with a finite number of terms.
+\cite{WiW76} show that the number of terms~$\nnn$ required for 10~digit precision ranges from $\nnn=2$ for $\xxxone = 10$ to $\nnn=91$ for $\xxxone = 0.1$.
+The range $10 < \xxxone <= 25$ is not well documented, though $\nnn \le 2$ is sufficient for ten-digit precision.
+Ten-digit precision requires only a single term for $\xxxone > 25$.
 
 \subsubsection[Luminosity]{Luminosity}\label{sxn:lmn}
 The total thermal emission of a body (e.g., star or planet) is called  

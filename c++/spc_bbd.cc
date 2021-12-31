@@ -336,16 +336,16 @@ flx_bbd_frc_get_WiW76 // [fnc] Fraction of blackbody emission in given spectral 
 
 double // [W m-2 sr-1] Integrated Planck function radiance from wvn_lo to infinity
 planck_integral_WiW76 // [fnc] Compute integral of Planck function from wvn_lo to infinity
-(double wvn_lo, // [cm-1] Lower limit of Planck integral in wavenumbers
+(double wvn_lo, // [cm-1] Lower limit of Planck integral in CGS wavenumbers
  double tpt){ // [K] Temperature
   /* Compute integral of Planck spectral radiance from wvn_lo [cm-1] to infinity
-     Result in [W m-2 sr-1] is valid for [10 < wvn_lo < 10000 cm-1 at Earth's temperatures
-     Result in [W m-2 sr-1] is valid for [0.2 < wvl_lo < 500 um at Earth's temperatures
+     Result in [W m-2 sr-1] is valid for [10 < wvn_lo < 10000 cm-1] at Earth's temperatures
+     Result in [W m-2 sr-1] is valid for [0.2 < wvl_lo < 500 um] at Earth's temperatures
      Theory from Widger, W. K. and Woodall, M. P., Integration of the Planck blackbody radiation function, Bulletin of the Am. Meteorological Society, 57, 10, 1217-1219, Oct. 1976
      Based on C++ implementation from
      https://www.spectralcalc.com/blackbody/inband_radiance.html
-     NB: For consistency with original sources, this function returns integrated radiance
-     Multiply result by pi to convert returned integrated radiance into hemispheric irradiance */
+     NB: For consistency with original sources, this function returns spectrally-integrated radiance
+     Multiply result by pi to convert returned integrated radiance into spectrally-integrated hemispheric irradiance */
 
   using phc::cst_Boltzmann; // (1.38063e-23) [J K-1] Boltzmann's constant (2018 SI NIST)
   using phc::cst_Planck; // (6.62606876e-34) [J s] Planck's constant (CODATA, 2018 SI NIST) (exact)
@@ -361,10 +361,10 @@ planck_integral_WiW76 // [fnc] Compute integral of Planck function from wvn_lo t
   
   /* How many terms of sum are needed?
      WiW76 shows that fewer than 200 terms suffice for NSD=10 in Earth's LW region [180 < T < 350 K], [3 < wvl < 100 um]
-     Following Wiw76 Figure 1, impose arbitrary maximum of 512 terms 
+     Following WiW76 Figure 1, impose arbitrary maximum of 512 terms 
      20211123: 
      wvn=10cm-1 at 300 K = x_abc = 0.048 produces physically realistic (positive) bbd_rdr for itr_nbr=8, 16, 32 terms
-     wvn=10cm-1 at 300 K = x_abc = 0.048 produces (physically unrealistic (negative) bbd_rdr for itr_nbr=64, 128, 256, 512 terms (example shown below)
+     wvn=10cm-1 at 300 K = x_abc = 0.048 produces physically unrealistic (negative) bbd_rdr for itr_nbr=64, 128, 256, 512 terms (example shown below)
      Hence more terms are not a panacaea
      DISORT uses ~six terms in "power series" method, so set itr_nbr_max to 8
      Moreover DISORT switches from "power series" method to "exponential series" method for x (aka VCUT) < 1.5
@@ -397,7 +397,7 @@ planck_integral_WiW76 // [fnc] Compute integral of Planck function from wvn_lo t
     srs_sum+=-x_abc_cbd*log(1.0-exp(-x_abc));
     for(int itr_idx=1;itr_idx<itr_nbr;itr_idx++){
       itr_rcp_dbl=1.0/itr_idx;
-      srs_sum+=exp(-itr_idx*x_abc)*((3.0*x_abc_sqr+6.0*(x_abc+itr_rcp_dbl)*itr_rcp_dbl)*itr_rcp_dbl)*itr_rcp_dbl;
+      srs_sum+=exp(-itr_idx*x_abc)*(3.0*x_abc_sqr+6.0*(x_abc+itr_rcp_dbl)*itr_rcp_dbl)*itr_rcp_dbl*itr_rcp_dbl;
     } // !itr_idx
   } // !mth_sng
   
