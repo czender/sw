@@ -1765,7 +1765,7 @@ we obtain
 \end{eqnarray}
 where the last step shifts the initial index to from zero to one.
 
-Using the inifinite series representation (\ref{eqn:rmn_ntg_pwr_srs}) for
+Using the infinite series representation (\ref{eqn:rmn_ntg_pwr_srs}) for
 the integrand of (\ref{eqn:rmn_zta_dfn}) yields
 \begin{eqnarray}
 \rmnztafnc(\xxx) & = & \frac{1}{\gmmfnc(\xxx)}
@@ -1922,7 +1922,7 @@ facilitate direct application to ESM radiation parameterizations.
 First we re-cast (\ref{eqn:plk_ntg_frq}) into a form with the
 generic radiation constants $\rdncstone$ and~$\rdncsttwo$, and
 with a non-zero lower bound~$\wvnone$, then we change variables
-to $\xxx$:
+to~$\xxx$:
 % fxm: convert this to wavenumbers
 \begin{eqnarray}
 \label{eqn:plk_ntg_wvn}
@@ -2034,7 +2034,7 @@ Hence the infinite series (\ref{eqn:tyl_mcl_srs}) is a valid representation of t
 This includes all physically realistic values of frequency, wavenumber, and wavelength.
 
 The sum of a power series can be written in closed form in terms of the number~$\nnn$ of terms, the first term~$\aaa$, and the ratio~$\rrr$ between terms.
-Consider a generic geometric series with indices arranged as in the second form of (\ref{eqn:tyl_mcl_srs})
+Consider a generic geometric series with indices arranged as in the second form of (\ref{eqn:tyl_mcl_srs}):
 \begin{eqnarray}
 \sum_{\kkk=1}^{\kkk=\nnn} \aaa\rrr^{\kkk - 1}
 & \equiv & \aaa + \aaa\rrr + \aaa\rrr^{2} + \aaa\rrr^{3} + \cdots + \aaa\rrr^{\nnn-3} + \aaa\rrr^{\nnn-2} + \aaa\rrr^{\nnn-1} \nonumber \\ 
@@ -2049,12 +2049,12 @@ Consider a generic geometric series with indices arranged as in the second form 
 & = & \frac{\aaa (1 - \rrr^{\nnn})}{1 - \rrr}
 \label{eqn:geo_srs}
 \end{eqnarray}
-Note that mutual cancellation of all terms except the first and the last on the RHS in the penultimate step of the derivation.
+Mutual cancellation of all terms except the first and the last on the RHS in the penultimate step of the derivation simplifies the series to its elegant sum.
 We can check our work by solving for the closed-form summation of the series of interest (\ref{eqn:tyl_mcl_srs}).
 Setting the first term $\aaa = 1$ in (\ref{eqn:geo_srs}), the constant ratio~$\rrr$ between terms to $\rrr = \yyy = \me^{-\xxx}$, and the number of terms $\nnn \rightarrow \infty$, yields $(1-\me^{-\xxx})^{-1}$, the starting point and correct sum of (\ref{eqn:tyl_mcl_srs}).
 
 We now substitute the Maclaurin series (\ref{eqn:tyl_mcl_srs}) into 
-the indefinite integral in (\ref{eqn:plk_ntg_xxx_ngt})
+the indefinite integral in (\ref{eqn:plk_ntg_xxx_ngt}):
 \begin{eqnarray}
 \int_{\xxxone}^{\infty} 
 \frac{\xxx^{3}\me^{-\xxx}}{1 - \me^{-\xxx}} \,\dfr\xxx
@@ -2077,8 +2077,8 @@ Mercifully, each term of (\ref{eqn:tyl_mcl_new}) is amenable to integration by p
 This technique expresses integrals of the form $\int \uuu\,\dfr\vvv$ in the equivalent form $\uuu\vvv - \int \vvv\,\dfr\uuu$.
 The general term in (\ref{eqn:tyl_mcl_new}) has the form
 $\int \xxx^{3}\me^{\mmm\xxx} \,\dfr\xxx$ where $\mmm$ is a negative integer.
-We first define the change of variables $\uuu = \xxx^{3}$, $\dfr\vvv = \me^{\mmm\xxx}\,\dfr\xxx$ so that $\dfr\uuu = 3\xxx^{2}\,\dfr\xxx$, $\vvv = \mmm^{-1}\me^{\mmm\xxx}$.
-Integrating by parts we obtain
+We define the change of variables $\uuu = \xxx^{3}$, $\dfr\vvv = \me^{\mmm\xxx}\,\dfr\xxx$ so that $\dfr\uuu = 3\xxx^{2}\,\dfr\xxx$, $\vvv = \mmm^{-1}\me^{\mmm\xxx}$.
+These definitions take their places in the first integration by parts:
 \begin{eqnarray}
 \int_{\xxxone}^{\infty} \xxx^{3}\me^{\mmm\xxx} \,\dfr\xxx  
 & = &
@@ -2094,7 +2094,7 @@ Integrating by parts we obtain
 \end{eqnarray}
 The first integration by parts yields a new indefinite integral identical to the original integral except second order in $\xxx$, one less than the cubic order of the original.
 By induction, we will reach a solvable integrand (of order zero in $\xxx$) if we iterate this procedure a total of three times.
-Similar to the first iteration, the next change of variables is
+The second change of variables is similar to the first iteration:
 $\uuu = \xxx^{2}$, $\dfr\vvv = \me^{\mmm\xxx}\,\dfr\xxx$ so that $\dfr\uuu = 2\xxx\,\dfr\xxx$, $\vvv = \mmm^{-1}\me^{\mmm\xxx}$.
 \begin{eqnarray}
 \int_{\xxxone}^{\infty} \xxx^{3}\me^{\mmm\xxx} \,\dfr\xxx  
@@ -2190,10 +2190,15 @@ $\ln(1 - \yyy) = - \sum_{\kkk=1}^{\kkk=\infty} \yyy^{\kkk}/\kkk$.
 \label{eqn:tyl_mcl_sln_opt}
 \end{eqnarray}
 The first term on the RHS is exact.
-The infinite series on the RHS must be approximated with a finite number of terms.
-\cite{WiW76} show that the number of terms~$\nnn$ required for 10~digit precision ranges from $\nnn=2$ for $\xxxone = 10$ to $\nnn=91$ for $\xxxone = 0.1$.
-The range $10 < \xxxone <= 25$ is not well documented, though $\nnn \le 2$ is sufficient for ten-digit precision.
-Ten-digit precision requires only a single term for $\xxxone > 25$.
+The infinite series on the RHS must be approximated with a small number of terms.
+More terms does not always means more accuracy.
+The Maclaurin series used to derive (\ref{eqn:tyl_mcl_sln_opt}) have a radius of convergence of $|\xxx| < 1$ due to singularities of $\ln(1+\xxx)$ and $\ln(1-\xxx)$ at $\xxx = \pm 1$.
+The series in (\ref{eqn:tyl_mcl_sln_opt}) can and does diverge outside this range.
+The optimal number~$\nnn$ of terms to sum for a given accuracy depends on the value of the independent spectral variable~$\xxx$.
+
+\cite{WiW76} show that the number of terms~$\nnn$ required for 10-digit precision of (\ref{eqn:tyl_mcl_sln_opt}) ranges from $\nnn=2$ for $\xxxone = 10$ to $\nnn=91$ for $\xxxone = 0.1$.
+The range $10 < \xxxone <= 25$ is not well-documented for (\ref{eqn:tyl_mcl_sln_opt}), though $\nnn \le 2$ terms suffices for 10-digit precision of (\ref{eqn:tyl_mcl_sln_fll}).
+Ten-digit precision for (\ref{eqn:tyl_mcl_sln_fll}) and (\ref{eqn:tyl_mcl_sln_opt}) requires only a single term for $\xxxone > 25$.
 
 \subsubsection[Luminosity]{Luminosity}\label{sxn:lmn}
 The total thermal emission of a body (e.g., star or planet) is called  
