@@ -1895,7 +1895,7 @@ emission.
 The integrated power emitted from the half-open band from lower
 frequency bound $\frqone$ to infinity is
 \begin{eqnarray}
-\flxupwplkbnd
+\flxupwplkbndupw
 & = & \frac{2 \mpi \cstplk}{\cstspdlgt^{2}} 
 \int_{\frqone}^{\infty} 
 \left( \frac{\cstblt \tpt}{\cstplk} \right)^{3}
@@ -1909,7 +1909,7 @@ frequency bound $\frqone$ to infinity is
 where, as before, $\xxx \equiv \cstplk \frq/\cstblt \tpt$.
 We will develop an analytic series expansion for this one-sided
 integral following the method of \cite{WiW76}.
-Here $\flxupwplkbnd$~[\wxmS] is the hemispherically integrated,
+Here $\flxupwplkbndupw$~[\wxmS] is the hemispherically integrated,
 frequency integrated, irradiance emitted by a blackbody over the range 
 $[\frqone,\infty)$.
 
@@ -1926,7 +1926,7 @@ to~$\xxx$:
 % fxm: convert this to wavenumbers
 \begin{eqnarray}
 \label{eqn:plk_ntg_wvn}
-\flxupwplkbnd
+\flxupwplkbndupw
 & = & \rdncstone
 \int_{\wvnone}^{\infty} 
 \frac{\wvn^{3}}{\exp(\rdncsttwo\wvn/\tpt) - 1} \,\dfr\wvn \nonumber \\
@@ -2182,10 +2182,10 @@ $\ln(1 - \yyy) = - \sum_{\kkk=1}^{\kkk=\infty} \yyy^{\kkk}/\kkk$.
 \xxxone^{3} \sum_{\kkk=1}^{\kkk=\infty} \me^{-\kkk\xxxone}\kkk^{-1} + 
 \kkk^{-2}\sum_{\kkk=1}^{\kkk=\infty} \me^{-\kkk\xxxone}[3\xxxone^{2} + 6\kkk^{-1}(\xxxone + \kkk^{-1})] \nonumber \\
  & = &
-\xxxone^{3}[-\ln(1 - \me^{-\xxx})] + 
+\xxxone^{3}[-\ln(1 - \me^{-\xxxone})] + 
 \kkk^{-2}\sum_{\kkk=1}^{\kkk=\infty} \me^{-\kkk\xxxone}[3\xxxone^{2} + 6\kkk^{-1}(\xxxone + \kkk^{-1})] \nonumber \\
  & = &
--\xxxone^{3}\ln(1 - \me^{-\xxx}) + 
+-\xxxone^{3}\ln(1 - \me^{-\xxxone}) + 
 \kkk^{-2}\sum_{\kkk=1}^{\kkk=\infty} \me^{-\kkk\xxxone}[3\xxxone^{2} + 6\kkk^{-1}(\xxxone + \kkk^{-1})]
 \label{eqn:tyl_mcl_sln_opt}
 \end{eqnarray}
@@ -2204,13 +2204,43 @@ The solution in (\ref{eqn:tyl_mcl_sln_opt}) is incomplete without the appropriat
 The complete solution is
 \begin{eqnarray}
 \label{eqn:plk_ntg_fnl}
-\flxupwplkbnd
+\flxupwplkbndupw
 & = & \rdncstone
 \int_{\xxxone}^{\infty} 
 \frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx \nonumber \\
 & = & \rdncstone \{
--\xxxone^{3}\ln(1 - \me^{-\xxx}) + 
+-\xxxone^{3}\ln(1 - \me^{-\xxxone}) + 
 \kkk^{-2}\sum_{\kkk=1}^{\kkk=\infty} \me^{-\kkk\xxxone}[3\xxxone^{2} + 6\kkk^{-1}(\xxxone + \kkk^{-1})] \}
+\end{eqnarray}
+The hemispherically integrated irradiance $\flxupwplkbnddwn$ emitted
+in the closed interval $\xxx \in [0,\xxxone]$ must be the difference
+between the full Stefan-Boltzmann irradiance $\flxupwplk$
+(\ref{eqn:stf_blt_dfn}) and the irradiance $\flxupwplkbndupw$ over the
+complementary range of $\xxx$ (\ref{eqn:plk_ntg_fnl}): 
+\begin{eqnarray}
+\label{eqn:plk_ntg_cmp}
+\flxupwplkbnddwn
+& = & \flxupwplk - \flxupwplkbndupw \nonumber \\
+& = & \rdncstone
+\int_{0}^{\xxxone} 
+\frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx \nonumber \\
+& = & \cststfblt \tpt^{4} - \rdncstone \{
+-\xxxone^{3}\ln(1 - \me^{-\xxxone}) + 
+\kkk^{-2}\sum_{\kkk=1}^{\kkk=\infty} \me^{-\kkk\xxxone}[3\xxxone^{2} + 6\kkk^{-1}(\xxxone + \kkk^{-1})] \}
+\end{eqnarray}
+Finally, the band-integrated irradiance $\flxupwplkbnd$ emitted
+in the closed interval $\xxx \in [\xxxone,\xxxtwo]$ is
+\begin{eqnarray}
+\label{eqn:plk_ntg_bnd}
+\flxupwplkbnd
+& = & \flxupwplkbndupw - \flxupwplkbndpupw \nonumber \\
+& = & \rdncstone
+\int_{\xxxone}^{\xxxtwo} 
+\frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx \nonumber \\
+& = & \rdncstone \{
+[\xxxtwo^{3}\ln(1 - \me^{-\xxxtwo}) - \xxxone^{3}\ln(1 - \me^{-\xxxone})] + \nonumber \\
+& & 
+\kkk^{-2}\sum_{\kkk=1}^{\kkk=\infty} \me^{-\kkk\xxxone}[3\xxxone^{2} + 6\kkk^{-1}(\xxxone + \kkk^{-1})] - \me^{-\kkk\xxxtwo}[3\xxxtwo^{2} + 6\kkk^{-1}(\xxxtwo + \kkk^{-1})] \}
 \end{eqnarray}
 
 \subsubsection[Luminosity]{Luminosity}\label{sxn:lmn}
