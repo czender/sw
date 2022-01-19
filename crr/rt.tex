@@ -1940,20 +1940,20 @@ where
 \label{eqn:rdn_cst_dfn}
 \begin{align}
 \label{eqn:rdn_cst_one_frq_dfn}
-\rdncstone & = \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}},
-\rdncsttwo = \cstplk / \cstblt,
+\rdncstone & = \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}}, \mkern8mu
+\rdncsttwo = \cstplk / \cstblt, \mkern8mu
       \xxx = \cstplk \frq / \cstblt \tpt,
-               \qquad \mbox{\frq\ in \Hz} \\
+               \mkern8mu \mbox{\frq\ in \Hz} \\
 \label{eqn:rdn_cst_one_wvn_dfn}
-\rdncstone & = \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}},
-\rdncsttwo = \cstplk \cstspdlgt / \cstblt,
+\rdncstone & = \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}}, \mkern8mu
+\rdncsttwo = \cstplk \cstspdlgt / \cstblt, \mkern8mu
       \xxx = \cstplk \cstspdlgt \wvn / \cstblt \tpt,
-               \qquad \mbox{\wvn\ in \xm} \\
+               \mkern8mu \mbox{\wvn\ in \xm} \\
 \label{eqn:rdn_cst_one_wvn_cgs_dfn}
-\rdncstone & = \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}},
-\rdncsttwo = 100 \cstplk \cstspdlgt / \cstblt,
+\rdncstone & = \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}}, \mkern8mu
+\rdncsttwo = 100 \cstplk \cstspdlgt / \cstblt, \mkern8mu
       \xxx = 100 \cstplk \cstspdlgt \wvn / \cstblt \tpt,
-               \qquad \mbox{\wvn\ in \xcm}
+               \mkern8mu \mbox{\wvn\ in \xcm}
 \end{align}
 \end{subequations}
 Here $\rdncstone$ is outside the definite integral and is identical for all
@@ -2043,7 +2043,7 @@ Consider a generic geometric series with indices arranged as in the second form 
 (1 - \rrr) ( \aaa + \aaa\rrr + \aaa\rrr^{2} + \aaa\rrr^{3} + \cdots + \aaa\rrr^{\nnn-3} + \aaa\rrr^{\nnn-2} + \aaa\rrr^{\nnn-1} ) \nonumber \\
 & = &
 \aaa + \aaa\rrr + \aaa\rrr^{2} + \aaa\rrr^{3} + \cdots + \aaa\rrr^{\nnn-3} +\aaa\rrr^{\nnn-2} + \aaa\rrr^{\nnn-1} \nonumber \\
-& & {} - \aaa\rrr - \aaa\rrr^{2} - \aaa\rrr^{3} - \cdots - \aaa\rrr^{\nnn-3} -\aaa\rrr^{\nnn-2} - \aaa\rrr^{\nnn-1} - \aaa\rrr^{\nnn} \nonumber \\
+& & {} \mkern8mu - \aaa\rrr - \aaa\rrr^{2} - \aaa\rrr^{3} - \cdots - \aaa\rrr^{\nnn-3} -\aaa\rrr^{\nnn-2} - \aaa\rrr^{\nnn-1} - \aaa\rrr^{\nnn} \nonumber \\
 & = & \aaa - \aaa\rrr^{\nnn} \nonumber \\
 \sum_{\kkk=1}^{\kkk=\nnn} \aaa\rrr^{\kkk - 1}
 & = & \frac{\aaa (1 - \rrr^{\nnn})}{1 - \rrr}
@@ -2199,6 +2199,19 @@ The optimal number~$\nnn$ of terms to sum for a given accuracy depends on the va
 \cite{WiW76} show that the number of terms~$\nnn$ required for 10-digit precision of (\ref{eqn:tyl_mcl_sln_opt}) ranges from $\nnn=2$ for $\xxxone = 10$ to $\nnn=91$ for $\xxxone = 0.1$.
 The range $10 < \xxxone <= 25$ is not well-documented for (\ref{eqn:tyl_mcl_sln_opt}), though $\nnn \le 2$ terms suffices for 10-digit precision of (\ref{eqn:tyl_mcl_sln_fll}).
 Ten-digit precision for (\ref{eqn:tyl_mcl_sln_fll}) and (\ref{eqn:tyl_mcl_sln_opt}) requires only a single term for $\xxxone > 25$.
+
+The solution in (\ref{eqn:tyl_mcl_sln_opt}) is incomplete without the appropriate pre-factor~$\rdncstone$ from (\ref{eqn:rdn_cst_dfn}).
+The complete solution is
+\begin{eqnarray}
+\label{eqn:plk_ntg_fnl}
+\flxupwplkbnd
+& = & \rdncstone
+\int_{\xxxone}^{\infty} 
+\frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx \nonumber \\
+& = & \rdncstone \{
+-\xxxone^{3}\ln(1 - \me^{-\xxx}) + 
+\kkk^{-2}\sum_{\kkk=1}^{\kkk=\infty} \me^{-\kkk\xxxone}[3\xxxone^{2} + 6\kkk^{-1}(\xxxone + \kkk^{-1})] \}
+\end{eqnarray}
 
 \subsubsection[Luminosity]{Luminosity}\label{sxn:lmn}
 The total thermal emission of a body (e.g., star or planet) is called  
