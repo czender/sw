@@ -9,7 +9,7 @@
 [web]
 	browser = google-chrome
 [push]
-	default = nothing
+#	default = nothing
 [color]
 	ui = true
 [color "branch"]
