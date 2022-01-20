@@ -563,6 +563,7 @@ case "${PVM_ARCH}" in
 	export INFOPATH=./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/share/info
 #	export NCARG_ROOT='/opt/local' # Port-installed
 #	export NETCDF_ROOT=/opt/local # MacPorts
+	export NETCDF_ROOT=/usr/local # Homebrew
 	export NCARG_ROOT='/usr/local/ncl-6.6.2' # Homebrew-installed
 	# 20200906: Always export HDF5_PLUGIN_PATH (at least on MacOS) for CCR
 	export HDF5_PLUGIN_PATH='/usr/local/hdf5/lib/plugin'
