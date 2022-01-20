@@ -1892,10 +1892,11 @@ broadband hemispheric irradiance
 As mentioned above, the integral in (\ref{eqn:stf_blt_2}) is needed
 for efficient evaluation of band-integrated blackbody radiance and
 emission.
-The integrated power emitted from the half-open band from lower
-frequency bound $\frqone$ to infinity is
+Let $\flxupwplkbndinf$ represent the hemispherically integrated power
+emitted from in the half-open band from lower frequency bound
+$\frqone$ to infinity is 
 \begin{eqnarray}
-\flxupwplkbndupw
+\flxupwplkbndinf
 & = & \frac{2 \mpi \cstplk}{\cstspdlgt^{2}} 
 \int_{\frqone}^{\infty} 
 \left( \frac{\cstblt \tpt}{\cstplk} \right)^{3}
@@ -1909,7 +1910,7 @@ frequency bound $\frqone$ to infinity is
 where, as before, $\xxx \equiv \cstplk \frq/\cstblt \tpt$.
 We will develop an analytic series expansion for this one-sided
 integral following the method of \cite{WiW76}.
-Here $\flxupwplkbndupw$~[\wxmS] is the hemispherically integrated,
+Here $\flxupwplkbndinf$~[\wxmS] is the hemispherically integrated,
 frequency integrated, irradiance emitted by a blackbody over the range 
 $[\frqone,\infty)$.
 
@@ -1926,7 +1927,7 @@ to~$\xxx$:
 % fxm: convert this to wavenumbers
 \begin{eqnarray}
 \label{eqn:plk_ntg_wvn}
-\flxupwplkbndupw
+\flxupwplkbndinf
 & = & \rdncstone
 \int_{\wvnone}^{\infty} 
 \frac{\wvn^{3}}{\exp(\rdncsttwo\wvn/\tpt) - 1} \,\dfr\wvn \nonumber \\
@@ -2204,7 +2205,7 @@ The solution in (\ref{eqn:tyl_mcl_sln_opt}) is incomplete without the appropriat
 The complete solution is
 \begin{eqnarray}
 \label{eqn:plk_ntg_fnl}
-\flxupwplkbndupw
+\flxupwplkbndinf
 & = & \rdncstone
 \int_{\xxxone}^{\infty} 
 \frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx \nonumber \\
@@ -2212,15 +2213,15 @@ The complete solution is
 -\xxxone^{3}\ln(1 - \me^{-\xxxone}) + 
 \kkk^{-2}\sum_{\kkk=1}^{\kkk=\infty} \me^{-\kkk\xxxone}[3\xxxone^{2} + 6\kkk^{-1}(\xxxone + \kkk^{-1})] \}
 \end{eqnarray}
-The hemispherically integrated irradiance $\flxupwplkbnddwn$ emitted
+The hemispherically integrated irradiance $\flxupwplkbndzro$ emitted
 in the closed interval $\xxx \in [0,\xxxone]$ must be the difference
 between the full Stefan-Boltzmann irradiance $\flxupwplk$
-(\ref{eqn:stf_blt_dfn}) and the irradiance $\flxupwplkbndupw$ over the
+(\ref{eqn:stf_blt_dfn}) and the irradiance $\flxupwplkbndinf$ over the
 complementary range of $\xxx$ (\ref{eqn:plk_ntg_fnl}): 
 \begin{eqnarray}
 \label{eqn:plk_ntg_cmp}
-\flxupwplkbnddwn
-& = & \flxupwplk - \flxupwplkbndupw \nonumber \\
+\flxupwplkbndzro
+& = & \flxupwplk - \flxupwplkbndinf \nonumber \\
 & = & \rdncstone
 \int_{0}^{\xxxone} 
 \frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx \nonumber \\
@@ -2233,7 +2234,7 @@ in the closed interval $\xxx \in [\xxxone,\xxxtwo]$ is
 \begin{eqnarray}
 \label{eqn:plk_ntg_bnd}
 \flxupwplkbnd
-& = & \flxupwplkbndupw - \flxupwplkbndpupw \nonumber \\
+& = & \flxupwplkbndinf - \flxupwplkbndpinf \nonumber \\
 & = & \rdncstone
 \int_{\xxxone}^{\xxxtwo} 
 \frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx \nonumber \\
@@ -2242,6 +2243,9 @@ in the closed interval $\xxx \in [\xxxone,\xxxtwo]$ is
 & & 
 \kkk^{-2}\sum_{\kkk=1}^{\kkk=\infty} \me^{-\kkk\xxxone}[3\xxxone^{2} + 6\kkk^{-1}(\xxxone + \kkk^{-1})] - \me^{-\kkk\xxxtwo}[3\xxxtwo^{2} + 6\kkk^{-1}(\xxxtwo + \kkk^{-1})] \}
 \end{eqnarray}
+For efficiency, a spectral radiative transfer model divided into $\nnn$~contiguous bands monotonically increasing interface frequencies/wavenumbers $[\xxxone, \xxxtwo, \cdots, \xxxiii, \cdots \xxxnnn, \xxxnnnp]$ would first evaluate $\flxupwplkbndinf$ (\ref{eqn:plk_ntg_fnl}) at all $\nnn+1$ interfaces.
+Then the band spectral fluxes $\flxupwplkbnd$ (\ref{eqn:plk_ntg_bnd}) would be obtained by differencing adjacent $\flxupwplkbndinf$.
+This way each $\flxupwplkbndinf$ need be evaluated only once per temperature value.
 
 \subsubsection[Luminosity]{Luminosity}\label{sxn:lmn}
 The total thermal emission of a body (e.g., star or planet) is called  

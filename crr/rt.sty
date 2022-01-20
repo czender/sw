@@ -336,8 +336,11 @@
  
 % 2. Derived commands
 
-\newcommand{\xxxone}{\ensuremath{\xxx_{\onesbs}}} % [] Lower wavenumber boundary
-\newcommand{\xxxtwo}{\ensuremath{\xxx_{\twosbs}}} % [] Upper wavenumber boundary
+\newcommand{\xxxone}{\ensuremath{\xxx_{\onesbs}}} % [cm-1] Lower wavenumber boundary
+\newcommand{\xxxtwo}{\ensuremath{\xxx_{\twosbs}}} % [cm-1] Upper wavenumber boundary
+\newcommand{\xxxnnn}{\ensuremath{\xxx_{\nnn}}} % [cm-1] Wavenumber boundary N
+\newcommand{\xxxiii}{\ensuremath{\xxx_{\iii}}} % [cm-1] Wavenumber boundary i
+\newcommand{\xxxnnnp}{\ensuremath{\xxx_{\nnn+1}}} % [cm-1] Wavenumber boundary N+1
 \newcommand{\rdncstone}{\ensuremath{\rdncst_{\onesbs}}} % [] Radiation constant C1
 \newcommand{\rdncsttwo}{\ensuremath{\rdncst_{\twosbs}}} % [] Radiation constant C2
 \newcommand{\mgnthr}{\ensuremath{\mgnppr_{\thrsbs}}} % [mgn] Threshold apparent magnitude (stellar)
@@ -648,9 +651,9 @@
 \newcommand{\plkwvl}{\ensuremath{\plkfnc_{\wvl}}} % [W m-2 m-1 sr-1] Specific blackbody radiance
 \newcommand{\plkwvn}{\ensuremath{\plkfnc_{\wvn}}} % [W m-2 cm-1 sr-1] Specific blackbody radiance
 \newcommand{\plkbnd}{\ensuremath{\plkfnc_{\bndsbs}}} % [W m-2 sr-1] Planck function in discrete band i
-\newcommand{\plkbndupw}{\ensuremath{\plkfnc^{+}_{\bndsbs}}} % [W m-2 sr-1] Planck function half-open towards infinity
-\newcommand{\plkbndpupw}{\ensuremath{\plkfnc^{+}_{\bndsbs+1}}} % [W m-2 sr-1] Planck function half-open next interface towards infinity
-\newcommand{\plkbnddwn}{\ensuremath{\plkfnc^{-}_{\bndsbs}}} % [W m-2 sr-1] Planck function half-open towards infinity
+\newcommand{\plkbndinf}{\ensuremath{\plkfnc^{\infty}_{\bndsbs}}} % [W m-2 sr-1] Planck function half-open towards infinity
+\newcommand{\plkbndpinf}{\ensuremath{\plkfnc^{\infty}_{\bndsbs+1}}} % [W m-2 sr-1] Planck function half-open next interface towards infinity
+\newcommand{\plkbndzro}{\ensuremath{\plkfnc^{0}_{\bndsbs}}} % [W m-2 sr-1] Planck function half-open towards infinity
 \newcommand{\plrdff}{\ensuremath{\plr_{\dff}}} % [rdn] Polar angle implied by diffusivity approximation
 \newcommand{\plrmubar}{\ensuremath{\bar{\plrmu}}} % [frc] Polar angle absolute value cosine mu
 \newcommand{\plrmunot}{\ensuremath{\plrmu_{0}}} % [frc] Cosine solar zenith angle
@@ -787,9 +790,9 @@
 \newcommand{\flxupwdlt}{\ensuremath{\Delta \flxupw}} % [W m-2] Change in upwelling flux
 \newcommand{\flxupwwvl}{\ensuremath{\flxupw_{\wvl}}} % [W m-2] Wavelength-dependent upwelling flux or [W m-2 m-1] Spectral upwelling flux
 \newcommand{\flxupwplkbnd}{\ensuremath{\flx^{+}_{\plkbnd}}} % [W m-2] Hemispheric upwelling blackbody irradiance in band i
-\newcommand{\flxupwplkbndupw}{\ensuremath{\flx^{+}_{\plkbndupw}}} % [W m-2] Hemispheric upwelling blackbody irradiance half-open range to infinity
-\newcommand{\flxupwplkbndpupw}{\ensuremath{\flx^{+}_{\plkbndpupw}}} % [W m-2] Hemispheric upwelling blackbody irradiance half-open range next band to infinity
-\newcommand{\flxupwplkbnddwn}{\ensuremath{\flx^{+}_{\plkbnddwn}}} % [W m-2] Hemispheric upwelling blackbody irradiance half-open range from zero
+\newcommand{\flxupwplkbndinf}{\ensuremath{\flx^{+}_{\plkbndinf}}} % [W m-2] Hemispheric upwelling blackbody irradiance half-open range to infinity
+\newcommand{\flxupwplkbndpinf}{\ensuremath{\flx^{+}_{\plkbndpinf}}} % [W m-2] Hemispheric upwelling blackbody irradiance half-open range next band to infinity
+\newcommand{\flxupwplkbndzro}{\ensuremath{\flx^{+}_{\plkbndzro}}} % [W m-2] Hemispheric upwelling blackbody irradiance half-open range from zero
 \newcommand{\rfldffone}{\ensuremath{\rfldff_{\onesbs}}} % [frc] Reflectance of layer 1 to diffuse radiation
 \newcommand{\rfldfftwo}{\ensuremath{\rfldff_{\twosbs}}} % [frc] Reflectance of layer 2 to diffuse radiation
 \newcommand{\rfldrcone}{\ensuremath{\rfldrc_{\onesbs}}} % [frc] Reflectance of layer 1 to direct radiation
