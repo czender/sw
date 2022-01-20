@@ -2206,7 +2206,7 @@ The complete solution is
 \begin{eqnarray}
 \label{eqn:plk_ntg_fnl}
 \flxupwplkbndinf
-& = & \rdncstone
+& \equiv & \rdncstone
 \int_{\xxxone}^{\infty} 
 \frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx \nonumber \\
 & = & \rdncstone \{
@@ -2221,9 +2221,15 @@ complementary range of $\xxx$ (\ref{eqn:plk_ntg_fnl}):
 \begin{eqnarray}
 \label{eqn:plk_ntg_cmp}
 \flxupwplkbndzro
+& \equiv & \rdncstone
+\int_{0}^{\xxxone} 
+\frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx \nonumber \\
 & = & \flxupwplk - \flxupwplkbndinf \nonumber \\
 & = & \rdncstone
-\int_{0}^{\xxxone} 
+\int_{0}^{\infty} 
+\frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx -
+\rdncstone
+\int_{\xxxone}^{\infty} 
 \frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx \nonumber \\
 & = & \cststfblt \tpt^{4} - \rdncstone \{
 -\xxxone^{3}\ln(1 - \me^{-\xxxone}) + 
