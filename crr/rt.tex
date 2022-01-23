@@ -1908,11 +1908,12 @@ $\frqone$ to infinity is
 \label{eqn:plk_ntg_frq}
 \end{eqnarray}
 where, as before, $\xxx \equiv \cstplk \frq/\cstblt \tpt$.
-We will develop an analytic series expansion for this one-sided
-integral following the method of \cite{WiW76}.
 Here $\flxupwplkbndinf$~[\wxmS] is the hemispherically integrated,
 frequency integrated, irradiance emitted by a blackbody over the range 
 $[\frqone,\infty)$.
+Steps in the derivation of (\ref{eqn:stf_blt_rmn}) and (\ref{eqn:cst_stf_blt_dfn}) showed that the definite integral value for the special case of $\frqone=0$ is $\mpi^{4}/15$.
+Now we will develop an analytic series expansion for the general one-sided
+integral following the method of \cite{WiW76}.
 
 Line-by-line and ESM radiation codes tend to express radiative
 quantities in CGS wavenumbers because those are the units of the
@@ -2249,9 +2250,9 @@ in the closed interval $\xxx \in [\xxxone,\xxxtwo]$ is
 & & 
 \kkk^{-2}\sum_{\kkk=1}^{\kkk=\infty} \me^{-\kkk\xxxone}[3\xxxone^{2} + 6\kkk^{-1}(\xxxone + \kkk^{-1})] - \me^{-\kkk\xxxtwo}[3\xxxtwo^{2} + 6\kkk^{-1}(\xxxtwo + \kkk^{-1})] \}
 \end{eqnarray}
-For efficiency, a spectral radiative transfer model divided into $\nnn$~contiguous bands monotonically increasing interface frequencies/wavenumbers $[\xxxone, \xxxtwo, \cdots, \xxxiii, \cdots \xxxnnn, \xxxnnnp]$ would first evaluate $\flxupwplkbndinf$ (\ref{eqn:plk_ntg_fnl}) at all $\nnn+1$ interfaces.
+For efficiency, a spectral radiative transfer model divided into $\nnn$~contiguous bands with monotonically increasing interface frequencies/wavenumbers $[\xxxone, \xxxtwo, \cdots, \xxxiii, \cdots \xxxnnn, \xxxnnnp]$ would first evaluate $\flxupwplkbndinf$ (\ref{eqn:plk_ntg_fnl}) at all $\nnn+1$ interfaces.
 Then the band spectral fluxes $\flxupwplkbnd$ (\ref{eqn:plk_ntg_bnd}) would be obtained by differencing adjacent $\flxupwplkbndinf$.
-This way each $\flxupwplkbndinf$ need be evaluated only once per temperature value.
+This way each $\flxupwplkbndinf$ need be evaluated only once per wavelength for a given value of temperature.
 
 \subsubsection[Luminosity]{Luminosity}\label{sxn:lmn}
 The total thermal emission of a body (e.g., star or planet) is called  
