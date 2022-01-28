@@ -814,6 +814,7 @@ CC_gcc_conda='x86_64-conda-linux-gnu-gcc -pedantic -D_DEFAULT_SOURCE'
 CC_gcc_homebrew='gcc-11 -std=gnu11 -pedantic -D_DEFAULT_SOURCE'
 CC_gcc_macports='gcc-mp-10 -std=gnu11 -pedantic -D_DEFAULT_SOURCE'
 CC_icc='icc -std=gnu11 -D_DEFAULT_SOURCE'
+CC_icx='icx -std=gnu11 -D_DEFAULT_SOURCE'
 CC_pathcc='pathcc -std=gnu11 -D_DEFAULT_SOURCE'
 CC_pgcc='pgcc -c9x -D_DEFAULT_SOURCE'
 CXX_clang='clang++ -std=c++17'
@@ -824,6 +825,7 @@ CXX_gxx_conda='x86_64-conda-linux-gnu-g++ -std=c++17'
 CXX_gxx_homebrew='g++-11 -std=c++17'
 CXX_gxx_macports='g++-mp-10 -std=c++17'
 CXX_icpc='icpc'
+CXX_icx='icx'
 CXX_pathCC='pathCC'
 CXX_pgCC='pgCC'
 FC_g95='g95'
@@ -841,14 +843,13 @@ FC_pgf95='pgf95'
 case "${HOST}" in
 #    firn* ) export LINUX_CC=${CC_clang_macports} ; export LINUX_CXX=${CXX_clang_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # clang/clang/macports
 #    firn* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # clang/clang/macports
-    firn* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; ;; # clang/clang/homebrew
+    firn* ) export LINUX_CC=${CC_icx} ; export LINUX_CXX=${CXX_icx} ; export LINUX_FC=${FC_ifort} ; ;; # icx/icx
     sastrugi* ) export LINUX_CC=${CC_clang_homebrew} ; export LINUX_CXX=${CXX_clang_homebrew} ; export LINUX_FC=${FC_gfortran_homebrew} ; ;; # clang/clang/homebrew
     dhcp* | jaws* | katabatic* | rigb* ) export LINUX_CC=${CC_gcc_macports} ; export LINUX_CXX=${CXX_gxx_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # all MacPorts
     glace* | grele* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC="${LINUX_CC} -I/usr/include/mpich2" ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK -I/usr/include/mpich2" ;; # gcc/g++/gfortran MPICH2
-    gplogin* ) export LINUX_CC=${CC_icc/icc/mpicc} ; export LINUX_CXX=${CXX_icpc/icpc/mpiCC} ; export LINUX_FC=${FC_ifort/ifort/mpif90} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icc/icpc/ifort OpenMPI	
-    gplogin* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icc/icpc/ifort OpenMPI GreenPlanet is special because it has a parallel filesystem, lustre, and hence can take advantage of MPI I/O when compiler is MPI-aware. However, compiler switches in all of my custom Makefiles are triggered by vendor-compiler names, e.g., gfortran, ifort, and xlf90, rather than the generic mpicc/mpiCC/mpif90, which are ambiguous. Hence we use this method to designate the invocation command (e.g., "mpif90" or "pgf90") together with the underlying compiler (e.g., "gfortran" or "pgf90"): MPI=Y tells Makefile to invoke compiler with 'mpicc', 'mpif90', etc., but LINUX_CC/CXX/FC point to underlying compilers. Makefile sets compiler-specific switches and options using LINUX_CC/CXX/FC, then, afterwards, sets CC/CXX/FC to 'mpicc/mpiCC/mpif90'. Alternate method, shown in preceding line, sets LINUX_CC/CXX/FC directly to 'mpicc/mpiCC/mpif90' here in bashrc, but then compiler-specific switches in Makefile are missed.
+    gplogin* ) export LINUX_CC=${CC_icx/icx/mpicc} ; export LINUX_CXX=${CXX_icx/icx/mpiCC} ; export LINUX_FC=${FC_ifort/ifort/mpif90} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icx/ifort OpenMPI	
+#    gplogin* ) export LINUX_CC=${CC_icx} ; export LINUX_CXX=${CXX_icx} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icx/ifort OpenMPI GreenPlanet is special because it has a parallel filesystem, lustre, and hence can take advantage of MPI I/O when compiler is MPI-aware. However, compiler switches in all of my custom Makefiles are triggered by vendor-compiler names, e.g., gfortran, ifort, and xlf90, rather than the generic mpicc/mpiCC/mpif90, which are ambiguous. Hence we use this method to designate the invocation command (e.g., "mpif90" or "pgf90") together with the underlying compiler (e.g., "gfortran" or "pgf90"): MPI=Y tells Makefile to invoke compiler with 'mpicc', 'mpif90', etc., but LINUX_CC/CXX/FC point to underlying compilers. Makefile sets compiler-specific switches and options using LINUX_CC/CXX/FC, then, afterwards, sets CC/CXX/FC to 'mpicc/mpiCC/mpif90'. Alternate method, shown in preceding line, sets LINUX_CC/CXX/FC directly to 'mpicc/mpiCC/mpif90' here in bashrc, but then compiler-specific switches in Makefile are missed.
     hpc* ) export LINUX_CC=${CC_pgcc} ; export LINUX_CXX=${CXX_pgCC} ; export LINUX_FC=${FC_pgf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # pgcc/pgCC/pgf95 MPICH2
-#   soot* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_g95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX=${LINUX_CXX} ;; # icc/icpc/g95 MPICH
     frazil* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran} ; ;; # clang/clang/gfortran
     e3sm* ) export LINUX_CC=${CC_gcc_conda} ; export LINUX_CXX=${CXX_gxx_conda} ; export LINUX_FC=${FC_gfortran_conda} ; ;; # gcc/g++/gfortran Conda
     skyglow* | snow* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # gcc/g++/gfortran OpenMPI
