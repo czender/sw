@@ -1350,7 +1350,7 @@ $\tptbrt$:
 \ln \left( 1 + \frac{ 2 \cstplk \frq^{3}}{\plkfrq \cstspdlgt^{2}} \right) \nonumber \\
 \tptbrt(\plkfrq,\frq) & = \frac{\cstplk \frq}{\cstblt}
 \left[ \ln \left( 1 + \frac{ 2 \cstplk \frq^{3}}{\plkfrq \cstspdlgt^{2}} \right) \right]^{-1},
-\qquad \mbox{\frq\ in \Hz, \plkfrq\ in \Hz$^{-1}$} \\
+\qquad \mbox{\frq\ in \Hz, \plkfrq\ in \Hz$^{-1}$ = s} \\
 \label{eqn:tpt_brt_wvl_dfn}
 \plkwvl(\tptbrt,\wvl) & = \frac{2 \cstplk \cstspdlgt^{2}}{\wvl^{5} 
 ( \me^{\cstplk \cstspdlgt / \wvl \cstblt \tptbrt} - 1)} \nonumber \\
@@ -1925,7 +1925,7 @@ First we re-cast (\ref{eqn:plk_ntg_frq}) into a form with the
 generic radiation constants $\rdncstone$ and~$\rdncsttwo$, and
 with a non-zero lower bound~$\wvnone$, then we change variables
 to~$\xxx$:
-% fxm: convert this to wavenumbers
+% fxm: convert this to wavelength
 \begin{eqnarray}
 \label{eqn:plk_ntg_wvn}
 \flxupwplkbndinf
@@ -1945,7 +1945,7 @@ where
 \rdncstone & = \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}}, \mkern8mu
 \rdncsttwo = \cstplk / \cstblt, \mkern8mu
       \xxx = \cstplk \frq / \cstblt \tpt,
-               \mkern8mu \mbox{\frq\ in \Hz} \\
+               \mkern8mu \mbox{\frq\ in \Hz\ = \xs} \\
 \label{eqn:rdn_cst_one_wvn_dfn}
 \rdncstone & = \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}}, \mkern8mu
 \rdncsttwo = \cstplk \cstspdlgt / \cstblt, \mkern8mu
@@ -2005,7 +2005,7 @@ for each successive term, normalized by the factorial of the term:
   (-1)(-2)(-3)(1 - \yyy)^{-4}(-1) \bigg|_{\yyy=0} \cdot \frac{\yyy^{3}}{3!} + \cdots \nonumber \\ 
   & & 
   \cdots + 
-  (-1)(-2)(-3) \cdots (-\kkk - 2)(-\kkk - 1)(-\kkk) (1 - \yyy)^{-\kkk}(-1) \bigg|_{\yyy=0} \cdot \frac{\yyy^{\kkk}}{\kkk!} + \ldots \nonumber \\
+  (-1)(-2)(-3) \cdots (-\kkk - 2)(-\kkk - 1)(-\kkk) (1 - \yyy)^{-\kkk}(-1) \bigg|_{\yyy=0} \cdot \frac{\yyy^{\kkk}}{\kkk!} + \cdots \nonumber \\
   & = & 
   (1)^{-1} \cdot \frac{1}{1} + 
   (-1)(1)^{-2}(-1) \cdot \frac{\yyy}{1} + 
