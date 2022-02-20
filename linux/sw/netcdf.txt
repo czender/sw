@@ -8549,7 +8549,9 @@ autoreconf -i -f
 # NB: --with-libcf builds libcf.a (apparently deprecated ~201307)
 # NB: --with-udunits builds libudunits2.a (apparently deprecated ~201307)
 # With HDF4 on FC26 in /usr/local:
-CPPFLAGS="-I/usr/local/include -I${HOME}/anaconda/include" LDFLAGS="-L/usr/local/lib -L${HOME}/anaconda/lib" ./configure --prefix=${HOME}/opt --enable-shared --enable-cdf5 --enable-dap --enable-hdf4 --enable-logging --enable-netcdf4 --enable-nczarr --enable-v2 > netcdf.configure.foo 2>&1
+# 20220220: Remove Anaconda paths and HDF4 to build netcdf-c
+# Place in /opt/local/netcdf so sudo make install 
+CC='clang' CPPFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" ./configure --prefix=/opt/netcdf --enable-shared --enable-cdf5 --enable-dap --enable-logging --enable-netcdf4 --enable-nczarr --enable-v2 > netcdf.configure.foo 2>&1
 mv -f config.log netcdf.config.log.foo
 make > netcdf.make.foo 2>&1
 make check > netcdf.check.foo 2>&1
