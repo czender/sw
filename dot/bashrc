@@ -255,13 +255,13 @@ PATH=${PATH}\:${MY_BIN_DIR}
 # PKG_ROOT is usually argument to configure --prefix=${PKG_ROOT}
 case "${HOST}" in 
     e3sm* ) export PKG_ROOT="${HOME}/anaconda" ; ;; # Anaconda
-    jaws* | katabatic* | rigb* ) PKG_ROOT='/opt/local' ; ;; # MacOS MacPorts
-    firn* | sastrugi* ) PKG_ROOT='/usr/local' ; ;; # MacOS Homebrew Intel silicon
-    spectral* ) PKG_ROOT='/opt/homebrew' ; ;; # MacOS Homebrew Mac silicon
-    cg-gpu* ) PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # NCSA roger cluster
-    gplogin* ) PKG_ROOT='/sopt' ; ;; # UCI PS Rocks Cluster
-    hpc* ) PKG_ROOT='/software' ; ;; # Torque machines
-    * ) PKG_ROOT='/usr/local' ; ;; # default
+    jaws* | katabatic* | rigb* ) export PKG_ROOT='/opt/local' ; ;; # MacOS MacPorts
+    firn* | sastrugi* ) export PKG_ROOT='/usr/local' ; ;; # MacOS Homebrew Intel silicon
+    spectral* ) export PKG_ROOT='/opt/homebrew' ; ;; # MacOS Homebrew Mac silicon
+    cg-gpu* ) export PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # NCSA roger cluster
+    gplogin* ) export PKG_ROOT='/sopt' ; ;; # UCI PS Rocks Cluster
+    hpc* ) export PKG_ROOT='/software' ; ;; # Torque machines
+    * ) export PKG_ROOT='/usr/local' ; ;; # default
 esac # endcase ${HOST}
 
 # Set operating system dependent paths and packages...
