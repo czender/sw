@@ -251,6 +251,19 @@ esac # !HOST
 PATH=${PATH}\:${HOME}/sh
 PATH=${PATH}\:${MY_BIN_DIR}
 
+# PKG_ROOT is where non-default sysadmin-installed packages reside
+# PKG_ROOT is usually argument to configure --prefix=${PKG_ROOT}
+case "${HOST}" in 
+    e3sm* ) export PKG_ROOT="${HOME}/anaconda" ; ;; # Anaconda
+    jaws* | katabatic* | rigb* ) PKG_ROOT='/opt/local' ; ;; # MacOS MacPorts
+    firn* | sastrugi* ) PKG_ROOT='/usr/local' ; ;; # MacOS Homebrew Intel silicon
+    spectral* ) PKG_ROOT='/opt/homebrew' ; ;; # MacOS Homebrew Mac silicon
+    cg-gpu* ) PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # NCSA roger cluster
+    gplogin* ) PKG_ROOT='/sopt' ; ;; # UCI PS Rocks Cluster
+    hpc* ) PKG_ROOT='/software' ; ;; # Torque machines
+    * ) PKG_ROOT='/usr/local' ; ;; # default
+esac # endcase ${HOST}
+
 # Set operating system dependent paths and packages...
 case "${PVM_ARCH}" in 
     
@@ -418,21 +431,10 @@ case "${PVM_ARCH}" in
 	    mira* | theta* ) export DATA="/projects/ClimateEnergy_3/${USER}" ; ;; # ANL ALCF
 	    * ) export DATA="${HOME}/data" ; ;; # default
 	esac # endcase ${HOST}
-# PKG_ROOT is where non-default sysadmin-installed packages reside
-# PKG_ROOT is usually argument to configure --prefix=${PKG_ROOT}
 # ROCKS_ROLLS_ROOT is where Rocks clusters put rolls
 # 20210420 HPCs that use modules should have no PKG_ROOT defined because there is no single location for all packages
 	case "${HOST}" in 
 	    gplogin* | hpc* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # UCI PS Rocks Cluster
-	esac # endcase ${HOST}
-	case "${HOST}" in 
-	    e3sm* ) export PKG_ROOT="${HOME}/anaconda" ; ;; # Anaconda
-	    jaws* | katabatic* | rigb* ) PKG_ROOT='/opt/local' ; ;; # MAC OS MacPorts
-	    firn* | sastrugi* ) PKG_ROOT='/usr/local' ; ;; # MAC OS Homebrew
-	    cg-gpu* ) PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # NCSA roger cluster
-	    gplogin* ) PKG_ROOT='/sopt' ; ;; # UCI PS Rocks Cluster
-	    hpc* ) PKG_ROOT='/software' ; ;; # Torque machines
-	    * ) PKG_ROOT='/usr/local' ; ;; # default
 	esac # endcase ${HOST}
 	if [ -n "${NETCDF_ROOT}" ]; then
 	    # Some modules, e.g., on compy, define NETCDF_ROOT, so use that
@@ -458,7 +460,7 @@ case "${PVM_ARCH}" in
 # OpenMP
 	case "${HOST}" in 
 		ess1* ) export OMP_NUM_THREADS='1' ; ;; # uniprocessor
-		firn* | frazil* | hpc* | jaws* | katabatic* | rigb* | sastrugi* | skyglow* ) export OMP_NUM_THREADS='4' ; ;; # quad processor
+		firn* | frazil* | hpc* | jaws* | katabatic* | rigb* | sastrugi* | skyglow* | spectral* ) export OMP_NUM_THREADS='4' ; ;; # quad processor
 		glace* | gplogin* | grele* | snow* ) export OMP_NUM_THREADS='8' ; ;; # dual-quad processor
 		acme1* | andes* | compy* | e3sm* ) export OMP_NUM_THREADS='16' ; ;; # dual-octet processor
 		*cheyenne* ) export OMP_NUM_THREADS='16' ; ;; # dual-hexadecimal processor
@@ -573,7 +575,7 @@ case "${PVM_ARCH}" in
 #	export NETCDF_LIB=${HOME}/lib
 	export UDUNITS_INC=/opt/local/include/udunits2 # MacPorts location
 	case "${HOST}" in 
-	    firn* | jaws* | katabatic* | rigb* | sastrugi* ) export OMP_NUM_THREADS=4 ; ;; # endif
+	    firn* | jaws* | katabatic* | rigb* | sastrugi* | spectral* ) export OMP_NUM_THREADS=4 ; ;; # endif
 	    cg1* ) export OMP_NUM_THREADS=2 ; ;; # cg1*
 	       * ) export OMP_NUM_THREADS=1 ; ;; # *
 	esac # endcase ${HOST}
@@ -585,12 +587,11 @@ case "${PVM_ARCH}" in
 	export SYSTYPE='BSD' # Used by killproc
 #	export PYTHONPATH=/usr/lib/portage/pym
 	export TEXMFDIR=/opt/local/share/texmf-texlive # One level above bibtex, tex,
-	
 	case "${HOST}" in 
-	    firn* | sastrugi* ) # MacOS Homebrew
+	    firn* | sastrugi* | spectral* ) # MacOS Homebrew
 		# Required to build nco.pdf due to ancient Xcode CLT TeXInfo
-		PATH='/usr/local/opt/llvm/bin'\:${PATH} # Required for OpenMP-enabled clang
-		PATH='/usr/local/Cellar/texinfo/6.8/bin'\:${PATH} ; ;; # Required for nco.texi
+		PATH="${PKG_ROOT}/opt/llvm/bin"\:${PATH} # Required for OpenMP-enabled clang
+		PATH="${PKG_ROOT}/Cellar/texinfo/6.8/bin"\:${PATH} ; ;; # Required for nco.texi
 	esac # !HOST
 	PATH=${PATH}\:/usr/local/opt/coreutils/libexec/gnubin # Up-to-date GNU commands from GNU Homebrew coreutils
 	#PATH=${PATH}\:/opt/local/libexec/gnubin # Up-to-date GNU commands from GNU MacPorts coreutils

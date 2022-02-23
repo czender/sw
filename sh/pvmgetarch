@@ -77,18 +77,16 @@ if [ -f /bin/uname -o -f /usr/bin/uname \
 	FreeBSD,i386 )          ARCH=FREEBSD ;;
 # 20160421 csz++ Implement LINUXPPC
 	Linux,ppc64 )         ARCH=LINUXPPC64 ;;
-# csz--
 # 20020812 csz++ Implement MACOS
 # 20210621 csz++ Change MACOSX to MACOS
 	Darwin,Power* )         ARCH=MACOS ;;
-# csz--
 # 20100705 csz++ Implement OS X on PC chips
 	Darwin,x86_64 )         ARCH=MACOS ;;
-# csz--
+# 20220223 csz++ Implement MacOS on Mac M1 chips
+	Darwin,arm64 )         ARCH=MACOS ;;
 # 20020812 csz++ deprecate SX3 in favor of NECSX
 #	SUPER-UX,SX-3 )         ARCH=SX3 ;;
 	SUPER-UX,SX-* )         ARCH=NECSX ;;
-# csz--
 	uts,* )                 ARCH=UTS2 ;;
 	realix,M88* )           ARCH=M88K ;;
 	DomainOS,DN* )          ARCH=APOLLO ;;
