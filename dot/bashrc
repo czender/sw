@@ -593,15 +593,17 @@ case "${PVM_ARCH}" in
 		PATH="${PKG_ROOT}/opt/llvm/bin"\:${PATH} # Required for OpenMP-enabled clang
 		PATH="${PKG_ROOT}/Cellar/texinfo/6.8/bin"\:${PATH} ; ;; # Required for nco.texi
 	esac # !HOST
-	PATH=${PATH}\:/usr/local/opt/coreutils/libexec/gnubin # Up-to-date GNU commands from GNU Homebrew coreutils
+	PATH=${PATH}\:"${PKG_ROOT}/opt/coreutils/libexec/gnubin" # Up-to-date GNU commands from GNU Homebrew coreutils
 	#PATH=${PATH}\:/opt/local/libexec/gnubin # Up-to-date GNU commands from GNU MacPorts coreutils
 	case "${HOST}" in 
 	    firn* ) # MacOS Intel Compilers
 		PATH='/opt/intel/oneapi/compiler/latest/mac/bin/intel64'\:${PATH} ; ;; # Required for Intel compilers
 	esac # !HOST
 	PATH=${PATH}\:/usr/local/bin # Custom-built 3rd party packages
-	PATH=${PATH}\:/opt/local/bin # MacPorts packages
-	PATH=${PATH}\:/opt/local/sbin # MacPorts packages
+	PATH=${PATH}\:"${PKG_ROOT}/bin" # Homebrew packages
+	PATH=${PATH}\:"${PKG_ROOT}/sbin" # Homebrew packages
+#	PATH=${PATH}\:/opt/local/bin # MacPorts packages
+#	PATH=${PATH}\:/opt/local/sbin # MacPorts packages
 	PATH=${PATH}\:/usr/bin # MacOS defaults
 	PATH=${PATH}\:/bin # MacOS coreutils
 	PATH=${PATH}\:/usr/sbin # MacOS root coreutils
@@ -611,12 +613,12 @@ case "${PVM_ARCH}" in
 	
 	MANPATH=${MANPATH}\:${HOME}/nco/man
 	MANPATH=${MANPATH}\:/usr/local/share/man
-	MANPATH=${MANPATH}\:/opt/local/man
+	MANPATH=${MANPATH}\:"${PKG_ROOT}"/man
 	MANPATH=${MANPATH}\:/usr/share/man
 	
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MY_LIB_DIR}
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
-	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/local/lib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:"${PKG_ROOT}/lib"
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${HOME}/anaconda/lib
 
