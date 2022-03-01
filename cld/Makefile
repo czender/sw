@@ -290,8 +290,8 @@ cfc_test:	$(CFC_TEST_OBJ)
 #	$(NCARGCC) -o $(MY_BIN_DIR)/cfc_test $(CFC_TEST_OBJ) $(LDFLAGS) 
 	$(CC) -o $(MY_BIN_DIR)/cfc_test $(CFC_TEST_OBJ) $(LDFLAGS) $(BIGGER_SUBSET_F77LIBS)
 
-GREG_SRC=	etbfct.f fct.f /home/zender/ncarg/ncargf.f
-GREG_OBJ=	etbfct.o fct.o /home/zender/ncarg/ncargf.o
+GREG_SRC=	etbfct.f fct.f $(HOME)/ncarg/ncargf.f
+GREG_OBJ=	etbfct.o fct.o $(HOME)/ncarg/ncargf.o
 greg:	$(GREG_OBJ) 
 	$(FC) -o $(MY_BIN_DIR)/greg $(GREG_OBJ) $(LDFLAGS) 
 
@@ -325,7 +325,7 @@ IO_MOVIE_SRC=	io_movie.c utilities.c ncarg_colors.f
 IO_MOVIE_OBJ=	io_movie.o utilities.o ncarg_colors.o
 io_movie:	$(IO_MOVIE_OBJ) 
 #		$(LINT) $(LINTFLAGS) $(IO_MOVIE_SRC)
-		ncargcc $(IO_MOVIE_OBJ) /home/zender/ncarg/libncargC.a /home/zender/ncarg/libncarg_gksC.a $(LDFLAGS) $(NETCDFLIB) -o $(MY_BIN_DIR)/io_movie
+		ncargcc $(IO_MOVIE_OBJ) $(HOME)/ncarg/libncargC.a $(HOME)/ncarg/libncarg_gksC.a $(LDFLAGS) $(NETCDFLIB) -o $(MY_BIN_DIR)/io_movie
 
 IO_MOVIE.3.2_SRC=	io_movie.3.2.c utilities.c ncarg_colors.f
 IO_MOVIE.3.2_OBJ=	io_movie.3.2.o utilities.o ncarg_colors.o

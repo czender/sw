@@ -15,8 +15,9 @@
 
 (add-to-list 'load-path "~/sw/elisp")
 ;(add-to-list 'load-path "/data/zender/tramp/lisp") ; Support TRAMP
-(add-to-list 'load-path "/usr/share/emacs/site-lisp") ; Support AUC TeX (Linux)
-(add-to-list 'load-path "/usr/local/share/emacs/site-lisp") ; Support AUC TeX
+(add-to-list 'load-path "/usr/share/emacs/site-lisp") ; AUC TeX Linux
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp") ; AUC TeX Homebrew Intel silicon
+(add-to-list 'load-path "/opt/homebrew/share/emacs/site-lisp") ; AUC TeX Homebrew Mac silicon
 
 (defvar running-xemacs nil "flag for testing whether xemacs (lucid) is running")
 (cond ((string-match "XEmacs\\|Lucid" emacs-version)
@@ -311,7 +312,8 @@
 ;; ============================
 ;; End of Options Menu Settings
 ;(setq-default ispell-program-name "aspell") 
-(setq-default ispell-program-name "/usr/local/bin/ispell") 
+(setq-default ispell-program-name "/usr/local/bin/ispell") ; Homebrew Intel silicon
+(setq-default ispell-program-name "/opt/homebrew/bin/ispell") ; Homebrew Mac silicon
 ;(custom-set-variables
 ;'(ispell-personal-dictionary "~/sw/elisp/ispell_english"))
 (custom-set-faces)

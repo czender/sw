@@ -20,7 +20,7 @@ export FC='ifort'
 export F90='ifort'
 export FFLAGS='-O3 -g -axW -mp -vec_report1'
 export F90FLAGS='-O3 -g -axW -mp -vec_report1'
-./configure --prefix=/usr/local --with-bootclasspath="/usr/lib/jvm/java-1.4.2-gcj-4.1-1.4.2.0/jre/lib" > antlr.configure.${GNU_TRP}.foo 2>&1
+./configure --prefix=/usr/local --with-bootclasspath="/usr/lib/jvm/java-1.4.2-gcj-4.1-1.4.2.0/jre/lib" > antlr.configure.foo 2>&1
 make
 make test
 sudo make install
@@ -49,7 +49,7 @@ export FC='gfortran'
 export F90='gfortran'
 export FFLAGS='-O -g -fno-second-underscore'
 export F90FLAGS='-O -g -fno-second-underscore'
-./configure --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+./configure --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 make test
 sudo make install
@@ -70,7 +70,7 @@ scp dust.ess.uci.edu:/data/zender/tmp/antlr-2.7.7.tar.gz .
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-./configure --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+./configure --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 make test
 make install # NB: sudo does not exist in cygwin
@@ -91,7 +91,7 @@ scp dust.ess.uci.edu:/data/zender/tmp/antlr-2.7.7.tar.gz .
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-./configure --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+./configure --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 make test
 sudo make install
@@ -115,7 +115,7 @@ scp dust.ess.uci.edu:/data/zender/tmp/antlr-2.7.7.tar.gz .
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/manl --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/manl --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 make test
 make install
@@ -137,7 +137,7 @@ wget http://glace.ess.uci.edu/libs/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-./configure  --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+./configure  --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 make test
 make install
@@ -157,7 +157,7 @@ wget http://glace.ess.uci.edu/libs/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-./configure  --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+./configure  --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 make test
 sudo make install
@@ -177,7 +177,7 @@ wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-./configure  --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+./configure  --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 make test
 make install
@@ -197,7 +197,7 @@ wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 
 make test # breaks on atof() issue
@@ -216,13 +216,13 @@ make install
 export CC='clang'
 export CFLAGS='-Wall'
 export CXX='clang -std=c++11'
-./configure  --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+./configure  --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 cd ${DATA}/tmp
 wget http://dust.ess.uci.edu/tmp/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-CC='clang' CFLAGS='-Wall' CXX='clang -std=c++11' ./configure  --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+CC='clang' CFLAGS='-Wall' CXX='clang -std=c++11' ./configure  --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 make test
 sudo make install
@@ -242,7 +242,7 @@ wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-CC='icc' CFLAGS='-Wall' CXX='icpc' ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+CC='icc' CFLAGS='-Wall' CXX='icpc' ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 
 make test # breaks on atof() issue
@@ -263,7 +263,7 @@ wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-CC=gcc CFLAGS='-Wall' CXX=g++ ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+CC=gcc CFLAGS='-Wall' CXX=g++ ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 
 make test # breaks on atof() issue
@@ -284,7 +284,7 @@ wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 
 make test # breaks on atof() issue
@@ -306,7 +306,7 @@ wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 make test
 make install
@@ -331,7 +331,7 @@ wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 make test
 make install
@@ -351,7 +351,7 @@ wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 
 make test # breaks on atof() issue
@@ -372,7 +372,7 @@ wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 make test # breaks on atof() issue
 make install
@@ -393,7 +393,7 @@ wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-./configure --prefix=${HOME} --bindir=${HOME}/bin --datadir=${HOME}/data/antlr --libdir=${HOME}/lib --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+./configure --prefix=${HOME} --bindir=${HOME}/bin --datadir=${HOME}/data/antlr --libdir=${HOME}/lib --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 make test # breaks on atof() issue
 make install
@@ -414,7 +414,7 @@ wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 
 make test # breaks on atof() issue
@@ -437,7 +437,7 @@ cd ${DATA}/tmp/antlr-2.7.7
 make distclean
 module purge
 module load ncarenv gnu/9.1.0 ncarcompilers mpt netcdf/4.6.3
-CC='gcc' CFLAGS='-Wall' CXX='g++' ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+CC='gcc' CFLAGS='-Wall' CXX='g++' ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 
 make test # breaks on atof() issue
@@ -459,7 +459,7 @@ wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 
 make test # breaks on atof() issue
@@ -481,7 +481,7 @@ wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 
 make test # breaks on atof() issue
@@ -503,7 +503,7 @@ wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 
 make test # breaks on atof() issue
@@ -525,7 +525,7 @@ wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 
 make test # breaks on atof() issue
@@ -547,7 +547,7 @@ scp dust.ess.uci.edu:/data/zender/tmp/antlr-2.7.7.tar.gz .
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 
 make test # breaks on atof() issue
@@ -569,7 +569,7 @@ wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
 tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
-CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make # NB: requires JDK (which includes JRE), free from Oracle
 
 make test # breaks on atof() issue
@@ -592,9 +592,9 @@ tar xvzf antlr-2.7.7.tar.gz
 cd ${DATA}/tmp/antlr-2.7.7
 make distclean
 # GCC
-CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 # Intel
-CC=icc CFLAGS='-Wall' CXX=icpc ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.${GNU_TRP}.foo 2>&1
+CC=icc CFLAGS='-Wall' CXX=icpc ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 
 make test # breaks on atof() issue
@@ -602,5 +602,29 @@ make install
 #make clean
 #***********************************************************************
 # 20220104: compy.pnl.gov 
+#***********************************************************************
+
+#***********************************************************************
+# 20220224: spectral.ess.uci.edu with clang-13.0.1 on MacOS 12.2.1
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+/bin/rm -r -f ${DATA}/tmp/antlr-2.7.7 # Important! Otherwise permissions may get screwed up
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+# NB: requires JDK (which includes JRE), free from Oracle:
+# https://download.oracle.com/java/17/latest/jdk-17_macos-aarch64_bin.dmg
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20220224: spectral.ess.uci.edu with clang-13.0.1 on MacOS 12.2.1
 #***********************************************************************
 
