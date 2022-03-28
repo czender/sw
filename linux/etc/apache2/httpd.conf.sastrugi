@@ -18,7 +18,8 @@
 # 20191016: Updated for MacOSX 10.15.1 Catalina
 # 20210316: Updated for MacOS  11.2.3  Big Sur
 # 20211027: Re-add PHP for MacOS 11.6  Big Sur
-# 20220328: Updated for MacOS  12.3    Monterey (based on https://discussions.apple.com/docs/DOC-250004361)
+# 20220328: Updated for MacOS  12.3    Monterey personal sites (based on https://discussions.apple.com/docs/DOC-250004361)
+# 20220328: Updated for MacOS  12.3    Monterey external sites (based on https://tech-cookbook.com/2021/10/25/how-to-setup-mamp-macos-apache-mysql-php-on-macos-12-monterey-2021)
 #
 # This is the main Apache HTTP server configuration file.  It contains the
 # configuration directives that give the server its instructions.
