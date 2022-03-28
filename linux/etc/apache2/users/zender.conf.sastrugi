@@ -1,0 +1,18 @@
+# $Header$
+
+# Purpose: Apache configuration for Zender group server (MacOS)
+
+# Usage:
+# diff ~/sw/linux/etc/apache2/users/zender.conf.sastrugi /etc/apache2/users/zender.conf
+# scp ~/sw/linux/etc/apache2/users/zender.conf.sastrugi sastrugi.ess.uci.edu:sw/linux/etc/apache2/users
+# sudo cp ~/sw/linux/etc/apache2/users/zender.conf.sastrugi /etc/apache2/users/zender.conf
+# sudo scp ~/sw/linux/etc/apache2/users/zender.conf.sastrugi sastrugi.ess.uci.edu:/etc/apache2/users/zender.conf
+
+<Directory "/Users/zender/Sites/">
+  AddLanguage en .en 
+  AddHandler perl-script .pl 
+  PerlHandler ModPerl::Registry 
+  Options Indexes MultiViews FollowSymLinks ExecCGI 
+  AllowOverride None 
+  Require host localhost
+</Directory>

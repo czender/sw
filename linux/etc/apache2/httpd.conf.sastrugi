@@ -3,10 +3,11 @@
 # Purpose: Apache configuration for Zender group server (MacOS)
 
 # Usage:
-# diff ~/sw/linux/etc/apache2/httpd.conf.firn /etc/apache2/httpd.conf
-# scp ~/sw/linux/etc/apache2/httpd.conf.firn firn.ess.uci.edu:sw/linux/etc/apache2
-# sudo cp ~/sw/linux/etc/apache2/httpd.conf.firn /etc/apache2/httpd.conf
-# sudo scp ~/sw/linux/etc/apache2/httpd.conf.firn firn.ess.uci.edu:/etc/apache2/httpd.conf
+# diff ~/sw/linux/etc/apache2/httpd.conf.sastrugi /etc/apache2/httpd.conf
+# scp ~/sw/linux/etc/apache2/httpd.conf.sastrugi sastrugi.ess.uci.edu:sw/linux/etc/apache2
+# sudo cp ~/sw/linux/etc/apache2/httpd.conf.sastrugi /etc/apache2/httpd.conf
+# sudo scp ~/sw/linux/etc/apache2/httpd.conf.sastrugi sastrugi.ess.uci.edu:/etc/apache2/httpd.conf
+# sudo apachectl graceful# Newish way to restart server
 # sudo apachectl start # Start web server
 # sudo apachectl stop # Stop web server
 # sudo apachectl restart # Restart web server after configuration changes
@@ -17,8 +18,8 @@
 # 20191016: Updated for MacOSX 10.15.1 Catalina
 # 20210316: Updated for MacOS  11.2.3  Big Sur
 # 20211027: Re-add PHP for MacOS 11.6  Big Sur
-# 20220328: Updated for MacOS  12.3    Monterey
-
+# 20220328: Updated for MacOS  12.3    Monterey (based on https://discussions.apple.com/docs/DOC-250004361)
+#
 # This is the main Apache HTTP server configuration file.  It contains the
 # configuration directives that give the server its instructions.
 # See <URL:http://httpd.apache.org/docs/2.4/> for detailed information.
@@ -87,7 +88,11 @@ ServerRoot "/usr"
 #
 # Example:
 # LoadModule foo_module modules/mod_foo.so
+# LoadModule my_custom_module /usr/local/libexec/mod_my_custom.so "My Signature Authority"
 #
+#LoadModule mpm_event_module libexec/apache2/mod_mpm_event.so
+LoadModule mpm_prefork_module libexec/apache2/mod_mpm_prefork.so
+#LoadModule mpm_worker_module libexec/apache2/mod_mpm_worker.so
 LoadModule authn_file_module libexec/apache2/mod_authn_file.so
 #LoadModule authn_dbm_module libexec/apache2/mod_authn_dbm.so
 #LoadModule authn_anon_module libexec/apache2/mod_authn_anon.so
@@ -114,6 +119,7 @@ LoadModule auth_basic_module libexec/apache2/mod_auth_basic.so
 #LoadModule socache_shmcb_module libexec/apache2/mod_socache_shmcb.so
 #LoadModule socache_dbm_module libexec/apache2/mod_socache_dbm.so
 #LoadModule socache_memcache_module libexec/apache2/mod_socache_memcache.so
+#LoadModule socache_redis_module libexec/apache2/mod_socache_redis.so
 #LoadModule watchdog_module libexec/apache2/mod_watchdog.so
 #LoadModule macro_module libexec/apache2/mod_macro.so
 #LoadModule dbd_module libexec/apache2/mod_dbd.so
@@ -155,6 +161,7 @@ LoadModule version_module libexec/apache2/mod_version.so
 #LoadModule proxy_http_module libexec/apache2/mod_proxy_http.so
 #LoadModule proxy_fcgi_module libexec/apache2/mod_proxy_fcgi.so
 #LoadModule proxy_scgi_module libexec/apache2/mod_proxy_scgi.so
+#LoadModule proxy_uwsgi_module libexec/apache2/mod_proxy_uwsgi.so
 #LoadModule proxy_fdpass_module libexec/apache2/mod_proxy_fdpass.so
 #LoadModule proxy_wstunnel_module libexec/apache2/mod_proxy_wstunnel.so
 #LoadModule proxy_ajp_module libexec/apache2/mod_proxy_ajp.so
@@ -181,7 +188,12 @@ LoadModule status_module libexec/apache2/mod_status.so
 LoadModule autoindex_module libexec/apache2/mod_autoindex.so
 #LoadModule asis_module libexec/apache2/mod_asis.so
 #LoadModule info_module libexec/apache2/mod_info.so
-#LoadModule cgi_module libexec/apache2/mod_cgi.so
+<IfModule !mpm_prefork_module>
+	#LoadModule cgid_module libexec/apache2/mod_cgid.so
+</IfModule>
+<IfModule mpm_prefork_module>
+	#LoadModule cgi_module libexec/apache2/mod_cgi.so
+</IfModule>
 #LoadModule dav_fs_module libexec/apache2/mod_dav_fs.so
 #LoadModule dav_lock_module libexec/apache2/mod_dav_lock.so
 #LoadModule vhost_alias_module libexec/apache2/mod_vhost_alias.so
@@ -193,12 +205,12 @@ LoadModule dir_module libexec/apache2/mod_dir.so
 #csz++
 LoadModule userdir_module libexec/apache2/mod_userdir.so
 LoadModule alias_module libexec/apache2/mod_alias.so
+#csz--
 #LoadModule rewrite_module libexec/apache2/mod_rewrite.so
+#PHP was deprecated in macOS 11 and removed from macOS 12
 #csz++
-#csz++ 20190418 I have always turned-on PHP7 but UCI threatened to shut-down firn because Apple's PHP has CERT vulnerabilities
-#csz++ 20211027 Apache not working well, presumably PHP has fixed the CERT, so restart PHP
-LoadModule php7_module libexec/apache2/libphp7.so
-#LoadModule perl_module libexec/apache2/mod_perl.so
+LoadModule perl_module libexec/apache2/mod_perl.so
+#csz--
 LoadModule hfs_apple_module libexec/apache2/mod_hfs_apple.so
 
 <IfModule unixd_module>
@@ -210,11 +222,8 @@ LoadModule hfs_apple_module libexec/apache2/mod_hfs_apple.so
 # It is usually good practice to create a dedicated user and group for
 # running httpd, as with most system services.
 #
-#csz++
-#User _www
-#Group _www
-User zender
-Group staff
+User _www
+Group _www
 
 </IfModule>
 
@@ -268,11 +277,8 @@ ServerAdmin you@example.com
 # documents. By default, all requests are taken from this directory, but
 # symbolic links and aliases may be used to point to other locations.
 #
-#csz++
-#DocumentRoot "/Library/WebServer/Documents"
-#<Directory "/Library/WebServer/Documents">
-DocumentRoot "/Users/zender/Sites"
-<Directory "/Users/zender/Sites">
+DocumentRoot "/Library/WebServer/Documents"
+<Directory "/Library/WebServer/Documents">
     #
     # Possible values for the Options directive are "None", "All",
     # or any combination of:
@@ -293,9 +299,7 @@ DocumentRoot "/Users/zender/Sites"
     # It can be "All", "None", or any combination of the keywords:
     #   AllowOverride FileInfo AuthConfig Limit
     #
-#csz++
-#AllowOverride None
-AllowOverride All
+    AllowOverride None
 
     #
     # Controls who can get stuff from this server.
@@ -308,94 +312,8 @@ AllowOverride All
 # is requested.
 #
 <IfModule dir_module>
-# csz 20030718: add index.shtml
-# dlw 20061116: add index.php
-#DirectoryIndex index.html
-DirectoryIndex index.shtml index.html index.php
+    DirectoryIndex index.html
 </IfModule>
-
-# csz add each directory where users can get listing, then run
-# sudo apachectl restart
-<Directory "/Users/zender/Sites/crm">
-    Options Indexes
-</Directory>
-<Directory "/Users/zender/Sites/dead">
-# Everyone receives "permission denied" errors on dead/data, though not on dead, unless FollowSymLinks explicitly stated for each directory that contains symlinks. This trait is not inherited.
-    Options Indexes FollowSymLinks Multiviews
-    MultiviewsMatch Any
-</Directory>
-<Directory "/Users/zender/Sites/dead/data">
-    Options Indexes FollowSymLinks Multiviews
-</Directory>
-<Directory "/Users/zender/Sites/doc">
-    Options Indexes
-</Directory>
-<Directory "/Users/zender/Sites/essgcm14">
-    Options Indexes
-</Directory>
-<Directory "/Users/zender/Sites/essgcm15">
-    Options Indexes
-</Directory>
-<Directory "/Users/zender/Sites/ess_eat">
-    Options Indexes FollowSymLinks Multiviews
-</Directory>
-<Directory "/Users/zender/Sites/ess_rmt">
-    Options Indexes FollowSymLinks Multiviews
-</Directory>
-<Directory "/Users/zender/Sites/f">
-    Options Indexes
-</Directory>
-<Directory "/Users/zender/Sites/facts">
-    Options Indexes
-</Directory>
-<Directory "/Users/zender/Sites/grids">
-    Options Indexes
-</Directory>
-<Directory "/Users/zender/Sites/hire">
-    Options Indexes
-</Directory>
-<Directory "/Users/zender/Sites/job">
-    Options Indexes
-</Directory>
-<Directory "/Users/zender/Sites/nco">
-    Options Indexes FollowSymLinks Multiviews
-</Directory>
-<Directory "/Users/zender/Sites/noria">
-    Options Indexes
-</Directory>
-<Directory "/Users/zender/Sites/poetry">
-    Options Indexes
-</Directory>
-<Directory "/Users/zender/Sites/pix">
-    Options Indexes
-</Directory>
-<Directory "/Users/zender/Sites/pix/zen">
-    Options Indexes FollowSymLinks Multiviews
-</Directory>
-<Directory "/Users/zender/Sites/pix/zen/*">
-    Options Indexes FollowSymLinks Multiviews
-</Directory>
-<Directory "/Users/zender/Sites/pr">
-    Options Indexes
-</Directory>
-<Directory "/Users/zender/Sites/ppr">
-    Options Indexes
-</Directory>
-<Directory "/Users/zender/Sites/prp">
-    Options Indexes
-</Directory>
-<Directory "/Users/zender/Sites/skg">
-    Options Indexes
-</Directory>
-<Directory "/Users/zender/Sites/smn">
-    Options Indexes
-</Directory>
-<Directory "/Users/zender/Sites/terraref">
-    Options Indexes FollowSymLinks Multiviews
-</Directory>
-<Directory "/Users/zender/Sites/tmp">
-    Options Indexes FollowSymLinks Multiviews
-</Directory>
 
 #
 # The following lines prevent .htaccess and .htpasswd files from being 
@@ -627,6 +545,7 @@ Include /private/etc/apache2/extra/httpd-autoindex.conf
 # User home directories
 #csz++
 Include /private/etc/apache2/extra/httpd-userdir.conf
+#csz--
 
 # Real-time info on requests and configuration
 #Include /private/etc/apache2/extra/httpd-info.conf
