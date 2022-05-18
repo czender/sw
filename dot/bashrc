@@ -208,7 +208,7 @@ case "${HOST}" in
     cooley* | cc[0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_cooley" ; MY_LIB_DIR="${HOME}/lib_cooley" ; MY_OBJ_DIR="${HOME}/obj_cooley" ; ;;
     cori* ) export MY_BIN_DIR="${HOME}/bin_cori" ; MY_LIB_DIR="${HOME}/lib_cori" ; MY_OBJ_DIR="${HOME}/obj_cori" ; ;;
     mira* ) export MY_BIN_DIR="${HOME}/bin_mira" ; MY_LIB_DIR="${HOME}/lib_mira" ; MY_OBJ_DIR="${HOME}/obj_mira" ; ;;
-    perlmutter* ) export MY_BIN_DIR="${HOME}/bin_perlmutter" ; MY_LIB_DIR="${HOME}/lib_perlmutter" ; MY_OBJ_DIR="${HOME}/obj_perlmutter" ; ;;
+    perlmutter* | login[0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_perlmutter" ; MY_LIB_DIR="${HOME}/lib_perlmutter" ; MY_OBJ_DIR="${HOME}/obj_perlmutter" ; ;;
     theta* ) export MY_BIN_DIR="${HOME}/bin_theta" ; MY_LIB_DIR="${HOME}/lib_theta" ; MY_OBJ_DIR="${HOME}/obj_theta" ; ;;
     titan* ) export MY_BIN_DIR="${HOME}/bin_titan" ; MY_LIB_DIR="${HOME}/lib_titan" ; MY_OBJ_DIR="${HOME}/obj_titan" ; ;;
 esac # endcase ${HOST}
