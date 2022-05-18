@@ -1,4 +1,4 @@
-# Use only on Cori at NERSC
+# Use only at NERSC on Cori/Edison/Hopper/Permutter etc
 # /bin/cp ~/sw/dot/bashrc.ext ~/.bashrc.ext
 
 # begin .bashrc.ext
@@ -30,7 +30,17 @@ if [ "$NERSC_HOST" == "edison" ]; then
    export MY_OBJ_DIR="${HOME}/obj_edison"
 
 fi # !edison
-if [ "$NERSC_HOST" == "cori" ] || [ "$NERSC_HOST" == "edison" ] || [ "$NERSC_HOST" == "hopper" ]
+if [ "$NERSC_HOST" == "perlmutter" ]; then
+
+   export PATH="${PATH}:${HOME}/bin_perlmutter"
+   export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${HOME}/lib_perlmutter"
+
+   export MY_BIN_DIR="${HOME}/bin_perlmutter"
+   export MY_LIB_DIR="${HOME}/lib_perlmutter"
+   export MY_OBJ_DIR="${HOME}/obj_perlmutter"
+
+fi # !perlmutter
+if [ "$NERSC_HOST" == "cori" ] || [ "$NERSC_HOST" == "perlmutter" ]
 then
    eval `dircolors -b` # Set environment variable LS_COLORS for ls
 
