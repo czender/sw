@@ -559,8 +559,6 @@ case "${PVM_ARCH}" in
 	export DATA=/Users/${USER}/data
 	export INFOPATH=./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/share/info
 #	export NCARG_ROOT='/opt/local' # Port-installed
-#	export NETCDF_ROOT=/opt/local # MacPorts
-#	export NETCDF_ROOT=/usr/local # Homebrew Intel silicon
 	export NETCDF_ROOT="${PKG_ROOT}" # Homebrew
 	export NCARG_ROOT="${PKG_ROOT}/opt/ncl-6.6.2" # Homebrew-installed
 	# 20200906: Always export HDF5_PLUGIN_PATH (at least on MacOS) for CCR
@@ -591,6 +589,7 @@ case "${PVM_ARCH}" in
 		PATH='/opt/intel/oneapi/compiler/latest/mac/bin/intel64'\:${PATH} ; ;; # Required for Intel compilers
 	esac # !HOST
 	PATH=${PATH}\:/usr/local/bin # Custom-built 3rd party packages
+	PATH=${PATH}\:/opt/netcdf/bin # netCDF development branch location
 	PATH=${PATH}\:"${PKG_ROOT}/bin" # Homebrew packages
 	PATH=${PATH}\:"${PKG_ROOT}/sbin" # Homebrew packages
 	PATH=${PATH}\:/usr/bin # MacOS defaults
@@ -607,6 +606,7 @@ case "${PVM_ARCH}" in
 	
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MY_LIB_DIR}
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/netcdf/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:"${PKG_ROOT}/lib"
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${HOME}/anaconda/lib
