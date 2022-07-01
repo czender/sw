@@ -724,3 +724,33 @@ exit # Exit new shell
 # 20201221: chrysalis.lcrc.anl.gov 
 #***********************************************************************
 
+#***********************************************************************
+# 20220630: perlmutter.nersc.gov gcc 11.2.0
+#***********************************************************************
+cd ${DATA}/tmp
+wget https://artifacts.unidata.ucar.edu/repository/downloads-udunits/2.2.28/udunits-2.2.28.tar.gz
+# scp dust.ess.uci.edu:/data/zender/tmp/udunits-2.2.28.tar.gz /data/zender/tmp
+# scp ~/data/tmp/udunits-2.2.28.tar.gz ac.zender@perlmutter.nersc.gov:data/tmp
+tar xvzf udunits-2.2.28.tar.gz
+cd ${DATA}/tmp/udunits-2.2.28
+bash # Use new shell to sandbox environment changes
+export CC='gcc'
+export CXX='g++'
+export FC='gfortran'
+export F77='gfortran'
+export F90='gfortran'
+export LDFLAGS='-L/usr/lib64 -lexpat'
+export LIBS='-lexpat'
+make distclean 2>&1 >foo
+autoreconf -i -f
+./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --libdir=${MY_LIB_DIR}
+make # completes executable/library build though fails to find makeinfo on perlmutter
+make check # optional; requires CUNIT installation
+make install # completes executable/library install, then fails on documentation
+make install-info install-html install-pdf
+make clean
+exit # Exit new shell
+#***********************************************************************
+# 20220630: perlmutter.nersc.gov 
+#***********************************************************************
+

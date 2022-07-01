@@ -32,4 +32,4 @@
      insteadOf = gh:
 [pull]
 	rebase = false
-	ff = only
+#	ff = only

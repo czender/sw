@@ -565,7 +565,7 @@ case "${PVM_ARCH}" in
 	export HDF5_PLUGIN_PATH='/usr/local/hdf5/lib/plugin'
 #	export NETCDF_INC=${HOME}/include
 #	export NETCDF_LIB=${HOME}/lib
-	export UDUNITS_INC="${PKG_ROOT}/include/udunits2" # Homebrew location
+#	export UDUNITS_INC="${PKG_ROOT}/include" # Homebrew location
 
 # GCC_RCH_ARG and ICC_RCH_ARG set CPU architecture only
 # Select ABI flags (i.e., 32 or 64 bit) at make time
