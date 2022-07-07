@@ -8841,7 +8841,7 @@ autoreconf -i -f
 # With HDF4 on FC26 in /usr/local:
 # 20220220: Remove Anaconda paths and HDF4 to build netcdf-c
 # Place in /opt/netcdf so requiers sudo make install 
-CC='clang' CPPFLAGS="-I/opt/homebrew/include" LDFLAGS="-L/opt/homebrew/lib" ./configure --prefix=/opt/netcdf --enable-shared --enable-cdf5 --enable-dap --enable-logging --enable-netcdf4 --enable-nczarr --enable-v2 > netcdf.configure.foo 2>&1
+CC='clang' CPPFLAGS="-I/opt/homebrew/include" LDFLAGS="-L/opt/homebrew/lib" ./configure --prefix=/opt/netcdf --enable-shared --enable-cdf5 --enable-dap --enable-logging --enable-netcdf4 --enable-nczarr --enable-v2 --with-plugin-dir=${HDF5_PLUGIN_PATH} > netcdf.configure.foo 2>&1
 mv -f config.log netcdf.config.log.foo
 make > netcdf.make.foo 2>&1
 make check > netcdf.check.foo 2>&1
