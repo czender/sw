@@ -8985,7 +8985,7 @@ autoreconf -i -f
 # NB: --with-libcf builds libcf.a (apparently deprecated ~201307)
 # NB: --with-udunits builds libudunits2.a (apparently deprecated ~201307)
 # With HDF4 on FC36 in /usr/local:
-CC='clang' CFLAGS='-g' ./configure --prefix=/usr/local --enable-shared --enable-cdf5 --enable-dap --enable-logging --enable-netcdf4 --enable-nczarr --enable-v2 > netcdf.configure.foo 2>&1
+CC='clang' CFLAGS='-g' ./configure --prefix=/usr/local --enable-shared --enable-cdf5 --enable-dap --enable-logging --enable-netcdf4 --enable-nczarr --enable-v2 --with-plugin-dir=${HDF5_PLUGIN_PATH} > netcdf.configure.foo 2>&1
 mv -f config.log netcdf.config.log.foo
 make > netcdf.make.foo 2>&1
 make check > netcdf.check.foo 2>&1
