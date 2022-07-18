@@ -36,6 +36,10 @@ export USERNAME BASH_ENV PATH
 # This is because NCO has been linking to Anaconda libnco.a instead of ~/lib/libnco.a
 # As of today, comment-out entire conda block
 # 20200905: Same thing
+# 20220714: Slack discussion with Cori user who (like me) gets errors running
+# ncremap or ncclimo in E3SM-U environment
+# https://app.slack.com/client/T04B3NH3U/C01EK9QPVLM/thread/C01EK9QPVLM-1653589778.655909
+# Moral: Let E3SM-U initialize conda, do not initialize it automatically in bash_profile
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 #__conda_setup="$('/Users/zender/anaconda/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
