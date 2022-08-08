@@ -8831,7 +8831,8 @@ autoreconf -i -f
 # NB: --enable-hdf4 documented at http://www.unidata.ucar.edu/software/netcdf/docs/build_hdf4.html
 # NB: --enable-hdf4 documented requires libhdf.a, libdf.a, libjpeg.a (and netCDF configure does not itself add -ljpeg)
 # NB: --enable-logging allows HDF error message to print
-# NB: --enable-nczarr builds Zarr
+# NB: --enable-nczarr builds Zarr (true by default)
+# NB: --enable-nczarr-s3 enables NCZarr S3 support (must be specified, is false by default)
 # NB: --enable-pnetcdf build with parallel I/O for classic files
 # NB: --enable-separate-fortran builds libnetcdff.a (default with shared libraries)
 # NB: --enable-shared builds shared libraries
@@ -8841,7 +8842,7 @@ autoreconf -i -f
 # With HDF4 on FC26 in /usr/local:
 # 20220220: Remove Anaconda paths and HDF4 to build netcdf-c
 # Place in /opt/netcdf so requiers sudo make install 
-CC='clang' CPPFLAGS="-I/opt/homebrew/include" LDFLAGS="-L/opt/homebrew/lib" ./configure --prefix=/opt/netcdf --enable-shared --enable-cdf5 --enable-dap --enable-logging --enable-netcdf4 --enable-nczarr --enable-v2 --with-plugin-dir=${HDF5_PLUGIN_PATH} > netcdf.configure.foo 2>&1
+CC='clang' CPPFLAGS="-I/opt/homebrew/include" LDFLAGS="-L/opt/homebrew/lib" ./configure --prefix=/opt/netcdf --enable-shared --enable-cdf5 --enable-dap --enable-logging --enable-netcdf4 --enable-nczarr --enable-nczarr-s3 --enable-v2 --with-plugin-dir=${HDF5_PLUGIN_PATH} > netcdf.configure.foo 2>&1
 mv -f config.log netcdf.config.log.foo
 make > netcdf.make.foo 2>&1
 make check > netcdf.check.foo 2>&1
