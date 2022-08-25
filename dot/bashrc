@@ -589,7 +589,7 @@ case "${PVM_ARCH}" in
 		PATH='/opt/intel/oneapi/compiler/latest/mac/bin/intel64'\:${PATH} ; ;; # Required for Intel compilers
 	esac # !HOST
 	PATH=${PATH}\:/usr/local/bin # Custom-built 3rd party packages
-#	PATH=${PATH}\:/opt/netcdf/bin # netCDF development branch location
+	PATH=${PATH}\:/opt/netcdf/bin # netCDF development branch location
 	PATH=${PATH}\:"${PKG_ROOT}/bin" # Homebrew packages
 	PATH=${PATH}\:"${PKG_ROOT}/sbin" # Homebrew packages
 	PATH=${PATH}\:/usr/bin # MacOS defaults
@@ -606,7 +606,7 @@ case "${PVM_ARCH}" in
 	
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MY_LIB_DIR}
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
-#	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/netcdf/lib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/netcdf/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:"${PKG_ROOT}/lib"
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${HOME}/anaconda/lib
