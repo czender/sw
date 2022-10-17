@@ -474,6 +474,22 @@ sudo make install
 #***********************************************************************
 
 #***********************************************************************
+# 20220925: spectral.ess.uci.edu
+#***********************************************************************
+cd ${DATA}/tmp
+#git clone https://github.com/ClimateGlobalChange/tempestremap.git
+cd ${DATA}/tmp/tempestremap
+git pull
+git reset --hard origin/master
+autoreconf -fi
+CC=${LINUX_CC} CXX=${LINUX_CXX} configure --prefix=/usr/local --with-netcdf=/opt/netcdf
+make
+sudo make install
+#***********************************************************************
+# 20220925: spectral.ess.uci.edu
+#***********************************************************************
+
+#***********************************************************************
 # 20190912: Old TR notes from esmf.txt, copied here for convenience
 #***********************************************************************
 # NB: Tempest executables do not always (ever?) accept "--option=val" format, use "--option val" instead

@@ -2690,10 +2690,10 @@ sudo cp ${DATA}/tmp/netcdf-4.0.1-beta3-snapshot2009050309/f90/typesizes.mod ${NE
 sudo cp ${DATA}/tmp/netcdf-4.0.1-beta3-snapshot2009050309/f90/netcdf.mod ${NETCDF_ROOT}/include/netcdf.mod.gfortran
 make clean
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20090503: neige.ess.uci.edu x86_64 Debian Ubuntu Intrepid Ibex gcc/gfortran netcdf-4-daily
 #***********************************************************************
@@ -2761,10 +2761,10 @@ sudo cp ${DATA}/tmp/netcdf-4.1-beta1-snapshot2009050200/f90/typesizes.mod ${NETC
 sudo cp ${DATA}/tmp/netcdf-4.1-beta1-snapshot2009050200/f90/netcdf.mod ${NETCDF4_ROOT}/include/netcdf.mod.gfortran
 make clean
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20090503: neige.ess.uci.edu x86_64/EMT64 Debian Ubuntu Jaunty Jackalope gcc/gfortran netcdf-4-daily
 #***********************************************************************
@@ -2832,10 +2832,10 @@ sudo cp ${DATA}/tmp/netcdf-4.1-beta1-snapshot2009061712/f90/typesizes.mod ${NETC
 sudo cp ${DATA}/tmp/netcdf-4.1-beta1-snapshot2009061712/f90/netcdf.mod ${NETCDF4_ROOT}/include/netcdf.mod.gfortran
 make clean
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20090617: neige.ess.uci.edu x86_64/EMT64 Debian Ubuntu Jaunty Jackalope gcc/gfortran netcdf-4-daily
 #***********************************************************************
@@ -2905,10 +2905,10 @@ sudo cp ${DATA}/tmp/netcdf-4.1-beta1-snapshot2009071200/f90/netcdf.mod ${NETCDF4
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20090712: neige.ess.uci.edu x86_64/EMT64 Debian Ubuntu Jaunty Jackalope gcc/gfortran netcdf-4-daily
 #***********************************************************************
@@ -2980,10 +2980,10 @@ sudo cp ${DATA}/tmp/netcdf-4.1-snapshot2009102800/f90/netcdf.mod ${NETCDF4_ROOT}
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20091030: givre.ess.uci.edu x86_64/EMT64 Debian Ubuntu Karmic Koala gcc/gfortran netcdf-4-daily
 #***********************************************************************
@@ -3055,10 +3055,10 @@ sudo cp ${DATA}/tmp/netcdf-4.1-snapshot2009111500/f90/netcdf.mod ${NETCDF4_ROOT}
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20091114: neige.ess.uci.edu x86_64/EMT64 Debian Ubuntu Karmic Koala gcc/gfortran netcdf-4-daily
 #***********************************************************************
@@ -3132,10 +3132,10 @@ sudo cp ${DATA}/tmp/netcdf-4.1-snapshot2010010800/f90/netcdf.mod ${NETCDF4_ROOT}
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20100108: givre.ess.uci.edu x86_64/EMT64 Debian Ubuntu Karmic Koala gcc/gfortran netcdf-4-daily
 #***********************************************************************
@@ -3209,10 +3209,10 @@ sudo cp ${DATA}/tmp/netcdf-4.1-snapshot2010020600/f90/netcdf.mod ${NETCDF4_ROOT}
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20100206: givre.ess.uci.edu x86_64/EMT64 Debian Ubuntu Karmic Koala gcc/gfortran netcdf-4-daily
 #***********************************************************************
@@ -3287,10 +3287,10 @@ sudo cp ${DATA}/tmp/netcdf-4.1.1-snapshot2010040900/f90/netcdf.mod ${NETCDF4_ROO
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20100409: givre.ess.uci.edu x86_64/EMT64 Debian Ubuntu Karmic Koala gcc/gfortran netcdf-4-daily
 #***********************************************************************
@@ -3364,10 +3364,10 @@ cp ${DATA}/tmp/netcdf-4.1.1-snapshot2010040900/f90/netcdf.mod ${NETCDF4_ROOT}/in
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20100503: givre.ess.uci.edu x86_64/EMT64 Windows Cygwin 1.7.5-1 gcc/gfortran netcdf-4-daily
 #***********************************************************************
@@ -3443,10 +3443,10 @@ sudo cp ${DATA}/tmp/netcdf-4.1.2-beta1-snapshot2010080820/f90/netcdf.mod ${NETCD
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20100809: givre.ess.uci.edu x86_64/EMT64 Debian Ubuntu Lucid Lynx gcc/gfortran netcdf-4-daily
 #***********************************************************************
@@ -3520,10 +3520,10 @@ cp ${DATA}/tmp/netcdf-4.1.2-beta1-snapshot2010080820/f90/netcdf.mod ${NETCDF4_RO
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20100929: neige.ess.uci.edu x86_64/EMT64 Windows Cygwin 1.7.7-1 gcc/gfortran netcdf-4-daily
 #***********************************************************************
@@ -3599,10 +3599,10 @@ sudo cp ${DATA}/tmp/netcdf-4.1.2-beta2-snapshot2010101108/f90/netcdf.mod ${NETCD
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20101011: givre.ess.uci.edu x86_64/EMT64 Debian Ubuntu Maverick Meerkat gcc/gfortran netcdf-4-daily
 #***********************************************************************
@@ -3678,10 +3678,10 @@ sudo cp ${DATA}/tmp/netcdf-4.1.2-snapshot2011041822/f90/netcdf.mod ${NETCDF4_ROO
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20110330: neige.ess.uci.edu x86_64/EMT64 Debian Ubuntu Maverick Meerkat gcc/gfortran netcdf-4-daily
 #***********************************************************************
@@ -3760,10 +3760,10 @@ sudo cp ${DATA}/tmp/netcdf-4.1.3-snapshot2011062620/f90/netcdf.mod ${NETCDF4_ROO
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20110626: neige.ess.uci.edu x86_64/EMT64 Debian Ubuntu Natty Narwhal gcc/gfortran netcdf-4-daily
 #***********************************************************************
@@ -3843,10 +3843,10 @@ sudo cp ${DATA}/tmp/netcdf-4.2-snapshot2012020522/libsrc4/.libs/libnetcdf4.a ${N
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20120206: givre.ess.uci.edu x86_64/EMT64 Debian Ubuntu Oneiric Ocelot gcc/gfortran 4.6.1 netcdf-4-daily
 #***********************************************************************
@@ -3928,10 +3928,10 @@ sudo cp ${DATA}/tmp/netcdf-4.2-snapshot2012040523/libsrc4/.libs/libnetcdf4.a ${N
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20120406: roulee.ess.uci.edu x86_64/EMT64 Debian Ubuntu Oneiric Ocelot gcc/gfortran 4.6.1 netcdf-4-daily
 #***********************************************************************
@@ -4013,10 +4013,10 @@ sudo cp ${DATA}/tmp/netcdf-4.2.1-rc1/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20120621: roulee.ess.uci.edu x86_64/EMT64 Debian Ubuntu Precise Pangolin gcc/gfortran 4.6.3 netcdf-4-daily
 #***********************************************************************
@@ -4117,10 +4117,10 @@ sudo cp ${DATA}/tmp/netcdf-4.2.1/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20120719: roulee.ess.uci.edu x86_64/EMT64 Debian Ubuntu Precise Pangolin gcc/gfortran 4.6.3 netcdf-4-daily
 #***********************************************************************
@@ -4224,10 +4224,10 @@ sudo cp ${DATA}/tmp/netcdf-4.2.1.1-snapshot2013020723/libsrc4/.libs/libnetcdf4.a
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20130208: roulee.ess.uci.edu x86_64/EMT64 Debian Ubuntu Quantal Quetzal gcc/gfortran 4.7.2 netcdf-4-daily
 #***********************************************************************
@@ -4332,10 +4332,10 @@ sudo cp ${DATA}/tmp/netcdf-4.3.0-rc3/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20130311: roulee.ess.uci.edu x86_64/EMT64 Debian Ubuntu Quantal Quetzal gcc/gfortran 4.7.2 netcdf-4-daily
 #***********************************************************************
@@ -4481,10 +4481,10 @@ sudo cp ${DATA}/tmp/netcdf-4.3.0-rc3/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20130319: roulee.ess.uci.edu x86_64/EMT64 Debian Ubuntu Quantal Quetzal gcc/gfortran 4.7.2 netcdf-4-daily
 #***********************************************************************
@@ -4589,10 +4589,10 @@ sudo cp ${DATA}/tmp/netcdf-4.3.0-rc4/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20130428: roulee.ess.uci.edu x86_64/EMT64 Debian Ubuntu Raring Ringtail gcc/gfortran 4.7.3 netcdf-4.3.0-rc4
 #***********************************************************************
@@ -4694,10 +4694,10 @@ sudo cp ${DATA}/tmp/netcdf-4.3.0/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20130504: roulee.ess.uci.edu x86_64/EMT64 Debian Ubuntu Raring Ringtail gcc/gfortran 4.7.3 netcdf-4.3.0
 #***********************************************************************
@@ -4802,10 +4802,10 @@ sudo cp ${DATA}/tmp/netcdf-4.3.0/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20130607: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 18 gcc/gfortran 4.7.2 netcdf-4.3.0
 #***********************************************************************
@@ -4901,10 +4901,10 @@ sudo cp ${DATA}/tmp/netcdf/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libnet
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20130722: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 19 gcc/gfortran 4.8.1 netcdf-4.3.0+ svn
 #***********************************************************************
@@ -5005,10 +5005,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20130827: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 19 gcc/gfortran 4.8.1 netcdf-4.3.0+ git
 #***********************************************************************
@@ -5117,10 +5117,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20131004: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 19 gcc/gfortran 4.8.1 netcdf-4.3.1-rc4 git
 #***********************************************************************
@@ -5229,10 +5229,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20131221: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 20 gcc/gfortran 4.8.2 netcdf-4.3.1-rc6 git
 #***********************************************************************
@@ -5362,10 +5362,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20140604: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 20 gcc/gfortran 4.8.2 netcdf-4.3.3-rc1 git pnetcdf mpi
 #***********************************************************************
@@ -5505,10 +5505,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20140623: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 20 gcc/gfortran 4.8.2 netcdf-4.3.3-rc1 git
 #***********************************************************************
@@ -5648,10 +5648,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20150203: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 21 gcc/gfortran 4.9.2 netcdf-4.3.3-rc3 HDF4 git 
 #***********************************************************************
@@ -5782,10 +5782,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20150530: rhea.ccs.ornl.gov RHEL 6.6 Santiago gcc/gfortran 4.8.2 netcdf-4.3.3.1 HDF4 git 
 #***********************************************************************
@@ -5925,10 +5925,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20150610: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 22 gcc/gfortran 5.1.1 netcdf-4.4.0-rc1 HDF4 git 
 #***********************************************************************
@@ -6071,10 +6071,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20151024: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 22 gcc/gfortran 5.1.1 netcdf-4.4.0-rc4 HDF4 git
 #***********************************************************************
@@ -6217,10 +6217,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20151112: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 23 gcc/gfortran 5.1.1 netcdf-4.4.0-rc5 HDF4 git
 #***********************************************************************
@@ -6363,10 +6363,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20160114: roulee.ess.uci.edu x86_64/EMT64 Fedora Core 23 gcc/gfortran 5.3.1 netcdf-4.4.0 HDF4 git
 #***********************************************************************
@@ -6509,10 +6509,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20160627: frazil.ess.uci.edu x86_64/EMT64 Fedora Core 24 gcc/gfortran 6.1.1 netcdf-4.4.4-RC3 HDF4 git
 #***********************************************************************
@@ -6658,10 +6658,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20170917: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.1.1 netcdf-4.4.1.1 HDF4 git pnetcdf
 #***********************************************************************
@@ -6801,10 +6801,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20170930: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.1.1 netcdf-4.5.0-rc3 HDF4 git
 #***********************************************************************
@@ -6944,10 +6944,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20171220: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.1.1 netcdf-4.5.1 HDF4 git
 #***********************************************************************
@@ -7107,10 +7107,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20180125: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.1.1 netcdf-4.6.0 HDF4 git
 #***********************************************************************
@@ -7270,10 +7270,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20180321: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.1.1 netcdf-4.6.1 HDF4 git
 #***********************************************************************
@@ -7413,10 +7413,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20181120: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.3.1 netcdf-4.6.2 HDF4 git
 #***********************************************************************
@@ -7556,10 +7556,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20190429: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.3.1 netcdf-4.7.0 HDF4 git
 #***********************************************************************
@@ -7699,10 +7699,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20190829: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 26 gcc/gfortran 7.3.1 netcdf-4.7.1 HDF4 git
 #***********************************************************************
@@ -7842,10 +7842,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20200418: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 32 gcc/gfortran 10.0.1 netcdf-4.7.4 HDF4 git
 #***********************************************************************
@@ -7986,10 +7986,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20200716: skyglow.ess.uci.edu x86_64/EMT64 Fedora Core 32 gcc/gfortran 10.1.1 netcdf-4.8.0 HDF4 git
 #***********************************************************************
@@ -8130,10 +8130,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20210330: glace.ess.uci.edu x86_64/EMT64 Ubuntu Xenial 16.04 gcc/gfortran 7.5.0 netcdf-4.8.0 HDF4 git
 #***********************************************************************
@@ -8274,10 +8274,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20210416: e3sm.ess.uci.edu x86_64/EMT64 Ubuntu Xenial 16.04 gcc/gfortran 7.5.0 netcdf-4.8.0 HDF4 git
 #***********************************************************************
@@ -8417,10 +8417,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20211019: sastrugi.ess.uci.edu MacOS 11.6 Homebrew clang 13.0/gfortran 11.2 netcdf-4.8.2-development HDF4 git
 #***********************************************************************
@@ -8563,10 +8563,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20220209: sastrugi.ess.uci.edu MacOS 12.1 Homebrew clang 13.0/gfortran 11.2 netcdf-4.8.2-development HDF4 git
 #***********************************************************************
@@ -8707,10 +8707,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20220616: glace.ess.uci.edu x86_64/EMT64 Ubuntu Xenial 16.04 gcc/gfortran 7.5.0 netcdf-4.9.1 HDF4 git
 #***********************************************************************
@@ -8854,10 +8854,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20220617: spectral.ess.uci.edu MacOS 12.4 Homebrew clang 13.0.1/gfortran 11.3.0 netcdf-4.9.1-development git
 #***********************************************************************
@@ -8998,10 +8998,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20220619: frazil.ess.uci.edu Fedora Core 36 clang 14.0.0 gfortran 12.1.1 netcdf-4.9.1-development git
 #***********************************************************************
@@ -9123,7 +9123,7 @@ autoreconf -i -f
 # NB: --enable-hdf4 documented requires libhdf.a, libdf.a, libjpeg.a (and netCDF configure does not itself add -ljpeg)
 # NB: --enable-logging allows HDF error message to print
 # NB: --enable-nczarr builds Zarr (true by default)
-# NB: --enable-nczarr-s3 enables NCZarr S3 support (must be specified, is false by default)
+# NB: --enable-nczarr-s3 enables NCZarr S3 support (false by default, also requires LDFLAGS="-L/opt/homebrew/lib -laws-cpp-sdk-s3")
 # NB: --enable-pnetcdf build with parallel I/O for classic files
 # NB: --enable-separate-fortran builds libnetcdff.a (default with shared libraries)
 # NB: --enable-shared builds shared libraries
@@ -9133,7 +9133,7 @@ autoreconf -i -f
 # With HDF4 on FC26 in /usr/local:
 # 20220220: Remove Anaconda paths and HDF4 to build netcdf-c
 # Place in /opt/netcdf so requires sudo make install 
-CC='clang' CPPFLAGS="-I/opt/homebrew/include" LDFLAGS="-L/opt/homebrew/lib" ./configure --prefix=/opt/netcdf --enable-shared --enable-cdf5 --enable-dap --enable-logging --enable-netcdf4 --enable-nczarr --enable-nczarr-s3 --enable-v2 --with-plugin-dir=${HDF5_PLUGIN_PATH} > netcdf.configure.foo 2>&1
+CC='clang' CPPFLAGS="-I/opt/homebrew/include" LDFLAGS="-L/opt/homebrew/lib -laws-cpp-sdk-s3" ./configure --prefix=/opt/netcdf --enable-shared --enable-cdf5 --enable-dap --enable-logging --enable-netcdf4 --enable-nczarr --enable-nczarr-s3 --enable-v2 --with-plugin-dir=${HDF5_PLUGIN_PATH} > netcdf.configure.foo 2>&1
 mv -f config.log netcdf.config.log.foo
 make > netcdf.make.foo 2>&1
 make check > netcdf.check.foo 2>&1
@@ -9145,10 +9145,10 @@ sudo cp ${DATA}/tmp/netcdf-c/libsrc4/.libs/libnetcdf4.a ${NETCDF4_ROOT}/lib/libn
 make clean
 exit # Return to previous shell level
 # Output saved to:
-http://dust.ess.uci.edu/tmp/netcdf.check.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.configure.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.make.x86_64-unknown-linux-gnu.foo
-http://dust.ess.uci.edu/tmp/netcdf.config.log.x86_64-unknown-linux-gnu.foo
+http://dust.ess.uci.edu/tmp/netcdf.check.foo
+http://dust.ess.uci.edu/tmp/netcdf.configure.foo
+http://dust.ess.uci.edu/tmp/netcdf.make.foo
+http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 # 20220907: spectral.ess.uci.edu MacOS 12.5.1 Homebrew clang 14.0.6/gfortran 11.3.0 netcdf-4.9.1-development git
 #***********************************************************************

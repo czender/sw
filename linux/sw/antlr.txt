@@ -658,3 +658,24 @@ openjdk-devel is installed on the system, does /usr/bin/java work for builting a
 # 20220630: perlmutter.nersc.gov gcc 11.2.0
 #***********************************************************************
 
+#***********************************************************************
+# 20221004: chrysalis.lcrc.anl.gov gcc 9.3
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+/bin/rm -r -f ${DATA}/tmp/antlr-2.7.7 # Important! Otherwise permissions may get screwed up
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+CC=gcc CFLAGS='-Wall' CXX=g++ ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-java --disable-python --disable-shared > antlr.configure.foo 2>&1
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20221004: chrysalis.lcrc.anl.gov gcc 9.3
+#***********************************************************************
