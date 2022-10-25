@@ -3073,19 +3073,27 @@ One such method \cite[][p.~232]{Sal96} is to identify an effective
 inclination $\plrmubar$ along which all radiation is assumed to
 travel.
 With this assumption, the contribution to upwelling irradiance from
-the lower boundary, the first term on the RHS of \ref{eqn:flx_net_xpn}), is
+the lower boundary, the first term on the RHS of (\ref{eqn:flx_net_xpn}), is
 \begin{eqnarray}
 2 \xpn_{3}(\taustr - \tau) & = & 
-\exp \left( -\frac{\taustr - \tau}{\plrmubar} \right)
+\exp \left( -\frac{\taustr - \tau}{\plrmubar} \right) \nonumber \\
+-\frac{\taustr - \tau}{\plrmubar} & = & \ln [ 2 \xpn_{3}(\taustr - \tau) ] \nonumber \\
+\frac{\taustr - \tau}{\plrmubar} & = & -\ln [ 2 \xpn_{3}(\taustr - \tau) ] \nonumber \\
+\frac{\plrmubar}{\taustr - \tau} & = & -\{ \ln [ 2 \xpn_{3}(\taustr - \tau) ] \}^{-1} \nonumber \\
+\plrmubar & = & - \frac{\taustr - \tau}{ \ln [ 2 \xpn_{3}(\taustr - \tau) ] }
 \label{eqn:dfs_fct_apx}
 \end{eqnarray}
 Inspection (or differentiation) shows that the atmosphere within one
 optical depth makes the dominant contribution to~(\ref{eqn:dfs_fct_apx}).
-For $\dlt\tau = \taustr - \tau = 1$, the diffusivity factor 
+For $\dlt\tau = \taustr - \tau = 1$, the diffusivity factor becomes
 \begin{eqnarray}
-\plrmubar^{-1} & \approx & \frac{5}{3}
+  \plrmubar^{-1} & \approx & \frac{5}{3}
 \label{eqn:plr_mu_bar_dfn}
 \end{eqnarray}
+% 20221020: Unable to reproduce Salby's result
+% ncap2 -O -s 'x=1.0;pi=4.0*atan(1.0);e3=gsl_sf_expint_En(3,x);mu=-x/(ln(2.0*pi*e3));theta=acos(mu);theta_dgr=180*theta/pi;print(x);print(pi);print(e3);print(mu);print(theta);print(theta_dgr)' ~/foo.nc
+% x = 1, pi = 3.14159265359, e3 = 0.109691967198, mu = 0.659225348946, theta = 0.851008227579, theta_dgr = 48.7591797712
+% mu is much closer to 2/3 than to 3/5
 The hypothetical collimated beam of radiation is inclined to the zenith
 by $\arccos(3/5) \approx 53.13\dgr$.
 This is equivalent to a collimated beam of radiation travelling
@@ -3151,9 +3159,9 @@ Earth's terrestrial radiative energy resides.
 
 In the absence of dynamical, chemical, and latent heating, the energy
 deposition in a parcel of air is entirely radiative.
-Under these conditions the idealize grey atmosphere described by
+Under these conditions the idealized grey atmosphere described by
 (\ref{eqn:gry_hlf_dfn}) will adjust to a temperature profile
-determined by \trmidx{radiative equilibrium}.
+in \trmidx{radiative equilibrium}.
 Let the time rate of change of temperature $\tpt$ of a parcel be
 denoted by $\htr$\,[\kxs], the parcel \trmidx{warming rate}\footnote{% 
 Conventionally $\htr$ is called the \trmidx{heating rate}, which is a

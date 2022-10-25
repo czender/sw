@@ -1093,7 +1093,7 @@ alias cori='ssh -Y cori.nersc.gov' # pw_psw (EMN=PeRLmutter)
 alias perlmutter='ssh -Y perlmutter-p1.nersc.gov' # pw_psw (EMN=PeRLmutter)
 alias bsrc="source ${HOME}/.bashrc"
 alias chm='chmod 644 *.*' # Make readable
-alias cln='rm *~ .[a-zA-Z]~ \#\*\# core core.* *.tmp *foo foo* *.o *.bak *.trace gmeta aaaa* thumb???.png thumbdta.tex *-t.tex* *.bbl *.blg *.log *.glo *.aux *.dlog *.cp *.cps *.fn *.fns *.ky *.pg *.toc *.tp *.vr *.lof *.lot *.dvi *.ttt *.fff *.stackdump PET0.* fort.73 \~\$*.*x'
+alias cln='rm *~ .[a-zA-Z]~ \#\*\# core core.* *.tmp *foo foo* *.o *.bak *.trace gmeta aaaa* thumb???.png thumbdta.tex *-t.tex* *.bbl *.blg *.log *.glo *.aux *.dlog *.cp *.cps *.fn *.fns *.ky *.pg *.toc *.tp *.vr *.lof *.lot *.dvi *.ttt *.fff *.stackdump PET0.* fort.73 \~\$*.*x ncap2_tmp_dmm*'
 alias compress='gzip'
 alias corerm='rm `find . -name core -print`'
 alias cp='cp -i -p' # -i = inquire, -p = preserve mode and time
