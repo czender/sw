@@ -220,6 +220,7 @@
 \newcommand{\mshmaxsbs}{\ensuremath{\mathrm{M}}} % [sbs] Maximum emission subscript
 \newcommand{\mssstl}{\ensuremath{m}} % [kg] Mass of satellite
 \newcommand{\msv}{\ensuremath{\epsilon}} % [frc] Emissivity
+\newcommand{\srp}{\ensuremath{\alpha}} % [frc] Absorptivity
 \newcommand{\mxwsbs}{\ensuremath{\mathrm{M}}} % [sbs] Maxwell subscript
 \newcommand{\nbrcnc}{\ensuremath{n}} % [# m-3] Number concentration
 \newcommand{\nbrpth}{\ensuremath{N}} % [# m-2] Number path
@@ -237,6 +238,7 @@
 \newcommand{\ntn}{\ensuremath{I}} % Intensity
 \newcommand{\oddsbs}{\ensuremath{\mathrm{o}}} % [sbs] Odd (anti-symmetric) subscript
 \newcommand{\onesbs}{\ensuremath{1}} % [sbs] State 1 subscript
+\newcommand{\zrosbs}{\ensuremath{0}} % [sbs] Zero subscript
 \newcommand{\oonensbs}{\ensuremath{o1n}} % [sbs] Vector spherical harmonic subscript o1n
 \newcommand{\optnbr}{\ensuremath{\kappa}} % [m2 #-1] = [m-1] Numeric optical coefficient
 \newcommand{\optspc}{\ensuremath{\psi}} % [m2 kg-1] Specific optical coefficient
@@ -277,7 +279,7 @@
 \newcommand{\rfrmlr}{\ensuremath{R}} % [m3 mol-1] Molar refraction
 \newcommand{\rmasbs}{\ensuremath{\mathrm{RMA}}} % [sbs] Resonance of Maximum Amplitude subscript
 \newcommand{\rsnsbs}{\ensuremath{\mathrm{r}}} % [sbs] Resonance subscript
-\newcommand{\rsnwvn}{\ensuremath{\wvn_{0}}} % [cm-1] Resonance frequency
+\newcommand{\rsnwvn}{\ensuremath{\wvn_{\zrosbs}}} % [cm-1] Resonance frequency
 \newcommand{\rth}{\ensuremath{\oplus}} % [sym] Astronomical symbol for Earth
 \newcommand{\rttsbs}{\ensuremath{\mathrm{r}}} % [sbs] Rotation subscript
 \newcommand{\sbfhsbs}{\ensuremath{(3)}} % [idx] Spherical bessel function h subscript
@@ -390,7 +392,7 @@
 \newcommand{\azievnidx}{\ensuremath{\azifnc_{\evnsbs,\aziidx}}} % [fnc] Azimuthal function, even (symmetric) component, term m
 \newcommand{\azievn}{\ensuremath{\azifnc_{\evnsbs}}} % [fnc] Azimuthal function, even (symmetric) component
 \newcommand{\azifncidx}{\ensuremath{\azifnc_{\aziidx}}} % [fnc] Azimuthal component term m
-\newcommand{\azinot}{\ensuremath{\azi_{0}}} % [rdn] Fixed solar azimuthal angle
+\newcommand{\azinot}{\ensuremath{\azi_{\zrosbs}}} % [rdn] Fixed solar azimuthal angle
 \newcommand{\azioddidx}{\ensuremath{\azifnc_{\oddsbs,\aziidx}}} % [fnc] Azimuthal function, odd (anti-symmetric) component, term m
 \newcommand{\aziodd}{\ensuremath{\azifnc_{\oddsbs}}} % [fnc] Azimuthal function, odd (anti-symmetric) component
 \newcommand{\aziprm}{\ensuremath{\azi^{\prime}}} % [rdn] Azimuthal angle prime
@@ -432,8 +434,8 @@
 \newcommand{\cstdmpQOL}{\ensuremath{\cstdmp^{\prime}}} % [frc] Damping constant (QOL78)
 \newcommand{\cstdmpidx}{\ensuremath{\cstdmp_{\lnidx}}} % [frq] Damping constant for specific line
 \newcommand{\cstfour}{\ensuremath{\cst_{4}}} % Constant of integration
-\newcommand{\cstzro}{\ensuremath{\cst_{0}}} % Constant of integration
-\newcommand{\cstone}{\ensuremath{\cst_{1}}} % Constant of integration
+\newcommand{\cstzro}{\ensuremath{\cst_{\zrosbs}}} % Constant of integration
+\newcommand{\cstone}{\ensuremath{\cst_{\onesbs}}} % Constant of integration
 \newcommand{\cstrstmod}{\ensuremath{\beta}} % Spring constant of restoring force for particular vibrational mode
 \newcommand{\cstrtt}{\ensuremath{B_{\vbrsbs}}} % Rotational constant
 \newcommand{\cstthree}{\ensuremath{\cst_{3}}} % Constant of integration
@@ -470,6 +472,9 @@
 \newcommand{\fctobs}{\ensuremath{\fctopt_{\mathrm{o}}}} % [frc] Optical factor accounting for aperature size
 \newcommand{\flxabssw}{\ensuremath{\flx^{\mathrm{ASR}}}} % [W m-2] Absorbed solar flux
 \newcommand{\flxabs}{\ensuremath{\flx^{\xsxabs}}} % [W m-2] Absorbed solar flux 
+\newcommand{\flxrfl}{\ensuremath{\flx_{\rfl}}} % [W m-2] Reflected flux 
+\newcommand{\flxmsv}{\ensuremath{\flx_{\msv}}} % [W m-2] Hemispheric emitted (not reflected, not total) irradiance
+\newcommand{\flxsrp}{\ensuremath{\flx_{\srp}}} % [W m-2] Absorbed flux 
 \newcommand{\flxact}{\ensuremath{\flx^{\prc}}} % [W m-2 Hz-1] Actinic flux
 \newcommand{\flxdlt}{\ensuremath{\Delta \flx}} % [W m-2] Change in flux
 \newcommand{\flxdwn}{\ensuremath{\flx^{-}}} % [W m-2] Downwelling flux
@@ -483,14 +488,14 @@
 \newcommand{\flxupwdwn}{\ensuremath{\flx^{\pm}}} % [W m-2] Up-downwelling irradiance
 \newcommand{\flxupwplk}{\ensuremath{\flx^{+}_{\plkfnc}}} % [W m-2] Hemispheric upwelling blackbody irradiance
 \newcommand{\flxupw}{\ensuremath{\flx^{+}}} % [W m-2] Upwelling flux
-\newcommand{\flxwgtfrcnot}{\ensuremath{\flxwgtfrc_{0}}} % [frc] Band-integrated spectral weight
+\newcommand{\flxwgtfrcnot}{\ensuremath{\flxwgtfrc_{\zrosbs}}} % [frc] Band-integrated spectral weight
 \newcommand{\flxwgtfrcoffrq}{\ensuremath{\flxwgtfrc(\frq)}} % [frc] Spectral weight of frequency
 \newcommand{\flxwgtfrcofwvl}{\ensuremath{\flxwgtfrc(\wvl)}} % [frc] Spectral weight of wavelength
 \newcommand{\flxwvl}{\ensuremath{\flx_{\wvl}}} % [W m-2 m-1] Irradiance per unit wavelength
 \newcommand{\frqcll}{\ensuremath{\frq_{\mathrm{col}}}} % [s-1] Collision frequency
 \newcommand{\frqmod}{\ensuremath{\frq_{\modvbridx}}} % [s-1] Frequency of vibrational mode
 \newcommand{\frqmshmax}{\ensuremath{\frq_{\mshmaxsbs}}} % [s-1] Frequency of maximum emission
-\newcommand{\frqnot}{\ensuremath{\frq_{0}}} % [s-1] Fixed frequency
+\newcommand{\frqnot}{\ensuremath{\frq_{\zrosbs}}} % [s-1] Fixed frequency
 \newcommand{\frqprm}{\ensuremath{\frq^{\prime}}} % [s-1] Frequency prime
 \newcommand{\fsfcffofplrmu}{\ensuremath{\fsfcff(\plrmu)}} % [frc] Forward-scatter coefficient of mu
 \newcommand{\fshabs}{\ensuremath{\fsh_{\abssbs}}} % [frc] Absorption efficiency
@@ -500,7 +505,7 @@
 \newcommand{\fshxxx}{\ensuremath{\fsh_{\xxx}}} % [frc] Generic efficiency
 \newcommand{\fwhmlrn}{\ensuremath{\fwhm_{\lrnsbs}}} % [Hz] Lorentz full width at half-maximum
 \newcommand{\hgtdlt}{\ensuremath{\Delta \hgt}} % [m] Change in height
-\newcommand{\hgtnot}{\ensuremath{\mathrm{\hgt}_{0}}} % [m] Atmospheric height at fixed level
+\newcommand{\hgtnot}{\ensuremath{\mathrm{\hgt}_{\zrosbs}}} % [m] Atmospheric height at fixed level
 \newcommand{\hgtprmprm}{\ensuremath{\hgt^{\prime\prime}}} % [m] Atmospheric height dummy variable
 \newcommand{\hgtprm}{\ensuremath{\hgt^{\prime}}} % [m] Atmospheric height dummy variable
 \newcommand{\hnu}{\ensuremath{\cstplk \frq}} % [J] Planck's constant times frequency
@@ -513,7 +518,7 @@
 \newcommand{\hwhmln}{\ensuremath{\hwhm_{\lnsbs}}} % [Hz] Half width at half-maximum of specific line
 \newcommand{\hwhmlrnln}{\ensuremath{\hwhm_{\lrnsbs,\lnidx}}} % [Hz] Lorentz half width at half-maximum of line i
 \newcommand{\hwhmlrn}{\ensuremath{\hwhm_{\lrnsbs}}} % [Hz] Lorentz half width at half-maximum
-\newcommand{\hwhmnot}{\ensuremath{\hwhm_{0}}} % [Hz] Half width at half-maximum at reference temperature, pressure
+\newcommand{\hwhmnot}{\ensuremath{\hwhm_{\zrosbs}}} % [Hz] Half width at half-maximum at reference temperature, pressure
 \newcommand{\hwhmntr}{\ensuremath{\hwhm_{\ntrsbs}}} % [Hz] Natural half width at half-maximum
 \newcommand{\hwhmprsavg}{\ensuremath{\bar{\hwhm}_{\prssbs}}} % [Hz] Mean pressure-broadened half width at half-maximum
 \newcommand{\hwhmprsnot}{\ensuremath{\hwhm_{\prs,0}}} % [Hz] Pressure-broadened half width at half-maximum at reference temperature, pressure
@@ -538,17 +543,17 @@
 \newcommand{\lctdlcrlsqr}{\ensuremath{\lctdlc^{\lctrlsbs 2}}} % [frc] Square of real part of dielectric function
 \newcommand{\lctdlcrl}{\ensuremath{\lctdlc^{\lctrlsbs}}} % [frc] Real part of dielectric function
 \newcommand{\lctdspvct}{\ensuremath{\mathbf{\lctdsp}}} % [C m-2] Electric displacement vector
-\newcommand{\lctfldnot}{\ensuremath{\lctfld_{0}}} % [V m-1] Electric field amplitude
+\newcommand{\lctfldnot}{\ensuremath{\lctfld_{\zrosbs}}} % [V m-1] Electric field amplitude
 \newcommand{\lctfldtrm}{\ensuremath{\lctfld_{\srsidx}}} % [V m-1] Electric field amplitude, nth term
 \newcommand{\lctmumdm}{\ensuremath{\mu}} % [H m-1] Electrical permeability of medium
-\newcommand{\lctmuvcm}{\ensuremath{\lctmu_{0}}} % [H m-1] Electrical permeability of free space
+\newcommand{\lctmuvcm}{\ensuremath{\lctmu_{\zrosbs}}} % [H m-1] Electrical permeability of free space
 \newcommand{\lctmuprt}{\ensuremath{\mu_{\prtsbs}}} % [H m-1] Electrical permeability of particle
 \newcommand{\lctplrvct}{\ensuremath{\mathbf{\lctplr}}} % [C m-2] Electric polarization vector
 \newcommand{\lctprmtavg}{\ensuremath{\bar{\lctprmt}}} % [F m-1] Mean electrical permittivity of mixture
 \newcommand{\lctprmtimg}{\ensuremath{\lctprmt^{\lctimgsbs}}} % [frc] Imaginary part of electrical permittivity
 \newcommand{\lctprmtmtx}{\ensuremath{\lctprmt_{\mtxsbs}}} % Electrical permittivity of homogeneous matrix
 \newcommand{\lctprmtncl}{\ensuremath{\lctprmt}} % [F m-1] Electrical permittivity of inclusion
-\newcommand{\lctprmtvcm}{\ensuremath{\lctprmt_{0}}} % Electrical permittivity of free space
+\newcommand{\lctprmtvcm}{\ensuremath{\lctprmt_{\zrosbs}}} % Electrical permittivity of free space
 \newcommand{\lctprmtrl}{\ensuremath{\lctprmt^{\lctrlsbs}}} % [frc] Real part of electrical permittivity
 \newcommand{\lctprmtspc}{\ensuremath{\lctprmt}_{\spcidx}} % [F m-1] Electrical permittivity of species i
 \newcommand{\emabetaspc}{\ensuremath{\emabeta_{\spcidx}}} % [frc] Effective Medium Approximation geometric factor "beta" of species i
@@ -573,10 +578,12 @@
 \newcommand{\mgnone}{\ensuremath{\mgnppr_{\onesbs}}} % [mgn] Apparent magnitude, first object
 \newcommand{\mgntwo}{\ensuremath{\mgnppr_{\twosbs}}} % [mgn] Apparent magnitude, second object
 \newcommand{\mgnznt}{\ensuremath{\mgnppr_{\zntsbs}}} % [mgn] Threshold apparent magnitude, zenith direction
+\newcommand{\msvnot}{\ensuremath{\msv_{\zrosbs}}} % [frc] Greybody emissivity
+\newcommand{\srpnot}{\ensuremath{\srp_{\zrosbs}}} % [frc] Greybody absorptivity
 \newcommand{\lnshpdpp}{\ensuremath{\lnshp_{\dppsbs}}} % [Hz-1] Doppler line shape profile
 \newcommand{\lnshplrn}{\ensuremath{\lnshp_{\lrnsbs}}} % [Hz-1] Lorentz line shape profile
 \newcommand{\lnshpntr}{\ensuremath{\lnshp_{\ntrsbs}}} % [Hz-1] Natural line shape profile
-\newcommand{\lnshpofdltfrq}{\ensuremath{\lnshp(\frq-\frq_{0})}} % [Hz-1] Line shape profile of frq - frq_not
+\newcommand{\lnshpofdltfrq}{\ensuremath{\lnshp(\frq-\frq_{\zrosbs})}} % [Hz-1] Line shape profile of frq - frq_not
 \newcommand{\lnshpoffrq}{\ensuremath{\lnshp(\frq)}} % [Hz-1] Line shape profile of frq
 \newcommand{\lnshpprs}{\ensuremath{\lnshp_{\prs}}} % [Hz-1] Pressure-broadened line shape profile
 \newcommand{\lnshpvgt}{\ensuremath{\lnshp_{\vgtsbs}}} % [Hz-1] Voigt line shape profile
@@ -608,7 +615,7 @@
 \newcommand{\nglhatnot}{\ensuremath{\mbox{\boldmath$\hat{\ngl}_{\slrsbs}$}}} % [rdn] Angle unit vector to Sun
 \newcommand{\nglhatprm}{\ensuremath{\mbox{\boldmath$\hat{\ngl}^{\prime}$}}} % [rdn] Angle unit vector prime
 \newcommand{\nglhat}{\ensuremath{\mbox{\boldmath$\hat{\ngl}$}}} % [rdn] Angle unit vector
-\newcommand{\nglphznot}{\ensuremath{\nglphz_{0}}} % [rdn] Phase angle not
+\newcommand{\nglphznot}{\ensuremath{\nglphz_{\zrosbs}}} % [rdn] Phase angle not
 \newcommand{\nglprm}{\ensuremath{\ngl^{\prime}}} % [rdn] Incident Angle 
 \newcommand{\nglvctprm}{\ensuremath{\vec{\ngl}}^{\prime}} % [rdn] Angle vector prime
 \newcommand{\nglvct}{\ensuremath{\vec{\ngl}}} % [rdn] Angle vector
@@ -653,13 +660,13 @@
 \newcommand{\plkbnd}{\ensuremath{\plkfnc_{\bndsbs}}} % [W m-2 sr-1] Planck function in discrete band i
 \newcommand{\plkbndinf}{\ensuremath{\plkfnc^{\infty}_{\bndsbs}}} % [W m-2 sr-1] Planck function half-open towards infinity
 \newcommand{\plkbndpinf}{\ensuremath{\plkfnc^{\infty}_{\bndsbs+1}}} % [W m-2 sr-1] Planck function half-open next interface towards infinity
-\newcommand{\plkzrobnd}{\ensuremath{\plkfnc^{\bndsbs}_{0}}} % [W m-2 sr-1] Planck function half-open towards infinity
+\newcommand{\plkzrobnd}{\ensuremath{\plkfnc^{\bndsbs}_{\zrosbs}}} % [W m-2 sr-1] Planck function half-open towards infinity
 \newcommand{\plrdff}{\ensuremath{\plr_{\dff}}} % [rdn] Polar angle implied by diffusivity approximation
 \newcommand{\plrmubar}{\ensuremath{\bar{\plrmu}}} % [frc] Polar angle absolute value cosine mu
-\newcommand{\plrmunot}{\ensuremath{\plrmu_{0}}} % [frc] Cosine solar zenith angle
+\newcommand{\plrmunot}{\ensuremath{\plrmu_{\zrosbs}}} % [frc] Cosine solar zenith angle
 \newcommand{\plrmuprm}{\ensuremath{\plrmu^{\prime}}} % [frc] Cosine solar zenith angle incident photons
 \newcommand{\plrmurcp}{\ensuremath{\plrmu^{-1}}} % [frc] Inverse cosine zenith angle
-\newcommand{\plrnot}{\ensuremath{\plr_{0}}} % [rdn] Solar zenith angle
+\newcommand{\plrnot}{\ensuremath{\plr_{\zrosbs}}} % [rdn] Solar zenith angle
 \newcommand{\plrprm}{\ensuremath{\plr^{\prime}}} % [frc] Polar angle prime
 \newcommand{\plrurcp}{\ensuremath{\plru^{-1}}} % [frc] Inverse cosine zenith angle
 \newcommand{\pplone}{\ensuremath{\ppl_{\onesbs}}} % [# m-3] Population of level 1
@@ -670,7 +677,7 @@
 \newcommand{\prdszprm}{\ensuremath{\delta\szprm}} % [frc] Size parameter period
 \newcommand{\prmclmsnsnf}{\ensuremath{\prmclmsns_{\mathrm{NF}}}} % [K W-1 m2] Climate sensitivity parameter, no feedback
 \newcommand{\prsavg}{\ensuremath{\bar{\prs}}} % [pa] Mean pressure
-\newcommand{\prsnot}{\ensuremath{\mathrm{\prs}_{0}}} % [Pa] Fixed pressure
+\newcommand{\prsnot}{\ensuremath{\mathrm{\prs}_{\zrosbs}}} % [Pa] Fixed pressure
 \newcommand{\prsprmprm}{\ensuremath{\prs^{\prime\prime}}} % [Pa] Atmospheric pressure dummy variable
 \newcommand{\prsprm}{\ensuremath{\prs^{\prime}}} % [Pa] Atmospheric pressure dummy variable
 \newcommand{\prspthscl}{\ensuremath{\tilde{\prs}}} % [Pa] Scaled path pressure
@@ -724,7 +731,7 @@
 \newcommand{\tauabs}{\ensuremath{\tau_{\abssbs}}} % [frc] Absorption optical depth
 \newcommand{\tauext}{\ensuremath{\tau_{\extsbs}}} % [frc] Extinction optical depth
 \newcommand{\tauhat}{\ensuremath{\hat{\tau}}} % [frc] Optical path
-\newcommand{\taunot}{\ensuremath{\tau_{0}}} % [frc] Optical depth at fixed position
+\newcommand{\taunot}{\ensuremath{\tau_{\zrosbs}}} % [frc] Optical depth at fixed position
 \newcommand{\tauoffrq}{\ensuremath{\tau(\frq)}} % [frc] Optical depth of nu
 \newcommand{\tauomu}{\ensuremath{{\tau/\plrmu}}} % [frc] Optical depth factor
 \newcommand{\tauprm}{\ensuremath{\tau^{\prime}}} % [frc] Dummy optical path
@@ -736,7 +743,7 @@
 \newcommand{\tptavg}{\ensuremath{\bar{\tpt}}} % [K] Mean temperature
 \newcommand{\tptbrt}{\ensuremath{\tpt_{\brtsbs}}} % [K] Brightness temperature
 \newcommand{\tptffc}{\ensuremath{\tpt_{\mathrm{E}}}} % [K] Effective temperature
-\newcommand{\tptnot}{\ensuremath{\mathrm{\tpt}_{0}}} % [K] Fixed temperature
+\newcommand{\tptnot}{\ensuremath{\mathrm{\tpt}_{\zrosbs}}} % [K] Fixed temperature
 \newcommand{\tptpthscl}{\ensuremath{\tilde{\tpt}}} % [K] Scaled path temperature
 \newcommand{\tptslr}{\ensuremath{\tpt_{\slrsbs}}} % [K] Temperature of Sun
 \newcommand{\tpttpt}{\ensuremath{\tpt_{\tptidx}}} % [K] Temperature of temperature
@@ -757,11 +764,11 @@
 \newcommand{\wvlmax}{\ensuremath{\wvl_{\maxsbs}}} % [m] Maximum wavelength
 \newcommand{\wvlmin}{\ensuremath{\wvl_{\minsbs}}} % [m] Miminum wavelength
 \newcommand{\wvlmshmax}{\ensuremath{\wvl_{\mshmaxsbs}}} % [m] Wavelength of maximum emission
-\newcommand{\wvlnot}{\ensuremath{\wvl_{0}}} % [m] Fixed wavelength
+\newcommand{\wvlnot}{\ensuremath{\wvl_{\zrosbs}}} % [m] Fixed wavelength
 \newcommand{\wvlone}{\ensuremath{\wvl_{1}}} % [m] Wavelength of 1st channel
 \newcommand{\wvlrma}{\ensuremath{\wvl_{\rmasbs}}} % [m] Wavelength of resonance of maximum amplitude
 \newcommand{\wvltwo}{\ensuremath{\wvl_{2}}} % [m] Wavelength of 2nd channel
-\newcommand{\wvlvcm}{\ensuremath{\wvl_{0}}} % [m] Wavelength in vacuum
+\newcommand{\wvlvcm}{\ensuremath{\wvl_{\zrosbs}}} % [m] Wavelength in vacuum
 \newcommand{\wvnbrimg}{\ensuremath{\wvnbr^{\lctimgsbs}}} % [m-1] Imaginary part of wavenumber scalar
 \newcommand{\wvnbrrl}{\ensuremath{\wvnbr^{\lctrlsbs}}} % [m-1] Real part of wavenumber scalar
 \newcommand{\wvnlwr}{\ensuremath{\wvn^{\lwrsbs}}} % [m-1] Energy in wavenumbers of lower state
@@ -857,7 +864,7 @@
 \newcommand{\flxdwnfrqofzzz}{\ensuremath{\flxdwnfrq(\zzz)}} % [W m-2 Hz-1] Specific irradiance downwelling of zzz
 \newcommand{\flxdwnfrq}{\ensuremath{\flxdwn_{\frq}}} % [W m-2 Hz-1] Downwelling specific irradiance
 \newcommand{\flxdwnlw}{\ensuremath{\flxdwn_{\mbox{\scriptsize LW}}}} % [W m-2] Downwelling longwave flux
-\newcommand{\flxdwnnot}{\ensuremath{\flxdwn_{0}}} % [W m-2] Incident downwelling irradiance
+\newcommand{\flxdwnnot}{\ensuremath{\flxdwn_{\zrosbs}}} % [W m-2] Incident downwelling irradiance
 \newcommand{\flxdwnsw}{\ensuremath{\flxdwn_{\mbox{\scriptsize SW}}}} % [W m-2] Downwelling solar flux
 \newcommand{\flxnetsw}{\ensuremath{\flx_{\mbox{\scriptsize SW}}}} % [W m-2] Net solar flux
 \newcommand{\flxnetlw}{\ensuremath{\flx_{\mbox{\scriptsize LW}}}} % [W m-2] Net longwave flux
@@ -877,7 +884,7 @@
 \newcommand{\flxfrqoftau}{\ensuremath{\flx_{\frq}}(\tau)} % [W m-2 Hz-1] Specific irradiance of tau
 \newcommand{\flxmdlfrq}{\ensuremath{\flx^{\mbox{\scriptsize mdl}}_{\frq}}} % [W m-2 Hz-1] Modeled specific irradiance
 \newcommand{\flxnotfrq}{\ensuremath{\flx_{0,\frq}}} % [W m-2 Hz-1] Initial specific irradiance
-\newcommand{\flxnot}{\ensuremath{\flx_{0}}} % [W m-2] Initial irradiance
+\newcommand{\flxnot}{\ensuremath{\flx_{\zrosbs}}} % [W m-2] Initial irradiance
 \newcommand{\flxobsfrq}{\ensuremath{\flx^{\mbox{\scriptsize obs}}_{\frq}}} % [W m-2 Hz-1] Observed specific irradiance
 \newcommand{\flxslrwvlofwvl}{\ensuremath{\flxslrwvl(\wvl)}} % [W m-2 m-1] Solar spectral irradiance of wvl
 \newcommand{\flxupwdwnfrq}{\ensuremath{\flxupwdwn_{\frq}}} % [W m-2 Hz-1] Up-downwelling specific irradiance
@@ -886,6 +893,9 @@
 \newcommand{\flxupwfrq}{\ensuremath{\flxupw_{\frq}}} % [W m-2 Hz-1] Upwelling specific irradiance
 \newcommand{\flxupwlw}{\ensuremath{\flxupw_{\mbox{\scriptsize LW}}}} % [W m-2] Upwelling longwave flux
 \newcommand{\flxupwsw}{\ensuremath{\flxupw_{\mbox{\scriptsize SW}}}} % [W m-2] Upwelling solar flux
+\newcommand{\flxupwrfl}{\ensuremath{\flxupw_{\rfl}}} % [W m-2] Upwelling reflected flux 
+\newcommand{\flxupwmsv}{\ensuremath{\flxupw_{\msv}}} % [W m-2] Upwelling hemispheric emitted (not reflected, not total) irradiance
+
 \newcommand{\frqshf}{\ensuremath{\frq^{\strsbs}}} % [Hz] Frequency of pressure-shifted line
 \newcommand{\fshabsavg}{\ensuremath{\langle\fshabs\rangle}} % [frc] Absorption efficiency, quasi-period mean
 \newcommand{\fshabsrsn}{\ensuremath{\fsh_{\abssbs,\rsnsbs}}} % [frc] Absorption efficiency, resonance component
@@ -901,7 +911,7 @@
 \newcommand{\lctfldsct}{\ensuremath{\lctfld_{\sctsbs}}} % [V m-1] Electric field, scattered component
 \newcommand{\lctvctcpx}{\ensuremath{\lctvct_{\cpxsbs}}} % [V m-1] Electric field vector, complex representation
 \newcommand{\lctvctncd}{\ensuremath{\lctvct_{\ncdsbs}}} % [V m-1] Electric field vector, incident component
-\newcommand{\lctvctnot}{\ensuremath{\lctvct_{0}}} % [V m-1] Electric field vector, constant
+\newcommand{\lctvctnot}{\ensuremath{\lctvct_{\zrosbs}}} % [V m-1] Electric field vector, constant
 \newcommand{\lctvctprt}{\ensuremath{\lctvct_{\prtsbs}}} % [V m-1] Electric field vector, internal to particle
 \newcommand{\lctvctsct}{\ensuremath{\lctvct_{\sctsbs}}} % [V m-1] Electric field vector, scattered component
 \newcommand{\lgnassnmofcosnglsct}{\ensuremath{\lgnassnm(\cos\nglsct)}} % [fnc] % Associated Legendre polynomial of order n and degree m of cosine nglsct
@@ -910,19 +920,19 @@
 \newcommand{\lgnassnrmnmofplru}{\ensuremath{\lgnassnrm(\plru)}} % [fnc] Normalized associated Legendre polynomial of order n and degree m of plru
 \newcommand{\lgnplrofcosnglsct}{\ensuremath{\lgnplr(\cos\nglsct)}} % [fnc] Legendre polynomial of order n of cosine nglsct
 \newcommand{\lgnplrofplru}{\ensuremath{\lgnplr(\plru)}} % [fnc] Legendre polynomial of order n of plru
-\newcommand{\lnshplrnofdltfrq}{\ensuremath{\lnshplrn(\frq-\frq_{0}})} % [Hz-1] Lorentz line shape profile of frq - frq_not
+\newcommand{\lnshplrnofdltfrq}{\ensuremath{\lnshplrn(\frq-\frq_{\zrosbs}})} % [Hz-1] Lorentz line shape profile of frq - frq_not
 \newcommand{\lnshplrnoffrq}{\ensuremath{\lnshplrn(\frq)}} % [Hz-1] Lorentz line shape profile of frequency frq
 \newcommand{\lnstravgmlk}{\ensuremath{\tilde{\lnstravg}}} % [m2 kg-1 Hz-1] Equivalent mean line strength for Malkmus distribution
 \newcommand{\lnstrlnoftpt}{\ensuremath{\lnstrln(\tpt)}} % [m2 kg-1 Hz-1] Line strength of specific line at temperature tpt
 \newcommand{\mgnvctcpx}{\ensuremath{\mgnvct_{\cpxsbs}}} % [A m-1] Magnetic field vector, complex representation
 \newcommand{\mgnvctncd}{\ensuremath{\mgnvct_{\ncdsbs}}} % [A m-1] Magnetic field vector, incident component
-\newcommand{\mgnvctnot}{\ensuremath{\mgnvct_{0}}} % [A m-1] Magnetic field vector, constant
+\newcommand{\mgnvctnot}{\ensuremath{\mgnvct_{\zrosbs}}} % [A m-1] Magnetic field vector, constant
 \newcommand{\mgnvctprt}{\ensuremath{\mgnvct_{\prtsbs}}} % [A m-1] Magnetic field vector, internal to particle
 \newcommand{\mgnvctsct}{\ensuremath{\mgnvct_{\sctsbs}}} % [A m-1] Magnetic field vector, scattered component
 \newcommand{\mlsmlk}{\ensuremath{\tilde{\mls}}} % [Hz] Equivalent mean line spacing of Malkmus distribution
 \newcommand{\nrglwrln}{\ensuremath{\nrglwr_{\lnsbs}}} % [J] Energy of lower state of specific line
 \newcommand{\nrguprln}{\ensuremath{\nrgupr_{\lnsbs}}} % [J] Energy of upper state of specific line
-\newcommand{\ntndwnnot}{\ensuremath{\mathrm{\ntndwn}_{0}}} % [W m-2 sr-1] Fixed downwelling intensity
+\newcommand{\ntndwnnot}{\ensuremath{\mathrm{\ntndwn}_{\zrosbs}}} % [W m-2 sr-1] Fixed downwelling intensity
 \newcommand{\ntndwndff}{\ensuremath{\ntndwn_{\dffsbs}}} % [W m-2 sr-1] Downwelling diffuse intensity
 \newcommand{\ntndwndrc}{\ensuremath{\ntndwn_{\drcsbs}}} % [W m-2 sr-1] Downwelling direct intensity
 \newcommand{\ntndwnfrqoftaungl}{\ensuremath{\ntndwnfrq(\tau,\nglhat)}} % [W m-2 Hz-1 sr-1] Downwelling specific intensity function of tau and omega
@@ -937,7 +947,7 @@
 \newcommand{\ntnfrqofzzzmmu}{\ensuremath{\ntnfrq(\zzz,-\plrmu)}} % [W m-2 Hz-1 sr-1] Downwelling specific intensity function of z and mu
 \newcommand{\ntnfrqofzzzpmu}{\ensuremath{\ntnfrq(\zzz,+\plrmu)}} % [W m-2 Hz-1 sr-1] Upwelling specific intensity function of z and mu
 \newcommand{\ntnmnfrqoftau}{\ensuremath{\ntnmnfrq(\tau)}} % [W m-2 Hz-1 sr-1] Mean specific intensity of tau
-\newcommand{\ntnnot}{\ensuremath{\ntn_{0}}} % [W m-2 sr-1] Upwelling direct intensity
+\newcommand{\ntnnot}{\ensuremath{\ntn_{\zrosbs}}} % [W m-2 sr-1] Upwelling direct intensity
 \newcommand{\ntnupwdff}{\ensuremath{\ntnupw_{\dffsbs}}} % [W m-2 sr-1] Upwelling diffuse intensity
 \newcommand{\ntnupwdrc}{\ensuremath{\ntnupw_{\drcsbs}}} % [W m-2 sr-1] Upwelling direct intensity
 \newcommand{\ntnupwdwndff}{\ensuremath{\ntnupwdwn_{\dffsbs}}} % [W m-2 sr-1] Up-downwelling intensity
@@ -1006,7 +1016,7 @@
 \newcommand{\wvnbrvctncd}{\ensuremath{\wvnbrvct_{\ncdsbs}}} % [m-1] Wavenumber vector, incident
 \newcommand{\wvnln}{\ensuremath{\wvn_{\lnsbs}}} % [m-1] Frequency in wavenumbers of specific line
 \newcommand{\wvnlwrln}{\ensuremath{\wvnlwr_{\lnsbs}}} % [m-1] Energy in wavenumbers of lower state of specific line
-\newcommand{\wvnnot}{\ensuremath{\wvn_{0}}} % [m-1] Frequency in wavenumbers at reference conditions
+\newcommand{\wvnnot}{\ensuremath{\wvn_{\zrosbs}}} % [m-1] Frequency in wavenumbers at reference conditions
 \newcommand{\wvnshf}{\ensuremath{\wvn^{\strsbs}}} % [m-1] Frequency in wavenumbers of pressure-shifted line
 \newcommand{\wvnuprln}{\ensuremath{\wvnupr_{\lnsbs}}} % [m-1] Energy in wavenumbers of upper state of specific line
 \newcommand{\xpnnprm}{\ensuremath{\xpnn^{\prime}}} % Derivative of exponential integral order n

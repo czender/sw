@@ -1887,6 +1887,28 @@ One must remember that $\plkfnc$ is the broadband
 (spectrally-integrated) intensity and that $\flxupwplk$ is the 
 broadband hemispheric irradiance
 (spectrally-and-angularly-integrated).  
+Furthermore, (\ref{eqn:plk_fnc_dfn}) is only valid for blackbodies, i.e., for material with spectrally uniform emissivity $\msv(\frq) = \msvnot = 1$.
+
+Substances of spectrally uniform emissivity less than one $\msv(\frq) = \msvnot  < 1$ are called greybodies. 
+The effective greybody emissivity $msvnot$ of an object can be defined by the ratio of its emitted (not scattered, not total) upwelling irradiance to blackbody irradiance at the same temperature so that
+\begin{eqnarray}
+\msvnot & \equiv & \flxupwmsv/\flxupwplk \nonumber \\
+\flxupwmsv & = & \msvnot \cststfblt \tpt^{4}
+\label{eqn:msv_not_dfn}
+\end{eqnarray}
+Kirchoff's Law for Radiation requires that the emissivity $\msvnot$ (and emitted power $\flxmsv$) for a greybody in thermal equilibrium must equal the absorptivity $\srpnot$ (and absorbed power $\flxsrp$), otherwise the body would drift from thermal equilibrium. 
+Moreover, energy conservation requires that radiation not absorbed by an object must be reflected.
+Thus the portion of the radiant downwelling flux $\flxdwn$ that reflected into upwelling flux $\flxupwrfl$ by a greybody surface is the co-absorptivity/emissivity times the incident flux. 
+The total surface upwelling flux $\flxupw$ is the sum of the emitted and reflected fluxes upwelling fluxes:
+\begin{eqnarray}
+\msv(\frq) & \equiv & \srp(\frq) \nonumber \\
+\msvnot & \equiv & \srpnot \nonumber \\
+\flxsrp & = & \msvnot \flxdwn = \srpnot \flxdwn \nonumber \\
+\flxupwrfl & = & (1- \msvnot) \flxdwn = (1 - \srpnot) \flxdwn \nonumber \\
+\flxupw & \equiv & \flxupwmsv + \flxupwrfl \nonumber \\
+\flxupw & = & \msvnot \cststfblt \tpt^{4} +  (1- \msvnot) \flxdwn
+\label{eqn:flx_upw_dfn}
+\end{eqnarray}
 
 \subsubsection[Band-integrated Emission]{Band-integrated Emission}\label{sxn:msn}
 As mentioned above, the integral in (\ref{eqn:stf_blt_2}) is needed
@@ -3349,7 +3371,7 @@ of $\nglhatprm$ and $\nglhat$ by the cosine law
 
 \subsubsection[Phase Function]{Phase Function}\label{sxn:phz_fnc}
 Accurate treatment of the angular scattering of radiation, i.e., the
-phase function, is, perhaps, makes rigorous demands of radiative
+phase function, makes rigorous demands of radiative
 transfer applications.
 A correspondingly large body of literature is devoted to this topic.
 Essential references include \citet{Van57}, \citet{JWW76},
@@ -3381,9 +3403,9 @@ of (dimensionless) probability per (dimensional) steradian, \xsr.
 The latter convention best expresses the physical meaning of the
 phase function and is adopted in this text.
 It is therefore important to remember that factors of $(4\mpi)^{-1}$ 
-which multiply the scattering integral in the radiative transfer
-equation are considered to be dimensionless in the formulations
-which follow, e.g., (\ref{eqn:src_sct_frq_dfn}).
+that multiply the scattering integral in the radiative transfer
+equation are considered as dimensionless in the formulations
+that follow, e.g., (\ref{eqn:src_sct_frq_dfn}).
 Furthermore, the units of $\phzfnc$ are probability per steradian,
 \xsr.  
 
@@ -3489,8 +3511,8 @@ For instance, a single moment Legendre expansion exactly describes
 Rayleigh scattering.
 However, the expansions of asymmetric phase functions converge
 much more slowly.
-The strongly peaked forward scattering lobes which appear at
-large size parameter may require hundreds of moments for accurate
+The strongly peaked forward scattering lobes that occur at
+large size parameters may require hundreds of moments for accurate
 representation.
 
 Computing the $\lgnxpncffplr$ using quadrature methods significantly
@@ -3506,13 +3528,13 @@ highly asymmetric phase functions:
 \wgtlbbidx \lgnplr(\cos\nglsctlbb) \phzfnc(\cos\nglsctlbb) \sin\nglsctlbb
 \end{eqnarray}
 where $\lbbnbr$ is the number of Gauss-Lobatto abscissae.
-Lobatto quadrature is discussed more thorought in \S~\ref{sxn:qdrlbb}.
+Lobatto quadrature is discussed more thoroughly in \S~\ref{sxn:qdrlbb}.
 
 \subsubsection[Henyey-Greenstein Approximation]{Henyey-Greenstein Approximation}
-Computation of the exact phase function of scatterers is laborious but 
-desirable when the objective is to predict directional radiances.
+Computation of the exact phase function of scatterers is laborious yet
+required when the objective is to predict directional radiances.
 However, phase function approximations often suffice when hemispheric
-fluxes are the objective.
+fluxes (not radiances) are the objective.
 The \trmdfn{Henyey-Greenstein Phase Function} approximates the full
 phase function in terms of its first Legendre moment, i.e., its
 \trmidx{asymmetry parameter}~$\asmprm$.
@@ -3543,7 +3565,7 @@ first moment, $\asmprm = \lgnxpncff_{1}$, is known.
 Components}\label{sxn:drc_dff}
 When working with \trmidx{half-range intensities} it is convenient to
 decompose  the downwelling intensity $\ntndwn$ into the sum of a
-\trmidx{direct component}, $\ntndwndrcoftaungl$, and a \trmidx{diffuse 
+\trmidx{direct (or solar-beam) component}, $\ntndwndrcoftaungl$, and a \trmidx{diffuse 
 component}, $\ntndwndffoftaungl$ such that 
 \begin{eqnarray}
 \ntndwnfrqoftaungl & = & \ntndwndrcoftaungl + \ntndwndffoftaungl
@@ -3563,7 +3585,7 @@ In such situations it is straightforward to define
 \ntnupwfrqoftaungl & = & \ntnupwdrcoftaungl + \ntnupwdffoftaungl
 \label{eqn:ntn_frq_upw_drc_dff}
 \end{eqnarray}
-Of course there exist planetary atmospheres \textit{somewhere} which
+Of course there exist planetary atmospheres \textit{somewhere} that
 are illuminated by multiple stars.
 We shall neglect upwelling solar beams for the time being.
 For consistency, though, we shall shall use $\ntnupwdff$ rather than
