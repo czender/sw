@@ -1889,24 +1889,25 @@ broadband hemispheric irradiance
 (spectrally-and-angularly-integrated).  
 Furthermore, (\ref{eqn:plk_fnc_dfn}) is only valid for blackbodies, i.e., for material with spectrally uniform emissivity $\msv(\frq) = \msvnot = 1$.
 
-Substances of spectrally uniform emissivity less than one $\msv(\frq) = \msvnot  < 1$ are called greybodies. 
-The effective greybody emissivity $msvnot$ of an object can be defined by the ratio of its emitted (not scattered, not total) upwelling irradiance to blackbody irradiance at the same temperature so that
+Substances of spectrally uniform emissivity less than one $\msv(\frq) = \msvnot  < 1$ are called greybodies.
+If an object has spectrally varying emissivity, we can still treat it as an "effective greybody" by utilitizing its Planck-weighted mean emissivity $\msvavg$. 
+The effective greybody emissivity $\msvavg$ of an object can also be measured by the ratio of its actual emitted (not scattered, not total) upwelling irradiance to the (theoretical) blackbody irradiance at the same temperature so that
 \begin{eqnarray}
-\msvnot & \equiv & \flxupwmsv/\flxupwplk \nonumber \\
-\flxupwmsv & = & \msvnot \cststfblt \tpt^{4}
+\msvavg & \equiv & \flxupwmsvavg/\flxupwplk \nonumber \\
+\flxupwmsvavg & = & \msvavg \cststfblt \tpt^{4}
 \label{eqn:msv_not_dfn}
 \end{eqnarray}
-Kirchoff's Law for Radiation requires that the emissivity $\msvnot$ (and emitted power $\flxmsv$) for a greybody in thermal equilibrium must equal the absorptivity $\srpnot$ (and absorbed power $\flxsrp$), otherwise the body would drift from thermal equilibrium. 
+Kirchoff's Law for Radiation requires that the emissivity $\msv$ (and emitted power $\flxmsv$) for a body in thermal equilibrium must equal the absorptivity $\srp$ (and absorbed power $\flxsrp$), otherwise the body would drift from thermal equilibrium. 
 Moreover, energy conservation requires that radiation not absorbed by an object must be reflected.
-Thus the portion of the radiant downwelling flux $\flxdwn$ that reflected into upwelling flux $\flxupwrfl$ by a greybody surface is the co-absorptivity/emissivity times the incident flux. 
-The total surface upwelling flux $\flxupw$ is the sum of the emitted and reflected fluxes upwelling fluxes:
+Thus the portion of the radiant downwelling flux $\flxdwn$ that is reflected into upwelling flux $\flxupwrfl$ by a surface is the co-absorptivity/emissivity times the incident flux. 
+The total surface upwelling flux $\flxupw$ is the sum of the emitted and reflected upwelling fluxes:
 \begin{eqnarray}
 \msv(\frq) & \equiv & \srp(\frq) \nonumber \\
-\msvnot & \equiv & \srpnot \nonumber \\
-\flxsrp & = & \msvnot \flxdwn = \srpnot \flxdwn \nonumber \\
-\flxupwrfl & = & (1- \msvnot) \flxdwn = (1 - \srpnot) \flxdwn \nonumber \\
-\flxupw & \equiv & \flxupwmsv + \flxupwrfl \nonumber \\
-\flxupw & = & \msvnot \cststfblt \tpt^{4} +  (1- \msvnot) \flxdwn
+\msvavg & \equiv & \srpavg \nonumber \\
+\flxsrp & = & \srpavg \flxdwn = \msvavg \flxdwn \nonumber \\
+\flxupwrfl & = & (1- \msvavg) \flxdwn = (1 - \srpavg) \flxdwn \nonumber \\
+\flxupw & \equiv & \flxupwmsvavg + \flxupwrfl \nonumber \\
+\flxupw & = & \msvavg \cststfblt \tpt^{4} +  (1- \msvavg) \flxdwn
 \label{eqn:flx_upw_dfn}
 \end{eqnarray}
 
