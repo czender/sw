@@ -1907,9 +1907,11 @@ The total surface upwelling flux $\flxupw$ is the sum of the emitted and reflect
 \flxsrp & = & \srpavg \flxdwn = \msvavg \flxdwn \nonumber \\
 \flxupwrfl & = & (1- \msvavg) \flxdwn = (1 - \srpavg) \flxdwn \nonumber \\
 \flxupw & \equiv & \flxupwmsvavg + \flxupwrfl \nonumber \\
-\flxupw & = & \msvavg \cststfblt \tpt^{4} +  (1- \msvavg) \flxdwn
+\flxupw & = & \msvavg \cststfblt \tpt^{4} +  (1- \msvavg) \flxdwn \nonumber \\
+\flxupw & = & \msvavg \cststfblt \tpt^{4} +  (1- \msvavg) \flxdwn \equiv \sigma \tptskn^{4}
 \label{eqn:flx_upw_dfn}
 \end{eqnarray}
+where the last equation defines an effective skin temperature $\tptskn$ for the atmospheric model as the temperature of a blackbody that would emit the same total upwelling flux $\flxupw$ as a surface (e.g., land, ocean, or sea ice) with an effective emissivity $\msvavg$ and actual skin temperature $\tpt$. 
 
 \subsubsection[Band-integrated Emission]{Band-integrated Emission}\label{sxn:msn}
 As mentioned above, the integral in (\ref{eqn:stf_blt_2}) is needed
@@ -3614,7 +3616,7 @@ The source function for thermal emission $\srcemsfrq$ is
 \begin{eqnarray}
 \srcemsfrq & = & \frac{\vlmemscff(\frq)}{\xsxext(\frq)} \nonumber \\
 & = & \frac{\xsxabs(\frq)}{\xsxext(\frq)}\plkfrq(\tpt) \nonumber \\
-& = & \frac{\xsxext(\frq)-\xsxabs(\frq)}{\xsxext(\frq)}\plkfrq(\tpt) \nonumber \\
+& = & \frac{\xsxext(\frq)-\xsxsct(\frq)}{\xsxext(\frq)}\plkfrq(\tpt) \nonumber \\
 & = & (1-\ssa)\plkfrq(\tpt)
 \label{eqn:src_ems_frq_dfn}
 \end{eqnarray}
