@@ -3612,7 +3612,8 @@ extinction law (\ref{eqn:flx_slr_toa_dlt_xmp_4}),
 \end{eqnarray}
 
 \subsubsection[Source Function]{Source Function}\label{sxn:src_slb}
-The source function for thermal emission $\srcemsfrq$ is
+The source function for thermal emission $\srcemsfrq$ is the ratio of the 
+volume emission to the volume extinction coefficient
 \begin{eqnarray}
 \srcemsfrq & = & \frac{\vlmemscff(\frq)}{\xsxext(\frq)} \nonumber \\
 & = & \frac{\xsxabs(\frq)}{\xsxext(\frq)}\plkfrq(\tpt) \nonumber \\
@@ -3920,7 +3921,9 @@ While the remainder of the terms in (\ref{eqn:rte_azi_avg}) contain
 only one azimuthally dependent intensity, the scattering integrals
 contain two, $\phzfnc$ and $\ntnupwdwn$.
 This causes the factor of $\ssa/4\mpi$ in front of the scattering
-integrals has to become a factor of $\ssa/2$. 
+integrals in (\ref{eqn:rte_dfn_fll_3_dwn}) and 
+(\ref{eqn:rte_dfn_fll_3_upw}) to become a factor of $\ssa/2$
+in (\ref{eqn:rte_azi_avg}).
 
 We apply the two stream formalism introduced in \S\ref{sxn:two_srm} 
 to the radiative transfer equation for the azimuthal mean radiation 
@@ -3929,8 +3932,7 @@ Recall that the two stream formalism is obtained by applying three
 successive approximations.
 The approximation is achieved in three stages.
 First, we operate on both sides of (\ref{eqn:rte_azi_avg_dwn}) with
-the hemispheric averaging operator (\ref{eqn:plr_avg_opr}).
-The procedure for (\ref{eqn:rte_azi_avg_dwn}) is identical.
+the hemispheric averaging operator (\ref{eqn:plr_avg_opr}):
 \begin{eqnarray}
 % ThS99 p. 171 (6.6), p. 176 (6.20)
 \label{eqn:rte_plr_avg_1}
@@ -3946,14 +3948,15 @@ The procedure for (\ref{eqn:rte_azi_avg_dwn}) is identical.
 - \frac{\ssa}{2} \int_{0}^{1} \int_{\dwnsbs} \ntndwndff(\tau,\plrmuprm) 
 \phzfnc(-\plrmuprm,-\plrmu) \,\dfr\plrmuprm \,\dfr\plrmu
 \end{eqnarray}
+The procedure for (\ref{eqn:rte_azi_avg_upw}) is identical.
 
 Further approximations are required to simplify equations
-(\ref{eqn:rte_plr_avg_2}). 
+(\ref{eqn:rte_plr_avg_1}). 
 These approximations allow us to decouple products of functions 
 with $\plrmu$ dependence.
 The first approximation, (\ref{eqn:two_srm_plr_mu_apx}),
 replaces the continuous value $\plrmu$ on the LHS of
-(\ref{eqn:rte_azi_avg}) by a suitable hemispheric mean value
+(\ref{eqn:rte_plr_avg_1}) by a suitable hemispheric mean value
 $\plrmubar$.
 % fxm: Write a sxn:plr_mu_avg which discusses choices of plrmubar
 \begin{eqnarray}
@@ -4082,7 +4085,7 @@ Armed with techniques introduced in solving the two stream equations
 for an isotropically scattering medium \S\ref{sxn:two_srm_eqn},  
 we now solve analytically the coupled two stream equations for
 an anisotropic medium.
-First we recast (\ref{eqn:rte_plr_avg_3}) into a simpler notation 
+First we recast (\ref{eqn:rte_plr_avg_2}) into a simpler notation 
 \begin{subequations}
 \label{eqn:two_str_asm_apx}
 \begin{align}
