@@ -39,6 +39,8 @@ if [ "$NERSC_HOST" == "perlmutter" ]; then
    export MY_LIB_DIR="${HOME}/lib_perlmutter"
    export MY_OBJ_DIR="${HOME}/obj_perlmutter"
 
+   module load gsl/2.7
+
 fi # !perlmutter
 if [ "$NERSC_HOST" == "cori" ] || [ "$NERSC_HOST" == "perlmutter" ]
 then
