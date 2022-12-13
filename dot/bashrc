@@ -501,7 +501,7 @@ case "${PVM_ARCH}" in
 	fi # ROCKS_ROLLS_ROOT
 
 	case "${HOST}" in 
-	    acme1* ) PATH=${PATH}\:/p/user_pub/e3sm_unified/envs/base/envs/e3sm_unified_latest/bin ; ;; # LLNL
+#	    acme1* ) PATH=${PATH}\:/p/user_pub/e3sm_unified/envs/base/envs/e3sm_unified_latest/bin ; ;; # LLNL
 	    *cheyenne* ) PATH=${PATH}\:/opt/pbs/bin ; ;; # NCAR cheyenne
 	    # Default compy PATH=/share/apps/modules/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/ganglia/bin:/opt/ganglia/sbin:/opt/pdsh/bin:/opt/rocks/bin:/opt/rocks/sbin:/qfs/people/zender/bin
 	    compy* ) PATH=${PATH}\:/share/apps/modules/bin\:/opt/rocks/bin ; ;; # PNNL compy
@@ -545,7 +545,7 @@ case "${PVM_ARCH}" in
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
 	case "${HOST}" in 
 	    # 20130916: Support NCAR modules on cheyenne by removing custom environment variables
-	    acme1* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/p/user_pub/e3sm_unified/envs/base/envs/e3sm_unified_latest/lib ; ;; # LLNL
+#	    acme1* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/p/user_pub/e3sm_unified/envs/base/envs/e3sm_unified_latest/lib ; ;; # LLNL
 	    *cheyenne* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/u/apps/ch/opt/udunits/2.2.26/gnu/9.1.0/lib\:/glade/u/apps/ch/opt/gsl/2.4/gnu/6.3.0/lib ; ;; # NCAR
 	esac # endcase ${HOST}
 
