@@ -1643,6 +1643,36 @@ But the vertical flux of energy is obtained by cosine-weighting the
 radiance over the hemisphere and this weight introduces the factor of 
 $\frac{1}{2}$ difference between the naive and the correct solutions.
 
+Let us now replace the assumption in (\ref{eqn:plk_hms_dfn}) that 
+the surface is a blackbody with the more realistic behavior that the thermal
+emission into the upper hemisphere is modulated by a directionally
+varying emissivity $\ntnfrq (+\plrmu) = \msv(\frq,\plrmu) \plkfrqtpt$.
+This behavior occurs with emission from flat, homogeneous liquid and ice surfaces.
+As before, we assume the emission is azimuthally symmetric, and that the
+Planck function is isotropic. 
+The upwelling hemispheric radiance $\flxmsvfrq$ from this non-blackbody is
+\begin{eqnarray} 
+\flxmsvfrq & = & 2 \mpi \int_{0}^{1} \msv(\frq,\plrmu) \plkfrq \plrmu \,\dfr\plrmu \nonumber \\
+& = & 2 \mpi \plkfrq \int_{0}^{1} \msv(\frq,\plrmu) \plrmu \,\dfr\plrmu
+\label{eqn:msv_hms_dfn}
+\end{eqnarray}
+The integrand in (\ref{eqn:msv_hms_dfn}) might be determined by
+the Fresnel equations for tabulated refractive indices water, for example.
+Brute force numerical techniques are typically required to integrate such expressions.
+This can be done, i.e., $\flxmsvfrq$ can be computed offline.
+It is easily shown from  (\ref{eqn:plk_hms_dfn}) and  (\ref{eqn:msv_hms_dfn}) that
+\begin{eqnarray} 
+\label{eqn:msv_plk_dfn}
+\flxmsvfrq & = & \flxplkfrq \times \left( 2\int_{0}^{1} \msv(\frq,\plrmu) \plrmu \,\dfr\plrmu \right) \\
+\msvhmsfrq & = & \flxmsvfrq/\flxplkfrq
+\label{eqn:msv_hms_frq_dfn}
+\end{eqnarray}
+Hence it can be useful to tabulate the parenthetical factor on the RHS of  (\ref{eqn:msv_plk_dfn})
+to convert blackbody hemispheric irradiance $\flxplkfrq$ into non-blackbody 
+hemispheric irradiance $\flxmsvfrq$.
+We name this factor the hemispheric mean spectral emissivity, $\msvhmsfrq$ (\ref{eqn:msv_hms_frq_dfn}).
+
+
 \subsubsection[Stefan-Boltzmann Law]{Stefan-Boltzmann Law}\label{sxn:stf_blt}
 The frequency-integrated hemispheric irradiance emanating from a
 blackbody of great interest since it describes, e.g., the radiant
@@ -1890,7 +1920,7 @@ broadband hemispheric irradiance
 Furthermore, (\ref{eqn:plk_fnc_dfn}) is only valid for blackbodies, i.e., for material with spectrally uniform emissivity $\msv(\frq) = \msvnot = 1$.
 
 Substances of spectrally uniform emissivity less than one $\msv(\frq) = \msvnot  < 1$ are called greybodies.
-If an object has spectrally varying emissivity, we can still treat it as an "effective greybody" by utilitizing its Planck-weighted mean emissivity $\msvavg$. 
+If an object has spectrally varying emissivity, we can still treat it as an ``effective greybody'' by utilitizing its Planck-weighted mean emissivity $\msvavg$. 
 The effective greybody emissivity $\msvavg$ of an object can also be measured by the ratio of its actual emitted (not scattered, not total) upwelling irradiance to the (theoretical) blackbody irradiance at the same temperature so that
 \begin{eqnarray}
 \msvavg & \equiv & \flxupwmsvavg/\flxupwplk \nonumber \\
