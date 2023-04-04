@@ -1662,16 +1662,17 @@ Brute force numerical techniques are typically required to integrate such expres
 This can be done, i.e., $\flxmsvfrq$ can be computed offline.
 It is easily shown from  (\ref{eqn:plk_hms_dfn}) and  (\ref{eqn:msv_hms_dfn}) that
 \begin{eqnarray} 
-\label{eqn:msv_plk_dfn}
-\flxmsvfrq & = & \flxplkfrq \times \left( 2\int_{0}^{1} \msv(\frq,\plrmu) \plrmu \,\dfr\plrmu \right) \\
-\msvhmsfrq & = & \flxmsvfrq/\flxplkfrq
+\flxmsvfrq & = & \flxplkfrq \times \left( 2\int_{0}^{1} \msv(\frq,\plrmu) \plrmu \,\dfr\plrmu \right) \nonumber \\
+& \equiv & \msvhmsfrq \flxplkfrq \qquad \mbox{where} \nonumber \\
+\msvhmsfrq & \equiv & 2\int_{0}^{1} \msv(\frq,\plrmu) \plrmu \,\dfr\plrmu \quad = \flxmsvfrq/\flxplkfrq
 \label{eqn:msv_hms_frq_dfn}
 \end{eqnarray}
-Hence it can be useful to tabulate the parenthetical factor on the RHS of  (\ref{eqn:msv_plk_dfn})
-to convert blackbody hemispheric irradiance $\flxplkfrq$ into non-blackbody 
-hemispheric irradiance $\flxmsvfrq$.
-We name this factor the hemispheric mean spectral emissivity, $\msvhmsfrq$ (\ref{eqn:msv_hms_frq_dfn}).
-
+We name $\msvhmsfrq$ (\ref{eqn:msv_hms_frq_dfn}) the hemispheric mean spectral emissivity.
+It is useful to tabulate $\msvhmsfrq$ to convert blackbody hemispheric irradiance $\flxplkfrq$ 
+into non-blackbody hemispheric irradiance $\flxmsvfrq$.
+The emissivity factor does not change significantly with time
+for a given natural surface type, so an offline lookup table of $\msvhmsfrq$
+reduces the complexity of estimating time-varying upwelling fluxes.
 
 \subsubsection[Stefan-Boltzmann Law]{Stefan-Boltzmann Law}\label{sxn:stf_blt}
 The frequency-integrated hemispheric irradiance emanating from a
