@@ -424,7 +424,7 @@ case "${PVM_ARCH}" in
 # https://stackoverflow.com/questions/4554718/how-to-use-patterns-in-the-case-statement-in-bash-scripting
 	case "${HOST}" in 
 	    acme1* ) export DATA="/home/${USER}/data" ; ;; # LLNL
-	    andes* | titan* ) export DATA="/gpfs/alpine/world-shared/cli115/${USER}" ; ;; # OLCF
+	    andes* | titan* ) export DATA="/gpfs/alpine/world-shared/cli115/${USER}" ; ;; # OLCF (20230406: maybe cli115-ecp?)
 	    bebop* | blues* | blogin* | chrlogin* ) export DATA="/home/${USER}/data" ; ;; # ANL LCRC
 	    cg-gpu* ) export DATA="/home/${USER}/data" ; ;; # NCSA roger
 	    *cheyenne* ) export DATA="/glade/work/${USER}" ; ;; # NCAR
@@ -809,9 +809,13 @@ CC_icc='icc -std=gnu11 -D_DEFAULT_SOURCE'
 CC_icx='icx -std=gnu11 -D_DEFAULT_SOURCE'
 CC_pathcc='pathcc -std=gnu11 -D_DEFAULT_SOURCE'
 CC_pgcc='pgcc -c9x -D_DEFAULT_SOURCE'
-CXX_clang='clang++ -std=c++17'
-CXX_clang_homebrew='clang++ -std=c++17'
-CXX_clang_macports='clang++-mp-12 -std=c++17'
+#20230408: Clangv16 defaults to clang++ -std=c++17 which deprecates std::binary_function used by ncap2, Antlr2
+#CXX_clang='clang++ -std=c++17'
+#CXX_clang_homebrew='clang++ -std=c++17'
+#CXX_clang_macports='clang++-mp-12 -std=c++17'
+CXX_clang='clang++ -std=c++14'
+CXX_clang_homebrew='clang++ -std=c++14'
+CXX_clang_macports='clang++-mp-12 -std=c++14'
 CXX_gxx='g++ -std=c++17'
 CXX_gxx_conda='x86_64-conda-linux-gnu-g++ -std=c++17'
 CXX_gxx_homebrew='g++-12 -std=c++17'
