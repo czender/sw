@@ -706,3 +706,26 @@ make install
 # 20230314: compy.pnl.gov 
 #***********************************************************************
 
+#***********************************************************************
+# 20230412: spectral.ess.uci.edu with Homebrew clang-16.0.1 on MacOS 13.3.1
+# NB: Original Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+# NB: Original Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+class ANTLR_API CharScannerLiteralsLess : public ANTLR_USE_NAMESPACE(std)binary_function<ANTLR_USE_NAMESPACE(std)string,ANTLR_USE_NAMESPACE(std)string,bool> { // csz 20230412
+***********************************************************************
+git clone git@github.com:nco/antlr2.git ${DATA}/antlr2
+cd ${DATA}/antlr2
+make distclean
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr2 --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+# NB: requires JDK (which includes JRE), free from Oracle:
+# https://download.oracle.com/java/17/latest/jdk-17_macos-aarch64_bin.dmg
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20230412: spectral.ess.uci.edu with Homebrew clang-16.0.1 on MacOS 13.3.1
+#***********************************************************************
+
