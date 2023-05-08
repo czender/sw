@@ -255,7 +255,8 @@ PATH=${PATH}\:${MY_BIN_DIR}
 # PKG_ROOT is where non-default sysadmin-installed packages reside
 # PKG_ROOT is usually argument to configure --prefix=${PKG_ROOT}
 case "${HOST}" in 
-    e3sm* | imua* ) export PKG_ROOT="${HOME}/anaconda" ; ;; # Anaconda
+    e3sm* ) export PKG_ROOT="${HOME}/anaconda" ; ;; # Anaconda
+    imua* ) export PKG_ROOT="/usr" ; ;; # Fedora
     katabatic* | rigb* ) export PKG_ROOT='/opt/local' ; ;; # MacOS MacPorts
     firn* | sastrugi* ) export PKG_ROOT='/usr/local' ; ;; # MacOS Homebrew Intel silicon
     spectral* ) export PKG_ROOT='/opt/homebrew' ; ;; # MacOS Homebrew Mac silicon
