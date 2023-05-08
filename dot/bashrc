@@ -452,7 +452,7 @@ case "${PVM_ARCH}" in
 	elif [ -n "${PKG_ROOT}" ]; then
 	    export NETCDF_ROOT="${PKG_ROOT}"
 	else
-	    export NETCDF4_ROOT='/usr/local'
+	    export NETCDF_ROOT='/usr'
 	fi # !NETCDF_ROOT
 	case "${HOST}" in 
 	    hpc* ) export NETCDF_ROOT="${PKG_ROOT}/netcdf" ; export NETCDF4_LIB="${PKG_ROOT}/netcdf4" ; ;; # HPC
