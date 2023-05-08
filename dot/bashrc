@@ -19,7 +19,6 @@
 # Usage: 
 # /bin/cp -f ${HOME}/.bashrc /fs/cgd/home0/${USER}
 # scp -p ${HOME}/sw/dot/bashrc andes.olcf.ornl.gov:.bashrc
-# scp -p ${HOME}/sw/dot/bashrc bebop.lcrc.anl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc blues.lcrc.anl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc cheyenne.ucar.edu:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc chrysalis.lcrc.anl.gov:.bashrc
@@ -28,6 +27,7 @@
 # scp -p ${HOME}/sw/dot/bashrc dust.ess.uci.edu:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc e3sm.ess.uci.edu:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc hpc3.rcic.uci.edu:.bashrc
+# scp -p ${HOME}/sw/dot/bashrc imua.ess.uci.edu:.bashrc
 # scp -p dust.ess.uci.edu:.bashrc ${HOME}/.bashrc 
 
 # RedHat Linux 7.x does not define PS1 in /etc/bashrc
@@ -255,8 +255,8 @@ PATH=${PATH}\:${MY_BIN_DIR}
 # PKG_ROOT is where non-default sysadmin-installed packages reside
 # PKG_ROOT is usually argument to configure --prefix=${PKG_ROOT}
 case "${HOST}" in 
-    e3sm* ) export PKG_ROOT="${HOME}/anaconda" ; ;; # Anaconda
-    jaws* | katabatic* | rigb* ) export PKG_ROOT='/opt/local' ; ;; # MacOS MacPorts
+    e3sm* | imua* ) export PKG_ROOT="${HOME}/anaconda" ; ;; # Anaconda
+    katabatic* | rigb* ) export PKG_ROOT='/opt/local' ; ;; # MacOS MacPorts
     firn* | sastrugi* ) export PKG_ROOT='/usr/local' ; ;; # MacOS Homebrew Intel silicon
     spectral* ) export PKG_ROOT='/opt/homebrew' ; ;; # MacOS Homebrew Mac silicon
     cg-gpu* ) export PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # NCSA roger cluster
@@ -266,9 +266,9 @@ case "${HOST}" in
 esac # endcase ${HOST}
 
 case "${HOST}" in 
-    firn* | frazil* | jaws* | katabatic* | rigb* | sastrugi* | skyglow* | spectral* ) export OMP_NUM_THREADS=4 ; ;; # endif
-    glace* | gplogin* | grele* | snow* ) export OMP_NUM_THREADS='8' ; ;; # dual-quad processor
-    acme1* | andes* | compy* | e3sm* ) export OMP_NUM_THREADS='16' ; ;; # dual-octet processor
+    firn* | katabatic* | rigb* | sastrugi* | spectral* ) export OMP_NUM_THREADS=4 ; ;; # endif
+    gplogin* | grele* | snow* ) export OMP_NUM_THREADS='8' ; ;; # dual-quad processor
+    acme1* | andes* | compy* | e3sm* | imua* ) export OMP_NUM_THREADS='16' ; ;; # dual-octet processor
     *cheyenne* ) export OMP_NUM_THREADS='16' ; ;; # dual-hexadecimal processor
     cg1* ) export OMP_NUM_THREADS=2 ; ;; # cg1*
     * ) export OMP_NUM_THREADS=1 ; ;; # *
@@ -435,6 +435,7 @@ case "${PVM_ARCH}" in
 	    e3sm* ) export DATA="${HOME}/data" ; ;; # UCI
 	    gplogin* ) export DATA="/data/${USER}" ; ;; # UCI PS Rocks Cluster
 	    hpc* ) export DATA="/data/users/${USER}" ; ;; # UCI HPC
+	    imua* ) export DATA="${HOME}/data" ; ;; # UCI
 	    login-* ) export DATA="${HOME}/data" ; ;; # UCI RCIC HPC3
 	    mira* | theta* ) export DATA="/projects/ClimateEnergy_3/${USER}" ; ;; # ANL ALCF
 	    * ) export DATA="${HOME}/data" ; ;; # default
@@ -468,7 +469,7 @@ case "${PVM_ARCH}" in
 	esac # endcase ${HOST}
 	# Set NCARG
 	case "${HOST}" in 
-	    glace* | grele* ) NCARG_ROOT='/usr/local/ncl-6.3.0' ; ;; # UCI PS Rocks Cluster
+	    grele* ) NCARG_ROOT='/usr/local/ncl-6.3.0' ; ;; # UCI PS Rocks Cluster
 	    gplogin* ) NCARG_ROOT='/sopt/ncl' ; ;; # UCI PS Rocks Cluster
 	esac # endcase ${HOST}
 	# Set MPICH_ROOT
@@ -507,7 +508,7 @@ case "${PVM_ARCH}" in
 	    compy* ) PATH=${PATH}\:/share/apps/modules/bin\:/opt/rocks/bin ; ;; # PNNL compy
 	    gplogin* ) # x86-64
 		PATH=${PATH}\:${ICC_ROOT}/bin/intel64 ; ;; # greenplanet
-#	    e3sm* | frazil* | skyglow ) 
+#	    e3sm* ) 
 #		PATH=${PATH}\:/usr/local/cuda/bin ; ;; # CUDA
 	esac # endcase ${HOST}
 	
@@ -537,7 +538,7 @@ case "${PVM_ARCH}" in
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${NETCDF4_ROOT}/lib
 	case "${HOST}" in 
-	    compy* | e3sm* | frazil* | skyglow* ) # Fedora uses LIB64 directory
+	    compy* | e3sm* | imua* ) # Fedora uses LIB64 directory
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib64
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/lib64
 		;; # LIB64
@@ -841,14 +842,12 @@ case "${HOST}" in
 #    firn* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # clang/clang/macports
     firn* ) export LINUX_CC=${CC_icx} ; export LINUX_CXX=${CXX_icx} ; export LINUX_FC=${FC_ifort} ; ;; # icx/icx
     sastrugi* | spectral* ) export LINUX_CC=${CC_clang_homebrew} ; export LINUX_CXX=${CXX_clang_homebrew} ; export LINUX_FC=${FC_gfortran_homebrew} ; ;; # clang/clang/homebrew
-    dhcp* | jaws* | katabatic* | rigb* ) export LINUX_CC=${CC_gcc_macports} ; export LINUX_CXX=${CXX_gxx_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # all MacPorts
-    glace* | grele* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC="${LINUX_CC} -I/usr/include/mpich2" ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK -I/usr/include/mpich2" ;; # gcc/g++/gfortran MPICH2
+    dhcp* | katabatic* | rigb* ) export LINUX_CC=${CC_gcc_macports} ; export LINUX_CXX=${CXX_gxx_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # all MacPorts
+    grele* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC="${LINUX_CC} -I/usr/include/mpich2" ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK -I/usr/include/mpich2" ;; # gcc/g++/gfortran MPICH2
     gplogin* ) export LINUX_CC=${CC_icx/icx/mpicc} ; export LINUX_CXX=${CXX_icx/icx/mpiCC} ; export LINUX_FC=${FC_ifort/ifort/mpif90} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icx/ifort OpenMPI	
 #    gplogin* ) export LINUX_CC=${CC_icx} ; export LINUX_CXX=${CXX_icx} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icx/ifort OpenMPI GreenPlanet is special because it has a parallel filesystem, lustre, and hence can take advantage of MPI I/O when compiler is MPI-aware. However, compiler switches in all of my custom Makefiles are triggered by vendor-compiler names, e.g., gfortran, ifort, and xlf90, rather than the generic mpicc/mpiCC/mpif90, which are ambiguous. Hence we use this method to designate the invocation command (e.g., "mpif90" or "pgf90") together with the underlying compiler (e.g., "gfortran" or "pgf90"): MPI=Y tells Makefile to invoke compiler with 'mpicc', 'mpif90', etc., but LINUX_CC/CXX/FC point to underlying compilers. Makefile sets compiler-specific switches and options using LINUX_CC/CXX/FC, then, afterwards, sets CC/CXX/FC to 'mpicc/mpiCC/mpif90'. Alternate method, shown in preceding line, sets LINUX_CC/CXX/FC directly to 'mpicc/mpiCC/mpif90' here in bashrc, but then compiler-specific switches in Makefile are missed.
     hpc* ) export LINUX_CC=${CC_pgcc} ; export LINUX_CXX=${CXX_pgCC} ; export LINUX_FC=${FC_pgf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # pgcc/pgCC/pgf95 MPICH2
-    frazil* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran} ; ;; # clang/clang/gfortran
-    e3sm* ) export LINUX_CC=${CC_gcc_conda} ; export LINUX_CXX=${CXX_gxx_conda} ; export LINUX_FC=${FC_gfortran_conda} ; ;; # gcc/g++/gfortran Conda
-    skyglow* | snow* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # gcc/g++/gfortran OpenMPI
+    e3sm* | imua* ) export LINUX_CC=${CC_gcc_conda} ; export LINUX_CXX=${CXX_gxx_conda} ; export LINUX_FC=${FC_gfortran_conda} ; ;; # gcc/g++/gfortran Conda
     andes* | blogin* | blues* | chrlogin* | *cheyenne* | compy* | cooley* | cori* | login-* | mira* | theta* | titan* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # gcc/g++/gfortran OpenMPI
 #    *cheyenne* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # gcc/g++/g95 MPICH 
@@ -861,15 +860,15 @@ export LAMMPICXX=${LINUX_CXX}
 # Select ABI flags (i.e., 32 or 64 bit) at make time
 # NB: Pathscale documents extensive set of PSC_* flags on User's Guide p. 149--151
 case "${HOST}" in 
-    firn* | jaws* | katabatic* | rigb* | sastrugi* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='' ; ;; # Intel Core i7
+    firn* | katabatic* | rigb* | sastrugi* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='' ; ;; # Intel Core i7
     esmf* ) export GCC_RCH_ARG='-mtune=power4' ; export ICC_RCH_ARG='' ; ;; # Power4
-    e3sm* | frazil* | glace* | grele* | skyglow* | snow* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-axP -mcpu=pentium4 -msse3' ; ;; # Core2 Extreme EMT64
+    e3sm* | grele* | imua* | snow* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-axP -mcpu=pentium4 -msse3' ; ;; # Core2 Extreme EMT64
     gplogin* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-ipo -no-prec-div -Wl,-z,muldefs' ; ;; # Core2 Extreme EMT64
 esac # endcase ${HOST}
 # Set ICC_ROOT, IFC_ROOT
 case "${HOST}" in
-    firn* | jaws* | katabatic* | rigb* | sastrugi* ) export ICC_ROOT='' ; export IFC_ROOT='' ; ;; # IA32
-    e3sm* | frazil* | glace* | grele* | skyglow* | snow* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # IA64
+    firn* | katabatic* | rigb* | sastrugi* ) export ICC_ROOT='' ; export IFC_ROOT='' ; ;; # IA32
+    e3sm* | grele* | imua* | snow* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # IA64
     gplogin* ) export ICC_ROOT='/sopt/intel/Compiler/11.0/081' ; export IFC_ROOT='/sopt/intel/Compiler/11.0/081' ; ;; # UCI PS Rocks Cluster
     ipcc* ) export ICC_ROOT='/opt/intel/cce/9.1.038' ; export IFC_ROOT='/opt/intel/fce/9.1.032' ; ;; # IPCC
     hpc* ) export ICC_ROOT='/software/intel/cc' ; export IFC_ROOT='/software/intel/fc' ; ;; # HPC
@@ -1003,8 +1002,7 @@ case ${PVM_ARCH} in
 	#export PRINTER='hp4050' # UCI croul
 	#export PRINTER='hp4250' # LGGE office
 	case ${HOST} in
-#	    frazil* | glace* | grele* | skyglow* ) export PRINTER='hp4700' ; ;; # UCI Croul 3323 (my office)
-	    e3sm* | firn* | frazil* | glace* | grele* | sastrugi* | skyglow* ) export PRINTER='hpm600' ; ;; # UCI Croul mail room
+	    e3sm* | firn* | grele* | imua* | sastrugi* ) export PRINTER='hpm600' ; ;; # UCI Croul mail room
 	esac # endcase ${HOST}
 	#export PRINTER='hp4350' # UCI Croul 3242 (common area)
 	#export PRINTER='hpm600' # UCI Croul mail room
@@ -1122,10 +1120,8 @@ alias ess_sco='ssh -Y 42350w13@eee.uci.edu'
 alias gbsh="/bin/cp ${HOME}/sw/dot/bashrc.greenplanet ${HOME}/.bashrc;source ${HOME}/.bashrc"
 alias firn='ssh -Y firn.ess.uci.edu'
 alias sastrugi='ssh -Y sastrugi.ess.uci.edu'
-alias frazil='ssh -Y frazil.ess.uci.edu'
 alias e3sm='ssh -Y e3sm.ess.uci.edu'
-alias skyglow='ssh -Y skyglow.ess.uci.edu'
-#alias jaws='ssh -Y jaws.ess.uci.edu'
+alias imua='ssh -Y imua.ess.uci.edu'
 alias katabatic='ssh -Y katabatic.ess.uci.edu'
 alias mactex='eval "$(/usr/libexec/path_helper)"' # MacOS Homebrew
 alias macbison='eval "PATH=${PKG_ROOT}/opt/bison/bin:${PKG_ROOT}/opt/flex/bin:${PATH}"' # MacOS Homebrew
@@ -1134,7 +1130,6 @@ alias macncl='eval "PATH=${PKG_ROOT}/ncl-6.6.2/bin:${PATH}";eval "export DYLD_FA
 alias mactr='eval "PATH=${DATA}/tmp/tempestremap:${PATH}"' # Built-from-source (so as not to precede Anaconda)
 alias audio='sudo killall coreaudiod' # kill Chrome, audio, restart Zoom, manually test audio and reset audio daemon, then re-start Chrome' # MacOS 11
 alias rigb='ssh -Y rigb.ess.uci.edu'
-alias glace='ssh -Y glace.ess.uci.edu'
 alias greenplanet='ssh -Y gplogin2.ps.uci.edu'
 alias grele='ssh -Y grele.ess.uci.edu'
 alias grep='egrep -i' # -i = case insensitive
@@ -1316,7 +1311,7 @@ case ${PVM_ARCH} in
 #    export FER_PALETTE=". ${FER_DIR}/ppl ${HOME}/ferret/ppl" # palettes
 
     case ${HOST} in
-    aerosol* | e3sm* | firn* | frazil* | glace* | grele* | jaws* | katabatic* | rigb* | sastrugi* | skyglow* )
+    aerosol* | e3sm* | firn* | grele* | imua* | jaws* | katabatic* | rigb* | sastrugi* )
 	export INTEL_LICENSE_FILE='/opt/intel/cc/9.0/licenses:/opt/intel/fc/9.0/licenses'
 	export LM_LICENSE_FILE='1700@ess1.ess.uci.edu'
     ;; # using network licenses
