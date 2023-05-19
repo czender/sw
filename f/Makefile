@@ -184,11 +184,11 @@ ifdef MPI_ROOT
  HDF5_INC += -I${MPI_ROOT}/include # Directory containing mpi.h
  HDF5_LIB += ${MPI_ROOT}/lib64 # Directory containing libmpi.a
 endif # !MPI_ROOT
- NETCDF_INC := ${NETCDF4_ROOT}/include $(shell nc-config --fflags)
+ NETCDF_INC := ${NETCDF4_ROOT}/include $(shell nf-config --fflags)
  NETCDF_LIB := ${NETCDF4_ROOT}/lib
  NC_LDFLAGS := -L${NETCDF_LIB} $(addprefix -L,${HDF5_LIB})
 # NC_LIBS := -lnetcdf -lhdf5_hl -lhdf5 -lz -lcurl
- NC_LIBS := $(shell nc-config --flibs)
+ NC_LIBS := $(shell nf-config --flibs)
 ifdef MPI_ROOT
  NC_LIBS += -lmpi
 endif # !MPI_ROOT
