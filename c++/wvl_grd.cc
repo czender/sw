@@ -623,15 +623,24 @@ wvl_grd_cls::recompute(){ // [fnc] Recompute properties of object
       { 3250.0, 4000.0, 4650.0, 5150.0, 6150.0,7700.0,8050.0,12850.0,
        16000.0,22650.0,29000.0,38000.0,50000.0,2600.0}; // [cm-1]
     const long wvl_nbr_RRTM_SW(sizeof(wvn_min_RRTM_SW)/sizeof(prc_cmp));
+    /* RRTM_SW wvl_min/max grid diagnosed from wvn_min/max grid
+       First in order of increasing/decreasing wavenumber/wavelength:
+       Band Index (wvn ncr)=  1      2      3      4      5      6      7      8       8       10      11      12      13      14
+       Band Index (wvl ncr)=  14     13     12     11     10     9      8      7       6       5       4       3       2       1
+       wvl ncr monotonic   =  13     12     11     10     9      8      7      6       5       4       3       2       1       14
+       wvl_ctr_RRTM_SW_um[]={3.462, 2.788, 2.325, 2.046, 1.784, 1.462, 1.270, 1.010 , 0.7016, 0.5333, 0.3932, 0.3040, 0.2316, 8.021}; // [um]
+       wvl_min_RRTM_SW_um[]={3.077, 2.500, 2.151, 1.942, 1.626, 1.299, 1.242, 0.7782, 0.6250, 0.4415, 0.3448, 0.2632, 0.2000, 3.846}; // [um]
+       wvl_max_RRTM_SW_um[]={3.846, 3.077, 2.500, 2.151, 1.942, 1.626, 1.299, 1.242 , 0.7782, 0.6250, 0.4415, 0.3448, 0.2632, 12.20}; // [um] */
+
     if(wvl_nbr != wvl_nbr_RRTM_SW){
       rcd+=deallocate(); // [fnc] Free dynamic memory of object
       wvl_nbr=wvl_nbr_RRTM_SW; // [nbr]
-    } // endif
+    } // !wvl_nbr
     rcd+=allocate(); // [fnc] Allocate dynamic memory for object
     for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
       wvl_min[wvl_idx]=0.01/wvn_max_RRTM_SW[wvl_idx]; // [cm-1] -> [m]
       wvl_max[wvl_idx]=0.01/wvn_min_RRTM_SW[wvl_idx]; // [cm-1] -> [m]
-    } // end loop over wvl_idx
+    } // !wvl_idx
     // end RRTM_SW-specific initialization
   }else if(grd_sng == "CAM_LW"){ // 
     /* Following bins are seven trace gas overlap bands from KHB96:

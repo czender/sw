@@ -412,7 +412,7 @@ c     Write data
       rcd=rcd+nf_put_var1_double(nc_id,clat_id,clat)
       rcd=rcd+nf_put_var1_double(nc_id,clon_id,clon)
       rcd=rcd+nf_put_var_double(nc_id,cld_id,cld)
-      rcd=rcd+nf_put_var1_double(nc_id,clwp_id,clwp)
+      rcd=rcd+nf_put_var_double(nc_id,clwp_id,clwp)
       rcd=rcd+nf_put_var1_double(nc_id,coszrs_id,coszrs)
       rcd=rcd+nf_put_var_double(nc_id,effcld_id,effcld)
       rcd=rcd+nf_put_var_double(nc_id,fice_id,fice)
@@ -455,16 +455,18 @@ c     Write data
       write(6,'(2a)') 'Wrote results to ',fl_out
 
 #ifdef CRM_SRB
+      
       rcd=rcd+nf_open(fl_out,NF_WRITE,nc_id)
-      if (rcd.ne.NF_NOERR) call nc_err_exit(rcd,fl_out)
+c     20230519: nc_err_exit() is borken
+c     if (rcd.ne.NF_NOERR) call nc_err_exit(rcd,fl_out)
 
 c     Put output file in define mode 
       rcd=rcd+nf_redef(nc_id)
-      if (rcd.ne.NF_NOERR) call nc_err_exit(rcd,fl_out)
+c      if (rcd.ne.NF_NOERR) call nc_err_exit(rcd,fl_out)
 
 c     Define dimension IDs
       rcd=rcd+nf_def_dim(nc_id,'bnd',bnd_nbr_SW,bnd_dim_id)
-      if (rcd.ne.NF_NOERR) call nc_err_exit(rcd,fl_out)
+c      if (rcd.ne.NF_NOERR) call nc_err_exit(rcd,fl_out)
 
 c     Assemble each multidimensional combination of dimension IDs
       dim_plevp_bnd=(/plevp_dim_id,bnd_dim_id/)
@@ -517,7 +519,6 @@ c     Define plevp arrays
       rcd=rcd+nf_def_var(nc_id,'flx_SW_up',NCPREC,1,plevp_dim_id,flx_SW_up_id)
       rcd=rcd+nf_def_var(nc_id,'flx_LW_dwn',NCPREC,1,plevp_dim_id,flx_LW_dwn_id)
       rcd=rcd+nf_def_var(nc_id,'flx_LW_up',NCPREC,1,plevp_dim_id,flx_LW_up_id)
-
 c     Define bnd arrays
       rcd=rcd+nf_def_var(nc_id,'flx_bnd_abs_atm',NCPREC,1,bnd_dim_id,flx_bnd_abs_atm_id)
       rcd=rcd+nf_def_var(nc_id,'flx_bnd_abs_sfc',NCPREC,1,bnd_dim_id,flx_bnd_abs_sfc_id)

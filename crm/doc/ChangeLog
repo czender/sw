@@ -1,5 +1,9 @@
 2023-05-19  Charlie Zender  <zender@uci.edu>
 
+	* Fix netCDF() to write clwp as array not scalar
+
+	* Merge CRM mls_clr.in with $DATA/aca/mls_clr.txt
+
 	* Update pvmgetarch. Change from nc-config --fflags to nf-config --fflags
 
 2021-07-12  Charlie Zender  <zender@uci.edu>
