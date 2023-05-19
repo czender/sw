@@ -4800,11 +4800,13 @@ program swnb2
      odxc_spc_ice(bnd_idx)=0.0
      odxc_spc_lqd(bnd_idx)=0.0
      odac_spc_aer(bnd_idx)=0.0
+     odac_spc_mpr(bnd_idx)=0.0
      odac_spc_snw(bnd_idx)=0.0
      odac_spc_bga(bnd_idx)=0.0
      odac_spc_ice(bnd_idx)=0.0
      odac_spc_lqd(bnd_idx)=0.0
      odxc_spc_aer(bnd_idx)=0.0
+     odxc_spc_mpr(bnd_idx)=0.0
      odxc_spc_snw(bnd_idx)=0.0
      odxc_spc_bga(bnd_idx)=0.0
      odxc_spc_Ray(bnd_idx)=0.0
@@ -4838,6 +4840,13 @@ program swnb2
      flx_bb_dwn_dff(levp_idx)=0.0
      flx_bb_upw(levp_idx)=0.0
   enddo                     ! end loop over levp
+  
+  ! Initialize other arrays incremented in main loop over bands
+  ntn_spc_aa_sfc(:,:)=0.0
+  lmn_spc_aa_sfc(:,:)=0.0
+  lmn_spc_aa_ndr(:,:)=0.0
+  ntn_spc_aa_ndr(:,:)=0.0
+  ntn_spc_aa_zen(:,:)=0.0
   
   ! Initialize counters either incremented or decremented in main loop over bands
   

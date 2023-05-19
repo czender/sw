@@ -1,3 +1,10 @@
+2023-05-19  Charlie Zender  <zender@uci.edu>
+
+	* Fix output for all these variables by initializing them to 0.0 before use (doh!)
+
+	* Comment-out netCDF put_var lines these variables that now cause IEEE errors on MacOS due to new compilers/netCDF:
+	lmn_spc_aa_sfc, ntn_spc_aa_sfc, odac_spc_mpr, odxc_spc_mpr, odxc_spc_ttl, trn_spc_atm_mpr, lmn_spc_aa_ndr_sfc
+
 2021-10-05  Charlie Zender  <zender@uci.edu>
 
 	* Verify that swnb2 still works on LGGE snowpack profiles, once	profiles are regenerated to include newer constituents (CO, etc.)
