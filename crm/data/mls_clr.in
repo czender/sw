@@ -1,6 +1,6 @@
  CRM 2.0 CCM 3.6 Column Radiation Model (CRM) Input File -*-text-*-
  Mid-latitude summer profile, clear sky
- CRM homepage URL is http://www.cgd.ucar.edu/cms/crm
+ CRM homepage: http://dust.ess.uci.edu/crm
    83.333333    Julian day of year at Greenwich (1.5 = Noon, Jan 1 GMT)
    0.0          Latitude (degrees North, from -90.0 to +90.0)
   Level  p [mb]    T [K]    H2O mmr    O3 mmr     Cld frc.  Cld LWP
@@ -25,7 +25,7 @@
  1013.000     Surface pressure [mb]
   294.00      Surface air temperature [K]
   294.00      Ground (skin) temperature [K]
-    1.0       Surface type flag (0=ocn, 1=lnd, 2=sea ice)
+    1         Surface type flag (0=ocn, 1=lnd, 2=sea ice)
     0.010     Surface aerodynamic roughness [m] (obsolete)
     0.000     Snow cover liquid water equivalent [m]
     0.100     Albedo (Vis, direct)
@@ -54,7 +54,7 @@ Greenwich.  The CRM uses the specified year, latitude, longitude and
 GMT to compute the correct Sun-Earth distance and solar zenith angle. 
 The CRM does not apply the equation of time, see the FAQ for details.
 
-Latitude runs from -90 to +90 degrees, Longitude from 0.0 to 360.0
+Latitude runs from -90 to +90 degrees, Longitude from 0.0 to 360.0.
 
 The total number of levels must be the same as the PLEV and PLEVR
 tokens in the file src/crm/params.h.
@@ -65,13 +65,13 @@ layers. These are computed as simple averages of adjacent level
 pressures.
 
 Dimensional units of input data:
-Temperature is input in K
-Pressure is input in mb
+Temperature is input in K.
+Pressure is input in mb.
 H2O and O3 are input as mass mixing ratios, 
 Cloud cover is input as a fraction from 0.0 to 1.0.
 Cloud cover of 1.0 is reset internally to 0.999, since cloud fractions
 of exactly 1.0 cause the longwave code to fail.
-Cloud liquid water path is input in g m-2 in each layer 
+Cloud liquid water path is input in g m-2 in each layer. 
 Trace gases CO2, NO2, CH4, CFC11, and CFC12 are input as volume mixing
 ratios.
 
@@ -83,7 +83,7 @@ before use. Over ocean and sea-ice, the specified spectral/angular
 albedos are set internally. For land points, the spectral/angular
 albedos read in are used without modification. 
 
-Snow cover is used over sea-ice to help set surface albedos
+Snow cover is used over sea-ice to help set surface albedos.
 
 Fractional strong zenith angle dependent surface and surface
 aerodynamic roughness are obsolete. They are only input to maintain
@@ -92,5 +92,5 @@ backwards compatability with previous CRM versions.
 *Important information regarding Aerosol Optical Depth (AOD) is
 contained in the file AEROSOL.
 
-Year AD must be input as an integer
+Year AD must be input as an integer.
 
