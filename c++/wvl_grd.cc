@@ -115,6 +115,8 @@ sng2sng_map wvl_grd_cls::opt2abb_map_mk(){ // Create abbreviation map
   map_tmp.insert(sng2sng_map::value_type("RRTMG_LW","RRTMG_LW"));
   map_tmp.insert(sng2sng_map::value_type("RRTMGP_LW","RRTMGP_LW"));
   map_tmp.insert(sng2sng_map::value_type("RRTM_SW","RRTM_SW"));
+  map_tmp.insert(sng2sng_map::value_type("RRTMG_SW","RRTM_SW"));
+  map_tmp.insert(sng2sng_map::value_type("RRTMGP_SW","RRTMGP_SW"));
   map_tmp.insert(sng2sng_map::value_type("LW","CAM_LW"));
   map_tmp.insert(sng2sng_map::value_type("lw","CAM_LW"));
   map_tmp.insert(sng2sng_map::value_type("CCM LW","CAM_LW"));
@@ -614,7 +616,9 @@ wvl_grd_cls::recompute(){ // [fnc] Recompute properties of object
     } // !wvl_idx
     // !RRTMGP_LW-specific initialization
   }else if(grd_sng == "RRTM_SW"){ // 
-    /* RRTM spectral grid from Rachel Scanza 20120323
+    /* RRTM spectral grid originally from Rachel Scanza 20120323
+       RRTMG_SW grid defined rrtmg_sw_init.f90 lines 193--199 is identical to RRTM_SW grid
+       RRTMGP_SW grid is re-arranged version of RRTM_SW/RRTMG_SW grid
        NB: RRTM_SW increases monotonically with wavenumber except for last bin */
     const prc_cmp wvn_min_RRTM_SW[]=
       { 2600.0, 3250.0, 4000.0, 4650.0, 5150.0,6150.0,7700.0, 8050.0,
@@ -625,7 +629,7 @@ wvl_grd_cls::recompute(){ // [fnc] Recompute properties of object
     const long wvl_nbr_RRTM_SW(sizeof(wvn_min_RRTM_SW)/sizeof(prc_cmp));
     /* RRTM_SW wvl_min/max grid diagnosed from wvn_min/max grid
        First in order of increasing/decreasing wavenumber/wavelength:
-       Band Index (wvn ncr)=  1      2      3      4      5      6      7      8       8       10      11      12      13      14
+       Band Index (wvn ncr)=  1      2      3      4      5      6      7      8       9       10      11      12      13      14
        Band Index (wvl ncr)=  14     13     12     11     10     9      8      7       6       5       4       3       2       1
        wvl ncr monotonic   =  13     12     11     10     9      8      7      6       5       4       3       2       1       14
        wvl_ctr_RRTM_SW_um[]={3.462, 2.788, 2.325, 2.046, 1.784, 1.462, 1.270, 1.010 , 0.7016, 0.5333, 0.3932, 0.3040, 0.2316, 8.021}; // [um]
@@ -642,6 +646,38 @@ wvl_grd_cls::recompute(){ // [fnc] Recompute properties of object
       wvl_max[wvl_idx]=0.01/wvn_min_RRTM_SW[wvl_idx]; // [cm-1] -> [m]
     } // !wvl_idx
     // end RRTM_SW-specific initialization
+  }else if(grd_sng == "RRTMGP_SW"){ // 
+    /* 20230520: RRTMGP_SW grid is re-arranged version of RRTM_SW/RRTMG_SW grid
+       RRTMG_SW band 14 is RRTMGP_SW Band 1
+       This ensures RRTMGP_SW increases monotonically with wavenumber for all bins
+       This increments by one the wavelength index of all other RRTMGP_SW bands relative to RRTMG_SW bands
+       For example, the Visible/NIR band overlapping 0.7 um is RRTMGP_SW Band 10 and is RRTMG_SW Band 9 */
+    const prc_cmp wvn_min_RRTMGP_SW[]=
+      {  820.0, 2600.0, 3250.0, 4000.0, 4650.0, 5150.0,6150.0,7700.0, 8050.0,
+	12850.0,16000.0,22650.0,29000.0,38000.0}; // [cm-1]
+    const prc_cmp wvn_max_RRTMGP_SW[]=
+      { 2600.0, 3250.0, 4000.0, 4650.0, 5150.0, 6150.0,7700.0,8050.0,12850.0,
+	16000.0,22650.0,29000.0,38000.0,50000.0}; // [cm-1]
+    const long wvl_nbr_RRTMGP_SW(sizeof(wvn_min_RRTMGP_SW)/sizeof(prc_cmp));
+    /* RRTMGP_SW wvl_min/max grid diagnosed from wvn_min/max grid
+       First in order of increasing/decreasing wavenumber/wavelength:
+       Band Index (wvn ncr)=    1      2      3      4      5      6      7      8      9       10      11      12      13      14
+       Band Index (wvl ncr)=    14     13     12     11     10     9      8      7      6       5       4       3       2       1
+       wvl ncr monotonic   =    14     13     12     11     10     9      8      7      6       5       4       3       2       1
+       wvl_ctr_RRTMGP_SW_um[]={ 8.021, 3.462, 2.788, 2.325, 2.046, 1.784, 1.462, 1.270, 1.010 , 0.7016, 0.5333, 0.3932, 0.3040, 0.2316}; // [um]
+       wvl_min_RRTMGP_SW_um[]={ 3.846, 3.077, 2.500, 2.151, 1.942, 1.626, 1.299, 1.242, 0.7782, 0.6250, 0.4415, 0.3448, 0.2632, 0.2000}; // [um]
+       wvl_max_RRTMGP_SW_um[]={12.20 , 3.846, 3.077, 2.500, 2.151, 1.942, 1.626, 1.299, 1.242 , 0.7782, 0.6250, 0.4415, 0.3448, 0.2632}; // [um] */
+
+    if(wvl_nbr != wvl_nbr_RRTMGP_SW){
+      rcd+=deallocate(); // [fnc] Free dynamic memory of object
+      wvl_nbr=wvl_nbr_RRTMGP_SW; // [nbr]
+    } // !wvl_nbr
+    rcd+=allocate(); // [fnc] Allocate dynamic memory for object
+    for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
+      wvl_min[wvl_idx]=0.01/wvn_max_RRTMGP_SW[wvl_idx]; // [cm-1] -> [m]
+      wvl_max[wvl_idx]=0.01/wvn_min_RRTMGP_SW[wvl_idx]; // [cm-1] -> [m]
+    } // !wvl_idx
+    // end RRTMGP_SW-specific initialization
   }else if(grd_sng == "CAM_LW"){ // 
     /* Following bins are seven trace gas overlap bands from KHB96:
        const prc_cmp wvn_min_CAM_LW[]={500.0,750.0,820.0,880.0,900.0,1000.0,1120.0,1170.0};
@@ -705,7 +741,7 @@ wvl_grd_cls::recompute(){ // [fnc] Recompute properties of object
   for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
     wvl_dlt[wvl_idx]=wvl_max[wvl_idx]-wvl_min[wvl_idx]; // [m]
     wvl_ctr[wvl_idx]=0.5*(wvl_max[wvl_idx]+wvl_min[wvl_idx]); // [m]
-  } // end loop over wvl_idx
+  } // !wvl_idx
   bool ncr_wvl; // [flg] Wavelength array increases
   if(grd_sng == "CAM_LW"){
     // fxm: CAM_LW decreases (sort of) but not monotonically so this would cause mnt_ncr() to fail
@@ -719,7 +755,7 @@ wvl_grd_cls::recompute(){ // [fnc] Recompute properties of object
   }else ncr_wvl=mnt_ncr(wvl_min,wvl_nbr);
   for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
     if(ncr_wvl) wvl_grd[wvl_idx]=wvl_min[wvl_idx]; else wvl_grd[wvl_idx]=wvl_max[wvl_idx]; // [m]
-  } // end loop over wvl_idx
+  } // !wvl_idx
   if(ncr_wvl) wvl_grd[wvl_nbr]=wvl_max[wvl_nbr-1]; else wvl_grd[wvl_nbr]=wvl_min[wvl_nbr-1]; // [m]
   wvl_mnm=vec_min(wvl_min,wvl_nbr); // [m]
   wvl_mxm=vec_max(wvl_max,wvl_nbr); // [m]
