@@ -2178,11 +2178,11 @@ program swnb2
         else if (opt_sng == 'fl_HC' .or. opt_sng == 'HC') then
            flg_HC=.true.
            call ftn_arg_get(arg_idx,arg_val,fl_HC) ! [sng] Herzberg Continuum file
-        else if (opt_sng == 'fl_clm' .or. opt_sng == 'input' .or. opt_sng == 'input') then
+        else if (opt_sng == 'fl_clm' .or. opt_sng == 'input' .or. opt_sng == 'profile' .or. opt_sng == 'prf') then
            call ftn_arg_get(arg_idx,arg_val,fl_clm) ! [sng] Column profile
         else if (opt_sng == 'fl_lqd' .or. opt_sng == 'lqd') then
            call ftn_arg_get(arg_idx,arg_val,fl_lqd) ! [sng] H2O liquid file
-        else if (opt_sng == 'fl_out' .or. opt_sng == 'output') then
+        else if (opt_sng == 'fl_out' .or. opt_sng == 'output' .or. opt_sng == 'out') then
            call ftn_arg_get(arg_idx,arg_val,fl_out) ! [sng] Output profile
         else if (opt_sng == 'fl_mpr' .or. opt_sng == 'mpr') then
            call ftn_arg_get(arg_idx,arg_val,fl_mpr) ! [sng] Impurity file
@@ -4233,6 +4233,7 @@ program swnb2
         btemp=sfc_tpt
      endif ! sfc_tpt
      ! Replace emissivity
+     ! fxm: ensure emissivity is consistent with rfl_spc_sfc data
      bemis=sfc_msv
   endif ! mode_ngt
   

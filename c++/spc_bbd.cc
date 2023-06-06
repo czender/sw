@@ -273,6 +273,7 @@ flx_bbd_frc_get_WiW76 // [fnc] Fraction of blackbody emission in given spectral 
   double ntn_bbd_rsl_ttl; // [W m-2 sr-1] Total integrated radiance resolved in wavenumber grid
   double flx_bbd_frc_mss_blr; // [frc] Fractional "missing" radiance bluer (shorter wavelengths/larger wavenumbers) than wavenumber grid
   double flx_bbd_frc_mss_rdr; // [frc] Fractional "missing" radiance redder (longer wavelengths/smaller wavenumbers) than wavenumber grid
+  double wvn_lo; // [cm-1] Lowest wavenumber in current bin
 
   long wvn_idx; // [idx] Counting index for wvn
 
@@ -281,12 +282,17 @@ flx_bbd_frc_get_WiW76 // [fnc] Fraction of blackbody emission in given spectral 
   for(wvn_idx=0;wvn_idx<=wvn_nbr;wvn_idx++){ // NB: wvn_nbr+1 iterations
 
     // Wavenumbers must increase monotonically to prevent negative flux fractions
-    if(wvn_idx != wvn_nbr)
-      if(wvn_grd[wvn_idx+1] <= wvn_grd[wvn_idx]) err_prn(sbr_nm,"wvn_min > wvn_max");
-    
+    if(wvn_idx < wvn_nbr){
+            //      if(wvn_grd[wvn_idx+1] <= wvn_grd[wvn_idx]) err_prn(sbr_nm,"wvn_min > wvn_max");
+      if(wvn_grd[wvn_idx] < wvn_grd[wvn_idx+1]){
+	wvn_lo=wvn_grd[wvn_idx];
+      }else{
+	wvn_lo=wvn_grd[wvn_idx+1];
+      } // !wvn_grd
+    } // !wvn_idx
     // Compute integral of Planck function from wvn_lo to infinity
     ntn_bbd_blr[wvn_idx]=planck_integral_WiW76
-      (wvn_grd[wvn_idx], // [cm-1] Lower limit of Planck integral in wavenumbers
+      (wvn_lo, // [cm-1] Lower limit of Planck integral in wavenumbers
        tpt); // [K] Temperature
 
   } // !wvn_idx

@@ -206,7 +206,6 @@ case "${HOST}" in
     blues* | blogin* | b[0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_blues" ; MY_LIB_DIR="${HOME}/lib_blues" ; MY_OBJ_DIR="${HOME}/obj_blues" ; ;;
     chrysalis* | chrlogin* | chr-[0123456789][0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_chrysalis" ; MY_LIB_DIR="${HOME}/lib_chrysalis" ; MY_OBJ_DIR="${HOME}/obj_chrysalis" ; ;;
     cooley* | cc[0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_cooley" ; MY_LIB_DIR="${HOME}/lib_cooley" ; MY_OBJ_DIR="${HOME}/obj_cooley" ; ;;
-    cori* ) export MY_BIN_DIR="${HOME}/bin_cori" ; MY_LIB_DIR="${HOME}/lib_cori" ; MY_OBJ_DIR="${HOME}/obj_cori" ; ;;
     mira* ) export MY_BIN_DIR="${HOME}/bin_mira" ; MY_LIB_DIR="${HOME}/lib_mira" ; MY_OBJ_DIR="${HOME}/obj_mira" ; ;;
     perlmutter* | login[0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_perlmutter" ; MY_LIB_DIR="${HOME}/lib_perlmutter" ; MY_OBJ_DIR="${HOME}/obj_perlmutter" ; ;;
     theta* ) export MY_BIN_DIR="${HOME}/bin_theta" ; MY_LIB_DIR="${HOME}/lib_theta" ; MY_OBJ_DIR="${HOME}/obj_theta" ; ;;
@@ -432,7 +431,7 @@ case "${PVM_ARCH}" in
 	    chrysalis* ) export DATA="${HOME}/data" ; ;; # ANL LCRC
 	    compy* ) export DATA="/qfs/people/${USER}/data" ; ;; # PNNL 
 	    cooley* | cc* ) export DATA="${HOME}/data" ; ;; # ANL ALCF 
-	    cori* | nid* | perlmutter* | login[0123456789][0123456789] ) export DATA="${HOME}/data" ; ;; # NERSC
+	    perlmutter* | login[0123456789][0123456789] | nid* ) export DATA="${HOME}/data" ; ;; # NERSC
 	    e3sm* ) export DATA="${HOME}/data" ; ;; # UCI
 	    gplogin* ) export DATA="/data/${USER}" ; ;; # UCI PS Rocks Cluster
 	    hpc* ) export DATA="/data/users/${USER}" ; ;; # UCI HPC
@@ -850,7 +849,7 @@ case "${HOST}" in
     hpc* ) export LINUX_CC=${CC_pgcc} ; export LINUX_CXX=${CXX_pgCC} ; export LINUX_FC=${FC_pgf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # pgcc/pgCC/pgf95 MPICH2
     e3sm* ) export LINUX_CC=${CC_gcc_conda} ; export LINUX_CXX=${CXX_gxx_conda} ; export LINUX_FC=${FC_gfortran_conda} ; ;; # gcc/g++/gfortran Conda
     imua* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # gcc/g++/gfortran RPMs
-    andes* | blogin* | blues* | chrlogin* | *cheyenne* | compy* | cooley* | cori* | login-* | mira* | theta* | titan* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # gcc/g++/gfortran OpenMPI
+    andes* | blogin* | blues* | chrlogin* | *cheyenne* | compy* | cooley* | login-* | mira* | theta* | titan* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # gcc/g++/gfortran OpenMPI
 #    *cheyenne* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # gcc/g++/g95 MPICH 
 esac # endcase ${HOST}
@@ -891,7 +890,6 @@ fi # hostname
 case "${HOST}" in
     andes* | titan* ) export PROJID='cli115' ; export DATA="/gpfs/alpine/world-shared/${PROJID}/${USER}" ; export LD_LIBRARY_PATH='/ccs/home/zender/lib_andes:/ccs/proj/cli900/sw/andes/e3sm-unified/base/envs/e3sm_unified_1.4.0/lib'\:${LD_LIBRARY_PATH} ; ;; # OLCF
     cooley* | cc* | mira* | theta* ) export PROJID='ClimateEnergy_4' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
-    cori* | cmem* | nid[0123456789][0123456789][0123456789][0123456789][0123456789] ) export PROJID='e3sm' ; export DATA="${HOME}/data" ; export PATH="${PATH}:/opt/cray/pe/netcdf/4.8.1.1/gnu/8.2/bin" ; export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/opt/cray/pe/netcdf/4.8.1.1/gnu/8.2/lib:/global/common/software/nersc/cori-2022q1/spack/cray-cnl7-haswell/gsl-2.7-ihnf7gi/lib:/global/common/software/spackecp/cori/e4s-22.02/software/cray-cnl7-haswell/gcc-11.2.0/udunits-2.2.28-hnqlzfxoxi6fl5qpahhmaprfy4cscuyh/lib" ; ;; # 20190806 needed for ncgen
     perlmutter* | login[0123456789][0123456789] | nid[0123456789][0123456789][0123456789][0123456789][0123456789][0123456789] ) export PROJID='e3sm' ; export DATA="${HOME}/data" ; export PATH="${PATH}:/opt/cray/pe/netcdf/4.8.1.1/gnu/9.1/bin" ; export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/opt/cray/pe/netcdf/4.8.1.1/gnu/9.1/lib:/global/common/software/spackecp/perlmutter/e4s-21.11/software/cray-sles15-zen3/gcc-11.2.0/gsl-2.7-2p3pcjckzogek2dubph7q4yd5msjuhxt/lib" ; ;; # 20220518 needed for ncgen
 esac # endcase ${HOST}
 
@@ -1093,7 +1091,6 @@ alias blues='ssh -Y ac.zender@blues.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias chrysalis='ssh -Y ac.zender@chrysalis.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias cooley='ssh -Y cooley.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
 alias theta='ssh -Y theta.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
-alias cori='ssh -Y cori.nersc.gov' # pw_psw (EMN=PeRLmutter)
 alias perlmutter='ssh -Y perlmutter-p1.nersc.gov' # pw_psw (EMN=PeRLmutter)
 alias bsrc="source ${HOME}/.bashrc"
 alias chm='chmod 644 *.*' # Make readable
