@@ -419,8 +419,9 @@ program clm
   logical cmd_ln_mpc_CWP
   logical cmd_ln_odxc_obs_aer
   logical cmd_ln_odxc_obs_bga
-  logical flg_aer
   logical flg_MFRSR_obs
+  logical flg_N2O_vrt ! Does input contain vertically resolved N2O concentration?
+  logical flg_aer
   logical flg_bga
   logical flg_snw ! [flg] Incorporate (read-in/write-out) multi-layer snow model
   logical flg_wnd
@@ -1031,6 +1032,7 @@ program clm
   fl_out='clm.nc'//nlc
   fl_txt='clm.txt'//nlc
   flg_aer=.false.
+  flg_N2O_vrt=.false. ! Does input contain vertically resolved N2O concentration?
   flg_MFRSR_obs=.false.
   flg_bga=.false.
   flg_snw=.false. ! [flg] Incorporate multi-layer snow model
@@ -1747,19 +1749,20 @@ program clm
      enddo
      
      ! De-allocate dynamic variables
-     if (allocated(CH4_vmr)) deallocate(CH4_vmr,stat=rcd)
      if (allocated(CH4_vmr_ntf)) deallocate(CH4_vmr_ntf,stat=rcd)
-     if (allocated(CO_vmr)) deallocate(CO_vmr,stat=rcd)
      if (allocated(CO_vmr_ntf)) deallocate(CO_vmr_ntf,stat=rcd)
-     if (allocated(H2O_vmr)) deallocate(H2O_vmr,stat=rcd)
      if (allocated(H2O_vmr_ntf)) deallocate(H2O_vmr_ntf,stat=rcd)
-     if (allocated(N2O_vmr)) deallocate(N2O_vmr,stat=rcd)
      if (allocated(N2O_vmr_ntf)) deallocate(N2O_vmr_ntf,stat=rcd)
-     if (allocated(O3_vmr)) deallocate(O3_vmr,stat=rcd)
      if (allocated(O3_vmr_ntf)) deallocate(O3_vmr_ntf,stat=rcd)
-     if (allocated(cnc_air)) deallocate(cnc_air,stat=rcd)
      if (allocated(cnc_air_ntf)) deallocate(cnc_air_ntf,stat=rcd)
-     
+
+     if (allocated(CH4_vmr)) deallocate(CH4_vmr,stat=rcd)
+     if (allocated(CO_vmr)) deallocate(CO_vmr,stat=rcd)
+     if (allocated(H2O_vmr)) deallocate(H2O_vmr,stat=rcd)
+     if (allocated(N2O_vmr)) deallocate(N2O_vmr,stat=rcd)
+     if (allocated(O3_vmr)) deallocate(O3_vmr,stat=rcd)
+     if (allocated(cnc_air)) deallocate(cnc_air,stat=rcd)
+
      ! end AFGL section
   else if (RFM_TXT_INPUT) then ! input file is in RFM_TXT_INPUT format
      ! File is already open because we opened it to obtain lev_nbr
@@ -1820,6 +1823,7 @@ program clm
         CH4_vmr(idx)=0.5*(CH4_vmr_ntf(idx)+CH4_vmr_ntf(idx+1)) ! [mlc mlc-1]
         O2_vmr(idx)=0.5*(O2_vmr_ntf(idx)+O2_vmr_ntf(idx+1)) ! [mlc mlc-1]
      enddo                  ! end loop over lev
+     flg_N2O_vrt=.true. ! Does input contain vertically resolved N2O concentration?
      
      ! Derive required CLM fields from RFM input
      do idx=1,lev_nbr
@@ -1845,22 +1849,23 @@ program clm
      enddo
      
      ! De-allocate dynamic variables
-     if (allocated(CH4_vmr)) deallocate(CH4_vmr,stat=rcd)
      if (allocated(CH4_vmr_ntf)) deallocate(CH4_vmr_ntf,stat=rcd)
-     if (allocated(CO_vmr)) deallocate(CO_vmr,stat=rcd)
-     if (allocated(CO_vmr_ntf)) deallocate(CO_vmr_ntf,stat=rcd)
-     if (allocated(CO2_vmr)) deallocate(CO2_vmr,stat=rcd)
      if (allocated(CO2_vmr_ntf)) deallocate(CO2_vmr_ntf,stat=rcd)
-     if (allocated(H2O_vmr)) deallocate(H2O_vmr,stat=rcd)
+     if (allocated(CO_vmr_ntf)) deallocate(CO_vmr_ntf,stat=rcd)
      if (allocated(H2O_vmr_ntf)) deallocate(H2O_vmr_ntf,stat=rcd)
-     if (allocated(N2O_vmr)) deallocate(N2O_vmr,stat=rcd)
      if (allocated(N2O_vmr_ntf)) deallocate(N2O_vmr_ntf,stat=rcd)
-     if (allocated(O3_vmr)) deallocate(O3_vmr,stat=rcd)
-     if (allocated(O3_vmr_ntf)) deallocate(O3_vmr_ntf,stat=rcd)
-     if (allocated(O2_vmr)) deallocate(O2_vmr,stat=rcd)
      if (allocated(O2_vmr_ntf)) deallocate(O2_vmr_ntf,stat=rcd)
+     if (allocated(O3_vmr_ntf)) deallocate(O3_vmr_ntf,stat=rcd)
 
-     ! end RFM_TXT_INPUT
+     if (allocated(CH4_vmr)) deallocate(CH4_vmr,stat=rcd)
+     if (allocated(CO2_vmr)) deallocate(CO2_vmr,stat=rcd)
+     if (allocated(CO_vmr)) deallocate(CO_vmr,stat=rcd)
+     if (allocated(H2O_vmr)) deallocate(H2O_vmr,stat=rcd)
+     if (.not.flg_N2O_vrt.and.allocated(N2O_vmr)) deallocate(N2O_vmr,stat=rcd)
+     if (allocated(O2_vmr)) deallocate(O2_vmr,stat=rcd)
+     if (allocated(O3_vmr)) deallocate(O3_vmr,stat=rcd)
+
+     ! RFM_TXT_INPUT
   else if (CLM_NC_INPUT) then ! Input file is in CLM_NC_INPUT format
      
      ! Assume lev,prs,T,q_H2O are available in input file in SI units
@@ -2403,9 +2408,20 @@ program clm
      lev(idx)=prs(idx)
      prs_dlt(idx)=prs_ntf(idx+1)-prs_ntf(idx)
      tpt_vrt(idx)=(1.0+eps_H2O_rcp_m1*q_H2O(idx))*tpt(idx)
+     ! 20230723 Next five lines have been used since forever
+     ! Unfortunately they rely on column totals and preclude using vertically resolved trace gas concentrations
+     ! This "approximation" originated because CCM3 radiation input files used globally uniform scalars for these concentrations
+     ! Thus CRM would never use the vertically resolved information in CLM files
+     ! However, SWNB2 and now RRTMG (kind of) can use this vertically resolved information
+     ! And L. Manzo is studying LW fluxes so we really need to make vertically resolved concentrations available in output
+     ! Goal is to use the globally scalar (well-mixed) default number only when vertically resolved information is not available
      q_CO2(idx)=CO2_vmr_clm*(mmw_CO2/mmw_dry_air)
      q_CH4(idx)=CH4_vmr_clm*(mmw_CH4/mmw_dry_air)
-     q_N2O(idx)=N2O_vmr_clm*(mmw_N2O/mmw_dry_air)
+     if(flg_N2O_vrt) then
+        q_N2O(idx)=vmr_N2O(idx)*(mmw_N2O/mmw_dry_air)
+     else ! !flg_N2O_vrt
+        q_N2O(idx)=N2O_vmr_clm*(mmw_N2O/mmw_dry_air)
+     endif ! !flg_N2O_vrt
      q_CFC11(idx)=CFC11_vmr_clm*(mmw_CFC11/mmw_dry_air)
      q_CFC12(idx)=CFC12_vmr_clm*(mmw_CFC12/mmw_dry_air)
      q_CO(idx)=q_CO_ntp(prs(idx))
@@ -2596,7 +2612,7 @@ program clm
      vmr_CO2(idx)=q_CO2(idx)*mmw_dry_air/mmw_CO2
      vmr_CH4(idx)=q_CH4(idx)*mmw_dry_air/mmw_CH4
      vmr_CO(idx)=q_CO(idx)*mmw_dry_air/mmw_CO
-     vmr_N2O(idx)=q_N2O(idx)*mmw_dry_air/mmw_N2O
+     if(.not.flg_N2O_vrt) vmr_N2O(idx)=q_N2O(idx)*mmw_dry_air/mmw_N2O
      vmr_CFC11(idx)=q_CFC11(idx)*mmw_dry_air/mmw_CFC11
      vmr_CFC12(idx)=q_CFC12(idx)*mmw_dry_air/mmw_CFC12
      vmr_O2(idx)=q_O2(idx)*mmw_dry_air/mmw_O2
