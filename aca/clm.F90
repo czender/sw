@@ -2410,6 +2410,7 @@ program clm
      q_CFC12(idx)=CFC12_vmr_clm*(mmw_CFC12/mmw_dry_air)
      q_NO2(idx)=q_NO2_ntp(prs(idx))
      q_OH(idx)=q_OH_ntp(prs(idx))
+     ! 20230725: fxm should recompute total column-equivalent mixing ratio, e.g., CO2_vmr_clm, based on vertical profiles
      if(flg_CO_vrt) then
         q_CO(idx)=vmr_CO(idx)*(mmw_CO/mmw_dry_air)
      else ! !flg_CO_vrt

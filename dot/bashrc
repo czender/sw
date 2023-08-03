@@ -1080,6 +1080,7 @@ fi # endif
 alias bc='bc -l' # -l = defines standard math library and sets scale to 20
 alias beepoff='xset b off' # Turn beep sound off for quiet work envionments
 alias cheyenne='ssh -Y cheyenne.ucar.edu' # Token-response of NCAR CIT pw_psw sends Duo request
+alias derecho='ssh -Y derecho.ucar.edu' # Token-response of NCAR CIT pw_psw sends Duo request
 alias mira='ssh -Y mira.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
 alias compy='ssh -Y compy.pnl.gov' # pyn_hgh + 6-digit fob code
 alias andes='ssh -Y andes.olcf.ornl.gov' # pyn_mdm + 6-digit fob code
