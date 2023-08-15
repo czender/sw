@@ -59,7 +59,7 @@ contains
     ! Stolen from CCM2 gffgch.F by J.J. Hack and G.T. Taylor
     ! Source reference unknown
     implicit none
-    real,intent(in)::tpt                  ! [K]
+    real,intent(in)::tpt ! [K]
     real tpt0
     real term1
     real term2
@@ -106,7 +106,7 @@ contains
     ! Range of validity is -50 C < T < 0 C
     use phys_cst_mdl,only:tpt_frz_pnt ! [mdl] Fundamental and derived physical constants
     implicit none
-    real,intent(in)::tpt                  ! [K]
+    real,intent(in)::tpt ! [K]
     real(selected_real_kind(p=12))::tpt_cls  ! [C]
     real(selected_real_kind(p=12))::svp_H2O_ice_dbl
     real(selected_real_kind(p=12))::cff(0:6)= &
@@ -129,8 +129,8 @@ contains
     ! Range of validity is -50 C < T < 50 C
     use phys_cst_mdl,only:tpt_frz_pnt ! [mdl] Fundamental and derived physical constants
     implicit none
-    real,intent(in)::tpt                  ! [K]
-    real(selected_real_kind(p=12))::tpt_cls  ! [C]
+    real,intent(in)::tpt ! [K]
+    real(selected_real_kind(p=12))::tpt_cls ! [C]
     real(selected_real_kind(p=12))::svp_H2O_lqd_dbl
     real(selected_real_kind(p=12))::cff(0:6)= &
          (/6.107799961,4.436518521e-1,1.428945805e-2,2.650648471e-4,3.031240396e-6,2.034080948e-8,6.136820929e-11/)
