@@ -208,8 +208,9 @@ case "${HOST}" in
     chrysalis* | chrlogin* | chr-[0123456789][0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_chrysalis" ; MY_LIB_DIR="${HOME}/lib_chrysalis" ; MY_OBJ_DIR="${HOME}/obj_chrysalis" ; ;;
     cooley* | cc[0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_cooley" ; MY_LIB_DIR="${HOME}/lib_cooley" ; MY_OBJ_DIR="${HOME}/obj_cooley" ; ;;
     frontier* ) export MY_BIN_DIR="${HOME}/bin_frontier" ; MY_LIB_DIR="${HOME}/lib_frontier" ; MY_OBJ_DIR="${HOME}/obj_frontier" ; ;;
+    login[0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_${LMOD_SYSTEM_NAME}" ; MY_LIB_DIR="${HOME}/lib_${LMOD_SYSTEM_NAME}" ; MY_OBJ_DIR="${HOME}/obj_${LMOD_SYSTEM_NAME}" ; ;; # 20230831 Frontier and Perlmutter login nodes share this name :(
     mira* ) export MY_BIN_DIR="${HOME}/bin_mira" ; MY_LIB_DIR="${HOME}/lib_mira" ; MY_OBJ_DIR="${HOME}/obj_mira" ; ;;
-    perlmutter* | login[0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_perlmutter" ; MY_LIB_DIR="${HOME}/lib_perlmutter" ; MY_OBJ_DIR="${HOME}/obj_perlmutter" ; ;;
+    perlmutter* ) export MY_BIN_DIR="${HOME}/bin_perlmutter" ; MY_LIB_DIR="${HOME}/lib_perlmutter" ; MY_OBJ_DIR="${HOME}/obj_perlmutter" ; ;;
     theta* ) export MY_BIN_DIR="${HOME}/bin_theta" ; MY_LIB_DIR="${HOME}/lib_theta" ; MY_OBJ_DIR="${HOME}/obj_theta" ; ;;
 esac # !${HOST}
 
@@ -434,8 +435,9 @@ case "${PVM_ARCH}" in
 	    cooley* | cc* ) export DATA="${HOME}/data" ; ;; # ANL ALCF 
 	    e3sm* ) export DATA="${HOME}/data" ; ;; # UCI
 	    frontier* ) export DATA="/lustre/orion/cli115/world-shared/${USER}" ; ;; # OLCF
+	    login[0123456789][0123456789] ) export DATA="${HOME}/data" ; ;; # 20230831 Frontier and Perlmutter login nodes share this name :(
 	    imua* ) export DATA="${HOME}/data" ; ;; # UCI
-	    perlmutter* | login[0123456789][0123456789] | nid* ) export DATA="${HOME}/data" ; ;; # NERSC
+	    perlmutter* | nid* ) export DATA="${HOME}/data" ; ;; # NERSC
 	    gplogin* ) export DATA="/data/${USER}" ; ;; # UCI PS Rocks Cluster
 	    hpc* ) export DATA="/data/users/${USER}" ; ;; # UCI HPC
 	    login-* ) export DATA="${HOME}/data" ; ;; # UCI RCIC HPC3
@@ -895,8 +897,14 @@ fi # hostname
 case "${HOST}" in
     andes* | frontier* ) export PROJID='cli115' ; ;; # OLCF
     cooley* | cc* | mira* | theta* ) export PROJID='ClimateEnergy_4' ; export DATA="/projects/${PROJID}/${USER}" ; ;;
-    perlmutter* | login[0123456789][0123456789] | nid[0123456789][0123456789][0123456789][0123456789][0123456789][0123456789] ) export PROJID='e3sm' ; export DATA="${HOME}/data" ; export PATH="${PATH}:/opt/cray/pe/netcdf/4.8.1.1/gnu/9.1/bin" ; export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/opt/cray/pe/netcdf/4.8.1.1/gnu/9.1/lib:/global/common/software/spackecp/perlmutter/e4s-21.11/software/cray-sles15-zen3/gcc-11.2.0/gsl-2.7-2p3pcjckzogek2dubph7q4yd5msjuhxt/lib" ; ;; # 20220518 needed for ncgen
+    perlmutter* | nid[0123456789][0123456789][0123456789][0123456789][0123456789][0123456789] ) export PROJID='e3sm' ; export PATH="${PATH}:/opt/cray/pe/netcdf/4.8.1.1/gnu/9.1/bin" ; export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/opt/cray/pe/netcdf/4.8.1.1/gnu/9.1/lib:/global/common/software/spackecp/perlmutter/e4s-21.11/software/cray-sles15-zen3/gcc-11.2.0/gsl-2.7-2p3pcjckzogek2dubph7q4yd5msjuhxt/lib" ; ;; # 20220518 needed for ncgen
 esac # endcase ${HOST}
+# 20230831 Frontier and Perlmutter login nodes share this name :(
+if [ "${LMOD_SYSTEM_NAME}" = 'perlmutter' ]; then
+    export PROJID='e3sm'
+    export PATH="${PATH}:/opt/cray/pe/netcdf/4.8.1.1/gnu/9.1/bin"
+    export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/opt/cray/pe/netcdf/4.8.1.1/gnu/9.1/lib:/global/common/software/spackecp/perlmutter/e4s-21.11/software/cray-sles15-zen3/gcc-11.2.0/gsl-2.7-2p3pcjckzogek2dubph7q4yd5msjuhxt/lib" # 20220518 needed for ncgen
+fi # !login
 
 # Export the big three
 export LD_LIBRARY_PATH
