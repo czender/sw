@@ -435,8 +435,14 @@ case "${PVM_ARCH}" in
 	    cooley* | cc* ) export DATA="${HOME}/data" ; ;; # ANL ALCF 
 	    e3sm* ) export DATA="${HOME}/data" ; ;; # UCI
 	    frontier* ) export DATA="/lustre/orion/cli115/world-shared/${USER}" ; ;; # OLCF
-	    login[0123456789][0123456789] ) export DATA="${HOME}/data" ; ;; # 20230831 Frontier and Perlmutter login nodes share this name :(
 	    imua* ) export DATA="${HOME}/data" ; ;; # UCI
+	    login[0123456789][0123456789] ) # 20230831 Frontier and Perlmutter login nodes share this name :(
+		if [ "${LMOD_SYSTEM_NAME}" = 'frontier' ]; then
+		    DATA="/lustre/orion/cli115/world-shared/${USER}"
+		elif [ "${LMOD_SYSTEM_NAME}" = 'perlmutter' ]; then
+		    DATA="${HOME}/data"
+		fi # !LMOD_SYSTEM_NAME
+		;; # !login	
 	    perlmutter* | nid* ) export DATA="${HOME}/data" ; ;; # NERSC
 	    gplogin* ) export DATA="/data/${USER}" ; ;; # UCI PS Rocks Cluster
 	    hpc* ) export DATA="/data/users/${USER}" ; ;; # UCI HPC
@@ -444,8 +450,8 @@ case "${PVM_ARCH}" in
 	    mira* | theta* ) export DATA="/projects/ClimateEnergy_3/${USER}" ; ;; # ANL ALCF
 	    * ) export DATA="${HOME}/data" ; ;; # default
 	esac # endcase ${HOST}
-# ROCKS_ROLLS_ROOT is where Rocks clusters put rolls
-# 20210420 HPCs that use modules should have no PKG_ROOT defined because there is no single location for all packages
+	# ROCKS_ROLLS_ROOT is where Rocks clusters put rolls
+	# 20210420 HPCs that use modules should have no PKG_ROOT defined because there is no single location for all packages
 	case "${HOST}" in 
 	    gplogin* | hpc* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # UCI PS Rocks Cluster
 	esac # endcase ${HOST}
@@ -1092,18 +1098,18 @@ fi # endif
 #alias ncbrowse='java ncBrowse.Browser' # netCDF file browser
 alias bc='bc -l' # -l = defines standard math library and sets scale to 20
 alias beepoff='xset b off' # Turn beep sound off for quiet work envionments
-alias cheyenne='ssh -Y cheyenne.ucar.edu' # Token-response of NCAR CIT pw_psw sends Duo request
-alias derecho='ssh -Y derecho.ucar.edu' # Token-response of NCAR CIT pw_psw sends Duo request
-alias mira='ssh -Y mira.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
-alias compy='ssh -Y compy.pnl.gov' # pyn_hgh + 6-digit fob code
-alias andes='ssh -Y andes.olcf.ornl.gov' # pyn_mdm + 6-digit fob code
 alias acme1='ssh -Y zender1@acme1.llnl.gov' # pw_hgh source /usr/local/uvcdat/latest/bin/setup_runtime.sh
+alias andes='ssh -Y andes.olcf.ornl.gov' # pyn_mdm + 6-digit fob code
 alias bebop='ssh -Y bebop.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
-alias bm='cd ~/nco/bm;nco_bm.pl --regress ncks;cd -'
 alias blues='ssh -Y ac.zender@blues.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
+alias bm='cd ~/nco/bm;nco_bm.pl --regress ncks;cd -'
+alias cheyenne='ssh -Y cheyenne.ucar.edu' # Token-response of NCAR CIT pw_psw sends Duo request
 alias chrysalis='ssh -Y ac.zender@chrysalis.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
+alias compy='ssh -Y compy.pnl.gov' # pyn_hgh + 6-digit fob code
 alias cooley='ssh -Y cooley.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
+alias derecho='ssh -Y derecho.ucar.edu' # Token-response of NCAR CIT pw_psw sends Duo request
 alias frontier='ssh -Y frontier.olcf.ornl.gov' # pyn_mdm + 6-digit fob code
+alias mira='ssh -Y mira.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
 alias perlmutter='ssh -Y perlmutter-p1.nersc.gov' # pw_psw (EMN=PeRLmutter)
 alias theta='ssh -Y theta.alcf.anl.gov' # 3886 + 8-digit fob code (case-sensitive!)
 alias bsrc="source ${HOME}/.bashrc"
