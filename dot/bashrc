@@ -264,7 +264,6 @@ case "${HOST}" in
     cg-gpu* ) export PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # NCSA roger cluster
     gplogin* ) export PKG_ROOT='/sopt' ; ;; # UCI PS Rocks Cluster
     hpc* ) export PKG_ROOT='/software' ; ;; # Torque machines
-    * ) export PKG_ROOT='/usr/local' ; ;; # default
 esac # endcase ${HOST}
 
 case "${HOST}" in 
