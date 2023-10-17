@@ -1074,6 +1074,11 @@ program clm
            call ftn_arg_get(arg_idx,arg_val,dbg_lvl) ! [enm] Debugging level
         else if (opt_sng == 'aer' .or. opt_sng == 'txt_has_aer' ) then
            flg_aer=.true.
+        else if (opt_sng == 'afgl' .or. opt_sng == 'AFGL') then
+           AFGL_TXT_INPUT=.true.
+           RFM_TXT_INPUT=.true.
+           CLM_NC_INPUT=.false.
+           CLM_TXT_INPUT=.false.
         else if (opt_sng == 'bga' .or. opt_sng == 'txt_has_bga' ) then
            flg_bga=.true.
         else if (opt_sng == 'drc_in') then
@@ -1100,6 +1105,11 @@ program clm
            call ftn_arg_get(arg_idx,arg_val,odxc_obs_bga_cmd_ln)
         else if (opt_sng == 'prs_top') then ! [Pa] Pressure at top of "atmosphere"
            call ftn_arg_get(arg_idx,arg_val,prs_top) 
+        else if (opt_sng == 'rfm' .or. opt_sng == 'RFM') then
+           RFM_TXT_INPUT=.true.
+           CLM_NC_INPUT=.false.
+           AFGL_TXT_INPUT=.false.
+           CLM_TXT_INPUT=.false.
         else if (opt_sng == 'snw') then ! [flg] Multi-layer snow model
            flg_snw=.true.
         else if (opt_sng == 'wbl_c') then
