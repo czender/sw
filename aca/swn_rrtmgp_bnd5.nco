@@ -1,0 +1,31 @@
+// $Header$ -*-C++-*-
+
+/* Purpose: Evaluate SWNB2 hyperspectral simulations of RRTMGP band 5
+
+   Usage: 
+   ncap2 -O --fl_spt ~/sw/aca/swn_rrtmgp_bnd5.nco ${drc_out}/swn_${prf}_clr.nc ${drc_out}/swn_${prf}_bnd5_clr.nc
+   ncks ${drc_out}/swn_${prf}_bnd5_clr.nc
+
+   RRTMGP (reversed, 1-based) band 5 spans 0.6250--0.7782 um
+   SWNB2 output reversed to increase monotonically with wavelength key indices (0-based):
+   1296 = 0.62520 um # Bluest SWNB2 band fully in RRTMGP (1-based) band 5
+   1466 = 0.69954 um # Bluest SWNB2 band fully in EAM VIS
+   1467 = 0.70003 um # Reddest SWNB2 band fully in EAM NIR
+   1610 = 0.77791 um # Reddest SWNB2 band fully in RRTMGP (1-based) band 5 */
+
+// Declare hyperspectral indices
+idx_vsb_min=1296;
+idx_vsb_max=1466;
+idx_nir_min=1467;
+idx_nir_max=1610;
+
+/* Fractions of solar downwelling flux in Band 5 total, VIS, and NIR components
+   (Evaluate all quantities at surface and drop _sfc affix for conciseness) */
+flx_frc_dwn=flx_frc_dwn_sfc(idx_vsb_min:idx_nir_max).total();
+flx_frc_dwn_vsb=flx_frc_dwn_sfc(idx_vsb_min:idx_vsb_max).total();
+flx_frc_dwn_nir=flx_frc_dwn_sfc(idx_nir_min:idx_nir_max).total();
+
+// Absolute solar downwelling fluxes in Band 5 total, VIS, and NIR components
+flx_dwn_sfc=(flx_spc_dwn_sfc(idx_vsb_min:idx_nir_max)*wvl_dlt(idx_vsb_min:idx_nir_max)).total();
+flx_dwn_sfc_vsb=(flx_spc_dwn_sfc(idx_vsb_min:idx_vsb_max)*wvl_dlt(idx_vsb_min:idx_vsb_max)).total();
+flx_dwn_sfc_nir=(flx_spc_dwn_sfc(idx_nir_min:idx_nir_max)*wvl_dlt(idx_nir_min:idx_nir_max)).total();

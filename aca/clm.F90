@@ -1065,7 +1065,7 @@ program clm
   arg_idx=1                 ! [idx] Counting index
   loop_while_options: do while (arg_idx <= arg_nbr)
      call ftn_getarg_wrp(arg_idx,arg_val) ! [sbr] Call getarg, increment arg_idx
-     dsh_key=arg_val(1:2)   ! [sng] First two characters of option
+     dsh_key=arg_val(1:2) ! [sng] First two characters of option
      if_dbl_dsh: if (dsh_key == '--') then
         opt_lng=ftn_opt_lng_get(arg_val) ! [nbr] Length of option
         if (opt_lng <= 0) stop 'Long option has no name'

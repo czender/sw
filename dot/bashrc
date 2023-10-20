@@ -1144,7 +1144,7 @@ alias imua='ssh -Y imua.ess.uci.edu'
 alias katabatic='ssh -Y katabatic.ess.uci.edu'
 alias mactex='eval "$(/usr/libexec/path_helper)"' # MacOS Homebrew
 alias macbison='eval "PATH=${PKG_ROOT}/opt/bison/bin:${PKG_ROOT}/opt/flex/bin:${PATH}"' # MacOS Homebrew
-alias mactexinfo='eval "PATH=${PKG_ROOT}/Cellar/texinfo/6.8/bin:${PATH}"' # MacOS Homebrew
+alias mactexinfo='eval "PATH=${PKG_ROOT}/Cellar/texinfo/7.1/bin:${PATH}"' # MacOS Homebrew
 alias macncl='eval "PATH=${PKG_ROOT}/ncl-6.6.2/bin:${PATH}";eval "export DYLD_FALLBACK_LIBRARY_PATH=$(dirname $(gfortran --print-file-name libgfortran.4.dylib)):${DYLD_FALLBACK_LIBRARY_PATH}"' # Unfortunately, this has never worked for me on MacOS because of Fortran library issues, so use Anaconda ESMF/ERWG instead
 alias mactr='eval "PATH=${DATA}/tmp/tempestremap:${PATH}"' # Built-from-source (so as not to precede Anaconda)
 alias audio='sudo killall coreaudiod' # kill Chrome, audio, restart Zoom, manually test audio and reset audio daemon, then re-start Chrome' # MacOS 11
