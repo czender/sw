@@ -51,28 +51,20 @@ for prf in mls mlw sas saw std tro; do
 	    exit 1
 	fi # !err
 	
-	# Currently borken, not sure why
-	if false; then
-	    # Analyze SWNB2 simulation
-	    #cmd_anl="ncap2 -O -v --fl_spt ${HOME}/sw/aca/swn_rrtmgp_bnd5.nco ${drc_out}/swn_${prf}_${sky}.nc ${drc_out}/swn_${prf}_bnd5_${sky}.nc >> ${drc_out}/swn_${prf}_${sky}.txt 2>&1"
-	    cmd_anl="ncap2 -O -v --fl_spt=${HOME}/sw/aca/swn_rrtmgp_bnd5.nco ${drc_out}/swn_${prf}_${sky}.nc ${drc_out}/swn_${prf}_bnd5_${sky}.nc"
+	# Analyze SWNB2 simulation
+	# Currently borken on MacOS not Linux, not sure why
+	cmd_anl="ncap2 -O -v --fl_spt ${HOME}/sw/aca/swn_rrtmgp_bnd5.nco ${drc_out}/swn_${prf}_${sky}.nc ${drc_out}/swn_${prf}_bnd5_${sky}.nc >> ${drc_out}/swn_${prf}_${sky}.txt 2>&1"
+	if [ "${PVM_ARCH}" != 'MACOS' ]; then
 	    eval ${cmd_anl}
-	    # Allow antlr_ret=133 for NCO < 5.1.9
-	    rcd=$?
-	    if [ "${rcd}" -ne 0 ] && [ "${rcd}" -ne 133 ] ; then
+	    if [ "$?" -ne 0 ]; then
 		printf "${spt_nm}: ERROR Failed to analyze SWNB2 simulation. Debug this:\n${cmd_anl}\n"
 		exit 1
 	    fi # !err
-	fi # !false
-	# ...instead, mouse this into terminal to process all data
-	if false; then
-	    for prf in mls mlw sas saw std tro; do
-		for sky in clr cld; do
-		    ncap2 -O -v --fl_spt=${HOME}/sw/aca/swn_rrtmgp_bnd5.nco ${drc_out}/swn_${prf}_${sky}.nc ${drc_out}/swn_${prf}_bnd5_${sky}.nc
-		    ncks -v flx_frc_d.._vsb ${drc_out}/swn_${prf}_bnd5_${sky}.nc
-		done # !sky
-	    done # !prf
-	fi # !false
+	else
+	    # ...instead, on MacOS, mouse this into terminal to process all data
+	    printf "${spt_nm}: WARNING MacOS requires manual analysis...mouse this into terminal window at end:\n"
+	    printf "for prf in mls mlw sas saw std tro; do\n\tfor sky in clr cld; do\n\t\t${cmd_anl}\n\t\tncks -v flx_frc_d.._vsb ${drc_out}/swn_${prf}_bnd5_${sky}.nc\n\tdone\ndone\n"
+	fi # !PVM_ARCH
 	
     done # !sky
 
