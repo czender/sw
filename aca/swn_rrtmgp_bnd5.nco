@@ -3,8 +3,12 @@
 /* Purpose: Evaluate SWNB2 hyperspectral simulations of RRTMGP band 5
 
    Usage: 
-   ncap2 -O --fl_spt ~/sw/aca/swn_rrtmgp_bnd5.nco ${drc_out}/swn_${prf}_clr.nc ${drc_out}/swn_${prf}_bnd5_clr.nc
-   ncks ${drc_out}/swn_${prf}_bnd5_clr.nc
+   drc_in=${DATA_RT}
+   drc_out=${DATA}/rrtmgp/swnb2
+   prf=tro
+   ncap2 -v -O --fl_spt ~/sw/aca/swn_rrtmgp_bnd5.nco ${drc_out}/swn_${prf}_clr.nc ${drc_out}/swn_${prf}_bnd5_clr.nc
+   ncks -C -v flx.? ${drc_out}/swn_${prf}_bnd5_clr.nc | m
+   ncks -v flx_frc_d.._vsb ${drc_out}/swn_${prf}_bnd5_clr.nc
 
    RRTMGP (reversed, 1-based) band 5 spans 0.6250--0.7782 um
    SWNB2 output reversed to increase monotonically with wavelength key indices (0-based):
@@ -19,13 +23,58 @@ idx_vsb_max=1466;
 idx_nir_min=1467;
 idx_nir_max=1610;
 
-/* Fractions of solar downwelling flux in Band 5 total, VIS, and NIR components
-   (Evaluate all quantities at surface and drop _sfc affix for conciseness) */
-flx_frc_dwn=flx_frc_dwn_sfc(idx_vsb_min:idx_nir_max).total();
-flx_frc_dwn_vsb=flx_frc_dwn_sfc(idx_vsb_min:idx_vsb_max).total();
-flx_frc_dwn_nir=flx_frc_dwn_sfc(idx_nir_min:idx_nir_max).total();
+/* Absolute fractions of solar downwelling flux in RRTMGP Band 5 total, VIS, and NIR components
+   (Evaluate all downwelling quantities at surface and drop _dwn and _sfc affixes for conciseness) */
+flx_frc_abs=flx_frc_dwn_sfc(idx_vsb_min:idx_nir_max).total();
+flx_frc_abs_vsb=flx_frc_dwn_sfc(idx_vsb_min:idx_vsb_max).total();
+flx_frc_abs_nir=flx_frc_dwn_sfc(idx_nir_min:idx_nir_max).total();
+flx_frc_abs@long_name="Absolute fraction of solar downwelling flux in RRTMGP Band 5";
+flx_frc_abs_vsb@long_name="Absolute fraction of solar downwelling flux in RRTMGP Band 5 VIS component";
+flx_frc_abs_nir@long_name="Absolute fraction of solar downwelling flux in RRTMGP Band 5 NIR component";
 
-// Absolute solar downwelling fluxes in Band 5 total, VIS, and NIR components
-flx_dwn_sfc=(flx_spc_dwn_sfc(idx_vsb_min:idx_nir_max)*wvl_dlt(idx_vsb_min:idx_nir_max)).total();
-flx_dwn_sfc_vsb=(flx_spc_dwn_sfc(idx_vsb_min:idx_vsb_max)*wvl_dlt(idx_vsb_min:idx_vsb_max)).total();
-flx_dwn_sfc_nir=(flx_spc_dwn_sfc(idx_nir_min:idx_nir_max)*wvl_dlt(idx_nir_min:idx_nir_max)).total();
+// Absolute solar downwelling fluxes in RRTMGP Band 5 total, VIS, and NIR components
+flx=(flx_spc_dwn_sfc(idx_vsb_min:idx_nir_max)*wvl_dlt(idx_vsb_min:idx_nir_max)).total();
+flx_vsb=(flx_spc_dwn_sfc(idx_vsb_min:idx_vsb_max)*wvl_dlt(idx_vsb_min:idx_vsb_max)).total();
+flx_nir=(flx_spc_dwn_sfc(idx_nir_min:idx_nir_max)*wvl_dlt(idx_nir_min:idx_nir_max)).total();
+flx@units=flx_vsb@units=flx_nir@units="watt meter-2";
+flx@long_name="Absolute solar downwelling flux in RRTMGP Band 5";
+flx_vsb@long_name="Absolute solar downwelling flux in RRTMGP Band 5 VIS component";
+flx_nir@long_name="Absolute solar downwelling flux in RRTMGP Band 5 NIR component";
+
+// Absolute solar direct downwelling fluxes in RRTMGP Band 5 total, VIS, and NIR components
+flx_drc=(flx_spc_dwn_drc_sfc(idx_vsb_min:idx_nir_max)*wvl_dlt(idx_vsb_min:idx_nir_max)).total();
+flx_drc_vsb=(flx_spc_dwn_drc_sfc(idx_vsb_min:idx_vsb_max)*wvl_dlt(idx_vsb_min:idx_vsb_max)).total();
+flx_drc_nir=(flx_spc_dwn_drc_sfc(idx_nir_min:idx_nir_max)*wvl_dlt(idx_nir_min:idx_nir_max)).total();
+flx_drc@units=flx_drc_vsb@units=flx_drc_nir@units="watt meter-2";
+flx_drc@long_name="Absolute solar direct downwelling flux in RRTMGP Band 5";
+flx_drc_vsb@long_name="Absolute solar direct downwelling flux in RRTMGP Band 5 VIS component";
+flx_drc_nir@long_name="Absolute solar direct downwelling flux in RRTMGP Band 5 NIR component";
+
+// Absolute solar diffuse downwelling fluxes in RRTMGP Band 5 total, VIS, and NIR components
+flx_dff=(flx_spc_dwn_dff_sfc(idx_vsb_min:idx_nir_max)*wvl_dlt(idx_vsb_min:idx_nir_max)).total();
+flx_dff_vsb=(flx_spc_dwn_dff_sfc(idx_vsb_min:idx_vsb_max)*wvl_dlt(idx_vsb_min:idx_vsb_max)).total();
+flx_dff_nir=(flx_spc_dwn_dff_sfc(idx_nir_min:idx_nir_max)*wvl_dlt(idx_nir_min:idx_nir_max)).total();
+flx_dff@units=flx_dff_vsb@units=flx_dff_nir@units="watt meter-2";
+flx_dff_vsb@long_name="Absolute solar diffuse downwelling flux in RRTMGP Band 5 VIS component";
+flx_dff_nir@long_name="Absolute solar diffuse downwelling flux in RRTMGP Band 5 NIR component";
+
+// Relative fractions of solar downwelling flux in RRTMGP Band 5 VIS, and NIR components
+flx_frc_vsb=flx_frc_abs_vsb/flx_frc_abs;
+flx_frc_nir=flx_frc_abs_nir/flx_frc_abs;
+flx_frc_vsb@units=flx_frc_nir@units="fraction";
+flx_frc_vsb@long_name="Relative fraction of solar downwelling flux in RRTMGP Band 5 VIS component";
+flx_frc_nir@long_name="Relative fraction of solar downwelling flux in RRTMGP Band 5 NIR component";
+
+// Relative fractions of solar direct downwelling flux in RRTMGP Band 5 VIS, and NIR components
+flx_frc_drc_vsb=flx_drc_vsb/flx_drc;
+flx_frc_drc_nir=flx_drc_nir/flx_drc;
+flx_frc_drc_vsb@units=flx_frc_drc_nir@units="fraction";
+flx_frc_drc_vsb@long_name="Relative fraction of solar direct downwelling flux in RRTMGP Band 5 VIS component";
+flx_frc_drc_nir@long_name="Relative fraction of solar direct downwelling flux in RRTMGP Band 5 NIR component";
+
+// Relative fractions of solar diffuse downwelling flux in RRTMGP Band 5 VIS, and NIR components
+flx_frc_dff_vsb=flx_dff_vsb/flx_dff;
+flx_frc_dff_nir=flx_dff_nir/flx_dff;
+flx_frc_dff_vsb@units=flx_frc_dff_nir@units="fraction";
+flx_frc_dff_vsb@long_name="Relative fraction of solar diffuse downwelling flux in RRTMGP Band 5 VIS component";
+flx_frc_dff_nir@long_name="Relative fraction of solar diffuse downwelling flux in RRTMGP Band 5 NIR component";
