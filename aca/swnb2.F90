@@ -6616,17 +6616,17 @@ program swnb2
      if (flg_rfl) then
         ! Apply spectral reflectance from boundary condition file
         albedo=rfl_spc_sfc(bnd_idx)
-        if(albedo<0.0.or.albedo>1.0) stop "rfl_spc_sfc out of bounds"
+        if(albedo < 0.0 .or. albedo > 1.0) stop "rfl_spc_sfc out of bounds"
      else ! flg_rfl
         ! Determine spectral reflectance from broadband parameters
-        if (wvl_ctr(bnd_idx)<0.7e-6) then
-           if (slr_zen_ngl_cos>0.5) then
+        if (wvl_ctr(bnd_idx) < 0.7e-6) then
+           if (slr_zen_ngl_cos > 0.5) then
               albedo=alb_sfc_vsb_drc
            else
               albedo=alb_sfc_vsb_dff
            endif
         else
-           if (slr_zen_ngl_cos>0.5) then
+           if (slr_zen_ngl_cos > 0.5) then
               albedo=alb_sfc_NIR_drc
            else
               albedo=alb_sfc_NIR_dff
