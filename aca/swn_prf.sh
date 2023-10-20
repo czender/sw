@@ -17,11 +17,12 @@ for prf in tro; do
     mkdir -p ${drc_out}
 
     # Select surface reflectance appropriate for profile
-    if [ ${prf} = 'tro' ]; then
-       rfl_sfc=rfl_spc_sfc_snc_100um_csza0.5.nc
-    else
-       rfl_sfc=rfl_spc_sfc_ocn_chl0.0_csza0.5.nc
-    fi # !prf
+    case ${prf} in
+	tro* ) rfl_sfc=rfl_spc_sfc_ocn_chl0.3mgxm3_csza0.5.nc ; ;;
+	mlw* | sas* | saw* ) rfl_sfc=rfl_spc_sfc_snc_100um_csza0.5.nc ; ;;
+	mls* | std* ) rfl_sfc=rfl_spc_sfc_snc_100um_csza0.5.nc ; ;;
+	* ) printf "${spt_nm}: ERROR profile = prf = ${prf} has no associated surface reflectance file\n" ; ;;
+    esac # !prf
 
     # Simulate atmosphere
     cmd_swn="swnb2 --drc_in=${drc_in} --lqd=aer_h2o_lqd_rds_swa_10.nc --prf=${prf}_icrccm_50lvl.nc --rfl=${rfl_sfc} --out=${drc_out}/swn_${prf}_clr.nc > ${drc_out}/swnb2_${prf}_clr.txt 2>&1"
