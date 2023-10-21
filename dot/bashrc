@@ -1129,7 +1129,7 @@ alias diff='diff -c -w' # -c = print 3 lines around diff, -w = ignore whitespace
 alias dir='ls -laF | more'
 alias du='du -k' # -k = units are kB rather than 512 B
 alias dust='ssh -Y dust.ess.uci.edu'
-alias egrep='egrep -i' # -i = case insensitive
+alias egrep='grep -E -i' # -i = case insensitive
 alias en='export LANG=en_GB.utf8;export LANGUAGE=en_GB:en:fr_FR:fr;export LC_ALL=en_GB.utf8'
 alias es='export LANG=es'
 alias fr='export LANG=fr_FR.utf8;export LANGUAGE=fr_FR:fr:en_GB:en;export LC_ALL=fr_FR.utf8'
@@ -1151,7 +1151,7 @@ alias audio='sudo killall coreaudiod' # kill Chrome, audio, restart Zoom, manual
 alias rigb='ssh -Y rigb.ess.uci.edu'
 alias greenplanet='ssh -Y gplogin2.ps.uci.edu'
 alias grele='ssh -Y grele.ess.uci.edu'
-alias grep='egrep -i' # -i = case insensitive
+alias grep='grep -E -i' # -i = case insensitive
 alias gv='gv -watch' # --watch = Check file periodically
 alias h='history'
 alias hdfview='env LD_LIBRARY_PATH=/usr/lib hdfview'
@@ -1206,7 +1206,7 @@ function fl_sz_drc { du -sbhL ${1} ; } # fl_sz_drc ${DATA}/maps
 # Total size of all files in list:
 function fl_sz_lst { du -ch ${1} | tail -1 | cut -f 1 ; } # fl_sz_lst `ls *.nc`
 function bin_obj_rm { rm "${HOME}/bin/${1} ${HOME}/obj/${1}.o ${HOME}/obj/${1}.d" ; }
-function dotgrep { 'egrep ${1} .[a-zA-Z]*' ; }
+function dotgrep { 'grep ${1} .[a-zA-Z]*' ; }
 function difffunc { diff -c -w ${1} ${2} | more ; } # -c = print 3 lines around diff, -w = ignore whitespace diffs
 function fl_rm { 'set tmp = `find . -name ${1} -print`;rm ${tmp}' ; }
 function m { ${PAGER} ${*} ; } # 
