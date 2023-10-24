@@ -18,8 +18,8 @@ spt_src="${BASH_SOURCE[0]}"
 spt_nm=$(basename ${spt_src}) # [sng] Script name (unlike $0, ${BASH_SOURCE[0]} works well with 'source <script>')
 
 # Main loop over profiles
-for prf in mls mlw sas saw std tro; do
-#for prf in tro; do
+#for prf in mls mlw sas saw std tro; do
+for prf in std; do
 
     # Loop over clear/cloudy columns
     for sky in clr cld; do
@@ -42,7 +42,7 @@ for prf in mls mlw sas saw std tro; do
 	esac # !sky
 	
 	# Simulate atmospheric RT
-	if false; then
+	if true; then
 	    cmd_swn="swnb2 --drc_in=${drc_in} --lqd=aer_h2o_lqd_rds_swa_10.nc --prf=${prf}_icrccm_50${sky}.nc --mpc_CWP=${mpc_CWP} ${rfl_sfc} --out=${drc_out}/swn_${prf}_${sky}.nc"
 	    echo ${cmd_swn}
 	    eval ${cmd_swn}
@@ -53,7 +53,7 @@ for prf in mls mlw sas saw std tro; do
 	fi # !false
 	
 	# Reverse spectral dimension so it increases (rather than decreases) with wavelength
-	if false; then
+	if true; then
 	    cmd_pdq="ncpdq -O --rdr=-bnd ${drc_out}/swn_${prf}_${sky}.nc ${drc_out}/swn_${prf}_${sky}.nc"
 	    echo ${cmd_pdq}
 	    eval ${cmd_pdq}
@@ -64,7 +64,7 @@ for prf in mls mlw sas saw std tro; do
 	fi # !false
 	
 	# Hyperslab file to retain only RRTMGP Band 5 wavelengths, and select scalars
-	if false; then
+	if true; then
 	    cmd_hyp="ncks -O -d bnd,${idx_vsb_min},${idx_nir_max} -v flx_spc_.?,wvl_.?,wvn_.? ${drc_out}/swn_${prf}_${sky}.nc ${drc_out}/swn_${prf}_${sky}_bnd5.nc"
 	    echo ${cmd_hyp}
 	    eval ${cmd_hyp}
