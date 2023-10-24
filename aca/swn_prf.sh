@@ -41,6 +41,8 @@ for prf in mls mlw sas saw std tro; do
 	    * ) printf "${spt_nm}: ERROR sky = ${sky} has no associated cloud thickness\n" ; ;;
 	esac # !sky
 	
+	printf "\n${spt_nm}: Simulating/analysing atmosphere with profile = ${prf}, sky = ${sky}\n"
+
 	# Simulate atmospheric RT
 	if true; then
 	    cmd_swn="swnb2 --drc_in=${drc_in} --lqd=aer_h2o_lqd_rds_swa_10.nc --prf=${prf}_icrccm_50${sky}.nc --mpc_CWP=${mpc_CWP} ${rfl_sfc} --out=${drc_out}/swn_${prf}_${sky}.nc > ${drc_out}/swn_${prf}_${sky}.txt 2>&1"

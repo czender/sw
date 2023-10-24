@@ -8352,11 +8352,11 @@ program swnb2
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_id,'long_name','Spectral downwelling flux'), &
           sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_dff_sfc_id,'long_name','Spectral insolation at surface'), &
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_dff_sfc_id,'long_name','Spectral diffuse surface insolation'), &
           sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_drc_sfc_id,'long_name','Spectral insolation at surface'), &
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_drc_sfc_id,'long_name','Spectral direct surface insolation'), &
           sbr_nm//': pa long_name in '//__FILE__)
-     rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_sfc_id,'long_name','Spectral insolation at surface'), &
+     rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_dwn_sfc_id,'long_name','Spectral surface insolation'), &
           sbr_nm//': pa long_name in '//__FILE__)
      rcd=nf90_wrp(nf90_put_att(nc_id,flx_spc_pht_dwn_sfc_id,'long_name','Spectral photon flux downwelling at surface'), &
           sbr_nm//': pa long_name in '//__FILE__)
