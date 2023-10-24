@@ -451,7 +451,7 @@ contains
 #else /* not BXM */
 
   subroutine phys_drv
-    stop 'phys_drv() ERROR: This routine should not be called'
+    error stop 'phys_drv() ERROR: This routine should not be called'
   end subroutine phys_drv
   
 #endif /* BXM */

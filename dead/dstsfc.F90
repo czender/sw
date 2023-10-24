@@ -99,7 +99,7 @@ contains
     
     if (lon_nbr_in < lon_nbr) then
        write (6,'(a)') 'dead: ERROR dst_sfc_set() reports lon_nbr_in < lon_nbr'
-       stop
+       error stop
     endif                     ! endif err
     
     ! Initialize public variables declared in dstsfc module
@@ -156,7 +156,7 @@ contains
     ! Main Code
     if (lon_nbr_in < lon_nbr) then
        write (6,'(a)') 'dead: ERROR flx_rad_sfc_set() reports lon_nbr_in < lon_nbr'
-       stop
+       error stop
     endif                     ! endif err
     do lon_idx=1,lon_nbr
        flx_LW_dwn_sfc(lon_idx,lat_idx)=flx_LW_dwn_sfc_in(lon_idx)
@@ -187,7 +187,7 @@ contains
     ! Main code
     if (lon_nbr_out > lon_nbr) then
        write (6,'(a)') 'dead: ERROR flx_rad_sfc_get() reports lon_nbr_out > lon_nbr'
-       stop
+       error stop
     endif                     ! endif err
     do lon_idx=1,lon_nbr
        flx_LW_dwn_sfc_out(lon_idx)=flx_LW_dwn_sfc(lon_idx,lat_idx)
@@ -227,7 +227,7 @@ contains
     ! Main code
     if (lon_nbr_out > lon_nbr) then
        write (6,'(a)') 'dead: ERROR soi_txt_get() reports lon_nbr_out > lon_nbr'
-       stop
+       error stop
     endif                     ! endif err
     
     do lon_idx=1,lon_nbr
@@ -274,7 +274,7 @@ contains
     ! Main code
     if (lon_nbr_out > lon_nbr) then
        write (6,'(a)') 'dead: ERROR sfc_typ_get() reports lon_nbr_out > lon_nbr'
-       stop
+       error stop
     endif                     ! endif err
     do lon_idx=1,lon_nbr
        sfc_typ_out(lon_idx)=sfc_typ(lon_idx,lat_idx)
@@ -303,7 +303,7 @@ contains
     ! Main Code
     if (lon_nbr_in < lon_nbr) then
        write (6,'(a)') 'dead: ERROR tpt_gnd_soi_set() reports lon_nbr_in < lon_nbr'
-       stop
+       error stop
     endif                     ! endif err
     do lon_idx=1,lon_nbr
        tpt_gnd(lon_idx,lat_idx)=tpt_gnd_in(lon_idx)
@@ -334,7 +334,7 @@ contains
     ! Main code
     if (lon_nbr_out > lon_nbr) then
        write (6,'(a)') 'dead: ERROR tpt_gnd_soi_get() reports lon_nbr_out > lon_nbr'
-       stop
+       error stop
     endif                     ! endif err
     do lon_idx=1,lon_nbr
        tpt_gnd_out(lon_idx)=tpt_gnd(lon_idx,lat_idx)
@@ -362,7 +362,7 @@ contains
     ! Main Code
     if (lon_nbr_in < lon_nbr) then
        write (6,'(a)') 'dead: ERROR vwc_sfc_set() reports lon_nbr_in < lon_nbr'
-       stop
+       error stop
     endif                     ! endif err
     do lon_idx=1,lon_nbr
        vwc_sfc(lon_idx,lat_idx)=vwc_sfc_in(lon_idx) ! [m3 m-3]
@@ -390,7 +390,7 @@ contains
     ! Main code
     if (lon_nbr_out > lon_nbr) then
        write (6,'(a)') 'dead: ERROR vwc_sfc_get() reports lon_nbr_out > lon_nbr'
-       stop
+       error stop
     endif                     ! endif err
     do lon_idx=1,lon_nbr
        vwc_sfc_out(lon_idx)=vwc_sfc(lon_idx,lat_idx)

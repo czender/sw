@@ -50,7 +50,7 @@ contains
     icf_fct=1.0_r8+6.0e-07_r8/(dns_slt*grv_sfc*(dmt_slt_opt**2.5_r8)) ! [frc] IvW82 p. 115 (6) MaB95 p. 16417 (4) Interparticle cohesive forces
     dns_fct=dns_slt*grv_sfc*dmt_slt_opt ! IvW82 p. 115 (6) MaB95 p. 16417 (4)
     if (ryn_nbr_frc_thr_prx_opt < 0.03_r8) then
-       stop 'dead: wnd_frc_thr_slt_get() reports ryn_nbr_frc_thr_prx_opt < 0.03'
+       error stop 'dead: wnd_frc_thr_slt_get() reports ryn_nbr_frc_thr_prx_opt < 0.03'
     else if (ryn_nbr_frc_thr_prx_opt < 10.0_r8) then
        ryn_nbr_frc_thr_opt_fnc=-1.0_r8+1.928_r8*(ryn_nbr_frc_thr_prx_opt**0.0922_r8) ! [frc] IvW82 p. 114 (3), MaB95 p. 16417 (6)
        ryn_nbr_frc_thr_opt_fnc=0.1291_r8*0.1291_r8/ryn_nbr_frc_thr_opt_fnc ! [frc] 
@@ -190,7 +190,7 @@ contains
     ! Adjust threshold velocity for inhibition by roughness elements
     wnd_frc_fsh_frc= & ! [frc] MaB95 p. 16420, GMB98 p. 6207
          +1.0_r8-log(rgh_mmn_mbl/rgh_mmn_smt)/log(0.35_r8*((0.1_r8/rgh_mmn_smt)**0.8_r8))
-    if (wnd_frc_fsh_frc <= 0.0_r8.or.wnd_frc_fsh_frc > 1.0_r8) stop &
+    if (wnd_frc_fsh_frc <= 0.0_r8.or.wnd_frc_fsh_frc > 1.0_r8) error stop &
          'dead: ERROR frc_thr_ncr_drg_get() reports wnd_frc_fsh_frc out of range'
     wnd_frc_fsh_frc_rcp=1.0_r8/wnd_frc_fsh_frc ! [frc] 
     frc_thr_ncr_drg=wnd_frc_fsh_frc_rcp ! [frc]
@@ -306,9 +306,9 @@ contains
              endif ! endif size bin carries sand
 #ifdef DST_DBG
              ! Sanity check
-             if (mss_frc_CaCO3_sz_crr < 0.0_r8 .or. mss_frc_CaCO3_sz_crr > 1.0_r8) stop &
+             if (mss_frc_CaCO3_sz_crr < 0.0_r8 .or. mss_frc_CaCO3_sz_crr > 1.0_r8) error stop &
                   'dead: flx_mss_CaCO3_msk() mss_frc_CaCO3_sz_crr < 0.0.or.mss_frc_CaCO3_sz_crr > 1.0'
-             if (mss_frc_CaCO3(lon_idx) < 0.0_r8 .or. mss_frc_CaCO3(lon_idx) > 1.0_r8) stop &
+             if (mss_frc_CaCO3(lon_idx) < 0.0_r8 .or. mss_frc_CaCO3(lon_idx) > 1.0_r8) error stop &
                   'dead: flx_mss_CaCO3_msk() mss_frc_CaCO3 < 0.0.or.mss_frc_CaCO3 > 1.0'
 #endif /* not DST_DBG */
              
@@ -735,7 +735,7 @@ contains
     
     ! Main Code
     ! Sanity check
-    if (doy < 1.0_r8 .or. doy >= 367.0_r8) stop 'dead: ERROR doy < 1.0.or.doy >= 367.0 in vai_lsm_get()'      
+    if (doy < 1.0_r8 .or. doy >= 367.0_r8) error stop 'dead: ERROR doy < 1.0.or.doy >= 367.0 in vai_lsm_get()'      
     ! Initialize array
     vai_lsm(:)=0.0_r8 ! [m2 m-2]
     
@@ -917,7 +917,7 @@ contains
     
     ! Main Code
     ! Sanity check
-    if (doy < 1.0.or.doy >= 367.0_r8) stop 'dead: ERROR doy < 1.0.or.doy >= 367.0 in tm_2_idx_wgt()'                  
+    if (doy < 1.0.or.doy >= 367.0_r8) error stop 'dead: ERROR doy < 1.0.or.doy >= 367.0 in tm_2_idx_wgt()'                  
     
     ! Initialize output to bogus values
     idx_mth_glb=-2147483647 ! [idx] Interpolation month, future
@@ -933,8 +933,8 @@ contains
     end do ! end while
     dom=doy-real(fdom_doy(imoy))+1.0_r8 ! [day] Current day of month [1.0..32.0)
     ! Sanity check
-    if (imoy < 1.or.imoy > mpy) stop 'dead: ERROR imoy < 1.or.imoy > mpy in tm_2_idx_wgt()'
-    if (dom < 1.0_r8.or.dom > 32.0_r8) stop 'dead: ERROR dom < 1.0.or.dom > 32.0 in tm_2_idx_wgt()'
+    if (imoy < 1.or.imoy > mpy) error stop 'dead: ERROR imoy < 1.or.imoy > mpy in tm_2_idx_wgt()'
+    if (dom < 1.0_r8.or.dom > 32.0_r8) error stop 'dead: ERROR dom < 1.0.or.dom > 32.0 in tm_2_idx_wgt()'
     
     ! Compute iday_NH and iday_SH:
     ! iday_NH = day of current year since Jan 0 [1..365]
@@ -1026,8 +1026,8 @@ contains
     real(r8) wgt_lub ! [frc] Interpolation weight
     ! Main Code
     ! Sanity check
-    if (doy < 1.0_r8.or.doy >= 367.0_r8) stop 'dead: ERROR doy < 1.0.or.doy >= 367.0 in lnd_frc_mbl_get()'
-    if (vai_mbl_thr <= 0.0_r8) stop 'dead: ERROR vai_mbl_thr <= 0.0 in lnd_frc_mbl_get()'
+    if (doy < 1.0_r8.or.doy >= 367.0_r8) error stop 'dead: ERROR doy < 1.0.or.doy >= 367.0 in lnd_frc_mbl_get()'
+    if (vai_mbl_thr <= 0.0_r8) error stop 'dead: ERROR vai_mbl_thr <= 0.0 in lnd_frc_mbl_get()'
     ! Initialize outputs
     pi=4.0_DBLKIND*atan(1.0_DBLKIND) ! [frc] 3
     lat_dgr=180.0_r8*lat_rdn/real(pi,r8) ! [dgr] Latitude
@@ -1116,7 +1116,7 @@ contains
           write(6,'(a,i3,a,f15.8)') &
                'dead: lnd_frc_mbl_get(): lnd_frc_mbl(', &
                lon_idx,') = ',lnd_frc_mbl(lon_idx)
-          stop
+          error stop
        endif ! endif out of bounds error
        
        if (lnd_frc_mbl(lon_idx) > 0.0_r8) then

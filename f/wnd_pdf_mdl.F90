@@ -37,7 +37,7 @@ contains
     !Ubar=W(Ut=0,n=1)=c(gamma(1+1/k)) -> c=Ubar/(gamma(1+1/k))
     if (wnd_spd_avg == 0.0_r8) then
        write(6,*) "Wind speed is zero and will cause a divide by zero condition...exiting"
-       stop
+       error stop
     end if
     ! [frc] Weibull shape parameter
     wbl_shp_prm = wnd_spd_var*sqrt(wnd_spd_avg)

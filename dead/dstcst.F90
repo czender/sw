@@ -65,8 +65,8 @@ contains
     kappa_dry_air=gas_cst_dry_airx/spc_heat_dry_air ! (0.286 = 2/7) [frc] Constant in potential temperature (IrG81 p. 25, Tre922 p. 72) 
     
     ! Sanity checks
-    if (abs(0.28571_r8-kappa_dry_air)/0.28571_r8 > 1.0e-4_r8) stop 'dst_cst_cmn_ini(): kappa_dry_air error'
-    if (abs(0.60777_r8-eps_H2O_rcp_m1)/0.60777_r8 > 1.0e-4_r8) stop 'dst_cst_cmn_ini(): eps_H2O_rcp_m1 error'
+    if (abs(0.28571_r8-kappa_dry_air)/0.28571_r8 > 1.0e-4_r8) error stop 'dst_cst_cmn_ini(): kappa_dry_air error'
+    if (abs(0.60777_r8-eps_H2O_rcp_m1)/0.60777_r8 > 1.0e-4_r8) error stop 'dst_cst_cmn_ini(): eps_H2O_rcp_m1 error'
     
     return
   end subroutine dst_cst_cmn_ini                       ! end dst_cst_cmn_ini()

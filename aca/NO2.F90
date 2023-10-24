@@ -265,7 +265,7 @@ program NO2
   else if (flg_NOAA) then
      bnd_nbr=bnd_nbr_NOAA   ! [nbr] Number of bands
   else
-     stop 'One of flg_JPL, flg_NCAR, flg_NOAA must be .true.'   
+     error stop 'One of flg_JPL, flg_NCAR, flg_NOAA must be .true.'   
   endif                     ! endif
   
   ! Allocate space for dynamic arrays
@@ -328,7 +328,7 @@ program NO2
                 prg_nm(1:ftn_strlen(prg_nm)), &
                 ': ERROR wvl_ctr_yyy(',bnd_idx,') = ',wvl_ctr_yyy(bnd_idx), &
                 ', qnt_yld_yyy(',bnd_idx,') = ',qnt_yld_yyy(bnd_idx)
-           stop 'EXIT_FAILURE from main()'
+           error stop 'EXIT_FAILURE from main()'
         endif               ! endif error
      enddo
      
@@ -503,7 +503,7 @@ program NO2
              prg_nm(1:ftn_strlen(prg_nm)), &
              ': WARNING bnd(',bnd_idx,') = ',bnd(bnd_idx), &
              ', qnt_yld(',bnd_idx,') = ',qnt_yld(bnd_idx)
-        !        stop 'EXIT_FAILURE from main()'
+        !        error stop 'EXIT_FAILURE from main()'
         if (qnt_yld(bnd_idx) < 0.0) qnt_yld(bnd_idx)=0.0
         if (qnt_yld(bnd_idx) > 1.0) qnt_yld(bnd_idx)=1.0
         write (6,'(a,1(a,i4,a,es15.8))')  &

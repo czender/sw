@@ -70,15 +70,15 @@ contains
     
     ! Get dimension sizes
     rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr),sbr_nm//': inquire_dim bnd')
-    !if (bnd_nbr>bnd_nbr_max) stop 'bnd_nbr>bnd_nbr_max'
+    !if (bnd_nbr>bnd_nbr_max) error stop 'bnd_nbr>bnd_nbr_max'
     cnt_bnd(1)=bnd_nbr
     cnt_bndp(1)=bnd_nbr+1
     srt_one(:)=1
     
     allocate(abs_xsx(bnd_nbr),stat=rcd)
-    if(rcd /= 0) stop 'allocate() failed for abs_xsx'
+    if(rcd /= 0) error stop 'allocate() failed for abs_xsx'
     allocate(wvl_grd(bnd_nbr+1),stat=rcd)
-    if(rcd /= 0) stop 'allocate() failed for wvl_grd'
+    if(rcd /= 0) error stop 'allocate() failed for wvl_grd'
 
     ! Get variable IDs
     rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx',abs_xsx_id)
@@ -90,7 +90,7 @@ contains
 
     if(present(abs_xsx_dadT)) then
        allocate(abs_xsx_dadT(bnd_nbr),stat=rcd)
-       if(rcd /= 0) stop 'allocate() failed for abs_xsx_dadT'
+       if(rcd /= 0) error stop 'allocate() failed for abs_xsx_dadT'
        rcd=nf90_wrp_inq_varid(nc_id,'abs_xsx_dadT',abs_xsx_dadT_id,rcd_opt=nf90_enotvar) ! Tolerate variable absence
        if(rcd /= nf90_noerr) then
           rcd=nf90_wrp(nf90_get_var(nc_id,abs_xsx_dadT_id,abs_xsx_dadT,srt_one,cnt_bnd),'gv abs_xsx_dadT')
@@ -104,7 +104,7 @@ contains
     endif ! !tpt_std
     if(present(qnt_yld)) then
        allocate(qnt_yld(bnd_nbr),stat=rcd)
-       if(rcd /= 0) stop 'allocate() failed for qnt_yld'
+       if(rcd /= 0) error stop 'allocate() failed for qnt_yld'
        rcd=nf90_wrp_inq_varid(nc_id,'qnt_yld',qnt_yld_id,rcd_opt=nf90_enotvar) ! Tolerate variable absence
        if(rcd /= nf90_noerr) then
           rcd=nf90_wrp(nf90_get_var(nc_id,qnt_yld_id,qnt_yld,srt_one,cnt_bnd),'gv qnt_yld')
@@ -114,19 +114,19 @@ contains
     endif ! !qnt_yld
     if(present(wvl_ctr)) then
        allocate(wvl_ctr(bnd_nbr),stat=rcd)
-       if(rcd /= 0) stop 'allocate() failed for wvl_ctr'
+       if(rcd /= 0) error stop 'allocate() failed for wvl_ctr'
        rcd=nf90_wrp_inq_varid(nc_id,'wvl_ctr',wvl_ctr_id)
        rcd=nf90_wrp(nf90_get_var(nc_id,wvl_ctr_id,wvl_ctr,srt_one,cnt_bnd),'gv wvl_ctr')
     endif ! !wvl_ctr
     if(present(wvl_min)) then
        allocate(wvl_min(bnd_nbr),stat=rcd)
-       if(rcd /= 0) stop 'allocate() failed for wvl_min'
+       if(rcd /= 0) error stop 'allocate() failed for wvl_min'
        rcd=nf90_wrp_inq_varid(nc_id,'wvl_min',wvl_min_id)
        rcd=nf90_wrp(nf90_get_var(nc_id,wvl_min_id,wvl_min,srt_one,cnt_bnd),'gv wvl_min')
     endif ! !wvl_min
     if(present(wvl_max)) then
        allocate(wvl_max(bnd_nbr),stat=rcd)
-       if(rcd /= 0) stop 'allocate() failed for wvl_max'
+       if(rcd /= 0) error stop 'allocate() failed for wvl_max'
        rcd=nf90_wrp_inq_varid(nc_id,'wvl_max',wvl_max_id)
        rcd=nf90_wrp(nf90_get_var(nc_id,wvl_max_id,wvl_max,srt_one,cnt_bnd),'gv wvl_max')
     endif ! !wvl_max
@@ -189,28 +189,28 @@ contains
     
     ! Get dimension sizes
     rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr),sbr_nm//": inquire_dim bnd")
-    !if (bnd_nbr>bnd_nbr_max) stop 'bnd_nbr>bnd_nbr_max'
+    !if (bnd_nbr>bnd_nbr_max) error stop 'bnd_nbr>bnd_nbr_max'
     cnt_bnd(1)=bnd_nbr
     srt_one(:)=1
     
     allocate(A_phi(bnd_nbr),stat=rcd)
-    if(rcd /= 0) stop "allocate() failed for A_phi"
+    if(rcd /= 0) error stop "allocate() failed for A_phi"
     allocate(A_psi(bnd_nbr),stat=rcd)
-    if(rcd /= 0) stop "allocate() failed for A_psi"
+    if(rcd /= 0) error stop "allocate() failed for A_psi"
     allocate(B_phi(bnd_nbr),stat=rcd)
-    if(rcd /= 0) stop "allocate() failed for B_phi"
+    if(rcd /= 0) error stop "allocate() failed for B_phi"
     allocate(B_psi(bnd_nbr),stat=rcd)
-    if(rcd /= 0) stop "allocate() failed for B_psi"
+    if(rcd /= 0) error stop "allocate() failed for B_psi"
     allocate(S_d_abs_cff_mss(bnd_nbr),stat=rcd)
-    if(rcd /= 0) stop "allocate() failed for S_d_abs_cff_mss"
+    if(rcd /= 0) error stop "allocate() failed for S_d_abs_cff_mss"
     allocate(S_p_abs_cff_mss(bnd_nbr),stat=rcd)
-    if(rcd /= 0) stop "allocate() failed for S_p_abs_cff_mss"
+    if(rcd /= 0) error stop "allocate() failed for S_p_abs_cff_mss"
     allocate(wvl_max(bnd_nbr),stat=rcd)
-    if(rcd /= 0) stop "allocate() failed for wvl_max"
+    if(rcd /= 0) error stop "allocate() failed for wvl_max"
     allocate(wvl_min(bnd_nbr),stat=rcd)
-    if(rcd /= 0) stop "allocate() failed for wvl_min"
+    if(rcd /= 0) error stop "allocate() failed for wvl_min"
     allocate(wvl_ctr(bnd_nbr),stat=rcd)
-    if(rcd /= 0) stop "allocate() failed for wvl_ctr"
+    if(rcd /= 0) error stop "allocate() failed for wvl_ctr"
     
     ! Get variable IDs
     rcd=nf90_wrp_inq_varid(nc_id,'A_phi',A_phi_id)
@@ -261,8 +261,8 @@ contains
     if (dbg_lvl >= dbg_sbr) write (6,'(a)') 'Entering slr_spc_get_CCM()'
     
     ! Initialize some variables
-    if (wvl_nbr > bnd_nbr_CCM_SW_max) stop 'wvl_nbr > bnd_nbr_CCM_SW_max in slr_spc_get_CCM()'
-    if (wvl_nbr /= bnd_nbr_CCM_SW_max) stop 'wvl_nbr /= bnd_nbr_CCM_SW_max in slr_spc_get_CCM()'
+    if (wvl_nbr > bnd_nbr_CCM_SW_max) error stop 'wvl_nbr > bnd_nbr_CCM_SW_max in slr_spc_get_CCM()'
+    if (wvl_nbr /= bnd_nbr_CCM_SW_max) error stop 'wvl_nbr /= bnd_nbr_CCM_SW_max in slr_spc_get_CCM()'
     
     ! Get first 16 bands
     wvl_nbr_tmp=16
@@ -308,8 +308,8 @@ contains
     if (dbg_lvl >= dbg_sbr) write (6,'(a)') 'Entering rbn_vec_CCM()'
     
     ! Initialize some variables
-    if (out_nbr > bnd_nbr_CCM_SW_max) stop 'out_nbr > bnd_nbr_CCM_SW_max in rbn_vec_CCM()'
-    if (out_nbr /= bnd_nbr_CCM_SW_max) stop 'out_nbr /= bnd_nbr_CCM_SW_max in rbn_vec_CCM()'
+    if (out_nbr > bnd_nbr_CCM_SW_max) error stop 'out_nbr > bnd_nbr_CCM_SW_max in rbn_vec_CCM()'
+    if (out_nbr /= bnd_nbr_CCM_SW_max) error stop 'out_nbr /= bnd_nbr_CCM_SW_max in rbn_vec_CCM()'
     
     ! Get first 16 bands
     out_idx_srt=1
@@ -423,7 +423,7 @@ contains
     
     ! Check for monotonicity
     mnt=mnt_chk(wvl_min_out_mnt,wvl_out_nbr)
-    if (.not.mnt) stop 'wvl_min_out_mnt not monotonic in slr_spc_get()'
+    if (.not.mnt) error stop 'wvl_min_out_mnt not monotonic in slr_spc_get()'
     
     ! Sanity check: even boundaries?
     do out_idx=1,wvl_out_nbr-1 ! Loop ends at wvl_out_nbr-1
@@ -433,7 +433,7 @@ contains
           write (6,'(2(a,i4,a,es10.3))')   &
                'wvl_min_out_mnt(',out_idx+1,') = ',wvl_min_out_mnt(out_idx+1), &
                ' != wvl_max_out_mnt(',out_idx,') = ',wvl_max_out_mnt(out_idx)
-          stop
+          error stop
        endif
     end do                    ! end loop over out_idx
     
@@ -443,7 +443,7 @@ contains
     rcd=nf90_wrp_inq_dimid(nc_id,'wvl',wvl_dim_id)
     ! Get dimension sizes
     rcd=nf90_wrp(nf90_inquire_dimension(nc_id,wvl_dim_id,len=wvl_in_nbr),sbr_nm//": inquire_dim wvl")
-    if (wvl_in_nbr > wvl_in_nbr_max) stop 'wvl_in_nbr > wvl_in_nbr_max in slr_spc_get()'
+    if (wvl_in_nbr > wvl_in_nbr_max) error stop 'wvl_in_nbr > wvl_in_nbr_max in slr_spc_get()'
     
     ! Allocate space for dynamic arrays
     allocate(flx_frc_blr_in(wvl_in_nbr),stat=rcd)
@@ -464,7 +464,7 @@ contains
     
     ! Check for monotonicity
     mnt=mnt_chk(wvl_min_in,wvl_in_nbr)
-    if (.not.mnt) stop 'wvl_min_in not monotonic in slr_spc_get()'
+    if (.not.mnt) error stop 'wvl_min_in not monotonic in slr_spc_get()'
     
     ! Interpolate flx_frc_blr_in to wvl_min_out_mnt
     call ntp_vec(wvl_in_nbr,wvl_max_in,flx_frc_blr_in,wvl_out_nbr,wvl_min_out_mnt,flx_frc_blr_min_out,xtr_typ_LHS,xtr_typ_RHS)
@@ -478,7 +478,7 @@ contains
     ! Sanity check
     do out_idx=1,wvl_out_nbr-1
        if (flx_frc_blr_min_out(out_idx+1) /= flx_frc_blr_max_out(out_idx)) &
-            stop 'flx_frc_blr_min_out(out_idx+1) /= flx_frc_blr_max_out(out_idx) in slr_spc_get()'
+            error stop 'flx_frc_blr_min_out(out_idx+1) /= flx_frc_blr_max_out(out_idx) in slr_spc_get()'
     end do                    ! end loop over out_idx
     
     ! Convert flx_frc_blr_[min,max]_out to flx_frc_out
@@ -556,9 +556,9 @@ contains
     rcd=nf90_wrp_inq_dimid(nc_id,'grd',grd_dim_id)
     ! Get dimension sizes
     rcd=nf90_wrp(nf90_inquire_dimension(nc_id,wvl_dim_id,len=wvl_in_nbr),sbr_nm//": inquire_dim wvl_dim")
-    if (wvl_in_nbr > wvl_in_nbr_max) stop 'wvl_in_nbr > wvl_in_nbr_max in wgt_get()'
+    if (wvl_in_nbr > wvl_in_nbr_max) error stop 'wvl_in_nbr > wvl_in_nbr_max in wgt_get()'
     rcd=nf90_wrp(nf90_inquire_dimension(nc_id,grd_dim_id,len=grd_in_nbr),sbr_nm//": inquire_dim grd_dim")
-    if (grd_in_nbr /= wvl_in_nbr+1) stop 'grd_in_nbr /= wvl_in_nbr+1 in wgt_get()'
+    if (grd_in_nbr /= wvl_in_nbr+1) error stop 'grd_in_nbr /= wvl_in_nbr+1 in wgt_get()'
     ! Allocate space for dynamic arrays
     allocate(var_in(wvl_in_nbr),stat=rcd)
     allocate(wvl_grd_in(grd_in_nbr),stat=rcd) 
@@ -583,7 +583,7 @@ contains
     
     ! Sanity check
     do out_idx=1,wvl_out_nbr-1
-       if (var_out(out_idx) < 0.0) stop 'var_out(out_idx) < 0.0 in wgt_get()'
+       if (var_out(out_idx) < 0.0) error stop 'var_out(out_idx) < 0.0 in wgt_get()'
     end do                    ! end loop over out_idx
     
     ! De-allocate dynamic variables
@@ -1550,7 +1550,7 @@ contains
           wvl_min(wvl_idx)=wvl_grd_min+(wvl_idx-1)*wvl_grd_rsn ! [m]
        enddo                  ! end loop over wvl
     else         
-       stop 'wvl_grd_mk() reports unknown wvl_grd_typ'
+       error stop 'wvl_grd_mk() reports unknown wvl_grd_typ'
     endif                     ! endelse
     
     ! Following derived grid values depend upon direction of monotonicity
@@ -1596,7 +1596,7 @@ contains
              write (6,'(2(a,i4,a,es10.3))')   &
                   'wvl_min(',wvl_idx+1,') = ',wvl_min(wvl_idx+1), &
                   ' != wvl_max(',wvl_idx,') = ',wvl_max(wvl_idx)
-             stop
+             error stop
           endif               ! endif
        end do                 ! end loop over wvl
     else                      ! not mnt_ncr
@@ -1607,7 +1607,7 @@ contains
              write (6,'(2(a,i4,a,es10.3))')   &
                   'wvl_min(',wvl_idx,') = ',wvl_min(wvl_idx), &
                   ' != wvl_max(',wvl_idx+1,') = ',wvl_max(wvl_idx+1)
-             stop
+             error stop
           endif               ! endif
        end do                 ! end loop over wvl
     endif                     ! not mnt_ncr
@@ -1641,7 +1641,7 @@ contains
        if (wvl_ctr(wvl_idx)<0.0) write (6,'(a,i4)')  &
             'wvl_grd_mk() reports bad wvl_ctr: ',wvl_idx
        ! write (6,'(a,a,i4)') prg_nm(1:ftn_strlen(prg_nm)),': ERROR wvl_grd_mk(): Bad wavelength bin at index ',wvl_idx
-       ! stop
+       ! error stop
     end do                    ! end loop over wvl
     
     return 
@@ -1727,7 +1727,7 @@ contains
     ! Main code
     if (dbg_lvl>=dbg_sbr) write (6,'(a)') 'Entering mlk_abs()'
     ! Enough memory? 
-    if (lev_nbr>lev_nbr_max) stop 'lev_nbr>lev_nbr_max in mlk_abs()'
+    if (lev_nbr>lev_nbr_max) error stop 'lev_nbr>lev_nbr_max in mlk_abs()'
     do lev_idx=1,lev_nbr
        ! Phi and psi weights are mid-layer quantities
        phi_wgt(lev_idx)=exp(A_phi*tpt_dlt(lev_idx)+B_phi*tpt_dlt_sqr(lev_idx))

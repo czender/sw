@@ -303,7 +303,7 @@ contains
   ! build mechanism could decide which files should and should not
   ! be built, but the simple solution is to do as follows...
   subroutine erf_stb
-    stop 'erf_stb() ERROR: This routine should not be called'
+    error stop 'erf_stb() ERROR: This routine should not be called'
   end subroutine erf_stb
 #endif  /* not CRAY */
   

@@ -50,7 +50,7 @@ contains
     write (6,'(3a)') prg_nm(1:ftn_strlen(prg_nm)),': ERROR ',msg(1:ftn_strlen(msg))
     write (6,'(3a)') prg_nm(1:ftn_strlen(prg_nm)),': nf90_strerror(rcd) = ',nf90_strerror(rcd)
     ! Die, monster, die!
-    stop 'EXIT_FAILURE in nf90_wrp()'
+    error stop 'EXIT_FAILURE in nf90_wrp()'
   end function nf90_wrp ! end nf90_wrp()
   
   subroutine nf90_err_exit(rcd,msg)  
@@ -68,7 +68,7 @@ contains
     if (rcd == nf90_noerr) return
     write (6,'(3a)') prg_nm(1:ftn_strlen(prg_nm)),': ERROR ',msg(1:ftn_strlen(msg))
     write (6,'(2a)') prg_nm(1:ftn_strlen(prg_nm)),nf90_strerror(rcd)
-    stop 'Executing Fortran9X stop() in nf90_err_exit()'
+    error stop 'Executing Fortran9X error stop() in nf90_err_exit()'
   end subroutine nf90_err_exit ! end nf90_err_exit()
   
   integer function nf90_wrp_create(fl_nm,mode,nc_id,sbr_nm)  
@@ -98,7 +98,7 @@ contains
           write (6,'(3a)') prg_nm(1:ftn_strlen(prg_nm)),': ERROR creating ',fl_nm(1:ftn_strlen(fl_nm))
        endif ! endif
        write (6,'(2a,i3,2a)') prg_nm(1:ftn_strlen(prg_nm)),': rcd = ',rcd,', ',nf90_strerror(rcd)
-       stop 'Executing Fortran9X stop() in nf90_wrp_create()'
+       error stop 'Executing Fortran9X error stop() in nf90_wrp_create()'
     endif ! endif err  
     return  
   end function nf90_wrp_create ! end nf90_wrp_create()
@@ -130,7 +130,7 @@ contains
           write (6,'(3a)') prg_nm(1:ftn_strlen(prg_nm)),': ERROR opening ',fl_nm(1:ftn_strlen(fl_nm))
        endif ! endif
        write (6,'(2a,i3,2a)') prg_nm(1:ftn_strlen(prg_nm)),': rcd = ',rcd,', ',nf90_strerror(rcd)
-       stop 'Executing Fortran9X stop() in nf90_wrp_open()'
+       error stop 'Executing Fortran9X error stop() in nf90_wrp_open()'
     endif ! endif err  
     return  
   end function nf90_wrp_open ! end nf90_wrp_open()
@@ -158,7 +158,7 @@ contains
        if(present(fl_nm)) write (6,'(6a)') prg_nm(1:ftn_strlen(prg_nm)), &
             ': ERROR closing ',fl_nm(1:ftn_strlen(fl_nm)),' in ',sbr_nm,'()'
        write (6,'(2a,i3,2a)') prg_nm(1:ftn_strlen(prg_nm)),': rcd = ',rcd,', ',nf90_strerror(rcd)
-       stop 'Executing Fortran9X stop() in nf90_wrp_close()'
+       error stop 'Executing Fortran9X error stop() in nf90_wrp_close()'
     endif ! endif err  
     if (present(vrb_sng) .and. vrb_sng /= '') &
          write (6,'(a,a2,a,1x,a)') prg_nm(1:ftn_strlen(prg_nm)), &
@@ -210,8 +210,8 @@ contains
     if (rcd == nf90_noerr .or. rcd == rcd_xcp) return
     write (6,'(2a)') 'ERROR nf90_inq_dimid() failed for dimension ',dmn_nm
     write (6,'(2a,i3,2a)') prg_nm(1:ftn_strlen(prg_nm)),': rcd = ',rcd,', ',nf90_strerror(rcd)
-    !    stop ! Die, monster, die!
-    stop 'Executing Fortran9X stop() in nf90_wrp_inq_dimid()'
+    !    error stop ! Die, monster, die!
+    error stop 'Executing Fortran9X error stop() in nf90_wrp_inq_dimid()'
   end function nf90_wrp_inq_dimid
 
   integer function nf90_wrp_inq_varid(nc_id,var_nm,var_id,rcd_opt)
@@ -240,7 +240,7 @@ contains
     if (rcd == nf90_noerr .or. rcd == rcd_xcp) return
     write (6,'(2a)') 'ERROR nf90_inq_varid() failed for variable ',var_nm
     write (6,'(a)') nf90_strerror(rcd) ! Houston, we have a problem...
-    stop 'Executing Fortran9X stop() in nf90_wrp_inq_varid()'
+    error stop 'Executing Fortran9X error stop() in nf90_wrp_inq_varid()'
   end function nf90_wrp_inq_varid
   
 end module nf90_utl

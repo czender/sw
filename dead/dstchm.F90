@@ -59,7 +59,7 @@ contains
     ! Main code
     
     ! Sanity check
-    if (idx_chm_end /= chm_nbr) stop 'dst_chm_cmn_ini() reports idx_chm_end /= chm_nbr'
+    if (idx_chm_end /= chm_nbr) error stop 'dst_chm_cmn_ini() reports idx_chm_end /= chm_nbr'
     
     ! H2O2 --> dust 
     ! ZhC99 p. 357 Tbl. 2 use gamma(H2O2->dust)=1.0e-4

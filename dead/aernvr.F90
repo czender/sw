@@ -169,7 +169,7 @@ contains
        else if (nint(oro(i)) == 2) then
           vwc_sfc(i)=1.0_r8      ! [m3 m-3] Volumetric water content
        else 
-          stop
+          error stop
        endif
     end do                    ! end loop over lon
 
@@ -250,7 +250,7 @@ contains
           mss_frc_snd(i)=0.0_r8  ! [frc] Mass fraction of sand
           tpt_sfc(i)=tpt_ice(i) ! [K] Surface temperature
        else 
-          stop
+          error stop
        endif
     end do                    ! end loop over lon
 

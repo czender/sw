@@ -1,3 +1,7 @@
+2023-10-24  Charlie Zender  <zender@uci.edu>
+
+	* Replace "stop" with "error stop" in *.F90 programs so program	returns non-zero exit status
+
 2023-10-20  Charlie Zender  <zender@uci.edu>
 
 	* Add swn_rrtmgp_bnd5.nco, swn_prf.sh to simulate/diagnose VIS+NIR components of RRTMG Band 5

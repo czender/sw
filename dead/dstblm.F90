@@ -143,13 +143,13 @@ contains
     cp_vpr_rcp_cp_dry_m1=spc_heat_H2O_vpr/spc_heat_dry_air-1.0_r8 ! (0.83745) [frc] Constant for moist specific heat IrG81 p. 77
     
     ! Sanity checks
-    if (abs(273.15_r8-tpt_frz_pnt)/273.15_r8 > 1.0e-4_r8) stop 'dst_cst_cmn_ini(): tpt_frz_pnt error'
-    if (abs(1004.697_r8-spc_heat_dry_air)/1004.697_r8 > 1.0e-4_r8) stop 'dst_cst_cmn_ini(): spc_heat_dry_air error'
-    if (abs(461.52_r8-gas_cst_H2O)/461.52_r8 > 1.0e-4_r8) stop 'dst_cst_cmn_ini(): gas_cst_H2O error'
-    if (abs(1846.08_r8-spc_heat_H2O_vpr)/1846.08_r8 > 1.0e-4_r8) stop 'dst_cst_cmn_ini(): spc_heat_H2O_vpr error'
+    if (abs(273.15_r8-tpt_frz_pnt)/273.15_r8 > 1.0e-4_r8) error stop 'dst_cst_cmn_ini(): tpt_frz_pnt error'
+    if (abs(1004.697_r8-spc_heat_dry_air)/1004.697_r8 > 1.0e-4_r8) error stop 'dst_cst_cmn_ini(): spc_heat_dry_air error'
+    if (abs(461.52_r8-gas_cst_H2O)/461.52_r8 > 1.0e-4_r8) error stop 'dst_cst_cmn_ini(): gas_cst_H2O error'
+    if (abs(1846.08_r8-spc_heat_H2O_vpr)/1846.08_r8 > 1.0e-4_r8) error stop 'dst_cst_cmn_ini(): spc_heat_H2O_vpr error'
     if (abs(0.83745_r8-cp_vpr_rcp_cp_dry_m1)/0.83745_r8 > 1.0e-3_r8) then
        write (6,'(a,f11.6)') 'cp_vpr_rcp_cp_dry_m1 = ',cp_vpr_rcp_cp_dry_m1
-       stop 'dst_cst_cmn_ini(): cp_vpr_rcp_cp_dry_m1 error'
+       error stop 'dst_cst_cmn_ini(): cp_vpr_rcp_cp_dry_m1 error'
     endif
     
     return

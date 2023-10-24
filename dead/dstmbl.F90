@@ -205,7 +205,7 @@ contains
     ! Compute required derived fields
     do i=1,plon
        ! Stop occasional haywire model runs 
-       if(tpt_mdp(i) > 350.0_r8) stop 'ERROR: dst_mbl() reports tpt_mdp(i) > 350.0'
+       if(tpt_mdp(i) > 350.0_r8) error stop 'ERROR: dst_mbl() reports tpt_mdp(i) > 350.0'
        ! Midlayer virtual temperature
        tpt_vrt_mdp=tpt_mdp(i)*(1.0+eps_H2O_rcp_m1*q_H2O_vpr(i)) ! [K]
        ! Density at center of gridbox

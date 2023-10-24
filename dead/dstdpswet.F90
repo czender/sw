@@ -531,7 +531,7 @@ contains
                      'dst_pcp: lat = ',lat_idx,' q_dst(',i,',',k,',',m,') = ',q_dst(i,k,m),' kg kg-1' &
                      ,', q_dst_tnd_evp = ',q_dst_tnd_evp(i,k,m),' kg kg-1 s-1' &
                      ,', q_dst_tnd_pcp = ',q_dst_tnd_pcp(i,k,m),' kg kg-1 s-1'
-                stop
+                error stop
              endif            ! endif err
           end do              ! end loop over lon
        end do                 ! end loop over lev

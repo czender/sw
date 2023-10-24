@@ -243,7 +243,7 @@ contains
     endif                     ! endif not last argument
     ! exit_status=-1            ! [enm] Program exit status (non-standard Fortran)
     ! call exit(exit_status)    ! [enm] Exit with current exit status (non-standard Fortran)
-    stop 'Exit on error from ftn_getarg_err()'
+    error stop 'Exit on error from ftn_getarg_err()'
     return
   end subroutine ftn_getarg_err
   
@@ -319,7 +319,7 @@ contains
        arg_idx=arg_idx+1
        ! Sanity checks
        arg_lng=len_trim(arg_val) ! [nbr] Length of argument
-       if (arg_lng <= 0) stop 'ftn_???_arg_get() reports option lacks argument'
+       if (arg_lng <= 0) error stop 'ftn_???_arg_get() reports option lacks argument'
     endif                     ! endif opt_cnj_is_spc
     ! Read argument into double and return
     read (arg_val(arg_val_srt_idx:arg_lng),*) opt_val ! [frc] Variable to receive copy of arg_val
@@ -389,7 +389,7 @@ contains
        arg_idx=arg_idx+1
        ! Sanity checks
        arg_lng=len_trim(arg_val) ! [nbr] Length of argument
-       if (arg_lng <= 0) stop 'ftn_???_arg_get() reports option lacks argument'
+       if (arg_lng <= 0) error stop 'ftn_???_arg_get() reports option lacks argument'
     endif                     ! endif opt_cnj_is_spc
     ! Read argument into float and return
     read (arg_val(arg_val_srt_idx:arg_lng),*) opt_val ! [frc] Variable to receive copy of arg_val
@@ -460,7 +460,7 @@ contains
        arg_idx=arg_idx+1
        ! Sanity checks
        arg_lng=len_trim(arg_val) ! [nbr] Length of argument
-       if (arg_lng <= 0) stop 'ftn_arg_get_int() reports option lacks argument'
+       if (arg_lng <= 0) error stop 'ftn_arg_get_int() reports option lacks argument'
     endif                     ! endif opt_cnj_is_spc
     ! Read argument into integer and return
     read (arg_val(arg_val_srt_idx:arg_lng),*) opt_val ! [nbr] Variable to receive copy of arg_val
@@ -530,7 +530,7 @@ contains
        arg_idx=arg_idx+1
        ! Sanity checks
        arg_lng=len_trim(arg_val) ! [nbr] Length of argument
-       if (arg_lng <= 0) stop 'ftn_arg_get_lgc() reports option lacks argument'
+       if (arg_lng <= 0) error stop 'ftn_arg_get_lgc() reports option lacks argument'
     endif                     ! endif opt_cnj_is_spc
     ! Read argument into integer and return
     read (arg_val(arg_val_srt_idx:arg_lng),*) opt_val ! [flg] Variable to receive copy of arg_val
@@ -606,12 +606,12 @@ contains
        arg_idx=arg_idx+1
        ! Sanity checks
        arg_lng=len_trim(arg_val) ! [nbr] Length of argument
-       if (arg_lng <= 0) stop 'ftn_???_arg_get() reports option lacks argument'
+       if (arg_lng <= 0) error stop 'ftn_???_arg_get() reports option lacks argument'
        if (arg_lng > len_var) then
           write (6,'(2a,i5,a,i5)') prg_nm(1:ftn_strlsc(prg_nm)), &
                ': ERROR '//sbr_nm//'() reports argument length = ',arg_lng, &
                ' too long to fit into variable length ',len_var
-          stop
+          error stop
        endif ! endif arg_lng > len_var
     endif                     ! endif opt_cnj_is_spc
     ! Read argument into string and return
@@ -863,7 +863,7 @@ contains
        write (6,'(a,a)') prg_nm(1:ftn_strlen(prg_nm)),': ERROR len1 < lng2 in ftn_strcpy()'
        write (6,'(a,i3,a,i3,2a)') 'len1 = ',len1,', lng1 = ',lng1,', sng1 = ',sng1
        write (6,'(a,i3,a,i3,2a)') 'len2 = ',len2,', lng2 = ',lng2,', sng2 = ',sng2
-       stop 'EXIT_FAILURE from ftn_strcpy()'
+       error stop 'EXIT_FAILURE from ftn_strcpy()'
     endif                     ! endif
     sng1(1:lng2)=sng2(1:lng2)
     return
@@ -967,7 +967,7 @@ contains
        write (6,'(a,a)') prg_nm(1:ftn_strlsc(prg_nm)),': ERROR len1 < lsc2 in ftn_strcpylsc()'
        write (6,'(a,i3,a,i3,2a)') 'len1 = ',len1,', lsc1 = ',lsc1,', sng1 = ',sng1
        write (6,'(a,i3,a,i3,2a)') 'len2 = ',len2,', lsc2 = ',lsc2,', sng2 = ',sng2
-       stop 'EXIT_FAILURE from ftn_strcpylsc()'
+       error stop 'EXIT_FAILURE from ftn_strcpylsc()'
     endif                     ! endif
     sng1(1:lsc2)=sng2(1:lsc2)
     ! NUL-initialize rest of string
@@ -1005,7 +1005,7 @@ contains
        write (6,'(a,a)') prg_nm(1:ftn_strlen(prg_nm)),': ERROR lng1+lng2 >= len1 in ftn_strcat()'
        write (6,'(a,i3,a,i3,2a)') 'len1 = ',len1,', lng1 = ',lng1,', sng1 = ',sng1
        write (6,'(a,i3,a,i3,2a)') 'len2 = ',len2,', lng2 = ',lng2,', sng2 = ',sng2
-       stop 'EXIT_FAILURE from ftn_strcat()'
+       error stop 'EXIT_FAILURE from ftn_strcat()'
     endif                     ! endif
     sng1(lng1+1:lng1+lng2)=sng2(1:lng2) ! I/O [sng] String to affix second string to
     return
@@ -1050,7 +1050,7 @@ contains
        write (6,'(4(a,i3),2a)') 'len2 = ',len2,', len_trim2 = ',len_trim2,', lng2 = ',lng2,', sng2 = ',sng2
        call ftn_strprn(sng1)
        call ftn_strprn(sng2)
-       stop 'EXIT_FAILURE from ftn_strpfx()'
+       error stop 'EXIT_FAILURE from ftn_strpfx()'
     endif                     ! endif
     ! Order is important
     sng2(lsc1+1:lsc1+lsc2)=sng2(1:lsc2)
@@ -1091,7 +1091,7 @@ contains
        write (6,'(2(a,i3),2a)') 'len_fl = ',len_fl,', lng_fl = ',lng_fl,', fl_nm = ',fl_nm
        call ftn_strprn(drc)
        call ftn_strprn(fl_nm)
-       stop 'EXIT_FAILURE from ftn_drcpfx()'
+       error stop 'EXIT_FAILURE from ftn_drcpfx()'
     endif                     ! endif
     
     if ( &                     ! Conditions for prepending fl_nm with drc:
@@ -1173,14 +1173,14 @@ contains
        prg_ID='Source file unknown Version unknown Date unknown' // char(0)
     else 
        prg_ptr=ftn_strstr(CVS_Id,',v') ! ',v' is right after program name
-       if (prg_ptr < 0) stop 'ERROR: ftn_prg_ID_mk() unable to find source code name'
+       if (prg_ptr < 0) error stop 'ERROR: ftn_prg_ID_mk() unable to find source code name'
        if (CVS_typ == CVS_kv) then
           prg_ID=CVS_Id(1:prg_ptr-1) //  &
                ' version ' // CVS_Revision(1:ftn_strlen(CVS_Revision)) //  &
                ' dated ' // CVS_Date(1:ftn_strlen(CVS_Date)) // ' GMT' // char(0)
        else if (CVS_typ == CVS_kkv) then
           vrs_ptr=ftn_strstr(CVS_Revision,'ion:') ! 'ion:' should appear two characters before version
-          if (vrs_ptr < 0) stop 'ERROR: ftn_prg_ID_mk() unable to find revision number'
+          if (vrs_ptr < 0) error stop 'ERROR: ftn_prg_ID_mk() unable to find revision number'
           prg_ID=CVS_Id(6:prg_ptr-1) //  &
                ' version ' // CVS_Revision(vrs_ptr+5:ftn_strlen(CVS_Revision)-2) //  &
                ' dated ' // CVS_Date(8:26) // ' GMT' // char(0)
@@ -1231,7 +1231,7 @@ contains
        call ftn_strcat(cmd_ln,arg_val)
        if (arg_idx == 0) call ftn_strcpy(prg_nm,arg_val) ! [sng] Program name
        cmd_ln_lng=ftn_strlen(cmd_ln) ! [nbr] Length of string
-       if (cmd_ln_lng > cmd_ln_len) stop 'cmd_ln_lng > cmd_ln_len in ftn_cmd_ln_sng()'
+       if (cmd_ln_lng > cmd_ln_len) error stop 'cmd_ln_lng > cmd_ln_len in ftn_cmd_ln_sng()'
        if (dbg_lvl >= dbg_vrb) then
           write (6,'(a,i3)') 'arg_idx = ',arg_idx
           write (6,'(a,a)') 'arg_val = ',arg_val

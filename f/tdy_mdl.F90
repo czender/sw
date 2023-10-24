@@ -46,7 +46,7 @@ contains
     svp_H2O_lqd_dbl=100.0*exp(svp_H2O_lqd_dbl) ! [mb] --> [Pa]
     svp_H2O_lqd_Wex=real(svp_H2O_lqd_dbl)
     ! Sanity check
-    if (svp_H2O_lqd_Wex < 0.0) stop 'svp_H2O_lqd_Wex < 0.0 in svp_H2O_lqd_Wex()'
+    if (svp_H2O_lqd_Wex < 0.0) error stop 'svp_H2O_lqd_Wex < 0.0 in svp_H2O_lqd_Wex()'
     return
   end function svp_H2O_lqd_Wex                       ! end svp_H2O_lqd_Wex()
   

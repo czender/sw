@@ -373,11 +373,11 @@ contains
     ! 19990913: erf() in SGI /usr/lib64/mips4/libftn.so is bogus
     if (abs(0.8427_r8-erf(1.0_r8))/0.8427_r8 > 0.001_r8) then
        write (6,'(a,f12.9)') 'erf(1.0_r8) = ',erf(1.0_r8)
-       stop 'dead: ovr_src_snk_frc_get() reports Error function error'
+       error stop 'dead: ovr_src_snk_frc_get() reports Error function error'
     endif                     ! endif
     if (erf(0.0_r8) /= 0.0_r8) then
        write (6,'(a,f12.9)') 'erf(0.0_r8) = ',erf(0.0_r8)
-       stop 'dead: ovr_src_snk_frc_get() reports Error function error'
+       error stop 'dead: ovr_src_snk_frc_get() reports Error function error'
     end if                     ! endif
     do src_idx=1,src_nbr
        sqrt2lngsdi=sqrt(2.0_r8)*log(gsd_src(src_idx)) ! [frc]

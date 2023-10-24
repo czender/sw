@@ -340,7 +340,7 @@ program htrn2nb
      dsh_key=arg_val(1:2) ! [sng] First two characters of option
      if (dsh_key == '--') then
         opt_lng=ftn_opt_lng_get(arg_val) ! [nbr] Length of option
-        if (opt_lng <= 0) stop 'Long option has no name'
+        if (opt_lng <= 0) error stop 'Long option has no name'
         opt_sng=arg_val(3:2+opt_lng) ! [sng] Option string
         if (dbg_lvl >= dbg_io) write (6,'(5a,i3)') prg_nm(1:ftn_strlen(prg_nm)), &
              ': DEBUG Double hyphen indicates multi-character option: ', &
@@ -444,8 +444,8 @@ program htrn2nb
   if (ftn_strlen(drc_out) > 0) call ftn_drcpfx(drc_out,fl_out) ! [sng] Output file
 
   ! Enough memory?
-  if (tpt_nbr > tpt_nbr_max) stop 'tpt_nbr > tpt_nbr_max'
-  if (bnd_nbr > bnd_nbr_max) stop 'bnd_nbr > bnd_nbr_max'
+  if (tpt_nbr > tpt_nbr_max) error stop 'tpt_nbr > tpt_nbr_max'
+  if (bnd_nbr > bnd_nbr_max) error stop 'bnd_nbr > bnd_nbr_max'
   
   if(grd_LW_SW) then
      wvn_min_LW=ln_lo
@@ -527,11 +527,11 @@ program htrn2nb
      ! Get dimension sizes
      rcd=rcd+nf90_inquire_dimension(nc_id,ln_ctr_dmn_id,len=ln_nbr)
      ! Enough memory?
-     if (ln_nbr > ln_nbr_max) stop 'ln_nbr > ln_nbr_max'
+     if (ln_nbr > ln_nbr_max) error stop 'ln_nbr > ln_nbr_max'
      rcd=rcd+nf90_inquire_dimension(nc_id,mlc_dmn_id,len=mlc_nbr)
-     if (mlc_nbr > mlc_nbr_max_htrn) stop 'mlc_nbr > mlc_nbr_max_htrn'
+     if (mlc_nbr > mlc_nbr_max_htrn) error stop 'mlc_nbr > mlc_nbr_max_htrn'
      rcd=rcd+nf90_inquire_dimension(nc_id,iso_dmn_id,len=iso_nbr)
-     if (iso_nbr > iso_nbr_max_htrn) stop 'iso_nbr > iso_nbr_max_htrn'
+     if (iso_nbr > iso_nbr_max_htrn) error stop 'iso_nbr > iso_nbr_max_htrn'
      srt_one(1)=1
      cnt_ln(1)=ln_nbr
      cnt_mlc(1)=mlc_nbr
@@ -1135,7 +1135,7 @@ program htrn2nb
         write (6,'(4(a,es10.3))')  &
              'S_d = ',S_d(bnd_idx),', S_d_abs_cff_mss = ',S_d_abs_cff_mss(bnd_idx), &
              'S_p = ',S_p(bnd_idx),', S_p_abs_cff_mss = ',S_p_abs_cff_mss(bnd_idx)
-        stop
+        error stop
      endif                  ! endif
   end do                    ! end loop over bnd
   

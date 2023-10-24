@@ -305,7 +305,7 @@ program O3
      dsh_key=arg_val(1:2)   ! [sng] First two characters of option
      if_dbl_dsh: if (dsh_key == '--') then
         opt_lng=ftn_opt_lng_get(arg_val) ! [nbr] Length of option
-        if (opt_lng <= 0) stop 'Long option has no name'
+        if (opt_lng <= 0) error stop 'Long option has no name'
         opt_sng=arg_val(3:2+opt_lng) ! [sng] Option string
         if (opt_sng == 'dbg' .or. opt_sng == 'dbg_lvl' ) then
            call ftn_arg_get(arg_idx,arg_val,dbg_lvl) ! [enm] Debugging level

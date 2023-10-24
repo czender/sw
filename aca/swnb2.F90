@@ -3992,7 +3992,7 @@ program swnb2
      do lev_idx=1,lev_nbr
         if (mpl_CWP(lev_idx)>0.0) cld_lvl_nbr=cld_lvl_nbr+1
      enddo                  ! end loop over lev
-     if (cld_lvl_nbr==0 .and. mpc_CWP_cmd_ln/=0.0) stop 'cld_lvl_nbr==0'
+     if (cld_lvl_nbr==0 .and. mpc_CWP_cmd_ln/=0.0) error stop 'cld_lvl_nbr==0'
      do lev_idx=1,lev_nbr
         if (mpl_CWP(lev_idx)>0.0) mpl_CWP(lev_idx)=mpc_CWP_cmd_ln/real(cld_lvl_nbr)
      enddo                  ! end loop over lev
@@ -4102,11 +4102,11 @@ program swnb2
      alb_sfc=0.5*(alb_sfc_vsb_drc+alb_sfc_NIR_drc)
   endif                     ! end if overriding CLM profile albedo
   ! Sanity check
-  if (alb_sfc>1.0.or.alb_sfc<0.0) stop 'alb_sfc>1.0.or.alb_sfc<0.0 in swnb2()'
+  if (alb_sfc>1.0.or.alb_sfc<0.0) error stop 'alb_sfc>1.0.or.alb_sfc<0.0 in swnb2()'
   if (cmd_ln_slr_cst) then
      slr_cst=slr_cst_cmd_ln
   endif                     ! end if overriding solar constant
-  if (sfc_msv>1.0.or.sfc_msv<0.0) stop 'sfc_msv>1.0.or.sfc_msv<0.0 in swnb2()'
+  if (sfc_msv>1.0.or.sfc_msv<0.0) error stop 'sfc_msv>1.0.or.sfc_msv<0.0 in swnb2()'
   if (cmd_ln_sfc_msv) then
      sfc_msv=sfc_msv_cmd_ln
   endif                     ! end if overriding surface emissivity
@@ -4147,9 +4147,9 @@ program swnb2
   endif                     ! end if no user defined levels
   ! Array dimensions: tau
   allocate(tau(tau_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for tau"
+  if(rcd /= 0) error stop "allocate() failed for tau"
   allocate(tau_prs(tau_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for tau_prs"
+  if(rcd /= 0) error stop "allocate() failed for tau_prs"
   ntau=tau_nbr
   do tau_idx=1,tau_nbr
      tau_prs(tau_idx)=prs_ntf(tau_idx)
@@ -4309,300 +4309,300 @@ program swnb2
   
   ! Array dimensions: bnd
   allocate(ext_cff_mss_aer(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for ext_cff_mss_aer"
+  if(rcd /= 0) error stop "allocate() failed for ext_cff_mss_aer"
   allocate(abs_cff_mss_aer(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for abs_cff_mss_aer"
+  if(rcd /= 0) error stop "allocate() failed for abs_cff_mss_aer"
   allocate(sca_cff_mss_aer(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for sca_cff_mss_aer"
+  if(rcd /= 0) error stop "allocate() failed for sca_cff_mss_aer"
   allocate(asm_prm_aer(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for asm_prm_aer"
+  if(rcd /= 0) error stop "allocate() failed for asm_prm_aer"
   allocate(abs_cff_mss_bga(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for abs_cff_mss_bga"
+  if(rcd /= 0) error stop "allocate() failed for abs_cff_mss_bga"
   allocate(sca_cff_mss_bga(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for sca_cff_mss_bga"
+  if(rcd /= 0) error stop "allocate() failed for sca_cff_mss_bga"
   allocate(asm_prm_bga(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for asm_prm_bga"
+  if(rcd /= 0) error stop "allocate() failed for asm_prm_bga"
   allocate(abs_cff_mss_ice(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for abs_cff_mss_ice"
+  if(rcd /= 0) error stop "allocate() failed for abs_cff_mss_ice"
   allocate(sca_cff_mss_ice(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for sca_cff_mss_ice"
+  if(rcd /= 0) error stop "allocate() failed for sca_cff_mss_ice"
   allocate(asm_prm_ice(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for asm_prm_ice"
+  if(rcd /= 0) error stop "allocate() failed for asm_prm_ice"
   allocate(abs_cff_mss_lqd(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for abs_cff_mss_lqd"
+  if(rcd /= 0) error stop "allocate() failed for abs_cff_mss_lqd"
   allocate(sca_cff_mss_lqd(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for sca_cff_mss_lqd"
+  if(rcd /= 0) error stop "allocate() failed for sca_cff_mss_lqd"
   allocate(asm_prm_lqd(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for asm_prm_lqd"
+  if(rcd /= 0) error stop "allocate() failed for asm_prm_lqd"
   allocate(abs_cff_mss_mpr(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for abs_cff_mss_mpr"
+  if(rcd /= 0) error stop "allocate() failed for abs_cff_mss_mpr"
   allocate(sca_cff_mss_mpr(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for sca_cff_mss_mpr"
+  if(rcd /= 0) error stop "allocate() failed for sca_cff_mss_mpr"
   allocate(asm_prm_mpr(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for asm_prm_mpr"
+  if(rcd /= 0) error stop "allocate() failed for asm_prm_mpr"
   allocate(abs_spc_SAS(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for abs_spc_SAS"
+  if(rcd /= 0) error stop "allocate() failed for abs_spc_SAS"
   allocate(abs_spc_atm(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for abs_spc_atm"
+  if(rcd /= 0) error stop "allocate() failed for abs_spc_atm"
   allocate(abs_spc_sfc(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for abs_spc_sfc"
+  if(rcd /= 0) error stop "allocate() failed for abs_spc_sfc"
   allocate(bnd(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for bnd"
+  if(rcd /= 0) error stop "allocate() failed for bnd"
   allocate(flx_abs_atm_rdr(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_abs_atm_rdr"
+  if(rcd /= 0) error stop "allocate() failed for flx_abs_atm_rdr"
   allocate(flx_frc_dwn_sfc_blr(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_frc_dwn_sfc_blr"
+  if(rcd /= 0) error stop "allocate() failed for flx_frc_dwn_sfc_blr"
   allocate(flx_frc_dwn_sfc(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_frc_dwn_sfc"
+  if(rcd /= 0) error stop "allocate() failed for flx_frc_dwn_sfc"
   allocate(flx_slr_frc(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_slr_frc"
+  if(rcd /= 0) error stop "allocate() failed for flx_slr_frc"
   allocate(flx_spc_abs_SAS(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_spc_abs_SAS"
+  if(rcd /= 0) error stop "allocate() failed for flx_spc_abs_SAS"
   allocate(flx_spc_abs_atm(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_spc_abs_atm"
+  if(rcd /= 0) error stop "allocate() failed for flx_spc_abs_atm"
   allocate(flx_spc_abs_sfc(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_spc_abs_sfc"
+  if(rcd /= 0) error stop "allocate() failed for flx_spc_abs_sfc"
   allocate(flx_spc_act_pht_TOA(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_spc_act_pht_TOA"
+  if(rcd /= 0) error stop "allocate() failed for flx_spc_act_pht_TOA"
   allocate(flx_spc_act_pht_sfc(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_spc_act_pht_sfc"
+  if(rcd /= 0) error stop "allocate() failed for flx_spc_act_pht_sfc"
   allocate(flx_spc_dwn_TOA(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_spc_dwn_TOA"
+  if(rcd /= 0) error stop "allocate() failed for flx_spc_dwn_TOA"
   allocate(flx_spc_dwn_dff_sfc(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_spc_dwn_dff_sfc"
+  if(rcd /= 0) error stop "allocate() failed for flx_spc_dwn_dff_sfc"
   allocate(flx_spc_dwn_drc_sfc(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_spc_dwn_drc_sfc"
+  if(rcd /= 0) error stop "allocate() failed for flx_spc_dwn_drc_sfc"
   allocate(flx_spc_dwn_sfc(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_spc_dwn_sfc"
+  if(rcd /= 0) error stop "allocate() failed for flx_spc_dwn_sfc"
   allocate(flx_spc_pht_dwn_sfc(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_spc_pht_dwn_sfc"
+  if(rcd /= 0) error stop "allocate() failed for flx_spc_pht_dwn_sfc"
   allocate(j_spc_NO2_sfc(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for j_spc_NO2_sfc"
+  if(rcd /= 0) error stop "allocate() failed for j_spc_NO2_sfc"
   allocate(lmn_SRF(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for lmn_SRF"
+  if(rcd /= 0) error stop "allocate() failed for lmn_SRF"
   allocate(nrg_pht(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for nrg_pht"
+  if(rcd /= 0) error stop "allocate() failed for nrg_pht"
   allocate(lmn_spc_aa_ndr_TOA(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for lmn_spc_aa_ndr_TOA"
+  if(rcd /= 0) error stop "allocate() failed for lmn_spc_aa_ndr_TOA"
   allocate(lmn_spc_aa_ndr_sfc(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for lmn_spc_aa_ndr_sfc"
+  if(rcd /= 0) error stop "allocate() failed for lmn_spc_aa_ndr_sfc"
   allocate(ntn_spc_aa_ndr_TOA(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for ntn_spc_aa_ndr_TOA"
+  if(rcd /= 0) error stop "allocate() failed for ntn_spc_aa_ndr_TOA"
   allocate(ntn_spc_aa_ndr_sfc(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for ntn_spc_aa_ndr_sfc"
+  if(rcd /= 0) error stop "allocate() failed for ntn_spc_aa_ndr_sfc"
   allocate(ntn_spc_aa_zen_sfc(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for ntn_spc_aa_zen_sfc"
+  if(rcd /= 0) error stop "allocate() failed for ntn_spc_aa_zen_sfc"
   allocate(odac_spc_aer(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odac_spc_aer"
+  if(rcd /= 0) error stop "allocate() failed for odac_spc_aer"
   allocate(odac_spc_mpr(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odac_spc_mpr"
+  if(rcd /= 0) error stop "allocate() failed for odac_spc_mpr"
   allocate(odac_spc_snw(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odac_spc_snw"
+  if(rcd /= 0) error stop "allocate() failed for odac_spc_snw"
   allocate(odac_spc_bga(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odac_spc_bga"
+  if(rcd /= 0) error stop "allocate() failed for odac_spc_bga"
   allocate(odac_spc_ice(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odac_spc_ice"
+  if(rcd /= 0) error stop "allocate() failed for odac_spc_ice"
   allocate(odac_spc_lqd(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odac_spc_lqd"
+  if(rcd /= 0) error stop "allocate() failed for odac_spc_lqd"
   allocate(odxc_spc_CO2(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_CO2"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_CO2"
   allocate(odxc_spc_H2O(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_H2O"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_H2O"
   allocate(odxc_spc_H2OH2O(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_H2OH2O"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_H2OH2O"
   allocate(odxc_spc_NO2(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_NO2"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_NO2"
   allocate(odxc_spc_CFC11(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_CFC11"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_CFC11"
   allocate(odxc_spc_CFC12(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_CFC12"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_CFC12"
   allocate(odxc_spc_O2(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_O2"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_O2"
   allocate(odxc_spc_O2N2(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_O2N2"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_O2N2"
   allocate(odxc_spc_O2O2(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_O2O2"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_O2O2"
   allocate(odxc_spc_O3(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_O3"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_O3"
   allocate(odxc_spc_OH(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_OH"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_OH"
   allocate(odxc_spc_CH4(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_CH4"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_CH4"
   allocate(odxc_spc_CO(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_CO"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_CO"
   allocate(odxc_spc_N2(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_N2"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_N2"
   allocate(odxc_spc_N2O(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_N2O"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_N2O"
   allocate(odxc_spc_Ray(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_Ray"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_Ray"
   allocate(odxc_spc_aer(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_aer"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_aer"
   allocate(odxc_spc_mpr(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_mpr"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_mpr"
   allocate(odxc_spc_snw(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_snw"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_snw"
   allocate(odxc_spc_bga(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_bga"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_bga"
   allocate(odxc_spc_ice(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_ice"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_ice"
   allocate(odxc_spc_lqd(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_lqd"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_lqd"
   allocate(odxc_spc_ttl(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxc_spc_ttl"
+  if(rcd /= 0) error stop "allocate() failed for odxc_spc_ttl"
   allocate(rfl_spc_SAS(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for rfl_spc_SAS"
+  if(rcd /= 0) error stop "allocate() failed for rfl_spc_SAS"
   allocate(alb_spc_snw(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for alb_spc_snw"
+  if(rcd /= 0) error stop "allocate() failed for alb_spc_snw"
   allocate(flx_spc_abs_snw(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_spc_abs_snw"
+  if(rcd /= 0) error stop "allocate() failed for flx_spc_abs_snw"
   allocate(flx_spc_dwn_snw(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_spc_dwn_snw"
+  if(rcd /= 0) error stop "allocate() failed for flx_spc_dwn_snw"
   allocate(flx_spc_upw_snw(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_spc_upw_snw"
+  if(rcd /= 0) error stop "allocate() failed for flx_spc_upw_snw"
   allocate(rfl_spc_sfc(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for rfl_spc_sfc"
+  if(rcd /= 0) error stop "allocate() failed for rfl_spc_sfc"
   allocate(trn_spc_atm_CO2(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_CO2"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_CO2"
   allocate(trn_spc_atm_H2O(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_H2O"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_H2O"
   allocate(trn_spc_atm_H2OH2O(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_H2OH2O"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_H2OH2O"
   allocate(trn_spc_atm_NO2(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_NO2"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_NO2"
   allocate(trn_spc_atm_CFC11(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_CFC11"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_CFC11"
   allocate(trn_spc_atm_CFC12(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_CFC12"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_CFC12"
   allocate(trn_spc_atm_O2(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_O2"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_O2"
   allocate(trn_spc_atm_O2N2(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_O2N2"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_O2N2"
   allocate(trn_spc_atm_O2O2(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_O2O2"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_O2O2"
   allocate(trn_spc_atm_O3(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_O3"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_O3"
   allocate(trn_spc_atm_OH(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_OH"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_OH"
   allocate(trn_spc_atm_CH4(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_CH4"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_CH4"
   allocate(trn_spc_atm_CO(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_CO"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_CO"
   allocate(trn_spc_atm_N2(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_N2"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_N2"
   allocate(trn_spc_atm_N2O(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_N2O"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_N2O"
   allocate(trn_spc_atm_Ray(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_Ray"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_Ray"
   allocate(trn_spc_atm_aer(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_aer"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_aer"
   allocate(trn_spc_atm_mpr(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_mpr"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_mpr"
   allocate(trn_spc_atm_snw(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_snw"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_snw"
   allocate(trn_spc_atm_bga(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_bga"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_bga"
   allocate(trn_spc_atm_ice(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_ice"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_ice"
   allocate(trn_spc_atm_lqd(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_lqd"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_lqd"
   allocate(trn_spc_atm_ttl(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for trn_spc_atm_ttl"
+  if(rcd /= 0) error stop "allocate() failed for trn_spc_atm_ttl"
   allocate(wvl(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for wvl"
+  if(rcd /= 0) error stop "allocate() failed for wvl"
   allocate(wvl_ctr(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for wvl_ctr"
+  if(rcd /= 0) error stop "allocate() failed for wvl_ctr"
   allocate(wvl_dlt(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for wvl_dlt"
+  if(rcd /= 0) error stop "allocate() failed for wvl_dlt"
   allocate(wvl_max(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for wvl_max"
+  if(rcd /= 0) error stop "allocate() failed for wvl_max"
   allocate(wvl_min(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for wvl_min"
+  if(rcd /= 0) error stop "allocate() failed for wvl_min"
   allocate(wvn(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for wvn"
+  if(rcd /= 0) error stop "allocate() failed for wvn"
   allocate(wvn_ctr(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for wvn_ctr"
+  if(rcd /= 0) error stop "allocate() failed for wvn_ctr"
   allocate(wvn_dlt(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for wvn_dlt"
+  if(rcd /= 0) error stop "allocate() failed for wvn_dlt"
   allocate(wvn_max(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for wvn_max"
+  if(rcd /= 0) error stop "allocate() failed for wvn_max"
   allocate(wvn_min(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for wvn_min"
+  if(rcd /= 0) error stop "allocate() failed for wvn_min"
   
   ! Array dimensions: grd
   allocate(wvl_grd(bnd_nbr+1),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for wvl_grd"
+  if(rcd /= 0) error stop "allocate() failed for wvl_grd"
 
   ! Array dimensions: bnd,lev_bnd_snw
   allocate(abs_cff_mss_snw(bnd_nbr,lev_bnd_snw_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for abs_cff_mss_snw"
+  if(rcd /= 0) error stop "allocate() failed for abs_cff_mss_snw"
   allocate(sca_cff_mss_snw(bnd_nbr,lev_bnd_snw_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for sca_cff_mss_snw"
+  if(rcd /= 0) error stop "allocate() failed for sca_cff_mss_snw"
   allocate(asm_prm_snw(bnd_nbr,lev_bnd_snw_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for asm_prm_snw"
+  if(rcd /= 0) error stop "allocate() failed for asm_prm_snw"
 
   if (flg_mie) then
      ! Array dimensions: mmn,bnd
      allocate(lgn_xpn_cff_aer(mmn_nbr,bnd_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for lgn_xpn_cff_aer"
+     if(rcd /= 0) error stop "allocate() failed for lgn_xpn_cff_aer"
      allocate(lgn_xpn_cff_bga(mmn_nbr,bnd_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for lgn_xpn_cff_bga"
+     if(rcd /= 0) error stop "allocate() failed for lgn_xpn_cff_bga"
      allocate(lgn_xpn_cff_ice(mmn_nbr,bnd_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for lgn_xpn_cff_ice"
+     if(rcd /= 0) error stop "allocate() failed for lgn_xpn_cff_ice"
      allocate(lgn_xpn_cff_lqd(mmn_nbr,bnd_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for lgn_xpn_cff_lqd"
+     if(rcd /= 0) error stop "allocate() failed for lgn_xpn_cff_lqd"
      allocate(lgn_xpn_cff_mpr(mmn_nbr,bnd_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for lgn_xpn_cff_mpr"
+     if(rcd /= 0) error stop "allocate() failed for lgn_xpn_cff_mpr"
   end if ! !flg_mie
   if (flg_mie_snw) then
      ! Array dimensions: mmn,bnd,lev_bnd_snw
      allocate(lgn_xpn_cff_snw(mmn_nbr,bnd_nbr,lev_bnd_snw_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for lgn_xpn_cff_snw"
+     if(rcd /= 0) error stop "allocate() failed for lgn_xpn_cff_snw"
   end if ! !flg_mie_snw
 
   if (flg_mie) then
      ! Array dimensions: mmn,bnd,lev
      allocate(lgn_xpn_cff_Mie_ttl(mmn_nbr,bnd_nbr,lev_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for lgn_xpn_cff_Mie_ttl"
+     if(rcd /= 0) error stop "allocate() failed for lgn_xpn_cff_Mie_ttl"
   end if ! !flg_mie
 
   ! Array dimensions: bnd,lev
   allocate(asm_prm_HG_ttl(bnd_nbr,lev_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for asm_prm_HG_ttl"
+  if(rcd /= 0) error stop "allocate() failed for asm_prm_HG_ttl"
   allocate(flx_spc_abs(bnd_nbr,lev_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_spc_abs"
+  if(rcd /= 0) error stop "allocate() failed for flx_spc_abs"
   allocate(ntn_spc_mean(bnd_nbr,lev_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for ntn_spc_mean"
+  if(rcd /= 0) error stop "allocate() failed for ntn_spc_mean"
   allocate(odxl_spc_ttl(bnd_nbr,lev_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for odxl_spc_ttl"
+  if(rcd /= 0) error stop "allocate() failed for odxl_spc_ttl"
   allocate(ss_alb_fct(bnd_nbr,lev_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for ss_alb_fct"
+  if(rcd /= 0) error stop "allocate() failed for ss_alb_fct"
 
   ! Array dimensions: bnd,levp
   allocate(flx_spc_dwn(bnd_nbr,levp_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_spc_dwn"
+  if(rcd /= 0) error stop "allocate() failed for flx_spc_dwn"
   allocate(flx_spc_dwn_dff(bnd_nbr,levp_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_spc_dwn_dff"
+  if(rcd /= 0) error stop "allocate() failed for flx_spc_dwn_dff"
   allocate(flx_spc_dwn_drc(bnd_nbr,levp_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_spc_dwn_drc"
+  if(rcd /= 0) error stop "allocate() failed for flx_spc_dwn_drc"
   allocate(flx_spc_upw(bnd_nbr,levp_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for flx_spc_upw"
+  if(rcd /= 0) error stop "allocate() failed for flx_spc_upw"
   allocate(lmn_spc_aa_ndr(bnd_nbr,levp_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for lmn_spc_aa_ndr"
+  if(rcd /= 0) error stop "allocate() failed for lmn_spc_aa_ndr"
   allocate(ntn_spc_aa_ndr(bnd_nbr,levp_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for ntn_spc_aa_ndr"
+  if(rcd /= 0) error stop "allocate() failed for ntn_spc_aa_ndr"
   allocate(ntn_spc_aa_zen(bnd_nbr,levp_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for ntn_spc_aa_zen"
+  if(rcd /= 0) error stop "allocate() failed for ntn_spc_aa_zen"
 
   ! Array dimensions: plr,bnd
   allocate(lmn_spc_aa_sfc(plr_nbr,bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for lmn_spc_aa_sfc"
+  if(rcd /= 0) error stop "allocate() failed for lmn_spc_aa_sfc"
   allocate(ntn_spc_aa_sfc(plr_nbr,bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for ntn_spc_aa_sfc"
+  if(rcd /= 0) error stop "allocate() failed for ntn_spc_aa_sfc"
 
   ! Array dimensions: azi,plr,bnd
   allocate(ntn_spc_TOA(azi_nbr,plr_nbr,bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop "allocate() failed for ntn_spc_TOA"
+  if(rcd /= 0) error stop "allocate() failed for ntn_spc_TOA"
 
   ! Initialize level-independent arrays that depend on bnd_nbr
   wvl_grd(1)=wvl_max_H2O(1)
@@ -4864,9 +4864,9 @@ program swnb2
           bnd_nbr,wvl_grd,rfl_spc_sfc, &
           xtr_typ_LHS,xtr_typ_RHS)
      if (allocated(rfl_spc_sfc_dsk)) deallocate(rfl_spc_sfc_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for rfl_spc_sfc_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for rfl_spc_sfc_dsk"
      if (allocated(wvl_grd_rfl)) deallocate(wvl_grd_rfl,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for wvl_grd_rfl"
+     if(rcd /= 0) error stop "deallocate() failed for wvl_grd_rfl"
   endif ! !flg_rfl
   ! Re-bin optical properties using nearest neighbor extrapolation
   if (flg_aer) then
@@ -4886,15 +4886,15 @@ program swnb2
      end if ! !flg_mie_aer
      if (allocated(abs_cff_mss_aer_dsk)) deallocate(abs_cff_mss_aer_dsk,stat=rcd) !
      if (allocated(ext_cff_mss_aer_dsk)) deallocate(ext_cff_mss_aer_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for ext_cff_mss_aer_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for ext_cff_mss_aer_dsk"
      if (allocated(sca_cff_mss_aer_dsk)) deallocate(sca_cff_mss_aer_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for sca_cff_mss_aer_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for sca_cff_mss_aer_dsk"
      if (allocated(asm_prm_aer_dsk)) deallocate(asm_prm_aer_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for asm_prm_aer_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for asm_prm_aer_dsk"
      if (allocated(wvl_grd_aer)) deallocate(wvl_grd_aer,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for wvl_grd_aer"
+     if(rcd /= 0) error stop "deallocate() failed for wvl_grd_aer"
      if (allocated(lgn_xpn_cff_aer_dsk)) deallocate(lgn_xpn_cff_aer_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for lgn_xpn_cff_aer_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for lgn_xpn_cff_aer_dsk"
   else ! !flg_aer
      ! Initialize unused variables to prevent triggering IEEE write exceptions
      ext_cff_mss_aer(:)=0.0
@@ -4913,15 +4913,15 @@ program swnb2
         end do ! end loop over mmn
      end if ! !flg_mie_bga
      if (allocated(abs_cff_mss_bga_dsk)) deallocate(abs_cff_mss_bga_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for abs_cff_mss_bga_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for abs_cff_mss_bga_dsk"
      if (allocated(sca_cff_mss_bga_dsk)) deallocate(sca_cff_mss_bga_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for sca_cff_mss_bga_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for sca_cff_mss_bga_dsk"
      if (allocated(asm_prm_bga_dsk)) deallocate(asm_prm_bga_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for asm_prm_bga_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for asm_prm_bga_dsk"
      if (allocated(wvl_grd_bga)) deallocate(wvl_grd_bga,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for wvl_grd_bga"
+     if(rcd /= 0) error stop "deallocate() failed for wvl_grd_bga"
      if (allocated(lgn_xpn_cff_bga_dsk)) deallocate(lgn_xpn_cff_bga_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for lgn_xpn_cff_bga_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for lgn_xpn_cff_bga_dsk"
   endif ! !flg_bga
   if (flg_ice) then
      call rbn_vec(bnd_nbr_ice,wvl_grd_ice,abs_cff_mss_ice_dsk, &
@@ -4937,15 +4937,15 @@ program swnb2
         end do ! end loop over mmn
      end if ! !flg_mie_ice
      if (allocated(abs_cff_mss_ice_dsk)) deallocate(abs_cff_mss_ice_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for abs_cff_mss_ice_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for abs_cff_mss_ice_dsk"
      if (allocated(sca_cff_mss_ice_dsk)) deallocate(sca_cff_mss_ice_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for sca_cff_mss_ice_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for sca_cff_mss_ice_dsk"
      if (allocated(asm_prm_ice_dsk)) deallocate(asm_prm_ice_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for asm_prm_ice_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for asm_prm_ice_dsk"
      if (allocated(wvl_grd_ice)) deallocate(wvl_grd_ice,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for wvl_grd_ice"
+     if(rcd /= 0) error stop "deallocate() failed for wvl_grd_ice"
      if (allocated(lgn_xpn_cff_ice_dsk)) deallocate(lgn_xpn_cff_ice_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for lgn_xpn_cff_ice_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for lgn_xpn_cff_ice_dsk"
   endif ! !flg_ice
   if (flg_lqd) then
      call rbn_vec(bnd_nbr_lqd,wvl_grd_lqd,abs_cff_mss_lqd_dsk, &
@@ -4961,15 +4961,15 @@ program swnb2
         end do ! end loop over mmn
      end if ! !flg_mie_lqd
      if (allocated(abs_cff_mss_lqd_dsk)) deallocate(abs_cff_mss_lqd_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for abs_cff_mss_lqd_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for abs_cff_mss_lqd_dsk"
      if (allocated(sca_cff_mss_lqd_dsk)) deallocate(sca_cff_mss_lqd_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for sca_cff_mss_lqd_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for sca_cff_mss_lqd_dsk"
      if (allocated(asm_prm_lqd_dsk)) deallocate(asm_prm_lqd_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for asm_prm_lqd_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for asm_prm_lqd_dsk"
      if (allocated(wvl_grd_lqd)) deallocate(wvl_grd_lqd,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for wvl_grd_lqd"
+     if(rcd /= 0) error stop "deallocate() failed for wvl_grd_lqd"
      if (allocated(lgn_xpn_cff_lqd_dsk)) deallocate(lgn_xpn_cff_lqd_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for lgn_xpn_cff_lqd_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for lgn_xpn_cff_lqd_dsk"
   endif ! !flg_lqd
   if (flg_mpr) then
      call rbn_vec(bnd_nbr_mpr,wvl_grd_mpr,abs_cff_mss_mpr_dsk, &
@@ -4985,15 +4985,15 @@ program swnb2
         end do ! end loop over mmn
      end if ! !flg_mie_mpr
      if (allocated(abs_cff_mss_mpr_dsk)) deallocate(abs_cff_mss_mpr_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for abs_cff_mss_mpr_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for abs_cff_mss_mpr_dsk"
      if (allocated(sca_cff_mss_mpr_dsk)) deallocate(sca_cff_mss_mpr_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for sca_cff_mss_mpr_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for sca_cff_mss_mpr_dsk"
      if (allocated(asm_prm_mpr_dsk)) deallocate(asm_prm_mpr_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for asm_prm_mpr_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for asm_prm_mpr_dsk"
      if (allocated(wvl_grd_mpr)) deallocate(wvl_grd_mpr,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for wvl_grd_mpr"
+     if(rcd /= 0) error stop "deallocate() failed for wvl_grd_mpr"
      if (allocated(lgn_xpn_cff_mpr_dsk)) deallocate(lgn_xpn_cff_mpr_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for lgn_xpn_cff_mpr_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for lgn_xpn_cff_mpr_dsk"
   endif ! !flg_mpr
   if (flg_snw) then
      do lev_bnd_snw_idx=1,lev_bnd_snw_nbr
@@ -5013,53 +5013,53 @@ program swnb2
      end do ! end loop over lev_bnd_snw_idx
      if (flg_mie) write (6,'(a,a,i2,a)') prg_nm(1:ftn_strlen(prg_nm)),': Utilizing ',mmn_nbr,' phase function moments'
      if (allocated(abs_cff_mss_snw_dsk)) deallocate(abs_cff_mss_snw_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for abs_cff_mss_snw_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for abs_cff_mss_snw_dsk"
      if (allocated(sca_cff_mss_snw_dsk)) deallocate(sca_cff_mss_snw_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for sca_cff_mss_snw_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for sca_cff_mss_snw_dsk"
      if (allocated(asm_prm_snw_dsk)) deallocate(asm_prm_snw_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for asm_prm_snw_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for asm_prm_snw_dsk"
      if (allocated(lgn_xpn_cff_snw_dsk)) deallocate(lgn_xpn_cff_snw_dsk,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for lgn_xpn_cff_snw_dsk"
+     if(rcd /= 0) error stop "deallocate() failed for lgn_xpn_cff_snw_dsk"
      if (allocated(wvl_grd_snw)) deallocate(wvl_grd_snw,stat=rcd) !
-     if(rcd /= 0) stop "deallocate() failed for wvl_grd_snw"
+     if(rcd /= 0) error stop "deallocate() failed for wvl_grd_snw"
   endif ! !flg_snw
   if (flg_msm) then
      ! Space for diagnostic CCY83 (delta-Eddington/adding) computation
      ! Array dimensions: bnd
      allocate(alb_dff_spc_snw_dea(bnd_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for alb_dff_spc_snw_dea"
+     if(rcd /= 0) error stop "allocate() failed for alb_dff_spc_snw_dea"
      allocate(alb_drc_spc_snw_dea(bnd_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for alb_drc_spc_snw_dea"
+     if(rcd /= 0) error stop "allocate() failed for alb_drc_spc_snw_dea"
      ! Array dimensions: bnd,levp_snw
      allocate(rfl_dff_spc_snw_cnt(bnd_nbr,levp_snw_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for rfl_dff_spc_snw_cnt"
+     if(rcd /= 0) error stop "allocate() failed for rfl_dff_spc_snw_cnt"
      allocate(trn_dff_spc_snw_cnt(bnd_nbr,levp_snw_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for trn_dff_spc_snw_cnt"
+     if(rcd /= 0) error stop "allocate() failed for trn_dff_spc_snw_cnt"
      allocate(rfl_drc_upw_snp(bnd_nbr,levp_snw_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for rfl_drc_upw_snp"
+     if(rcd /= 0) error stop "allocate() failed for rfl_drc_upw_snp"
      allocate(rfl_dff_upw_snp(bnd_nbr,levp_snw_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for rfl_dff_upw_snp"
+     if(rcd /= 0) error stop "allocate() failed for rfl_dff_upw_snp"
      allocate(rfl_dff_dwn_snp(bnd_nbr,levp_snw_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for rfl_dff_dwn_snp"
+     if(rcd /= 0) error stop "allocate() failed for rfl_dff_dwn_snp"
      allocate(trn_ttl_drc_snp(bnd_nbr,levp_snw_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for trn_ttl_drc_snp"
+     if(rcd /= 0) error stop "allocate() failed for trn_ttl_drc_snp"
      allocate(trn_drc_drc_snp(bnd_nbr,levp_snw_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for trn_drc_drc_snp"
+     if(rcd /= 0) error stop "allocate() failed for trn_drc_drc_snp"
      ! Array dimensions: bnd,lev_snw (20160516: so why are they all dimensioned by levp_snw_nbr)?
      allocate(rfl_ddm_spc_snw(bnd_nbr,levp_snw_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for rfl_ddm_spc_snw"
+     if(rcd /= 0) error stop "allocate() failed for rfl_ddm_spc_snw"
      allocate(trn_ddm_spc_snw(bnd_nbr,levp_snw_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for trn_ddm_spc_snw"
+     if(rcd /= 0) error stop "allocate() failed for trn_ddm_spc_snw"
      allocate(rfl_dff_spc_snw(bnd_nbr,levp_snw_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for rfl_dff_spc_snw"
+     if(rcd /= 0) error stop "allocate() failed for rfl_dff_spc_snw"
      allocate(trn_dff_spc_snw(bnd_nbr,levp_snw_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for trn_dff_spc_snw"
+     if(rcd /= 0) error stop "allocate() failed for trn_dff_spc_snw"
      allocate(rfl_drc_spc_snw(bnd_nbr,levp_snw_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for rfl_drc_spc_snw"
+     if(rcd /= 0) error stop "allocate() failed for rfl_drc_spc_snw"
      allocate(trn_ttl_drc_spc_snw(bnd_nbr,levp_snw_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for trn_ttl_drc_spc_snw"
+     if(rcd /= 0) error stop "allocate() failed for trn_ttl_drc_spc_snw"
      allocate(trn_drc_drc(bnd_nbr,levp_snw_nbr),stat=rcd)
-     if(rcd /= 0) stop "allocate() failed for trn_drc_drc"
+     if(rcd /= 0) error stop "allocate() failed for trn_drc_drc"
   endif ! !flg_msm
   ! Absorption cross-sections should be 0 outside data range
   xtr_typ_LHS=xtr_prt_nil+xtr_fll_nil
@@ -5108,9 +5108,9 @@ program swnb2
        bnd_nbr,wvl_grd,lmn_SRF, &
        xtr_typ_LHS,xtr_typ_RHS)
   if (allocated(lmn_SRF_dsk)) deallocate(lmn_SRF_dsk,stat=rcd) !
-  if(rcd /= 0) stop "deallocate() failed for lmn_SRF_dsk"
+  if(rcd /= 0) error stop "deallocate() failed for lmn_SRF_dsk"
   if (allocated(wvl_grd_lmn)) deallocate(wvl_grd_lmn,stat=rcd) !
-  if(rcd /= 0) stop "deallocate() failed for wvl_grd_lmn"
+  if(rcd /= 0) error stop "deallocate() failed for wvl_grd_lmn"
   do bnd_idx=1,bnd_nbr
      bnd_wgt_lmn(bnd_idx)=lmn_SRF(bnd_idx)
   enddo                  ! end loop over bnd
@@ -6422,7 +6422,7 @@ program swnb2
                 ' at lev(',lev_idx,') = ',prs(lev_idx)/100.0,' mb and wvl(',bnd_idx,') = ',wvl(bnd_idx)*1.0e6, &
                 ' um, because odsl_spc_ttl = ',odsl_spc_ttl(bnd_idx,lev_idx),' and odxl_spc_ttl = ',odxl_spc_ttl(bnd_idx,lev_idx)
            ss_alb_fct(bnd_idx,lev_idx)=1.0
-           stop 'ss_alb_fct > 1.0'
+           error stop 'ss_alb_fct > 1.0'
         endif
      enddo                  ! end loop over lev
      
@@ -6616,7 +6616,7 @@ program swnb2
      if (flg_rfl) then
         ! Apply spectral reflectance from boundary condition file
         albedo=rfl_spc_sfc(bnd_idx)
-        if(albedo < 0.0 .or. albedo > 1.0) stop "rfl_spc_sfc out of bounds"
+        if(albedo < 0.0 .or. albedo > 1.0) error stop "rfl_spc_sfc out of bounds"
      else ! flg_rfl
         ! Determine spectral reflectance from broadband parameters
         if (wvl_ctr(bnd_idx) < 0.7e-6) then
@@ -6908,10 +6908,10 @@ program swnb2
            ! CCY83 p. 136 (B22), CAM3 p. 115 (4.223)
            trn_dff_spc_snw_nxt=trn_dff_spc_snw_crr*tmp_fct_mtx_nvr*trn_dff_spc_snw(bnd_idx,levp_snw_idx)
            
-           if (rfl_dff_spc_snw_nxt > 1.0) stop 'rfl_dff_spc_snw_nxt > 1.0'
-           if (rfl_dff_spc_snw_nxt < 0.0) stop 'rfl_dff_spc_snw_nxt < 0.0'
-           if (trn_dff_spc_snw_nxt > 1.0) stop 'trn_dff_spc_snw_nxt > 1.0'
-           if (trn_dff_spc_snw_nxt < 0.0) stop 'trn_dff_spc_snw_nxt < 0.0'
+           if (rfl_dff_spc_snw_nxt > 1.0) error stop 'rfl_dff_spc_snw_nxt > 1.0'
+           if (rfl_dff_spc_snw_nxt < 0.0) error stop 'rfl_dff_spc_snw_nxt < 0.0'
+           if (trn_dff_spc_snw_nxt > 1.0) error stop 'trn_dff_spc_snw_nxt > 1.0'
+           if (trn_dff_spc_snw_nxt < 0.0) error stop 'trn_dff_spc_snw_nxt < 0.0'
 
            ! Direct transmittance of direct beam
            trn_drc_drc_nxt=trn_drc_drc_crr*trn_drc_drc(bnd_idx,levp_snw_idx)
@@ -7040,7 +7040,7 @@ program swnb2
         rfl_dff_spc_snw(:,:)=0.0
      endif ! night-time
 
-     ! call t_stopf('disort')
+     ! call t_error stopf('disort')
      
      ! Store spectral fluxes returned from DISORT
      ! DISORT uses a funny indexing system: 
@@ -9366,398 +9366,398 @@ program swnb2
   ! De-allocate dynamic variables
   ! Array dimensions: azi
   if (allocated(azi)) deallocate(azi,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for azi'
+  if(rcd /= 0) error stop 'deallocate() failed for azi'
   if (allocated(azi_dgr)) deallocate(azi_dgr,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for azi_dgr'
+  if(rcd /= 0) error stop 'deallocate() failed for azi_dgr'
   ! Array dimensions: bnd
   if (allocated(abs_spc_SAS)) deallocate(abs_spc_SAS,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for abs_spc_SAS'
+  if(rcd /= 0) error stop 'deallocate() failed for abs_spc_SAS'
   if (allocated(abs_spc_atm)) deallocate(abs_spc_atm,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for abs_spc_atm'
+  if(rcd /= 0) error stop 'deallocate() failed for abs_spc_atm'
   if (allocated(abs_spc_sfc)) deallocate(abs_spc_sfc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for abs_spc_sfc'
+  if(rcd /= 0) error stop 'deallocate() failed for abs_spc_sfc'
   if (allocated(bnd)) deallocate(bnd,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for bnd'
+  if(rcd /= 0) error stop 'deallocate() failed for bnd'
   if (allocated(flx_abs_atm_rdr)) deallocate(flx_abs_atm_rdr,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_abs_atm_rdr'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_abs_atm_rdr'
   if (allocated(flx_frc_dwn_sfc_blr)) deallocate(flx_frc_dwn_sfc_blr,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_frc_dwn_sfc_blr'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_frc_dwn_sfc_blr'
   if (allocated(flx_frc_dwn_sfc)) deallocate(flx_frc_dwn_sfc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_frc_dwn_sfc'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_frc_dwn_sfc'
   if (allocated(flx_slr_frc)) deallocate(flx_slr_frc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_slr_frc'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_slr_frc'
   if (allocated(flx_spc_abs_SAS)) deallocate(flx_spc_abs_SAS,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_spc_abs_SAS'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_spc_abs_SAS'
   if (allocated(flx_spc_abs_atm)) deallocate(flx_spc_abs_atm,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_spc_abs_atm'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_spc_abs_atm'
   if (allocated(flx_spc_abs_sfc)) deallocate(flx_spc_abs_sfc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_spc_abs_sfc'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_spc_abs_sfc'
   if (allocated(flx_spc_act_pht_TOA)) deallocate(flx_spc_act_pht_TOA,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_spc_act_pht_TOA'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_spc_act_pht_TOA'
   if (allocated(flx_spc_act_pht_sfc)) deallocate(flx_spc_act_pht_sfc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_spc_act_pht_sfc'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_spc_act_pht_sfc'
   if (allocated(flx_spc_dwn_TOA)) deallocate(flx_spc_dwn_TOA,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_spc_dwn_TOA'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_spc_dwn_TOA'
   if (allocated(flx_spc_dwn_dff_sfc)) deallocate(flx_spc_dwn_dff_sfc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_spc_dwn_dff_sfc'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_spc_dwn_dff_sfc'
   if (allocated(flx_spc_dwn_drc_sfc)) deallocate(flx_spc_dwn_drc_sfc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_spc_dwn_drc_sfc'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_spc_dwn_drc_sfc'
   if (allocated(flx_spc_dwn_sfc)) deallocate(flx_spc_dwn_sfc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_spc_dwn_sfc'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_spc_dwn_sfc'
   if (allocated(flx_spc_pht_dwn_sfc)) deallocate(flx_spc_pht_dwn_sfc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_spc_pht_dwn_sfc'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_spc_pht_dwn_sfc'
   if (allocated(j_spc_NO2_sfc)) deallocate(j_spc_NO2_sfc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for j_spc_NO2_sfc'
+  if(rcd /= 0) error stop 'deallocate() failed for j_spc_NO2_sfc'
   if (allocated(lmn_SRF)) deallocate(lmn_SRF,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for lmn_SRF'
+  if(rcd /= 0) error stop 'deallocate() failed for lmn_SRF'
   if (allocated(lmn_spc_aa_ndr_TOA)) deallocate(lmn_spc_aa_ndr_TOA,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for lmn_spc_aa_ndr_TOA'
+  if(rcd /= 0) error stop 'deallocate() failed for lmn_spc_aa_ndr_TOA'
   if (allocated(nrg_pht)) deallocate(nrg_pht,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for nrg_pht'
+  if(rcd /= 0) error stop 'deallocate() failed for nrg_pht'
   if (allocated(ntn_spc_aa_ndr_TOA)) deallocate(ntn_spc_aa_ndr_TOA,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for ntn_spc_aa_ndr_TOA'
+  if(rcd /= 0) error stop 'deallocate() failed for ntn_spc_aa_ndr_TOA'
   if (allocated(ntn_spc_aa_ndr_sfc)) deallocate(ntn_spc_aa_ndr_sfc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for ntn_spc_aa_ndr_sfc'
+  if(rcd /= 0) error stop 'deallocate() failed for ntn_spc_aa_ndr_sfc'
   if (allocated(ntn_spc_aa_zen_sfc)) deallocate(ntn_spc_aa_zen_sfc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for ntn_spc_aa_zen_sfc'
+  if(rcd /= 0) error stop 'deallocate() failed for ntn_spc_aa_zen_sfc'
   if (allocated(odac_spc_aer)) deallocate(odac_spc_aer,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odac_spc_aer'
+  if(rcd /= 0) error stop 'deallocate() failed for odac_spc_aer'
   if (allocated(odac_spc_mpr)) deallocate(odac_spc_mpr,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odac_spc_mpr'
+  if(rcd /= 0) error stop 'deallocate() failed for odac_spc_mpr'
   if (allocated(odac_spc_snw)) deallocate(odac_spc_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odac_spc_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for odac_spc_snw'
   if (allocated(odac_spc_bga)) deallocate(odac_spc_bga,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odac_spc_bga'
+  if(rcd /= 0) error stop 'deallocate() failed for odac_spc_bga'
   if (allocated(odac_spc_ice)) deallocate(odac_spc_ice,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odac_spc_ice'
+  if(rcd /= 0) error stop 'deallocate() failed for odac_spc_ice'
   if (allocated(odac_spc_lqd)) deallocate(odac_spc_lqd,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odac_spc_lqd'
+  if(rcd /= 0) error stop 'deallocate() failed for odac_spc_lqd'
   if (allocated(odxc_spc_CO2)) deallocate(odxc_spc_CO2,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_CO2'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_CO2'
   if (allocated(odxc_spc_H2O)) deallocate(odxc_spc_H2O,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_H2O'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_H2O'
   if (allocated(odxc_spc_H2OH2O)) deallocate(odxc_spc_H2OH2O,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_H2OH2O'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_H2OH2O'
   if (allocated(odxc_spc_NO2)) deallocate(odxc_spc_NO2,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_NO2'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_NO2'
   if (allocated(odxc_spc_CFC11)) deallocate(odxc_spc_CFC11,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_CFC11'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_CFC11'
   if (allocated(odxc_spc_CFC12)) deallocate(odxc_spc_CFC12,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_CFC12'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_CFC12'
   if (allocated(odxc_spc_O2)) deallocate(odxc_spc_O2,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_O2'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_O2'
   if (allocated(odxc_spc_O2N2)) deallocate(odxc_spc_O2N2,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_O2N2'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_O2N2'
   if (allocated(odxc_spc_O2O2)) deallocate(odxc_spc_O2O2,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_O2O2'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_O2O2'
   if (allocated(odxc_spc_O3)) deallocate(odxc_spc_O3,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_O3'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_O3'
   if (allocated(odxc_spc_OH)) deallocate(odxc_spc_OH,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_OH'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_OH'
   if (allocated(odxc_spc_CO)) deallocate(odxc_spc_CO,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_CO'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_CO'
   if (allocated(odxc_spc_N2)) deallocate(odxc_spc_N2,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_N2'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_N2'
   if (allocated(odxc_spc_N2O)) deallocate(odxc_spc_N2O,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_N2O'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_N2O'
   if (allocated(odxc_spc_CH4)) deallocate(odxc_spc_CH4,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_CH4'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_CH4'
   if (allocated(odxc_spc_Ray)) deallocate(odxc_spc_Ray,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_Ray'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_Ray'
   if (allocated(odxc_spc_aer)) deallocate(odxc_spc_aer,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_aer'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_aer'
   if (allocated(odxc_spc_mpr)) deallocate(odxc_spc_mpr,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_mpr'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_mpr'
   if (allocated(odxc_spc_snw)) deallocate(odxc_spc_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_snw'
   if (allocated(odxc_spc_bga)) deallocate(odxc_spc_bga,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_bga'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_bga'
   if (allocated(odxc_spc_ice)) deallocate(odxc_spc_ice,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_ice'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_ice'
   if (allocated(odxc_spc_lqd)) deallocate(odxc_spc_lqd,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_lqd'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_lqd'
   if (allocated(odxc_spc_ttl)) deallocate(odxc_spc_ttl,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxc_spc_ttl'
+  if(rcd /= 0) error stop 'deallocate() failed for odxc_spc_ttl'
   if (allocated(rfl_spc_SAS)) deallocate(rfl_spc_SAS,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for rfl_spc_SAS'
+  if(rcd /= 0) error stop 'deallocate() failed for rfl_spc_SAS'
   if (allocated(alb_spc_snw)) deallocate(alb_spc_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for alb_spc_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for alb_spc_snw'
   if (allocated(flx_spc_abs_snw)) deallocate(flx_spc_abs_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_spc_abs_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_spc_abs_snw'
   if (allocated(flx_spc_dwn_snw)) deallocate(flx_spc_dwn_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_spc_dwn_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_spc_dwn_snw'
   if (allocated(flx_spc_upw_snw)) deallocate(flx_spc_upw_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_spc_upw_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_spc_upw_snw'
   if (allocated(rfl_spc_sfc)) deallocate(rfl_spc_sfc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for rfl_spc_sfc'
+  if(rcd /= 0) error stop 'deallocate() failed for rfl_spc_sfc'
   if (allocated(trn_spc_atm_CO2)) deallocate(trn_spc_atm_CO2,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_CO2'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_CO2'
   if (allocated(trn_spc_atm_H2O)) deallocate(trn_spc_atm_H2O,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_H2O'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_H2O'
   if (allocated(trn_spc_atm_H2OH2O)) deallocate(trn_spc_atm_H2OH2O,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_H2OH2O'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_H2OH2O'
   if (allocated(trn_spc_atm_NO2)) deallocate(trn_spc_atm_NO2,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_NO2'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_NO2'
   if (allocated(trn_spc_atm_CFC11)) deallocate(trn_spc_atm_CFC11,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_CFC11'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_CFC11'
   if (allocated(trn_spc_atm_CFC12)) deallocate(trn_spc_atm_CFC12,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_CFC12'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_CFC12'
   if (allocated(trn_spc_atm_O2)) deallocate(trn_spc_atm_O2,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_O2'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_O2'
   if (allocated(trn_spc_atm_O2N2)) deallocate(trn_spc_atm_O2N2,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_O2N2'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_O2N2'
   if (allocated(trn_spc_atm_O2O2)) deallocate(trn_spc_atm_O2O2,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_O2O2'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_O2O2'
   if (allocated(trn_spc_atm_O3)) deallocate(trn_spc_atm_O3,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_O3'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_O3'
   if (allocated(trn_spc_atm_OH)) deallocate(trn_spc_atm_OH,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_OH'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_OH'
   if (allocated(trn_spc_atm_CO)) deallocate(trn_spc_atm_CO,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_CO'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_CO'
   if (allocated(trn_spc_atm_N2)) deallocate(trn_spc_atm_N2,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_N2'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_N2'
   if (allocated(trn_spc_atm_N2O)) deallocate(trn_spc_atm_N2O,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_N2O'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_N2O'
   if (allocated(trn_spc_atm_CH4)) deallocate(trn_spc_atm_CH4,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_CH4'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_CH4'
   if (allocated(trn_spc_atm_Ray)) deallocate(trn_spc_atm_Ray,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_Ray'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_Ray'
   if (allocated(trn_spc_atm_aer)) deallocate(trn_spc_atm_aer,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_aer'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_aer'
   if (allocated(trn_spc_atm_mpr)) deallocate(trn_spc_atm_mpr,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_mpr'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_mpr'
   if (allocated(trn_spc_atm_bga)) deallocate(trn_spc_atm_bga,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_bga'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_bga'
   if (allocated(trn_spc_atm_ice)) deallocate(trn_spc_atm_ice,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_ice'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_ice'
   if (allocated(trn_spc_atm_lqd)) deallocate(trn_spc_atm_lqd,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_lqd'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_lqd'
   if (allocated(trn_spc_atm_ttl)) deallocate(trn_spc_atm_ttl,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_spc_atm_ttl'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_spc_atm_ttl'
   if (allocated(wvl)) deallocate(wvl,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for wvl'
+  if(rcd /= 0) error stop 'deallocate() failed for wvl'
   if (allocated(wvl_ctr)) deallocate(wvl_ctr,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for wvl_ctr'
+  if(rcd /= 0) error stop 'deallocate() failed for wvl_ctr'
   if (allocated(wvl_dlt)) deallocate(wvl_dlt,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for wvl_dlt'
+  if(rcd /= 0) error stop 'deallocate() failed for wvl_dlt'
   if (allocated(wvl_max)) deallocate(wvl_max,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for wvl_max'
+  if(rcd /= 0) error stop 'deallocate() failed for wvl_max'
   if (allocated(wvl_min)) deallocate(wvl_min,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for wvl_min'
+  if(rcd /= 0) error stop 'deallocate() failed for wvl_min'
   if (allocated(wvn)) deallocate(wvn,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for wvn'
+  if(rcd /= 0) error stop 'deallocate() failed for wvn'
   if (allocated(wvn_ctr)) deallocate(wvn_ctr,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for wvn_ctr'
+  if(rcd /= 0) error stop 'deallocate() failed for wvn_ctr'
   if (allocated(wvn_dlt)) deallocate(wvn_dlt,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for wvn_dlt'
+  if(rcd /= 0) error stop 'deallocate() failed for wvn_dlt'
   if (allocated(wvn_max)) deallocate(wvn_max,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for wvn_max'
+  if(rcd /= 0) error stop 'deallocate() failed for wvn_max'
   if (allocated(wvn_min)) deallocate(wvn_min,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for wvn_min'
+  if(rcd /= 0) error stop 'deallocate() failed for wvn_min'
   ! Array dimensions: chn
   if (allocated(flx_chn_dwn_TOA)) deallocate(flx_chn_dwn_TOA,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_chn_dwn_TOA'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_chn_dwn_TOA'
   if (allocated(flx_chn_upw_TOA)) deallocate(flx_chn_upw_TOA,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_chn_upw_TOA'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_chn_upw_TOA'
   ! Array dimensions: grd
   if (allocated(wvl_grd)) deallocate(wvl_grd,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for wvl_grd'
+  if(rcd /= 0) error stop 'deallocate() failed for wvl_grd'
   ! Array dimensions: lev
   if (allocated(RH_lqd)) deallocate(RH_lqd,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for RH_lqd'
+  if(rcd /= 0) error stop 'deallocate() failed for RH_lqd'
   if (allocated(alt)) deallocate(alt,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for alt'
+  if(rcd /= 0) error stop 'deallocate() failed for alt'
   if (allocated(lev)) deallocate(lev,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for lev'
+  if(rcd /= 0) error stop 'deallocate() failed for lev'
   if (allocated(flx_bb_abs)) deallocate(flx_bb_abs,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_bb_abs'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_bb_abs'
   if (allocated(flx_nst_abs)) deallocate(flx_nst_abs,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_nst_abs'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_nst_abs'
   if (allocated(htg_rate_bb)) deallocate(htg_rate_bb,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for htg_rate_bb'
+  if(rcd /= 0) error stop 'deallocate() failed for htg_rate_bb'
   if (allocated(j_NO2)) deallocate(j_NO2,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for j_NO2'
+  if(rcd /= 0) error stop 'deallocate() failed for j_NO2'
   if (allocated(ntn_bb_mean)) deallocate(ntn_bb_mean,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for ntn_bb_mean'
+  if(rcd /= 0) error stop 'deallocate() failed for ntn_bb_mean'
   if (allocated(odal_obs_aer)) deallocate(odal_obs_aer,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odal_obs_aer'
+  if(rcd /= 0) error stop 'deallocate() failed for odal_obs_aer'
   if (allocated(odal_obs_mpr)) deallocate(odal_obs_mpr,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odal_obs_mpr'
+  if(rcd /= 0) error stop 'deallocate() failed for odal_obs_mpr'
   if (allocated(odal_obs_snw)) deallocate(odal_obs_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odal_obs_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for odal_obs_snw'
   if (allocated(odal_obs_bga)) deallocate(odal_obs_bga,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odal_obs_bga'
+  if(rcd /= 0) error stop 'deallocate() failed for odal_obs_bga'
   if (allocated(odsl_obs_aer)) deallocate(odsl_obs_aer,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odsl_obs_aer'
+  if(rcd /= 0) error stop 'deallocate() failed for odsl_obs_aer'
   if (allocated(odsl_obs_mpr)) deallocate(odsl_obs_mpr,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odsl_obs_mpr'
+  if(rcd /= 0) error stop 'deallocate() failed for odsl_obs_mpr'
   if (allocated(odsl_obs_snw)) deallocate(odsl_obs_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odsl_obs_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for odsl_obs_snw'
   if (allocated(odsl_obs_bga)) deallocate(odsl_obs_bga,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odsl_obs_bga'
+  if(rcd /= 0) error stop 'deallocate() failed for odsl_obs_bga'
   if (allocated(odxl_obs_aer)) deallocate(odxl_obs_aer,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxl_obs_aer'
+  if(rcd /= 0) error stop 'deallocate() failed for odxl_obs_aer'
   if (allocated(odxl_obs_mpr)) deallocate(odxl_obs_mpr,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxl_obs_mpr'
+  if(rcd /= 0) error stop 'deallocate() failed for odxl_obs_mpr'
   if (allocated(odxl_obs_snw)) deallocate(odxl_obs_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxl_obs_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for odxl_obs_snw'
   if (allocated(odxl_obs_bga)) deallocate(odxl_obs_bga,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxl_obs_bga'
+  if(rcd /= 0) error stop 'deallocate() failed for odxl_obs_bga'
   if (allocated(tpt)) deallocate(tpt,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for tpt'
+  if(rcd /= 0) error stop 'deallocate() failed for tpt'
   ! Array dimensions: levp
   if (allocated(alt_ntf)) deallocate(alt_ntf,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for alt_ntf'
+  if(rcd /= 0) error stop 'deallocate() failed for alt_ntf'
   if (allocated(flx_frc_dwn_dff)) deallocate(flx_frc_dwn_dff,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_frc_dwn_dff'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_frc_dwn_dff'
   if (allocated(flx_bb_dwn_rat)) deallocate(flx_bb_dwn_rat,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_bb_dwn_rat'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_bb_dwn_rat'
   if (allocated(flx_bb_dwn_dff)) deallocate(flx_bb_dwn_dff,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_bb_dwn_dff'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_bb_dwn_dff'
   if (allocated(flx_bb_dwn_drc)) deallocate(flx_bb_dwn_drc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_bb_dwn_drc'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_bb_dwn_drc'
   if (allocated(flx_bb_dwn)) deallocate(flx_bb_dwn,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_bb_dwn'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_bb_dwn'
   if (allocated(flx_bb_net)) deallocate(flx_bb_net,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_bb_net'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_bb_net'
   if (allocated(flx_bb_upw)) deallocate(flx_bb_upw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_bb_upw'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_bb_upw'
   if (allocated(flx_nst_dwn)) deallocate(flx_nst_dwn,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_nst_dwn'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_nst_dwn'
   if (allocated(flx_nst_net)) deallocate(flx_nst_net,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_nst_net'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_nst_net'
   if (allocated(flx_nst_upw)) deallocate(flx_nst_upw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_nst_upw'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_nst_upw'
   if (allocated(flx_nst_dwn)) deallocate(flx_nst_dwn,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_nst_dwn'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_nst_dwn'
   if (allocated(flx_nst_upw)) deallocate(flx_nst_upw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_nst_upw'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_nst_upw'
   if (allocated(levp)) deallocate(levp,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for levp'
+  if(rcd /= 0) error stop 'deallocate() failed for levp'
   if (allocated(tpt_ntf)) deallocate(tpt_ntf,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for tpt_ntf'
+  if(rcd /= 0) error stop 'deallocate() failed for tpt_ntf'
   ! Array dimensions: plr
   if (allocated(plr)) deallocate(plr,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for plr'
+  if(rcd /= 0) error stop 'deallocate() failed for plr'
   if (allocated(plr_cos)) deallocate(plr_cos,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for plr_cos'
+  if(rcd /= 0) error stop 'deallocate() failed for plr_cos'
   if (allocated(plr_dgr)) deallocate(plr_dgr,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for plr_dgr'
+  if(rcd /= 0) error stop 'deallocate() failed for plr_dgr'
   ! Array dimensions: lev_snw, levp_snw
   if (allocated(lev_snw)) deallocate(lev_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for lev_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for lev_snw'
   if (allocated(levp_snw)) deallocate(levp_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for levp_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for levp_snw'
   if (allocated(dns_snw)) deallocate(dns_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for dns_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for dns_snw'
   if (allocated(dpt_dlt_snw)) deallocate(dpt_dlt_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for dpt_dlt_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for dpt_dlt_snw'
   if (allocated(dpt_ntf_snw)) deallocate(dpt_ntf_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for dpt_ntf_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for dpt_ntf_snw'
   if (allocated(dpt_snw)) deallocate(dpt_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for dpt_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for dpt_snw'
   if (allocated(mmr_mpr_snw)) deallocate(mmr_mpr_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for mmr_mpr_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for mmr_mpr_snw'
   if (allocated(rds_ffc_snw)) deallocate(rds_ffc_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for rds_ffc_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for rds_ffc_snw'
   if (allocated(tpt_snw)) deallocate(tpt_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for tpt_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for tpt_snw'
   if (allocated(tpt_ntf_snw)) deallocate(tpt_ntf_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for tpt_ntf_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for tpt_ntf_snw'
   if (allocated(foo_snw)) deallocate(foo_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for foo_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for foo_snw'
   if (allocated(alb_dff_spc_snw_dea)) deallocate(alb_dff_spc_snw_dea,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for alb_dff_spc_snw_dea'
+  if(rcd /= 0) error stop 'deallocate() failed for alb_dff_spc_snw_dea'
   if (allocated(alb_drc_spc_snw_dea)) deallocate(alb_drc_spc_snw_dea,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for alb_drc_spc_snw_dea'
+  if(rcd /= 0) error stop 'deallocate() failed for alb_drc_spc_snw_dea'
   ! Array dimensions: bnd,lev_snw
   if (allocated(rfl_ddm_spc_snw)) deallocate(rfl_ddm_spc_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for rfl_ddm_spc_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for rfl_ddm_spc_snw'
   if (allocated(trn_ddm_spc_snw)) deallocate(trn_ddm_spc_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_ddm_spc_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_ddm_spc_snw'
   if (allocated(rfl_dff_spc_snw)) deallocate(rfl_dff_spc_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for rfl_dff_spc_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for rfl_dff_spc_snw'
   if (allocated(trn_dff_spc_snw)) deallocate(trn_dff_spc_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_dff_spc_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_dff_spc_snw'
   if (allocated(rfl_drc_spc_snw)) deallocate(rfl_drc_spc_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for rfl_drc_spc_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for rfl_drc_spc_snw'
   if (allocated(trn_ttl_drc_spc_snw)) deallocate(trn_ttl_drc_spc_snw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_ttl_drc_spc_snw'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_ttl_drc_spc_snw'
   if (allocated(trn_drc_drc)) deallocate(trn_drc_drc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_drc_drc'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_drc_drc'
   ! Array dimensions: bnd,levp_snw
   if (allocated(rfl_dff_spc_snw_cnt)) deallocate(rfl_dff_spc_snw_cnt,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for rfl_dff_spc_snw_cnt'
+  if(rcd /= 0) error stop 'deallocate() failed for rfl_dff_spc_snw_cnt'
   if (allocated(trn_dff_spc_snw_cnt)) deallocate(trn_dff_spc_snw_cnt,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_dff_spc_snw_cnt'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_dff_spc_snw_cnt'
   if (allocated(rfl_drc_upw_snp)) deallocate(rfl_drc_upw_snp,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for rfl_drc_upw_snp'
+  if(rcd /= 0) error stop 'deallocate() failed for rfl_drc_upw_snp'
   if (allocated(rfl_dff_upw_snp)) deallocate(rfl_dff_upw_snp,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for rfl_dff_upw_snp'
+  if(rcd /= 0) error stop 'deallocate() failed for rfl_dff_upw_snp'
   if (allocated(rfl_dff_dwn_snp)) deallocate(rfl_dff_dwn_snp,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for rfl_dff_dwn_snp'
+  if(rcd /= 0) error stop 'deallocate() failed for rfl_dff_dwn_snp'
   if (allocated(trn_ttl_drc_snp)) deallocate(trn_ttl_drc_snp,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_ttl_drc_snp'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_ttl_drc_snp'
   if (allocated(trn_drc_drc_snp)) deallocate(trn_drc_drc_snp,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for trn_drc_drc_snp'
+  if(rcd /= 0) error stop 'deallocate() failed for trn_drc_drc_snp'
   ! Array dimensions: tau
   if (allocated(tau)) deallocate(tau,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for tau'
+  if(rcd /= 0) error stop 'deallocate() failed for tau'
   if (allocated(tau_prs)) deallocate(tau_prs,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for tau_prs'
+  if(rcd /= 0) error stop 'deallocate() failed for tau_prs'
   ! Array dimensions: bnd,lev
   if (allocated(lgn_xpn_cff_Mie_ttl)) deallocate(lgn_xpn_cff_Mie_ttl,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for lgn_xpn_cff_Mie_ttl'
+  if(rcd /= 0) error stop 'deallocate() failed for lgn_xpn_cff_Mie_ttl'
   if (allocated(asm_prm_HG_ttl)) deallocate(asm_prm_HG_ttl,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for asm_prm_HG_ttl'
+  if(rcd /= 0) error stop 'deallocate() failed for asm_prm_HG_ttl'
   if (allocated(flx_spc_abs)) deallocate(flx_spc_abs,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_spc_abs'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_spc_abs'
   if (allocated(ntn_spc_mean)) deallocate(ntn_spc_mean,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for ntn_spc_mean'
+  if(rcd /= 0) error stop 'deallocate() failed for ntn_spc_mean'
   if (allocated(odxl_spc_ttl)) deallocate(odxl_spc_ttl,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for odxl_spc_ttl'
+  if(rcd /= 0) error stop 'deallocate() failed for odxl_spc_ttl'
   if (allocated(ss_alb_fct)) deallocate(ss_alb_fct,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for ss_alb_fct'
+  if(rcd /= 0) error stop 'deallocate() failed for ss_alb_fct'
   ! Array dimensions: bnd,levp
   if (allocated(flx_spc_dwn)) deallocate(flx_spc_dwn,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_spc_dwn'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_spc_dwn'
   if (allocated(flx_spc_dwn_dff)) deallocate(flx_spc_dwn_dff,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_spc_dwn_dff'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_spc_dwn_dff'
   if (allocated(flx_spc_dwn_drc)) deallocate(flx_spc_dwn_drc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_spc_dwn_drc'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_spc_dwn_drc'
   if (allocated(flx_spc_upw)) deallocate(flx_spc_upw,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for flx_spc_upw'
+  if(rcd /= 0) error stop 'deallocate() failed for flx_spc_upw'
   if (allocated(lmn_spc_aa_ndr)) deallocate(lmn_spc_aa_ndr,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for lmn_spc_aa_ndr'
+  if(rcd /= 0) error stop 'deallocate() failed for lmn_spc_aa_ndr'
   if (allocated(ntn_spc_aa_ndr)) deallocate(ntn_spc_aa_ndr,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for ntn_spc_aa_ndr'
+  if(rcd /= 0) error stop 'deallocate() failed for ntn_spc_aa_ndr'
   if (allocated(ntn_spc_aa_zen)) deallocate(ntn_spc_aa_zen,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for ntn_spc_aa_zen'
+  if(rcd /= 0) error stop 'deallocate() failed for ntn_spc_aa_zen'
   ! Array dimensions: plr,bnd
   if (allocated(lmn_spc_aa_sfc)) deallocate(lmn_spc_aa_sfc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for lmn_spc_aa_sfc'
+  if(rcd /= 0) error stop 'deallocate() failed for lmn_spc_aa_sfc'
   if (allocated(ntn_spc_aa_sfc)) deallocate(ntn_spc_aa_sfc,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for ntn_spc_aa_sfc'
+  if(rcd /= 0) error stop 'deallocate() failed for ntn_spc_aa_sfc'
   ! Array dimensions: plr,levp
   if (allocated(lmn_bb_aa)) deallocate(lmn_bb_aa,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for lmn_bb_aa'
+  if(rcd /= 0) error stop 'deallocate() failed for lmn_bb_aa'
   if (allocated(ntn_bb_aa)) deallocate(ntn_bb_aa,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for ntn_bb_aa'
+  if(rcd /= 0) error stop 'deallocate() failed for ntn_bb_aa'
   ! Array dimensions: azi,plr,bnd
   if (allocated(ntn_spc_TOA)) deallocate(ntn_spc_TOA,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for ntn_spc_TOA'
+  if(rcd /= 0) error stop 'deallocate() failed for ntn_spc_TOA'
   ! Array dimensions: azi,plr,chn
   if (allocated(ntn_chn_TOA)) deallocate(ntn_chn_TOA,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for ntn_chn_TOA'
+  if(rcd /= 0) error stop 'deallocate() failed for ntn_chn_TOA'
   if (allocated(rfl_chn_TOA)) deallocate(rfl_chn_TOA,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for rfl_chn_TOA'
+  if(rcd /= 0) error stop 'deallocate() failed for rfl_chn_TOA'
   ! Array dimensions: azi,plr,levp
   if (allocated(ntn_spc_chn)) deallocate(ntn_spc_chn,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for ntn_spc_chn'
+  if(rcd /= 0) error stop 'deallocate() failed for ntn_spc_chn'
   if (flg_mie) then
      ! Array dimensions: mmn,bnd,lev
      if (allocated(lgn_xpn_cff_Mie_ttl)) deallocate(lgn_xpn_cff_Mie_ttl,stat=rcd)
-     if(rcd /= 0) stop 'deallocate() failed for lgn_xpn_cff_Mie_ttl'
+     if(rcd /= 0) error stop 'deallocate() failed for lgn_xpn_cff_Mie_ttl'
   end if ! !flg_mie
 
   call exit(exit_status)

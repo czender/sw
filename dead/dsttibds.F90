@@ -96,11 +96,11 @@ contains
     rcd=nf90_wrp_inq_dimid(nc_id,"bln",bln_dmn_id)
     ! Get dimension sizes
     rcd=nf90_wrp(nf90_inquire_dimension(nc_id,lat_dmn_id,len=lat_nbr),sbr_nm//": inquire_dim lat")
-    if (lat_nbr /= lat_nbr_max.and.lat_nbr /= 1) stop "lat_nbr /= lat_nbr_max.and.lat_nbr /= 1"
+    if (lat_nbr /= lat_nbr_max.and.lat_nbr /= 1) error stop "lat_nbr /= lat_nbr_max.and.lat_nbr /= 1"
     rcd=nf90_wrp(nf90_inquire_dimension(nc_id,lon_dmn_id,len=lon_nbr),sbr_nm//": inquire_dim lon")
-    if (lon_nbr /= lon_nbr_max.and.lon_nbr /= 1) stop "lon_nbr /= lon_nbr_max.and.lon_nbr /= 1"
+    if (lon_nbr /= lon_nbr_max.and.lon_nbr /= 1) error stop "lon_nbr /= lon_nbr_max.and.lon_nbr /= 1"
     rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bln_dmn_id,len=bln_nbr_lcl),sbr_nm//": inquire_dim bln")
-    if (bln_nbr_lcl /= bln_nbr) stop "bln_nbr_lcl /= bln_nbr"
+    if (bln_nbr_lcl /= bln_nbr) error stop "bln_nbr_lcl /= bln_nbr"
     ! Get variable IDs
     rcd=nf90_wrp_inq_varid(nc_id,"lon",lon_id)
     rcd=nf90_wrp_inq_varid(nc_id,"lat",lat_id)
@@ -172,7 +172,7 @@ contains
                   "dead: ERROR dst_tibds_ini() sanity check failed at ", &
                   "lat(",lat_idx,") = ",lat(lat_idx),", ", &
                   "lon(",lon_idx,") = ",lon(lon_idx),", "
-             stop 
+             error stop 
           endif               ! endif err
        end do                 ! end loop over lon
     end do                    ! end loop over lat

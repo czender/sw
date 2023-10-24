@@ -133,7 +133,7 @@ contains
     
     ! Sanity check
     if(dmt_vwr(1) < 0.0001e-6_r8.or.dmt_vwr(1) > 100.0e-6_r8)  &
-         stop 'ERROR: dst_scv_cmn_ini() probably called before dst_psd_ini()'
+         error stop 'ERROR: dst_scv_cmn_ini() probably called before dst_psd_ini()'
     ! Initialize common block used for wet deposition
     do sz_idx=1,dst_nbr
        ! frc_ice_scv = 1.0_r8 for nucleation scavenging exactly as efficient per unit mass in ice as in liquid
@@ -552,7 +552,7 @@ contains
                      'dst_pcp: lat = ',lat_idx,' q_dst(',i,',',k,',',m,') = ',q_dst(i,k,m),' kg kg-1' &
                      ,', q_dst_tnd_evp = ',q_dst_tnd_evp(i,k,m),' kg kg-1 s-1' &
                      ,', q_dst_tnd_pcp = ',q_dst_tnd_pcp(i,k,m),' kg kg-1 s-1'
-                stop
+                error stop
              endif            ! endif err
           end do              ! end loop over lon
        end do                 ! end loop over lev
@@ -1055,7 +1055,7 @@ contains
           else if (ryn_nbr_grv(m) < 2.0e5_r8) then
              cff_drg_grv(m)=0.44_r8 ! Sep97 p. 463 (8.32)
           else
-             stop 'Reynolds number too large in clc_fsh_get()'
+             error stop 'Reynolds number too large in clc_fsh_get()'
           endif               ! end else
           ! Update terminal velocity based on new Reynolds number and drag coefficient
           vlc_grv(m)=sqrt(4.0_r8*grv_sfc*dmt_aer(m)*slp_crc(m)*dns_aer(m)/(3.0_r8*cff_drg_grv(m)*dns_mdp)) ! [m s-1] Terminal velocity SeP97 p. 467 (8.44)

@@ -159,10 +159,10 @@ contains
     var_lst(19)='mpc_H2O'     ! [kg m-2] Column mass path of H2O vapor
     
     ! Sanity checks
-    if (var_nbr /= 19) stop 'dead: var_nbr /= 19 in bdg_cmn_ini()'
+    if (var_nbr /= 19) error stop 'dead: var_nbr /= 19 in bdg_cmn_ini()'
     if (tm_dlt <= 0.0_r8 .or. tm_dlt > 3600.0_r8) then
        write(6,'(a,f9.3,a2)') 'dead: bdg_cmn_ini() reports unreasonable timestep duration tm_dlt = ',tm_dlt,' s'
-       stop
+       error stop
     endif                     ! endif err
     lat_wgt_ttl=0.0_r8           ! [frc] Total of latitude weights (currently must sum to 2.0)
     do lat_idx=1,plat
@@ -170,7 +170,7 @@ contains
     end do                    ! end loop over lat
     if (abs(2.0_r8-lat_wgt_ttl)/2.0_r8 > 1.0e-6) then
        write (6,'(a,f9.3,a)') 'dead: bdg_cmn_ini() reports lat_wgt_ttl = ',lat_wgt_ttl,' != 2.0'
-       stop
+       error stop
     endif                     ! endif err
     
     ! Create netCDF output file
@@ -254,7 +254,7 @@ contains
        end if                 ! endif
     end do                    ! end loop over var
     write(6,'(2a)') 'ERROR bdg_idx_get(): Variable name not found:',var_nm
-    stop
+    error stop
   end function bdg_idx_get                       ! end bdg_idx_get()
   
   subroutine bdg_gam_dry(var_nm,lat_idx,prs_dlt,q_H2O_vpr_mmrm,mmrd)

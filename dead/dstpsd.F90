@@ -408,13 +408,13 @@ contains
     
     ! Sanity checks
     do idx=1,dst_nbr
-       if (dmt_min(idx) > dmt_nmr(idx).or.dmt_max(idx) < dmt_nmr(idx)) stop &
+       if (dmt_min(idx) > dmt_nmr(idx).or.dmt_max(idx) < dmt_nmr(idx)) error stop &
             'dead: dst_psd_ini() reports dmt_min(idx) > dmt_nmr(idx).or.dmt_max(idx) < dmt_nmr(idx)'
-       if (dmt_min(idx) > dmt_vwr(idx).or.dmt_max(idx) < dmt_vwr(idx)) stop &
+       if (dmt_min(idx) > dmt_vwr(idx).or.dmt_max(idx) < dmt_vwr(idx)) error stop &
             'dead: dst_psd_ini() reports dmt_min(idx) > dmt_vwr(idx).or.dmt_max(idx) < dmt_vwr(idx)'
-       if (gsd_anl(idx) < 1.0.or.gsd_anl(idx) > 3.0_r8) stop &
+       if (gsd_anl(idx) < 1.0.or.gsd_anl(idx) > 3.0_r8) error stop &
             'dead: dst_psd_ini() reports gsd_anl(idx) < 1.0.or.gsd_anl(idx) > 3.0'
-       if (dns_aer(idx) < 500.0.or.dns_aer(idx) > 3000.0_r8) stop &
+       if (dns_aer(idx) < 500.0.or.dns_aer(idx) > 3000.0_r8) error stop &
             'dead: dst_psd_ini() reports dns_aer(idx) < 500.0.or.dns_aer(idx) > 3000.0'
     end do                     ! end loop over cst
     
@@ -585,13 +585,13 @@ contains
     else if (sz_grd_typ == grd_typ_lgr) then
        max_min_ratio=sz_grd_max/sz_grd_min
        series_ratio=max_min_ratio**(1.0_r8/real(sz_nbr,r8))
-       if (sz_grd_min == 0.0_r8) stop 'dead: grd_mk() reports sz_grd_min = 0.0'
+       if (sz_grd_min == 0.0_r8) error stop 'dead: grd_mk() reports sz_grd_min = 0.0'
        sz_min(1)=sz_grd_min
        do idx=2,sz_nbr        ! Loop starts at 2
           sz_min(idx)=sz_min(idx-1)*series_ratio
        end do                  ! end loop over grd
     else
-       stop 'dead: grd_mk() reports unknown grid type'
+       error stop 'dead: grd_mk() reports unknown grid type'
     endif                     ! endif
     
     ! Derived grid values 

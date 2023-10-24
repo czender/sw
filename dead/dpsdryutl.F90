@@ -114,7 +114,7 @@ contains
        cff_drg_fst_scl=0.44_r8 ! Sep97 p. 463 (8.32)
     else
        write (6,'(a,es9.2)') "ryn_nbr = ",ryn_nbr
-       stop 'ERROR: Reynolds number too large in cff_drg_fst_scl()'
+       error stop 'ERROR: Reynolds number too large in cff_drg_fst_scl()'
     endif               ! end else
   end function cff_drg_fst_scl ! [fnc] Drag coefficient
 

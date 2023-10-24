@@ -344,7 +344,7 @@ contains
     rcd=nf90_wrp_inq_dimid(nc_id,'wvl',bnd_dim_id)
     ! Get dimension sizes
     rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dim_id,len=aer_bnd_nbr),sbr_nm//": inquire_dim bnd")
-    if (aer_bnd_nbr > aer_bnd_nbr_max) stop 'aer_bnd_nbr > aer_bnd_nbr_max'
+    if (aer_bnd_nbr > aer_bnd_nbr_max) error stop 'aer_bnd_nbr > aer_bnd_nbr_max'
     ! Allocate space for dynamic arrays
     allocate(abs_cff_mss_aer(aer_bnd_nbr),stat=rcd)
     allocate(asm_prm_aer(aer_bnd_nbr),stat=rcd)
@@ -445,9 +445,9 @@ contains
     
     ! Get dimension sizes
     rcd=nf90_wrp(nf90_inquire_dimension(nc_id,chn_dim_id,len=chn_nbr),sbr_nm//": inquire_dim chn")
-    if (chn_nbr > chn_nbr_max) stop 'chn_nbr > chn_nbr_max'
+    if (chn_nbr > chn_nbr_max) error stop 'chn_nbr > chn_nbr_max'
     rcd=nf90_wrp(nf90_inquire_dimension(nc_id,time_dim_id,len=time_nbr),sbr_nm//": inquire_dim time")
-    if (time_nbr > time_nbr_max) stop 'time_nbr > time_nbr_max'
+    if (time_nbr > time_nbr_max) error stop 'time_nbr > time_nbr_max'
     
     ! Allocate space for dynamic arrays
     allocate(chn(chn_nbr),stat=rcd)
@@ -472,7 +472,7 @@ contains
        brk_lft_idx_chn=brk_lft_idx_chn+1
     end do                    ! end loop over chn
     if (brk_lft_idx_chn > chn_nbr) then
-       stop 'brk_lft_idx_chn > chn_nbr' 
+       error stop 'brk_lft_idx_chn > chn_nbr' 
     else 
        brk_lft_idx_chn=brk_lft_idx_chn-1
     endif
@@ -488,7 +488,7 @@ contains
        brk_lft_idx_time=brk_lft_idx_time+1
     end do                    ! end loop over time
     if (brk_lft_idx_time > time_nbr) then
-       stop 'brk_lft_idx_time > time_nbr' 
+       error stop 'brk_lft_idx_time > time_nbr' 
     else 
        brk_lft_idx_time=brk_lft_idx_time-1
     endif
@@ -544,7 +544,7 @@ contains
     if (allocated(time_obs)) deallocate(time_obs,stat=rcd)
     
     ! Sanity check
-    if (odxc_obs_aer < 0.0) stop 'odxc_obs_aer < 0.0'
+    if (odxc_obs_aer < 0.0) error stop 'odxc_obs_aer < 0.0'
     return
   end subroutine aer_odxc_get                       ! end aer_odxc_get()
   

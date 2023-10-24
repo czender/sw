@@ -237,7 +237,7 @@ contains
        write(6,*)'ERROR in wnd_min_max_wbl_get(): '
        write(6,*)'Specify fraction larger than 0.5 to resolve'
        write(6,*)'Doing otherwise is no better than using mean wind speed'
-       stop
+       error stop
     endif ! endif err
     
     do lon_idx=1,plon

@@ -99,7 +99,7 @@ program sng
      dsh_key=arg_val(1:2) ! [sng] First two characters of option
      if (dsh_key == "--") then
         opt_lng=ftn_opt_lng_get(arg_val) ! [nbr] Length of option
-        if (opt_lng <= 0) stop "Long option has no name"
+        if (opt_lng <= 0) error stop "Long option has no name"
         opt_sng=arg_val(3:2+opt_lng) ! [sng] Option string
         if (dbg_lvl >= dbg_io) write (6,"(5a,i3)") prg_nm(1:ftn_strlen(prg_nm)), &
              ": DEBUG Double hyphen indicates multi-character option: ", &

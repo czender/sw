@@ -40,7 +40,7 @@ contains
     ! Model should abort until veracity can be established
     ! q_dst_mxm should exceed greatest recorded atmospheric dust concentration
     q_dst_mxm=1.0e-3          ! [kg kg-1] Maximum plausible mass mixing ratio of dust
-    if(q_dst_mxm < 1.0e-7) stop 'dst_dbg_cmn_ini() reports q_dst_mxm too small, will trip for reasonable dust concentrations'
+    if(q_dst_mxm < 1.0e-7) error stop 'dst_dbg_cmn_ini() reports q_dst_mxm too small, will trip for reasonable dust concentrations'
     
     ! Source/sink routines compare new dust mixing ratio to q_dst_sgn
     ! q_dst < q_dst_sgn indicates unbelievably low dust emissions
@@ -50,7 +50,8 @@ contains
     ! q_dst_sgn should not exceed about 1.0e-20 kg kg-1
     ! WARNING: Model is free to (and does) eliminate concentrations lower than q_dst_sgn
     q_dst_sgn=1.0e-30_r8         ! [kg kg-1] Minimum plausible mass mixing ratio of dust
-    if(q_dst_sgn > 1.0e-20_r8) stop 'dst_dbg_cmn_ini() reports q_dst_sgn too large, fixers may cause significant mass imbalances'
+    if(q_dst_sgn > 1.0e-20_r8) error stop &
+         'dst_dbg_cmn_ini() reports q_dst_sgn too large, fixers may cause significant mass imbalances'
     
     ! Threshold flux indicating presence of "significant" dust
     ! Evaporative source routine prints warning when evaporative dust flux 
@@ -60,7 +61,7 @@ contains
     ! Source routine compares new dust flux to flx_mss_mxm
     ! flx_mss_vrt_dst_ttl > flx_mss_mxm indicates suspiciously high dust fluxes
     flx_mss_mxm=100.0e-9      ! [kg m-2 s-1] Maximum plausible flux of dust
-    if(flx_mss_mxm < 1.0e-9) stop 'dst_dbg_cmn_ini() reports flx_mss_mxm too small, will trip for reasonable mass fluxes'
+    if(flx_mss_mxm < 1.0e-9) error stop 'dst_dbg_cmn_ini() reports flx_mss_mxm too small, will trip for reasonable mass fluxes'
 
     ! Initialize common block used for debugging
 #ifdef BXM

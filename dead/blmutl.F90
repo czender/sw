@@ -191,7 +191,7 @@ contains
              else if (pln_typ_idx > 0) then ! Regular plant type
                 rlm_crr=snw_frc(lon_idx)*rgh_mmn_snw+(1.0_r8-snw_frc(lon_idx))*z0mvt(pln_typ_idx) ! [m] Bon96 p. 59
              else             ! Presumably ocean snuck through
-                stop 'dead: ERROR: pln_typ_idx == 0 in rgh_zpd_get()'
+                error stop 'dead: ERROR: pln_typ_idx == 0 in rgh_zpd_get()'
              endif            ! endif
              rgh_mmn(lon_idx)= & ! [m]
                   rgh_mmn(lon_idx)+ &
@@ -312,7 +312,7 @@ contains
              else if (pln_typ_idx > 0) then ! Regular plant type
                 rlm_crr=snw_frc(lon_idx)*rgh_mmn_snw+(1.0_r8-snw_frc(lon_idx))*z0mvt(pln_typ_idx) ! [m] Bon96 p. 59
              else             ! Presumably ocean snuck through
-                stop 'dead: ERROR: pln_typ_idx == 0 in rgh_mmn_get()'
+                error stop 'dead: ERROR: pln_typ_idx == 0 in rgh_mmn_get()'
              endif            ! endif
              rgh_mmn(lon_idx)= & ! [m]
                   rgh_mmn(lon_idx)+ &
@@ -1314,7 +1314,7 @@ contains
        endif                  ! endif ice
 #ifdef DST_DBG
        ! Sanity check
-       if (.not.flg_lnd(lon_idx).and..not.flg_ocn(lon_idx).and..not.flg_ice(lon_idx)) stop 'Invalid surface type in blm_glb()'
+       if (.not.flg_lnd(lon_idx).and..not.flg_ocn(lon_idx).and..not.flg_ice(lon_idx)) error stop 'Invalid surface type in blm_glb()'
 #endif /* not DST_DBG */
     end do                     ! end loop over lon
     

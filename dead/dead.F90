@@ -162,7 +162,7 @@ program dead
      dsh_key=arg_val(1:2) ! [sng] First two characters of option
      if_dbl_dsh: if (dsh_key == '--') then
         opt_lng=ftn_opt_lng_get(arg_val) ! [nbr] Length of option
-        if (opt_lng <= 0) stop 'Long option has no name'
+        if (opt_lng <= 0) error stop 'Long option has no name'
         opt_sng=arg_val(3:2+opt_lng) ! [sng] Option string
         if (opt_sng == 'dbg' .or. opt_sng == 'dbg_lvl' ) then
            call ftn_arg_get(arg_idx,arg_val,dbg_lvl) ! [enm] Debugging level
@@ -977,6 +977,6 @@ end subroutine tm2nc            ! end tm2nc()
 ! build mechanism could decide which files should and should not
 ! be built, but the simple solution is to do as follows...
 subroutine dead_stb
-  stop 'dead_stb() error: BXM not set, this routine should not be called'
+  error stop 'dead_stb() error: BXM not set, this routine should not be called'
 end subroutine dead_stb            ! end dead_stb()
 #endif  /* not BXM */

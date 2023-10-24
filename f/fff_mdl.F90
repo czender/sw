@@ -118,15 +118,15 @@ contains
     write (6,"(3(a,es15.8))") "erf(",0.0_r8,") = ",erf(0.0_r8)," =?= ",0.0_r8
     write (6,"(3(a,es15.8))") "erf(",1.0_r8,") = ",erf(1.0_r8)," =?= ",8.42700793E-01_r8
     write (6,"(2(a,es15.8))") "erf(",cmp_prc_foo,") = ",erf(cmp_prc_foo)
-    if (abs(0.8427_r8-erf(1.0_r8))/0.8427_r8 > 0.001_r8) stop "gsl_tst() reports Error function error"
-    if (erf(0.0_r8) /= 0.0_r8) stop "gsl_tst() reports Error function error"
+    if (abs(0.8427_r8-erf(1.0_r8))/0.8427_r8 > 0.001_r8) error stop "gsl_tst() reports Error function error"
+    if (erf(0.0_r8) /= 0.0_r8) error stop "gsl_tst() reports Error function error"
     
     ! Test gamma function
     write (6,"(a)") "Testing gamma function gamma():"
     write (6,"(3(a,es15.8))") "gamma(",0.5_r8,") = ",gamma(0.5_r8)," =?= ",sqrt(pi)
     write (6,"(2(a,es15.8))") "gamma(",cmp_prc_foo,") = ",gamma(cmp_prc_foo)
     if (abs(sqrt(pi)-gamma(0.5_r8))/sqrt(pi) > 1.0e-5_r8) &
-         stop "gsl_tst() reports Gamma function error"
+         error stop "gsl_tst() reports Gamma function error"
     
 #if 0
     ! Incomplete gamma function gammq() is only available in librecipes_f
@@ -136,9 +136,9 @@ contains
     write (6,"(a)") "Testing incomplete gamma function gammq():"
     write (6,"(3(a,es15.8))") "gammq(",1.0_r8,",",cmp_prc_foo,") = ",gammq(1.0_r8,cmp_prc_foo)
     write (6,"(3(a,es15.8))") "gammq(",1.0_r8,",",cmp_prc_foo,") = ",gammq(1.0_r8,cmp_prc_foo)
-    if (gammq(73.0_r8,0.0_r8) /= 1.0_r8) stop "Incomplete gamma function error"
+    if (gammq(73.0_r8,0.0_r8) /= 1.0_r8) error stop "Incomplete gamma function error"
     if (abs(exp(-1.0_r8)-1.0_r8*gammq(1.0_r8,1.0_r8))/exp(-1.0_r8) > 1.0e-5_r8) &
-         stop "gsl_tst() reports Incomplete gamma function error"
+         error stop "gsl_tst() reports Incomplete gamma function error"
 #endif /* !0 */
     
     if (dbg_lvl >= dbg_sbr) write(6,"(a)") "Exiting gsl_tst()"
@@ -246,7 +246,7 @@ contains
     
     ! De-allocate dynamic variables
     if (allocated(thr_idx)) deallocate(thr_idx,stat=rcd) ! [idx] OpenMP thread index
-    if(rcd /= 0) stop "deallocate() failed for thr_idx"
+    if(rcd /= 0) error stop "deallocate() failed for thr_idx"
     
     if (dbg_lvl >= dbg_sbr) write(6,"(a)") "Exiting omp_tst()"
     return
@@ -517,7 +517,7 @@ contains
     ! if-then-else construct
     if (.false.) then
        write (6,"(a,a)") prg_nm(1:ftn_strlen(prg_nm)),": ERROR: if-then-else construct is broken"
-       stop
+       error stop
     else
        write (6,"(a,a)") prg_nm(1:ftn_strlen(prg_nm)),": if-then-else construct works as expected"
     endif                     ! endif

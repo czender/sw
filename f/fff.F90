@@ -228,7 +228,7 @@ program fff
      dsh_key=arg_val(1:2) ! [sng] First two characters of option
      if (dsh_key == '--') then
         opt_lng=ftn_opt_lng_get(arg_val) ! [nbr] Length of option
-        if (opt_lng <= 0) stop 'Long option has no name'
+        if (opt_lng <= 0) error stop 'Long option has no name'
         opt_sng=arg_val(3:2+opt_lng) ! [sng] Option string
         if (dbg_lvl >= dbg_io) write (6,'(5a,i3)') prg_nm(1:ftn_strlen(prg_nm)), &
              ': DEBUG Double hyphen indicates multi-character option: ', &
@@ -323,7 +323,7 @@ program fff
 
   ! Check for netCDF Fortran90 interface conformance
   !if(.not.byteSizesOK()) then ! Requires use typesizes.mod explicitly
-  !   stop 'Compiler does not support required kinds of variables'
+  !   error stop 'Compiler does not support required kinds of variables'
   !end if ! endif bytesizesok()
 
   ! Read in netCDF data
@@ -341,30 +341,30 @@ program fff
   rcd=nf90_wrp_inq_dimid(nc_id,'lon',lon_dmn_id)
   ! Get dimension sizes
   rcd=nf90_wrp(nf90_inquire_dimension(nc_id,bnd_dmn_id,len=bnd_nbr),sbr_nm//': inquire_dim bnd')
-  if(bnd_nbr > bnd_nbr_max) stop 'bnd_nbr > bnd_nbr_max'
+  if(bnd_nbr > bnd_nbr_max) error stop 'bnd_nbr > bnd_nbr_max'
   rcd=nf90_wrp(nf90_inquire_dimension(nc_id,lat_dmn_id,len=lat_nbr),sbr_nm//': inquire_dim lat')
-  if(lat_nbr > lat_nbr_max) stop 'lat_nbr > lat_nbr_max'
+  if(lat_nbr > lat_nbr_max) error stop 'lat_nbr > lat_nbr_max'
   rcd=nf90_wrp(nf90_inquire_dimension(nc_id,lev_dmn_id,len=lev_nbr),sbr_nm//': inquire_dim lev')
-  if(lev_nbr > lev_nbr_max) stop 'lev_nbr > lev_nbr_max'
+  if(lev_nbr > lev_nbr_max) error stop 'lev_nbr > lev_nbr_max'
   rcd=nf90_wrp(nf90_inquire_dimension(nc_id,lon_dmn_id,len=lon_nbr),sbr_nm//': inquire_dim lon')
-  if(lon_nbr > lon_nbr_max) stop 'lon_nbr > lon_nbr_max'
-  if(rcd /= nf90_noerr) stop 'Error retrieving dimension sizes'
+  if(lon_nbr > lon_nbr_max) error stop 'lon_nbr > lon_nbr_max'
+  if(rcd /= nf90_noerr) error stop 'Error retrieving dimension sizes'
 
   ! Allocate space for dynamic arrays
   ! fxm: TODO 13
   ! call wrp_allocate(lat_nbr,lat,'lat') ! Coordinate variable
   allocate(lat(lat_nbr),stat=rcd) ! Coordinate variable
-  if(rcd /= 0) stop 'allocate() failed for lat'
+  if(rcd /= 0) error stop 'allocate() failed for lat'
   allocate(lev(lev_nbr),stat=rcd) ! Coordinate variable
-  if(rcd /= 0) stop 'allocate() failed for lev'
+  if(rcd /= 0) error stop 'allocate() failed for lev'
   allocate(lon(lon_nbr),stat=rcd) ! Coordinate variable
-  if(rcd /= 0) stop 'allocate() failed for lon'
+  if(rcd /= 0) error stop 'allocate() failed for lon'
   allocate(one_dmn_var(bnd_nbr),stat=rcd)
-  if(rcd /= 0) stop 'allocate() failed for one_dmn_var'
+  if(rcd /= 0) error stop 'allocate() failed for one_dmn_var'
   allocate(three_dmn_var(lon_nbr,lev_nbr,lat_nbr),stat=rcd)
-  if(rcd /= 0) stop 'allocate() failed for three_dmn_var'
+  if(rcd /= 0) error stop 'allocate() failed for three_dmn_var'
   allocate(three_dmn_var_crd(lon_nbr,lat_nbr,lev_nbr),stat=rcd)
-  if(rcd /= 0) stop 'allocate() failed for three_dmn_var_crd'
+  if(rcd /= 0) error stop 'allocate() failed for three_dmn_var_crd'
   ! Assemble count vectors for each multidimensional combination of dimensions
   cnt_lon_lev_lat=(/lon_nbr,lev_nbr,lat_nbr/)
   ! Get variable IDs
@@ -573,13 +573,13 @@ program fff
   ! De-allocate dynamic variables
   call wrp_deallocate(lat,rcd,'lat in '//__FILE__) ! Coordinate variable
   if (allocated(lev)) deallocate(lev,stat=rcd) ! Coordinate variable
-  if(rcd /= 0) stop 'deallocate() failed for lev'
+  if(rcd /= 0) error stop 'deallocate() failed for lev'
   if (allocated(lon)) deallocate(lon,stat=rcd) ! Coordinate variable
-  if(rcd /= 0) stop 'deallocate() failed for lon'
+  if(rcd /= 0) error stop 'deallocate() failed for lon'
   if (allocated(one_dmn_var)) deallocate(one_dmn_var,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for one_dmn_var'
+  if(rcd /= 0) error stop 'deallocate() failed for one_dmn_var'
   if (allocated(three_dmn_var)) deallocate(three_dmn_var,stat=rcd)
-  if(rcd /= 0) stop 'deallocate() failed for three_dmn_var'
+  if(rcd /= 0) error stop 'deallocate() failed for three_dmn_var'
 
 #ifdef CPP_FOO
   write (6,'(2a)') prg_nm(1:ftn_strlen(prg_nm)),': CPP token CPP_FOO is defined'

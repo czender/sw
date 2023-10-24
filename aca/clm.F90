@@ -1022,8 +1022,8 @@ program clm
   cmd_ln_odxc_obs_aer=.false.
   cmd_ln_odxc_obs_bga=.false.
   dbg_lvl=0
-  drc_in='/data/zender/aca'//nlc ! [sng] Input directory
-  drc_out='/data/zender/aca'//nlc ! [sng] Output directory
+  drc_in='./'//nlc ! [sng] Input directory
+  drc_out='./'//nlc ! [sng] Output directory
   exit_status=0
   fl_aer='aer_mineral_dust.nc'//nlc
   fl_bga='aer_h2so4_215K.nc'//nlc
@@ -1068,7 +1068,7 @@ program clm
      dsh_key=arg_val(1:2) ! [sng] First two characters of option
      if_dbl_dsh: if (dsh_key == '--') then
         opt_lng=ftn_opt_lng_get(arg_val) ! [nbr] Length of option
-        if (opt_lng <= 0) stop 'Long option has no name'
+        if (opt_lng <= 0) error stop 'Long option has no name'
         opt_sng=arg_val(3:2+opt_lng) ! [sng] Option string
         if (opt_sng == 'dbg' .or. opt_sng == 'dbg_lvl' ) then
            call ftn_arg_get(arg_idx,arg_val,dbg_lvl) ! [enm] Debugging level
@@ -1087,11 +1087,11 @@ program clm
            call ftn_arg_get(arg_idx,arg_val,drc_out) ! [sng] Output directory
         else if (opt_sng == 'lev_snw') then ! [nbr] Number of snow layers
            call ftn_arg_get(arg_idx,arg_val,lev_snw_nbr)
-           if (lev_snw_nbr+lev_nbr > lev_nbr_max) stop 'lev_snw_nbr+lev_nbr > lev_nbr_max'
+           if (lev_snw_nbr+lev_nbr > lev_nbr_max) error stop 'lev_snw_nbr+lev_nbr > lev_nbr_max'
            if (lev_snw_nbr > 0) flg_snw=.true. ! [flg] Multi-layer snow model
         else if (opt_sng == 'lev_atm') then ! [nbr] Number of atmosphere layers
            call ftn_arg_get(arg_idx,arg_val,lev_nbr)
-           if (lev_nbr > lev_nbr_max) stop 'lev_nbr > lev_nbr_max'
+           if (lev_nbr > lev_nbr_max) error stop 'lev_nbr > lev_nbr_max'
         else if (opt_sng == 'netcdf' .or. opt_sng == 'nc_in') then
            CLM_NC_INPUT=.true.
            AFGL_TXT_INPUT=.false.
@@ -1167,7 +1167,7 @@ program clm
         call ftn_arg_get(arg_idx,arg_val,odxc_obs_bga_cmd_ln)
      else if(dsh_key == '-l') then
         call ftn_arg_get(arg_idx,arg_val,lev_nbr)
-        if (lev_nbr > lev_nbr_max) stop 'lev_nbr > lev_nbr_max'
+        if (lev_nbr > lev_nbr_max) error stop 'lev_nbr > lev_nbr_max'
      else if(dsh_key == '-m') then
         cmd_ln_mpc_CWP=.not.cmd_ln_mpc_CWP
         call ftn_arg_get(arg_idx,arg_val,mpc_CWP_cmd_ln)
@@ -2042,7 +2042,7 @@ program clm
      lon_dgr_m180_p180=lon_dgr-360.0 ! [dgr]
   else
      write (6,'(a,a,f9.3)') prg_nm(1:ftn_strlen(prg_nm)),': ERROR lon_dgr = ',lon_dgr
-     stop
+     error stop
   endif                     ! endif
   gtst_doy=ltst_doy-lon_dgr_m180_p180/360.0
   
@@ -2204,7 +2204,7 @@ program clm
         endif
      enddo                  ! end loop over lev
      ! Apportion background aerosol equally amongst these levels
-     if (bga_lvl_nbr <= 0) stop 'bga_lvl_nbr == 0'
+     if (bga_lvl_nbr <= 0) error stop 'bga_lvl_nbr == 0'
      
      if (cmd_ln_odxc_obs_bga) odxc_obs_bga=odxc_obs_bga_cmd_ln
      do idx=1,lev_nbr
@@ -2228,12 +2228,12 @@ program clm
      do idx=1,lev_nbr
         if (odxl_obs_aer(idx) > 0.0) aer_lvl_nbr=aer_lvl_nbr+1
      enddo                  ! end loop over lev
-     if (aer_lvl_nbr == 0) stop 'ERROR: aer_lvl_nbr == 0 but aerosol is expected'
+     if (aer_lvl_nbr == 0) error stop 'ERROR: aer_lvl_nbr == 0 but aerosol is expected'
      if (cmd_ln_odxc_obs_aer) odxc_obs_aer=odxc_obs_aer_cmd_ln
      ! Subtract observed background aerosol from observed total
      if (cmd_ln_odxc_obs_bga.or.flg_bga) then
         ! Sanity check
-        if (wvl_obs_aer /= wvl_obs_bga) stop 'Attempting to subtract optical depths when wvl_obs_aer /= wvl_obs_bga'
+        if (wvl_obs_aer /= wvl_obs_bga) error stop 'Attempting to subtract optical depths when wvl_obs_aer /= wvl_obs_bga'
         write(0,'(a,f6.4,a3,f6.4)') 'Subtracting aerosols: Tropospheric aerosol = ',odxc_obs_aer,' - ',odxc_obs_bga
         odxc_obs_aer=odxc_obs_aer-odxc_obs_bga
      endif                  ! endif subtracting background aerosol from total
@@ -2329,10 +2329,10 @@ program clm
      endif                  ! endif dbg
      
      ! Sanity check
-     if (sat_vpr_lqd <= 0.0) stop 'sat_vpr_lqd <= 0.0 in main()'
-     if (sat_vpr_ice <= 0.0) stop 'sat_vpr_ice <= 0.0 in main()'
-     if (qst_H2O_lqd(idx) < 0.0) stop 'qst_H2O_lqd(idx) < 0.0 in main()'
-     if (qst_H2O_ice(idx) < 0.0) stop 'qst_H2O_ice(idx) < 0.0 in main()'
+     if (sat_vpr_lqd <= 0.0) error stop 'sat_vpr_lqd <= 0.0 in main()'
+     if (sat_vpr_ice <= 0.0) error stop 'sat_vpr_ice <= 0.0 in main()'
+     if (qst_H2O_lqd(idx) < 0.0) error stop 'qst_H2O_lqd(idx) < 0.0 in main()'
+     if (qst_H2O_ice(idx) < 0.0) error stop 'qst_H2O_ice(idx) < 0.0 in main()'
      if (force_cld_lvl_2b_sat) then
         if (mpl_CWP(idx) > 0.0) then
            ! NB: Whether layers containing ice clouds should be only ice-saturated
@@ -2350,7 +2350,7 @@ program clm
      do idx=1,lev_nbr
         if (mpl_CWP(idx) > 0.0) cld_lvl_nbr=cld_lvl_nbr+1
      enddo                  ! end loop over lev
-     if (cld_lvl_nbr == 0) stop 'cld_lvl_nbr == 0'
+     if (cld_lvl_nbr == 0) error stop 'cld_lvl_nbr == 0'
      do idx=1,lev_nbr
         if (mpl_CWP(idx) > 0.0) mpl_CWP(idx)=mpc_CWP_cmd_ln/cld_lvl_nbr
      enddo                  ! end loop over lev

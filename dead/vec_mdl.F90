@@ -66,8 +66,8 @@ contains
     call xtr_ini(xtr_typ_LHS,xtr_typ_RHS)
     
     ! Vet input
-    if (in_nbr <= 1) stop 'nbr_dat_in <= 1 in ntp_vec()'
-    if (out_nbr < 1) stop 'nbr_dat_out < 1 in ntp_vec()'
+    if (in_nbr <= 1) error stop 'nbr_dat_in <= 1 in ntp_vec()'
+    if (out_nbr < 1) error stop 'nbr_dat_out < 1 in ntp_vec()'
     
     ! Find direction of monotonicity
     if (crd_in(2)-crd_in(1) > 0.0_r8) then 
@@ -131,7 +131,7 @@ contains
           endif               ! endif
           ! Extrapolation options are presented in decreasing order of preference
           if (.not.xtr_flg_LHS(xtr_fll_msk)) then
-             stop 'ERROR: Full LHS extrapolation required but not permitted in ntp_vec()'
+             error stop 'ERROR: Full LHS extrapolation required but not permitted in ntp_vec()'
           else if (xtr_flg_LHS(xtr_fll_nil_msk)) then
              dat_out(out_idx)=0.0_r8
           else if (xtr_flg_LHS(xtr_fll_ngh_msk)) then
@@ -141,7 +141,7 @@ contains
                   (crd_in_mnt(1)-crd_out_mnt(out_idx))* &
                   (dat_in_mnt(2)-dat_in_mnt(1))/(crd_in_mnt(2)-crd_in_mnt(1))
           else
-             stop 'Unknown xtr_typ_LHS in ntp_vec()'
+             error stop 'Unknown xtr_typ_LHS in ntp_vec()'
           endif               ! endif xtr_typ_LHS
           if (xtr_flg_LHS(xtr_vrb_msk)) write (6,'(a,a,i4,a,es10.3)')  &
                xtr_sng_LHS(1:ftn_strlen(xtr_sng_LHS)),' yields dat_out(',out_idx,') = ',dat_out(out_idx)
@@ -171,7 +171,7 @@ contains
           endif               ! endif
           ! Extrapolation options are presented in decreasing order of preference
           if (.not.xtr_flg_RHS(xtr_fll_msk)) then
-             stop 'ERROR: Full RHS extrapolation required but not permitted in ntp_vec()'
+             error stop 'ERROR: Full RHS extrapolation required but not permitted in ntp_vec()'
           else if (xtr_flg_RHS(xtr_fll_nil_msk)) then
              dat_out(out_idx)=0.0_r8
           else if (xtr_flg_RHS(xtr_fll_ngh_msk)) then
@@ -182,12 +182,12 @@ contains
                   (dat_in_mnt(in_nbr)-dat_in_mnt(in_nbr-1))/ &
                   (crd_in_mnt(in_nbr)-crd_in_mnt(in_nbr-1))
           else
-             stop 'Unknown xtr_typ_RHS in ntp_vec()'
+             error stop 'Unknown xtr_typ_RHS in ntp_vec()'
           endif               ! endif xtr_typ_RHS
           if (xtr_flg_RHS(xtr_vrb_msk)) write (6,'(a,a,i4,a,es10.3)')  &
                xtr_sng_RHS(1:ftn_strlen(xtr_sng_RHS)),' yields dat_out(',out_idx,') = ',dat_out(out_idx)
        else
-          stop 'ERROR: Unforeseen value of brk_lft_idx in ntp_vec()'
+          error stop 'ERROR: Unforeseen value of brk_lft_idx in ntp_vec()'
        endif
 100    continue               ! Branch from identity interpolation
     end do                     ! end loop over output coordinates
@@ -277,8 +277,8 @@ contains
     if (dbg_lvl >= dbg_sbr) write (6,'(a)') 'Entering rbn_vec()'
     
     ! Vet input
-    if (in_nbr < 1) stop 'in_nbr < 1 in rbn_vec()'
-    if (out_nbr < 1) stop 'out_nbr < 1 in rbn_vec()'
+    if (in_nbr < 1) error stop 'in_nbr < 1 in rbn_vec()'
+    if (out_nbr < 1) error stop 'out_nbr < 1 in rbn_vec()'
     
     ! Initialize default values
     grd_in_nbr=in_nbr+1
@@ -289,9 +289,9 @@ contains
     
     ! Check for monotonicity
     mnt=mnt_chk(grd_in,in_nbr+1)
-    if (.not.mnt) stop 'grd_in not monotonic in rbn_vec()'
+    if (.not.mnt) error stop 'grd_in not monotonic in rbn_vec()'
     mnt=mnt_chk(grd_out,out_nbr+1)
-    if (.not.mnt) stop 'grd_out not monotonic in rbn_vec()'
+    if (.not.mnt) error stop 'grd_out not monotonic in rbn_vec()'
     
     ! Find direction of monotonicity
     if (grd_in(2)-grd_in(1) > 0.0_r8) then 
@@ -329,14 +329,14 @@ contains
                'ERROR: rbn_vec() has grd_out_mnt(grd_out_nbr=',grd_out_nbr, &
                ') = ',grd_out_mnt(grd_out_nbr), &
                ' < grd_in_mnt(1) = ',grd_in_mnt(1)
-          stop
+          error stop
        endif
        if (grd_out_mnt(1) > grd_in_mnt(grd_in_nbr)) then
           write (6,'(a,es10.3,a,i4,a,es10.3)')  &
                'ERROR: rbn_vec() has grd_out_mnt(1) = ',grd_out_mnt(1), &
                ' > grd_in_mnt(grd_in_nbr = ',grd_in_nbr, &
                ') = ',grd_in_mnt(grd_in_nbr)
-          stop
+          error stop
        endif
     endif                     ! endif xtr_err
     
@@ -400,7 +400,7 @@ contains
     ! Vet bracketing indices
     do grd_out_idx=1,grd_out_nbr
        if (brk_lft_idx(grd_out_idx) > brk_rgt_idx(grd_out_idx)) then
-          stop 'brk_lft_idx(grd_out_idx) > brk_rgt_idx(grd_out_idx) in rbn_vec()'
+          error stop 'brk_lft_idx(grd_out_idx) > brk_rgt_idx(grd_out_idx) in rbn_vec()'
        endif                  ! endif
     end do                     ! end loop over output coordinates
     
@@ -420,7 +420,7 @@ contains
        out_idxp1=out_idx+1
        ! Traverse truth table by examining all possible values of brk_lft_idx(out_idx)
        if (brk_lft_idx(out_idx) < 0) then
-          stop 'ERROR: brk_lft_idx(out_idx) < 0 in rbn_vec()'
+          error stop 'ERROR: brk_lft_idx(out_idx) < 0 in rbn_vec()'
        else if (brk_lft_idx(out_idx) == 0) then
           ! LHS extrapolation required
           if (xtr_flg_LHS(xtr_vrb_msk)) then
@@ -445,15 +445,15 @@ contains
              endif            ! endif xtr_flg_vrb
              ! Extrapolation options are presented in decreasing order of preference
              if (.not.xtr_flg_LHS(xtr_fll_msk)) then
-                stop 'ERROR: Full LHS extrapolation required but not permitted in rbn_vec()'
+                error stop 'ERROR: Full LHS extrapolation required but not permitted in rbn_vec()'
              else if (xtr_flg_LHS(xtr_fll_nil_msk)) then
                 dat_out(out_idx)=0.0_r8
              else if (xtr_flg_LHS(xtr_fll_ngh_msk)) then
                 dat_out(out_idx)=dat_in_mnt(1)
              else if (xtr_flg_LHS(xtr_fll_lnr_msk)) then
-                stop 'xtr_fll_lnr not implemented yet in rbn_vec()'
+                error stop 'xtr_fll_lnr not implemented yet in rbn_vec()'
              else
-                stop 'Unknown xtr_typ_LHS in fll branch of rbn_vec()'
+                error stop 'Unknown xtr_typ_LHS in fll branch of rbn_vec()'
              endif            ! endif xtr_typ_LHS
           else if (brk_lft_idx(out_idxp1) > 0) then ! brk_lft_idx(out_idxp1) == 0
              ! Half degenerate case: current output bin has partial overlap with input bins
@@ -463,7 +463,7 @@ contains
              endif            ! endif xtr_flg_vrb
              ! Extrapolation options are presented in decreasing order of preference
              if (.not.xtr_flg_LHS(xtr_prt_msk)) then
-                stop 'ERROR: Partial LHS extrapolation required but not permitted in rbn_vec()'
+                error stop 'ERROR: Partial LHS extrapolation required but not permitted in rbn_vec()'
              else if (xtr_flg_LHS(xtr_prt_frc_msk)) then
                 ! Compute average of overlap input bins
                 crd_dlt_rgt=grd_out_mnt(out_idxp1)-grd_in_mnt(brk_lft_idx(out_idxp1))
@@ -477,7 +477,7 @@ contains
                    crd_dlt_ttl=crd_dlt_ttl+grd_in_mnt(in_idx+1)-grd_in_mnt(in_idx)
                 end do        ! end loop over inner trapezoids
                 if (crd_dlt_ttl <= 0.0_r8) then 
-                   stop 'ERROR: crd_dlt_ttl <= 0.0 in xtr_LHS branch of rbn_vec()'
+                   error stop 'ERROR: crd_dlt_ttl <= 0.0 in xtr_LHS branch of rbn_vec()'
                 endif         ! endif crd_dlt_ttl <= 0.0
                 ovl_avg=trp_area_ttl/crd_dlt_ttl 
                 if (xtr_flg_LHS(xtr_prt_wgt_msk)) then
@@ -486,13 +486,13 @@ contains
                    dat_out(out_idx)=ovl_avg
                 endif         ! endif wgt
              else if (xtr_flg_LHS(xtr_prt_lnr_msk)) then
-                stop 'xtr_prt_lnr not implemented yet in rbn_vec()'
+                error stop 'xtr_prt_lnr not implemented yet in rbn_vec()'
              else if (xtr_flg_LHS(xtr_prt_ngh_msk)) then
                 dat_out(out_idx)=dat_in_mnt(1)
              else if (xtr_flg_LHS(xtr_prt_nil_msk)) then
                 dat_out(out_idx)=0.0_r8
              else
-                stop 'Unknown xtr_typ_LHS in prt branch of rbn_vec()'
+                error stop 'Unknown xtr_typ_LHS in prt branch of rbn_vec()'
              endif            ! endif xtr_typ_LHS
           else                ! brk_lft_idx(out_idxp1) == 0
              write (6,'(a)') 'Unforeseen brk_lft_idx in xtr_typ_LHS in rbn_vec()'
@@ -563,7 +563,7 @@ contains
                   ', brk_rgt_idx(',out_idxp1, &
                   ') = ',brk_rgt_idx(out_idxp1)
              write (6,'(a,i5)') 'trp_nbr = ',trp_nbr
-             stop 'Unforeseen trp_nbr in rbn_vec()' 
+             error stop 'Unforeseen trp_nbr in rbn_vec()' 
           endif               ! endif trp_nbr == 0
        else if (brk_rgt_idx(out_idxp1) > grd_in_nbr) then ! brk_lft_idx(out_idx) == 0
           ! RHS extrapolation required
@@ -592,15 +592,15 @@ contains
              endif            ! endif xtr_flg_vrb
              ! Extrapolation options are presented in decreasing order of preference
              if (.not.xtr_flg_RHS(xtr_fll_msk)) then
-                stop 'ERROR: Full RHS extrapolation required but not permitted in rbn_vec()'
+                error stop 'ERROR: Full RHS extrapolation required but not permitted in rbn_vec()'
              else if (xtr_flg_RHS(xtr_fll_nil_msk)) then
                 dat_out(out_idx)=0.0_r8
              else if (xtr_flg_RHS(xtr_fll_ngh_msk)) then
                 dat_out(out_idx)=dat_in_mnt(in_nbr)
              else if (xtr_flg_RHS(xtr_fll_lnr_msk)) then
-                stop 'xtr_fll_lnr not implemented yet in rbn_vec()'
+                error stop 'xtr_fll_lnr not implemented yet in rbn_vec()'
              else
-                stop 'Unknown xtr_typ_RHS in rbn_vec()'
+                error stop 'Unknown xtr_typ_RHS in rbn_vec()'
              endif            ! endif xtr_typ_RHS
           else                ! brk_rgt_idx(out_idx) == grd_in_nbr+1
              ! Half degenerate case: current output bin has partial overlap with input bins
@@ -610,7 +610,7 @@ contains
              endif            ! endif xtr_flg_vrb
              ! Extrapolation options are presented in decreasing order of preference
              if (.not.xtr_flg_RHS(xtr_prt_msk)) then
-                stop 'ERROR: Partial RHS extrapolation required but not permitted in rbn_vec()'
+                error stop 'ERROR: Partial RHS extrapolation required but not permitted in rbn_vec()'
              else if (xtr_flg_RHS(xtr_prt_frc_msk)) then
                 ! Compute average of overlap input bins
                 crd_dlt_lft=grd_in_mnt(brk_rgt_idx(out_idx))-grd_out_mnt(out_idx)
@@ -624,7 +624,7 @@ contains
                    crd_dlt_ttl=crd_dlt_ttl+grd_in_mnt(in_idx+1)-grd_in_mnt(in_idx)
                 end do        ! end loop over inner trapezoids
                 if (crd_dlt_ttl <= 0.0_r8) then 
-                   stop 'ERROR: crd_dlt_ttl <= 0.0 in xtr_RHS branch of rbn_vec()'
+                   error stop 'ERROR: crd_dlt_ttl <= 0.0 in xtr_RHS branch of rbn_vec()'
                 endif         ! endif crd_dlt_ttl <= 0.0
                 ovl_avg=trp_area_ttl/crd_dlt_ttl 
                 if (xtr_flg_RHS(xtr_prt_wgt_msk)) then
@@ -633,13 +633,13 @@ contains
                    dat_out(out_idx)=ovl_avg
                 endif         ! endif wgt
              else if (xtr_flg_RHS(xtr_prt_lnr_msk)) then
-                stop 'xtr_prt_lnr not implemented yet in rbn_vec()'
+                error stop 'xtr_prt_lnr not implemented yet in rbn_vec()'
              else if (xtr_flg_RHS(xtr_prt_ngh_msk)) then
                 dat_out(out_idx)=dat_in_mnt(in_nbr)
              else if (xtr_flg_RHS(xtr_prt_nil_msk)) then
                 dat_out(out_idx)=0.0_r8
              else
-                stop 'Unknown xtr_typ_RHS in prt branch of rbn_vec()'
+                error stop 'Unknown xtr_typ_RHS in prt branch of rbn_vec()'
              endif            ! endif xtr_typ_RHS
           endif               ! brk_rgt_idx(out_idx) == grd_in_nbr+1
           if (xtr_flg_RHS(xtr_vrb_msk)) write (6,'(a,a,i4,a,es10.3)')  &
@@ -651,7 +651,7 @@ contains
                ') = ',brk_lft_idx(out_idx), &
                ', brk_rgt_idx(',out_idx, &
                ') = ',brk_rgt_idx(out_idx)
-          stop 'Unforeseen bracketing values in rbn_vec()' 
+          error stop 'Unforeseen bracketing values in rbn_vec()' 
        endif                  ! endelse RHS extrapolate
     end do                     ! end loop over output coordinates
     

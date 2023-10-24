@@ -131,7 +131,7 @@ module dstodx ! [mdl Optical depth information
       ! Main code
       ! Sanity check
       if(dmt_swr(1) < 0.0001e-6_r8.or.dmt_swr(1) > 100.0e-6_r8)  &
-           stop 'ERROR: dst_odx_cmn_ini() probably called before dst_psd_ini()'
+           error stop 'ERROR: dst_odx_cmn_ini() probably called before dst_psd_ini()'
       ! Initialize common block used for diagnostic optical depth output
       ! NB: dmt_swr is only variable that requires dstpsd.h in this routine
       call ntp_vec(dst_nbr_hrz,dmt_ctr_hrz,ext_cff_mss_dst_hrz,dst_nbr,dmt_swr,ext_cff_mss_dst_dgn,xtr_typ_LHS,xtr_typ_RHS)

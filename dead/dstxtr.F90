@@ -91,8 +91,8 @@ contains
     ! Get dimension IDs
     rcd=nf90_wrp_inq_dimid(nc_id,"time",time_dmn_id)
     rcd=nf90_wrp(nf90_inquire_dimension(nc_id,time_dmn_id,len=time_nbr_in),sbr_nm//": inquire_dim time")
-    if (time_nbr > time_nbr_in) stop "time_nbr > time_nbr_in"
-    if (xtr_dat_nbr /= xtr_idx_end) stop "ERROR: xtr_dat_nbr /= xtr_idx_end"
+    if (time_nbr > time_nbr_in) error stop "time_nbr > time_nbr_in"
+    if (xtr_dat_nbr /= xtr_idx_end) error stop "ERROR: xtr_dat_nbr /= xtr_idx_end"
     
     rcd=nf90_wrp_inq_varid(nc_id,"time",time_id,rcd_opt=NF90_ENOTVAR)
     ! Fill time with monotonic array if not present in external forcing file
@@ -167,7 +167,7 @@ contains
     ! Verify time coordinate is monotonic increasing
     if (.not.mnt_ncr_chk(time,time_nbr)) then
        ! fxm: should improve input dataset
-       !stop "time coordinate not monotonic increasing"
+       !error stop "time coordinate not monotonic increasing"
        ! Implied do loop initialization
        time=real((/(idx,idx=1,time_nbr)/))
     endif ! endif
@@ -210,7 +210,7 @@ contains
     ! Get dimension IDs
     rcd=nf90_wrp_inq_dimid(nc_id,"time",time_dmn_id)
     rcd=nf90_wrp(nf90_inquire_dimension(nc_id,time_dmn_id,len=time_nbr_in),sbr_nm//": inquire_dim time")
-    if (time_nbr > time_nbr_in) stop "time_nbr > time_nbr_in"
+    if (time_nbr > time_nbr_in) error stop "time_nbr > time_nbr_in"
     
     ! Get variable IDs
     rcd=nf90_wrp_inq_varid(nc_id,"time",time_id)
@@ -223,7 +223,7 @@ contains
     rcd=nf90_wrp(nf90_get_var(nc_id,wnd_znl_mdp_hst_id,xtr_dat_frc(:,1,2)),sbr_nm//": get_var wnd_znl_mdp_hst")
     
     ! Verify time coordinate is monotonic increasing
-    if(.not.mnt_ncr_chk(time,time_nbr)) stop "time coordinate not monotonic increasing"
+    if(.not.mnt_ncr_chk(time,time_nbr)) error stop "time coordinate not monotonic increasing"
     write (6,'(a)') "Ingested "//fl_in
     if (dbg_lvl >= dbg_fl) then
        write (6,'(a,i3)') "INFO: "//sbr_nm//"() reports time_nbr = ",time_nbr

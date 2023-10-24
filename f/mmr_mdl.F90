@@ -82,7 +82,7 @@ contains
     integer,intent(in)::lmn_nbr
     integer::rcd
     allocate(var_ptr(lmn_nbr),stat=rcd)
-    if(rcd /= 0) stop "allocate() failed in wrp_allocate_fnc"
+    if(rcd /= 0) error stop "allocate() failed in wrp_allocate_fnc"
   end function wrp_allocate_fnc
 
   subroutine wrp_allocate_1D_FourByteInt( & ! [sbr] Allocate 1D array
@@ -110,7 +110,7 @@ contains
        else
           write (6,'(2a)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR variable already associated'
        endif ! endif
-       stop
+       error stop
     endif ! endif associated
     ! Allocate memory
     allocate(var_ptr(dmn_cnt(1)),stat=rcd) ! Coordinate variable
@@ -122,7 +122,7 @@ contains
           write (6,'(2a)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR allocating memory'
        endif ! endif
        write (6,'(2a,i3)') sbr_nm(1:ftn_strlen(sbr_nm)),': rcd = ',rcd
-       stop  
+       error stop  
     endif ! endif err  
     return
   end subroutine wrp_allocate_1D_FourByteInt
@@ -141,7 +141,7 @@ contains
        else
           write (6,'(2a)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR variable already associated'
        endif
-       stop
+       error stop
     endif
     allocate(var_ptr(dmn_cnt(1)),stat=rcd)
     if (rcd /= 0) then  
@@ -151,7 +151,7 @@ contains
           write (6,'(2a)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR allocating memory'
        endif
        write (6,'(2a,i3)') sbr_nm(1:ftn_strlen(sbr_nm)),': rcd = ',rcd
-       stop  
+       error stop  
     endif
     return
   end subroutine wrp_allocate_1D_EightByteInt
@@ -170,7 +170,7 @@ contains
        else
           write (6,'(2a)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR variable already associated'
        endif
-       stop
+       error stop
     endif
     allocate(var_ptr(dmn_cnt(1)),stat=rcd)
     if (rcd /= 0) then  
@@ -180,7 +180,7 @@ contains
           write (6,'(2a)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR allocating memory'
        endif
        write (6,'(2a,i3)') sbr_nm(1:ftn_strlen(sbr_nm)),': rcd = ',rcd
-       stop  
+       error stop  
     endif
     return
   end subroutine wrp_allocate_1D_FourByteReal
@@ -199,7 +199,7 @@ contains
        else
           write (6,'(2a)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR variable already associated'
        endif
-       stop
+       error stop
     endif
     allocate(var_ptr(dmn_cnt(1)),stat=rcd) ! Coordinate variable
     if (rcd /= 0) then  
@@ -209,7 +209,7 @@ contains
           write (6,'(2a)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR allocating memory'
        endif
        write (6,'(2a,i3)') sbr_nm(1:ftn_strlen(sbr_nm)),': rcd = ',rcd
-       stop  
+       error stop  
     endif
     return
   end subroutine wrp_allocate_1D_EightByteReal
@@ -228,7 +228,7 @@ contains
        else
           write (6,'(2a)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR variable already associated'
        endif
-       stop
+       error stop
     endif
     allocate(var_ptr(dmn_cnt),stat=rcd)
     if (rcd /= 0) then  
@@ -238,7 +238,7 @@ contains
           write (6,'(2a)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR allocating memory'
        endif
        write (6,'(2a,i3)') sbr_nm(1:ftn_strlen(sbr_nm)),': rcd = ',rcd
-       stop  
+       error stop  
     endif
     return
   end subroutine wrp_allocate_scl_FourByteInt
@@ -257,7 +257,7 @@ contains
        else
           write (6,'(2a)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR variable already associated'
        endif
-       stop
+       error stop
     endif
     allocate(var_ptr(dmn_cnt),stat=rcd)
     if (rcd /= 0) then  
@@ -267,7 +267,7 @@ contains
           write (6,'(2a)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR allocating memory'
        endif
        write (6,'(2a,i3)') sbr_nm(1:ftn_strlen(sbr_nm)),': rcd = ',rcd
-       stop  
+       error stop  
     endif
     return
   end subroutine wrp_allocate_scl_EightByteInt
@@ -287,7 +287,7 @@ contains
        else
           write (6,'(2a)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR variable already associated'
        endif
-       stop
+       error stop
     endif
     allocate(var_ptr(dmn_cnt),stat=rcd)
     if (rcd /= 0) then  
@@ -297,7 +297,7 @@ contains
           write (6,'(2a)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR allocating memory'
        endif
        write (6,'(2a,i3)') sbr_nm(1:ftn_strlen(sbr_nm)),': rcd = ',rcd
-       stop  
+       error stop  
     endif
     return
   end subroutine wrp_allocate_scl_FourByteReal
@@ -317,7 +317,7 @@ contains
        else
           write (6,'(2a)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR variable already associated'
        endif
-       stop
+       error stop
     endif
     allocate(var_ptr(dmn_cnt),stat=rcd)
     if (rcd /= 0) then  
@@ -327,7 +327,7 @@ contains
           write (6,'(2a)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR allocating memory'
        endif
        write (6,'(2a,i3)') sbr_nm(1:ftn_strlen(sbr_nm)),': rcd = ',rcd
-       stop  
+       error stop  
     endif
     return
   end subroutine wrp_allocate_scl_EightByteReal
@@ -374,7 +374,7 @@ contains
             ' in __FILE__'//__FILE__
     endif
     ! Die, monster, die!
-    stop
+    error stop
   end subroutine wrp_deallocate_FourByteReal ! end wrp_deallocate()
 #endif /* PRC_DBL */
   
@@ -404,7 +404,7 @@ contains
     else
        write (6,'(2a,i6)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR deallocate failed rcd = ',rcd
     endif
-    stop
+    error stop
   end subroutine wrp_deallocate_EightByteReal
   
   subroutine wrp_deallocate_FourByteInt(var_ptr,rcd,var_nm_opt)
@@ -433,7 +433,7 @@ contains
     else
        write (6,'(2a,i6)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR deallocate failed rcd = ',rcd
     endif
-    stop
+    error stop
   end subroutine wrp_deallocate_FourByteInt
   
   subroutine wrp_deallocate_EightByteInt(var_ptr,rcd,var_nm_opt)
@@ -462,7 +462,7 @@ contains
     else
        write (6,'(2a,i6)') sbr_nm(1:ftn_strlen(sbr_nm)),': ERROR deallocate failed rcd = ',rcd
     endif
-    stop
+    error stop
   end subroutine wrp_deallocate_EightByteInt
   
 end module mmr_mdl ! [mdl] Memory management

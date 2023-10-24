@@ -88,11 +88,11 @@ contains
     rcd=nf90_wrp_inq_dimid(nc_id,"time",time_dmn_id)
     ! Get dimension sizes
     rcd=nf90_wrp(nf90_inquire_dimension(nc_id,lat_dmn_id,len=lat_nbr_in),sbr_nm//": inquire_dim lat")
-    if (lat_nbr /= lat_nbr_in) stop "lat_nbr /= lat_nbr_in"
+    if (lat_nbr /= lat_nbr_in) error stop "lat_nbr /= lat_nbr_in"
     rcd=nf90_wrp(nf90_inquire_dimension(nc_id,lon_dmn_id,len=lon_nbr_in),sbr_nm//": inquire_dim lon")
-    if (lon_nbr /= lon_nbr_in) stop "lon_nbr /= lon_nbr_in"
+    if (lon_nbr /= lon_nbr_in) error stop "lon_nbr /= lon_nbr_in"
     rcd=nf90_wrp(nf90_inquire_dimension(nc_id,time_dmn_id,len=time_nbr_in),sbr_nm//": inquire_dim time")
-    if (time_nbr /= time_nbr_in) stop "time_nbr /= time_nbr_in"
+    if (time_nbr /= time_nbr_in) error stop "time_nbr /= time_nbr_in"
     ! Get variable IDs
     rcd=nf90_wrp_inq_varid(nc_id,"time",time_id)
 #ifdef TOMS
@@ -103,7 +103,7 @@ contains
     rcd=nf90_wrp(nf90_get_var(nc_id,time_id,time),"get_var time")
 
     ! Verify time coordinate is monotonic increasing
-    if(.not.mnt_ncr_chk(time,time_nbr)) stop "dst_tvbds_ini(): time coordinate not monotonic increasing"
+    if(.not.mnt_ncr_chk(time,time_nbr)) error stop "dst_tvbds_ini(): time coordinate not monotonic increasing"
 
     ! Get indices of bounding time slices
     idx_glb_dsk=idx_glb_get(time,time_nbr,time_doy)
@@ -169,7 +169,7 @@ contains
     real(r8) time_dlt_1st     ! [day] Time interval between glb and current time
     ! Main code
     ! Vet time
-    if (time_doy < 1.0.or.time_doy > 366.25) stop "dead: dst_tvbds_ntp() reports time_doy out of bounds"
+    if (time_doy < 1.0.or.time_doy > 366.25) error stop "dead: dst_tvbds_ntp() reports time_doy out of bounds"
     
     ! Save current indices of boundary time slices
     idx_lub_dsk_old=idx_lub_dsk ! [idx] Index of most recent past time slice in input file, old
@@ -216,7 +216,7 @@ contains
              if (rcd /= nf90_noerr) call nf90_err_exit(rcd,"dst_tvbds_ntp():get_vara vai_dst")
              write (6,"(2(a,f9.4))") "dead: dst_tvbds_ntp(): WARNING Day of year = ",time_doy, &
                   ": read data for day ",time(idx_glb_dsk)
-             stop "dead: dst_tvbds_ntp() executing code that should not be reached"
+             error stop "dead: dst_tvbds_ntp() executing code that should not be reached"
           endif               ! endif reading new glb
        endif                  ! endif reading new lub
     endif                     ! endif updating either glb or lub
@@ -239,7 +239,7 @@ contains
     crd_min=0.0_r8
     crd_max=1.0_r8
     crd_ntp=time_dlt_1st/time_dlt
-    if (crd_ntp < 0.0.or.crd_ntp > 1.0) stop "dead: dst_tvbds_ntp() reports crd_ntp out of bounds"
+    if (crd_ntp < 0.0.or.crd_ntp > 1.0) error stop "dead: dst_tvbds_ntp() reports crd_ntp out of bounds"
     
     call ntp_arr(dat_nbr,vai_dst_bnd(1,1,idx_glb_ram),vai_dst_bnd(1,1,idx_lub_ram), & ! I
          crd_min,crd_max,crd_ntp, & ! I
@@ -315,7 +315,7 @@ contains
     ! Main code
     if (lon_nbr_out /= lon_nbr) then
        write (6,"(a)") "dead: ERROR dst_tvbds_get() reports lon_nbr_out /= lon_nbr"
-       stop
+       error stop
     endif                     ! endif err
     
     ! Copying data from buffer to I/O variable ensures integrity of buffer
@@ -353,7 +353,7 @@ contains
     
     if (crd_max <= crd_min) then
        write (6,"(a)") "dead: ERROR bnt_ntp() reports crd_max <= crd_min"
-       stop
+       error stop
     endif                     ! endif err
     
     ! Compute interpolation weight outside main loop
@@ -391,7 +391,7 @@ contains
        endif                  ! endif
     end do                    ! end loop over dat
     write (6,"(a)") "dead: ERROR idx_glb_get() unable to find greatest lower bound"
-    stop
+    error stop
   end function idx_glb_get                       ! end idx_glb_get()
   
 end module dsttvbds

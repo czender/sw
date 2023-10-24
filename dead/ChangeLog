@@ -1,3 +1,7 @@
+2023-10-24  Charlie Zender  <zender@uci.edu>
+
+	* Replace "stop" with "error stop" in *.F90 programs so program	returns non-zero exit status
+
 2019-02-05  Charlie Zender  <zender@uci.edu>
 
 	* Change copyright year to end in '--present' to avoid updating annually

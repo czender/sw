@@ -277,7 +277,7 @@ program H2OH2O
   else if (Chy98) then
      bnd_nbr=bnd_nbr_Chy98   ! [nbr] Number of bands
   else
-     stop 'One of GVD98, TGC98, Chy98 must be .true.'   
+     error stop 'One of GVD98, TGC98, Chy98 must be .true.'   
   endif                     ! endif
   
   ! Allocate space for dynamic arrays
@@ -329,7 +329,7 @@ program H2OH2O
   endif                     ! endif SCL_NIR
   if (GVD98) then
      call ftn_strcpy(src_rfr_sng,'Data source is Goss et al. (1998) (GVD98)')
-     stop 'GVD98 not implemented yet'
+     error stop 'GVD98 not implemented yet'
   endif
   if (TGC98) then
      call ftn_strcpy(src_rfr_sng,'Data source is Tso, Geldart, and Chylek (1998) (TGC98)'// &
