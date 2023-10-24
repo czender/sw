@@ -18,8 +18,8 @@ spt_src="${BASH_SOURCE[0]}"
 spt_nm=$(basename ${spt_src}) # [sng] Script name (unlike $0, ${BASH_SOURCE[0]} works well with 'source <script>')
 
 # Main loop over profiles
-#for prf in mls mlw sas saw std tro; do
-for prf in std; do
+for prf in mls mlw sas saw std tro; do
+#for prf in std; do
 
     # Loop over clear/cloudy columns
     for sky in clr cld; do
