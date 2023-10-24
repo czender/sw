@@ -3844,7 +3844,7 @@ program swnb2
   if(mode_chn) then
      if(ocn_msk < 1.0) then
         print *, 'ocn_msk < 1.0', ocn_msk
-        stop
+        error stop
      endif
   endif
   
@@ -7056,6 +7056,20 @@ program swnb2
      do levp_idx=1,levp_nbr
         flx_spc_dwn_drc(bnd_idx,levp_idx)=rfldir(levp_idx)/ &
              wvl_dlt(bnd_idx)
+        ! 20231024: Notice rfldn is quite often negative for unimportant bands
+        ! Presumably this is because of precision issues with tiny fluxes
+        if(rfldn(levp_idx) < 0.0) then
+           rfldn(levp_idx)=0.0
+           if(dbg_lvl >= dbg_fl) then
+              write (6,'(a10,i4,a2,a6,es8.1,a2,a11,i4,a2,a7,es8.1,a2,a8,es8.1)') &
+                   'bnd_idx = ',bnd_idx,', ', &
+                   'bnd = ',bnd(bnd_idx),', ', &
+                   'levp_idx = ',levp_idx,', ', &
+                   'levp = ',levp(levp_idx),', ', &
+                   'rfldn = ',rfldn(levp_idx)
+              error stop 'rfldn(levp_idx) < 0.0'
+           endif ! dbg
+        endif ! rfldn
         flx_spc_dwn_dff(bnd_idx,levp_idx)=rfldn(levp_idx)/ &
              wvl_dlt(bnd_idx)
         flx_spc_dwn(bnd_idx,levp_idx)= &
