@@ -43,7 +43,7 @@ for prf in mls mlw sas saw std tro; do
 	
 	# Simulate atmospheric RT
 	if true; then
-	    cmd_swn="swnb2 --drc_in=${drc_in} --lqd=aer_h2o_lqd_rds_swa_10.nc --prf=${prf}_icrccm_50${sky}.nc --mpc_CWP=${mpc_CWP} ${rfl_sfc} --out=${drc_out}/swn_${prf}_${sky}.nc"
+	    cmd_swn="swnb2 --drc_in=${drc_in} --lqd=aer_h2o_lqd_rds_swa_10.nc --prf=${prf}_icrccm_50${sky}.nc --mpc_CWP=${mpc_CWP} ${rfl_sfc} --out=${drc_out}/swn_${prf}_${sky}.nc > ${drc_out}/swn_${prf}_${sky}.txt 2>&1"
 	    echo ${cmd_swn}
 	    eval ${cmd_swn}
 	    if [ "$?" -ne 0 ]; then
