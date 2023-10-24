@@ -7054,22 +7054,25 @@ program swnb2
              wvl_dlt(bnd_idx)
      enddo                  ! end loop over lev
      do levp_idx=1,levp_nbr
+        if(rfldir(levp_idx) < 0.0) error stop 'rfldir(levp_idx) < 0.0'
         flx_spc_dwn_drc(bnd_idx,levp_idx)=rfldir(levp_idx)/ &
              wvl_dlt(bnd_idx)
-        ! 20231024: Notice rfldn is quite often negative for unimportant bands
+        ! 20231024: Notice rfldn and flup are quite often negative for unimportant bands
         ! Presumably this is because of precision issues with tiny fluxes
-        if(rfldn(levp_idx) < 0.0) then
-           rfldn(levp_idx)=0.0
-           if(dbg_lvl >= dbg_fl) then
-              write (6,'(a10,i4,a2,a6,es8.1,a2,a11,i4,a2,a7,es8.1,a2,a8,es8.1)') &
+        if(dbg_lvl >= dbg_fl) then
+           if(rfldn(levp_idx) < 0.0 .or. flup(levp_idx) < 0.0) then
+              write (6,'(a10,i4,a2,a6,es8.1,a2,a11,i4,a2,a7,es8.1,a2,a8,es8.1,a2,a7,es8.1)') &
                    'bnd_idx = ',bnd_idx,', ', &
                    'bnd = ',bnd(bnd_idx),', ', &
                    'levp_idx = ',levp_idx,', ', &
                    'levp = ',levp(levp_idx),', ', &
-                   'rfldn = ',rfldn(levp_idx)
+                   'rfldn = ',rfldn(levp_idx),', ', &
+                   'flup = ',flup(levp_idx)
               error stop 'rfldn(levp_idx) < 0.0'
-           endif ! dbg
-        endif ! rfldn
+           endif ! rfldn
+        endif ! dbg
+        if(rfldn(levp_idx) < 0.0) rfldn(levp_idx)=0.0
+        if(flup(levp_idx) < 0.0) flup(levp_idx)=0.0
         flx_spc_dwn_dff(bnd_idx,levp_idx)=rfldn(levp_idx)/ &
              wvl_dlt(bnd_idx)
         flx_spc_dwn(bnd_idx,levp_idx)= &
