@@ -425,7 +425,7 @@ case "${PVM_ARCH}" in
 # https://stackoverflow.com/questions/4554718/how-to-use-patterns-in-the-case-statement-in-bash-scripting
 	case "${HOST}" in 
 	    acme1* ) export DATA="/home/${USER}/data" ; ;; # LLNL
-	    andes* ) export DATA="/gpfs/alpine/world-shared/cli115/${USER}" ; ;; # OLCF (20230406: maybe cli115-ecp?)
+	    andes* | frontier* ) export DATA="/lustre/orion/cli115/world-shared/${USER}" ; ;; # OLCF
 	    bebop* | blues* | blogin* | chrlogin* ) export DATA="/home/${USER}/data" ; ;; # ANL LCRC
 	    cg-gpu* ) export DATA="/home/${USER}/data" ; ;; # NCSA roger
 	    *cheyenne* ) export DATA="/glade/work/${USER}" ; ;; # NCAR
@@ -433,7 +433,6 @@ case "${PVM_ARCH}" in
 	    compy* ) export DATA="/qfs/people/${USER}/data" ; ;; # PNNL 
 	    cooley* | cc* ) export DATA="${HOME}/data" ; ;; # ANL ALCF 
 	    e3sm* ) export DATA="${HOME}/data" ; ;; # UCI
-	    frontier* ) export DATA="/lustre/orion/cli115/world-shared/${USER}" ; ;; # OLCF
 	    imua* ) export DATA="${HOME}/data" ; ;; # UCI
 	    login[0123456789][0123456789] ) # 20230831 Frontier and Perlmutter login nodes share this name :(
 		if [ "${LMOD_SYSTEM_NAME}" = 'frontier' ]; then
