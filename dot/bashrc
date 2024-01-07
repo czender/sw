@@ -512,7 +512,7 @@ case "${PVM_ARCH}" in
 #	    acme1* ) PATH=${PATH}\:/p/user_pub/e3sm_unified/envs/base/envs/e3sm_unified_latest/bin ; ;; # LLNL
 	    # Default compy PATH=/share/apps/modules/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/ganglia/bin:/opt/ganglia/sbin:/opt/pdsh/bin:/opt/rocks/bin:/opt/rocks/sbin:/qfs/people/zender/bin
 	    compy* ) PATH=${PATH}\:/share/apps/modules/bin\:/opt/rocks/bin ; ;; # PNNL compy
-	    derecho* ) PATH=${PATH}\:/opt/pbs/bin ; ;; # NCAR derecho
+	    derecho* ) PATH=${PATH}\:/opt/pbs/bin\:/glade/u/apps/derecho/23.06/spack/opt/spack/ncarcompilers/1.0.0/gcc/12.2.0/gj6c/bin ; ;; # NCAR derecho
 	    gplogin* ) # x86-64
 		PATH=${PATH}\:${ICC_ROOT}/bin/intel64 ; ;; # greenplanet
 #	    e3sm* ) 

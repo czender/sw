@@ -786,8 +786,10 @@ git reset --hard origin/master
 make distclean
 module purge
 module load ncarenv gcc ncarcompilers netcdf udunits
-CC='gcc' CFLAGS='-Wall' CXX='g++' ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr2 --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+CC='gcc' CFLAGS='-Wall' CXX='g++' JAR=/glade/u/apps/derecho/23.06/opt/bin/jar JAVAC=/glade/u/apps/derecho/23.06/opt/bin/javac ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr2 --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-java --disable-shared > antlr.configure.foo 2>&1
 make
+
+CC='/glade/u/apps/derecho/23.06/spack/opt/spack/ncarcompilers/1.0.0/gcc/12.2.0/gj6c/bin/CC' CFLAGS='-Wall' CXX='/glade/u/apps/derecho/23.06/spack/opt/spack/ncarcompilers/1.0.0/gcc/12.2.0/gj6c/bin/g++' JAR=/glade/u/apps/derecho/23.06/opt/bin/jar JAVAC=/glade/u/apps/derecho/23.06/opt/bin/javac ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr2 --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-java --disable-shared > antlr.configure.foo 2>&1
 
 make test # breaks on atof() issue
 make install
