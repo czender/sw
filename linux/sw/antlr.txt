@@ -789,11 +789,6 @@ module load ncarenv gcc ncarcompilers netcdf udunits
 CC='gcc' CFLAGS='-Wall' CXX='g++' ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr2 --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 
-module purge
-module load ncarenv gnu/9.1.0 ncarcompilers mpt netcdf/4.6.3
-CC='gcc' CFLAGS='-Wall' CXX='g++' ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
-make
-
 make test # breaks on atof() issue
 make install
 #make clean

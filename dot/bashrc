@@ -266,7 +266,7 @@ case "${HOST}" in
     firn* | katabatic* | rigb* | sastrugi* | spectral* ) export OMP_NUM_THREADS=4 ; ;; # endif
     gplogin* | grele* | snow* ) export OMP_NUM_THREADS='8' ; ;; # dual-quad processor
     acme1* | andes* | compy* | e3sm* | imua* ) export OMP_NUM_THREADS='16' ; ;; # dual-octet processor
-    *derecho* ) export OMP_NUM_THREADS='16' ; ;; # dual-hexadecimal processor
+    derecho* ) export OMP_NUM_THREADS='16' ; ;; # dual-hexadecimal processor
     cg1* ) export OMP_NUM_THREADS=2 ; ;; # cg1*
     * ) export OMP_NUM_THREADS=1 ; ;; # *
 esac # endcase ${HOST}
@@ -424,9 +424,9 @@ case "${PVM_ARCH}" in
 	    andes* | frontier* ) export DATA="/lustre/orion/cli115/world-shared/${USER}" ; ;; # OLCF
 	    bebop* | blues* | blogin* | chrlogin* ) export DATA="/home/${USER}/data" ; ;; # ANL LCRC
 	    cg-gpu* ) export DATA="/home/${USER}/data" ; ;; # NCSA roger
-	    *derecho* ) export DATA="/glade/work/${USER}" ; ;; # NCAR
 	    chrysalis* ) export DATA="${HOME}/data" ; ;; # ANL LCRC
 	    compy* ) export DATA="/qfs/people/${USER}/data" ; ;; # PNNL 
+	    derecho* ) export DATA="/glade/work/${USER}" ; ;; # NCAR
 	    e3sm* ) export DATA="${HOME}/data" ; ;; # UCI
 	    imua* ) export DATA="${HOME}/data" ; ;; # UCI
 	    login[0123456789][0123456789] ) # 20230831 Frontier and Perlmutter login nodes share this name :(
@@ -510,9 +510,9 @@ case "${PVM_ARCH}" in
 
 	case "${HOST}" in 
 #	    acme1* ) PATH=${PATH}\:/p/user_pub/e3sm_unified/envs/base/envs/e3sm_unified_latest/bin ; ;; # LLNL
-	    *derecho* ) PATH=${PATH}\:/opt/pbs/bin ; ;; # NCAR derecho
 	    # Default compy PATH=/share/apps/modules/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/ganglia/bin:/opt/ganglia/sbin:/opt/pdsh/bin:/opt/rocks/bin:/opt/rocks/sbin:/qfs/people/zender/bin
 	    compy* ) PATH=${PATH}\:/share/apps/modules/bin\:/opt/rocks/bin ; ;; # PNNL compy
+	    derecho* ) PATH=${PATH}\:/opt/pbs/bin ; ;; # NCAR derecho
 	    gplogin* ) # x86-64
 		PATH=${PATH}\:${ICC_ROOT}/bin/intel64 ; ;; # greenplanet
 #	    e3sm* ) 
@@ -554,7 +554,7 @@ case "${PVM_ARCH}" in
 	case "${HOST}" in 
 	    # 20130916: Support NCAR modules on derecho by removing custom environment variables
 #	    acme1* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/p/user_pub/e3sm_unified/envs/base/envs/e3sm_unified_latest/lib ; ;; # LLNL
-	    *derecho* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/u/apps/derecho/23.06/spack/opt/spack/udunits/2.2.28/gcc/12.2.0/vls2/lib\:/glade/u/apps/ch/opt/gsl/2.7/gnu/12.1.0/lib ; ;; # NCAR
+	    derecho* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/u/apps/derecho/23.06/spack/opt/spack/udunits/2.2.28/gcc/12.2.0/vls2/lib\:/glade/u/apps/ch/opt/gsl/2.7/gnu/12.1.0/lib ; ;; # NCAR
 	esac # endcase ${HOST}
 
 # HTTP proxy at LGGE needed for googleearth
@@ -856,8 +856,8 @@ case "${HOST}" in
     hpc* ) export LINUX_CC=${CC_pgcc} ; export LINUX_CXX=${CXX_pgCC} ; export LINUX_FC=${FC_pgf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # pgcc/pgCC/pgf95 MPICH2
     e3sm* ) export LINUX_CC=${CC_gcc_conda} ; export LINUX_CXX=${CXX_gxx_conda} ; export LINUX_FC=${FC_gfortran_conda} ; ;; # gcc/g++/gfortran Conda
     imua* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # gcc/g++/gfortran RPMs
-    andes* | blogin* | blues* | chrlogin* | *derecho* | compy* | frontier* | login-* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # gcc/g++/gfortran OpenMPI
-#    *derecho* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icc/icpc/ifort
+    andes* | blogin* | blues* | chrlogin* | compy* | derecho* | frontier* | login-* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # gcc/g++/gfortran OpenMPI
+#    derecho* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # gcc/g++/g95 MPICH 
 esac # endcase ${HOST}
 # LAMMPICC and LAMPICXX are OS-independent
@@ -881,17 +881,6 @@ case "${HOST}" in
     ipcc* ) export ICC_ROOT='/opt/intel/cce/9.1.038' ; export IFC_ROOT='/opt/intel/fce/9.1.032' ; ;; # IPCC
     hpc* ) export ICC_ROOT='/software/intel/cc' ; export IFC_ROOT='/software/intel/fc' ; ;; # HPC
 esac # endcase ${HOST}
-
-if fl_is_exe /bin/hostname ; then
-    if [ `/bin/hostname` = 'meeker' ]; then
-	export PVM_ARCH=SUNMP
-# NB: use 'man products' for all SCD product info
-	PATH=/local/bin:${PATH}
-	PATH=/fs/local/bin:${PATH}
-	export DATA=/fs/cgd/data0/${USER}
-	export X11=/usr/lib/X11
-    fi # meeker
-fi # hostname
 
 # System-specific environments
 case "${HOST}" in
