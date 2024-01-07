@@ -773,4 +773,30 @@ make install
 # 20231207: chrysalis.lcrc.anl.gov gcc 13.2.0
 #***********************************************************************
 
+#***********************************************************************
+# 20240107: derecho.ucar.edu 
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+#cd ${DATA}
+#git clone git@github.com:nco/antlr2.git ${DATA}/antlr2
+cd ${DATA}/antlr2
+git reset --hard origin/master
+make distclean
+module purge
+module load ncarenv gcc ncarcompilers netcdf udunits
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr2 --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
 
+module purge
+module load ncarenv gnu/9.1.0 ncarcompilers mpt netcdf/4.6.3
+CC='gcc' CFLAGS='-Wall' CXX='g++' ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20240107: derecho.ucar.edu 
+#***********************************************************************
