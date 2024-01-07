@@ -786,7 +786,7 @@ git reset --hard origin/master
 make distclean
 module purge
 module load ncarenv gcc ncarcompilers netcdf udunits
-CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr2 --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+CC='gcc' CFLAGS='-Wall' CXX='g++' ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr2 --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
 make
 
 module purge
