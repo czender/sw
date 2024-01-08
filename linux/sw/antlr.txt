@@ -791,6 +791,17 @@ make
 
 CC='/glade/u/apps/derecho/23.06/spack/opt/spack/ncarcompilers/1.0.0/gcc/12.2.0/gj6c/bin/CC' CFLAGS='-Wall' CXX='/glade/u/apps/derecho/23.06/spack/opt/spack/ncarcompilers/1.0.0/gcc/12.2.0/gj6c/bin/g++' JAR=/glade/u/apps/derecho/23.06/opt/bin/jar JAVAC=/glade/u/apps/derecho/23.06/opt/bin/javac ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr2 --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-java --disable-shared > antlr.configure.foo 2>&1
 
+20240107: Both of the above approaches yield same error:
+make[3]: Entering directory '/glade/work/zender/antlr2/lib/cpp/src'
+*** compiling /glade/work/zender/antlr2/lib/cpp/src/../../../lib/cpp/src/ANTLRUtil.cpp
+NCAR_ERROR: wrapper cannot locate path to CC
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                      >> E R R O R <<
+============================================================
+
+CC -g -c  -I. -I/glade/work/zender/antlr2/scripts/../lib/cpp /glade/work/zender/antlr2/lib/cpp/src/../../../lib/cpp/src/ANTLRUtil.cpp"
+
 make test # breaks on atof() issue
 make install
 #make clean
