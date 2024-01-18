@@ -7,8 +7,8 @@
    drc_out=${DATA}/rrtmgp/swnb2
    prf=tro
    ncap2 -v -O --fl_spt ~/sw/aca/swn_rrtmgp_anl_bnd5.nco ${drc_out}/swn_${prf}_clr.nc ${drc_out}/swn_${prf}_anl_bnd5_clr.nc
-   ncks -C -v flx.? ${drc_out}/swn_${prf}_bnd5_clr.nc | m
-   ncks -v flx_frc_d.._vsb ${drc_out}/swn_${prf}_bnd5_clr.nc
+   ncks -C -v flx.? ${drc_out}/swn_${prf}_anl_bnd5_clr.nc | m
+   ncks -v flx_frc_d.._vsb ${drc_out}/swn_${prf}_anl_bnd5_clr.nc
 
    RRTMGP (reversed, 1-based) band 5 spans 0.6250--0.7782 um
    SWNB2 output reversed to increase monotonically with wavelength key indices (0-based):
@@ -18,10 +18,10 @@
    1610 = 0.77791 um # Reddest SWNB2 band fully in RRTMGP (1-based) band 5 */
 
 // Declare hyperspectral indices
-idx_vsb_min=1296; // Bluest SWNB2 band fully in RRTMGP (1-based) band 5
-idx_vsb_max=1466; // Bluest SWNB2 band fully in EAM VIS
-idx_nir_min=1467; // Reddest SWNB2 band fully in EAM NIR
-idx_nir_max=1610; // Reddest SWNB2 band fully in RRTMGP (1-based) band 5
+*idx_vsb_min=1296; // 0.62520 um, Bluest SWNB2 band fully in RRTMGP (1-based) band 5
+*idx_vsb_max=1466; // 0.69954 um, Bluest SWNB2 band fully in EAM VIS
+*idx_nir_min=1467; // 0.70003 um, Reddest SWNB2 band fully in EAM NIR
+*idx_nir_max=1610; // 0.77791 um, Reddest SWNB2 band fully in RRTMGP (1-based) band 5
 
 /* Absolute fractions of solar downwelling flux in RRTMGP Band 5 total, VIS, and NIR components
    (Evaluate all downwelling quantities at surface and drop _dwn and _sfc affixes for conciseness) */
