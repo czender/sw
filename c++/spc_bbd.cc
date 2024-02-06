@@ -273,7 +273,7 @@ flx_bbd_frc_get_WiW76 // [fnc] Fraction of blackbody emission in given spectral 
   double ntn_bbd_rsl_ttl; // [W m-2 sr-1] Total integrated radiance resolved in wavenumber grid
   double flx_bbd_frc_mss_blr; // [frc] Fractional "missing" radiance bluer (shorter wavelengths/larger wavenumbers) than wavenumber grid
   double flx_bbd_frc_mss_rdr; // [frc] Fractional "missing" radiance redder (longer wavelengths/smaller wavenumbers) than wavenumber grid
-  double wvn_lo(NC_MIN_DOUBLE); // [cm-1] Lowest wavenumber in current bin
+  double wvn_lo(DBL_MIN); // [cm-1] Lowest wavenumber in current bin
 
   long wvn_idx; // [idx] Counting index for wvn
 
