@@ -114,6 +114,7 @@ sng2sng_map wvl_grd_cls::opt2abb_map_mk(){ // Create abbreviation map
   map_tmp.insert(sng2sng_map::value_type("RRTM_LW","RRTM_LW"));
   map_tmp.insert(sng2sng_map::value_type("RRTMG_LW","RRTMG_LW"));
   map_tmp.insert(sng2sng_map::value_type("RRTMGP_LW","RRTMGP_LW"));
+  map_tmp.insert(sng2sng_map::value_type("RRTMGP_5BND_LW","RRTMGP_5BND_LW"));
   map_tmp.insert(sng2sng_map::value_type("RRTM_SW","RRTM_SW"));
   map_tmp.insert(sng2sng_map::value_type("RRTMG_SW","RRTM_SW"));
   map_tmp.insert(sng2sng_map::value_type("RRTMGP_SW","RRTMGP_SW"));
@@ -615,6 +616,23 @@ wvl_grd_cls::recompute(){ // [fnc] Recompute properties of object
       wvl_max[wvl_idx]=0.01/wvn_min_RRTMGP_LW[wvl_idx]; // [cm-1] -> [m]
     } // !wvl_idx
     // !RRTMGP_LW-specific initialization
+  }else if(grd_sng == "RRTMGP_5BND_LW"){ // 
+    /* RRTMGP spectral grid from Lili Manzo 20240205
+       Optimal grid to reduce surface emission/heating biases in RRTMGP_LW to < 0.01% */
+
+    const prc_cmp wvn_min_RRTMGP_5BND_LW[]={  10.0, 700.0, 820.0, 980.0,1080.0}; // [cm-1]
+    const prc_cmp wvn_max_RRTMGP_5BND_LW[]={ 700.0, 820.0, 980.0,1080.0,3250.0}; // [cm-1]
+    const long wvl_nbr_RRTMGP_5BND_LW(sizeof(wvn_min_RRTMGP_5BND_LW)/sizeof(prc_cmp));
+    if(wvl_nbr != wvl_nbr_RRTMGP_5BND_LW){
+      rcd+=deallocate(); // [fnc] Free dynamic memory of object
+      wvl_nbr=wvl_nbr_RRTMGP_5BND_LW; // [nbr]
+    } // endif
+    rcd+=allocate(); // [fnc] Allocate dynamic memory for object
+    for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
+      wvl_min[wvl_idx]=0.01/wvn_max_RRTMGP_5BND_LW[wvl_idx]; // [cm-1] -> [m]
+      wvl_max[wvl_idx]=0.01/wvn_min_RRTMGP_5BND_LW[wvl_idx]; // [cm-1] -> [m]
+    } // !wvl_idx
+    // !RRTMGP_5BND_LW-specific initialization
   }else if(grd_sng == "RRTM_SW"){ // 
     /* RRTM spectral grid originally from Rachel Scanza 20120323
        RRTMG_SW grid defined rrtmg_sw_init.f90 lines 193--199 is identical to RRTM_SW grid
