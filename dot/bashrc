@@ -425,7 +425,7 @@ case "${PVM_ARCH}" in
 # https://stackoverflow.com/questions/4554718/how-to-use-patterns-in-the-case-statement-in-bash-scripting
 	case "${HOST}" in 
 	    acme1* ) export DATA="/home/${USER}/data" ; ;; # LLNL
-	    andes* ) export DATA="/gpfs/alpine/world-shared/cli115/${USER}" ; ;; # OLCF (20230406: maybe cli115-ecp?)
+	    andes* | frontier* ) export DATA="/lustre/orion/cli115/world-shared/${USER}" ; ;; # OLCF
 	    bebop* | blues* | blogin* | chrlogin* ) export DATA="/home/${USER}/data" ; ;; # ANL LCRC
 	    cg-gpu* ) export DATA="/home/${USER}/data" ; ;; # NCSA roger
 	    *cheyenne* ) export DATA="/glade/work/${USER}" ; ;; # NCAR
@@ -433,7 +433,6 @@ case "${PVM_ARCH}" in
 	    compy* ) export DATA="/qfs/people/${USER}/data" ; ;; # PNNL 
 	    cooley* | cc* ) export DATA="${HOME}/data" ; ;; # ANL ALCF 
 	    e3sm* ) export DATA="${HOME}/data" ; ;; # UCI
-	    frontier* ) export DATA="/lustre/orion/cli115/world-shared/${USER}" ; ;; # OLCF
 	    imua* ) export DATA="${HOME}/data" ; ;; # UCI
 	    login[0123456789][0123456789] ) # 20230831 Frontier and Perlmutter login nodes share this name :(
 		if [ "${LMOD_SYSTEM_NAME}" = 'frontier' ]; then
@@ -454,20 +453,21 @@ case "${PVM_ARCH}" in
 	case "${HOST}" in 
 	    gplogin* | hpc* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # UCI PS Rocks Cluster
 	esac # endcase ${HOST}
-	if [ -n "${NETCDF_ROOT}" ]; then
-	    # Some modules, e.g., on compy, define NETCDF_ROOT, so use that
-	    export NETCDF_ROOT="${NETCDF_ROOT}"
-	elif [ -n "${PKG_ROOT}" ]; then
-	    export NETCDF_ROOT="${PKG_ROOT}"
-	else
-	    export NETCDF_ROOT='/usr'
-	fi # !NETCDF_ROOT
-	case "${HOST}" in 
-	    hpc* ) export NETCDF_ROOT="${PKG_ROOT}/netcdf" ; export NETCDF4_LIB="${PKG_ROOT}/netcdf4" ; ;; # HPC
-#		export LD_ASSUME_KERNEL='2.4.1' # Prevents IPCC PGI linker complaints
-	esac # endcase ${HOST}
-	export NETCDF_INC="${NETCDF_ROOT}/include"
-	export NETCDF_LIB="${NETCDF_ROOT}/lib"
+	# 20231206 Stop assigning NETCDF_ROOT in bashrc, do so in configure.eg instead
+#	if [ -n "${NETCDF_ROOT}" ]; then
+#	    # Some modules, e.g., on compy, define NETCDF_ROOT, so use that
+#	    export NETCDF_ROOT="${NETCDF_ROOT}"
+#	elif [ -n "${PKG_ROOT}" ]; then
+#	    export NETCDF_ROOT="${PKG_ROOT}"
+#	fi # !NETCDF_ROOT
+#	case "${HOST}" in 
+#	    hpc* ) export NETCDF_ROOT="${PKG_ROOT}/netcdf" ; export NETCDF4_LIB="${PKG_ROOT}/netcdf4" ; ;; # HPC
+##		export LD_ASSUME_KERNEL='2.4.1' # Prevents IPCC PGI linker complaints
+#	esac # endcase ${HOST}
+#	if [ -n "${NETCDF_ROOT}" ]; then
+#	    export NETCDF_INC="${NETCDF_ROOT}/include"
+#	    export NETCDF_LIB="${NETCDF_ROOT}/lib"
+#	fi # !NETCDF_ROOT
 	# 20200906: Always export HDF5_PLUGIN_PATH (at least on MacOS) for CCR
 	# 20230903: Deprecate CCR, so netCDF looks for plugins in `nc-config --plugindir`
 #	case "${HOST}" in 
@@ -573,7 +573,7 @@ case "${PVM_ARCH}" in
 	export DATA=/Users/${USER}/data
 	export INFOPATH=./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/share/info
 #	export NCARG_ROOT='/opt/local' # Port-installed
-	export NETCDF_ROOT="${PKG_ROOT}" # Homebrew
+#	export NETCDF_ROOT="${PKG_ROOT}" # Homebrew
 	export NCARG_ROOT="${PKG_ROOT}/opt/ncl-6.6.2" # Homebrew-installed
 	# 20200906: Always export HDF5_PLUGIN_PATH (at least on MacOS) for CCR
 	export HDF5_PLUGIN_PATH='/usr/local/hdf5/lib/plugin'
