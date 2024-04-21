@@ -249,6 +249,11 @@ esac # !HOST
 PATH=${PATH}\:${HOME}/sh
 PATH=${PATH}\:${MY_BIN_DIR}
 
+# Amazon Web Services AWS NCO development for OSTFL
+case "${HOST}" in 
+    spectral* ) export AWS_DEFAULT_PROFILE='AWSAdministratorAccess-767397735549' ; ;; # MacOS Homebrew Mac silicon
+esac # endcase ${HOST}
+
 # PKG_ROOT is where non-default sysadmin-installed packages reside
 # PKG_ROOT is usually argument to configure --prefix=${PKG_ROOT}
 case "${HOST}" in 
