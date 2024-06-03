@@ -9893,7 +9893,7 @@ http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
 
 #***********************************************************************
-# 20240519: spectral.ess.uci.edu MacOS 14.4.1 Homebrew clang 18.1.5/gfortran 14.1.0 netcdf-4.9.3-development git
+# 20240519: spectral.ess.uci.edu MacOS 14.5 Homebrew clang 18.1.5/gfortran 14.1.0 netcdf-4.9.3-development git
 #***********************************************************************
 sudo aptitude install antlr bison doxygen flex gcc g++ gsl-bin libgsl0-dev libcurl4-gnutls-dev libexpat1-dev libxml2-dev netcdf-bin udunits-bin libudunits2-0 libudunits2-dev # Install netCDF prequisites
 sudo yum install antlr antlr-C++ curl-devel libxml2-devel bison flex gcc gcc-c++ gcc-gfortran gsl gsl-devel librx librx-devel udunits2 udunits2-devel
@@ -10036,5 +10036,5 @@ http://dust.ess.uci.edu/tmp/netcdf.configure.foo
 http://dust.ess.uci.edu/tmp/netcdf.make.foo
 http://dust.ess.uci.edu/tmp/netcdf.config.log.foo
 #***********************************************************************
-# 20240519: spectral.ess.uci.edu MacOS 14.4.1 Homebrew clang 18.1.5/gfortran 14.1.0 netcdf-4.9.3-development git
+# 20240519: spectral.ess.uci.edu MacOS 14.5 Homebrew clang 18.1.5/gfortran 14.1.0 netcdf-4.9.3-development git
 #***********************************************************************
