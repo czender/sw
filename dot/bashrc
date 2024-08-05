@@ -47,7 +47,7 @@ function fl_is_exe {
     fl=${fl:?"ERROR: fl_is_exe() requires filename as argument"}
     test -f "${fl}" -a -x "${fl}"
     # By default, Bash functions return exit status of last command executed
-} # end fl_is_exe()
+} # !fl_is_exe()
 
 function lprpdf {
 # Purpose: Convert PDF file to Postscript, send result to printer
@@ -59,7 +59,7 @@ function lprpdf {
     cmd="pdf2ps ${fl} ${fl/pdf/ps}; lpr ${fl/pdf/ps}; rm ${fl/pdf/ps}"
     printf "Issuing command: ${cmd}\n"
     ${cmd}
-} # end restart()
+} # !restart()
 
 function restart {
 # Purpose: Restart daemon
@@ -70,7 +70,7 @@ function restart {
     cmd="sudo /etc/init.d/${dmn} restart"
     printf "Issuing command: ${cmd}\n"
     ${cmd}
-} # end restart()
+} # !restart()
 
 function start {
 # Purpose: Start daemon
@@ -81,7 +81,7 @@ function start {
     cmd="sudo /etc/init.d/${dmn} start"
     printf "Issuing command: ${cmd}\n"
     ${cmd}
-} # end start()
+} # !start()
 
 function stop {
 # Purpose: Stop daemon
@@ -92,7 +92,7 @@ function stop {
     cmd="sudo /etc/init.d/${dmn} stop"
     printf "Issuing command: ${cmd}\n"
     ${cmd}
-} # end stop()
+} # !stop()
 
 function bsh_mjr_vrs_ge_2 {
 # Purpose: Return true if major version of Bash shell is >= 2
@@ -102,11 +102,11 @@ function bsh_mjr_vrs_ge_2 {
 	let vrs=${BASH_VERSION%%.*} # NeR98 p. 100
 	if [ ${vrs} -ge 2 ] ; then # NeR98 p. 153
 	    return 0; # 0 is true in shell-ese
-	fi # endif
-    fi # endif
+	fi # !vrs
+    fi # !BASH_VERSION
     # By default, functions return exit status of last command executed
     return 1; # 1 is false in shell-ese
-} # end fl_is_exe()
+} # !bsh_mjr_vrs_ge_2()
 
 # 20150519: List dimensions in netCDF file
 function ncdmnlist { ncks --cdl -m ${1} | cut -d ':' -f 1 | cut -d '=' -s -f 1 ; }
@@ -1088,7 +1088,9 @@ alias beepoff='xset b off' # Turn beep sound off for quiet work envionments
 alias acme1='ssh -Y zender1@acme1.llnl.gov' # pw_hgh source /usr/local/uvcdat/latest/bin/setup_runtime.sh
 alias andes='ssh -Y andes.olcf.ornl.gov' # pyn_mdm + 6-digit fob code
 alias bebop='ssh -Y bebop.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
-alias blues='ssh -Y ac.zender@blues.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
+# 20240607: for ALCF, go to logins, then SSH to blues
+#alias blues='ssh -Y ac.zender@blues.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
+alias blues='ssh -Y -J ac.zender@logins.lcrc.anl.gov ac.zender@blues.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias bm='cd ~/nco/bm;nco_bm.pl --regress ncks;cd -'
 alias chrysalis='ssh -Y ac.zender@chrysalis.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias compy='ssh -Y compy.pnl.gov' # pyn_hgh + 6-digit fob code
