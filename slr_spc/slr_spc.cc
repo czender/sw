@@ -34,6 +34,9 @@
 
 /* Example usage:
    
+   Build (as of 20240808) on spectral.ess.uci.edu:
+   make CPPFLAGS="-DLINUX -I ${HOME}/include -I/opt/netcdf/include -I/opt/homebrew/include" LDFLAGS="-L/opt/netcdf/lib -L/opt/homebrew/lib -L${HOME}/lib -lcsz_c++ -lnco_c++ -lnetcdf"
+
    Debugging:
    slr_spc --dbg=1 --wvl_nbr=2497
    slr_spc --dbg=1 --wvl_nbr=2497 ${DATA}/aca/spc_Kur95_20wvn.txt ${DATA}/aca/spc_Kur95_20wvn.nc
@@ -289,9 +292,11 @@ int main(const int argc,char **argv)
 
   if(flx_slr_src == LaN68){
     wvl_nbr=122;
+    // 20240808 Change to new Fortran function names
     flx_frc_fnc=FORTRAN_slffln; // [fnc] Fractional solar flux function
   }else if(flx_slr_src == ThD71){
     wvl_nbr=68;
+    // 20240808 Change to new Fortran function names
     flx_frc_fnc=FORTRAN_slfftd; // [fnc] Fractional solar flux function
   }else if(flx_slr_src == NeL84){
     wvl_nbr=921;
