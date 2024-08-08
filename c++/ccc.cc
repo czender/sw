@@ -18,25 +18,25 @@
    make -W ccc.cc OPTS=D VRS_SNG=2.6.0 ccc
    make OPTS=D ccc
    // With netCDF3
-   cd ${HOME}/c++;make -W ccc.cc OPTS=D ccc;cd -
+   cd ${HOME}/sw/c++;make -W ccc.cc OPTS=D ccc;cd -
    cd ${HOME}/nco/src/nco_c++;make -f Makefile.old lib_cln cln;make -f Makefile.old OPTS=D lib;cd -
    // With netCDF4
-   cd ${HOME}/c++;make -W ccc.cc OPTS=D OMP=N NETCDF4=Y ccc;cd -
+   cd ${HOME}/sw/c++;make -W ccc.cc OPTS=D OMP=N NETCDF4=Y ccc;cd -
    cd ${HOME}/nco/src/nco_c++;make -f Makefile.old OMP=Y NETCDF4=Y lib_cln cln;make -f Makefile.old OMP=Y OPTS=D NETCDF4=Y lib;cd -
    cd ${HOME}/nco/src/nco_c++;make -f Makefile.old OMP=N NETCDF4=Y lib_cln cln;make -f Makefile.old OMP=N OPTS=D NETCDF4=Y lib;cd -
-   cd ${HOME}/c++;make lib_cln cln;make --jobs=1 OPTS=D ccc;cd -
+   cd ${HOME}/sw/c++;make lib_cln cln;make --jobs=1 OPTS=D ccc;cd -
    cd ${HOME}/mie;make lib_cln cln;make OPTS=D mie;cd -
-   scp ~/c++/ccc.cc sand.ess.uci.edu:c++
-   scp ~/c++/ccc.cc esmf.ess.uci.edu:c++
-   scp ~/c++/ccc.cc goldhill.cgd.ucar.edu:c++ */
+   scp ~/sw/c++/ccc.cc sand.ess.uci.edu:sw/c++
+   scp ~/sw/c++/ccc.cc esmf.ess.uci.edu:sw/c++
+   scp ~/sw/c++/ccc.cc goldhill.cgd.ucar.edu:sw/c++ */
 
-// etags ~/c++/*.cc ~/c++/*.hh ~/mie/*.cc ~/mie/*.hh ~/slr_spc/*.cc ~/slr_spc/*.hh ~/ck/htrn.c
+// etags ~/sw/c++/*.cc ~/sw/c++/*.hh ~/sw/mie/*.cc ~/sw/mie/*.hh ~/sw/slr_spc/*.cc ~/sw/slr_spc/*.hh ~/sw/ck/htrn.c
 
 /* Usage:
    ccc --dbg=3 --function=sin --flt=1.5
-   ccc --fl_in=${HOME}/nco/data/in.nc --fl_out=${HOME}/c++/foo.nc
-   ccc --drc_in=${HOME}/nco/data --fl_in=in.nc --drc_out=${HOME}/c++ --fl_out=foo.nc
-   ccc --drc_dat=${DATA}/aca --drc_in=${HOME}/nco/data --fl_in=in.nc --drc_out=${HOME}/c++ --fl_out=foo.nc
+   ccc --fl_in=${HOME}/nco/data/in.nc --fl_out=${HOME}/sw/c++/foo.nc
+   ccc --drc_in=${HOME}/nco/data --fl_in=in.nc --drc_out=${HOME}/sw/c++ --fl_out=foo.nc
+   ccc --drc_dat=${DATA}/aca --drc_in=${HOME}/nco/data --fl_in=in.nc --drc_out=${HOME}/sw/c++ --fl_out=foo.nc
    ccc --dbg=3 --xtr_LHS="xtr_prt_wgt+xtr_fll_nil+xtr_vrb" */
 
 // Standard C++ headers
