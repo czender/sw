@@ -797,6 +797,7 @@ int main(const int argc,char **argv)
   prc_cmp *flx_frc_ThD71=new prc_cmp[wvl_nbr];
   prc_cmp *flx_frc_NeL84=new prc_cmp[wvl_nbr];
   prc_cmp *flx_frc_Kur95=new prc_cmp[wvl_nbr];
+  prc_cmp *flx_frc_JHC21=new prc_cmp[wvl_nbr];
   prc_cmp *flx_slr=new prc_cmp[wvl_nbr];
   prc_cmp *flx_spc_slr=new prc_cmp[wvl_nbr];
   float wvl_min_mcr;
@@ -808,7 +809,8 @@ int main(const int argc,char **argv)
     flx_frc_LaN68[idx]=static_cast<prc_cmp>(FORTRAN_slffln(&wvl_min_mcr,&wvl_max_mcr));
     flx_frc_ThD71[idx]=static_cast<prc_cmp>(FORTRAN_slfftd(&wvl_min_mcr,&wvl_max_mcr));
     flx_frc_NeL84[idx]=0.0;
-    flx_frc_Kur95[idx]=flx_frc[idx];
+    if(flx_slr_src == Kur95) flx_frc_Kur95[idx]=flx_frc[idx]; else flx_frc_Kur95[idx]=1.0/wvl_nbr;
+    if(flx_slr_src == JHC21) flx_frc_JHC21[idx]=flx_frc[idx]; else flx_frc_JHC21[idx]=1.0/wvl_nbr;
     flx_slr[idx]=slr_cst*flx_frc[idx];
     flx_spc_slr[idx]=flx_slr[idx]/wvl_dlt[idx];
   } // end loop over wvl 
