@@ -35,7 +35,7 @@
 /* Example usage:
    
    Build (as of 20240808) on spectral.ess.uci.edu:
-   make CPPFLAGS="-DLINUX -I ${HOME}/include -I/opt/netcdf/include -I/opt/homebrew/include" LDFLAGS="-L/opt/netcdf/lib -L/opt/homebrew/lib -L${HOME}/lib -lcsz_c++ -lnco_c++ -lnetcdf"
+   cd ~/sw/slr_spc;make CPPFLAGS="-DLINUX -I ${HOME}/include -I/opt/netcdf/include -I/opt/homebrew/include" LDFLAGS="-L/opt/netcdf/lib -L/opt/homebrew/lib -L${HOME}/lib -lcsz_c++ -lnco_c++ -lnetcdf";cd -
 
    Debugging:
    slr_spc --dbg=1 --wvl_nbr=2497
@@ -43,7 +43,7 @@
    slr_spc --dbg=1 --wvl_lmt=5.0 --wvl_nbr=2497 ${DATA}/aca/spc_Kur95_20wvn.txt ${DATA}/aca/spc_Kur95_20wvn.nc
 
    Production:
-   slr_spc --dbg=1 --ncr_wvl ${DATA}/aca/tsis_ssi_L3_c24h_20240807.nc ${DATA}/aca/spc_JHC21.nc
+   slr_spc --dbg=1 --flx_slr_src=JHC21 ${DATA}/aca/tsis_ssi_L3_c24h_20240807.nc ${DATA}/aca/spc_JHC21.nc
    slr_spc --dbg=1 --ncr_wvl --wvl_nbr=49934 ${DATA}/aca/spc_Kur95_01wvn.txt ${DATA}/aca/spc_Kur95_01wvn.nc
    slr_spc --dbg=1 --ncr_wvl --wvl_nbr=2497 ${DATA}/aca/spc_Kur95_20wvn.txt ${DATA}/aca/spc_Kur95_20wvn.nc
    slr_spc --dbg=1 --flx_slr_src=NeL84 ${DATA}/aca/spc_NeL84.txt ${DATA}/aca/spc_NeL84.nc
@@ -97,7 +97,7 @@ int main(const int argc,char **argv)
     "Kurucz (1995) (Kur95)",
     "Jing et al. (2021)"
   };
-  int flx_slr_src=JHC21; // default
+  int flx_slr_src=Kur95; // default
 
   // Locals
   FILE *fp_in; // instead of cin, for now
@@ -107,7 +107,7 @@ int main(const int argc,char **argv)
   float flt_foo;
   prc_cmp wvl_ctr_mcr;
   int int_foo;
-  int rcd(0);
+  int rcd(NC_NOERR);
   long bnd_idx;
   long idx;
   long idx_max_wvl; // [idx] Index of maximum wavelenth
@@ -232,6 +232,9 @@ int main(const int argc,char **argv)
 	else if((flx_slr_sng[Kur95].find(opt_sng) != std::string::npos) || 
 	   (opt_sng.find("Kur95") != std::string::npos)) 
 	  flx_slr_src=Kur95;
+	else if((flx_slr_sng[JHC21].find(opt_sng) != std::string::npos) || 
+	   (opt_sng.find("JHC21") != std::string::npos)) 
+	  flx_slr_src=JHC21;
 	else err_prn(prg_nm,sbr_nm,"Unknown flx_slr_src");
       } // end if "flx_slr_src"
     } // opt != 0
@@ -292,16 +295,16 @@ int main(const int argc,char **argv)
 
   if(flx_slr_src == LaN68){
     wvl_nbr=122;
-    // 20240808 Change to new Fortran function names
     flx_frc_fnc=FORTRAN_slffln; // [fnc] Fractional solar flux function
   }else if(flx_slr_src == ThD71){
     wvl_nbr=68;
-    // 20240808 Change to new Fortran function names
     flx_frc_fnc=FORTRAN_slfftd; // [fnc] Fractional solar flux function
   }else if(flx_slr_src == NeL84){
     wvl_nbr=921;
     flx_frc_fnc=FORTRAN_slffln; // Bogus, not used
   }else if(flx_slr_src == Kur95){
+    flx_frc_fnc=FORTRAN_slffln; // Bogus, not used
+  }else if(flx_slr_src == JHC21){
     flx_frc_fnc=FORTRAN_slffln; // Bogus, not used
   } // end else
   if(dbg_lvl > 1) std::cerr << "flx_slr_src = " << flx_slr_sng[flx_slr_src] << std::endl;
@@ -494,9 +497,7 @@ int main(const int argc,char **argv)
 
        Spike at 630 nm appears due to changing wavelength resolution from 1 nm to 2 nm
        Spike at 1 um appears due to changing wavelength resolution from 2 nm to 5 nm
-       Remaining spikes are numerical noise due to loss of precision in flux
-
-       */
+       Remaining spikes are numerical noise due to loss of precision in flux */
 
     prc_cmp *flx_blr=new prc_cmp[wvl_nbr]; // [frc] Fraction of solar flux at shorter wavelengths
 
@@ -599,12 +600,74 @@ int main(const int argc,char **argv)
       wvl_max[idx]=1.0/(100.*wvn_min[idx]); // [m] Maximum wavelength in band
       wvl_dlt[idx]=wvl_max[idx]-wvl_min[idx]; // [m] Bandwidth
       flx_bnd[idx]=wvn_dlt[idx]*flx_spc_wvn[idx]; // [W m-2] Solar flux in band
-    } // end loop over wvl 
+    } // end loop over wvl
 
     delete []wvn_ctr; // [m] Wavelength at band center
     delete []flx_spc_wvn;
   } // end if Kur95
   
+  if(flx_slr_src == JHC21){ // JHC21
+
+    // Check for file existance
+    struct stat stat_sct;
+    rcd=stat(fl_in.c_str(),&stat_sct);
+    if(rcd == -1) std::perror("ERROR std::stat()");
+
+    // Open input file
+    int nc_id=nco_open(fl_in,NC_NOWRITE); // [fnc] Open netCDF file
+    if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Opening "+fl_in);
+  
+    wvl_nbr=nco_inq_dimlen(nc_id,static_cast<std::string>("wavelength")); // [nbr] Number of wavelengths
+
+    prc_cmp *wvl_ctr_nm=new prc_cmp[wvl_nbr]; // [nm] Wavelength at band center
+    prc_cmp *flx_spc_bnd_1au_xnm=new prc_cmp[wvl_nbr]; // [W m-2 nm-1] TSIS-measured absolute spectral flux at 1 AU
+    prc_cmp *flx_spc_bnd=new prc_cmp[wvl_nbr]; // [W m-2 m-1] TSIS-measured absolute spectral flux at 1 AU
+
+    // User must free this memory when no longer needed
+    // For objects in spc_slr_cls, this is done in fl_slr_spc_set() which calls deallocate()
+    rcd=nco_get_var(nc_id,static_cast<std::string>("wavelength"),wvl_ctr_nm); // [nm]
+    rcd=nco_get_var(nc_id,static_cast<std::string>("irradiance_1au"),flx_spc_bnd_1au_xnm); // [W m-2 nm-1] 
+
+    // TSIS provides wavenlength in nm
+    for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
+      wvl_ctr[wvl_idx]=1.0e-9*wvl_ctr_nm[wvl_idx];
+      flx_spc_bnd[wvl_idx]=1.0e9*flx_spc_bnd_1au_xnm[wvl_idx];
+    } // !wvl_idx
+
+    // Close input file
+    rcd=nco_close(nc_id); // [fnc] Close netCDF file
+    if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Closing "+fl_in);
+
+    std::cerr << "Ingested data from " << fl_in << std::endl;
+
+    if(dbg_lvl > dbg_off){
+      std::cerr << "idx\twvn_ctr\tflx_spc_wvn" << std::endl;
+      std::cerr << "#\tnm\tW m-2 nm-1" << std::endl;
+      for(idx=0;idx<wvl_nbr;idx++) std::cerr << idx << "\t" << wvl_ctr[idx] << "\t" << 1.0e-9*flx_spc_bnd[idx] << std::endl;
+    } // end if dbg
+
+    // Create standard fields
+    wvl_min[0]=wvl_ctr[0]-0.5*(wvl_ctr[1]-wvl_ctr[0]);
+    for(wvl_idx=1;wvl_idx<wvl_nbr;wvl_idx++){
+      wvl_min[wvl_idx]=0.5*(wvl_ctr[wvl_idx-1]+wvl_ctr[wvl_idx]);
+    } // !wvl_idx
+    for(wvl_idx=0;wvl_idx<wvl_nbr-1;wvl_idx++){
+      wvl_max[wvl_idx]=0.5*(wvl_ctr[wvl_idx]+wvl_ctr[wvl_idx+1]);
+    } // !wvl_idx
+    wvl_max[wvl_nbr-1]=wvl_ctr[wvl_nbr-2]+0.5*(wvl_ctr[wvl_nbr-1]-wvl_ctr[wvl_nbr-2]);
+    for(idx=0;idx<wvl_nbr;idx++){
+      wvl[wvl_idx]=wvl_ctr[wvl_idx]; // [m] Nominal wavelength
+      wvl_dlt[wvl_idx]=wvl_max[wvl_idx]-wvl_min[wvl_idx]; // [m] Bandwidth
+      flx_bnd[wvl_idx]=wvl_dlt[wvl_idx]*flx_spc_bnd[wvl_idx]; // [W m-2] Solar flux in band
+    } // !wvl_idx
+
+    delete []wvl_ctr_nm;
+    delete []flx_spc_bnd_1au_xnm;
+    delete []flx_spc_bnd;
+  } // !JHC21
+  
+  // fxm got to here with JHC21
+
   // Make sure standard fields are in requested order
   if(flg_ncr_wvl && flx_slr_src == Kur95){
     std::cerr << "Reversing input data to be in order of increasing wavelength" << std::endl;
