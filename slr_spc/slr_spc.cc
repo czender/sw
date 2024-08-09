@@ -43,7 +43,7 @@
    slr_spc --dbg=1 --wvl_lmt=5.0 --wvl_nbr=2497 ${DATA}/aca/spc_Kur95_20wvn.txt ${DATA}/aca/spc_Kur95_20wvn.nc
 
    Production:
-   slr_spc --dbg=1 --flx_slr_src=JHC21 ${DATA}/aca/tsis_ssi_L3_c24h_20240807.nc ${DATA}/aca/spc_JHC21.nc
+   slr_spc --dbg=1 --flx_slr_src=JHC21 --wvl_nbr=2104 ${DATA}/aca/tsis_ssi_L3_c24h_20240807.nc ${DATA}/aca/spc_JHC21.nc
    slr_spc --dbg=1 --ncr_wvl --wvl_nbr=49934 ${DATA}/aca/spc_Kur95_01wvn.txt ${DATA}/aca/spc_Kur95_01wvn.nc
    slr_spc --dbg=1 --ncr_wvl --wvl_nbr=2497 ${DATA}/aca/spc_Kur95_20wvn.txt ${DATA}/aca/spc_Kur95_20wvn.nc
    slr_spc --dbg=1 --flx_slr_src=NeL84 ${DATA}/aca/spc_NeL84.txt ${DATA}/aca/spc_NeL84.nc
@@ -641,7 +641,7 @@ int main(const int argc,char **argv)
     std::cerr << "Ingested data from " << fl_in << std::endl;
 
     if(dbg_lvl > dbg_off){
-      std::cerr << "idx\twvn_ctr\tflx_spc_wvn" << std::endl;
+      std::cerr << "idx\twvl_ctr\tflx_spc_wvl" << std::endl;
       std::cerr << "#\tnm\tW m-2 nm-1" << std::endl;
       for(idx=0;idx<wvl_nbr;idx++) std::cerr << idx << "\t" << wvl_ctr[idx] << "\t" << 1.0e-9*flx_spc_bnd[idx] << std::endl;
     } // end if dbg
@@ -655,7 +655,7 @@ int main(const int argc,char **argv)
       wvl_max[wvl_idx]=0.5*(wvl_ctr[wvl_idx]+wvl_ctr[wvl_idx+1]);
     } // !wvl_idx
     wvl_max[wvl_nbr-1]=wvl_ctr[wvl_nbr-2]+0.5*(wvl_ctr[wvl_nbr-1]-wvl_ctr[wvl_nbr-2]);
-    for(idx=0;idx<wvl_nbr;idx++){
+    for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
       wvl[wvl_idx]=wvl_ctr[wvl_idx]; // [m] Nominal wavelength
       wvl_dlt[wvl_idx]=wvl_max[wvl_idx]-wvl_min[wvl_idx]; // [m] Bandwidth
       flx_bnd[wvl_idx]=wvl_dlt[wvl_idx]*flx_spc_bnd[wvl_idx]; // [W m-2] Solar flux in band
@@ -666,8 +666,6 @@ int main(const int argc,char **argv)
     delete []flx_spc_bnd;
   } // !JHC21
   
-  // fxm got to here with JHC21
-
   // Make sure standard fields are in requested order
   if(flg_ncr_wvl && flx_slr_src == Kur95){
     std::cerr << "Reversing input data to be in order of increasing wavelength" << std::endl;
@@ -690,7 +688,6 @@ int main(const int argc,char **argv)
   } // endif flg_ncr_wvl
 
   // Derive fields from standard fields
-
   prc_cmp *wvl_mcr=new prc_cmp[wvl_nbr];
   for(idx=0;idx<wvl_nbr;idx++){
     wvl_mcr[idx]=wvl[idx]*1.0e6;
