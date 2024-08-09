@@ -74,6 +74,7 @@ ifndef ${NETCDF4} # netCDF4 support
 endif # endif NETCDF4
 ifndef NETCDF_ROOT
  NETCDF_ROOT := /usr/local
+# NETCDF_ROOT := /opt/homebrew
 endif
 ifndef NETCDF4_ROOT
  NETCDF4_ROOT := ${NETCDF_ROOT}

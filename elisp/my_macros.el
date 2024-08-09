@@ -155,6 +155,16 @@ The normal global definition of the character C-z indirects to this keymap.")
          (define-key c-mode-map "\C-cc"    "/*  */\M-3\C-b")
          )))
 
+; Insert an Asciidoc keyword emphasis at cursor
+(fset 'c_keyword
+   "**  **\M-3\C-b")
+(define-key ctl-z-map "k" 'c_keyword)
+(setq c-mode-hook
+      (function
+       (lambda ()
+         (define-key c-mode-map "\C-cc"    "**  **\M-3\C-b")
+         )))
+
 ; Insert an editing begin comment at cursor 
 (fset 'f_edit_begin
    "\C-ac++csz\C-a")

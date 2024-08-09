@@ -1,3 +1,11 @@
+2024-08-08  Charlie Zender  <zender@uci.edu>
+
+	* Update C++ compliance when not using std namespace
+
+	* Replace original (23-year old!) Makefile with modified version of ~/sw/c++/Makefile
+
+	* flx_slr_frc.f: Alter whitespace so all lines fit within 72 characters
+
 2001-10-14  Charlie Zender  <zender@uci.edu>
 
 	* Converting to nco_c++ library

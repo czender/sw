@@ -14,7 +14,8 @@
    LaN68: Bri92, CCM2, CCM3, CCM4
    ThD71: TaL89, Ste78, Sli89
    NeL84: EbC92 
-   Kur95: ZBP97 */
+   Kur95: ZBP97
+   JHC21: JHC21 */
 
 /* Strategy: 
    1. Front end section: acquire data from measurement source in 
@@ -33,12 +34,16 @@
 
 /* Example usage:
    
+   Build (as of 20240808) on spectral.ess.uci.edu:
+   cd ~/sw/slr_spc;make CPPFLAGS="-DLINUX -I ${HOME}/include -I/opt/netcdf/include -I/opt/homebrew/include" LDFLAGS="-L/opt/netcdf/lib -L/opt/homebrew/lib -L${HOME}/lib -lcsz_c++ -lnco_c++ -lnetcdf";cd -
+
    Debugging:
    slr_spc --dbg=1 --wvl_nbr=2497
    slr_spc --dbg=1 --wvl_nbr=2497 ${DATA}/aca/spc_Kur95_20wvn.txt ${DATA}/aca/spc_Kur95_20wvn.nc
    slr_spc --dbg=1 --wvl_lmt=5.0 --wvl_nbr=2497 ${DATA}/aca/spc_Kur95_20wvn.txt ${DATA}/aca/spc_Kur95_20wvn.nc
 
    Production:
+   slr_spc --dbg=1 --flx_slr_src=JHC21 ${DATA}/aca/tsis_ssi_L3_c24h_20240807.nc ${DATA}/aca/spc_JHC21.nc
    slr_spc --dbg=1 --ncr_wvl --wvl_nbr=49934 ${DATA}/aca/spc_Kur95_01wvn.txt ${DATA}/aca/spc_Kur95_01wvn.nc
    slr_spc --dbg=1 --ncr_wvl --wvl_nbr=2497 ${DATA}/aca/spc_Kur95_20wvn.txt ${DATA}/aca/spc_Kur95_20wvn.nc
    slr_spc --dbg=1 --flx_slr_src=NeL84 ${DATA}/aca/spc_NeL84.txt ${DATA}/aca/spc_NeL84.nc
@@ -66,7 +71,7 @@
 
 // #define MAIN_PROGRAM_FILE MUST precede #include slr_spc.hh
 #define MAIN_PROGRAM_FILE
-#include <slr_spc.hh> // Program-specific definitions
+#include "slr_spc.hh" // Program-specific definitions
 #include <libcsz_c++.hh> // Personal C++ library
 #include <libnco_c++.hh> // C++ interface to netCDF C library
 
@@ -84,12 +89,14 @@ int main(const int argc,char **argv)
   void usg_prn(const char *opt_sng);
 
   // Enums
-  enum flx_slr_src{LaN68,ThD71,NeL84,Kur95};
-  const std::string flx_slr_sng[4]={
+  enum flx_slr_src{LaN68,ThD71,NeL84,Kur95,JHC21};
+  const std::string flx_slr_sng[5]={
     "Labs and Neckel (1968) (LaN68)",
     "Thekeakara and Drummond (1971) (ThD71)",
     "Neckel and Labs (via WDC) (1984) (NeL84)",
-    "Kurucz (1995) (Kur95)"};
+    "Kurucz (1995) (Kur95)",
+    "Jing et al. (2021)"
+  };
   int flx_slr_src=Kur95; // default
 
   // Locals
@@ -100,7 +107,7 @@ int main(const int argc,char **argv)
   float flt_foo;
   prc_cmp wvl_ctr_mcr;
   int int_foo;
-  int rcd(0);
+  int rcd(NC_NOERR);
   long bnd_idx;
   long idx;
   long idx_max_wvl; // [idx] Index of maximum wavelenth
@@ -145,9 +152,9 @@ int main(const int argc,char **argv)
   prc_cmp wvl_mnm_mcr(1.0); // [um] Option wvl_mnm_mcr
   long bnd_nbr(10); // [nbr] Option bnd_nbr
   long wvl_nbr(10); // [nbr] Option wvl_nbr
-  string fl_err("cerr"); // Option e
-  string fl_in("/data/zender/aca/spc_Kur95_20wvn.txt"); // Option i
-  string fl_out("/data/zender/aca/out.nc"); // Option o
+  std::string fl_err("cerr"); // Option e
+  std::string fl_in("/data/zender/aca/spc_Kur95_20wvn.txt"); // Option i
+  std::string fl_out("/data/zender/aca/out.nc"); // Option o
 
   static struct option opt_lng[]={
     /* The option structure is {char *name,int has_arg,int *flag,int val} 
@@ -186,8 +193,8 @@ int main(const int argc,char **argv)
   extern int optind; // extern enumerating cardinal of current option
   int opt; // Value is zero if current argument is long type, else value contains single letter version of command line argument
   int opt_idx=0; // Index of current long option into opt_lng array
-  string opt_crr; // String representation of current long-option name
-  string opt_sng; // String representation of current optarg, if any
+  std::string opt_crr; // String representation of current long-option name
+  std::string opt_sng; // String representation of current optarg, if any
  
   // Parse command line arguments 
   while(1){
@@ -199,7 +206,7 @@ int main(const int argc,char **argv)
     if(opt == EOF) break; // Parse positional arguments once getopt_long_only() returns EOF
     // Process long options without short option counterparts
     if(opt == 0){
-      if(dbg_lvl >= dbg_io) cerr << "Long option name: " << opt_crr << (optarg ? ",  Argument: "+opt_sng : ", No Argument") << endl;
+      if(dbg_lvl >= dbg_io) std::cerr << "Long option name: " << opt_crr << (optarg ? ",  Argument: "+opt_sng : ", No Argument") << std::endl;
       if(opt_crr == "bnd_nbr") bnd_nbr=strtol(optarg,(char **)NULL,10);
       if(opt_crr == "ncr_wvl") flg_ncr_wvl=true;
       if(opt_crr == "dcr_wvl") flg_ncr_wvl=false;
@@ -213,18 +220,21 @@ int main(const int argc,char **argv)
       if(opt_crr == "wvl_mxm_mcr") wvl_mxm_mcr=static_cast<prc_cmp>(strtod(optarg,(char **)NULL));
       if(opt_crr == "flx_slr_src"){
 	// Get author of solar flux source. Default is ThD71
-	if((flx_slr_sng[ThD71].find(opt_sng) != string::npos) || 
-	   (opt_sng.find("ThD71") != string::npos)) 
+	if((flx_slr_sng[ThD71].find(opt_sng) != std::string::npos) || 
+	   (opt_sng.find("ThD71") != std::string::npos)) 
 	  flx_slr_src=ThD71;
-	else if((flx_slr_sng[LaN68].find(opt_sng) != string::npos) || 
-	   (opt_sng.find("LaN68") != string::npos)) 
+	else if((flx_slr_sng[LaN68].find(opt_sng) != std::string::npos) || 
+	   (opt_sng.find("LaN68") != std::string::npos)) 
 	  flx_slr_src=LaN68;
-	else if((flx_slr_sng[NeL84].find(opt_sng) != string::npos) || 
-	   (opt_sng.find("NeL84") != string::npos)) 
+	else if((flx_slr_sng[NeL84].find(opt_sng) != std::string::npos) || 
+	   (opt_sng.find("NeL84") != std::string::npos)) 
 	  flx_slr_src=NeL84;
-	else if((flx_slr_sng[Kur95].find(opt_sng) != string::npos) || 
-	   (opt_sng.find("Kur95") != string::npos)) 
+	else if((flx_slr_sng[Kur95].find(opt_sng) != std::string::npos) || 
+	   (opt_sng.find("Kur95") != std::string::npos)) 
 	  flx_slr_src=Kur95;
+	else if((flx_slr_sng[JHC21].find(opt_sng) != std::string::npos) || 
+	   (opt_sng.find("JHC21") != std::string::npos)) 
+	  flx_slr_src=JHC21;
 	else err_prn(prg_nm,sbr_nm,"Unknown flx_slr_src");
       } // end if "flx_slr_src"
     } // opt != 0
@@ -251,7 +261,7 @@ int main(const int argc,char **argv)
       fl_out=optarg;
       break;
     case 'v': // Print the CVS program info 
-      cerr << CVS_Header << endl;
+      std::cerr << CVS_Header << std::endl;
       return EXIT_SUCCESS;
       break;
     default: // Print proper usage 
@@ -294,8 +304,10 @@ int main(const int argc,char **argv)
     flx_frc_fnc=FORTRAN_slffln; // Bogus, not used
   }else if(flx_slr_src == Kur95){
     flx_frc_fnc=FORTRAN_slffln; // Bogus, not used
+  }else if(flx_slr_src == JHC21){
+    flx_frc_fnc=FORTRAN_slffln; // Bogus, not used
   } // end else
-  if(dbg_lvl > 1) cerr << "flx_slr_src = " << flx_slr_sng[flx_slr_src] << endl;
+  if(dbg_lvl > 1) std::cerr << "flx_slr_src = " << flx_slr_sng[flx_slr_src] << std::endl;
 
   // Create standard arrays
   prc_cmp *wvl=new prc_cmp[wvl_nbr]; // [m] Nominal wavelength
@@ -346,9 +358,9 @@ int main(const int argc,char **argv)
     for(idx=0;idx<wvl_nbr;idx++) wvl_max_tmp[idx]*=1.0e-6;
 
     if(dbg_lvl > 1){
-      cerr << "idx\twvl_max\tflx_frc_blr" << endl;
-      cerr << "#\tum\t" << endl;
-      for(idx=0;idx<wvl_nbr;idx++) cerr << idx << "\t" << wvl_max_tmp[idx]*1.0e6 << "\t" << flx_frc_blr_tmp[idx] << endl;
+      std::cerr << "idx\twvl_max\tflx_frc_blr" << std::endl;
+      std::cerr << "#\tum\t" << std::endl;
+      for(idx=0;idx<wvl_nbr;idx++) std::cerr << idx << "\t" << wvl_max_tmp[idx]*1.0e6 << "\t" << flx_frc_blr_tmp[idx] << std::endl;
     } // end if dbg
 
     // Create standard fields
@@ -419,9 +431,9 @@ int main(const int argc,char **argv)
     for(idx=0;idx<wvl_nbr;idx++) wvl_max_tmp[idx]*=1.0e-6;
 
     if(dbg_lvl > 1){
-      cerr << "idx\twvl_max\tflx_frc_blr" << endl;
-      cerr << "#\tum\t" << endl;
-      for(idx=0;idx<wvl_nbr;idx++) cerr << idx << "\t" << wvl_max_tmp[idx]*1.0e6 << "\t" << flx_frc_blr_tmp[idx] << endl;
+      std::cerr << "idx\twvl_max\tflx_frc_blr" << std::endl;
+      std::cerr << "#\tum\t" << std::endl;
+      for(idx=0;idx<wvl_nbr;idx++) std::cerr << idx << "\t" << wvl_max_tmp[idx]*1.0e6 << "\t" << flx_frc_blr_tmp[idx] << std::endl;
     } // end if dbg
 
     // Create standard fields
@@ -485,9 +497,7 @@ int main(const int argc,char **argv)
 
        Spike at 630 nm appears due to changing wavelength resolution from 1 nm to 2 nm
        Spike at 1 um appears due to changing wavelength resolution from 2 nm to 5 nm
-       Remaining spikes are numerical noise due to loss of precision in flux
-
-       */
+       Remaining spikes are numerical noise due to loss of precision in flux */
 
     prc_cmp *flx_blr=new prc_cmp[wvl_nbr]; // [frc] Fraction of solar flux at shorter wavelengths
 
@@ -509,16 +519,16 @@ int main(const int argc,char **argv)
 	idx++;
       } // end if
     } // end while
-    cerr << "Ingested data from " << fl_in << endl;
+    std::cerr << "Ingested data from " << fl_in << std::endl;
     (void)fclose(fp_in); 
     
     // Set size of wavelength and wavenumber arrays to number in input file
     wvl_nbr=idx;
 
     if(dbg_lvl > 1){
-      cerr << "idx\twvl_max\tflx_blr" << endl;
-      cerr << "#\tnm\tW m-2" << endl;
-      for(idx=0;idx<wvl_nbr;idx++) cerr << idx << "\t" << wvl_max[idx]*1.0e9 << "\t" << flx_blr[idx] << endl;
+      std::cerr << "idx\twvl_max\tflx_blr" << std::endl;
+      std::cerr << "#\tnm\tW m-2" << std::endl;
+      for(idx=0;idx<wvl_nbr;idx++) std::cerr << idx << "\t" << wvl_max[idx]*1.0e9 << "\t" << flx_blr[idx] << std::endl;
     } // end if dbg
 
     // Create standard fields
@@ -562,16 +572,16 @@ int main(const int argc,char **argv)
 	idx++;
       } // end if
     } // end while
-    cerr << "Ingested data from " << fl_in << endl;
+    std::cerr << "Ingested data from " << fl_in << std::endl;
     (void)fclose(fp_in); 
 
     // Set size of wavelength and wavenumber arrays to number in input file
     wvl_nbr=idx; // [nbr] Number of wavelength bands
   
     if(dbg_lvl > 1){
-      cerr << "idx\twvn_ctr\tflx_spc_wvn" << endl;
-      cerr << "#\tcm-1\tW m-2/cm-1" << endl;
-      for(idx=0;idx<wvl_nbr;idx++) cerr << idx << "\t" << wvn_ctr[idx] << "\t" << flx_spc_wvn[idx] << endl;
+      std::cerr << "idx\twvn_ctr\tflx_spc_wvn" << std::endl;
+      std::cerr << "#\tcm-1\tW m-2/cm-1" << std::endl;
+      for(idx=0;idx<wvl_nbr;idx++) std::cerr << idx << "\t" << wvn_ctr[idx] << "\t" << flx_spc_wvn[idx] << std::endl;
     } // end if dbg
 
     prc_cmp *wvn_dlt=new prc_cmp[wvl_nbr]; // [cm-1] Bandwidth
@@ -590,15 +600,77 @@ int main(const int argc,char **argv)
       wvl_max[idx]=1.0/(100.*wvn_min[idx]); // [m] Maximum wavelength in band
       wvl_dlt[idx]=wvl_max[idx]-wvl_min[idx]; // [m] Bandwidth
       flx_bnd[idx]=wvn_dlt[idx]*flx_spc_wvn[idx]; // [W m-2] Solar flux in band
-    } // end loop over wvl 
+    } // end loop over wvl
 
     delete []wvn_ctr; // [m] Wavelength at band center
     delete []flx_spc_wvn;
   } // end if Kur95
   
+  if(flx_slr_src == JHC21){ // JHC21
+
+    // Check for file existance
+    struct stat stat_sct;
+    rcd=stat(fl_in.c_str(),&stat_sct);
+    if(rcd == -1) std::perror("ERROR std::stat()");
+
+    // Open input file
+    int nc_id=nco_open(fl_in,NC_NOWRITE); // [fnc] Open netCDF file
+    if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Opening "+fl_in);
+  
+    wvl_nbr=nco_inq_dimlen(nc_id,static_cast<std::string>("wavelength")); // [nbr] Number of wavelengths
+
+    prc_cmp *wvl_ctr_nm=new prc_cmp[wvl_nbr]; // [nm] Wavelength at band center
+    prc_cmp *flx_spc_bnd_1au_xnm=new prc_cmp[wvl_nbr]; // [W m-2 nm-1] TSIS-measured absolute spectral flux at 1 AU
+    prc_cmp *flx_spc_bnd=new prc_cmp[wvl_nbr]; // [W m-2 m-1] TSIS-measured absolute spectral flux at 1 AU
+
+    // User must free this memory when no longer needed
+    // For objects in spc_slr_cls, this is done in fl_slr_spc_set() which calls deallocate()
+    rcd=nco_get_var(nc_id,static_cast<std::string>("wavelength"),wvl_ctr_nm); // [nm]
+    rcd=nco_get_var(nc_id,static_cast<std::string>("irradiance_1au"),flx_spc_bnd_1au_xnm); // [W m-2 nm-1] 
+
+    // TSIS provides wavenlength in nm
+    for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
+      wvl_ctr[wvl_idx]=1.0e-9*wvl_ctr_nm[wvl_idx];
+      flx_spc_bnd[wvl_idx]=1.0e9*flx_spc_bnd_1au_xnm[wvl_idx];
+    } // !wvl_idx
+
+    // Close input file
+    rcd=nco_close(nc_id); // [fnc] Close netCDF file
+    if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Closing "+fl_in);
+
+    std::cerr << "Ingested data from " << fl_in << std::endl;
+
+    if(dbg_lvl > dbg_off){
+      std::cerr << "idx\twvn_ctr\tflx_spc_wvn" << std::endl;
+      std::cerr << "#\tnm\tW m-2 nm-1" << std::endl;
+      for(idx=0;idx<wvl_nbr;idx++) std::cerr << idx << "\t" << wvl_ctr[idx] << "\t" << 1.0e-9*flx_spc_bnd[idx] << std::endl;
+    } // end if dbg
+
+    // Create standard fields
+    wvl_min[0]=wvl_ctr[0]-0.5*(wvl_ctr[1]-wvl_ctr[0]);
+    for(wvl_idx=1;wvl_idx<wvl_nbr;wvl_idx++){
+      wvl_min[wvl_idx]=0.5*(wvl_ctr[wvl_idx-1]+wvl_ctr[wvl_idx]);
+    } // !wvl_idx
+    for(wvl_idx=0;wvl_idx<wvl_nbr-1;wvl_idx++){
+      wvl_max[wvl_idx]=0.5*(wvl_ctr[wvl_idx]+wvl_ctr[wvl_idx+1]);
+    } // !wvl_idx
+    wvl_max[wvl_nbr-1]=wvl_ctr[wvl_nbr-2]+0.5*(wvl_ctr[wvl_nbr-1]-wvl_ctr[wvl_nbr-2]);
+    for(idx=0;idx<wvl_nbr;idx++){
+      wvl[wvl_idx]=wvl_ctr[wvl_idx]; // [m] Nominal wavelength
+      wvl_dlt[wvl_idx]=wvl_max[wvl_idx]-wvl_min[wvl_idx]; // [m] Bandwidth
+      flx_bnd[wvl_idx]=wvl_dlt[wvl_idx]*flx_spc_bnd[wvl_idx]; // [W m-2] Solar flux in band
+    } // !wvl_idx
+
+    delete []wvl_ctr_nm;
+    delete []flx_spc_bnd_1au_xnm;
+    delete []flx_spc_bnd;
+  } // !JHC21
+  
+  // fxm got to here with JHC21
+
   // Make sure standard fields are in requested order
   if(flg_ncr_wvl && flx_slr_src == Kur95){
-    cerr << "Reversing input data to be in order of increasing wavelength" << endl;
+    std::cerr << "Reversing input data to be in order of increasing wavelength" << std::endl;
     (void)rvr_vec(wvl,wvl_nbr);
     (void)rvr_vec(wvl_dlt,wvl_nbr);
     (void)rvr_vec(wvl_min,wvl_nbr);
@@ -669,7 +741,7 @@ int main(const int argc,char **argv)
      This convention is similar to BPB's implementation of Lan68 and ThD71 */
   if(flx_frc[idx_min_wvl] != 0.0){
     wrn_prn(prg_nm,sbr_nm,"flx_frc[idx_min_wvl] != 0.0");
-    cerr << "flx_frc[" << idx_min_wvl << "] = " << flx_frc[idx_min_wvl] << endl;
+    std::cerr << "flx_frc[" << idx_min_wvl << "] = " << flx_frc[idx_min_wvl] << std::endl;
   } // endif
   if(flg_ncr_wvl){
     flx_frc_rdr[idx_min_wvl]=1.0; // [frc] Fraction of solar flux at longer wavelengths
@@ -703,28 +775,29 @@ int main(const int argc,char **argv)
   } // end loop over wvl 
 
   if(true){
-    cerr << "Initialization state:" << endl;
-    cerr << "Input file: " << fl_in << endl;
-    cerr << "Spectral solar flux source: "+flx_slr_sng[flx_slr_src] << endl;
-    cerr << "Number of input spectral bins = " << wvn_nbr << endl;
-    cerr << "Smallest wavenumber = " << wvn_min[idx_max_wvl] << " cm-1" << endl;
-    cerr << "Largest wavenumber = " << wvn_max[idx_min_wvl] << " cm-1" << endl;
-    cerr << "Shortest wavelength = " << wvl_min[idx_min_wvl]*1.0e6 << " um" << endl;
-    cerr << "Longest wavelength = " << wvl_max[idx_max_wvl]*1.0e6 << " um" << endl;
-    cerr << "Input solar constant = " << flx_ttl << " W m-2" << endl;
-    cerr << "Sum of flx_frc = " << flx_ttl_foo << " W m-2" << endl;
-    cerr << "User solar constant = " << slr_cst << " W m-2" << endl;
-    cerr << "Output solar constant = " << flx_ttl_foo2 << " W m-2" << endl;
-    cerr << "Number of output spectral bins = " << wvl_nbr << endl;
-    cerr << "Number of sub-bins in each spectral bin = " << bnd_nbr << endl;
-    cerr << "Output file: " << fl_out << endl;
-    cerr << endl;
+    std::cerr << "Initialization state:" << std::endl;
+    std::cerr << "Input file: " << fl_in << std::endl;
+    std::cerr << "Spectral solar flux source: "+flx_slr_sng[flx_slr_src] << std::endl;
+    std::cerr << "Number of input spectral bins = " << wvn_nbr << std::endl;
+    std::cerr << "Smallest wavenumber = " << wvn_min[idx_max_wvl] << " cm-1" << std::endl;
+    std::cerr << "Largest wavenumber = " << wvn_max[idx_min_wvl] << " cm-1" << std::endl;
+    std::cerr << "Shortest wavelength = " << wvl_min[idx_min_wvl]*1.0e6 << " um" << std::endl;
+    std::cerr << "Longest wavelength = " << wvl_max[idx_max_wvl]*1.0e6 << " um" << std::endl;
+    std::cerr << "Input solar constant = " << flx_ttl << " W m-2" << std::endl;
+    std::cerr << "Sum of flx_frc = " << flx_ttl_foo << " W m-2" << std::endl;
+    std::cerr << "User solar constant = " << slr_cst << " W m-2" << std::endl;
+    std::cerr << "Output solar constant = " << flx_ttl_foo2 << " W m-2" << std::endl;
+    std::cerr << "Number of output spectral bins = " << wvl_nbr << std::endl;
+    std::cerr << "Number of sub-bins in each spectral bin = " << bnd_nbr << std::endl;
+    std::cerr << "Output file: " << fl_out << std::endl;
+    std::cerr << std::endl;
   } /* end if */
 
   prc_cmp *flx_frc_LaN68=new prc_cmp[wvl_nbr];
   prc_cmp *flx_frc_ThD71=new prc_cmp[wvl_nbr];
   prc_cmp *flx_frc_NeL84=new prc_cmp[wvl_nbr];
   prc_cmp *flx_frc_Kur95=new prc_cmp[wvl_nbr];
+  prc_cmp *flx_frc_JHC21=new prc_cmp[wvl_nbr];
   prc_cmp *flx_slr=new prc_cmp[wvl_nbr];
   prc_cmp *flx_spc_slr=new prc_cmp[wvl_nbr];
   float wvl_min_mcr;
@@ -736,7 +809,8 @@ int main(const int argc,char **argv)
     flx_frc_LaN68[idx]=static_cast<prc_cmp>(FORTRAN_slffln(&wvl_min_mcr,&wvl_max_mcr));
     flx_frc_ThD71[idx]=static_cast<prc_cmp>(FORTRAN_slfftd(&wvl_min_mcr,&wvl_max_mcr));
     flx_frc_NeL84[idx]=0.0;
-    flx_frc_Kur95[idx]=flx_frc[idx];
+    if(flx_slr_src == Kur95) flx_frc_Kur95[idx]=flx_frc[idx]; else flx_frc_Kur95[idx]=1.0/wvl_nbr;
+    if(flx_slr_src == JHC21) flx_frc_JHC21[idx]=flx_frc[idx]; else flx_frc_JHC21[idx]=1.0/wvl_nbr;
     flx_slr[idx]=slr_cst*flx_frc[idx];
     flx_spc_slr[idx]=flx_slr[idx]/wvl_dlt[idx];
   } // end loop over wvl 
@@ -758,7 +832,7 @@ int main(const int argc,char **argv)
   prc_cmp *flx_slr_bnd=new prc_cmp[bnd_nbr];
 
   // For each spectral interval in the final output array
-  if(dbg_lvl > 0) cerr << "Printing one `.' before each wvl loop:" << endl;
+  if(dbg_lvl > 0) std::cerr << "Printing one `.' before each wvl loop:" << std::endl;
   for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
 
     // Divide each output spectral interval into a number of subintervals called bands
@@ -787,7 +861,7 @@ int main(const int argc,char **argv)
     wvl_wgt[wvl_idx]/=flx_frc[wvl_idx];
     
   } // end loop over wvl 
-  if(dbg_lvl > 0) cerr << endl;
+  if(dbg_lvl > 0) std::cerr << std::endl;
 
   // Destroy arrays that contain sub-bands of each interval
   delete []bnd;
@@ -874,20 +948,20 @@ int main(const int argc,char **argv)
 
   // Close output file
   rcd=nco_close(nc_out); // [fnc] Close netCDF file
-  cerr << "Wrote results to " << fl_out << endl;
-  cerr << "ncks: ncks -C -H -F -m -u -d wvl,0.5e-6 -v wvl " << fl_out << endl;
+  std::cerr << "Wrote results to " << fl_out << std::endl;
+  std::cerr << "ncks: ncks -C -H -F -m -u -d wvl,0.5e-6 -v wvl " << fl_out << std::endl;
     
   Exit_gracefully();
 } // end main() 
 
 void usg_prn(const char *opt_sng)
 {
-  cerr << "\nusage: " << prg_nm << " [-options] where options are one or more of:\n\n";
-  cerr << opt_sng << "\n\n:";
-  cerr << "-D dbg_lvl Set debugging level (default is 0)\n";
-  cerr << "-f flt_foo Set generic float (default is 0)\n";
-  cerr << "-i fl_in Set input file name. (default is in.nc)\n";
-  cerr << "-o fl_out Set output file name. Default is out.nc\n";
-  cerr << "-v print the CVS program version\n";
-  cerr << endl;
+  std::cerr << "\nusage: " << prg_nm << " [-options] where options are one or more of:\n\n";
+  std::cerr << opt_sng << "\n\n:";
+  std::cerr << "-D dbg_lvl Set debugging level (default is 0)\n";
+  std::cerr << "-f flt_foo Set generic float (default is 0)\n";
+  std::cerr << "-i fl_in Set input file name. (default is in.nc)\n";
+  std::cerr << "-o fl_out Set output file name. Default is out.nc\n";
+  std::cerr << "-v print the CVS program version\n";
+  std::cerr << std::endl;
 } // end usg_prn() 

@@ -6,6 +6,7 @@
 
 # 20041229: Debian Ubuntu Linux times out ssh connections after about five minutes
 # 20191205: Update keep alive value as per https://bjornjohansen.no/ssh-timeout
+# 20240607: Cause SSH to blues to first ssh to “logins.lcrc.anl.gov” and then ssh to blues
 # These options should keep the ssh connection alive longer
 
 ServerAliveInterval 120
@@ -20,3 +21,8 @@ Host blues
     HostName blues.lcrc.anl.gov
     User ac.zender
     IdentityFile ~/.ssh/id_rsa_pph
+
+Host blues.lcrc.anl.gov blues
+    HostName blues.lcrc.anl.gov
+    ProxyJump logins.lcrc.anl.gov
+
