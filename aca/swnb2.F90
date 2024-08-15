@@ -20,6 +20,7 @@ program swnb2
   
   ! Compilation:
   ! cd ${HOME}/sw/aca; make -W swnb2.F90 OMP=N OPTS=D NETCDF4=Y swnb2; cd - # grele, neige, virga
+  ! cd ${HOME}/sw/aca; NETCDF_ROOT='/opt/netcdf' make -W swnb2.F90 OMP=N OPTS=D NETCDF4=Y swnb2; cd - # grele, neige, virga
   ! cd ~/aca;NETCDF_ROOT='/usr' NETCDF_INC='/usr/include' NETCDF_LIB='/usr/lib' make NETCDF4=N NETCDFF=Y; cd - # netCDF3 givre, neige
   ! cd ${HOME}/sw/aca; make -W swnb2.F90 MPI=Y OMP=N OPTS=D NETCDF4=Y swnb2; cd - # greenplanet
   ! cd ${HOME}/sw/aca; make -W swnb2.F90 OMP=N OPTS=D NETCDF4=N swnb2; cd - # sand
@@ -2016,6 +2017,8 @@ program swnb2
   fl_snw='aer_snw_rds_ffc_100um.nc'//nlc
   fl_out='swnb.nc'//nlc
   fl_slr='spc_Kur95_01wvn.nc'//nlc
+  ! 20240813: Add capability to use CMIP7 solar irradiance (mostly from TSIS1)
+  ! fl_slr='spc_FDE24.nc'//nlc
   fl_brdf='brdf.nc'//nlc  ! BRDF file
   
   azi_nbr=azi_nbr_max
@@ -2106,6 +2109,7 @@ program swnb2
   sfc_msv=1.0 ! [frc] Surface emissivity
   sfc_tpt=3000.0 ! [K] Surface temperature (used only for bottom boundary emission in night mode)
   slr_cst=slr_cst_CCM
+  ! slr_cst=slr_cst_FDE24 ! CMIP7
   slr_zen_ngl_cos_cmd_ln=mss_val ! [frc] Solar zenith angle cosine
   slr_zen_ngl_dgr_cmd_ln=mss_val ! [dgr] Solar zenith angle degrees
   str_nbr=4
@@ -2317,6 +2321,8 @@ program swnb2
         else if (opt_sng == 'slr_zen_ngl_dgr' .or. opt_sng == 'szad') then
            cmd_ln_slr_zen_ngl_dgr=.true.
            call ftn_arg_get(arg_idx,arg_val,slr_zen_ngl_dgr_cmd_ln) ! [dgr] Solar zenith angle degrees
+        else if (opt_sng == 'spc_slr') then
+           call ftn_arg_get(arg_idx,arg_val,fl_slr)
         else if (opt_sng == 'srm' .or. opt_sng == 'streams') then
            call ftn_arg_get(arg_idx,arg_val,str_nbr)
         else if (opt_sng == 'vpr_H2O_abs_cld') then

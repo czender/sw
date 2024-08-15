@@ -34,6 +34,7 @@ program fff
 
   ! Compilation:
   ! export NETCDF_ROOT='/usr';export NETCDF4_ROOT='/usr'
+  ! export NETCDF_ROOT='/opt/netcdf';export NETCDF4_ROOT='/opt/netcdf'
   ! cd ${HOME}/f; make -W fff.F90 OPTS=D NETCDF4=Y fff; cd -
   ! cd ${HOME}/f; make -W fff.F90 OPTS=D fff; cd -
   ! cd ${HOME}/f; make -W fff.F90 fff; cd -

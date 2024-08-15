@@ -65,6 +65,7 @@ module phys_cst_mdl ! [mdl] Fundamental and derived physical constants
   real,parameter::rds_earth_ease_ml=6371.228e+03 ! [m] Radius of Earth, authalic sphere, used in EASE ML grids
   real,parameter::rds_earth=6.370e+06 ! [m] Radius of sphere of same volume as Earth
   real,parameter::slr_cst_CCM=1367.0  ! [W m-2] Solar constant used in CCM
+  real,parameter::slr_cst_FDE24=1361.353 ! [W m-2] Solar constant 1850-2023 mean used in CMIP7
   real,parameter::speed_of_light=2.99793e+08 ! [m s-] Speed of light in vacuo
   real,parameter::tpt_frz_pnt=273.15  ! [K] Kelvin--Celsius scale offset Bol80
   real,parameter::tpt_trp_pnt=273.16  ! [K] Standard temperature See, e.g., Bol80

@@ -119,6 +119,7 @@ namespace phc{ // [nms] Physical constant namespace
   const double rds_earth(6.370e+06); // (6.370e+06) [m] Radius of sphere of same volume as Earth
   const double sfc_tns_wtr_lqd_STP(7.610e-3); // [J m-2] Surface tension of liquid water at STP
   const double slr_cst_CCM(1367.0); // (1367.0) [W m-2] Solar constant used in CCM
+  const double slr_cst_FDE24(1361.353); // (1361.353) [W m-2] Solar constant 1850-2023 mean used in CMIP7
   const double spc_heat_H2O_ice_vlm(2.094e06); // (2.094e06) [J m-3 K-1] Volumetric specific heat capacity of ice water CCM:lsm/phyconi.F
   const double spc_heat_H2O_ice(2108.0); // (2108.0) [J kg-1 K-1] Specific heat capacity of ice water (quora.com)
   const double spc_heat_H2O_lqd(4187.0); // (4187.0) [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15 (fxm: better to derive this from density and volumetric spec. heat?)

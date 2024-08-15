@@ -1,3 +1,11 @@
+2024-08-14  Charlie Zender  <zender@uci.edu>
+
+	* swnb2: Add --spc_slr command line option (synonomous with -T)
+
+	* swn_prf: Explicitly specify spectral flux option
+
+	* Change default swn_prf.sh output directory from ~/data/rrtmgp/swnb2 to ~/data/rrtmgp/slr_Kur95
+
 2023-10-24  Charlie Zender  <zender@uci.edu>
 
 	* Replace "stop" with "error stop" in *.F90 programs so program	returns non-zero exit status

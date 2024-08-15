@@ -15,7 +15,8 @@
    ThD71: TaL89, Ste78, Sli89
    NeL84: EbC92 
    Kur95: ZBP97
-   JHC21: JHC21 */
+   JHC21: HCF18
+   FDE24: CMIP7 */
 
 /* Strategy: 
    1. Front end section: acquire data from measurement source in 
@@ -43,6 +44,7 @@
    slr_spc --dbg=1 --wvl_lmt=5.0 --wvl_nbr=2497 ${DATA}/aca/spc_Kur95_20wvn.txt ${DATA}/aca/spc_Kur95_20wvn.nc
 
    Production:
+   slr_spc --dbg=1 --flx_slr_src=FDE24 --wvl_nbr=3890 ${DATA}/aca/solar_CMIP_SOLARIS-HEPPA-4-3_gn_1850_2023.nc ${DATA}/aca/spc_FDE24.nc
    slr_spc --dbg=1 --flx_slr_src=JHC21 --wvl_nbr=2104 ${DATA}/aca/tsis_ssi_L3_c24h_20240807.nc ${DATA}/aca/spc_JHC21.nc
    slr_spc --dbg=1 --ncr_wvl --wvl_nbr=49934 ${DATA}/aca/spc_Kur95_01wvn.txt ${DATA}/aca/spc_Kur95_01wvn.nc
    slr_spc --dbg=1 --ncr_wvl --wvl_nbr=2497 ${DATA}/aca/spc_Kur95_20wvn.txt ${DATA}/aca/spc_Kur95_20wvn.nc
@@ -89,13 +91,14 @@ int main(const int argc,char **argv)
   void usg_prn(const char *opt_sng);
 
   // Enums
-  enum flx_slr_src{LaN68,ThD71,NeL84,Kur95,JHC21};
-  const std::string flx_slr_sng[5]={
+  enum flx_slr_src{LaN68,ThD71,NeL84,Kur95,JHC21,FDE24};
+  const std::string flx_slr_sng[6]={
     "Labs and Neckel (1968) (LaN68)",
     "Thekeakara and Drummond (1971) (ThD71)",
     "Neckel and Labs (via WDC) (1984) (NeL84)",
     "Kurucz (1995) (Kur95)",
-    "Jing et al. (2021)"
+    "Jing, Huang, Chen, et al. (2021)",
+    "Funke, Dudok de Wit, Ermolli, et al. (2024)"
   };
   int flx_slr_src=Kur95; // default
 
@@ -235,6 +238,9 @@ int main(const int argc,char **argv)
 	else if((flx_slr_sng[JHC21].find(opt_sng) != std::string::npos) || 
 	   (opt_sng.find("JHC21") != std::string::npos)) 
 	  flx_slr_src=JHC21;
+	else if((flx_slr_sng[FDE24].find(opt_sng) != std::string::npos) || 
+	   (opt_sng.find("FDE24") != std::string::npos)) 
+	  flx_slr_src=FDE24;
 	else err_prn(prg_nm,sbr_nm,"Unknown flx_slr_src");
       } // end if "flx_slr_src"
     } // opt != 0
@@ -305,6 +311,8 @@ int main(const int argc,char **argv)
   }else if(flx_slr_src == Kur95){
     flx_frc_fnc=FORTRAN_slffln; // Bogus, not used
   }else if(flx_slr_src == JHC21){
+    flx_frc_fnc=FORTRAN_slffln; // Bogus, not used
+  }else if(flx_slr_src == FDE24){
     flx_frc_fnc=FORTRAN_slffln; // Bogus, not used
   } // end else
   if(dbg_lvl > 1) std::cerr << "flx_slr_src = " << flx_slr_sng[flx_slr_src] << std::endl;
@@ -628,7 +636,7 @@ int main(const int argc,char **argv)
     rcd=nco_get_var(nc_id,static_cast<std::string>("wavelength"),wvl_ctr_nm); // [nm]
     rcd=nco_get_var(nc_id,static_cast<std::string>("irradiance_1au"),flx_spc_bnd_1au_xnm); // [W m-2 nm-1] 
 
-    // TSIS provides wavenlength in nm
+    // TSIS provides wavelength in nm
     for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
       wvl_ctr[wvl_idx]=1.0e-9*wvl_ctr_nm[wvl_idx];
       flx_spc_bnd[wvl_idx]=1.0e9*flx_spc_bnd_1au_xnm[wvl_idx];
@@ -665,6 +673,67 @@ int main(const int argc,char **argv)
     delete []flx_spc_bnd_1au_xnm;
     delete []flx_spc_bnd;
   } // !JHC21
+  
+  if(flx_slr_src == FDE24){ // FDE24
+
+    // Check for file existance
+    struct stat stat_sct;
+    rcd=stat(fl_in.c_str(),&stat_sct);
+    if(rcd == -1) std::perror("ERROR std::stat()");
+
+    // Open input file
+    int nc_id=nco_open(fl_in,NC_NOWRITE); // [fnc] Open netCDF file
+    if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Opening "+fl_in);
+  
+    wvl_nbr=nco_inq_dimlen(nc_id,static_cast<std::string>("wlen")); // [nbr] Number of wavelengths
+
+    prc_cmp *wvl_bnd_nm=new prc_cmp[2*wvl_nbr]; // [nm] Wavelength bounds
+    prc_cmp *wvl_ctr_nm=new prc_cmp[wvl_nbr]; // [nm] Wavelength at band center
+    prc_cmp *wvl_dlt_nm=new prc_cmp[wvl_nbr]; // [nm] Bandwidth
+    prc_cmp *flx_spc_bnd_1au_xnm=new prc_cmp[wvl_nbr]; // [W m-2 nm-1] TSIS-measured absolute spectral flux at 1 AU
+    prc_cmp *flx_spc_bnd=new prc_cmp[wvl_nbr]; // [W m-2 m-1] TSIS-measured absolute spectral flux at 1 AU
+
+    // User must free this memory when no longer needed
+    // For objects in spc_slr_cls, this is done in fl_slr_spc_set() which calls deallocate()
+    rcd=nco_get_var(nc_id,static_cast<std::string>("wlen_bnds"),wvl_bnd_nm); // [nm]
+    rcd=nco_get_var(nc_id,static_cast<std::string>("wlen"),wvl_ctr_nm); // [nm]
+    rcd=nco_get_var(nc_id,static_cast<std::string>("wlenbinsize"),wvl_dlt_nm); // [nm]
+    rcd=nco_get_var(nc_id,static_cast<std::string>("ssi"),flx_spc_bnd_1au_xnm); // [W m-2 nm-1] 
+
+    // FDE24 provides wavelength in nm (like TSIS)
+    for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
+      wvl_min[wvl_idx]=1.0e-9*wvl_bnd_nm[2*wvl_idx];
+      wvl_max[wvl_idx]=1.0e-9*wvl_bnd_nm[2*wvl_idx+1];
+    } // !wvl_idx
+    for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
+      wvl_ctr[wvl_idx]=1.0e-9*wvl_ctr_nm[wvl_idx];
+      wvl_dlt[wvl_idx]=1.0e-9*wvl_dlt_nm[wvl_idx];
+      flx_spc_bnd[wvl_idx]=1.0e9*flx_spc_bnd_1au_xnm[wvl_idx];
+    } // !wvl_idx
+
+    // Close input file
+    rcd=nco_close(nc_id); // [fnc] Close netCDF file
+    if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Closing "+fl_in);
+
+    std::cerr << "Ingested data from " << fl_in << std::endl;
+
+    if(dbg_lvl > dbg_off){
+      std::cerr << "idx\twvl_ctr\tflx_spc_wvl" << std::endl;
+      std::cerr << "#\tnm\tW m-2 nm-1" << std::endl;
+      for(idx=0;idx<wvl_nbr;idx++) std::cerr << idx << "\t" << wvl_ctr[idx] << "\t" << 1.0e-9*flx_spc_bnd[idx] << std::endl;
+    } // !dbg
+
+    // Create standard fields
+    for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
+      flx_bnd[wvl_idx]=wvl_dlt[wvl_idx]*flx_spc_bnd[wvl_idx]; // [W m-2] Solar flux in band
+    } // !wvl_idx
+
+    delete []wvl_bnd_nm;
+    delete []wvl_ctr_nm;
+    delete []wvl_dlt_nm;
+    delete []flx_spc_bnd_1au_xnm;
+    delete []flx_spc_bnd;
+  } // !FDE24
   
   // Make sure standard fields are in requested order
   if(flg_ncr_wvl && flx_slr_src == Kur95){
@@ -795,6 +864,7 @@ int main(const int argc,char **argv)
   prc_cmp *flx_frc_NeL84=new prc_cmp[wvl_nbr];
   prc_cmp *flx_frc_Kur95=new prc_cmp[wvl_nbr];
   prc_cmp *flx_frc_JHC21=new prc_cmp[wvl_nbr];
+  prc_cmp *flx_frc_FDE24=new prc_cmp[wvl_nbr];
   prc_cmp *flx_slr=new prc_cmp[wvl_nbr];
   prc_cmp *flx_spc_slr=new prc_cmp[wvl_nbr];
   float wvl_min_mcr;
@@ -808,16 +878,17 @@ int main(const int argc,char **argv)
     flx_frc_NeL84[idx]=0.0;
     if(flx_slr_src == Kur95) flx_frc_Kur95[idx]=flx_frc[idx]; else flx_frc_Kur95[idx]=1.0/wvl_nbr;
     if(flx_slr_src == JHC21) flx_frc_JHC21[idx]=flx_frc[idx]; else flx_frc_JHC21[idx]=1.0/wvl_nbr;
+    if(flx_slr_src == FDE24) flx_frc_FDE24[idx]=flx_frc[idx]; else flx_frc_FDE24[idx]=1.0/wvl_nbr;
     flx_slr[idx]=slr_cst*flx_frc[idx];
     flx_spc_slr[idx]=flx_slr[idx]/wvl_dlt[idx];
-  } // end loop over wvl 
+  } // !idx
 
   prc_cmp *wvl_wgt=new prc_cmp[wvl_nbr];
   for(idx=0;idx<wvl_nbr;idx++){
     // Compute non-weighted indices of refraction
     wvl_ctr_mcr=wvl[idx]*1.0e6;
     wvl_wgt[idx]=0.0;
-  } // end loop over wvl 
+  } // !idx
 
   // Create arrays to contain sub-bands of each interval
   prc_cmp *bnd=new prc_cmp[bnd_nbr];
@@ -829,7 +900,6 @@ int main(const int argc,char **argv)
   prc_cmp *flx_slr_bnd=new prc_cmp[bnd_nbr];
 
   // For each spectral interval in the final output array
-  if(dbg_lvl > 0) std::cerr << "Printing one `.' before each wvl loop:" << std::endl;
   for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
 
     // Divide each output spectral interval into a number of subintervals called bands
@@ -839,26 +909,25 @@ int main(const int argc,char **argv)
       bnd_max_mcr[bnd_idx]=wvl_min[wvl_idx]*1.0e6+(bnd_idx+1)*bnd_sz_mcr[bnd_idx];
       bnd_ctr_mcr[bnd_idx]=0.5*(bnd_max_mcr[bnd_idx]+bnd_min_mcr[bnd_idx]);
       bnd[bnd_idx]=1.0e-6*bnd_ctr_mcr[bnd_idx];
-    } // end loop over bnd
+    } // !bnd_idx
     
     // Routines which only take scalars
     for(bnd_idx=0;bnd_idx<bnd_nbr;bnd_idx++){
       /* NB: Of course these numbers are only valid for LaN68, ThD71 or 
 	 other sources which have spectra in fractional form */
       flx_frc_bnd[bnd_idx]=(*flx_frc_fnc)(static_cast<float *>(bnd_min_mcr+bnd_idx),static_cast<float *>(bnd_max_mcr+bnd_idx));
-    } // end loop over bnd
+    } // !bnd_idx
       
     // Weight of current spectral interval
     for(bnd_idx=0;bnd_idx<bnd_nbr;bnd_idx++){
       flx_slr_bnd[bnd_idx]=slr_cst*flx_frc_bnd[bnd_idx];
       wvl_wgt[wvl_idx]+=bnd_ctr_mcr[bnd_idx]*flx_frc_bnd[bnd_idx];
-    } // end loop over bnd
+    } // !bnd_idx
 
     // Normalize by solar fraction to get solar spectral weighted average
     wvl_wgt[wvl_idx]/=flx_frc[wvl_idx];
     
-  } // end loop over wvl 
-  if(dbg_lvl > 0) std::cerr << std::endl;
+  } // !wvl_idx
 
   // Destroy arrays that contain sub-bands of each interval
   delete []bnd;

@@ -4,7 +4,8 @@
 
    Usage: 
    drc_in=${DATA_RT}
-   drc_out=${DATA}/rrtmgp/swnb2
+   drc_out=${DATA}/rrtmgp/slr_Kur95
+   drc_out=${DATA}/rrtmgp/slr_FDE24
    prf=tro
    ncap2 -v -O --fl_spt ~/sw/aca/swn_rrtmgp_anl_bnd5.nco ${drc_out}/swn_${prf}_clr.nc ${drc_out}/swn_${prf}_anl_bnd5_clr.nc
    ncks -C -v flx.? ${drc_out}/swn_${prf}_anl_bnd5_clr.nc | m

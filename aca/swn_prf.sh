@@ -3,7 +3,7 @@
 # Usage: swn_prf.sh [no options yet]
 # Required Environment:
 # DATA_RT is SWNB2 input data directory (typically ~zender/data/aca)
-# DATA is grandparent of SWNB2 output directory (typically ~zender/data/rrtmgp/swnb2)
+# DATA is grandparent of SWNB2 output directory (typically ~zender/data/rrtmgp/slr_Kur95)
 
 # Define spectral indices
 idx_vsb_min=1296 # Bluest SWNB2 band fully in RRTMGP (1-based) band 5
@@ -11,9 +11,13 @@ idx_vsb_max=1466 # Bluest SWNB2 band fully in EAM VIS
 idx_nir_min=1467 # Reddest SWNB2 band fully in EAM NIR
 idx_nir_max=1610 # Reddest SWNB2 band fully in RRTMGP (1-based) band 5
 
+# Specify solar spectrum
+#spc=Kur95
+spc=FDE24
+
 # Define I/O directories
 drc_in=${DATA_RT}
-drc_out=${DATA}/rrtmgp/swnb2
+drc_out=${DATA}/rrtmgp/spc_${spc}
 spt_src="${BASH_SOURCE[0]}"
 spt_nm=$(basename ${spt_src}) # [sng] Script name (unlike $0, ${BASH_SOURCE[0]} works well with 'source <script>')
 
@@ -41,11 +45,18 @@ for prf in mls mlw sas saw std tro; do
 	    * ) printf "${spt_nm}: ERROR sky = ${sky} has no associated cloud thickness\n" ; ;;
 	esac # !sky
 	
-	printf "\n${spt_nm}: Simulating/analysing atmosphere with profile = ${prf}, sky = ${sky}\n"
+	# Select appropriate spectral flux
+	case ${spc} in
+	    Kur95* ) spc_slr="--spc_slr=spc_${spc}.nc" ; ;;
+	    FDE24* ) spc_slr="--spc_slr=spc_${spc}.nc" ; ;;
+	    * ) printf "${spt_nm}: ERROR spc = ${spc} has no associated spectral file\n" ; ;;
+	esac # !sky
+	
+	printf "\n${spt_nm}: Simulating/analysing atmosphere with profile = ${prf}, sky = ${sky}, spc = ${spc}\n"
 
 	# Simulate atmospheric RT
 	if true; then
-	    cmd_swn="swnb2 --drc_in=${drc_in} --lqd=aer_h2o_lqd_rds_swa_10.nc --prf=${prf}_icrccm_50${sky}.nc --mpc_CWP=${mpc_CWP} ${rfl_sfc} --out=${drc_out}/swn_${prf}_${sky}.nc > ${drc_out}/swn_${prf}_${sky}.txt 2>&1"
+	    cmd_swn="swnb2 --drc_in=${drc_in} --lqd=aer_h2o_lqd_rds_swa_10.nc --prf=${prf}_icrccm_50${sky}.nc --mpc_CWP=${mpc_CWP} ${rfl_sfc} ${spc_slr} --out=${drc_out}/swn_${prf}_${sky}.nc > ${drc_out}/swn_${prf}_${sky}.txt 2>&1"
 	    echo ${cmd_swn}
 	    eval ${cmd_swn}
 	    if [ "$?" -ne 0 ]; then
