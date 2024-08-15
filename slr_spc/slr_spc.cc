@@ -108,14 +108,12 @@ int main(const int argc,char **argv)
   float (*flx_frc_fnc)(const float *wvl_min_mcr,const float *wvl_max_mcr);
   float flt_foo2;
   float flt_foo;
-  prc_cmp wvl_ctr_mcr;
   int int_foo;
   int rcd(NC_NOERR);
   long bnd_idx;
   long idx;
   long idx_max_wvl; // [idx] Index of maximum wavelenth
   long idx_min_wvl; // [idx] Index of minimum wavelenth
-  long ncr_ncr_wvl; // [nbr] Increment to increasing wavelength
   long wvl_idx;
   const std::string CVS_Date("$Date$"); // [sng] CVS date string
   const std::string CVS_Header("$Id$"); // [sng] CVS header string
@@ -145,14 +143,9 @@ int main(const int argc,char **argv)
   std::cerr << "Command Line: " << cmd_ln << std::endl;
 
   // Set defaults for command line options
-  bool flg_lmt(true); // [flg] Option lmt, no_lmt
-  bool flg_slr_spc(true); // [flg] Option slr, no_slr
   bool flg_ncr_wvl(true); // [flg] Option ncr_wvl, dcr_wvl
   float flt_foo_input(0.0); // Option f  
   prc_cmp slr_cst(1367.0); // [W m-2] Option slr_cst
-  prc_cmp wvl_lmt_mcr(5.0); // [um] Option wvl_lmt_mcr
-  prc_cmp wvl_mxm_mcr(1.1); // [um] Option wvl_mxm_mcr
-  prc_cmp wvl_mnm_mcr(1.0); // [um] Option wvl_mnm_mcr
   long bnd_nbr(10); // [nbr] Option bnd_nbr
   long wvl_nbr(10); // [nbr] Option wvl_nbr
   std::string fl_err("cerr"); // Option e
@@ -173,9 +166,6 @@ int main(const int argc,char **argv)
     // Long options with argument
     {"bnd_nbr",1,0,0},
     {"flx_slr_src",1,0,0},
-    {"wvl_mxm_mcr",1,0,0},
-    {"wvl_mnm_mcr",1,0,0},
-    {"wvl_lmt_mcr",1,0,0},
     {"wvl_nbr",1,0,0},
     // Long options with optional argument
     // Long options with short counterparts
@@ -213,14 +203,7 @@ int main(const int argc,char **argv)
       if(opt_crr == "bnd_nbr") bnd_nbr=strtol(optarg,(char **)NULL,10);
       if(opt_crr == "ncr_wvl") flg_ncr_wvl=true;
       if(opt_crr == "dcr_wvl") flg_ncr_wvl=false;
-      if(opt_crr == "slr_spc") flg_slr_spc=true;
-      if(opt_crr == "no_slr_spc") flg_slr_spc=false;
-      if(opt_crr == "lmt") flg_lmt=true;
-      if(opt_crr == "no_lmt") flg_lmt=false;
       if(opt_crr == "wvl_nbr") wvl_nbr=strtol(optarg,(char **)NULL,10);
-      if(opt_crr == "wvl_mnm_mcr") wvl_mnm_mcr=static_cast<prc_cmp>(strtod(optarg,(char **)NULL));
-      if(opt_crr == "wvl_lmt_mcr") wvl_lmt_mcr=static_cast<prc_cmp>(strtod(optarg,(char **)NULL));
-      if(opt_crr == "wvl_mxm_mcr") wvl_mxm_mcr=static_cast<prc_cmp>(strtod(optarg,(char **)NULL));
       if(opt_crr == "flx_slr_src"){
 	// Get author of solar flux source. Default is ThD71
 	if((flx_slr_sng[ThD71].find(opt_sng) != std::string::npos) || 
@@ -242,7 +225,7 @@ int main(const int argc,char **argv)
 	   (opt_sng.find("FDE24") != std::string::npos)) 
 	  flx_slr_src=FDE24;
 	else err_prn(prg_nm,sbr_nm,"Unknown flx_slr_src");
-      } // end if "flx_slr_src"
+      } // !"flx_slr_src"
     } // opt != 0
     
     switch(opt){
@@ -290,9 +273,6 @@ int main(const int argc,char **argv)
   } // end if  
 
   // Convert input data to SI units
-  //  prc_cmp wvl_lmt(wvl_lmt_mcr*1.0e-6); // um -> m
-  //  prc_cmp wvl_min=wvl_mnm_mcr*1.0e-6; // um -> m
-  //  prc_cmp wvl_max=wvl_mxm_mcr*1.0e-6; // um -> m
   //  prc_cmp wvl_ctr=0.5*(wvl_min+wvl_max);
   //  prc_cmp wvl_ncr=(wvl_max-wvl_min)/wvl_nbr;
 
@@ -369,7 +349,7 @@ int main(const int argc,char **argv)
       std::cerr << "idx\twvl_max\tflx_frc_blr" << std::endl;
       std::cerr << "#\tum\t" << std::endl;
       for(idx=0;idx<wvl_nbr;idx++) std::cerr << idx << "\t" << wvl_max_tmp[idx]*1.0e6 << "\t" << flx_frc_blr_tmp[idx] << std::endl;
-    } // end if dbg
+    } // !dbg
 
     // Create standard fields
     for(idx=0;idx<wvl_nbr;idx++){
@@ -442,7 +422,7 @@ int main(const int argc,char **argv)
       std::cerr << "idx\twvl_max\tflx_frc_blr" << std::endl;
       std::cerr << "#\tum\t" << std::endl;
       for(idx=0;idx<wvl_nbr;idx++) std::cerr << idx << "\t" << wvl_max_tmp[idx]*1.0e6 << "\t" << flx_frc_blr_tmp[idx] << std::endl;
-    } // end if dbg
+    } // !dbg
 
     // Create standard fields
     for(idx=0;idx<wvl_nbr;idx++){
@@ -537,7 +517,7 @@ int main(const int argc,char **argv)
       std::cerr << "idx\twvl_max\tflx_blr" << std::endl;
       std::cerr << "#\tnm\tW m-2" << std::endl;
       for(idx=0;idx<wvl_nbr;idx++) std::cerr << idx << "\t" << wvl_max[idx]*1.0e9 << "\t" << flx_blr[idx] << std::endl;
-    } // end if dbg
+    } // !dbg
 
     // Create standard fields
     wvl_min[0]=wvl_max[0]-(wvl_max[1]-wvl_max[0]); // [m] Minimum wavelength in band
@@ -590,7 +570,7 @@ int main(const int argc,char **argv)
       std::cerr << "idx\twvn_ctr\tflx_spc_wvn" << std::endl;
       std::cerr << "#\tcm-1\tW m-2/cm-1" << std::endl;
       for(idx=0;idx<wvl_nbr;idx++) std::cerr << idx << "\t" << wvn_ctr[idx] << "\t" << flx_spc_wvn[idx] << std::endl;
-    } // end if dbg
+    } // !dbg
 
     prc_cmp *wvn_dlt=new prc_cmp[wvl_nbr]; // [cm-1] Bandwidth
     prc_cmp *wvn_min=new prc_cmp[wvl_nbr]; // [cm-1] Minimum wavenumber in band
@@ -612,7 +592,7 @@ int main(const int argc,char **argv)
 
     delete []wvn_ctr; // [m] Wavelength at band center
     delete []flx_spc_wvn;
-  } // end if Kur95
+  } // !Kur95
   
   if(flx_slr_src == JHC21){ // JHC21
 
@@ -652,7 +632,7 @@ int main(const int argc,char **argv)
       std::cerr << "idx\twvl_ctr\tflx_spc_wvl" << std::endl;
       std::cerr << "#\tnm\tW m-2 nm-1" << std::endl;
       for(idx=0;idx<wvl_nbr;idx++) std::cerr << idx << "\t" << wvl_ctr[idx] << "\t" << 1.0e-9*flx_spc_bnd[idx] << std::endl;
-    } // end if dbg
+    } // !dbg
 
     // Create standard fields
     wvl_min[0]=wvl_ctr[0]-0.5*(wvl_ctr[1]-wvl_ctr[0]);
@@ -745,17 +725,15 @@ int main(const int argc,char **argv)
     (void)rvr_vec(wvl_max,wvl_nbr);
     (void)rvr_vec(wvl_ctr,wvl_nbr);
     (void)rvr_vec(flx_bnd,wvl_nbr);
-  } // end if flg_ncr_wvl
+  } // !flg_ncr_wvl
 
   if(flg_ncr_wvl){
     idx_max_wvl=wvl_nbr-1L;
     idx_min_wvl=0L;
-    ncr_ncr_wvl=1L;
   }else{
     idx_max_wvl=0L;
     idx_min_wvl=wvl_nbr-1L;
-    ncr_ncr_wvl=-1L;
-  } // endif flg_ncr_wvl
+  } // !flg_ncr_wvl
 
   // Derive fields from standard fields
   prc_cmp *wvl_mcr=new prc_cmp[wvl_nbr];
@@ -887,7 +865,6 @@ int main(const int argc,char **argv)
   prc_cmp *wvl_wgt=new prc_cmp[wvl_nbr];
   for(idx=0;idx<wvl_nbr;idx++){
     // Compute non-weighted indices of refraction
-    wvl_ctr_mcr=wvl[idx]*1.0e6;
     wvl_wgt[idx]=0.0;
   } // !idx
 
@@ -952,7 +929,7 @@ int main(const int argc,char **argv)
   if(dbg_lvl > 3){
     rcd=nco_inq_ndims(nc_out,int_foo);
     std::cerr << "Currently there are " << int_foo << " dimensions defined" << std::endl;
-  } // end if dbg
+  } // !dbg
   const int *dmn_scl=&wvl_dmn; // dummy argument, not used
 
   // Global attributes
