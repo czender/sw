@@ -97,8 +97,8 @@ int main(const int argc,char **argv)
     "Thekeakara and Drummond (1971) (ThD71)",
     "Neckel and Labs (via WDC) (1984) (NeL84)",
     "Kurucz (1995) (Kur95)",
-    "Jing, Huang, Chen, et al. (2021)",
-    "Funke, Dudok de Wit, Ermolli, et al. (2024)"
+    "Jing, Huang, Chen, et al. (2021) (JHC21)",
+    "Funke, Dudok de Wit, Ermolli, et al. (2024) (FDE24)"
   };
   int flx_slr_src=Kur95; // default
 
@@ -707,6 +707,7 @@ int main(const int argc,char **argv)
     } // !wvl_idx
     for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
       wvl_ctr[wvl_idx]=1.0e-9*wvl_ctr_nm[wvl_idx];
+      wvl[wvl_idx]=wvl_ctr[wvl_idx]; // [m] Nominal wavelength
       wvl_dlt[wvl_idx]=1.0e-9*wvl_dlt_nm[wvl_idx];
       flx_spc_bnd[wvl_idx]=1.0e9*flx_spc_bnd_1au_xnm[wvl_idx];
     } // !wvl_idx
@@ -872,7 +873,7 @@ int main(const int argc,char **argv)
   for(idx=0;idx<wvl_nbr;idx++){
     wvl_min_mcr=1.0e6*wvl_min[idx];
     wvl_max_mcr=1.0e6*wvl_max[idx];
-    // NB: arguments in microns 
+    // NB: Arguments in microns 
     flx_frc_LaN68[idx]=static_cast<prc_cmp>(FORTRAN_slffln(&wvl_min_mcr,&wvl_max_mcr));
     flx_frc_ThD71[idx]=static_cast<prc_cmp>(FORTRAN_slfftd(&wvl_min_mcr,&wvl_max_mcr));
     flx_frc_NeL84[idx]=0.0;
@@ -962,6 +963,8 @@ int main(const int argc,char **argv)
   var_mtd_sct var_mtd[]={
     {0,"flx_bnd",nco_xtyp,1,dmn_wvl,"long_name","Absolute solar flux in band","units","watt meter-2"},
     {0,"flx_frc",nco_xtyp,1,dmn_wvl,"long_name","Fraction of solar flux in band","units","fraction"},
+    {0,"flx_frc_FDE24",nco_xtyp,1,dmn_wvl,"long_name","Fraction of solar flux: Funke, Dudok de Wit, Ermolli, et al. (2024)","units","fraction"},
+    {0,"flx_frc_JHC21",nco_xtyp,1,dmn_wvl,"long_name","Fraction of solar flux: Jing, Huang, Chen, et al. (2021)","units","fraction"},
     {0,"flx_frc_Kur95",nco_xtyp,1,dmn_wvl,"long_name","Fraction of solar flux: Kurucz (1995)","units","fraction"},
     {0,"flx_frc_LaN68",nco_xtyp,1,dmn_wvl,"long_name","Fraction of solar flux: Labs & Neckel (1968)","units","fraction"},
     {0,"flx_frc_NeL84",nco_xtyp,1,dmn_wvl,"long_name","Fraction of solar flux: Neckel & Labs (1984)","units","fraction"},
@@ -992,6 +995,8 @@ int main(const int argc,char **argv)
   // Write data and delete dynamic arrays
   rcd=nco_put_var(nc_out,static_cast<std::string>("flx_bnd"),flx_bnd); delete []flx_bnd;
   rcd=nco_put_var(nc_out,static_cast<std::string>("flx_frc"),flx_frc); delete []flx_frc;
+  rcd=nco_put_var(nc_out,static_cast<std::string>("flx_frc_FDE24"),flx_frc_FDE24); delete []flx_frc_FDE24;
+  rcd=nco_put_var(nc_out,static_cast<std::string>("flx_frc_JHC21"),flx_frc_JHC21); delete []flx_frc_JHC21;
   rcd=nco_put_var(nc_out,static_cast<std::string>("flx_frc_Kur95"),flx_frc_Kur95); delete []flx_frc_Kur95;
   rcd=nco_put_var(nc_out,static_cast<std::string>("flx_frc_LaN68"),flx_frc_LaN68); delete []flx_frc_LaN68;
   rcd=nco_put_var(nc_out,static_cast<std::string>("flx_frc_NeL84"),flx_frc_NeL84); delete []flx_frc_NeL84;
