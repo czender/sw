@@ -90,7 +90,7 @@ for prf in mls mlw sas saw std tro; do
 	# Analyze SWNB2 simulation
 	# Currently borken on MacOS not Linux, not sure why
 	if true; then
-	    cmd_anl="ncap2 -O -v --fl_spt=${HOME}/sw/aca/swn_rrtmgp_anl_bnd5.nco ${drc_out}/swn_${prf}_${sky}.nc ${drc_out}/swn_${prf}_anl_bnd5_${sky}.nc"
+	    cmd_anl="ncap2 -O -v --fl_spt=${HOME}/sw/aca/swn_rrtmgp_bnd5_anl.nco ${drc_out}/swn_${prf}_${sky}.nc ${drc_out}/swn_${prf}_anl_bnd5_${sky}.nc"
 	    if [ "${PVM_ARCH}" != 'MACOS' ]; then
 		echo ${cmd_anl}
 		eval ${cmd_anl}
@@ -101,7 +101,7 @@ for prf in mls mlw sas saw std tro; do
 	    else
 		# ...instead, on MacOS, mouse this into terminal to process all data
 		printf "${spt_nm}: WARNING MacOS requires manual analysis...mouse this into terminal window at end:\n"
-		printf "for prf in mls mlw sas saw std tro; do\n\tfor sky in clr cld; do\n\t\tncap2 -O -v --fl_spt=${HOME}/sw/aca/swn_rrtmgp_anl_bnd5.nco ${drc_out}/swn_\${prf}_\${sky}.nc ${drc_out}/swn_\${prf}_anl_bnd5_\${sky}.nc\n\t\tncks -v flx_frc_d.._vsb ${drc_out}/swn_\${prf}_anl_bnd5_\${sky}.nc\n\tdone\ndone\n"
+		printf "for prf in mls mlw sas saw std tro; do\n\tfor sky in clr cld; do\n\t\tncap2 -O -v --fl_spt=${HOME}/sw/aca/swn_rrtmgp_bnd5_anl.nco ${drc_out}/swn_\${prf}_\${sky}.nc ${drc_out}/swn_\${prf}_anl_bnd5_\${sky}.nc\n\t\tncks -v flx_frc_d.._vsb ${drc_out}/swn_\${prf}_anl_bnd5_\${sky}.nc\n\tdone\ndone\n"
 	    fi # !PVM_ARCH
 	fi # !false
 	
