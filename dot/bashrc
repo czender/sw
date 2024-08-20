@@ -550,7 +550,7 @@ case "${PVM_ARCH}" in
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${NETCDF4_ROOT}/lib
 	case "${HOST}" in 
-	    compy* | e3sm* | imua* ) # Fedora uses LIB64 directory
+	    chrysalis* | chrlogin* | chr-[0123456789][0123456789][0123456789][0123456789] | compy* | e3sm* | imua* ) # Fedora uses LIB64 directory
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib64
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/lib64
 		;; # LIB64
