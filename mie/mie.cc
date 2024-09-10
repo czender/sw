@@ -16,7 +16,9 @@
 
 // Editing, Compilation:
 // etags ~/sw/aer/*.F ~/sw/aer/*.h ~/sw/c++/*.cc ~/sw/c++/*.hh ~/sw/mie/*.cc ~/sw/mie/*.hh ~/sw/slr_spc/*.cc ~/sw/slr_spc/*.hh
-/* cd ~/sw/mie;make OPTS=D VRS_SNG=3.4.2 mie;cd -
+/* spectral.ess.uci.edu (as of 20240910):
+   cd ~/sw/mie;make CPPFLAGS="-DLINUX -I ${HOME}/include -I/opt/netcdf/include -I/opt/homebrew/include" LDFLAGS="-L/opt/netcdf/lib -L/opt/homebrew/lib -L${HOME}/lib -lcsz_c++ -lnco_c++ -lnetcdf";cd -
+   cd ~/sw/mie;make OPTS=D VRS_SNG=3.4.2 mie;cd -
    cd ~/sw/mie;make OPTS=D NETCDF4=Y mie;cd -
    cd ~/sw/c++;make OMP=N OPTS=D NETCDF4=Y UDUNITS2=Y;cd ~/sw/mie;make OMP=N OPTS=D NETCDF4=Y UDUNITS2=Y
    cd ~/sw/c++;make OMP=N OPTS=D NETCDF4=N UDUNITS2=N;cd ~/sw/mie;make OMP=N OPTS=D NETCDF4=N UDUNITS2=N
@@ -222,8 +224,8 @@ extern "C" {
 // Personal headers
 // #define MAIN_PROGRAM_FILE MUST precede #include mie.hh
 #define MAIN_PROGRAM_FILE
-#include <mie.hh> // Program-specific definitions
-#include <mie_cls.hh> // Program-specific class definitions
+#include "mie.hh" // Program-specific definitions
+#include "mie_cls.hh" // Program-specific class definitions
 #include <libcsz_c++.hh> // Personal C++ library
 #include <libcsm_c++.hh> // Climate systems modeling library
 #include <libnco_c++.hh> // C++ interface to netCDF C library

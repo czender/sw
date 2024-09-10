@@ -1,3 +1,7 @@
+2024-09-10  Charlie Zender  <zender@uci.edu>
+
+	* Use "" not <> for mie.hh and mie_cls.hh headers to make clang18 happy
+
 2021-06-18  Charlie Zender  <zender@uci.edu>
 
 	* Implement user-specifiable surface emissivity via --msv_sfc for flx_sfc_lnd()
