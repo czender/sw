@@ -15,7 +15,7 @@
    ThD71: TaL89, Ste78, Sli89
    NeL84: EbC92 
    Kur95: ZBP97
-   JHC21: HCF18
+   JHC21: JHC21
    FDE24: CMIP7 */
 
 /* Strategy: 

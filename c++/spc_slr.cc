@@ -123,6 +123,14 @@ sng2sng_map spc_slr_cls::opt2abb_map_mk(){ // Create abbreviation map
 
   map_tmp.insert(sng2sng_map::value_type("Kur95_20wvn","Kur95_20wvn"));
 
+  map_tmp.insert(sng2sng_map::value_type("JHC21","JHC21"));
+  map_tmp.insert(sng2sng_map::value_type("Jing","JHC21"));
+  map_tmp.insert(sng2sng_map::value_type("Huang","JHC21"));
+
+  map_tmp.insert(sng2sng_map::value_type("FDE24","FDE24"));
+  map_tmp.insert(sng2sng_map::value_type("Funke","FDE24"));
+  map_tmp.insert(sng2sng_map::value_type("CMIP7","FDE24"));
+
   map_tmp.insert(sng2sng_map::value_type("lsr","lsr"));
   map_tmp.insert(sng2sng_map::value_type("laser","lsr"));
   map_tmp.insert(sng2sng_map::value_type("Laser","lsr"));
@@ -162,6 +170,14 @@ sng2spc_slr_sct_map spc_slr_cls::spc_slr_map_mk(){ // [fnc] Create solar flux so
     {"Kur95_01wvn", // [sng] Solar flux source abbreviation
      "Kurucz (1995) 01 cm-1", // [sng] Solar flux source description
      fio::data_file_path_get("spc_Kur95_01wvn.nc"), // [sng] File containing solar spectrum
+     (flx_slr_frc_fnc_ptr_typ)CEWI_NULL}, // [fnc] Function to compute solar spectrum
+    {"JHC21", // [sng] Solar flux source abbreviation
+     "", // [sng] Solar flux source description
+     fio::data_file_path_get("spc_JHC21.nc"), // [sng] File containing solar spectrum
+     (flx_slr_frc_fnc_ptr_typ)CEWI_NULL}, // [fnc] Function to compute solar spectrum
+    {"FDE24", // [sng] Solar flux source abbreviation
+     "", // [sng] Solar flux source description
+     fio::data_file_path_get("spc_FDE24.nc"), // [sng] File containing solar spectrum
      (flx_slr_frc_fnc_ptr_typ)CEWI_NULL}, // [fnc] Function to compute solar spectrum
     {"lsr", // [sng] Solar flux source abbreviation
      "Laser (delta function)", // [sng] Solar flux source description

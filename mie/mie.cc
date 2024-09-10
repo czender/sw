@@ -2890,7 +2890,7 @@ int main(int argc,char **argv)
     svp_fct_klv_xpn=2.0*mmw_H2O*sfc_tns_wtr_lqd/(dns_H2O_lqd_std*gas_cst_unv*tpt_mdp*sz_ctr[idx]); // [frc] Kelvin effect IrG81 p. 89 (5) 
     svp_fct_klv[idx]=std::exp(svp_fct_klv_xpn); // [frc] Kelvin effect IrG81 p. 89 (5) 
     if(svp_fct_klv_xpn > 1.0) wrn_prn(sbr_nm,"Kelvin (curvature) effect problem: svp_fct_klv_xpn = "+nbr2sng(svp_fct_klv_xpn)+" > 1.0. Reducing Kelvin effect to unity. (HINT: aerosol may be too small to apply classical Kelvin theory?).");
-    svp_fct_klv[idx]=min(1.0,svp_fct_klv[idx]); // [frc] Kelvin effect IrG81 p. 89 (5) 
+    svp_fct_klv[idx]=min_cpv(1.0,svp_fct_klv[idx]); // [frc] Kelvin effect IrG81 p. 89 (5) 
     svp_fct_slt[idx]=1.0; // [frc] Solute effect
     svp_fct_ttl[idx]=svp_fct_klv[idx]*svp_fct_slt[idx]; // [frc] Total effect
     RH_lqd_sfc[idx]=RH_lqd*svp_fct_ttl[idx]; // [frc]
