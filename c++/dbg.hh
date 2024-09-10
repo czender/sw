@@ -91,9 +91,10 @@ namespace dbg{ // [nms] Debugging namespace
   const float CEWI_flt(9.9692099683868690e+36f); // Compiler Error Warning Initializer for float 
   const int CEWI_int(-2147483647); // Compiler Error Warning Initializer for int
   const long CEWI_lng(-2147483647L); // Compiler Error Warning Initializer for long
-#ifdef HAVE_LONG_LONG
+  // 20240910: Assume compiler has "long long"
+  //#ifdef HAVE_LONG_LONG
   const long long CEWI_lng_lng(-2147483647LL); // Compiler Error Warning Initializer for long long
-#endif // !HAVE_LONG_LONG
+  //#endif // !HAVE_LONG_LONG
   const prc_cmp CEWI_cpv=PRC_CMP(9.9692099683868690e+36); // Compiler Error Warning Initializer for computational precision
   const short CEWI_sht(-32767); // Compiler Error Warning Initializer for short
   const size_t CEWI_szt(0); // Compiler Error Warning Initializer for size_t

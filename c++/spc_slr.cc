@@ -91,6 +91,11 @@ spc_slr_cls::tst(long obj_nbr){ // [fnc] Self-test of spc_slr_cls class
   std::cout << "abb = " << tst_obj->abb << ", flx_frc = " << flx_frc << std::endl;
   delete tst_obj; // [sct] Test object
 
+  tst_obj=new spc_slr_cls("FDE24"); // [sct] Test object
+  flx_frc=tst_obj->flx_frc_get(0.2e-6,1.0e-5); // [fnc] Fraction of solar spectrum in a single spectral region
+  std::cout << "abb = " << tst_obj->abb << ", flx_frc = " << flx_frc << std::endl;
+  delete tst_obj; // [sct] Test object
+
   tst_obj=new spc_slr_cls("lsr"); // [sct] Test object
   flx_frc=tst_obj->flx_frc_get(0.2e-6,1.0e-5); // [fnc] Fraction of solar spectrum in a single spectral region
   std::cout << "abb = " << tst_obj->abb << ", flx_frc = " << flx_frc << std::endl;
@@ -172,11 +177,11 @@ sng2spc_slr_sct_map spc_slr_cls::spc_slr_map_mk(){ // [fnc] Create solar flux so
      fio::data_file_path_get("spc_Kur95_01wvn.nc"), // [sng] File containing solar spectrum
      (flx_slr_frc_fnc_ptr_typ)CEWI_NULL}, // [fnc] Function to compute solar spectrum
     {"JHC21", // [sng] Solar flux source abbreviation
-     "", // [sng] Solar flux source description
+     "Jing, Huang, Chen, et al. (2021)", // [sng] Solar flux source description
      fio::data_file_path_get("spc_JHC21.nc"), // [sng] File containing solar spectrum
      (flx_slr_frc_fnc_ptr_typ)CEWI_NULL}, // [fnc] Function to compute solar spectrum
     {"FDE24", // [sng] Solar flux source abbreviation
-     "", // [sng] Solar flux source description
+     "Funke, Dudok de Wit, Ermolli, et al. (2024) CMIP7", // [sng] Solar flux source description
      fio::data_file_path_get("spc_FDE24.nc"), // [sng] File containing solar spectrum
      (flx_slr_frc_fnc_ptr_typ)CEWI_NULL}, // [fnc] Function to compute solar spectrum
     {"lsr", // [sng] Solar flux source abbreviation
@@ -191,29 +196,29 @@ sng2spc_slr_sct_map spc_slr_cls::spc_slr_map_mk(){ // [fnc] Create solar flux so
     /* fxm: Define variables before inserting into map, because map values 
        seem to be unwritable (read-only) once they are in map */
     spc_slr_map_tmp.insert(sng2spc_slr_sct_map::value_type(spc_slr[idx].abb,spc_slr[idx])); // [sct] Map with key=abbreviation, value=solar flux source structure
-  } // end loop over itr
+  } // !idx
   // Return a value to initialize a static class member
   return spc_slr_map_tmp;
-} // end spc_slr_cls::spc_slr_map_mk()
+} // !spc_slr_cls::spc_slr_map_mk()
 
 std::string // [sng] Description string
 spc_slr_cls::abb2dsc(const std::string &abb_sng){ // [fnc] Abbreviation to description mapper
   // Purpose: Return description of solar flux source
   return spc_slr_map.find(abb_sng)->second.dsc; // [sng] Description string
-} // end spc_slr_cls::abb2dsc()
+} // !spc_slr_cls::abb2dsc()
 
 flx_slr_frc_fnc_ptr_typ // [fnc] Pointer to function returning fractional solar fluxes
 spc_slr_cls::abb2fnc // [fnc] Abbreviation to function mapper
 (const std::string &abb_sng){ // [sng] Abbreviation string
   // Purpose: Return pointer to function which computes solar flux source
   return spc_slr_map.find(abb_sng)->second.flx_slr_frc_fnc_ptr; // [fnc] Pointer to function returning fractional solar fluxes
-} // end spc_slr_cls::abb2fnc()
+} // !spc_slr_cls::abb2fnc()
 
 std::string // [sng] File containing solar spectrum
 spc_slr_cls::abb2fl_slr_spc(const std::string &abb_sng){ // [fnc] Abbreviation to file mapper
   // Purpose: Return file containing solar spectrum
   return spc_slr_map.find(abb_sng)->second.fl_slr_spc; // [sng] File containing solar spectrum
-} // end spc_slr_cls::abb2fl_slr_spc()
+} // !spc_slr_cls::abb2fl_slr_spc()
 
 // Static member functions end
 // Public member functions begin
@@ -245,12 +250,12 @@ spc_slr_cls::spc_slr_cls // [fnc] Constructor
   rcd+=recompute(); // [fnc] Recompute properties of object
 
   nst_nbr++; // [nbr] Number of instantiated class members
-} // end spc_slr_cls constructor
+} // !spc_slr_cls constructor
 
 spc_slr_cls::~spc_slr_cls(){ // Destructor
   rcd+=deallocate(); // [fnc] Free dynamic memory for object
   nst_nbr--; // [nbr] Number of instantiated class members
-} // end spc_slr_cls destructor
+} // !spc_slr_cls destructor
 
 void spc_slr_cls::prn()const{std::cout << this;} // [fnc] Print object contents
 
@@ -282,7 +287,7 @@ spc_slr_cls::fl_slr_spc_set(const std::string &fl_slr_spc_arg){ // [fnc] File co
   
   if(rcm_flg) rcd+=recompute(); // [fnc] Recompute properties of object
   return rcd; // [enm] Return success code
-} // end spc_slr_cls::fl_slr_spc_set()
+} // !spc_slr_cls::fl_slr_spc_set()
 
 int // [enm] Return success code
 spc_slr_cls::flx_slr_frc_fnc_ptr_set(const flx_slr_frc_fnc_ptr_typ &flx_slr_frc_fnc_ptr_arg){ // [fnc] Function to compute solar spectrum
@@ -290,7 +295,7 @@ spc_slr_cls::flx_slr_frc_fnc_ptr_set(const flx_slr_frc_fnc_ptr_typ &flx_slr_frc_
   flx_slr_frc_fnc_ptr=flx_slr_frc_fnc_ptr_arg; // [fnc] Function to compute solar spectrum
   if(rcm_flg) rcd+=recompute(); // [fnc] Recompute properties of object
   return rcd; // [enm] Return success code
-} // end spc_slr_cls::flx_slr_frc_fnc_ptr_set()
+} // !spc_slr_cls::flx_slr_frc_fnc_ptr_set()
 
 int // [enm] Return success code
 spc_slr_cls::typ_set(const std::string &spc_slr_arg){ // [fnc] Set solar flux source
@@ -298,7 +303,7 @@ spc_slr_cls::typ_set(const std::string &spc_slr_arg){ // [fnc] Set solar flux so
   abb= (spc_slr_arg == "") ? spc_slr_typ_dfl : spc_slr_arg; // [sng] Solar flux source abbreviation
   if(rcm_flg) rcd+=recompute(); // [fnc] Recompute properties of object
   return rcd; // [enm] Return success code
-} // end spc_slr_cls::typ_set()
+} // !spc_slr_cls::typ_set()
 
 int // [enm] Return success code
 spc_slr_cls::slr_cst_set(const prc_cmp &slr_cst_arg) // [W m-2] Solar constant
@@ -312,7 +317,7 @@ spc_slr_cls::slr_cst_set(const prc_cmp &slr_cst_arg) // [W m-2] Solar constant
   slr_cst=slr_cst_arg; // [W m-2] Solar constant
   if(rcm_flg) rcd+=recompute(); // [fnc] Recompute properties of object
   return rcd; // [enm] Return success code
-} // end spc_slr_cls::slr_cst_set()
+} // !spc_slr_cls::slr_cst_set()
 
 prc_cmp // O [frc] Fraction of solar flux in band
 spc_slr_cls::flx_frc_get // [fnc] Fraction of solar spectrum in a single spectral region
@@ -337,7 +342,7 @@ spc_slr_cls::flx_frc_get // [fnc] Fraction of solar spectrum in a single spectra
      &flx_slr_frc); // O [frc] Fraction of solar flux in band
   
   return flx_slr_frc; // [frc] Fraction of solar flux in band
-} // end spc_slr_cls::flx_frc_get()
+} // !spc_slr_cls::flx_frc_get()
 
 int // O [enm] Return success code
 spc_slr_cls::flx_frc_get // [fnc] Compute fraction of solar spectrum in given spectral region
@@ -362,13 +367,13 @@ spc_slr_cls::flx_frc_get // [fnc] Compute fraction of solar spectrum in given sp
     // Solar spectra is available as PDF(lambda)
     for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
       flx_slr_frc[wvl_idx]=(*flx_slr_frc_fnc_ptr)(wvl_min[wvl_idx],wvl_max[wvl_idx]); // [frc] Fraction of solar flux in band
-    } // end loop over wvl_idx
+    } // !loop over wvl_idx
 
-  }else{ // endif flx_slr_frc_fnc_ptr != CEWI_NULL
+  }else{ // !flx_slr_frc_fnc_ptr != CEWI_NULL
 
     // Solar spectra is only available in file form
     // Monotonic wavelength grids may be passed directly to ntp_slr_flx_mnt()
-    // Massage non-monotonic grids, e.g., CAM_SW, before calling ntp_slr_flx_mnt()
+    // Massage non-monotonic grids, e.g., CAM_SW, RRTMG_SW, before calling ntp_slr_flx_mnt()
     if(!mnt_chk(wvl_min,wvl_nbr) || !mnt_chk(wvl_max,wvl_nbr)){
     
       rcd_lcl+=ntp_slr_flx_nmn // [fnc] Interpolate raw solar spectrum to non-monotonic grid
@@ -377,7 +382,7 @@ spc_slr_cls::flx_frc_get // [fnc] Compute fraction of solar spectrum in given sp
 	 wvl_nbr, // I [nbr] Number of wavelength bands
 	 flx_slr_frc); // O [frc] Fraction of solar flux in band
 
-    }else{
+    }else{ // !mnt_chk
       
       rcd_lcl+=ntp_slr_flx_mnt // [fnc]  Interpolate raw solar spectrum to monotonic grid
 	(wvl_min, // I [m] Minimum wavelength in band
@@ -385,12 +390,12 @@ spc_slr_cls::flx_frc_get // [fnc] Compute fraction of solar spectrum in given sp
 	 wvl_nbr, // I [nbr] Number of wavelength bands
 	 flx_slr_frc); // O [frc] Fraction of solar flux in band
 
-    } // endelse
+    } // !mnt_chk
 
   } // endelse flx_slr_frc_fnc_ptr != CEWI_NULL
   
   return rcd_lcl; // [enm] Return success code
-} // end spc_slr_cls::flx_frc_get()
+} // !spc_slr_cls::flx_frc_get()
 
 // Public member functions end
 // Private member functions begin
@@ -399,7 +404,7 @@ int // [enm] Return success code
 spc_slr_cls::allocate(){ // [fnc] Allocate dynamic memory for object
   // Purpose: Allocate dynamic memory for object
   return rcd; // [enm] Return success code
-} // end spc_slr_cls_cls::allocate()
+} // !spc_slr_cls_cls::allocate()
 
 int // [enm] Return success code
 spc_slr_cls::deallocate(){ // [fnc] Free dynamic memory for object
@@ -417,7 +422,7 @@ spc_slr_cls::deallocate(){ // [fnc] Free dynamic memory for object
   } // endif
 
   return rcd; // [enm] Return success code
-} // end spc_slr_cls::deallocate()
+} // !spc_slr_cls::deallocate()
 
 int // [enm] Return success code
 spc_slr_cls::recompute(){ // [fnc] Recompute properties of object
@@ -427,7 +432,7 @@ spc_slr_cls::recompute(){ // [fnc] Recompute properties of object
   dsc=abb2dsc(abb); // [sng] Solar flux source description
   flx_slr_frc_fnc_ptr=abb2fnc(abb); // [fnc] Pointer to function returning fractional solar fluxes
   
-  /* Most spectral solar flux sources (ThD71 LaN68 Kur95) are stored in files
+  /* Most spectral solar flux sources (ThD71 LaN68 Kur95 FDE24) are stored in files
      These sources are automatically loaded whenever the external file is changed in fl_spc_src_set() 
      Other sources use functions and here is where we specify the function
      This could be done by expanding the slr_spc struct to contain a function pointer
@@ -435,7 +440,7 @@ spc_slr_cls::recompute(){ // [fnc] Recompute properties of object
   if(abb == "NeL84") err_prn(sbr_nm,"Neckel & Labs option unavailable at this time."); 
 
   return rcd; // [enm] Return success code
-} // end spc_slr_cls::recompute()
+} // !spc_slr_cls::recompute()
 
 int // O [enm] Return success code
 spc_slr_cls::ntp_slr_flx_mnt // [fnc]  Interpolate raw solar spectrum to monotonic grid
@@ -471,8 +476,8 @@ spc_slr_cls::ntp_slr_flx_mnt // [fnc]  Interpolate raw solar spectrum to monoton
   if(dbg_lvl_get() >= dbg_io){ 
     for(wvl_idx=0;wvl_idx<wvl_nbr_out;wvl_idx++){
       std::cout << "wvl_min_out[" << wvl_idx << "] = " << wvl_min_out[wvl_idx] << ", wvl_max_out[" << wvl_idx << "] = " << wvl_max_out[wvl_idx] << std::endl;
-    } // end loop over wvl_idx
-  } // endif dbg
+    } // !wvl_idx
+  } // !dbg
   
   // Check for monotonicity of output grid
   if(!mnt_chk(wvl_min_out,wvl_nbr_out)) err_prn(sbr_nm,"wvl_min_out not monotonic");
@@ -521,16 +526,16 @@ spc_slr_cls::ntp_slr_flx_mnt // [fnc]  Interpolate raw solar spectrum to monoton
 	if(dbg_lvl_get() > 2) wrn_prn(sbr_nm,"Monotonically increasing grid is not contiguous wvl_min_out["+nbr2sng(wvl_idx)+"+1] != wvl_max_out["+nbr2sng(wvl_idx)+"]");
 	ctg_flg=false;
 	break;
-      } // endif
-    } // end loop over wvl
+      } // !wvl_min_out
+    } // !wvl_idx
   }else{ // !mnt_ncr_flg
     for(wvl_idx=0;wvl_idx<wvl_nbr_out-1;wvl_idx++){ // Loop ends at wvl_nbr_out-2
       if(wvl_min_out[wvl_idx] != wvl_max_out[wvl_idx+1]){
 	if(dbg_lvl_get() > 2) wrn_prn(sbr_nm,"Monotonically decreasing grid is not contiguous wvl_min_out["+nbr2sng(wvl_idx)+"] != wvl_max_out["+nbr2sng(wvl_idx)+"+1]");
 	ctg_flg=false;
 	break;
-      } // endif
-    } // end loop over wvl
+      } // !wvl_min_out
+    } // !wvl_idx
   } // !mnt_ncr_flg
 
   // Check that bins abut if wavelength grid is contiguous 
@@ -615,14 +620,14 @@ spc_slr_cls::ntp_slr_flx_nmn // [fnc] Interpolate raw solar spectrum to non-mono
       /* CAM_LW grid triggers this problem */
       wrn_prn(sbr_nm,"Solar fluxes requested on psychotic grid type where wvl_nbr_tmp = "+nbr2sng(wvl_nbr_tmp)+" != "+nbr2sng(wvl_nbr_tmp2)+" = wvl_nbr_tmp2. Setting wvl_nbr_tmp = 1.");
       wvl_nbr_tmp=1;
-    } /* endif */
+    } /* !wvl_nbr_tmp */
 
     if(dbg_lvl_get() >= dbg_crr){
       dbg_prn(sbr_nm,"Calling ntp_slr_flx_mnt() for "+nbr2sng(wvl_nbr_tmp)+" bands beginning with band "+nbr2sng(wvl_idx_srt));
       std::cout << "idx\twvl_min\twvl_max\tflx_frc_out" << std::endl;
       std::cout << "   \t  um   \t  um   \t    frc    " << std::endl;
       for(wvl_idx=wvl_idx_srt;wvl_idx<wvl_idx_srt+wvl_nbr_tmp;wvl_idx++) std::cout << wvl_idx << "\t" << wvl_min_out[wvl_idx]*1.0e6 << "\t" << wvl_max_out[wvl_idx]*1.0e6 << "\t" << flx_frc_out[wvl_idx] << std::endl;
-    } // endif
+    } // !dbg
 
     rcd_lcl+=ntp_slr_flx_mnt // [fnc]  Interpolate raw solar spectrum to monotonic grid
       (const_cast<const prc_cmp *>(wvl_min_out+wvl_idx_srt), // I [m] Minimum wavelength in band
@@ -635,12 +640,12 @@ spc_slr_cls::ntp_slr_flx_nmn // [fnc] Interpolate raw solar spectrum to non-mono
     wvl_nbr_rmn-=wvl_nbr_tmp; // [nbr] Number of remaining wavelengths to interpolate
     // Increment counter
     nmn_cnt++; // [cnt] Number of monotonic chunks used in interpolation
-  } // end loop over wvl
+  } // !wvl_nbr_rmn
 
   if(dbg_lvl == dbg_crr) std::cout << prg_nm_get() << ": INFO "+sbr_nm+"() reports calling ntp_slr_flx_mnt() " << nmn_cnt << " times" << std::endl;
   if(dbg_lvl >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");
   return rcd_lcl;
-} // end spc_slr_cls::ntp_slr_flx_nmn()
+} // !spc_slr_cls::ntp_slr_flx_nmn()
 
 int // O [enm] Return success code
 spc_slr_cls::ntp_slr_flx_nmn_CAM_SW // [fnc] Interpolate raw solar spectrum to CAM_SW grid
@@ -697,7 +702,7 @@ spc_slr_cls::ntp_slr_flx_nmn_CAM_SW // [fnc] Interpolate raw solar spectrum to C
 
   if(dbg_lvl >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");
   return rcd_lcl;
-} // end spc_slr_cls::ntp_slr_flx_nmn_CAM_SW()
+} // !spc_slr_cls::ntp_slr_flx_nmn_CAM_SW()
 
 int // [enm] Return success code
 spc_slr_cls::spc_slr_raw_fl_get // [fnc] Load raw solar spectrum data from file
@@ -766,8 +771,8 @@ spc_slr_cls::spc_slr_raw_fl_get // [fnc] Load raw solar spectrum data from file
     for(idx=0;idx<wvl_nbr;idx++){
       wvl_min[idx]/=1.0e6; // [um] -> [m]
       wvl_max[idx]/=1.0e6; // [um] -> [m]
-    } // end for
-  } // end if
+    } // !idx
+  } // !wvl_units_sng
   
   // Close input file
   rcd=nco_close(nc_id); // [fnc] Close netCDF file
@@ -781,7 +786,7 @@ spc_slr_cls::spc_slr_raw_fl_get // [fnc] Load raw solar spectrum data from file
 
   if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");
   return rcd; // [enm] Return success code
-} // end spc_slr_cls::spc_slr_raw_fl_get()
+} // !spc_slr_cls::spc_slr_raw_fl_get()
 
 // Private member functions end
 // Global functions with C++ linkages begin

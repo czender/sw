@@ -105,8 +105,8 @@
 // Personal headers
 // #define MAIN_PROGRAM_FILE MUST precede #include ccc.hh
 #define MAIN_PROGRAM_FILE
-#include <ccc.hh> // Program-specific definitions
-#include <cls.hh> // Program-specific class definitions
+#include "ccc.hh" // Program-specific definitions
+#include "cls.hh" // Program-specific class definitions
 #include <libcsz_c++.hh> // Personal C++ library
 #include <libcsm_c++.hh> // Climate systems modeling library
 #include <libnco_c++.hh> // C++ interface to netCDF C library
@@ -1470,11 +1470,11 @@ int main(int argc,char **argv)
     const mnr_tst_sct mnr[]={
       {"biomass", // [sng] Particle abbreviation
        "C", // [sng] Molecular composition
-       mmw_C, // [kg mol-1] Mean molecular weight
+       (prc_cmp)mmw_C, // [kg mol-1] Mean molecular weight
        1000.0}, // [kg m-3] Bulk density fxm: get Biomass density
       {"dust_like", // [sng] Particle abbreviation
        "SiO2", // [sng] Molecular composition
-       mmw_SiO2, // [kg mol-1] Mean molecular weight
+       (prc_cmp)mmw_SiO2, // [kg mol-1] Mean molecular weight
        2500.0} // [kg m-3] Bulk density BPB ARESE report 2/96, Table 1, PaG77 p. 2076, (DKS91 p. 118 has 1600, Volz 1972)
       /*
       {"", // [sng] Particle abbreviation
@@ -1494,7 +1494,7 @@ int main(int argc,char **argv)
     /*    mnr_map.insert(sng2cpv_map::value_type("afghan_dust",
     {"afghan_dust", // [sng] Particle abbreviation
        "SiO2", // [sng] Molecular composition
-       mmw_SiO2, // [kg mol-1] Mean molecular weight
+       (prc_cmp)mmw_SiO2, // [kg mol-1] Mean molecular weight
        2500.0})); // [kg m-3] Bulk density SAJ93 (same density as Dust-like, for convenience, for now) */
     dns_prt=mnr_map.find(cmp_sng_prt)->second.dns; // [kg m-3] Bulk density
     prc_cmp mmw_aer=mnr_map.find(cmp_sng_prt)->second.mmw; // [kg mol-1] Mean molecular weight

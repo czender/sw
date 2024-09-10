@@ -365,544 +365,544 @@ sng2mnr_sct_map aer_cls::mnr_map_mk(){ // Create abbreviation map
      "H2SO4_H2O", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_NNM98.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_H2SO4, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_H2SO4, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_H2SO4_61pct_273K_std}, // [kg m-3] Density of 61% H2SO4 solution (by weight) at 273 K (Timmermans in ${HOME}/idx_rfr/hitran/timmerma.dat)
     {"H2SO4_220K_72_NNM98", // [sng] Particle abbreviation
      "72% H2SO4 at 220K (NNM98)", // [sng] Particle description
      "H2SO4-H2O", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_NNM98.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_H2SO4, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_H2SO4, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_H2SO4_72pct_273K_std}, // [kg m-3] Density of 72% H2SO4 solution (by weight) at 273 K (Timmermans in ${HOME}/idx_rfr/hitran/timmerma.dat)
     {"H2SO4_300K_PaW75", // [sng] Particle abbreviation
      "75% H2SO4 at 300K (PaW75)", // [sng] Particle description
      "H2SO4-H2O", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_PaW75.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_H2SO4, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_H2SO4, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_H2SO4_75pct_303K_std}, // [kg m-3] Density of 75% H2SO4 solution (by weight) at 303 K (Timmermans in ${HOME}/idx_rfr/hitran/timmerma.dat)
     {"aeronet_Bhr", // [sng] Particle abbreviation
      "Aeronet Bahrain", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_DHE02.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
      dns_dst_std}, // (2500.0) [kg m-3] Standard density of dust
     {"aeronet_Bnz", // [sng] Particle abbreviation
      "Aeronet Banizoumbou", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_DHE02.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
      dns_dst_std}, // (2500.0) [kg m-3] Standard density of dust
     {"aeronet_Brb", // [sng] Particle abbreviation
      "Aeronet Barbados", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_DHE02.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
      dns_dst_std}, // (2500.0) [kg m-3] Standard density of dust
     {"aeronet_CpV", // [sng] Particle abbreviation
      "Aeronet Cape Verde", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_DHE02.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
      dns_dst_std}, // (2500.0) [kg m-3] Standard density of dust
     {"aeronet_Mng", // [sng] Particle abbreviation
      "Aeronet Mongolia", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_DHE02.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
      dns_dst_std}, // (2500.0) [kg m-3] Standard density of dust
     {"aeronet_Ogd", // [sng] Particle abbreviation
      "Aeronet Ougadougou", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_DHE02.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
      dns_dst_std}, // (2500.0) [kg m-3] Standard density of dust
     {"aeronet_SdA", // [sng] Particle abbreviation
      "Aeronet Saudi Arabia", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_DHE02.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
      dns_dst_std}, // (2500.0) [kg m-3] Standard density of dust
     {"afghan_dust", // [sng] Particle abbreviation
      "Afghan dust", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_SAJ93.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
      dns_dst_std}, // (2500.0) [kg m-3] Standard density of dust
     {"air", // [sng] Particle abbreviation
      "Dry air", // [sng] Particle description
      "N2O2", // [sng] Molecular composition
      "Function ~/c++/idx_rfr.cc:idx_rfr_air_get()", // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_dry_air, // [kg mol-1] Mean molecular weight
-     spc_heat_dry_air, // [J kg-1 K-1] Specific heat capacity of dry air
+     (prc_cmp)mmw_dry_air, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_dry_air, // [J kg-1 K-1] Specific heat capacity of dry air
      1.0}, // [kg m-3] Bulk density
     {"biomass", // [sng] Particle abbreviation
      "Biomass", // [sng] Particle description
      "C", // [sng] Molecular composition)
      fio::data_file_path_get("idx_rfr_DKS91.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_C, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_C, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      1000.0}, // [kg m-3] Bulk density Biomass fxm: get BMB density
     {"calcite_pellet_LQB93", // [sng] Particle abbreviation
      "Calcite (calcium carbonate)", // [sng] Particle description
      "CaCO3", // [sng] Molecular composition
      "Function ~/c++/idx_rfr.cc:idx_rfr_LQB93_get()", // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_CaCO3, // [kg mol-1] Mean molecular weight
-     spc_heat_CaCO3_sld, // [J kg-1 K-1] Specific heat capacity of calcite
+     (prc_cmp)mmw_CaCO3, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_CaCO3_sld, // [J kg-1 K-1] Specific heat capacity of calcite
      dns_CaCO3}, // (2710.0) [kg m-3] Density of calcite
     {"calcite_oray_LQB93", // [sng] Particle abbreviation
      "Calcite (calcium carbonate)", // [sng] Particle description
      "CaCO3", // [sng] Molecular composition
      "Function ~/c++/idx_rfr.cc:idx_rfr_LQB93_get()", // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_CaCO3, // [kg mol-1] Mean molecular weight
-     spc_heat_CaCO3_sld, // [J kg-1 K-1] Specific heat capacity of calcite
+     (prc_cmp)mmw_CaCO3, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_CaCO3_sld, // [J kg-1 K-1] Specific heat capacity of calcite
      dns_CaCO3}, // (2710.0) [kg m-3] Density of calcite
     {"calcite_eray_LQB93", // [sng] Particle abbreviation
      "Calcite (calcium carbonate)", // [sng] Particle description
      "CaCO3", // [sng] Molecular composition
      "Function ~/c++/idx_rfr.cc:idx_rfr_LQB93_get()", // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_CaCO3, // [kg mol-1] Mean molecular weight
-     spc_heat_CaCO3_sld, // [J kg-1 K-1] Specific heat capacity of calcite
+     (prc_cmp)mmw_CaCO3, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_CaCO3_sld, // [J kg-1 K-1] Specific heat capacity of calcite
      dns_CaCO3}, // (2710.0) [kg m-3] Density of calcite
     {"gypsum_EX_LQB93", // [sng] Particle abbreviation
      "Gypsum (hydrous calcium sulfate)", // [sng] Particle description
      "CaSO4_2H2O", // [sng] Molecular composition
      "Function ~/c++/idx_rfr.cc:idx_rfr_LQB93_get()", // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_CaSO4_2H2O, // [kg mol-1] Mean molecular weight
-     spc_heat_CaSO4_sld, // [J kg-1 K-1] Specific heat capacity of gypsum
+     (prc_cmp)mmw_CaSO4_2H2O, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_CaSO4_sld, // [J kg-1 K-1] Specific heat capacity of gypsum
      dns_CaSO4_2H2O}, // (2300.0) [kg m-3] Density of gypsum
     {"gypsum_pellet_LQB93", // [sng] Particle abbreviation
      "Gypsum (hydrous calcium sulfate)", // [sng] Particle description
      "CaSO4_2H2O", // [sng] Molecular composition
      "Function ~/c++/idx_rfr.cc:idx_rfr_LQB93_get()", // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_CaSO4_2H2O, // [kg mol-1] Mean molecular weight
-     spc_heat_CaSO4_sld, // [J kg-1 K-1] Specific heat capacity of gypsum
+     (prc_cmp)mmw_CaSO4_2H2O, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_CaSO4_sld, // [J kg-1 K-1] Specific heat capacity of gypsum
      dns_CaSO4_2H2O}, // (2300.0) [kg m-3] Density of gypsum
     {"dust_like", // [sng] Particle abbreviation
      "Dust-like", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_DKS91.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
      dns_dst_DKS91}, // (1600.0) [kg m-3] Density of dust DKS91 p. 118
     {"Fe2O3_avg_hitran96", // [sng] Particle abbreviation
      "Hematite O/E-ray mean (Shettle/HITRAN96)", // [sng] Particle description
      "Fe2O3", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_shettle_Fe2O3_SiO2.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_Fe2O3, // (159.692e-03) [kg mol-1] Mean molecular weight
-     spc_heat_Fe2O3_sld, // (650627.0) [J kg-1 K-1] Specific heat capacity of hematite (iron oxide) CRC95 p. 5-15
+     (prc_cmp)mmw_Fe2O3, // (159.692e-03) [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_Fe2O3_sld, // (650627.0) [J kg-1 K-1] Specific heat capacity of hematite (iron oxide) CRC95 p. 5-15
      dns_Fe2O3}, // (5260.0) [kg m-3] Density of hematite crystals (http://webmineral.com/data/Hematite.shtml)
     {"Fe2O3_oray_hitran96", // [sng] Particle abbreviation
      "Hematite O-ray (Shettle/HITRAN96)", // [sng] Particle description
      "Fe2O3", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_shettle_Fe2O3_SiO2.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_Fe2O3, // (159.692e-03) [kg mol-1] Mean molecular weight
-     spc_heat_Fe2O3_sld, // (650627.0) [J kg-1 K-1] Specific heat capacity of hematite (iron oxide) CRC95 p. 5-15
+     (prc_cmp)mmw_Fe2O3, // (159.692e-03) [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_Fe2O3_sld, // (650627.0) [J kg-1 K-1] Specific heat capacity of hematite (iron oxide) CRC95 p. 5-15
      dns_Fe2O3}, // (5260.0) [kg m-3] Density of hematite crystals (http://webmineral.com/data/Hematite.shtml)
     {"Fe2O3_eray_hitran96", // [sng] Particle abbreviation
      "Hematite E-ray (Shettle/HITRAN96)", // [sng] Particle description
      "Fe2O3", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_shettle_Fe2O3_SiO2.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_Fe2O3, // (159.692e-03) [kg mol-1] Mean molecular weight
-     spc_heat_Fe2O3_sld, // (650627.0) [J kg-1 K-1] Specific heat capacity of hematite (iron oxide) CRC95 p. 5-15
+     (prc_cmp)mmw_Fe2O3, // (159.692e-03) [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_Fe2O3_sld, // (650627.0) [J kg-1 K-1] Specific heat capacity of hematite (iron oxide) CRC95 p. 5-15
      dns_Fe2O3}, // (5260.0) [kg m-3] Density of hematite crystals (http://webmineral.com/data/Hematite.shtml)
     {"Fe2O3_avg_roush", // [sng] Particle abbreviation
      "Hematite O/E-ray mean (Querry/Roush)", // [sng] Particle description
      "Fe2O3", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_Fe2O3.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_Fe2O3, // (159.692e-03) [kg mol-1] Mean molecular weight
-     spc_heat_Fe2O3_sld, // (650627.0) [J kg-1 K-1] Specific heat capacity of hematite (iron oxide) CRC95 p. 5-15
+     (prc_cmp)mmw_Fe2O3, // (159.692e-03) [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_Fe2O3_sld, // (650627.0) [J kg-1 K-1] Specific heat capacity of hematite (iron oxide) CRC95 p. 5-15
      dns_Fe2O3}, // (5260.0) [kg m-3] Density of hematite crystals (http://webmineral.com/data/Hematite.shtml)
     {"Fe2O3_oray_roush", // [sng] Particle abbreviation
      "Hematite O-ray (Querry/Roush)", // [sng] Particle description
      "Fe2O3", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_Fe2O3.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_Fe2O3, // (159.692e-03) [kg mol-1] Mean molecular weight
-     spc_heat_Fe2O3_sld, // (650627.0) [J kg-1 K-1] Specific heat capacity of hematite (iron oxide) CRC95 p. 5-15
+     (prc_cmp)mmw_Fe2O3, // (159.692e-03) [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_Fe2O3_sld, // (650627.0) [J kg-1 K-1] Specific heat capacity of hematite (iron oxide) CRC95 p. 5-15
      dns_Fe2O3}, // (5260.0) [kg m-3] Density of hematite crystals (http://webmineral.com/data/Hematite.shtml)
     {"Fe2O3_eray_roush", // [sng] Particle abbreviation
      "Hematite E-ray (Querry/Roush)", // [sng] Particle description
      "Fe2O3", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_Fe2O3.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_Fe2O3, // (159.692e-03) [kg mol-1] Mean molecular weight
-     spc_heat_Fe2O3_sld, // (650627.0) [J kg-1 K-1] Specific heat capacity of hematite (iron oxide) CRC95 p. 5-15
+     (prc_cmp)mmw_Fe2O3, // (159.692e-03) [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_Fe2O3_sld, // (650627.0) [J kg-1 K-1] Specific heat capacity of hematite (iron oxide) CRC95 p. 5-15
      dns_Fe2O3}, // (5260.0) [kg m-3] Density of hematite crystals (http://webmineral.com/data/Hematite.shtml)
     {"Fe2O3_doccd", // [sng] Particle abbreviation
      "Hematite (DOCCD)", // [sng] Particle description
      "Fe2O3", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_triaud_Fe2O3.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_Fe2O3, // (159.692e-03) [kg mol-1] Mean molecular weight
-     spc_heat_Fe2O3_sld, // (650627.0) [J kg-1 K-1] Specific heat capacity of hematite (iron oxide) CRC95 p. 5-15
+     (prc_cmp)mmw_Fe2O3, // (159.692e-03) [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_Fe2O3_sld, // (650627.0) [J kg-1 K-1] Specific heat capacity of hematite (iron oxide) CRC95 p. 5-15
      dns_Fe2O3}, // (5260.0) [kg m-3] Density of hematite crystals (http://webmineral.com/data/Hematite.shtml)
     {"h2o_War84", // [sng] Particle abbreviation
      "H2O ice (War84)", // [sng] Particle description
      "H2O", // [sng] Molecular composition
      "Function ~/idx_rfr_H2O:idx_rfr_H2O_ice_get_War84()", // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_H2O, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_ice, // [J kg-1 K-1] Specific heat capacity of ice water 
+     (prc_cmp)mmw_H2O, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_ice, // [J kg-1 K-1] Specific heat capacity of ice water 
      dns_H2O_ice_std}, // (917.0) [kg m-3] Density of ice crystals (NGW03 p. 6)
     {"h2o_ice", // [sng] Particle abbreviation
      "H2O ice", // [sng] Particle description
      "H2O", // [sng] Molecular composition
      "Function ~/idx_rfr_H2O:idx_rfr_H2O_ice_get_WaB08()", // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_H2O, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_ice, // [J kg-1 K-1] Specific heat capacity of ice water 
+     (prc_cmp)mmw_H2O, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_ice, // [J kg-1 K-1] Specific heat capacity of ice water 
      dns_H2O_ice_std}, // (917.0) [kg m-3] Density of ice crystals (NGW03 p. 6)
     {"h2o_lqd", // [sng] Particle abbreviation
      "H2O liquid", // [sng] Particle description
      "H2O", // [sng] Molecular composition
      "Function ~/idx_rfr_H2O/idx_rfr_H2O_lqd_get()", // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_H2O, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_H2O, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_H2O_lqd_std}, // (1000.0) [kg m-3] Density of liquid water
     {"h2so4_215K", // [sng] Particle abbreviation
      "75% H2SO4 at 215K (HSL88)", // [sng] Particle description
      "H2SO4-H2O", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_shettle.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_H2SO4, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_H2SO4, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_H2SO4_75pct_273K_std}, // [kg m-3] Density of 75% H2SO4 solution (by weight) at 273 K (Timmermans in ${HOME}/idx_rfr/hitran/timmerma.dat)
     {"h2so4_300K", // [sng] Particle abbreviation
      "75% H2SO4 at 300K (HSL88)", // [sng] Particle description
      "H2SO4-H2O", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_shettle.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_H2SO4, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_H2SO4, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_H2SO4_75pct_303K_std}, // [kg m-3] Density of 75% H2SO4 solution (by weight) at 303 K (Timmermans in ${HOME}/idx_rfr/hitran/timmerma.dat)
     {"illite", // [sng] Particle abbreviation
      "Illite (EgH79, Que87)", // [sng] Particle description
      "(K,H3O)(Al,Mg,Fe)2(Si,Al)4O10[(OH)2,(H2O)]", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_Ill_Kao_Mnt.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_illite, // (389.34e-03) [kg mol-1] Mean molecular weight of Illite http://webmineral.com/data/Illite.shtml
-     spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_illite, // (389.34e-03) [kg mol-1] Mean molecular weight of Illite http://webmineral.com/data/Illite.shtml
+     (prc_cmp)spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
      dns_illite}, // (2750.0) [kg m-3] Density of illite
     {"kaolinite", // [sng] Particle abbreviation
      "Kaolinite (EgH79, RPO91)", // [sng] Particle description
      "Al2Si2O5(OH)4", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_Ill_Kao_Mnt.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_kaolinite, // (258.16e-03) [kg mol-1] Mean molecular weight of Kaolinite http://webmineral.com/data/Kaolinite.shtml
-     spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_kaolinite, // (258.16e-03) [kg mol-1] Mean molecular weight of Kaolinite http://webmineral.com/data/Kaolinite.shtml
+     (prc_cmp)spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
      dns_kaolinite}, // (2600.0) [kg m-3] Density of kaolinite
     {"lac_ChC90", // [sng] Particle abbreviation
      "Soot from Chang and Charalampopoulos (1990)", // [sng] Particle description
      "C", // [sng] Molecular composition
      "Function ~/c++/idx_rfr.cc:idx_rfr_ChC90_get()", // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_C, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_C, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_lac_std}, // (1800.0) [kg m-3] Standard density of soot
     {"lac_DKS91", // [sng] Particle abbreviation
      "Soot", // [sng] Particle description
      "C", // [sng] Molecular composition
      "Function ~/c++/idx_rfr.cc:idx_rfr_DKS91_get()", // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_C, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_C, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_lac_DKS91}, // (2300.0) [kg m-3] Density of soot DKS91 p. 118
     {"lac_HKS98", // [sng] Particle abbreviation
      "Soot (HKS98)", // [sng] Particle description
      "C", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_HKS98.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_C, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_C, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_lac_HKS98}, // (1000.0) [kg m-3] Density of soot HKS98 p. 836
     {"lac_WaW80", // [sng] Particle abbreviation
      "Soot from Warren & Wiscombe (1980)", // [sng] Particle description
      "C", // [sng] Molecular composition
      "Function ~/c++/idx_rfr.cc:idx_rfr_WaW80_get()", // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_C, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_C, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_lac_WaW80}, // (2050.0) [kg m-3] Bulk density soot 
     {"lac_YZS00", // [sng] Particle abbreviation
      "Sooty sulfate (YZS00)", // [sng] Particle description
      "H2SO4C", // [sng] Molecular composition
      "Function ~/c++/idx_rfr.cc:idx_rfr_YZS00_get()", // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_C, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_C, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_lac_YZS00}, // (1860.0) [kg m-3] Bulk density Sooty sulfate of YZS00
     {"limestone_dsp_QOL78", // [sng] Particle abbreviation
      "Limestone (QOL78 DA)", // [sng] Particle description
      "CaCO3 (amorphous calcite = calcium carbonate)", // [sng] Molecular composition
      "Function ~/c++/idx_rfr.cc:idx_rfr_LQB93_get()", // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_CaCO3, // [kg mol-1] Mean molecular weight
-     spc_heat_CaCO3_sld, // [J kg-1 K-1] Specific heat capacity of calcite
+     (prc_cmp)mmw_CaCO3, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_CaCO3_sld, // [J kg-1 K-1] Specific heat capacity of calcite
      dns_CaCO3}, // (2710.0) [kg m-3] Density of calcite
     {"limestone_krk_QOL78", // [sng] Particle abbreviation
      "Limestone (QOL78 K-K)", // [sng] Particle description
      "CaCO3 (amorphous calcite = calcium carbonate)", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_limestone.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_CaCO3, // [kg mol-1] Mean molecular weight
-     spc_heat_CaCO3_sld, // [J kg-1 K-1] Specific heat capacity of calcite
+     (prc_cmp)mmw_CaCO3, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_CaCO3_sld, // [J kg-1 K-1] Specific heat capacity of calcite
      dns_CaCO3}, // (2710.0) [kg m-3] Density of calcite
     {"montmorillonite", // [sng] Particle abbreviation
      "Montmorillonite (EgH79, RPO91)", // [sng] Particle description
      "(Na,Ca)0,3(Al,Mg)2Si4O10(OH)2.n(H2O)", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_Ill_Kao_Mnt.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_montmorillonite, // (549.07e-03) [kg mol-1] Mean molecular weight of Montmorillonite http://webmineral.com/data/Montmorillonite.shtml
-     spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_montmorillonite, // (549.07e-03) [kg mol-1] Mean molecular weight of Montmorillonite http://webmineral.com/data/Montmorillonite.shtml
+     (prc_cmp)spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
      dns_montmorillonite}, // (2350.0) [kg m-3] Density of montmorillonite
     {"meteoric_dust", // [sng] Particle abbreviation
      "Meteoric dust (Shettle/HITRAN96)", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_shettle.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
      dns_dst_mtr_DKS91}, // [kg m-3] Bulk density Meteoric dust DKS91 p. 118
     {"mineral_dust", // [sng] Particle abbreviation
      "Mineral dust (DKS91)", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_DKS91.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
      dns_dst_std}, // (2500.0) [kg m-3] Standard density of dust
     {"NaCl", // [sng] Particle abbreviation
      "Sodium chloride", // [sng] Particle description
      "NaCl", // [sng] Molecular composition
      "", // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_NaCl, // [kg mol-1] Mean molecular weight % fxm 
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water
+     (prc_cmp)mmw_NaCl, // [kg mol-1] Mean molecular weight % fxm 
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water
      dns_NaCl_std}, // [kg m-3] Bulk density % http://www.crystran.co.uk/nacldata.htm 
     {"NaCl_Fla04", // [sng] Particle abbreviation
      "Sodium chloride", // [sng] Particle description
      "NaCl", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_Fla04.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_NaCl, // [kg mol-1] Mean molecular weight % fxm 
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water
+     (prc_cmp)mmw_NaCl, // [kg mol-1] Mean molecular weight % fxm 
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water
      dns_NaCl_std}, // [kg m-3] Bulk density % http://www.crystran.co.uk/nacldata.htm 
     {"MgSO4", // [sng] Particle abbreviation
      "Magnesium sulfate", // [sng] Particle description
      "MgSO4", // [sng] Molecular composition
      "", // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_MgSO4, // [kg mol-1] Mean molecular weight % fxm 
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water
+     (prc_cmp)mmw_MgSO4, // [kg mol-1] Mean molecular weight % fxm 
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water
      dns_MgSO4_std}, // [kg m-3] Bulk density from Yu's thesis
     {"oceanic", // [sng] Particle abbreviation
      "Oceanic (DKS91)", // [sng] Particle description
      "NaCl MgSO4", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_DKS91.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_NaCl, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_NaCl, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      1000.0}, // [kg m-3] Bulk density % fxm
     {"saharan_dust", // [sng] Particle abbreviation
      "Saharan dust (Vol73)", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_Vol73.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
      dns_dst_Vol73}, // (2650.0) [kg m-3] Density of dust Vol73
     {"sea_salt_GADS", // [sng] Particle abbreviation
      "Sea salt", // [sng] Particle description
      "NaCl", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_GADS.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_NaCl, // [kg mol-1] Mean molecular weight % fxm 
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_NaCl, // [kg mol-1] Mean molecular weight % fxm 
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_NaCl_std}, // [kg m-3] Bulk density % http://www.crystran.co.uk/nacldata.htm 
     {"sea_salt_Fla04", // [sng] Particle abbreviation
      "Sea salt", // [sng] Particle description
      "NaCl", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_Fla04.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_NaCl, // [kg mol-1] Mean molecular weight % fxm 
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_NaCl, // [kg mol-1] Mean molecular weight % fxm 
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_NaCl_std}, // [kg m-3] Bulk density % http://www.crystran.co.uk/nacldata.htm 
     {"SiO2_avg_hitran96", // [sng] Particle abbreviation
      "Quartz O/E-ray mean (Shettle/HITRAN96)", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_shettle_Fe2O3_SiO2.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // (60.0843e-03) [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // (738962.0) [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // (60.0843e-03) [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // (738962.0) [J kg-1 K-1] Specific heat capacity of quartz
      dns_SiO2}, // (2620.0) [kg m-3] Density of SiO2 (http://webmineral.com/data/Quartz.shtml)
     {"SiO2_oray_hitran96", // [sng] Particle abbreviation
      "Quartz O-ray (Shettle/HITRAN96)", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_shettle_Fe2O3_SiO2.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // (60.0843e-03) [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // (738962.0) [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // (60.0843e-03) [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // (738962.0) [J kg-1 K-1] Specific heat capacity of quartz
      dns_SiO2}, // (2620.0) [kg m-3] Density of SiO2 (http://webmineral.com/data/Quartz.shtml)
     {"SiO2_eray_hitran96", // [sng] Particle abbreviation
      "Quartz E-ray (Shettle/HITRAN96)", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_shettle_Fe2O3_SiO2.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // (60.0843e-03) [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // (738962.0) [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // (60.0843e-03) [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // (738962.0) [J kg-1 K-1] Specific heat capacity of quartz
      dns_SiO2}, // (2620.0) [kg m-3] Density of SiO2 (http://webmineral.com/data/Quartz.shtml)
     {"SiO2_avg_roush", // [sng] Particle abbreviation
      "Quartz O/E-ray mean (Querry/Roush)", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_SiO2.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // (60.0843e-03) [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // (738962.0) [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // (60.0843e-03) [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // (738962.0) [J kg-1 K-1] Specific heat capacity of quartz
      dns_SiO2}, // (2620.0) [kg m-3] Density of SiO2 (http://webmineral.com/data/Quartz.shtml)
     {"SiO2_oray_roush", // [sng] Particle abbreviation
      "Quartz O-ray (Querry/Roush)", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_SiO2.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // (60.0843e-03) [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // (738962.0) [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // (60.0843e-03) [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // (738962.0) [J kg-1 K-1] Specific heat capacity of quartz
      dns_SiO2}, // (2620.0) [kg m-3] Density of SiO2 (http://webmineral.com/data/Quartz.shtml)
     {"SiO2_eray_roush", // [sng] Particle abbreviation
      "Quartz E-ray (Querry/Roush)", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_SiO2.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // (60.0843e-03) [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // (738962.0) [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // (60.0843e-03) [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // (738962.0) [J kg-1 K-1] Specific heat capacity of quartz
      dns_SiO2}, // (2620.0) [kg m-3] Density of SiO2 (http://webmineral.com/data/Quartz.shtml)
     {"sulfate", // [sng] Particle abbreviation
      "Sulfate", // [sng] Particle description
      "H2SO4", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_DKS91.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_H2SO4, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_H2SO4, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_H2SO4_std}, // [kg m-3] Bulk density Sulfate (same density as H2SO4 for now)
     {"toms_dust_STD03", // [sng] Particle abbreviation
      "TOMS dust retrievals in Tor02/STD03/Tor03", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_STD03.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
      dns_dst_std}, // (2500.0) [kg m-3] Standard density of dust
     {"volcanic_dust", // [sng] Particle abbreviation
      "Volcanic dust", // [sng] Particle description
      "SiO2", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_shettle.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_SiO2, // [kg mol-1] Mean molecular weight
-     spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
+     (prc_cmp)mmw_SiO2, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_SiO2_sld, // [J kg-1 K-1] Specific heat capacity of quartz
      2760.0}, // [kg m-3] Bulk density Volcanic dust DKS91 p. 118 (Volz 1973)
     {"wsoc00_HKS98", // [sng] Particle abbreviation
      "Water soluble organic/inorganic mixture at RH=0.00 (HKS98)", // [sng] Particle description
      "C", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_HKS98.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_NH4NH4SO4, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_NH4NH4SO4, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_wsoc_HKS98}, // (1800.0) [kg m-3] Density of water soluble organic/inorganic mixture HKS98 p. 836
     {"wsoc50_HKS98", // [sng] Particle abbreviation
      "Water soluble organic/inorganic mixture at RH=0.50 (HKS98)", // [sng] Particle description
      "C", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_HKS98.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_NH4NH4SO4, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_NH4NH4SO4, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_wsoc_HKS98}, // (1800.0) [kg m-3] Density of water soluble organic/inorganic mixture HKS98 p. 836
     {"wsoc70_HKS98", // [sng] Particle abbreviation
      "Water soluble organic/inorganic mixture at RH=0.70 (HKS98)", // [sng] Particle description
      "C", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_HKS98.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_NH4NH4SO4, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_NH4NH4SO4, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_wsoc_HKS98}, // (1800.0) [kg m-3] Density of water soluble organic/inorganic mixture HKS98 p. 836
     {"wsoc80_HKS98", // [sng] Particle abbreviation
      "Water soluble organic/inorganic mixture at RH=0.80 (HKS98)", // [sng] Particle description
      "C", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_HKS98.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_NH4NH4SO4, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_NH4NH4SO4, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_wsoc_HKS98}, // (1800.0) [kg m-3] Density of water soluble organic/inorganic mixture HKS98 p. 836
     {"wsoc90_HKS98", // [sng] Particle abbreviation
      "Water soluble organic/inorganic mixture at RH=0.90 (HKS98)", // [sng] Particle description
      "C", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_HKS98.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_NH4NH4SO4, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_NH4NH4SO4, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_wsoc_HKS98}, // (1800.0) [kg m-3] Density of water soluble organic/inorganic mixture HKS98 p. 836
     {"wsoc95_HKS98", // [sng] Particle abbreviation
      "Water soluble organic/inorganic mixture at RH=0.95 (HKS98)", // [sng] Particle description
      "C", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_HKS98.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_NH4NH4SO4, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_NH4NH4SO4, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_wsoc_HKS98}, // (1800.0) [kg m-3] Density of water soluble organic/inorganic mixture HKS98 p. 836
     {"wsoc98_HKS98", // [sng] Particle abbreviation
      "Water soluble organic/inorganic mixture at RH=0.98 (HKS98)", // [sng] Particle description
      "C", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_HKS98.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_NH4NH4SO4, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_NH4NH4SO4, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_wsoc_HKS98}, // (1800.0) [kg m-3] Density of water soluble organic/inorganic mixture HKS98 p. 836
     {"wsoc99_HKS98", // [sng] Particle abbreviation
      "Water soluble organic/inorganic mixture at RH=0.99 (HKS98)", // [sng] Particle description
      "C", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_HKS98.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_NH4NH4SO4, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_NH4NH4SO4, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_wsoc_HKS98}, // (1800.0) [kg m-3] Density of water soluble organic/inorganic mixture HKS98 p. 836
     {"wsoc00_HKS98", // [sng] Particle abbreviation
      "Water soluble organic/inorganic mixture at RH=0.0 (HKS98)", // [sng] Particle description
      "C", // [sng] Molecular composition
      fio::data_file_path_get("idx_rfr_HKS98.nc"), // [sng] File containing refractive indices
      (idx_rfr_fnc_ptr_typ)CEWI_NULL, // [fnc] Function to compute refractive indices
-     mmw_NH4NH4SO4, // [kg mol-1] Mean molecular weight
-     spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
+     (prc_cmp)mmw_NH4NH4SO4, // [kg mol-1] Mean molecular weight
+     (prc_cmp)spc_heat_H2O_lqd, // [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15
      dns_wsoc_HKS98} // (1800.0) [kg m-3] Density of water soluble organic/inorganic mixture HKS98 p. 836
   }; // end mnr_sct mnr[]
   long idx; // [idx] Counting index

@@ -87,8 +87,8 @@ const sng2chm_sct_map Chm::chm_map_mk(){ // Create chemical map
     // {const std::string abb,const std::string dsc,const double mmw,const prc_cmp cff_hnr_H2O_298K,const prc_cmp rxn_ntp_H2O_298K}
     {"HNO3", // [sng] Standard abbreviation
      "Nitric acid", // [sng] Description
-     mmw_HNO3, // [kg mol-1] Mean molecular weight
-     cff_hnr_HNO3_H2O_298K, // [mol ltr-1 atm-1] Henry's Law coefficient in liquid water at 298 K
+     (prc_cmp)mmw_HNO3, // [kg mol-1] Mean molecular weight
+     (prc_cmp)cff_hnr_HNO3_H2O_298K, // [mol ltr-1 atm-1] Henry's Law coefficient in liquid water at 298 K
      72335.367, // [J mol-1] Reaction enthalpy of HNO3 at 298K
      0.0, // [frc] Normalized reactivity  of HNO3 for dry deposition SeP97 p. 973 (19.25)
      1.0e14 // [mol ltr-1 atm-1] Effective Henry's Law coefficient  of HNO3 in liquid water at 298 K at pH 6.5 SeP97 p. 975 Tbl. 19.2

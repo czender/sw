@@ -1,5 +1,9 @@
 2024-09-10  Charlie Zender  <zender@uci.edu>
 
+	* Implement --slr_spc=FDE24. Diagnostic total irradiance is troubling, needs investigation.
+
+	* Replace min() with min_cpv() to make clang18 happy
+
 	* Use "" not <> for mie.hh and mie_cls.hh headers to make clang18 happy
 
 2021-06-18  Charlie Zender  <zender@uci.edu>

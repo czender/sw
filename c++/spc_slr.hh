@@ -108,7 +108,7 @@ public:
   flx_frc_get // [fnc] Fraction of solar spectrum in given spectral region
   (const prc_cmp &wvl_min, // I [m] Minimum wavelength
    const prc_cmp &wvl_max)const; // I [m] Maximum wavelength
-  // end flx_frc_get() prototype
+  // !flx_frc_get() prototype
 
   int // O [enm] Return success code
   flx_frc_get // [fnc] Fraction of solar spectrum in given spectral region
@@ -116,7 +116,7 @@ public:
    const prc_cmp *wvl_max, // I [m] Maximum wavelength
    const long &wvl_nbr, // I [nbr] Number of wavelength bands
    prc_cmp *flx_slr_frc)const; // O [frc] Fraction of solar flux in band
-  // end flx_frc_get() prototype
+  // !flx_frc_get() prototype
 
 private:
 
@@ -164,7 +164,7 @@ private:
    const long wvl_nbr_out, // I [nbr] Number of wavelength bands
    prc_cmp *flx_frc_out, // O [frc] Fraction of solar flux in band
    const bool wrn_ntp_flg=false)const; // I [flg] Print WARNINGs from ntp_vec()
-  // end ntp_slr_flx_mnt() prototype
+  // !ntp_slr_flx_mnt() prototype
 
   int // O [enm] Return success code
   ntp_slr_flx_nmn // [fnc] Interpolate raw solar spectrum to non-monotonic grid
@@ -172,7 +172,7 @@ private:
    const prc_cmp *wvl_max_out, // I [m] Maximum wavelength in band
    const long wvl_nbr_out, // I [nbr] Number of wavelength bands
    prc_cmp *flx_frc_out)const; // O [frc] Fraction of solar flux in band
-  // end ntp_slr_flx_nmn() prototype
+  // !ntp_slr_flx_nmn() prototype
 
   int // O [enm] Return success code
   ntp_slr_flx_nmn_CAM_SW // [fnc] Interpolate raw solar spectrum to CAM_SW grid
@@ -180,7 +180,7 @@ private:
    const prc_cmp *wvl_max_out, // I [m] Maximum wavelength in band
    const long wvl_nbr_out, // I [nbr] Number of wavelength bands
    prc_cmp *flx_frc_out)const; // O [frc] Fraction of solar flux in band
-  // end ntp_slr_flx_nmn_CAM_SW() prototype
+  // !ntp_slr_flx_nmn_CAM_SW() prototype
 
   int // O [enm] Return success code
   spc_slr_raw_fl_get // [fnc] Load raw solar spectrum data from file
@@ -190,11 +190,11 @@ private:
    long &wvl_nbr, // O [nbr] Number of wavelength bands
    prc_cmp *&flx_frc_blr, // O [frc] Fraction of solar flux at shorter wavelengths
    prc_cmp *&flx_slr_frc); // O [frc] Fraction of solar flux in band
-  // end spc_slr_raw_fl_get() prototype
+  // !spc_slr_raw_fl_get() prototype
 
   void prn()const; // [fnc] Print object contents
 
-}; // end class spc_slr_cls
+}; // !class spc_slr_cls
 
 // Prototype global functions with C++ linkages
 
@@ -202,7 +202,7 @@ prc_cmp // O [frc] Fraction of solar flux in band
 flx_slr_frc_lsr // [fnc] Solar flux of laser
 (const prc_cmp &wvl_min, // I [m] Minimum wavelength in band
  const prc_cmp &wvl_max); // I [m] Maximum wavelength in band
-// end flx_slr_frc_lsr() prototype
+// !flx_slr_frc_lsr() prototype
 
 int // O [enm] Return success code
 flx_slr_frc_lsr // [fnc] Solar flux of laser
@@ -210,7 +210,7 @@ flx_slr_frc_lsr // [fnc] Solar flux of laser
  const prc_cmp *wvl_max, // I [m] Maximum wavelength in band
  const long &wvl_nbr, // I [nbr] Number of wavelength bands
  prc_cmp *flx_slr_frc); // O [frc] Fraction of solar flux in band
-// end flx_slr_frc_lsr() prototype
+// !flx_slr_frc_lsr() prototype
 
 // Define inline'd functions in header so source is visible to calling files
 

@@ -6,7 +6,7 @@
    License: GNU General Public License (GPL) Version 3
    See http://www.gnu.org/copyleft/gpl.html for full license text */
 
-#include <cls.hh> // Class-specific definitions
+#include "cls.hh" // Class-specific definitions
 ////////////////////////////////////////////////////////////////////////
 
 // Base class
