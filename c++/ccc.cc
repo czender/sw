@@ -22,7 +22,7 @@
    cd ${HOME}/nco/src/nco_c++;make -f Makefile.old lib_cln cln;make -f Makefile.old OPTS=D lib;cd -
    // With netCDF4
    spectral.ess.uci.edu (as of 20240808):
-   cd ~/sw/ccc;make CPPFLAGS="-DLINUX -I ${HOME}/include -I/opt/netcdf/include -I/opt/homebrew/include" LDFLAGS="-L/opt/netcdf/lib -L/opt/homebrew/lib -L${HOME}/lib -lcsm_c++ -lcsz_c++ -lnco_c++ -lnetcdf -lomp";cd - # Use -std=c++17 library
+   cd ~/sw/ccc;make CPPFLAGS="-DPRC_DBL -DLINUX -I ${HOME}/include -I/opt/netcdf/include -I/opt/homebrew/include" LDFLAGS="-L/opt/netcdf/lib -L/opt/homebrew/lib -L${HOME}/lib -lcsz_c++ -lcsm_c++ -lnco_c++ -lnetcdf -lomp";cd - # Use -std=c++17 library
    cd ${HOME}/sw/c++;make -W ccc.cc OPTS=D OMP=N NETCDF4=Y NETCDF_INC=/opt/netcdf/include NETCDF_LIB=/opt/netcdf/lib ccc;cd -
    cd ${HOME}/sw/c++;make -W ccc.cc OPTS=D OMP=N NETCDF4=Y ccc;cd -
    cd ${HOME}/nco/src/nco_c++;make -f Makefile.old OMP=Y NETCDF4=Y lib_cln cln;make -f Makefile.old OMP=Y OPTS=D NETCDF4=Y lib;cd -
