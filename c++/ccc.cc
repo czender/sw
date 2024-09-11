@@ -1551,13 +1551,13 @@ int main(int argc,char **argv)
     std::cout << prg_nm_get() << ": INFO std::fprintf()'ing string with overflow..." << std::endl;
     (void)std::fprintf(stdout,"%s\n",chr_ptr);
     std::cout << prg_nm_get() << ": INFO std::free()'ing allocated memory..." << std::endl;
-    (void)std::free(chr_ptr); // [sng] Pointer to buffer
+    std::free(chr_ptr); // [sng] Pointer to buffer
     std::cout << prg_nm_get() << ": INFO std::strcpy()'ing to std::free()'d memory..." << std::endl;
     (void)std::strcpy(chr_ptr,"This string written to already std::free()'d memory");
     std::cout << prg_nm_get() << ": INFO std::fprintf()'ing string written to already std::free()'d memory..." << std::endl;
     (void)std::fprintf(stdout,"%s\n",chr_ptr);
     std::cout << prg_nm_get() << ": INFO std::free()'ing already std::free()'d memory..." << std::endl;
-    (void)std::free(chr_ptr); // [sng] Pointer to buffer
+    std::free(chr_ptr); // [sng] Pointer to buffer
     std::cout << prg_nm_get() << ": INFO std::realloc()'ing already std::free()'d memory..." << std::endl;
     chr_ptr=(char *)std::realloc(chr_ptr,lng_foo); // [sng] Pointer to buffer
     std::cout << prg_nm_get() << ": INFO std::strcpy()'ing to erroneous memory..." << std::endl;
