@@ -17,7 +17,7 @@
 // Editing, Compilation:
 // etags ~/sw/aer/*.F ~/sw/aer/*.h ~/sw/c++/*.cc ~/sw/c++/*.hh ~/sw/mie/*.cc ~/sw/mie/*.hh ~/sw/slr_spc/*.cc ~/sw/slr_spc/*.hh
 /* spectral.ess.uci.edu (as of 20240910):
-   cd ~/sw/mie;make CPPFLAGS="-DLINUX -I ${HOME}/include -I/opt/netcdf/include -I/opt/homebrew/include" LDFLAGS="-L/opt/netcdf/lib -L/opt/homebrew/lib -L${HOME}/lib -lcsz_c++ -lnco_c++ -lnetcdf";cd -
+   cd ~/sw/mie;make CPPFLAGS="-DLINUX -I ${HOME}/include -I/opt/netcdf/include -I/opt/homebrew/include" LDFLAGS="-L/opt/netcdf/lib -L/opt/homebrew/lib -L${HOME}/lib -lcsm_c++ -lcsz_c++ -lnco_c++ -lnetcdf -lomp";cd -
    cd ~/sw/mie;make OPTS=D VRS_SNG=3.4.2 mie;cd -
    cd ~/sw/mie;make OPTS=D NETCDF4=Y mie;cd -
    cd ~/sw/c++;make OMP=N OPTS=D NETCDF4=Y UDUNITS2=Y;cd ~/sw/mie;make OMP=N OPTS=D NETCDF4=Y UDUNITS2=Y
@@ -3661,7 +3661,7 @@ int main(int argc,char **argv)
 	     ngl_dlt, // I [rdn] Width of angle bin
 	     phz_fnc_crr, // O [sr-1] Phase function at current size, band
 	     plz_crr); // O [frc] Degree of linear polarization at current size, band
-	} // end if mie_flg	
+	} // !mie_flg	
 
 	/* Test integration over size distribution  */
 	if(tst_sng == "psd_ntg_dgn"){

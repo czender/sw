@@ -21,7 +21,7 @@
 #include <cmath> // sin cos cos sin 3.14159 
 
 // Personal headers
-#include <ccc.hh> // Program-specific definitions
+#include "ccc.hh" // Program-specific definitions
 #include <libcsz_c++.hh> // Personal C++ library
 
 // Namespaces

@@ -43,13 +43,13 @@ operator<< // [fnc] Stream insertion operator
     dyn_sz+=sizeof(rt_obj.rfl_flx)+sizeof(rt_obj.trn_flx)+sizeof(rt_obj.abs_flx)+sizeof(rt_obj.tau_ext)+sizeof(rt_obj.ss_alb)+sizeof(rt_obj.asm_prm); // [sz] Total size of dynamic buffers owned by object
   }else{
     srm_out << "No layer optical properties in dynamic memory" << std::endl;
-  } // endif
+  } // !rt_obj.flg_rta_in_dyn_mmr
   srm_out << "sizeof(rt_obj) = " << sizeof(rt_obj) << " B" << std::endl;
   srm_out << "Size of dynamic arrays = " << dyn_sz << " B" << std::endl;
   srm_out << "Total memory owned by object = " << sizeof(rt_obj)+dyn_sz << " B" << std::endl;
     
   return srm_out; // [srm] Reference to output stream for cascading
-} // end operator<<()
+} // !operator<<()
 
 // Friendly functions end
 // Static members begin
@@ -82,7 +82,7 @@ rt_cls::tst(long obj_nbr){ // [fnc] Self-test of rt_cls class
     plrmu_avg_tmp=tst_obj->plrmu_avg_get(); // [frc] Mean zenith angle
     std::cout << "idx = " << idx << ", nst_nbr = " << nst_nbr << ", plrmu_avg = " << plrmu_avg_tmp << std::endl;
     delete tst_obj; // [sct] Test object
-  } // end loop over obj
+  } // !idx
 
   // Test all radiative transfer methods
   tst_obj=new rt_cls; // [sct] Test object
@@ -92,7 +92,7 @@ rt_cls::tst(long obj_nbr){ // [fnc] Self-test of rt_cls class
   delete tst_obj; // [sct] Test object
 
   return rcd; // [enm] Return success code
-} // end rt_cls::tst()
+} // !rt_cls::tst()
 
 int rt_cls::nst_nbr_get(){return nst_nbr;} // [nbr] Number of instantiated class members
 sng2sng_map rt_cls::opt2abb_map=rt_cls::opt2abb_map_mk(); // [map] Option to abbreviation map
@@ -104,7 +104,7 @@ sng2sng_map rt_cls::opt2abb_map_mk(){ // [fnc] Create option to abbreviation map
   map_tmp.insert(sng2sng_map::value_type("two_srm_asm_sct","two_srm_asm_sct"));
 
   return map_tmp; // [map] Option to abbreviation map
-} // end rt_cls::opt2abb_map_mk()
+} // !rt_cls::opt2abb_map_mk()
 
 std::string // O [sng] Radiative transfer method abbreviation
 rt_cls::opt2abb // [fnc] Option to abbreviation mapper
@@ -114,7 +114,7 @@ rt_cls::opt2abb // [fnc] Option to abbreviation mapper
   itr=opt2abb_map.find(opt_sng);
   if(itr == opt2abb_map.end()) err_prn("rt_cls::opt2abb",opt_sng+" is unknown");
   return itr->second; // [sng] Radiative transfer method abbreviation
-} // end rt_cls::opt2abb()
+} // !rt_cls::opt2abb()
 
 const sng2rt_sct_map rt_cls::rt_map=rt_cls::rt_map_mk(); // [map] Radiative transfer method map
 const sng2rt_sct_map rt_cls::rt_map_mk(){ // [fnc] Create radiative transfer method map
@@ -125,7 +125,7 @@ const sng2rt_sct_map rt_cls::rt_map_mk(){ // [fnc] Create radiative transfer met
     {"two_srm_asm_sct", // [sng] Radiative transfer method abbreviation
      "Two stream anisotropically scattering", // [sng] Radiative transfer method description
      two_srm_asm_sct} // [fnc] Function to compute layer optical properties
-  }; // end rt_sct rt[]
+  }; // !rt_sct rt[]
   long idx; // [idx] Counting index
   int rt_nbr=sizeof(rt)/sizeof(rt_sct); // [nbr] Number of radiative transfer methods
   sng2rt_sct_map rt_map_tmp; // [sct] Map with key=abbreviation, value=radiative transfer method structure
@@ -133,10 +133,10 @@ const sng2rt_sct_map rt_cls::rt_map_mk(){ // [fnc] Create radiative transfer met
     /* fxm: Define variables before inserting into map, because map values 
        seem to be unwritable (read-only) once they are in map. */
     rt_map_tmp.insert(sng2rt_sct_map::value_type(rt[idx].abb,rt[idx])); // [sct] Map with key=abbreviation, value=radiative transfer method structure
-  } // end loop over itr
+  } // !idx
   // Return a value to initialize a static class member
   return rt_map_tmp;
-} // end rt_cls::rt_map_mk()
+} // !rt_cls::rt_map_mk()
 
 sng2var_mtd_sct_map rt_cls::var_mtd_map; // [map] Variable metadata map
 sng2var_mtd_sct_map rt_cls::var_mtd_map_mk // [fnc] Create variable metadata map
@@ -159,36 +159,36 @@ sng2var_mtd_sct_map rt_cls::var_mtd_map_mk // [fnc] Create variable metadata map
     {0,"abs_flx",NC_FLOAT,1,dmn_wvl,"long_name","Flux absorptance","units","fraction"},
     {0,"rfl_flx",NC_FLOAT,1,dmn_wvl,"long_name","Flux reflectance","units","fraction"},
     {0,"trn_flx",NC_FLOAT,1,dmn_wvl,"long_name","Flux transmittance","units","fraction"}
-  }; // end var_mtd_sct var_mtd[]
+  }; // !var_mtd_sct var_mtd[]
   const int var_mtd_nbr(sizeof(var_mtd)/sizeof(var_mtd_sct)); // [nbr] Number of variables in array
   long idx; // [idx] Counting index
   sng2var_mtd_sct_map var_mtd_map_tmp; // [sct] Map with key=abbreviation, value=variable metadata structure
   for(idx=0;idx<var_mtd_nbr;idx++){
     var_mtd_map_tmp.insert(sng2var_mtd_sct_map::value_type(var_mtd[idx].nm,var_mtd[idx])); // [sct] Map with key=abbreviation, value=variable metadata structure
-  } // end loop over itr
+  } // !idx
   // Return value to initialize static class member
   return var_mtd_map_tmp;
-} // end rt_cls::var_mtd_map_mk()
+} // !rt_cls::var_mtd_map_mk()
 
 var_mtd_sct // [sct] Variable metadata structure
 rt_cls::var2mtd // [fnc] Variable name to metadata mapper
 (const std::string &var_nm){ // [sng] Variable name
   // Purpose: Return metadata structure for requested variable
   return var_mtd_map.find(var_nm)->second; // [sct] Variable metadata structure
-} // end rt_cls::var2mtd()
+} // !rt_cls::var2mtd()
 
 std::string // [sng] Description string
 rt_cls::abb2dsc(const std::string &abb_sng){ // [fnc] Abbreviation to description mapper
   // Purpose: Return description of radiative transfer method
   return rt_map.find(abb_sng)->second.dsc; // [sng] Description string
-} // end rt_cls::abb2dsc()
+} // !rt_cls::abb2dsc()
 
 rt_sln_fnc_ptr_typ // [fnc] Pointer to function returning layer optical properties
 rt_cls::abb2fnc // [fnc] Abbreviation to function mapper
 (const std::string &abb_sng){ // [sng] Radiative transfer method abbreviation
   // Purpose: Return pointer to function which computes layer optical properties
   return rt_map.find(abb_sng)->second.rt_sln_fnc_ptr; // [fnc] Pointer to function returning layer optical properties
-} // end rt_cls::abb2fnc()
+} // !rt_cls::abb2fnc()
 
 // Static member functions end
 // Public member functions begin
@@ -245,12 +245,12 @@ rt_cls::rt_cls // [fnc] Constructor
   rcd+=recompute(); // [fnc] Recompute properties of object
 
   nst_nbr++; // [nbr] Number of instantiated class members
-} // end rt_cls constructor
+} // !rt_cls constructor
 
 rt_cls::~rt_cls(){ // [fnc] Destructor
   rcd+=deallocate(); // [fnc] Free dynamic memory for object
   nst_nbr--; // [nbr] Number of instantiated class members
-} // end rt_cls destructor
+} // !rt_cls destructor
 
 void rt_cls::prn()const{std::cout << this;} // [fnc] Print object contents
 
@@ -273,7 +273,7 @@ rt_cls::rt_sln_fnc_ptr_set(const rt_sln_fnc_ptr_typ &rt_sln_fnc_ptr_arg){ // [fn
   rt_sln_fnc_ptr=rt_sln_fnc_ptr_arg; // [fnc] Function to compute layer optical properties
   if(rcm_flg) rcd+=recompute(); // [fnc] Recompute properties of object
   return rcd; // [enm] Return success code
-} // end rt_cls::rt_sln_fnc_ptr_set()
+} // !rt_cls::rt_sln_fnc_ptr_set()
 
 int // [enm] Return success code
 rt_cls::typ_set(const std::string &rt_arg){ // [fnc] Set radiative transfer method
@@ -281,7 +281,7 @@ rt_cls::typ_set(const std::string &rt_arg){ // [fnc] Set radiative transfer meth
   abb= (rt_arg == "") ? rt_typ_dfl : rt_arg; // [sng] Radiative transfer method abbreviation
   if(rcm_flg) rcd+=recompute(); // [fnc] Recompute properties of object
   return rcd; // [enm] Return success code
-} // end rt_cls::typ_set()
+} // !rt_cls::typ_set()
 
 int // [enm] Return success code
 rt_cls::wvl_nbr_set(const long &wvl_nbr_arg) // [nbr] Number of wavelength bands
@@ -298,7 +298,7 @@ rt_cls::wvl_nbr_set(const long &wvl_nbr_arg) // [nbr] Number of wavelength bands
   rcd+=allocate(); // [fnc] Allocate dynamic memory for object
 
   return rcd; // [enm] Return success code
-} // end rt_cls::wvl_nbr_set()
+} // !rt_cls::wvl_nbr_set()
 
 int // [enm] Return success code
 rt_cls::nc_out_set // [fl] Set netCDF output file
@@ -310,7 +310,7 @@ rt_cls::nc_out_set // [fl] Set netCDF output file
   //  nc_out=nc_out_arg; // [fl] netCDF file ID for output
 
   return rcd; // [enm] Return success code
-} // end rt_cls::nc_out_set()
+} // !rt_cls::nc_out_set()
   
 int // [enm] Return success code
 rt_cls::nc_out_set // [fl] Set netCDF output file
@@ -323,7 +323,7 @@ rt_cls::nc_out_set // [fl] Set netCDF output file
   //  rcd=nco_create(fl_out,NC_CLOBBER,nc_out); 
 
   return rcd; // [enm] Return success code
-} // end rt_cls::nc_out_set()
+} // !rt_cls::nc_out_set()
   
 int // [enm] Return success code
 rt_cls::plrmu_avg_set(const prc_cmp &plrmu_avg_arg) // [frc] Mean zenith angle
@@ -335,7 +335,7 @@ rt_cls::plrmu_avg_set(const prc_cmp &plrmu_avg_arg) // [frc] Mean zenith angle
   plrmu_avg=plrmu_avg_arg; // [frc] Mean zenith angle
   if(rcm_flg) rcd+=recompute(); // [fnc] Recompute properties of object
   return rcd; // [enm] Return success code
-} // end rt_cls::plrmu_avg_set()
+} // !rt_cls::plrmu_avg_set()
 
 int // O [enm] Return success code
 rt_cls::twg_set // [fnc] Set slab single scattering properties
@@ -364,7 +364,7 @@ rt_cls::twg_set // [fnc] Set slab single scattering properties
 
   if(rcm_flg) rcd+=recompute(); // [fnc] Recompute properties of object
   return rcd; // [enm] Return success code
-} // end rt_cls::twg_set()
+} // !rt_cls::twg_set()
 
 int // O [enm] Return success code
 rt_cls::var_put // [fnc] Write variable to output file
@@ -399,7 +399,7 @@ rt_cls::var_put // [fnc] Write variable to output file
 
   if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");
   return rcd; // [enm] Return success code
-} // end rt_cls::var_put()
+} // !rt_cls::var_put()
 
 // Public member functions end
 // Private member functions begin
@@ -423,7 +423,7 @@ rt_cls::allocate(){ // [fnc] Allocate dynamic memory for object
   } // endif
 
   return rcd; // [enm] Return success code
-} // end rt_cls_cls::allocate()
+} // !rt_cls_cls::allocate()
 
 int // [enm] Return success code
 rt_cls::deallocate(){ // [fnc] Free dynamic memory for object
@@ -446,7 +446,7 @@ rt_cls::deallocate(){ // [fnc] Free dynamic memory for object
   } // endif
 
   return rcd; // [enm] Return success code
-} // end rt_cls::deallocate()
+} // !rt_cls::deallocate()
 
 int // [enm] Return success code
 rt_cls::recompute(){ // [fnc] Recompute properties of object
@@ -472,7 +472,7 @@ rt_cls::recompute(){ // [fnc] Recompute properties of object
      abs_flx); // O [frc] Flux absorptance
 
   return rcd; // [enm] Return success code
-} // end rt_cls::recompute()
+} // !rt_cls::recompute()
 
 // Private member functions end
 // Global functions with C++ linkages begin
@@ -534,9 +534,9 @@ two_srm_iso_sct // [fnc] Two stream approximation for isotropically scattering s
       d_str=1.0-rho_inf[wvl_idx]*rho_inf[wvl_idx]*exp_mns_2gmm_tau; // [frc] D star ThS99 p. 229 (7.38)
       rfl_flx[wvl_idx]=rho_inf[wvl_idx]*(1.0-exp_mns_2gmm_tau)/d_str; // [frc] Flux reflectance ThS99 p. 230 (7.42)
       trn_flx[wvl_idx]=(1.0-rho_inf[wvl_idx]*rho_inf[wvl_idx])*exp_mns_gmm_tau/d_str; // [frc] Flux transmittance ThS99 p. 230 (7.43)
-    } // end if non-conservative
+    } // !ss_alb
     abs_flx[wvl_idx]=1.0-rfl_flx[wvl_idx]-trn_flx[wvl_idx]; // [frc] Flux absorptance ThS99 p. 230 (7.44)
-  } // end loop over wvl_idx
+  } // !wvl_idx
   
   // Perhaps rho_inf is worth saving?
   delete []rho_inf; // [frc] Reflectance at infinite optical depth
@@ -545,7 +545,7 @@ two_srm_iso_sct // [fnc] Two stream approximation for isotropically scattering s
 
   if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");
   return rcd; // [enm] Return success code
-} // end two_srm_iso_sct()
+} // !two_srm_iso_sct()
 
 int // O [enm] Return success code
 two_srm_asm_sct // [fnc] Two stream approximation for anisotropically scattering slab
@@ -589,11 +589,11 @@ two_srm_asm_sct // [fnc] Two stream approximation for anisotropically scattering
     rfl_flx[wvl_idx]=rho_inf[wvl_idx]*(exp_gmm_tau-exp_mns_gmm_tau)/d_str; // [frc] Flux reflectance ThS99 p. 230 (7.42)
     trn_flx[wvl_idx]=(1.0-rho_inf[wvl_idx]*rho_inf[wvl_idx])/d_str; // [frc] Flux transmittance ThS99 p. 230 (7.43)
     abs_flx[wvl_idx]=1.0-rfl_flx[wvl_idx]-trn_flx[wvl_idx]; // [frc] Flux absorptance ThS99 p. 230 (7.44)
-  } // end loop over wvl_idx
+  } // !wvl_idx
 
   if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");
   return rcd; // [enm] Return success code
-} // end two_srm_asm_sct()
+} // !two_srm_asm_sct()
 
 int // O [enm] Return success code
 rt_lop // [fnc] Radiative transfer layer optical properties
@@ -625,7 +625,7 @@ rt_lop // [fnc] Radiative transfer layer optical properties
 
   for(idx=0;idx<wvl_nbr;idx++){
     ;
-  } // end loop over wvl
+  } // !idx
 
   // Sanity check
   // Flux reflectance, transmittance and absorptance should sum to unity
@@ -648,7 +648,7 @@ rt_lop // [fnc] Radiative transfer layer optical properties
        rfl_flx[idx]+trn_flx[idx]+abs_flx[idx], // I [frc] Approximation to target argument
        PRC_CMP(1.0e-4), // I [frc] Relative precision
        nfo_msg); // I [sng] Descriptive message of context
-  } // end loop over wvl
+  } // !idx
 
   // Delete obsolete arrays
 
@@ -661,7 +661,7 @@ rt_lop // [fnc] Radiative transfer layer optical properties
     {0,"abs_flx",NC_FLOAT,1,dmn_wvl,"long_name","Flux absorptance","units","fraction"},
     {0,"rfl_flx",NC_FLOAT,1,dmn_wvl,"long_name","Flux reflectance","units","fraction"},
     {0,"trn_flx",NC_FLOAT,1,dmn_wvl,"long_name","Flux transmittance","units","fraction"}
-  }; // end var_mtd_sct var_mtd[]
+  }; // !var_mtd_sct var_mtd[]
   const int var_mtd_nbr(sizeof(var_mtd)/sizeof(var_mtd_sct)); // [nbr] Number of variables in array
   const int dmn_nbr_max(1); // [nbr] Maximum number of dimensions allowed in single variable in output file
   rcd+=nco_var_dfn(nc_out,var_mtd,var_mtd_nbr,dmn_nbr_max); // [fnc] Define variables in output netCDF file
@@ -673,7 +673,7 @@ rt_lop // [fnc] Radiative transfer layer optical properties
 
   if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");
   return rcd; // [enm] Return success code
-} // end rt_lop()
+} // !rt_lop()
 
 int // O [enm] Return success code
 rt_rfl_snw // [fnc] Radiative transfer for snow reflectance
@@ -812,15 +812,15 @@ rt_rfl_snw // [fnc] Radiative transfer for snow reflectance
       // Restore original handler
       old_gsl_error_handler=gsl_set_error_handler(NULL); // [fnc] GSL error handler
       
-    }else{ // end if tau_ext_scl
+    }else{ // !tau_ext_scl
       if(dbg_lvl_get() > dbg_sbr) std::cout << "INFO: Using semi-infinite snowpack approximation" << std::endl;
       rfl_spc_snw_drc[idx]=rfl_spc_snw_drc_apx[idx]; // [frc] Snow spectral flux reflectance for direct radiation
       rfl_spc_snw_dff[idx]=rfl_spc_snw_dff_apx[idx]; // [frc] Snow spectral flux reflectance for diffuse radiation
-    } // end if tau_ext_scl
+    } // !tau_ext_scl
     
     rfl_spc_snw[idx]=flx_frc_drc_sfc[idx]*rfl_spc_snw_drc[idx]+(1.0-flx_frc_drc_sfc[idx])*rfl_spc_snw_dff[idx]; // [frc] Snow spectral flux reflectance
 
-  } // end loop over wvl
+  } // !idx
   
     // Sanity check
     // Flux reflectance, transmittance and absorptance should sum to unity
@@ -830,7 +830,7 @@ rt_rfl_snw // [fnc] Radiative transfer for snow reflectance
     std::cout << "  Solar zenith angle: Cosine = " << slr_zen_ngl_cos << ", Degrees = " << std::acos(slr_zen_ngl_cos)*180.0/mth::cst_M_PIl << std::endl;
     std::cout << "  Diffuse reflectance of underlying ground = " << rfl_gnd_dff << ", Fraction of incident flux in direct beam = " << flx_frc_drc_sfc[0] << std::endl;
     std::cout << "  Reflectance: Direct = " << rfl_spc_snw_drc[0] << " (direct semi-infinite = " << rfl_spc_snw_drc_apx[0] << "), Diffuse = " << rfl_spc_snw_dff[0] << " (diffuse semi-infinite = " << rfl_spc_snw_dff_apx[0] << "), Total = " << rfl_spc_snw[0] << std::endl;
-  } // endif true
+  } // !true
   
   // Delete obsolete arrays
   
@@ -852,7 +852,7 @@ rt_rfl_snw // [fnc] Radiative transfer for snow reflectance
     {0,"rfl_spc_snw_drc",NC_FLOAT,1,dmn_wvl,"long_name","Snow spectral flux reflectance for direct radiation","units","fraction"},
     {0,"rfl_spc_snw_drc_apx",NC_FLOAT,1,dmn_wvl,"long_name","Snow spectral flux reflectance for direct radiation, semi-infinite approximation","units","fraction"},
     {0,"rfl_gnd_dff",NC_FLOAT,0,dmn_scl,"long_name","Diffuse reflectance of ground (beneath snow)","units","fraction"}
-  }; // end var_mtd_sct var_mtd[]
+  }; // !var_mtd_sct var_mtd[]
   const int var_mtd_nbr(sizeof(var_mtd)/sizeof(var_mtd_sct)); // [nbr] Number of variables in array
   const int dmn_nbr_max(1); // [nbr] Maximum number of dimensions allowed in single variable in output file
   rcd+=nco_var_dfn(nc_out,var_mtd,var_mtd_nbr,dmn_nbr_max); // [fnc] Define variables in output netCDF file
@@ -867,6 +867,6 @@ rt_rfl_snw // [fnc] Radiative transfer for snow reflectance
 
   if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");
   return rcd; // [enm] Return success code
-} // end rt_rfl_snw()
+} // !rt_rfl_snw()
 
 // Global functions with C++ linkages end

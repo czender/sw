@@ -1,3 +1,11 @@
+2024-09-11  Charlie Zender  <zender@uci.edu>
+
+	* ccc, gsl now build with clang++ -std=c++17
+
+	* Use double-quotes not angle brackets to #include simple, local, non-library headers
+
+	* Cast to (prc_cmp) all operands involving complex numbers
+
 2024-09-10  Charlie Zender  <zender@uci.edu>
 
 	* Assume "long long" type is supported

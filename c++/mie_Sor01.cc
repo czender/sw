@@ -26,9 +26,10 @@ xsx_abs_grg_Sor01 // [fnc] Compute aggregate cross-section for absorption (sigma
 {
   const std::complex<prc_cmp> m2(idx_rfr*idx_rfr);
   // 20240910: Clang18 refuses to mix complex<float> with double in this call
-  //  prc_cmp E=imag((m2-1.0)/(m2+2.0)); // Sor01 p. 654 (31)
-  prc_cmp E=imag((m2-1)/(m2+2)); // Sor01 p. 654 (31)
-  
+  //  prc_cmp E=std::imag((m2-1.0)/(m2+2.0)); // Sor01 p. 654 (31)
+  // Newer C++ standards require complex and non-complex operands of binary math be of same type, so cast before use:
+  prc_cmp E=std::imag((m2-(prc_cmp)1)/(m2+(prc_cmp)2)); // Sor01 p. 654 (31)
+
   prc_cmp xsx_abs_mnm=4.0*mth::cst_M_PIl*wvn*pow(rds_mnm,3)*E; // Sor01 p. 654 (30)
   return mnm_nbr*xsx_abs_mnm; // Sor01 p. 654 (29)
 } // end xsx_abs_grg_Sor01()
@@ -45,8 +46,9 @@ xsx_sct_grg_Sor01 // [fnc] Compute aggregate cross-section for scattering (sigma
   const std::complex<prc_cmp> m2(idx_rfr*idx_rfr);
   // 20240910: Clang18 refuses to mix complex<float> with double in this call
   //prc_cmp F=std::abs((m2-1.0)/(m2+2.0)); // Sor01 p. 654 (27)
-  prc_cmp D=(m2-1)/(m2+2); // CEWI
-  prc_cmp F=std::abs(D); // Sor01 p. 654 (27)
+  // In other words, auto-promotion will not be performed
+  // Newer C++ standards require complex and non-complex operands of binary math be of same type, so cast before use:
+  prc_cmp F=std::abs((m2-(prc_cmp)1)/(m2+(prc_cmp)2)); // Sor01 p. 654 (27)
   F*=F; // Sor01 p. (27)
   
   prc_cmp G=1.0+4.0*wvn*wvn*rds_gyr*rds_gyr/(3.0*dmn_frc);

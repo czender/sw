@@ -81,7 +81,7 @@ mie_prc // [fnc] Mie processor
  const prc_cmp * const ngl_dlt, // I [rdn] Width of angle bin
  prc_cmp * const phz_fnc, // O [sr-1] Phase function
  prc_cmp * const plz); // O [frc] Polarization
-// end mie_prc() prototype
+// !mie_prc()
 
 int // O [enm] Return success code
 mie_sph_BoH83 // [fnc] Mie solution for homogeneous spheres
@@ -96,7 +96,7 @@ mie_sph_BoH83 // [fnc] Mie solution for homogeneous spheres
  double &q_sct, // O [frc] Scattering efficiency
  std::complex<double> * const s1, // O [frc] Scalar amplitude scattering matrix element S1
  std::complex<double> * const s2); // O [frc] Scalar amplitude scattering matrix element S2
-// end mie_sph_BoH83() prototype
+// !mie_sph_BoH83()
 
 int // O [enm] Return success code
 mie_sph_coat_BoH83 // [fnc] Mie solution for coated spheres
@@ -109,7 +109,7 @@ mie_sph_coat_BoH83 // [fnc] Mie solution for coated spheres
  double &q_bck, // O [frc] Backscattering efficiency
  double &asm_prm, // O [frc] Asymmetry parameter
  double &bck_hms); // O [frc] Hemispheric backscatter
-// end mie_sph_coat_BoH83() prototype
+// !mie_sph_coat_BoH83()
 
 int // O [rcd] Return success code
 mie_bck_hms_Chy73 // [fnc] Mie solution for hemispheric backscatter
@@ -118,7 +118,7 @@ mie_bck_hms_Chy73 // [fnc] Mie solution for hemispheric backscatter
  const std::complex<double> * const an, // I [frc] an coefficients
  const std::complex<double> * const bn, // I [frc] bn coefficients
  double &bck_hms); // O [frc] Hemispheric backscatter
-// end mie_bck_hms_Chy73() prototype
+// !mie_bck_hms_Chy73()
 
 int // [rcd] Return success code
 mie_ngl_BoH83_csz // [fnc] Mie phase function for homogeneous spheres
@@ -131,7 +131,7 @@ mie_ngl_BoH83_csz // [fnc] Mie phase function for homogeneous spheres
  const prc_cmp * const ngl_dlt, // I [rdn] Width of angle bin
  prc_cmp *phz_fnc, // O [sr-1] Phase function
  prc_cmp *plz); // O [frc] Polarization
-// end mie_ngl_BoH83_csz() prototype
+// !mie_ngl_BoH83_csz()
 
 int // O [enm] Return success code
 adt_apx // [fnc] Anomalous Diffraction Theory approximation
@@ -141,6 +141,6 @@ adt_apx // [fnc] Anomalous Diffraction Theory approximation
  double &q_abs, // I/O [frc] Absorption efficiency
  double &q_ext, // I/O [frc] Extinction efficiency
  double &q_sct); // I/O [frc] Scattering efficiency
-// end adt_apx() prototype
+// !adt_apx()
 
 #endif // MIE_SLN_HH  

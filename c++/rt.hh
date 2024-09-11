@@ -47,7 +47,7 @@ int // O [enm] Return success code
    prc_cmp *rfl_flx, // O [frc] Flux reflectance
    prc_cmp *trn_flx, // O [frc] Flux transmittance
    prc_cmp *abs_flx); // O [frc] Flux absorptance
-// end rt_sln_fnc_ptr_typ() prototype
+// !rt_sln_fnc_ptr_typ()
 
 // Radiative transfer methods
 typedef struct{ // [sct] rt_sct Radiative transfer method structure
@@ -134,7 +134,7 @@ public:
    const prc_cmp *asm_prm_arg, // I [frc] Asymmetry parameter
    const prc_cmp *ss_alb_arg, // I [frc] Single scattering albedo
    const prc_cmp *tau_ext_arg); // I [frc] Extinction optical depth
-  // end twg_set() prototype
+  // !twg_set()
   
   int // O [enm] Return success code
   var_put // [fnc] Write variable to output file
@@ -190,7 +190,7 @@ private:
   var2mtd // [fnc] Variable name to metadata mapper
   (const std::string &var_nm); // I [sng] Variable name
 
-}; // end class rt_cls
+}; // !class rt_cls
 
 // Prototype global functions with C++ linkages
 
@@ -204,7 +204,7 @@ two_srm_iso_sct // [fnc] Two stream approximation for isotropically scattering s
  prc_cmp *rfl_flx, // O [frc] Flux reflectance
  prc_cmp *trn_flx, // O [frc] Flux transmittance
  prc_cmp *abs_flx); // O [frc] Flux absorptance
-// end two_srm_iso_sct() prototype
+// !two_srm_iso_sct()
 
 int // O [enm] Return success code
 two_srm_asm_sct // [fnc] Two stream approximation for anisotropically scattering slab
@@ -216,14 +216,14 @@ two_srm_asm_sct // [fnc] Two stream approximation for anisotropically scattering
  prc_cmp *rfl_flx, // O [frc] Flux reflectance
  prc_cmp *trn_flx, // O [frc] Flux transmittance
  prc_cmp *abs_flx); // O [frc] Flux absorptance
-// end two_srm_asm_sct() prototype
+// !two_srm_asm_sct()
 
 int // O [enm] Return success code
 rt_lop // [fnc] Radiative transfer layer optical properties
 (const int &nc_out, // I [fl] netCDF file for output 
  const rt_cls &rt_obj, // I [rt] Radiative transfer object
  const prc_cmp &slr_zen_ngl_cos); // I [frc] Cosine solar zenith angle
-// end rt_lop() prototype
+// !rt_lop()
 
 int // O [enm] Return success code
 rt_rfl_snw // [fnc] Radiative transfer for snow reflectance
@@ -232,7 +232,7 @@ rt_rfl_snw // [fnc] Radiative transfer for snow reflectance
  const prc_cmp &rfl_gnd_dff, // I [frc] Diffuse reflectance of ground (beneath snow)
  const rt_cls &rt_obj, // I [rt] Radiative transfer object
  const prc_cmp &slr_zen_ngl_cos); // I [frc] Cosine solar zenith angle
-// end rt_rfl_snw() prototype
+// !rt_rfl_snw()
 
 // Define inline'd functions in header so source is visible to calling files
 

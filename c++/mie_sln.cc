@@ -17,7 +17,8 @@
    2000 Add coated sphere solution
    2001 Improved casting for ISO compliance, std::pow(int,int)
    2004 Add Wis79 solution
-   2005 Add MaS99 solution */
+   2005 Add MaS99 solution
+   2024 */
    
 #include <mie_sln.hh> // Mie scattering solutions and utilities
 
@@ -189,7 +190,7 @@ mie_prc // [fnc] Mie processor
       // Once method works with default (7) angles, use angles specified by host mie program
       for(ngl_idx=1;ngl_idx<=2*ngl_nbr-1;ngl_idx++){ // NB: Loop index starts at 1
 	XMU[ngl_idx]=std::cos(ngl[ngl_idx-1]); // [frc] Cosine polar scattering angle Wis79 p. 16 (9B);
-      } // end loop over angle */
+      } // !ngl_idx
 
       NMOM=static_cast<int>(2.0*sz_prm); // [nbr] Number of Legendre moments [~2*sz_prm]
       if((XX < 1.0) || (XX > 100.0)) NMOM=1; // [nbr] Number of Legendre moments [~2*sz_prm]
@@ -226,16 +227,16 @@ mie_prc // [fnc] Mie processor
 	std::cerr << "PMOM_dimension = MOMDIM+1 = " << MOMDIM+1 << std::endl;
 	for(ngl_idx=1;ngl_idx<=NUMANG;ngl_idx++){
 	  std::cerr << "S1[" << std::setw(2) << ngl_idx << "] = " << std::setw(tbl_clm_wdt) << S1[ngl_idx] << ", S2[" << ngl_idx << "] = " << std::setw(tbl_clm_wdt) << S2[ngl_idx] << std::endl;
-	} // end loop over ngl
+	} // !ngl_idx
 
 	// fxm: Understand and implement PMOM diagnostics
 	for(int lgn_idx=1;lgn_idx<=PMOM_dimension;lgn_idx++){
 	  for(int lgn2_idx=1;lgn2_idx<=PMOM_second_dimension;lgn2_idx++){
 	    std::cerr << "PMOM[" << std::setw(2) << lgn_idx << "][ " << lgn2_idx << "] = " << std::setw(tbl_clm_wdt) << PMOM[lgn_idx][lgn2_idx] << std::endl;
 	    ;
-	  } // end loop over lgn2
-	} // end loop over lgn
-      } // end if dbg
+	  } // !lgn2_idx
+	} // !lgn_idx
+      } // !dbg
 
       /* Read Wis79 output variables into appropriate values from driver
 	 Variables from driver that are not set by Wis79 should be zeroed
@@ -251,7 +252,7 @@ mie_prc // [fnc] Mie processor
       for(ngl_idx=1;ngl_idx<=2*ngl_nbr-1;ngl_idx++){ // NB: Loop index starts at 1
 	s1[ngl_idx]=S1[ngl_idx]; // [frc] Scalar amplitude scattering matrix element S1 Wis79 p. 16 (9a, 11a), Wis80 p. 1505 (1d)
 	s2[ngl_idx]=S2[ngl_idx]; // [frc] Scalar amplitude scattering matrix element S2 Wis79 p. 16 (9b, 11b), Wis80 p. 1505 (1e)
-      } // end loop over ngl
+      } // !ngl_idx
 
       PMOM[0][0]=PMOM[0][0]; // [frc] Legendre polynomial expansion coefficients (moments) 
 
@@ -262,7 +263,7 @@ mie_prc // [fnc] Mie processor
       TFORW[0]=TFORW[0]; // [frc] Forward ratio of scattering amplitudes useful for polarized RT Wis79 p. 60 (B.5, B.6)
       TBACK[0]=TBACK[0]; // [frc] Backward ratio of scattering amplitudes useful for polarized RT Wis79 p. 60 (B.7, B.8)
       SPIKE+=0.; // [frc] CEWI Spike diagnostic Wis79 p. 62 (B.10)
-    } // end if slv_sng
+    } // !slv_sng
 
     if(dbg_lvl >= dbg_io){
       int tbl_clm_wdt(8); // [nbr] Width of table columns
@@ -270,8 +271,8 @@ mie_prc // [fnc] Mie processor
       std::cerr << prg_nm_get() << ": INFO Wis79 diagnostics from " << sbr_nm << "():" << std::endl;
       for(ngl_idx=1;ngl_idx<=2*ngl_nbr-1;ngl_idx++){ // NB: Loop index starts at 1
 	std::cerr << "s1[" << std::setw(2) << ngl_idx << "] = " << std::setw(tbl_clm_wdt) << s1[ngl_idx] << ", s2[" << ngl_idx << "] = " << std::setw(tbl_clm_wdt) << s2[ngl_idx] << std::endl;
-      } // end loop over ngl
-    } // end if dbg
+      } // !ngl_idx
+    } // !dbg
     
     if(slf_tst_flg){
       std::cerr << "\nCompare these results to Bohren & Huffman (1983), \n\"Absorption and Scattering of Light by Small Particles\" from Wiley Interscience Press\n" << std::endl;
@@ -375,7 +376,7 @@ mie_prc // [fnc] Mie processor
     (void)std::fprintf(stdout,"  ANGLE       S11             POL             S33             S34\n");
     for(ngl_idx=0;ngl_idx<2*ngl_nbr-1;ngl_idx++)
       (void)std::fprintf(stdout," %6.2f  %13.6e  %13.6e\n",ngl[ngl_idx]*180.0/mth::cst_M_PIl,phz_fnc[ngl_idx],plz[ngl_idx]);
-  } // end self-test
+  } // !slf_tst_flg
   
   // Sanity check
   q_abs=q_ext-q_sct; // [frc] Absorption efficiency
@@ -384,7 +385,7 @@ mie_prc // [fnc] Mie processor
     std::cerr << "WARNING: q_abs = " << q_abs << ", re-setting to 0.0" << std::endl;
     q_sct=q_ext; // [frc] Scattering efficiency
     q_abs=0.0; // [frc] Absorption efficiency
-  } // end if q_abs < 0
+  } // !q_abs < 0
   
   // Free amplitude scattering matrices
   if(s1) delete[]s1; // [frc] Scalar amplitude scattering matrix element S1
@@ -393,7 +394,7 @@ mie_prc // [fnc] Mie processor
 
   if(dbg_lvl >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");
   return rcd; // [rcd] Return code
-} // end mie_prc()
+} // !mie_prc()
 
 int // O [enm] Return success code
 mie_sph_BoH83 // [fnc] Mie solution for homogeneous spheres
@@ -473,7 +474,7 @@ mie_sph_BoH83 // [fnc] Mie solution for homogeneous spheres
     //    theta[ngl_idx]=(ngl_idx-1)*ngl_dlt_scl; // [rdn] Polar scattering angle
     theta[ngl_idx]=ngl[ngl_idx-1]; // [rdn] Polar scattering angle
     mu[ngl_idx]=std::cos(theta[ngl_idx]); // [frc] Cosine polar scattering angle
-  } // end loop over ngl
+  } // !ngl_idx
   // Logarithmic derivative D[ngl_idx] calculated by downward
   // recurrence beginning with initial value i at ngl_idx=trm_nbr_max
   const long idx_end_trm(trm_nbr_max-1);
@@ -481,17 +482,17 @@ mie_sph_BoH83 // [fnc] Mie solution for homogeneous spheres
     // 20010728: rn takes integer values but store as double to avoid compiler warnings
     rn_dbl=static_cast<double>(trm_nbr_max-ngl_idx+1);
     D[trm_nbr_max-ngl_idx]=rn_dbl/y2-1.0/(D[trm_nbr_max-ngl_idx+1]+rn_dbl/y2);
-  } // end loop over ngl
+  } // !ngl_idx
   for(ngl_idx=1;ngl_idx<=ngl_nbr;ngl_idx++){ // NB: Loop index starts at 1
     pi0[ngl_idx]=0.0;
     pi1[ngl_idx]=1.0;
-  } // end loop over ngl
+  } // !ngl_idx
   const long idx_end_ngl(2*ngl_nbr-1);
   // fxm 20040127: s1, s1 are dimension 2*ngl_nbr but only have 2*ngl_nbr-1 initialized!!!
   for(ngl_idx=1;ngl_idx<=idx_end_ngl;ngl_idx++){ // NB: Loop index starts at 1
     s1[ngl_idx]=std::complex<double>(0.0,0.0); // [frc] Scalar amplitude scattering matrix element S1 BoH83 p. 63 (3.12)
     s2[ngl_idx]=std::complex<double>(0.0,0.0); // [frc] Scalar amplitude scattering matrix element S2 BoH83 p. 63 (3.12)
-  } // end loop over ngl
+  } // !ngl_idx
   // Riccati-Bessel Functions with real argument x
   // calculated by upward recurrence
   psi0=std::cos(sz_prm);
@@ -546,8 +547,8 @@ mie_sph_BoH83 // [fnc] Mie solution for homogeneous spheres
 	// [frc] Scalar amplitude scattering matrix elements BoH83 p. 63 (3.12)
 	s1[jj]+=(fn*(an[trm_idx]*pi[ngl_idx]*P+bn[trm_idx]*tau[ngl_idx]*T));
 	s2[jj]+=(fn*(an[trm_idx]*tau[ngl_idx]*T+bn[trm_idx]*pi[ngl_idx]*P));
-      } // endif
-    } // end loop over ngl
+      } // !ngl_idx
+    } // !ngl_idx
     psi0=psi1;
     psi1=psi;
     aPsi1=psi1;
@@ -558,7 +559,7 @@ mie_sph_BoH83 // [fnc] Mie solution for homogeneous spheres
     for(ngl_idx=1;ngl_idx<=ngl_nbr;ngl_idx++){ // NB: Loop index starts at 1
       pi1[ngl_idx]=(2.0*trm_idx-1.0)/(trm_idx-1.0)*mu[ngl_idx]*pi[ngl_idx]-trm_idx*pi0[ngl_idx]/(trm_idx-1.0);
       pi0[ngl_idx]=pi[ngl_idx];
-    } // end loop over ngl
+    } // !ngl_idx
   }while(trm_idx-1-trm_nbr < 0);
   /* Evaluate optical efficiencies using different methods */
   // Scattering efficiency evaluated by series expansion
@@ -583,7 +584,7 @@ mie_sph_BoH83 // [fnc] Mie solution for homogeneous spheres
   if(theta) delete []theta;
   
   return rcd; // [rcd] Return code
-} // end mie_sph_BoH83()
+} // !mie_sph_BoH83()
 
 int // O [rcd] Return success code
 mie_ngl_BoH83_csz // [fnc] Mie scattering matrix for homogeneous spheres
@@ -648,10 +649,10 @@ mie_ngl_BoH83_csz // [fnc] Mie scattering matrix for homogeneous spheres
     plz[ngl_idx-1]=plr_lnr; // [frc] Degree of linear polarization
     phz_fnc[ngl_idx-1]=s11*phz_fnc_nrm; // [sr-1] Phase function BoH83 p. 383 (13.2)
     // ngl_dlt[ngl_idx-1]=ngl_dlt_scl; // [rdn] Width of angle bin
-  } // end loop over ngl
+  } // !ngl_idx
 
   return rcd; // [rcd] Return code
-} // end mie_ngl_BoH83_csz()
+} // !mie_ngl_BoH83_csz()
 
 int // O [rcd] Return success code
 mie_bck_hms_Chy73 // [fnc] Mie solution for hemispheric backscatter
@@ -709,8 +710,8 @@ mie_bck_hms_Chy73 // [fnc] Mie solution for hemispheric backscatter
 	temp=std::pow(-1.0,(rk+rl-1.0)/2.0)*E*EF;
 	sb2 += temp*real(an[idx_k]*conj(an[idx_l])
 			  +bn[idx_k]*conj(bn[idx_l]));
-      } // end loop over idx_l
-    } // endif
+      } // !idx_l
+    } // !idx_k
     /* Compute third term
        Increment over odd l and odd k only */
     if((idx_k % 2u) != 0u) {
@@ -734,14 +735,14 @@ mie_bck_hms_Chy73 // [fnc] Mie solution for hemispheric backscatter
 	// 20000804: fxm: change this to int^int
 	sb3+=std::pow(-1.0,((rk+rl)/2.0))*E*EF
 	 *real(an[idx_k]*conj(bn[idx_l]));
-      } // end loop over idx_l
-    } // endif
-  } // end loop over idx_k
+      } // !idx_l
+    } // !idx_k
+  } // !idx_k
   bck_hms=sb1+2.0*sb2+2.0*sb3;
   bck_hms*=1.0/(sz_prm*sz_prm);
 
   return 0;
-} // end mie_bck_hms_Chy73()
+} // !mie_bck_hms_Chy73()
 
 int // O [enm] Return success code
 mie_sph_coat_BoH83 // [fnc] Mie solution for coated spheres
@@ -929,7 +930,7 @@ mie_sph_coat_BoH83 // [fnc] Mie solution for coated spheres
   rcd+=mie_bck_hms_Chy73(sz_prm_mnt,trm_nbr,an_arr,bn_arr,bck_hms);
 
   return rcd;
-} // end mie_sph_coat_BoH83()
+} // !mie_sph_coat_BoH83()
 
 int // O [enm] Return success code
 adt_apx // [fnc] Anomalous Diffraction Theory approximation
@@ -998,7 +999,7 @@ adt_apx // [fnc] Anomalous Diffraction Theory approximation
     q_sct_adt_BoH83=0.0; // [frc] Scattering efficiency, ADT
     q_abs_adt_BoH83=q_ext_adt_BoH83; // [frc] Absorption efficiency, ADT
     err_prn(sbr_nm,"Exiting...");
-  } // end if q_abs_adt_BoH83 < 0
+  } // !q_abs_adt_BoH83 < 0
   
   /* Implement Van57(?) */
   rho=2.0*sz_prm*(idx_rfr_ffc.real()-idx_rfr_mdm.real()); // [frc] Phase delay center
@@ -1023,5 +1024,5 @@ adt_apx // [fnc] Anomalous Diffraction Theory approximation
   if(dbg_lvl_get() == dbg_crr) std::cerr << "q_abs = " << q_abs << ", q_abs_adt_BoH83 = " << q_abs_adt_BoH83 << std::endl;
   
   return rcd;
-} // end adt_apx()
+} // !adt_apx()
 

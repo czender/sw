@@ -36,7 +36,7 @@
 // Personal headers
 // #define MAIN_PROGRAM_FILE MUST precede #include ccc.hh
 #define MAIN_PROGRAM_FILE
-#include <gsl.hh> // Program-specific definitions
+#include "gsl.hh" // Program-specific definitions
 #include <libcsz_c++.hh> // Personal C++ library
 #include <libnco_c++.hh> // C++ interface to netCDF C library
 
