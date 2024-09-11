@@ -17,7 +17,7 @@
 // Editing, Compilation:
 // etags ~/sw/aer/*.F ~/sw/aer/*.h ~/sw/c++/*.cc ~/sw/c++/*.hh ~/sw/mie/*.cc ~/sw/mie/*.hh ~/sw/slr_spc/*.cc ~/sw/slr_spc/*.hh
 /* spectral.ess.uci.edu (as of 20240910):
-   cd ~/sw/mie;make CPPFLAGS="-DPRC_DBL -DLINUX -I ${HOME}/include -I/opt/netcdf/include -I/opt/homebrew/include" LDFLAGS="-L/opt/netcdf/lib -L/opt/homebrew/lib -L${HOME}/lib -lcsz_c++ -lcsm_c++ -lnco_c++ -lnetcdf -lomp";cd -
+   cd ~/sw/mie;make CPPFLAGS="-DABORT_ON_ERROR -DHAVE_LONG_LONG -DPRC_DBL -DLINUX -I ${HOME}/include -I/opt/netcdf/include -I/opt/homebrew/include" CFLAGS="-g" LDFLAGS="-L/opt/netcdf/lib -L/opt/homebrew/lib -L${HOME}/lib -lcsz_c++ -lcsm_c++ -lnco_c++ -lnetcdf -lomp";cd -
    cd ~/sw/mie;make OPTS=D VRS_SNG=3.4.2 mie;cd -
    cd ~/sw/mie;make OPTS=D NETCDF4=Y mie;cd -
    cd ~/sw/c++;make OMP=N OPTS=D NETCDF4=Y UDUNITS2=Y;cd ~/sw/mie;make OMP=N OPTS=D NETCDF4=Y UDUNITS2=Y

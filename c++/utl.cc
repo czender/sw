@@ -456,4 +456,4 @@ drc_pfx // [fnc] Intelligently return drc/fl_nm
   drc_fl_nm=drc+drc_fl_nm; // O [sng] Full file name = drc/fl_nm
 
   return drc_fl_nm; // O [sng] Full file name = drc/fl_nm
-} // end drc_pfx()
+} // !drc_pfx()

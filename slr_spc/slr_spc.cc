@@ -36,7 +36,7 @@
 /* Example usage:
    
    Build (as of 20240808) on spectral.ess.uci.edu:
-   cd ~/sw/slr_spc;make CPPFLAGS="-DLINUX -I ${HOME}/include -I/opt/netcdf/include -I/opt/homebrew/include" LDFLAGS="-L/opt/netcdf/lib -L/opt/homebrew/lib -L${HOME}/lib -lcsz_c++ -lnco_c++ -lnetcdf";cd -
+   cd ~/sw/slr_spc;make CPPFLAGS="-DABORT_ON_ERROR -DHAVE_LONG_LONG -DPRC_DBL -DLINUX -I ${HOME}/include -I/opt/netcdf/include -I/opt/homebrew/include" CFLAGS="-g" LDFLAGS="-L/opt/netcdf/lib -L/opt/homebrew/lib -L${HOME}/lib -lcsz_c++ -lnco_c++ -lnetcdf";cd -
 
    Debugging:
    slr_spc --dbg=1 --wvl_nbr=2497

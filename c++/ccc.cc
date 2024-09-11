@@ -22,7 +22,7 @@
    cd ${HOME}/nco/src/nco_c++;make -f Makefile.old lib_cln cln;make -f Makefile.old OPTS=D lib;cd -
    // With netCDF4
    spectral.ess.uci.edu (as of 20240808):
-   cd ~/sw/c++;make CPPFLAGS="-DPRC_DBL -DLINUX -I ${HOME}/include -I/opt/netcdf/include -I/opt/homebrew/include" LDFLAGS="-L/opt/netcdf/lib -L/opt/homebrew/lib -L${HOME}/lib -lcsz_c++ -lcsm_c++ -lnco_c++ -lnetcdf -lomp";cd - # Use -std=c++17 library
+   cd ~/sw/c++;make CPPFLAGS="-DABORT_ON_ERROR -DHAVE_LONG_LONG -DPRC_DBL -DLINUX -I ${HOME}/include -I/opt/netcdf/include -I/opt/homebrew/include" CFLAGS="-g" LDFLAGS="-L/opt/netcdf/lib -L/opt/homebrew/lib -L${HOME}/lib -lcsz_c++ -lcsm_c++ -lnco_c++ -lnetcdf -lomp";cd - # Use -std=c++17 library
    cd ${HOME}/sw/c++;make -W ccc.cc OPTS=D OMP=N NETCDF4=Y NETCDF_INC=/opt/netcdf/include NETCDF_LIB=/opt/netcdf/lib ccc;cd -
    cd ${HOME}/sw/c++;make -W ccc.cc OPTS=D OMP=N NETCDF4=Y ccc;cd -
    cd ${HOME}/nco/src/nco_c++;make -f Makefile.old OMP=Y NETCDF4=Y lib_cln cln;make -f Makefile.old OMP=Y OPTS=D NETCDF4=Y lib;cd -
@@ -115,10 +115,10 @@
 //using namespace std; // [nms] std is namespace for all standard C++ headers
 namespace nmspc1{
   const prc_cmp pi(3.0); // [frc] 3.0
-} // end namespace nmspc1
+} // !namespace nmspc1
 namespace nmspc2{
   const prc_cmp pi(4.0); // [frc] 4.0
-} // end namespace nmspc2
+} // !namespace nmspc2
 
 // Important to #define personal definitions after system #include's
 #define NBR_LMN(array) (sizeof(array)/sizeof(array[0]))
@@ -139,7 +139,7 @@ typedef std::map<std::string,mnr_tst_sct,std::less<std::string> > sng2mnr_tst_ma
 // Prototypes
 extern "C" {
 #include "getopt.h" // GNU getopt() functionality from BSD my_getopt()
-} // end extern
+} // !extern
 
 int main(int argc,char **argv)
 {
@@ -299,7 +299,7 @@ int main(int argc,char **argv)
     {"version",no_argument,0,'v'},
     // Last option named "0" signals getopt_long() to stop processing  
     {0,0,0,0}
-  }; // end opt_lng
+  }; // !opt_lng
   
   // Short options: no colon = no arg, one colon = required arg, two colons = optional arg
   const char * const opt_sht_lst("34D::f:hi:o:r:v"); // [sng] List of single-letter (C-style) option abbreviations
@@ -338,7 +338,7 @@ int main(int argc,char **argv)
 	for(idx=0;idx<arr_nbr;idx++){
 	  arr_val[idx]=static_cast<prc_cmp>(std::strtod(arg_lst_sng[idx],(char **)NULL)); // [frc]
 	  std::cout << "arr_val[" << idx << "] = " << arr_val[idx] << std::endl;
-	} // end loop over array
+	} // !idx
 	// Free dynamic memory
 	delete []arr_val; // [frc] Mode parameters
 	delete []arg_lst_sng;
@@ -413,8 +413,8 @@ int main(int argc,char **argv)
     default:
       (void)usg_prn(opt_sht_lst); // Print proper usage 
       return EXIT_FAILURE;
-    } // end switch 
-  } // end while loop 
+    } // !opt
+  } // !while(1)
   
   // Process positional arguments  
   if(optind < argc){
@@ -426,8 +426,8 @@ int main(int argc,char **argv)
     }else if(psn_arg_nbr == 2){
       fl_in=argv[optind++]; // [sng] Input file
       fl_out=argv[optind++]; // [sng] Output file
-    } // end else
-  } // end if
+    } // !psn_arb_nbr
+  } // !optind
 
   // Compute quantities that might depend on command line input
   (void)fio::data_path_set(drc_dat); // [sng] Data directory
@@ -1036,8 +1036,8 @@ int main(int argc,char **argv)
 	//	std::cout << "tpt_d2d[" << bnd_idx << "][" << sz_idx << "] = " << tpt_d2d[bnd_idx][sz_idx] << std::endl;
 	tpt_v1d[bnd_idx*sz_nbr+sz_idx]=bnd_idx*sz_nbr+sz_idx; // [K] Temperature (vector 1-dimensional)
 	std::cout << "tpt_v1d[" << bnd_idx*sz_nbr+sz_idx << "] = " << tpt_v1d[bnd_idx*sz_nbr+sz_idx] << std::endl;
-      } // end loop over lon
-    } // end loop over bnd
+      } // !sz_idx
+    } // !bnd_idx
   } // !dbg || tst_sng == "dyn"
   
   if(dbg_lvl == dbg_old || tst_sng == "lmt" || tst_sng == "flt"){
@@ -1199,7 +1199,7 @@ int main(int argc,char **argv)
       if(rcd != 0) std::cout << "WARNING: rcd = " << rcd << ", nsw_dbl.err = " << nsw_dbl.err << std::endl;
       std::cout << "gsl_sf_ellint_Ecomp(" << gsl_a << ") = " << nsw_dbl.val << std::endl;
     } // endif
-    // end Complete elliptic integral of the second kind test
+    // !Complete elliptic integral of the second kind test
 
     // Error function
     std::cout << "Error function gsl_sf_erf(1.0)=0.842701...";
@@ -1216,7 +1216,7 @@ int main(int argc,char **argv)
     rcd=gsl_sf_erf_e(gsl_a,&nsw_dbl);
     if(rcd != 0) std::cout << "WARNING: rcd = " << rcd << ", nsw_dbl.err = " << nsw_dbl.err << std::endl;
     std::cout << "gsl_sf_erf(" << gsl_a << ") = " << nsw_dbl.val << std::endl;
-    // end Error function test
+    // !Error function test
 
     // Exponential integral Ei
     // AbS64 p. 233 (5.3) Example 2
@@ -1236,7 +1236,7 @@ int main(int argc,char **argv)
       if(rcd != 0) std::cout << "WARNING: rcd = " << rcd << ", nsw_dbl.err = " << nsw_dbl.err << std::endl;
       std::cout << "gsl_sf_expint_Ei(" << gsl_a << ") = " << nsw_dbl.val << std::endl;
     } // endif
-    // end Exponential integral Ei test
+    // !Exponential integral Ei test
 
     // Exponential integral E1
     // NB: E1 and Ei are both called Exponential Integrals, yet are completely different
@@ -1256,7 +1256,7 @@ int main(int argc,char **argv)
       if(rcd != 0) std::cout << "WARNING: rcd = " << rcd << ", nsw_dbl.err = " << nsw_dbl.err << std::endl;
       std::cout << "gsl_sf_expint_E1(" << gsl_a << ") = " << nsw_dbl.val << std::endl;
     } // endif
-    // end Exponential integral E1 test
+    // !Exponential integral E1 test
 
     // Gamma function
     std::cout << "Gamma function gsl_sf_gamma(0.5)=sqrt(pi)...";
@@ -1275,8 +1275,8 @@ int main(int argc,char **argv)
       rcd=gsl_sf_gamma_e(gsl_a,&nsw_dbl);
       if(rcd != 0) std::cout << "WARNING: rcd = " << rcd << ", nsw_dbl.err = " << nsw_dbl.err << std::endl;
       std::cout << "gsl_sf_gamma(" << gsl_a << ") = " << nsw_dbl.val << std::endl;
-    } // endif
-    // end Gamma function test
+    } // !gsl_a
+    // !Gamma function test
 
     // Legendre function
     std::cout << "Legendre function gsl_sf_legendre(2,1.0/sqrt(3))=0.0...";
@@ -1298,7 +1298,7 @@ int main(int argc,char **argv)
       if(rcd != 0) std::cout << "WARNING: rcd = " << rcd << ", nsw_dbl.err = " << nsw_dbl.err << std::endl;
       std::cout << "gsl_sf_legendre(" << gsl_a << ", " << gsl_b << ") = " << nsw_dbl.val << std::endl;
     } // endif
-    // end Legendre function test
+    // !Legendre function test
 
     // Log double factorial function
     std::cout << "Log double factorial function gsl_sf_lndoublefact(10)=log(3840.0)...";
@@ -1316,7 +1316,7 @@ int main(int argc,char **argv)
     rcd=gsl_sf_lndoublefact_e(static_cast<unsigned int>(gsl_a),&nsw_dbl);
     if(rcd != 0) std::cout << "WARNING: rcd = " << rcd << ", nsw_dbl.err = " << nsw_dbl.err << std::endl;
     std::cout << "gsl_sf_lndoublefact(" << gsl_a << ") = " << nsw_dbl.val << std::endl;
-    // end Log double factorial function test
+    // !Log double factorial function test
 
     // Incomplete gamma function
     std::cout << "Incomplete gamma function gsl_sf_gamma_inc_Q(1.0,1.0)=e^{-1}...";
@@ -1336,7 +1336,7 @@ int main(int argc,char **argv)
       if(rcd != 0) std::cout << "WARNING: rcd = " << rcd << ", nsw_dbl.err = " << nsw_dbl.err << std::endl;
       std::cout << "gsl_sf_gamma_inc_Q(" << gsl_a << ", " << gsl_b << ") = " << nsw_dbl.val << std::endl;
     } // endif
-    // end Incomplete gamma function test
+    // !Incomplete gamma function test
 
     // Airy function
     std::cout << "Airy function gsl_sf_airy_Ai_e(0)=1.0/(pow(3,2/3)*gamma(2/3))...";
@@ -1354,7 +1354,7 @@ int main(int argc,char **argv)
     rcd=gsl_sf_airy_Ai_e(gsl_a,gsl_mode,&nsw_dbl);
     if(rcd != 0) std::cout << "WARNING: rcd = " << rcd << ", nsw_dbl.err = " << nsw_dbl.err << std::endl;
     std::cout << "gsl_sf_airy_Ai(" << gsl_a << ") = " << nsw_dbl.val << std::endl;
-    // end Airy function test
+    // !Airy function test
 
     // Regular cylindrical Bessel function of fractional order
     std::cout << "Bessel function gsl_sf_bessel_Jnu_e(0)...";
@@ -1373,7 +1373,7 @@ int main(int argc,char **argv)
     } // endif
     if(rcd != 0) std::cout << "WARNING: rcd = " << rcd << ", nsw_dbl.err = " << nsw_dbl.err << std::endl;
     std::cout << "gsl_sf_bessel_Jnu(0.5," << gsl_a << ") = " << nsw_dbl.val << std::endl;
-    // end Regular cylindrical Bessel function of fractional order test
+    // !Regular cylindrical Bessel function of fractional order test
 
     // Zeros of regular Bessel function of order 1
     // ccc --tst=gsl --gsl_uint=5
@@ -1396,7 +1396,7 @@ int main(int argc,char **argv)
     } // endif
     if(rcd != 0) std::cout << "WARNING: rcd = " << rcd << ", nsw_dbl.err = " << nsw_dbl.err << std::endl;
     std::cout << "gsl_sf_bessel_zero_J1_e(" << gsl_uint << ") = " << nsw_dbl.val << std::endl;
-    // end Zeros of regular Bessel function of order 1 test
+    // !Zeros of regular Bessel function of order 1 test
 
     /* Binary representation of floating point variables
        Excellent discussion in GDT01 p. 364 */
@@ -1491,14 +1491,14 @@ int main(int argc,char **argv)
        , // [kg mol-1] Mean molecular weight
        }, // [kg m-3] Bulk density fxm: get Biomass density
       */
-    }; // end mnr_tst_sct mnr[]
+    }; // !mnr_tst_sct mnr[]
     int mnr_nbr=sizeof(mnr)/sizeof(mnr_tst_sct);
     sng2mnr_tst_map mnr_map; // [sct] Map with key=abbreviation, value=mineral structure
     for(idx=0;idx<mnr_nbr;idx++){
       /* fxm: Define variables before inserting into map, because map values 
 	 seem to be unwritable (read-only) once they are in map. */
       mnr_map.insert(sng2mnr_tst_map::value_type(mnr[idx].abb,mnr[idx])); // [sct] Map with key=abbreviation, value=mineral structure
-    } // end loop over itr
+    } // !idx
     // Inserting and instantiating a structure at the same time does not work
     /*    mnr_map.insert(sng2cpv_map::value_type("afghan_dust",
     {"afghan_dust", // [sng] Particle abbreviation
