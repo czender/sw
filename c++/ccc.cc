@@ -1805,10 +1805,12 @@ int main(int argc,char **argv)
     // long long is ISO C99 standard but is neither ISO C++ nor ANSI C standard
     long long mmr_blk_ttl(0LL); // Cumulative allocated memory
 #else // !HAVE_LONG_LONG
-    long mmr_blk_ttl(0L); // Cumulative allocated memory
+    long mmr_blk_cnt(0L); // [nbr] Count of blocks allocated
+    long mmr_blk_ttl(0L); // [B] Cumulative allocated memory
 #endif // !HAVE_LONG_LONG
     for(idx=0;idx<mmr_blk_nbr;idx++){
       mmr_blk_ptr[idx]=new char[mmr_blk_sz];
+      mmr_blk_cnt++;
       mmr_blk_ttl+=mmr_blk_sz;
       std::cout << idx+1 << " blocks of size " << mmr_blk_sz/1.0e6 << " MB = " << mmr_blk_ttl/1.0e6 << " MB total" << std::endl;
       /* AIX allocates at least 7000 GB without complaining
@@ -1817,8 +1819,11 @@ int main(int argc,char **argv)
       if(mmr_blk_ttl > mmr_blk_ttl_max){
 	std::cout << "Successfully allocated more than " << mmr_blk_ttl_max/1.0e6 << " MB, ending OOM test" << std::endl;
 	break;
-      } // endif
-    } // end loop over idx
+      } // !mmr_blk_ptr
+    } // !idx
+    for(idx=0;idx<mmr_blk_cnt;idx++){
+      delete []mmr_blk_ptr[idx];
+    } // !idx
   } // !dbg || tst_sng == "oom"
   
   if(dbg_lvl == dbg_old || tst_sng == "phys_cst"){
