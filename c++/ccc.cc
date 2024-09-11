@@ -22,7 +22,7 @@
    cd ${HOME}/nco/src/nco_c++;make -f Makefile.old lib_cln cln;make -f Makefile.old OPTS=D lib;cd -
    // With netCDF4
    spectral.ess.uci.edu (as of 20240808):
-   cd ~/sw/ccc;make CPPFLAGS="-DPRC_DBL -DLINUX -I ${HOME}/include -I/opt/netcdf/include -I/opt/homebrew/include" LDFLAGS="-L/opt/netcdf/lib -L/opt/homebrew/lib -L${HOME}/lib -lcsz_c++ -lcsm_c++ -lnco_c++ -lnetcdf -lomp";cd - # Use -std=c++17 library
+   cd ~/sw/c++;make CPPFLAGS="-DPRC_DBL -DLINUX -I ${HOME}/include -I/opt/netcdf/include -I/opt/homebrew/include" LDFLAGS="-L/opt/netcdf/lib -L/opt/homebrew/lib -L${HOME}/lib -lcsz_c++ -lcsm_c++ -lnco_c++ -lnetcdf -lomp";cd - # Use -std=c++17 library
    cd ${HOME}/sw/c++;make -W ccc.cc OPTS=D OMP=N NETCDF4=Y NETCDF_INC=/opt/netcdf/include NETCDF_LIB=/opt/netcdf/lib ccc;cd -
    cd ${HOME}/sw/c++;make -W ccc.cc OPTS=D OMP=N NETCDF4=Y ccc;cd -
    cd ${HOME}/nco/src/nco_c++;make -f Makefile.old OMP=Y NETCDF4=Y lib_cln cln;make -f Makefile.old OMP=Y OPTS=D NETCDF4=Y lib;cd -
@@ -203,7 +203,6 @@ int main(int argc,char **argv)
   double dbl_foo(0.0); // [frc] Intrinsic double temporary variable
   double gsl_a(0.0); // [frc] Parameter a of GSL evaluations
   double gsl_b(0.0); // [frc] Parameter b of GSL evaluations
-  double gsl_c(0.0); // [frc] Parameter c of GSL evaluations
   unsigned int gsl_uint(1); // [nbr] Unsigned int for GSL evaluations
   float flt_foo(0.0f); // [frc] Intrinsic float temporary variable
   prc_cmp cpv_foo(PRC_CMP(0.0)); // [frc] Intrinsic computational precision temporary variable
@@ -262,7 +261,6 @@ int main(int argc,char **argv)
     {"function",required_argument,0,0}, // [sng] Function name
     {"gsl_a",required_argument,0,0}, // [frc] Parameter a of GSL evaluations
     {"gsl_b",required_argument,0,0}, // [frc] Parameter b of GSL evaluations
-    {"gsl_c",required_argument,0,0}, // [frc] Parameter c of GSL evaluations
     {"gsl_uint",required_argument,0,0}, // [nbr] Unsigned int for GSL evaluations
     {"int_foo",required_argument,0,0}, // [nbr] Intrinsic int temporary variable
     {"lat_nbr",required_argument,0,0}, // [nbr] Number of latitudes
@@ -323,7 +321,7 @@ int main(int argc,char **argv)
     // Process long options without short option counterparts
     if(opt == 0){
       if(dbg_lvl >= dbg_io) std::cerr << "Long option name: " << opt_crr << (optarg ? ",  Argument: "+opt_sng : ", No Argument") << std::endl;
-      if(opt_crr == "flg_flg") flg_flg=true;
+      if(opt_crr == "flg_flg"){flg_flg=true;std::cout << "INFO: User explicitly set flg_flg to " << flg_flg << std::endl;}
       if(opt_crr == "bnd_nbr") bnd_nbr=std::strtol(opt_sng.c_str(),(char **)NULL,10);
       if(opt_crr == "sz_nbr") sz_nbr=std::strtol(opt_sng.c_str(),(char **)NULL,10);
       if(opt_crr == "arr_val"){
@@ -357,7 +355,6 @@ int main(int argc,char **argv)
       if(opt_crr == "function") fnc_sng=SzDstFnc::opt2abb(opt_sng); // [sng] Function name 
       if(opt_crr == "gsl_a") gsl_a=std::strtod(opt_sng.c_str(),(char **)NULL); // [frc] Parameter a of GSL evaluation
       if(opt_crr == "gsl_b") gsl_b=std::strtod(opt_sng.c_str(),(char **)NULL); // [frc] Parameter b of GSL evaluation
-      if(opt_crr == "gsl_c") gsl_c=std::strtod(opt_sng.c_str(),(char **)NULL); // [frc] Parameter c of GSL evaluation
       if(opt_crr == "gsl_uint") gsl_uint=static_cast<unsigned int>(std::strtol(opt_sng.c_str(),(char **)NULL,10)); // [nbr] Unsigned int for GSL evaluations
       if(opt_crr == "int_foo") int_foo=static_cast<int>(std::strtol(opt_sng.c_str(),(char **)NULL,10)); // [nbr] Intrinsic int temporary variable
       if(opt_crr == "lat_nbr") lat_nbr=std::strtol(opt_sng.c_str(),(char **)NULL,10); // [nbr] Number of latitudes
@@ -482,7 +479,7 @@ int main(int argc,char **argv)
     // Print contents using overloaded stream insertion operator
     std::cout << tpt_a2d << std::endl; // [fnc]
     // std::cout << "Access a2d_cls out of range: " << tpt_a2d(bnd_nbr*sz_nbr) << std::endl; // [fnc]
-  } // end if dbg || tst_sng == "a2d"
+  } // !dbg || tst_sng == "a2d"
 
   if(dbg_lvl == dbg_old || tst_sng == "aer"){
     std::cout << "Testing aer_cls..." << std::endl;
@@ -490,12 +487,12 @@ int main(int argc,char **argv)
     aer_cls aer(sng_foo);
     std::cout << aer << std::endl;
     aer.tst(sng_foo,lng_foo);
-  } // end if dbg || tst_sng == "aer"
+  } // !dbg || tst_sng == "aer"
 
   if(dbg_lvl == dbg_old || tst_sng == "arr"){
     // ccc --tst=arr --arr_val=-1.0,1.0e1,1.0e36
     std::cout << "Testing arrays in command line arguments..." << std::endl;
-  } // end if dbg || tst_sng == "arr"
+  } // !dbg || tst_sng == "arr"
 
   if(dbg_lvl == dbg_old || tst_sng == "bnr"){
     /* ccc --dbg=3 --int_foo=0x01
@@ -547,7 +544,7 @@ int main(int argc,char **argv)
     std::cout << "Binary of unsigned long long " << ulng_lng_bnr << " is " << bit_sng_tpl(ulng_lng_bnr) << std::endl;
 #endif // !HAVE_LONG_LONG
     std::cout << "Binary of unsigned short " << usht_bnr << " is " << bit_sng_tpl(usht_bnr) << std::endl;
-  } // end if dbg || tst_sng == "bnr"
+  } // !dbg || tst_sng == "bnr"
   
   if(dbg_lvl == dbg_old || tst_sng == "uint"){
     /* ccc --dbg=3 --int_foo=0x01
@@ -595,7 +592,7 @@ int main(int argc,char **argv)
     std::cout << "ui64 of unsigned long long " << ulng_lng_bnr << "ul is " << ui64_val << "u" << std::endl;
 #endif // !HAVE_LONG_LONG
     std::cout << "ui32 of unsigned short " << usht_bnr << "us is " << ui32_val << "u" << std::endl;
-  } // end if dbg || tst_sng == "uint"
+  } // !dbg || tst_sng == "uint"
 
   if(dbg_lvl == dbg_old || tst_sng == "cmp"){
     // ccc --dbg=3 --tst=cmp
@@ -676,7 +673,7 @@ int main(int argc,char **argv)
     cmp_nm="Token PGI_CXX defined in main(), probably compiled with PGI pgCC"; // [sng] Compiler name
 #endif // !PGI_CXX
     std::cout << cmp_nm << std::endl;
-  } // end if dbg || tst_sng == "cmp"
+  } // !dbg || tst_sng == "cmp"
 
   if(dbg_lvl == dbg_old || tst_sng == "cpp"){
     std::cout << "Testing C pre-proprocessor behavior..." << std::endl;
@@ -693,7 +690,7 @@ int main(int argc,char **argv)
     std::string nvr_PVM_ARCH((std::getenv("PVM_ARCH")) ? std::getenv("PVM_ARCH") : ""); // [sng] Environment variable PVM_ARCH
     std::cout << "PVM_ARCH current environment = " << nvr_PVM_ARCH << std::endl;
     if(pvm_arch_cmp != nvr_PVM_ARCH) err_prn(sbr_nm," PVM_ARCH during compilation != PVM_ARCH in current environment");
-  } // end if dbg || tst_sng == "cpp"
+  } // !dbg || tst_sng == "cpp"
 
   if(dbg_lvl == dbg_old || tst_sng == "cpx"){
     std::cout << "Testing complex number arithmetic..." << std::endl;
@@ -726,7 +723,7 @@ int main(int argc,char **argv)
     std::cout << "after assignment dcx_foo=std::complex<double>(0.0,1.0), dcx_foo = " << dcx_foo << std::endl;
     dcx_foo=std::complex<double>(fcx_foo);
     std::cout << "after assignment dcx_foo=std::complex<double>(fcx_foo), dcx_foo = " << dcx_foo << std::endl;
-  } // end if dbg || tst_sng == "cpx"
+  } // !dbg || tst_sng == "cpx"
   
   if(dbg_lvl == dbg_old || tst_sng == "crp"){
     std::cout << "Testing cryptography..." << std::endl;
@@ -743,7 +740,7 @@ int main(int argc,char **argv)
     std::cout << "PGI compiler pgCC does not support crypt() function, skipping test..." << std::endl;
 #endif // PGI_CXX
     std::cout << "pwd_ucr = " << pwd_ucr << ", salt = " << slt_sng << ", pwd_ncr = " << pwd_ncr << std::endl;
-  } // end if dbg || tst_sng == "crp"
+  } // !dbg || tst_sng == "crp"
 
   if(dbg_lvl == dbg_old || tst_sng == "ddra"){
     std::cout << "Testing DDRA model..." << std::endl;
@@ -1015,7 +1012,19 @@ int main(int argc,char **argv)
     // Remove unused variable warnings
     dmnszavg_stl+=0.0*(varsz_stl_1D+dmnszavg_gcm_avg_wgt_varnbr+dmnszavg_gcm_avg_wgt_lmnnbr+lmn_nbr_ttl+ntg_nbr_ttl+flp_nbr_ttl+rcd+rnk_avg);
 
-  } // end if dbg || tst_sng == "ddra"
+    std::cout << "DDRA results: " << std::endl;
+    std::cout << "dmnszavg_stl = " << dmnszavg_stl << std::endl;
+    std::cout << "tm_frc_flp_ttl = " << tm_frc_flp_ttl << std::endl;
+    std::cout << "tm_frc_io_ttl = " << tm_frc_io_ttl << std::endl;
+    std::cout << "tm_frc_ntg_ttl = " << tm_frc_ntg_ttl << std::endl;
+    std::cout << "tm_frc_rd_ttl = " << tm_frc_rd_ttl << std::endl;
+    std::cout << "tm_frc_wrt_ttl = " << tm_frc_wrt_ttl << std::endl;
+    std::cout << "ntg_nbr_rdc_dfl = " << ntg_nbr_rdc_dfl << std::endl;
+    std::cout << "ntg_nbr_nrm_dfl = " << ntg_nbr_nrm_dfl << std::endl;
+    std::cout << "flp_nbr_rdc_dfl = " << flp_nbr_rdc_dfl << std::endl;
+    std::cout << "flp_nbr_nrm_dfl = " << flp_nbr_nrm_dfl << std::endl;
+
+  } // !dbg || tst_sng == "ddra"
   
   if(dbg_lvl == dbg_old || tst_sng == "dyn"){
     std::cout << "Testing dynamic allocation of multidimensional fixed float arrays..." << std::endl;
@@ -1029,7 +1038,7 @@ int main(int argc,char **argv)
 	std::cout << "tpt_v1d[" << bnd_idx*sz_nbr+sz_idx << "] = " << tpt_v1d[bnd_idx*sz_nbr+sz_idx] << std::endl;
       } // end loop over lon
     } // end loop over bnd
-  } // end if dbg || tst_sng == "dyn"
+  } // !dbg || tst_sng == "dyn"
   
   if(dbg_lvl == dbg_old || tst_sng == "lmt" || tst_sng == "flt"){
     std::cout << "Testing floating point representation using <cfloat>..." << std::endl;
@@ -1072,7 +1081,7 @@ int main(int argc,char **argv)
     std::cout << "Testing floating point representation using numeric_limits<T>..." << std::endl;
     std::numeric_limits<float>::max() << std::endl;
 #endif // !HAVE_NUMERIC_LIMITS
-  } // end if dbg || tst_sng == "flt"
+  } // !dbg || tst_sng == "flt"
   
   if(dbg_lvl == dbg_old || tst_sng == "fnc"){
     // ccc --dbg=3 --function=sine --flt=0.5
@@ -1093,7 +1102,7 @@ int main(int argc,char **argv)
     std::cout << "base.fnc->eval(cpv_foo) = " << base.fnc->eval(cpv_foo) << std::endl;
     //  std::cout << "base.eval(cpv_foo) = " << base.eval(cpv_foo) << std::endl;
     //  virtualViaReference(&sin_fnc,cpv_foo);
-  } // end if dbg || tst_sng == "fnc"
+  } // !dbg || tst_sng == "fnc"
   
   if(dbg_lvl == dbg_old || tst_sng == "gmt"){
     std::cout << "Testing GMT time conversion utilities..." << std::endl;
@@ -1118,7 +1127,7 @@ int main(int argc,char **argv)
     int tm_mnt(gmt_tm->tm_min); // [mnt] 0-based minute of second [0..59]
     int tm_sec(gmt_tm->tm_sec); // [s] 0-based second of minute [0..59]
     (void)std::fprintf(stdout,"%4.4d/%2.2d/%2.2d YDY %d GMT %2.2d:%2.2d:%f\n",tm_yr,tm_mth,tm_day,tm_ydy,tm_hr,tm_mnt,tm_sec+tm_sec_frc);
-  } // end if dbg || tst_sng == "gmt"
+  } // !dbg || tst_sng == "gmt"
 
   if(dbg_lvl == dbg_old || tst_sng == "gsl"){
     std::cout << "Testing GSL behavior..." << std::endl;
@@ -1159,7 +1168,7 @@ int main(int argc,char **argv)
 
     // Restore original handler
     std::cout << "Restoring default handler..." << std::endl;
-    old_gsl_error_handler=gsl_set_error_handler(NULL); // [fnc] GSL error handler
+    old_gsl_error_handler=gsl_set_error_handler(old_gsl_error_handler); // [fnc] GSL error handler
 
     if(dbg_lvl == dbg_old){
       // Test non-GSL numeric problems
@@ -1168,7 +1177,7 @@ int main(int argc,char **argv)
       int cst_one(1); // [nbr] One
       int cst_zero(0); // [nbr] Zero
       std::cout << "One divided by zero (1/0) = " << cst_one/cst_zero << std::endl;
-    } // end if dbg || tst_sng == "idx_rfr"
+    } // !dbg || tst_sng == "idx_rfr"
 
     // Complete elliptic integral of the second kind
     std::cout << "Complete elliptic integral of the second kind gsl_sf_ellint_Ecomp(0.0)=pi/2...";
@@ -1398,7 +1407,7 @@ int main(int argc,char **argv)
     std::cout << "promoted gsl_a = "; gsl_ieee_fprintf_double(stdout,&gsl_a_flt_dbl);std::cout << std::endl;
     std::cout << "  double gsl_a = "; gsl_ieee_fprintf_double(stdout,&gsl_a);std::cout << std::endl;
     
-  } // end if dbg || tst_sng == "gsl"
+  } // !dbg || tst_sng == "gsl"
   
   if(dbg_lvl == dbg_old || tst_sng == "idx_rfr"){
     std::cout << "Testing idx_rfr_cls..." << std::endl;
@@ -1407,7 +1416,7 @@ int main(int argc,char **argv)
     std::cout << idx_rfr << std::endl;
     idx_rfr.tst(sng_foo,lng_foo);
     idx_rfr_H2O_tst();
-  } // end if dbg || tst_sng == "idx_rfr"
+  } // !dbg || tst_sng == "idx_rfr"
 
   if(dbg_lvl == dbg_old || tst_sng == "ld"){
 #ifdef AIX
@@ -1423,7 +1432,7 @@ int main(int argc,char **argv)
 #else // !AIX
     std::cout << "Linker test only available with AIX..." << std::endl;
 #endif // !AIX
-  } // end if dbg || tst_sng == "ld"
+  } // !dbg || tst_sng == "ld"
 
   if(dbg_lvl == dbg_old || tst_sng == "lmt" || tst_sng == "ntg" ){
     std::cout << "Testing integer representation using <climits>..." << std::endl;
@@ -1450,7 +1459,7 @@ int main(int argc,char **argv)
 #if (defined ULLONG_MAX)
     std::cout << "ULLONG_MAX = " << ULLONG_MAX << " = Maximum value an `unsigned long long int' can hold" << std::endl;
 #endif // !ULLONG_MAX
-  } // end if dbg || tst_sng == "lmt" || tst_sng == "ntg"
+  } // !dbg || tst_sng == "lmt" || tst_sng == "ntg"
 
   if(dbg_lvl == dbg_old || tst_sng == "map"){
     std::cout << "Testing STL map containers" << std::endl;
@@ -1502,7 +1511,7 @@ int main(int argc,char **argv)
     std::cerr << "mmw_aer = " << mmw_aer << " kg mol-1" << std::endl;
     // fxm: indexing the map by the key (like hashing in Perl) does not work
     //    std::cerr << "mnr_map[\"dust_like\"] = " << mnr_map["dust_like"] << std::endl;
-  } // end if dbg || tst_sng == "map"
+  } // !dbg || tst_sng == "map"
   
   if(dbg_lvl == dbg_old || tst_sng == "mmr"){
     std::cout << "Testing memory usage statistics gleaned by getrusage()..." << std::endl;
@@ -1555,7 +1564,7 @@ int main(int argc,char **argv)
     (void)std::strcpy(chr_ptr,"This string std::strcpy()'d to erroneous memory");
     std::cout << prg_nm_get() << ": INFO std::fprintf()'ing string std::strcpy()'d to erroneous memory..." << std::endl;
     (void)std::fprintf(stdout,"%s\n",chr_ptr);
-  } // end if dbg || tst_sng == "mmr"
+  } // !dbg || tst_sng == "mmr"
 
   if(dbg_lvl == dbg_old || tst_sng == "mpi"){
     /* mpirun -np 2 ccc --dbg=0 --tst=mpi
@@ -1598,7 +1607,7 @@ int main(int argc,char **argv)
     std::cout << "MPI Activation token ENABLE_MPI is false" << std::endl; 
     std::cout << prg_nm_get() << ": INFO Not attempting MPI processes" << std::endl;
 #endif // !ENABLE_MPI
-  } // end if dbg || tst_sng == "mpi"
+  } // !dbg || tst_sng == "mpi"
 
   if(dbg_lvl == dbg_old || tst_sng == "mth"){
     std::cout << "Testing mathematical utilities, constants..." << std::endl;
@@ -1628,14 +1637,14 @@ int main(int argc,char **argv)
     // Solve cubic equation with complex coefficients and complex solutions
     rcd+=eqn_cbc_slvr(prm_a,prm_b,prm_c,&sln_1,&sln_2,&sln_3);
     std::cout << "Cubic with complex coefficients a = " << prm_a << ", b = " << prm_b << ", c = " << prm_c << " has solutions: sln_1 = " << sln_1 << ", sln_2 = " << sln_2 << ", sln_3 = " << sln_3 << std::endl;
-  } // end if dbg || tst_sng == "mth"
+  } // !dbg || tst_sng == "mth"
 
   if(dbg_lvl == dbg_old || tst_sng == "nms"){
     // ccc --dbg=3 --tst=nms
     std::cout << "Testing namespaces..." << std::endl;
     std::cout << "nmspc1::pi = " << nmspc1::pi << std::endl;
     std::cout << "nmspc2::pi = " << nmspc2::pi << std::endl;
-  } // end if dbg || tst_sng == "nms"
+  } // !dbg || tst_sng == "nms"
   
   if(dbg_lvl == dbg_old || tst_sng == "ntp" || tst_sng == "rbn" || tst_sng == "vec"){
     // ccc --dbg=3 --xtr_LHS="xtr_prt_wgt+xtr_fll_nil+xtr_vrb" --xtr_RHS="xtr_prt_wgt+xtr_fll_nil+xtr_vrb"
@@ -1643,7 +1652,7 @@ int main(int argc,char **argv)
     // ccc --dbg=3 --xtr_LHS="xtr_prt_wgt+xtr_fll_ngh+xtr_vrb" --xtr_RHS="xtr_prt_wgt+xtr_fll_ngh+xtr_vrb"
     std::cout << "Testing ntp_vec() and rbn_vec()..." << std::endl;
     vec_tst(xtr_LHS,xtr_RHS);
-  } // end if dbg || tst_sng == "ntp", "rbn", "vec"
+  } // !dbg || tst_sng == "ntp", "rbn", "vec"
   
   if(dbg_lvl == dbg_old || tst_sng == "nvr"){
     std::cout << "Testing environment variables..." << std::endl;
@@ -1663,7 +1672,7 @@ int main(int argc,char **argv)
     // Inner parentheses allow nvr_crr to be updated, outer parens for boolean evaluation of loop
     // Technique from UNIX programming FAQ
     while((nvr_crr=*nvr++)) std::cout << nvr_crr << std::endl;
-  } // end if dbg || tst_sng == "nvr"
+  } // !dbg || tst_sng == "nvr"
 
   if(dbg_lvl == dbg_old || tst_sng == "nwt_rph"){
     std::cout << "Testing Newton-Raphson root finder..." << std::endl;
@@ -1680,7 +1689,7 @@ int main(int argc,char **argv)
     rcd+=nwt_rph_slvr(eqn_sng,prm_a.real(),prm_b.real(),prm_c.real(),&sln);
     std::cout << "Solving equation " << eqn_sng << std::endl;
     std::cout << "Solution is x = " << sln << std::endl;
-  } // end if dbg || tst_sng == "nwt_rph"
+  } // !dbg || tst_sng == "nwt_rph"
 
   if(dbg_lvl == dbg_old || tst_sng == "ocn"){
     std::cout << "Testing exchange coefficient over ocean..." << std::endl;
@@ -1704,7 +1713,7 @@ int main(int argc,char **argv)
        rgh_mmn_ocn=10.0*std::exp(-cst_von_krm/std::sqrt(xch_cff_mmn_ocn_ntr))
        plot,wnd_10m_ntr,xch_cff_mmn_ocn_ntr
     */
-  } // end if dbg || tst_sng == "ocn"
+  } // !dbg || tst_sng == "ocn"
   
   if(dbg_lvl == dbg_old || tst_sng == "cxx11"){
     // ccc --dbg=1 --tst=cxx11
@@ -1715,7 +1724,7 @@ int main(int argc,char **argv)
     std::vector<std::thread> threads;
     for(int i=0;i<5;++i) threads.push_back(std::thread(cxx11_hello));
     for(auto& thread: threads) thread.join();
-  } // end if dbg || tst_sng == "cxx11"
+  } // !dbg || tst_sng == "cxx11"
 
   if(dbg_lvl == dbg_old || tst_sng == "omp"){
     // ccc --dbg=1 --tst=omp
@@ -1745,7 +1754,7 @@ int main(int argc,char **argv)
       std::cout << std::endl;
       std::cout << prg_nm_get() << ": INFO Maximum number of threads system allows = omp_get_max_threads() = " << thr_nbr_max << std::endl;
       std::cout << prg_nm_get() << ": INFO Number of processors available = omp_get_num_procs() = " << prc_nbr_max << std::endl;
-    } // endif dbg_lvl
+    } // !dbg_lvl
     if(thr_nbr_max > thr_nbr_max_fsh){
       std::cout << prg_nm_get() << ": INFO Reducing number of threads from " << thr_nbr_max << " to " << thr_nbr_max_fsh << " since " << prg_nm_get() << " hits I/O bottleneck above " << thr_nbr_max_fsh << " threads" << std::endl;
       (void)omp_set_num_threads(thr_nbr_max_fsh); // [nbr] Maximum number of threads system is allowed
@@ -1780,7 +1789,7 @@ int main(int argc,char **argv)
       std::cout << "thr_idx[" << idx << "]=" << thr_idx[idx] << std::endl;
     } // end loop over idx
 #endif // endif _OPENMP
-  } // end if dbg || tst_sng == "omp"
+  } // !dbg || tst_sng == "omp"
 
   if(dbg_lvl == dbg_old || tst_sng == "oom"){
     std::cout << "Testing out of memory (OOM) behavior and my_new_handler()..." << std::endl;
@@ -1810,7 +1819,7 @@ int main(int argc,char **argv)
 	break;
       } // endif
     } // end loop over idx
-  } // end if dbg || tst_sng == "oom"
+  } // !dbg || tst_sng == "oom"
   
   if(dbg_lvl == dbg_old || tst_sng == "phys_cst"){
     std::cout << "Testing physical constants..." << std::endl;
@@ -1847,7 +1856,7 @@ int main(int argc,char **argv)
       << "spc_heat_Fe2O3_sld = " << spc_heat_Fe2O3_sld << " J kg-1 K-1, "
       << "spc_heat_SiO2_sld = " << spc_heat_SiO2_sld << " J kg-1 K-1, "
       << std::endl;
-  } // end if dbg || tst_sng == "phys_cst"
+  } // !dbg || tst_sng == "phys_cst"
 
   if(dbg_lvl == dbg_old || tst_sng == "prn"){
     // Test counter printing
@@ -1861,7 +1870,7 @@ int main(int argc,char **argv)
       std::cout << "\rMie computation: " << std::setw(6) << idx;
     } // end loop over idx
     std::cout << std::endl;
-  } // end if dbg || tst_sng == "prn"
+  } // !dbg || tst_sng == "prn"
 
   if(dbg_lvl == dbg_old || tst_sng == "ptr"){
     std::cout << "Testing pointer nomenclature..." << std::endl;
@@ -1876,7 +1885,7 @@ int main(int argc,char **argv)
     std::cout << "" << std::endl;
     std::cout << "int * restrict foo: foo is a restricted pointer to an integer. If the integer changes, no other pointer will access the integer" << std::endl;
     std::cout << "int * restrict const foo: foo is a constant restricted pointer to an integer. If the integer changes, no other pointer will access the integer" << std::endl;
-  } // end if dbg || tst_sng == "ptr"
+  } // !dbg || tst_sng == "ptr"
 
   if(dbg_lvl == dbg_old || tst_sng == "rnd" || tst_sng == "round" ){
     std::cout << "Testing round() functionality..." << std::endl;
@@ -1890,7 +1899,7 @@ int main(int argc,char **argv)
     std::cout << "round(0.5-1.0e-17) = " << mth_fnc::round(0.5-1.0e-17) << std::endl;
     std::cout << "round(0.5) = " << mth_fnc::round(0.5) << std::endl;
     std::cout << "round(dbl_foo) = round(" << dbl_foo << ") = " << mth_fnc::round(dbl_foo) << std::endl;
-  } // end if dbg || tst_sng == "rnd"
+  } // !dbg || tst_sng == "rnd"
 
   if(dbg_lvl == dbg_old || tst_sng == "rtti"){
     std::cout << "Testing run-time-type-instantiation (RTTI)..." << std::endl;
@@ -1999,7 +2008,7 @@ int main(int argc,char **argv)
    typeid(unsigned long long).name() = y
    typeid(unsigned long).name() = m
    typeid(unsigned short).name() = t */
-  } // end if dbg || tst_sng == "rtti"
+  } // !dbg || tst_sng == "rtti"
 
   if(dbg_lvl == dbg_old || tst_sng == "simd"){
     // ccc --dbg=1 --tst=simd
@@ -2011,7 +2020,7 @@ int main(int argc,char **argv)
 #endif // !_OPENMP
 #ifdef _OPENMP // OpenMP-compliant compilers define _OPENMP=YYYYMM = year and month of OpenMP specification
 #endif // endif _OPENMP
-  } // end if dbg || tst_sng == "simd"
+  } // !dbg || tst_sng == "simd"
 
   if(dbg_lvl == dbg_old || tst_sng == "sizeof"){
     std::cout << "Testing dynamic sizing ability..." << std::endl;
@@ -2024,7 +2033,7 @@ int main(int argc,char **argv)
     std::cerr << "sizeof grd_typ_sng = " << sizeof grd_typ_sng << " B" << std::endl;
     std::cerr << "sizeof(std::string) = " << sizeof(std::string) << " B" << std::endl;
     std::cerr << "grd_typ_nbr = " << grd_typ_nbr << std::endl;
-  } // end if dbg || tst_sng == "sizeof"
+  } // !dbg || tst_sng == "sizeof"
   
   if(dbg_lvl == dbg_old || tst_sng == "spc_slr"){
     std::cout << "Testing spc_slr class..." << std::endl;
@@ -2034,7 +2043,7 @@ int main(int argc,char **argv)
     std::cout << flx_slr_src; // [sct] Solar flux source
     // Test solar flux source class for memory leaks by initializing lng_foo members
     rcd+=spc_slr_cls::tst(lng_foo); // [sct] Solar flux source
-  } // end if dbg || tst_sng == "spc_slr"
+  } // !dbg || tst_sng == "spc_slr"
 
   if(dbg_lvl == dbg_old || tst_sng == "sng" || tst_sng == "srm"){
     /* Test string and stream handling DeD97 p. 915, DeD01 p. 960
@@ -2099,7 +2108,7 @@ int main(int argc,char **argv)
     // Restore defaults
     std::cout.precision(8); // Number of digits to right of decimal
     std::cout.flags(ios_flg_dfl); // [srm] Output stream
-  } // end if dbg || tst_sng == "sng" || tst_sng == "srm"
+  } // !dbg || tst_sng == "sng" || tst_sng == "srm"
 
   if(dbg_lvl == dbg_old || tst_sng == "sizeof" || tst_sng == "sz"){
     std::cout << "Testing native type sizes..." << std::endl;
@@ -2116,7 +2125,7 @@ int main(int argc,char **argv)
     std::cout << "sizeof(long) = " << sizeof(long) << std::endl;
     std::cout << "sizeof(short) = " << sizeof(short) << std::endl;
     std::cout << "sizeof(size_t) = " << sizeof(size_t) << std::endl;
-  } // end if dbg || tst_sng == "sizeof"
+  } // !dbg || tst_sng == "sizeof"
   
   if(dbg_lvl == dbg_old || tst_sng == "c99"){
     /* Test C99 syntax
@@ -2217,7 +2226,7 @@ int main(int argc,char **argv)
 #else // !HAVE_C99
     std::cout << "INFO: Compiler is not xlC or g++, not testing restrict type qualifier..." << std::endl;
 #endif // !HAVE_C99
-  } // end if dbg || tst_sng == "c99"
+  } // !dbg || tst_sng == "c99"
 
   if(dbg_lvl == dbg_old || tst_sng == "stat"){
     // ccc --tst=stat --fl_in=~/foo.nc
@@ -2227,6 +2236,7 @@ int main(int argc,char **argv)
     struct stat stat_sct;
     rcd_sys=stat(fl_in.c_str(),&stat_sct);
     std::cout << "Testing stat() functions on " << fl_in << ":" << std::endl;
+    std::cout << "Return code = rcd_sys = " << rcd_sys << std::endl;
     std::cout << "Inode number = st_ino = " << stat_sct.st_ino << std::endl;
     std::cout << "Protection mode = st_mode = " << stat_sct.st_mode << std::endl;
     std::cout << "Number of hard links = st_nlink = " << stat_sct.st_nlink << std::endl;
@@ -2238,7 +2248,7 @@ int main(int argc,char **argv)
     std::cout << "Time of last access = st_atime = " << stat_sct.st_atime << std::endl;
     std::cout << "Time of last modification = st_mtime = " << stat_sct.st_mtime << std::endl;
     std::cout << "Time of last ctime = st_ctime = " << stat_sct.st_ctime << std::endl;
-  } // end if dbg || tst_sng == "stat"
+  } // !dbg || tst_sng == "stat"
 
   if(dbg_lvl == dbg_old || tst_sng == "sys"){
     // ccc --tst=sys
@@ -2248,7 +2258,7 @@ int main(int argc,char **argv)
     std::cout << "Effective user ID = geteuid() = " << geteuid() << std::endl;
     std::cout << "Process ID = getpid() = " << getpid() << std::endl;
     std::cout << "Parent process ID = getppid() = " << getppid() << std::endl;
-  } // end if dbg || tst_sng == "sys"
+  } // !dbg || tst_sng == "sys"
 
   if(dbg_lvl == dbg_old || tst_sng == "snd"){
     // ccc --tst=snd
@@ -2266,7 +2276,7 @@ EOF
     prc_cmp sln=0.035; // [ppt] Salinity
     prc_cmp sln_ppt=sln*1000; // [ppt] Salinity
     std::cout << "Temperature = " << tpt_cls << " C, Salinity = " << sln_ppt << " ppt, Depth = " << dpt << " m, Speed of sound = " << spd_snd_wtr_fst_scl(dpt,sln_ppt,tpt_cls) << " m s-1" << std::endl;
-  } // end if dbg || tst_sng == "snd"
+  } // !dbg || tst_sng == "snd"
 
   if(dbg_lvl == dbg_old || tst_sng == "try"){
 #ifndef PGI_CXX
@@ -2281,7 +2291,7 @@ EOF
 #else // PGI_CXX
     std::cout << "PGI compiler pgCC does not support try/throw/catch exceptions, skipping test..." << std::endl;
 #endif // PGI_CXX
-  } // end if dbg || tst_sng == "try"
+  } // !dbg || tst_sng == "try"
 
   if(dbg_lvl == dbg_old || tst_sng == "tst"){
     Test test;
@@ -2289,7 +2299,7 @@ EOF
     std::cout << "Default constructor no argument test.tst_nbr_get() = " << test.tst_nbr_get() << std::endl;
     Test test2(4);
     std::cout << "Default constructor one argument test2.tst_nbr_get() = " << test2.tst_nbr_get() << std::endl;
-  } // end if dbg || tst_sng == "tst"
+  } // !dbg || tst_sng == "tst"
 
   // Allocate dynamic arrays
   prc_cmp *lat=new prc_cmp[lat_nbr]; // [dgr] Latitude
@@ -2360,7 +2370,7 @@ EOF
   if(dbg_lvl > dbg_off || tst_sng == "nc"){
     std::cout << prg_nm << ": INFO External netCDF type of prc_cmp variables will be " << nco_typ_sng(nco_xtyp) << std::endl;
     std::cout << prg_nm << ": INFO Record dimension will be " << (dmn_rcd == "" ? "non-existent" : dmn_rcd) << std::endl;
-  } // endif dbg
+  } // !dbg
  
   // Create dimensions
   const int wvl_dmn(nco_def_dim(nc_out,static_cast<std::string>("wvl"),dmn_rcd == "wvl" ? NC_UNLIMITED : wvl_nbr)); // [dmn] Wavelength dimension
@@ -2380,7 +2390,7 @@ EOF
   if(dbg_lvl == dbg_old || tst_sng == "nc"){
     rcd=nco_inq_ndims(nc_out,int_foo);
     std::cerr << "Currently there are " << int_foo << " dimensions defined" << std::endl;
-  } // end if dbg
+  } // !dbg
   // Global attributes
   rcd=nco_put_att(nc_out,NC_GLOBAL,"history",time_bfr_srt.substr(0,time_bfr_srt.size()-1)+": "+cmd_ln);
   rcd=nco_put_att(nc_out,NC_GLOBAL,"CVS_Id",CVS_Id);
@@ -2519,7 +2529,7 @@ EOF
     //    rcd+=rt_obj.var_put(nc_out,"rfl_flx"); // [frc] Flux reflectance
     const prc_cmp tmp_foo(0.5); // [frc] Cosine solar zenith angle
     rcd+=rt_lop(nc_out,rt_obj,tmp_foo); // [frc] Flux reflectance
-  } // end if dbg || "rt"
+  } // !dbg || "rt"
 
   if(dbg_lvl == dbg_old || tst_sng == "wvl"){
     // ccc --tst=wvl
@@ -2533,7 +2543,7 @@ EOF
     std::cout << wvl_obj; // [obj] Wavelength grid object
     // Test wavelength grid object for memory leaks by initializing lng_foo members
     //rcd+=wvl_grd_cls::tst(lng_foo); // [obj] Wavelength grid 
-  } // end if dbg || "wvl"
+  } // !dbg || "wvl"
 
   // Close output file
   rcd=nco_close(nc_out); // [fnc] Close netCDF file
@@ -2543,7 +2553,7 @@ EOF
 
   Exit_gracefully();
   return EXIT_SUCCESS;
-} // end main()
+} // !main()
 
 void usg_prn(const char *opt_sng)
 {

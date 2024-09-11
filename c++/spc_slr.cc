@@ -40,7 +40,7 @@ operator<< // [fnc] Stream insertion operator
   } // endif
     
   return srm_out; // [srm] Reference to output stream for cascading
-} // end operator<<()
+} // !operator<<()
 
 // Friendly functions end
 // Static members begin
@@ -68,7 +68,7 @@ spc_slr_cls::tst(long obj_nbr){ // [fnc] Self-test of spc_slr_cls class
     flx_frc=tst_obj->flx_frc_get(0.2e-6,1.0e-5); // [fnc] Fraction of solar spectrum in a single spectral region
     std::cout << "idx = " << idx << ", nst_nbr = " << nst_nbr << ", flx_frc = " << flx_frc << std::endl;
     delete tst_obj; // [sct] Test object
-  } // end loop over obj
+  } // !loop over obj
 
   // Test all solar spectra
   tst_obj=new spc_slr_cls("LaN68"); // [sct] Test object
@@ -102,7 +102,7 @@ spc_slr_cls::tst(long obj_nbr){ // [fnc] Self-test of spc_slr_cls class
   delete tst_obj; // [sct] Test object
 
   return rcd_lcl; // [enm] Return success code
-} // end spc_slr_cls::tst()
+} // !spc_slr_cls::tst()
 
 int spc_slr_cls::nst_nbr_get(){return nst_nbr;} // [nbr] Number of instantiated class members
 sng2sng_map spc_slr_cls::opt2abb_map=spc_slr_cls::opt2abb_map_mk(); // [map] Option to abbreviation map
@@ -141,7 +141,7 @@ sng2sng_map spc_slr_cls::opt2abb_map_mk(){ // Create abbreviation map
   map_tmp.insert(sng2sng_map::value_type("Laser","lsr"));
 
   return map_tmp;
-} // end spc_slr_cls::opt2abb_map_mk()
+} // !spc_slr_cls::opt2abb_map_mk()
 
 std::string // O [sng] Solar flux source abbreviation
 spc_slr_cls::opt2abb // [fnc] Option to abbreviation mapper
@@ -151,7 +151,7 @@ spc_slr_cls::opt2abb // [fnc] Option to abbreviation mapper
   itr=opt2abb_map.find(opt_sng);
   if(itr == opt2abb_map.end()) err_prn("spc_slr_cls::opt2abb",opt_sng+" is unknown");
   return itr->second; // O [sng] Solar flux source abbreviation
-} // end spc_slr_cls::opt2abb()
+} // !spc_slr_cls::opt2abb()
 
 sng2spc_slr_sct_map spc_slr_cls::spc_slr_map=spc_slr_cls::spc_slr_map_mk(); // [map] Solar flux source map
 sng2spc_slr_sct_map spc_slr_cls::spc_slr_map_mk(){ // [fnc] Create solar flux source map
@@ -188,7 +188,7 @@ sng2spc_slr_sct_map spc_slr_cls::spc_slr_map_mk(){ // [fnc] Create solar flux so
      "Laser (delta function)", // [sng] Solar flux source description
      "", // [sng] File containing solar spectrum
      flx_slr_frc_lsr} // [fnc] Function to compute solar spectrum
-  }; // end spc_slr_sct spc_slr[]
+  }; // !spc_slr_sct spc_slr[]
   long idx; // [idx] Counting index
   int spc_slr_nbr=sizeof(spc_slr)/sizeof(spc_slr_sct); // [nbr] Number of solar flux source structures
   sng2spc_slr_sct_map spc_slr_map_tmp; // [sct] Map with key=abbreviation, value=solar flux source structure
@@ -558,7 +558,7 @@ spc_slr_cls::ntp_slr_flx_mnt // [fnc]  Interpolate raw solar spectrum to monoton
 
   if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");
   return rcd_lcl; // [enm] Return success code
-} // end spc_slr_cls::ntp_slr_flx_mnt()
+} // !spc_slr_cls::ntp_slr_flx_mnt()
 
 int // O [enm] Return success code
 spc_slr_cls::ntp_slr_flx_nmn // [fnc] Interpolate raw solar spectrum to non-monotonic grid
@@ -683,21 +683,21 @@ spc_slr_cls::ntp_slr_flx_nmn_CAM_SW // [fnc] Interpolate raw solar spectrum to C
     { // New scope to hide re-declaration of const wvl_nbr_tmp
       const long wvl_nbr_tmp(16); // [nbr] Number of output bins in current output block
       rcd_lcl+=ntp_slr_flx_mnt(const_cast<const prc_cmp *>(wvl_min_out+wvl_idx_srt),const_cast<const prc_cmp *>(wvl_max_out+wvl_idx_srt),wvl_nbr_tmp,flx_frc_out+wvl_idx_srt);
-    } // end scope
+    } // !scope
 
     // Get band 17
     wvl_idx_srt=16; // [idx] Starting index of current output block
     { // New scope to hide re-declaration of const wvl_nbr_tmp
       const long wvl_nbr_tmp(1); // [nbr] Number of output bins in current output block
       rcd_lcl+=ntp_slr_flx_mnt(const_cast<const prc_cmp *>(wvl_min_out+wvl_idx_srt),const_cast<const prc_cmp *>(wvl_max_out+wvl_idx_srt),wvl_nbr_tmp,flx_frc_out+wvl_idx_srt);
-    } // end scope
+    } // !scope
 
     // Get bands 18 and 19
     wvl_idx_srt=17; // [idx] Starting index of current output block
     { // New scope to hide re-declaration of const wvl_nbr_tmp
       const long wvl_nbr_tmp(2); // [nbr] Number of output bins in current output block
       rcd_lcl+=ntp_slr_flx_mnt(const_cast<const prc_cmp *>(wvl_min_out+wvl_idx_srt),const_cast<const prc_cmp *>(wvl_max_out+wvl_idx_srt),wvl_nbr_tmp,flx_frc_out+wvl_idx_srt);
-    } // end scope
+    } // !scope
   } // endif CAM_SW
 
   if(dbg_lvl >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");
@@ -809,7 +809,7 @@ flx_slr_frc_lsr // [fnc] Solar flux of laser
 
   if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");
   return 1.0;
-} // end flx_slr_frc_lsr()
+} // !flx_slr_frc_lsr()
 
 int // O [enm] Return success code
 flx_slr_frc_lsr // [fnc] Solar flux of laser
@@ -831,14 +831,14 @@ flx_slr_frc_lsr // [fnc] Solar flux of laser
   prc_cmp flx_tmp(1.0/wvl_nbr); // [frc] Fraction of solar flux in band
   for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
     flx_slr_frc[wvl_idx]=flx_tmp; // [frc] Fraction of solar flux in band
-  } // end loop over wvl_idx
+  } // !wvl_idx
 
   if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Exiting...");
 
   if(wvl_min[0] == wvl_max[0]){;} // CEWU Compiler Error Warning Usage
 
   return rcd;
-} // end flx_slr_frc_lsr()
+} // !flx_slr_frc_lsr()
 
 // fxm: This function does nothing useful
 prc_cmp // [frc] Fraction of solar flux in band
@@ -906,27 +906,27 @@ flx_slr_frc_ThD71 // [fnc] Fraction of solar flux in given spectral region of Th
     std::cout << "idx\twvl_max\tflx_frc_blr" << std::endl;
     std::cout << "#\tum\t" << std::endl;
     for(idx=0;idx<wvl_nbr;idx++) std::cout << idx << "\t" << wvl_max_tmp[idx]*1.0e6 << "\t" << flx_frc_blr_tmp[idx] << std::endl;
-  } // end if dbg
+  } // !dbg
   
   // Create standard fields
   for(idx=0;idx<wvl_nbr;idx++){
     wvl_max[idx]=wvl_max_tmp[idx]; // [m] Maximum wavelength in band
-  } // end loop over wvl 
+  } // !idx
   
   wvl_min[0]=wvl_max[0]-(wvl_max[1]-wvl_max[0]);
   for(idx=1;idx<wvl_nbr;idx++){
     wvl_min[idx]=wvl_max[idx-1]; // [m] Minimum wavelength in band
-  } // end loop over wvl 
+  } // !idx
   
   for(idx=0;idx<wvl_nbr;idx++){
     wvl[idx]=wvl_ctr[idx]=0.5*(wvl_max[idx]+wvl_min[idx]); // [m] Wavelength at band center
     wvl_dlt[idx]=wvl_max[idx]-wvl_min[idx]; // [m] Bandwidth
-  } // end loop over wvl 
+  } // !idx
   
   flx_slr_frc[0]=flx_frc_blr_tmp[0]; // [W m-2] Solar flux in band
   for(idx=1;idx<wvl_nbr;idx++){
     flx_slr_frc[idx]=flx_frc_blr_tmp[idx]-flx_frc_blr_tmp[idx-1]; // [frc] Fraction of solar flux in band
-  } // end loop over wvl 
+  } // !idx
   
   // Free dynamic memory
   delete[] wvl; // [m] Nominal wavelength
@@ -938,6 +938,6 @@ flx_slr_frc_ThD71 // [fnc] Fraction of solar flux in given spectral region of Th
 
   // fxm: return whole array
   return foo; // [frc]
-} // end flx_slr_frc_ThD71()
+} // !flx_slr_frc_ThD71()
 
 // Global functions with C++ linkages end
