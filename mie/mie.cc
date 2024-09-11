@@ -432,7 +432,8 @@ int main(int argc,char **argv)
   prc_cmp rgh_mmn_ice_std(0.0005); // [m] Roughness length over sea ice BKL97 p. F-3 (updated)
   prc_cmp rgh_mmn_mbl(100.0e-6); // [m] Roughness length momentum for erodible surfaces MaB95 p. 16420, GMB98 p. 6205
   prc_cmp rgh_mmn_smt(10.0e-6); // [m] Smooth roughness length MaB95 p. 16426, MaB97 p. 4392, GMB98 p. 6207 fxm: aer uses 30.0e-6
-  prc_cmp slr_cst(1367.0); // [W m-2] Solar constant
+  //prc_cmp slr_cst(phc::slr_cst_CCM); // [W m-2] Solar constant (default value until 20240911)
+  prc_cmp slr_cst(phc::slr_cst_FDE24); // [W m-2] Solar constant 20240911: Adopt FDE24 values by default
   prc_cmp slr_zen_ngl_cos(1.0); // [frc] Cosine solar zenith angle
   prc_cmp snw_hgt_lqd(0.0); // [m] Equivalent liquid water snow depth
   prc_cmp spc_heat_prt(0.0); // [J kg-1 K-1] Specific heat capacity of particle
@@ -495,7 +496,8 @@ int main(int argc,char **argv)
   std::string cmp_sng_ncl("Fe2O3"); // [sng] Composition of inclusion
   std::string cmp_sng_prt("saharan_dust"); // [sng] Composition of particle
   std::string psd_typ("lognormal"); // [sng] Particle size distribution type
-  std::string slr_spc_key("LaN68"); // [sng] Solar spectrum string
+  //std::string slr_spc_key("LaN68"); // [sng] Solar spectrum string (default value until 20240911)
+  std::string slr_spc_key("FDE24"); // [sng] Solar spectrum string 20240911: Adopt FDE24 values by default
   std::string slv_sng("Wis79"); // [sng] Mie solver to use (BoH83 or Wis79)
   std::string spc_idx_sng("foo"); // [sng] Label for FORTRAN block data
   std::string spc_wgt_sng("Default"); // [sng] Spectral weight
@@ -1283,13 +1285,13 @@ int main(int argc,char **argv)
   prc_cmp *psd_gsd_anl=new prc_cmp[psd_nbr]; // [frc] Geometric standard deviation
   prc_cmp *psd_cnc_nbr_anl=new prc_cmp[psd_nbr]; // [# m-3] Number concentration analytic
   prc_cmp *psd_mss_frc_anl=new prc_cmp[psd_nbr]; // [frc] Mass fraction analytic
-  for(idx=0;idx<psd_nbr;idx++){
-    psd_rds_nma[idx]=psd_lst[idx].rds_nma_get(); // [m] Number median radius analytic
-    psd_dmt_nma[idx]=psd_lst[idx].dmt_nma_get(); // [m] Number median diameter analytic
-    psd_gsd_anl[idx]=psd_lst[idx].gsd_anl_get(); // [frc] Geometric standard deviation
-    psd_cnc_nbr_anl[idx]=psd_lst[idx].cnc_nbr_anl_get(); // [# m-3] Number concentration analytic
-    psd_mss_frc_anl[idx]=psd_lst[idx].mss_frc_anl_get(); // [frc] Mass fraction analytic
-  } // end loop over modes
+  for(psd_idx=0;psd_idx<psd_nbr;psd_idx++){
+    psd_rds_nma[psd_idx]=psd_lst[psd_idx].rds_nma_get(); // [m] Number median radius analytic
+    psd_dmt_nma[psd_idx]=psd_lst[psd_idx].dmt_nma_get(); // [m] Number median diameter analytic
+    psd_gsd_anl[psd_idx]=psd_lst[psd_idx].gsd_anl_get(); // [frc] Geometric standard deviation
+    psd_cnc_nbr_anl[psd_idx]=psd_lst[psd_idx].cnc_nbr_anl_get(); // [# m-3] Number concentration analytic
+    psd_mss_frc_anl[psd_idx]=psd_lst[psd_idx].mss_frc_anl_get(); // [frc] Mass fraction analytic
+  } // !psd_idx
 
   // Instantiate size grid
   assert(psd_nbr > 0L);
@@ -1312,13 +1314,13 @@ int main(int argc,char **argv)
   prc_cmp *rds_grd=new prc_cmp[sz_nbr+1]; // [m] Radius grid
   prc_cmp *rds_max=new prc_cmp[sz_nbr]; // [m] Maximum radius in bin
   prc_cmp *rds_min=new prc_cmp[sz_nbr]; // [m] Minimum radius in bin
-  for(idx=0;idx<sz_nbr;idx++){
-    rds_ctr[idx]=sz_ctr[idx]; // [m] Radius at bin center
-    rds_dlt[idx]=sz_dlt[idx]; // [m] Width of radius bin
-    rds_grd[idx]=sz_grd[idx]; // [m] Radius grid
-    rds_max[idx]=sz_max[idx]; // [m] Maximum radius in bin
-    rds_min[idx]=sz_min[idx]; // [m] Minimum radius in bin
-  } // end loop over sz
+  for(sz_idx=0;sz_idx<sz_nbr;sz_idx++){
+    rds_ctr[sz_idx]=sz_ctr[sz_idx]; // [m] Radius at bin center
+    rds_dlt[sz_idx]=sz_dlt[sz_idx]; // [m] Width of radius bin
+    rds_grd[sz_idx]=sz_grd[sz_idx]; // [m] Radius grid
+    rds_max[sz_idx]=sz_max[sz_idx]; // [m] Maximum radius in bin
+    rds_min[sz_idx]=sz_min[sz_idx]; // [m] Minimum radius in bin
+  } // !sz_idx
   rds_grd[sz_nbr]=sz_grd[sz_nbr]; // [m] Radius grid
   const prc_cmp rds_ctr_ctr(0.5*(rds_grd[0]+rds_grd[sz_nbr])); // [m] Mean grid radius
   const prc_cmp rds_min_min(rds_grd[0]); // [m] Minimum grid radius
@@ -1330,13 +1332,13 @@ int main(int argc,char **argv)
   prc_cmp *dmt_grd=new prc_cmp[sz_nbr+1]; // [m] Diameter grid
   prc_cmp *dmt_max=new prc_cmp[sz_nbr]; // [m] Maximum diameter in bin
   prc_cmp *dmt_min=new prc_cmp[sz_nbr]; // [m] Minimum diameter in bin
-  for(idx=0;idx<sz_nbr;idx++){
-    dmt_ctr[idx]=2.0*rds_ctr[idx]; // [m] Diameter at bin center
-    dmt_dlt[idx]=2.0*rds_dlt[idx]; // [m] Width of diameter bin
-    dmt_grd[idx]=2.0*rds_grd[idx]; // [m] Diameter grid
-    dmt_max[idx]=2.0*rds_max[idx]; // [m] Maximum diameter in bin
-    dmt_min[idx]=2.0*rds_min[idx]; // [m] Minimum diameter in bin
-  } // end loop over sz
+  for(sz_idx=0;sz_idx<sz_nbr;sz_idx++){
+    dmt_ctr[sz_idx]=2.0*rds_ctr[sz_idx]; // [m] Diameter at bin center
+    dmt_dlt[sz_idx]=2.0*rds_dlt[sz_idx]; // [m] Width of diameter bin
+    dmt_grd[sz_idx]=2.0*rds_grd[sz_idx]; // [m] Diameter grid
+    dmt_max[sz_idx]=2.0*rds_max[sz_idx]; // [m] Maximum diameter in bin
+    dmt_min[sz_idx]=2.0*rds_min[sz_idx]; // [m] Minimum diameter in bin
+  } // !sz_idx
   dmt_grd[sz_nbr]=2.0*rds_grd[sz_nbr]; // [m] Diameter grid
   const prc_cmp dmt_ctr_ctr(0.5*(dmt_grd[0]+dmt_grd[sz_nbr])); // [m] Mean grid diameter
   const prc_cmp dmt_min_min(dmt_grd[0]); // [m] Minimum grid diameter
@@ -1491,37 +1493,37 @@ int main(int argc,char **argv)
   prc_cmp sfc_rsl(0.0); // [m2 m-3] Surface area concentration resolved
   prc_cmp vlm_rsl(0.0); // [m3 m-3] Volume concentration resolved
   prc_cmp xsa_rsl(0.0); // [m2 m-3] Cross-sectional area concentration resolved
-  for(idx=0;idx<sz_nbr;idx++){
+  for(sz_idx=0;sz_idx<sz_nbr;sz_idx++){
     // No need for loop over size modes here since dst[] includes all modes already
-    cnc[idx]=dst[idx]*sz_dlt[idx]; // [# m-3] Number concentration
-    cnc_nbr_rsl+=cnc[idx]; // [# m-3] Number concentration resolved
-    nbr_prt_rsl[idx]=cnc_nbr_rsl; // [# m-3] Number concentration of smaller particles
+    cnc[sz_idx]=dst[sz_idx]*sz_dlt[sz_idx]; // [# m-3] Number concentration
+    cnc_nbr_rsl+=cnc[sz_idx]; // [# m-3] Number concentration resolved
+    nbr_prt_rsl[sz_idx]=cnc_nbr_rsl; // [# m-3] Number concentration of smaller particles
 
-    xsa[idx]=mth::cst_M_PIl*rds_ctr[idx]*rds_ctr[idx]; // [m2] Cross-sectional area of sphere of given size
-    xsa_rsl+=xsa[idx]*cnc[idx]; // [m2 m-3] Cross-sectional area concentration resolved
-    xsa_prt_rsl[idx]=xsa_rsl; // [m2 m-3] Cross-sectional area concentration of smaller particles
+    xsa[sz_idx]=mth::cst_M_PIl*rds_ctr[sz_idx]*rds_ctr[sz_idx]; // [m2] Cross-sectional area of sphere of given size
+    xsa_rsl+=xsa[sz_idx]*cnc[sz_idx]; // [m2 m-3] Cross-sectional area concentration resolved
+    xsa_prt_rsl[sz_idx]=xsa_rsl; // [m2 m-3] Cross-sectional area concentration of smaller particles
 
-    sfc[idx]=4.0*xsa[idx]; // [m2] Surface area of sphere of given size
-    sfc_rsl+=sfc[idx]*cnc[idx]; // [m2 m-3] Surface area concentration resolved
-    sfc_prt_rsl[idx]=sfc_rsl; // [m2 m-3] Surface area concentration of smaller particles
+    sfc[sz_idx]=4.0*xsa[sz_idx]; // [m2] Surface area of sphere of given size
+    sfc_rsl+=sfc[sz_idx]*cnc[sz_idx]; // [m2 m-3] Surface area concentration resolved
+    sfc_prt_rsl[sz_idx]=sfc_rsl; // [m2 m-3] Surface area concentration of smaller particles
 
-    vlm[idx]=(4.0/3.0)*mth::cst_M_PIl*std::pow(rds_ctr[idx],PRC_CMP(3.0)); // [m3] Volume of sphere of given size
-    vlm_rsl+=vlm[idx]*cnc[idx]; // [m3 m-3] Volume concentration resolved
-    vlm_prt_rsl[idx]=vlm_rsl; // [m3 m-3] Volume concentration of smaller particles
+    vlm[sz_idx]=(4.0/3.0)*mth::cst_M_PIl*std::pow(rds_ctr[sz_idx],PRC_CMP(3.0)); // [m3] Volume of sphere of given size
+    vlm_rsl+=vlm[sz_idx]*cnc[sz_idx]; // [m3 m-3] Volume concentration resolved
+    vlm_prt_rsl[sz_idx]=vlm_rsl; // [m3 m-3] Volume concentration of smaller particles
 
-    mss[idx]=vlm[idx]*dns_prt; // [kg] Mass of sphere of given size
-    mss_rsl+=mss[idx]*cnc[idx]; // [kg m-3] Mass concentration resolved
-    mss_prt_rsl[idx]=mss_rsl; // [kg m-3] Mass concentration of smaller particles
+    mss[sz_idx]=vlm[sz_idx]*dns_prt; // [kg] Mass of sphere of given size
+    mss_rsl+=mss[sz_idx]*cnc[sz_idx]; // [kg m-3] Mass concentration resolved
+    mss_prt_rsl[sz_idx]=mss_rsl; // [kg m-3] Mass concentration of smaller particles
 
-    dst_rds[idx]=dst[idx]*sz_ctr[idx]; // [m m-3 m-1] Radius distribution
-    dst_xsa[idx]=dst[idx]*xsa[idx]; // [m2 m-3 m-1] Cross-sectional area distribution
-    dst_sfc[idx]=dst[idx]*sfc[idx]; // [m2 m-3 m-1] Surface area distribution
-    dst_vlm[idx]=dst[idx]*vlm[idx]; // [m3 m-3 m-1] Volume distribution
-    dst_mss[idx]=dst[idx]*mss[idx]; // [kg m-3 m-1] Mass distribution
-    rds_nwr+=rds_ctr[idx]*cnc[idx]; // Arithmetic mean radius resolved
-    rds_swr+=rds_ctr[idx]*sfc[idx]*cnc[idx]; // Surface area weighted radius resolved
-    rds_vwr+=rds_ctr[idx]*vlm[idx]*cnc[idx]; // Mass weighted mean radius resolved
-  } // end loop over sz
+    dst_rds[sz_idx]=dst[sz_idx]*sz_ctr[sz_idx]; // [m m-3 m-1] Radius distribution
+    dst_xsa[sz_idx]=dst[sz_idx]*xsa[sz_idx]; // [m2 m-3 m-1] Cross-sectional area distribution
+    dst_sfc[sz_idx]=dst[sz_idx]*sfc[sz_idx]; // [m2 m-3 m-1] Surface area distribution
+    dst_vlm[sz_idx]=dst[sz_idx]*vlm[sz_idx]; // [m3 m-3 m-1] Volume distribution
+    dst_mss[sz_idx]=dst[sz_idx]*mss[sz_idx]; // [kg m-3 m-1] Mass distribution
+    rds_nwr+=rds_ctr[sz_idx]*cnc[sz_idx]; // Arithmetic mean radius resolved
+    rds_swr+=rds_ctr[sz_idx]*sfc[sz_idx]*cnc[sz_idx]; // Surface area weighted radius resolved
+    rds_vwr+=rds_ctr[sz_idx]*vlm[sz_idx]*cnc[sz_idx]; // Mass weighted mean radius resolved
+  } // !sz_idx
 
   // Normalize weighted integrals by resolved concentrations
   rds_nwr/=cnc_nbr_rsl; // [m] Arithmetic mean radius resolved
@@ -1534,13 +1536,13 @@ int main(int argc,char **argv)
   const prc_cmp sfc_spc_rsl(sfc_rsl/mss_rsl); // [m2 kg-1] Specific Surface area resolved 
   const prc_cmp vlm_spc_rsl(vlm_rsl/mss_rsl); // [m3 kg-1] Specific volume resolved
 
-  for(idx=0;idx<sz_nbr;idx++){
-    nbr_prt_rsl_frc[idx]=nbr_prt_rsl[idx]/cnc_nbr_rsl; // [frc] Fraction of number concentration from smaller particles
-    xsa_prt_rsl_frc[idx]=xsa_prt_rsl[idx]/xsa_rsl; // [frc] Fraction of cross-sectional area concentration from smaller particles
-    sfc_prt_rsl_frc[idx]=sfc_prt_rsl[idx]/sfc_rsl; // [frc] Fraction of surface area concentration from smaller particles
-    vlm_prt_rsl_frc[idx]=vlm_prt_rsl[idx]/vlm_rsl; // [frc] Fraction of volume concentration from smaller particles
-    mss_prt_rsl_frc[idx]=mss_prt_rsl[idx]/mss_rsl; // [frc] Fraction of mass concentration from smaller particles
-  } // end loop over sz
+  for(sz_idx=0;sz_idx<sz_nbr;sz_idx++){
+    nbr_prt_rsl_frc[sz_idx]=nbr_prt_rsl[sz_idx]/cnc_nbr_rsl; // [frc] Fraction of number concentration from smaller particles
+    xsa_prt_rsl_frc[sz_idx]=xsa_prt_rsl[sz_idx]/xsa_rsl; // [frc] Fraction of cross-sectional area concentration from smaller particles
+    sfc_prt_rsl_frc[sz_idx]=sfc_prt_rsl[sz_idx]/sfc_rsl; // [frc] Fraction of surface area concentration from smaller particles
+    vlm_prt_rsl_frc[sz_idx]=vlm_prt_rsl[sz_idx]/vlm_rsl; // [frc] Fraction of volume concentration from smaller particles
+    mss_prt_rsl_frc[sz_idx]=mss_prt_rsl[sz_idx]/mss_rsl; // [frc] Fraction of mass concentration from smaller particles
+  } // !sz_idx
 
   // Find resolved median sizes by interpolating inverted size -> [number,surface,volume] relationships
   prc_cmp rds_nmr; // [m] Number median radius resolved
@@ -1578,7 +1580,7 @@ int main(int argc,char **argv)
   prc_cmp hxg_fct_tmp2; // [frc] Factor in computation of nbr_vts_per_hxg
   prc_cmp xsa_vts_rsl(0.0); // [m2 m-3] Equal-V/S sphere cross-sectional area concentration resolved
   prc_cmp mss_vts_rsl(0.0); // [kg m-3] Equal-V/S sphere mass concentration resolved
-  for(idx=0;idx<sz_nbr;idx++){
+  for(sz_idx=0;sz_idx<sz_nbr;sz_idx++){
     /* Conceptual and algorithmic framework for treating hexagonal prisms:
        Adopt all symbols and nomenclature from GrW99/NGW03
        Two general approaches are possible:
@@ -1597,26 +1599,26 @@ int main(int argc,char **argv)
        Cons: Size argument to mie_slv() routine is fxm 
        
        Approach #1 is the most intuitive and extensible approach because
-       the simplest nomenclature (e.g., rds[idx]) specifies the real particles.
+       the simplest nomenclature (e.g., rds[sz_idx]) specifies the real particles.
        Adopting approach #1 means eventually dropping the spherical assumption */ 
 
     // Assume aspect ratio is size invariant for now
-    asp_rat_hxg[idx]=asp_rat_hxg_dfl; // [frc] Hexagonal prism aspect ratio NGW03 p. 3 (5)
-    rds_hxg[idx]=rds_ctr[idx]; // [m] Half-width a of basal face of hexagonal prism NGW03 p. 3 (5)
-    dmt_hxg[idx]=asp_rat_hxg[idx]*2.0*rds_hxg[idx]; // [m] Length c of hexagonal prism NGW03 p. 3 (5)
-    hxg_fct_tmp=PRC_CMP(4.0)*asp_rat_hxg[idx]+std::sqrt(PRC_CMP(3.0)); // [frc] Factor in computation of nbr_vts_per_hxg NGW03 p. 3 (6b)
+    asp_rat_hxg[sz_idx]=asp_rat_hxg_dfl; // [frc] Hexagonal prism aspect ratio NGW03 p. 3 (5)
+    rds_hxg[sz_idx]=rds_ctr[sz_idx]; // [m] Half-width a of basal face of hexagonal prism NGW03 p. 3 (5)
+    dmt_hxg[sz_idx]=asp_rat_hxg[sz_idx]*2.0*rds_hxg[sz_idx]; // [m] Length c of hexagonal prism NGW03 p. 3 (5)
+    hxg_fct_tmp=PRC_CMP(4.0)*asp_rat_hxg[sz_idx]+std::sqrt(PRC_CMP(3.0)); // [frc] Factor in computation of nbr_vts_per_hxg NGW03 p. 3 (6b)
     hxg_fct_tmp2=std::pow(hxg_fct_tmp,PRC_CMP(3.0)); // [frc] Factor in computation of nbr_vts_per_hxg NGW03 p. 3 (6b)
     // rds_ctr_vts is radius at bin center of spheres with same V/S ratio as hexagonal prism of size (a,Gamma)=(rds_ctr,asp_rat_hxg)=(rds_hxg,asp_rat_hxg)
-    rds_ctr_vts[idx]=3.0*std::sqrt(PRC_CMP(3.0))*rds_hxg[idx]*asp_rat_hxg[idx]/hxg_fct_tmp; // [m] Radius at bin center of equal V/S spheres NGW03 p.3 (6a)
-    nbr_vts_per_hxg[idx]=hxg_fct_tmp2/(PRC_CMP(36.0)*mth::cst_M_PIl*asp_rat_hxg[idx]*asp_rat_hxg[idx]); // [nbr] Number equal V/S spheres per hexagonal prism NGW03 p. 3 (6b)
+    rds_ctr_vts[sz_idx]=3.0*std::sqrt(PRC_CMP(3.0))*rds_hxg[sz_idx]*asp_rat_hxg[sz_idx]/hxg_fct_tmp; // [m] Radius at bin center of equal V/S spheres NGW03 p.3 (6a)
+    nbr_vts_per_hxg[sz_idx]=hxg_fct_tmp2/(PRC_CMP(36.0)*mth::cst_M_PIl*asp_rat_hxg[sz_idx]*asp_rat_hxg[sz_idx]); // [nbr] Number equal V/S spheres per hexagonal prism NGW03 p. 3 (6b)
     // cnc_vts is number of equal-V/S-spheres with same volume (and area) as cnc hexagonal prism of size (a,Gamma)=(rds_ctr,asp_rat_hxg)=(rds_hxg,asp_rat_hxg)
-    cnc_vts[idx]=nbr_vts_per_hxg[idx]*cnc[idx]; // [# m-3] Number concentration of equal V/S spheres
-    cnc_nbr_vts_rsl+=cnc_vts[idx]; // [frc] Equal-V/S sphere number concentration resolved
-    xsa_vts[idx]=mth::cst_M_PIl*rds_ctr_vts[idx]*rds_ctr_vts[idx]; // [m2] Equal-V/S sphere cross-sectional area
-    xsa_vts_rsl+=xsa_vts[idx]*cnc_vts[idx]; // [m2 m-3] Equal-V/S sphere cross-sectional area concentration resolved
-    vlm_vts[idx]=(4.0/3.0)*mth::cst_M_PIl*std::pow(rds_ctr_vts[idx],PRC_CMP(3.0)); // [m3] Equal-V/S sphere volume
-    mss_vts_rsl+=vlm_vts[idx]*cnc_vts[idx]*dns_prt; // [kg m-3] Equal-V/S sphere mass concentration resolved
-  } // end loop over sz
+    cnc_vts[sz_idx]=nbr_vts_per_hxg[sz_idx]*cnc[sz_idx]; // [# m-3] Number concentration of equal V/S spheres
+    cnc_nbr_vts_rsl+=cnc_vts[sz_idx]; // [frc] Equal-V/S sphere number concentration resolved
+    xsa_vts[sz_idx]=mth::cst_M_PIl*rds_ctr_vts[sz_idx]*rds_ctr_vts[sz_idx]; // [m2] Equal-V/S sphere cross-sectional area
+    xsa_vts_rsl+=xsa_vts[sz_idx]*cnc_vts[sz_idx]; // [m2 m-3] Equal-V/S sphere cross-sectional area concentration resolved
+    vlm_vts[sz_idx]=(4.0/3.0)*mth::cst_M_PIl*std::pow(rds_ctr_vts[sz_idx],PRC_CMP(3.0)); // [m3] Equal-V/S sphere volume
+    mss_vts_rsl+=vlm_vts[sz_idx]*cnc_vts[sz_idx]*dns_prt; // [kg m-3] Equal-V/S sphere mass concentration resolved
+  } // !sz_idx
   /* Analytic expressions exist for total number concentration, surface area, and volume of hexagonal prisms
      These expressions are similar to statistics of spheres except for pre-factors
      However, number concentration of equivalent V/S-spheres is complex function of 
@@ -1766,10 +1768,10 @@ int main(int argc,char **argv)
   // Weight by number and by mass
   prc_cmp vlc_grv_nwr(0.0); // [m s-1] Number weighted terminal velocity
   prc_cmp vlc_grv_vwr(0.0); // [m s-1] Mass weighted terminal velocity
-  for(idx=0;idx<sz_nbr;idx++){
-    vlc_grv_nwr+=vlc_grv[idx]*cnc[idx]; // [m s-1] Number weighted terminal velocity
-    vlc_grv_vwr+=vlc_grv[idx]*vlm[idx]*cnc[idx]; // [m s-1] Mass weighted terminal velocity
-  } // end loop over sz
+  for(sz_idx=0;sz_idx<sz_nbr;sz_idx++){
+    vlc_grv_nwr+=vlc_grv[sz_idx]*cnc[sz_idx]; // [m s-1] Number weighted terminal velocity
+    vlc_grv_vwr+=vlc_grv[sz_idx]*vlm[sz_idx]*cnc[sz_idx]; // [m s-1] Mass weighted terminal velocity
+  } // !sz_idx
   vlc_grv_nwr/=cnc_nbr_rsl; // [m s-1] Number weighted terminal velocity
   vlc_grv_vwr/=vlm_rsl; // [m s-1] Mass weighted terminal velocity
 
@@ -1780,7 +1782,7 @@ int main(int argc,char **argv)
   prc_cmp *dmt_aer=new prc_cmp[sz_nbr]; // [m] Aerodynamic diameter
   prc_cmp *dmt_eqv_sfc=new prc_cmp[sz_nbr]; // [m] Diameter of sphere with same surface area
   prc_cmp *dmt_eqv_vlm=new prc_cmp[sz_nbr]; // [m] Diameter of sphere with same volume
-  for(idx=0;idx<sz_nbr;idx++){
+  for(sz_idx=0;sz_idx<sz_nbr;sz_idx++){
     /* Particles are ellipsoidal when asp_rat_lps != 1.0
        In this case, diameter does not suffice to characterize particle dimension
        First, dmt_ctr remains the canonical particle size and so must be assigned a physically meaningful definition
@@ -1793,18 +1795,18 @@ int main(int argc,char **argv)
        dmt_mnr: Minor axis of ellipsoid is diameter along "b" axis, i.e., 2*b
        We set dmt_ctr equal to diameter of sphere with same surface area as in Gin03 p. 2 (10)
        This is sometimes called the surface equivalent diameter */
-    if(asp_rat_lps[idx] == 1.0){
-      dmt_mjr[idx]=dmt_ctr[idx]; // [m] Major axis of ellipsoid
-      dmt_mnr[idx]=dmt_ctr[idx]; // [m] Minor axis of ellipsoid
+    if(asp_rat_lps[sz_idx] == 1.0){
+      dmt_mjr[sz_idx]=dmt_ctr[sz_idx]; // [m] Major axis of ellipsoid
+      dmt_mnr[sz_idx]=dmt_ctr[sz_idx]; // [m] Minor axis of ellipsoid
     }else{
       // Minor axis of ellipsoid is diameter along "b" axis, i.e., 2*b
-      dmt_mnr[idx]=2.0*dmt_ctr[idx]/psi_lps_fst_scl(asp_rat_lps[idx]); // [m] Minor axis of ellipsoid Gin03 p.2 (10)
+      dmt_mnr[sz_idx]=2.0*dmt_ctr[sz_idx]/psi_lps_fst_scl(asp_rat_lps[sz_idx]); // [m] Minor axis of ellipsoid Gin03 p.2 (10)
       // Major axis of ellipsoid is diameter along "a" axis, i.e., 2*a
-      dmt_mjr[idx]=dmt_mnr[idx]*asp_rat_lps[idx]; // [m] Major axis of ellipsoid
+      dmt_mjr[sz_idx]=dmt_mnr[sz_idx]*asp_rat_lps[sz_idx]; // [m] Major axis of ellipsoid
     } // endif ellipsoid
-    dmt_eqv_sfc[idx]=dmt_eqv_sfc_lps_fst_scl(0.5*dmt_mjr[idx],0.5*dmt_mnr[idx]); // [m] Diameter of sphere with same surface area
-    dmt_eqv_vlm[idx]=dmt_eqv_vlm_lps_fst_scl(0.5*dmt_mjr[idx],0.5*dmt_mnr[idx]); // [m] Diameter of sphere with same volume
-  } // end loop over sz
+    dmt_eqv_sfc[sz_idx]=dmt_eqv_sfc_lps_fst_scl(0.5*dmt_mjr[sz_idx],0.5*dmt_mnr[sz_idx]); // [m] Diameter of sphere with same surface area
+    dmt_eqv_vlm[sz_idx]=dmt_eqv_vlm_lps_fst_scl(0.5*dmt_mjr[sz_idx],0.5*dmt_mnr[sz_idx]); // [m] Diameter of sphere with same volume
+  } // !sz_idx
 
   /* Stokes diameter is diameter of sphere of same density with same terminal settling velocity
      Stokes diameter equals particle diameter when particle is spherical */
@@ -2310,26 +2312,26 @@ int main(int argc,char **argv)
   if(oro_is_ocn(oro)) shm_nbr_xpn=-0.5; else shm_nbr_xpn=-0.6666667; // [frc] Surface-dependent exponent for aerosol-diffusion dependence on Schmidt number
   using phc::grv_sfc_mean; // (9.80665) [m s-2] Mean gravitational acceleration at Earth's surface
   using phc::cst_Boltzmann; // (1.38063e-23) [J K-1] Boltzmann's constant
-  for(idx=0;idx<sz_nbr;idx++){
-    stk_nbr[idx]=vlc_grv[idx]*wnd_frc_dps*wnd_frc_dps/(grv_sfc_mean*vsc_knm_atm); // [frc] Stokes number SeP97 p. 965
+  for(sz_idx=0;sz_idx<sz_nbr;sz_idx++){
+    stk_nbr[sz_idx]=vlc_grv[sz_idx]*wnd_frc_dps*wnd_frc_dps/(grv_sfc_mean*vsc_knm_atm); // [frc] Stokes number SeP97 p. 965
     // Without slip correction factor, following is known as Stokes-Einstein relation
-    dff_aer[idx]=cst_Boltzmann*tpt_mdp*slp_crc[idx]/(3.0*mth::cst_M_PIl*vsc_dyn_atm*dmt_ctr[idx]); // [m2 s-1] Brownian diffusivity SeP97 p. 474 (8.73), PeE92 p. 2558 (21)
-    shm_nbr[idx]=vsc_knm_atm/dff_aer[idx]; // [frc] Schmidt number SeP97 p. 972
-    pcl_nbr[idx]=vlc_grv[idx]*rds_ctr[idx]/dff_aer[idx]; // [frc] Peclet number Sli82 p. 323
-    rss_lmn[idx]=1.0/(wnd_frc_dps*(std::pow(shm_nbr[idx],shm_nbr_xpn)+std::pow(PRC_CMP(10.0),PRC_CMP(-3.0)/stk_nbr[idx]))); // [s m-1] Quasi-laminar layer resistance SeP97 p. 972 (19.18), 965 (19.18), SlS80 p. 1014 (5), SHH78 p. 2087 (C.6), p. 2070 (43)
-  } // end loop over sz
+    dff_aer[sz_idx]=cst_Boltzmann*tpt_mdp*slp_crc[sz_idx]/(3.0*mth::cst_M_PIl*vsc_dyn_atm*dmt_ctr[sz_idx]); // [m2 s-1] Brownian diffusivity SeP97 p. 474 (8.73), PeE92 p. 2558 (21)
+    shm_nbr[sz_idx]=vsc_knm_atm/dff_aer[sz_idx]; // [frc] Schmidt number SeP97 p. 972
+    pcl_nbr[sz_idx]=vlc_grv[sz_idx]*rds_ctr[sz_idx]/dff_aer[sz_idx]; // [frc] Peclet number Sli82 p. 323
+    rss_lmn[sz_idx]=1.0/(wnd_frc_dps*(std::pow(shm_nbr[sz_idx],shm_nbr_xpn)+std::pow(PRC_CMP(10.0),PRC_CMP(-3.0)/stk_nbr[sz_idx]))); // [s m-1] Quasi-laminar layer resistance SeP97 p. 972 (19.18), 965 (19.18), SlS80 p. 1014 (5), SHH78 p. 2087 (C.6), p. 2070 (43)
+  } // !sz_idx
 
   // Weight by number and by mass
-  for(idx=0;idx<sz_nbr;idx++){
-    dff_aer_vwr+=dff_aer[idx]*vlm[idx]*cnc[idx]; // Mass weighted Brownian diffusivity of particle
-    dff_aer_nwr+=dff_aer[idx]*cnc[idx]; // Number weighted Brownian diffusivity of particle
-    rss_lmn_vwr+=rss_lmn[idx]*vlm[idx]*cnc[idx]; // Mass weighted laminar resistance
-    rss_lmn_nwr+=rss_lmn[idx]*cnc[idx]; // Number weighted laminar resistance
-    shm_nbr_vwr+=shm_nbr[idx]*vlm[idx]*cnc[idx]; // Mass weighted Schmidt number
-    shm_nbr_nwr+=shm_nbr[idx]*cnc[idx]; // Number weighted Schmidt number
-    stk_nbr_vwr+=stk_nbr[idx]*vlm[idx]*cnc[idx]; // Mass weighted Stokes number
-    stk_nbr_nwr+=stk_nbr[idx]*cnc[idx]; // Number weighted Stokes number
-  } // end loop over sz
+  for(sz_idx=0;sz_idx<sz_nbr;sz_idx++){
+    dff_aer_vwr+=dff_aer[sz_idx]*vlm[sz_idx]*cnc[sz_idx]; // Mass weighted Brownian diffusivity of particle
+    dff_aer_nwr+=dff_aer[sz_idx]*cnc[sz_idx]; // Number weighted Brownian diffusivity of particle
+    rss_lmn_vwr+=rss_lmn[sz_idx]*vlm[sz_idx]*cnc[sz_idx]; // Mass weighted laminar resistance
+    rss_lmn_nwr+=rss_lmn[sz_idx]*cnc[sz_idx]; // Number weighted laminar resistance
+    shm_nbr_vwr+=shm_nbr[sz_idx]*vlm[sz_idx]*cnc[sz_idx]; // Mass weighted Schmidt number
+    shm_nbr_nwr+=shm_nbr[sz_idx]*cnc[sz_idx]; // Number weighted Schmidt number
+    stk_nbr_vwr+=stk_nbr[sz_idx]*vlm[sz_idx]*cnc[sz_idx]; // Mass weighted Stokes number
+    stk_nbr_nwr+=stk_nbr[sz_idx]*cnc[sz_idx]; // Number weighted Stokes number
+  } // !sz_idx
   dff_aer_vwr/=vlm_rsl; // [m2 s-1] Mass weighted Brownian diffusivity of particle
   dff_aer_nwr/=cnc_nbr_rsl; // [m2 s-1] Number weighted Brownian diffusivity of particle
   rss_lmn_vwr/=vlm_rsl; // [s m-1] Mass weighted laminar resistance
@@ -2343,11 +2345,11 @@ int main(int argc,char **argv)
   prc_cmp *rss_trb=new prc_cmp[sz_nbr]; // [s m-1] Resistance to turbulent deposition
   prc_cmp *vlc_dry=new prc_cmp[sz_nbr]; // [m s-1] Total dry deposition velocity
   prc_cmp *vlc_trb=new prc_cmp[sz_nbr]; // [m s-1] Turbulent deposition velocity
-  for(idx=0;idx<sz_nbr;idx++){
-    rss_trb[idx]=rss_aer_mmn+rss_lmn[idx]+rss_aer_mmn*rss_lmn[idx]*vlc_grv[idx]; // [s m-1] Resistance to turbulent deposition SeP97 p. 961 (19.7)
-    vlc_trb[idx]=1.0/rss_trb[idx]; // [m s-1] Turbulent deposition velocity SeP97 p. 961 (19.7)
-    vlc_dry[idx]=vlc_grv[idx]+vlc_trb[idx]; // [m s-1] Total dry deposition velocity SeP97 p. 961 (19.7)
-  } // end loop over sz
+  for(sz_idx=0;sz_idx<sz_nbr;sz_idx++){
+    rss_trb[sz_idx]=rss_aer_mmn+rss_lmn[sz_idx]+rss_aer_mmn*rss_lmn[sz_idx]*vlc_grv[sz_idx]; // [s m-1] Resistance to turbulent deposition SeP97 p. 961 (19.7)
+    vlc_trb[sz_idx]=1.0/rss_trb[sz_idx]; // [m s-1] Turbulent deposition velocity SeP97 p. 961 (19.7)
+    vlc_dry[sz_idx]=vlc_grv[sz_idx]+vlc_trb[sz_idx]; // [m s-1] Total dry deposition velocity SeP97 p. 961 (19.7)
+  } // !sz_idx
 
   // Wet deposition
   // Instantiate raindrop size grid
@@ -2982,7 +2984,7 @@ int main(int argc,char **argv)
     flx_spc_slr[wvl_idx]=flx_slr[wvl_idx]/wvl_dlt[wvl_idx]; // [W m-2 m-1] Solar spectral flux in band
     nrg_pht[wvl_idx]=cst_Planck*speed_of_light/wvl_ctr[wvl_idx]; // [J pht-1] Energy of photon at band center
     flx_spc_slr_pht[wvl_idx]=flx_spc_slr[wvl_idx]/nrg_pht[wvl_idx]; // [pht m-2 s-1 m-1] Solar spectral photon flux in band
-  } // end loop over wvl 
+  } // !wvl_idx 
   if(wvl_nbr > 1 && mnt_chk(wvl,wvl_nbr)){
     // Generate series of partial sums series with fraction of flux bluer
     // NB: Technique is ill-defined for non-monotonic wavelength grids
@@ -3000,13 +3002,13 @@ int main(int argc,char **argv)
       flx_slr_frc_blr[idx_min_wvl]=0.0; // [frc] Fraction of solar flux at shorter wavelengths
       for(wvl_idx=1;wvl_idx<wvl_nbr;wvl_idx++){
 	flx_slr_frc_blr[wvl_idx]=flx_slr_frc_blr[wvl_idx-1]+flx_slr_frc[wvl_idx]; // [frc] Fraction of solar flux at shorter wavelengths
-      } // end loop over wvl 
+      } // !wvl_idx 
       flx_slr_frc_blr[idx_max_wvl]=1.0; // [frc] Fraction of solar flux at shorter wavelengths
     }else{
       flx_slr_frc_blr[idx_max_wvl]=1.0; // [frc] Fraction of solar flux at shorter wavelengths
       for(wvl_idx=1;wvl_idx<wvl_nbr;wvl_idx++){
 	flx_slr_frc_blr[wvl_idx]=flx_slr_frc_blr[wvl_idx-1]-flx_slr_frc[wvl_idx]; // [frc] Fraction of solar flux at shorter wavelengths
-      } // end loop over wvl 
+      } // !wvl_idx 
       flx_slr_frc_blr[idx_min_wvl]=0.0; // [frc] Fraction of solar flux at shorter wavelengths
     } // end else flg_ncr_wvl
   } // end else wvl_nbr > 1 and monotonic grid
@@ -3017,7 +3019,7 @@ int main(int argc,char **argv)
   for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
     idx_rfr_ffc_wgt[wvl_idx]=std::complex<prc_cmp>(0.0,0.0); // [frc] Spectral flux-weighted effective refractive index
     wvl_wgt[wvl_idx]=0.0; // [m] Solar flux-weighted wavelength
-  } // end loop over wvl 
+  } // !wvl_idx 
 
   // Get tabulated refractive indices
   std::complex<prc_cmp> *idx_rfr_cor=new std::complex<prc_cmp>[wvl_nbr]; // [frc] Refractive index of core
@@ -3111,7 +3113,7 @@ int main(int argc,char **argv)
   prc_cmp *sz_prm_swa=new prc_cmp[wvl_nbr]; // [frc] Size parameter at rds_swa
   for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
     sz_prm_swa[wvl_idx]=2.0*mth::cst_M_PIl*rds_swa/wvl_ctr[wvl_idx]; // [frc] Size parameter at rds_swa
-  } // end loop over wvl 
+  } // !wvl_idx 
   
   if(true){
     std::cout << "Initialization state:" << std::endl;
@@ -3132,7 +3134,7 @@ int main(int argc,char **argv)
     std::cout << "Environment:" << std::endl;
     std::cout << "  Solar constant = " << slr_cst << " W m-2" << std::endl;
     std::cout << "  Solar spectrum is " << flx_slr_src.dsc_get() << " from " << (flx_slr_src.fl_slr_spc_get() != "" ? flx_slr_src.fl_slr_spc_get() : " a function") << std::endl;
-    std::cout << "  Fraction of solar flux in " << wvl_mnm*1.0e6 << "--" << wvl_mxm*1.0e6 << " um is " << flx_slr_src.flx_frc_get(wvl_min[wvl_idx_dbg],wvl_max[wvl_idx_dbg]) << std::endl;
+    std::cout << "  Fraction of solar flux in " << wvl_min[wvl_idx_dbg]*1.0e6 << "--" << wvl_max[wvl_idx_dbg]*1.0e6 << " um is " << flx_slr_src.flx_frc_get(wvl_min[wvl_idx_dbg],wvl_max[wvl_idx_dbg]) << std::endl;
     std::cout << "  Blackbody temperature of particles = " << tpt_prt << " K" << std::endl;
     std::cout << "  Blackbody temperature of radiation = " << tpt_bbd_wgt << " K, hemispheric blackbody emission = " << spc_bbd.flx_ttl() << " W m-2, fraction in " << wvl_mnm*1.0e6 << "--" << wvl_mxm*1.0e6 << " um is " << spc_bbd.flx_bbd_frc_get(wvl_mnm,wvl_mxm) << " = " << spc_bbd.flx_ttl()*spc_bbd.flx_bbd_frc_get(wvl_mnm,wvl_mxm) << " W m-2" << std::endl;
     std::cout << "  Pressure = " << prs_mdp/100.0 << " mb, Temperature = " << tpt_mdp << " K, Density = " << dns_mdp << " kg m-3" << std::endl;
@@ -3948,7 +3950,7 @@ int main(int argc,char **argv)
 	  abs_fsh[sz_idx]=ext_fsh[sz_idx]-sca_fsh[sz_idx]; // [frc] Absorption efficiency
 	} // end loop over sz
       } // end if fdg_idx
-    } // end loop over wvl 
+    } // !wvl_idx 
   } // endif fdg_flg
 
   // Implement user-specified single scattering albedo
@@ -3973,7 +3975,7 @@ int main(int argc,char **argv)
 	  abs_fsh[sz_idx]=ext_fsh[sz_idx]-sca_fsh[sz_idx]; // [frc] Absorption efficiency
 	} // end loop over sz
       } // end if debug wavelength
-    } // end loop over wvl 
+    } // !wvl_idx 
   } // endif ss_alb_flg
 
   // Prognostic optical properties are now set and it is safe to derive purely diagnostic optical properties
@@ -3982,7 +3984,7 @@ int main(int argc,char **argv)
   // fxm: Angstrom exponent should be computed in sub-gridscale loop
   for(wvl_idx=0;wvl_idx<wvl_nbr-1;wvl_idx++){ // NB: wvl_nbr-1
     ang_xpn[wvl_idx]=std::log(ext_cff_mss[wvl_idx+1]/ext_cff_mss[wvl_idx])/std::log(wvl_ctr[wvl_idx]/wvl_ctr[wvl_idx+1]); // [frc] Angstrom exponent
-  } // end loop over wvl 
+  } // !wvl_idx 
   ang_xpn[wvl_nbr-1]= (wvl_nbr > 1 ? ang_xpn[wvl_nbr-2] : 0); // [frc] Angstrom exponent
 
   /* Determine size-resolved specific optical properties at single wavelength
@@ -4052,7 +4054,7 @@ int main(int argc,char **argv)
     sca_cff_dst[wvl_idx]=sca_cff_mss[wvl_idx]*mss_sph_rsl; // [m-1] Distance scattering coefficient
     ext_cff_dst[wvl_idx]=ext_cff_mss[wvl_idx]*mss_sph_rsl; // [m-1] Distance extinction coefficient
     bck_cff_dst[wvl_idx]=bck_cff_mss[wvl_idx]*mss_sph_rsl; // [m-1] Distance backscattering coefficient
-  } // end loop over wvl
+  } // !wvl_idx
   
   // Derive visibility
   const prc_cmp wvl_vsb(0.55e-6); // [m] Wavelength for visibility diagnostics
@@ -4097,7 +4099,7 @@ int main(int argc,char **argv)
 	    std::cout << "WARNING: Reducing printed single scattering albedo from 1.0 to " << ss_alb_bnd_CAM_SW << " at wvl[" << wvl_idx_dbg << "] = " << wvl_ctr[wvl_idx_dbg]*1.0e6 << " um" << std::endl;
 	    ss_alb[wvl_idx]=ss_alb_bnd_CAM_SW; // [frc] Single scattering albedo
 	  } // endif
-	} // end loop over wvl 
+	} // !wvl_idx 
       } // endif CAM_SW
 
       if(ftn_fxd_flg){
@@ -4208,7 +4210,7 @@ int main(int argc,char **argv)
     idx_rfr_ffc_vlw_rl[wvl_idx]=idx_rfr_ffc_vlw[wvl_idx].real(); // [frc] Effective refractive index, volume-weighted approximation, real component
     idx_rfr_ffc_wgt_img[wvl_idx]=idx_rfr_ffc_wgt[wvl_idx].imag(); // [frc] Spectral flux-weighted effective refractive index, imaginary component
     idx_rfr_ffc_wgt_rl[wvl_idx]=idx_rfr_ffc_wgt[wvl_idx].real(); // [frc] Spectral flux-weighted effective refractive index, real component
-  } // end loop over wvl 
+  } // !wvl_idx 
 
   // Open output file
   int nccreate_mode(NC_CLOBBER); // [enm] Mode flag for nco_create() call
@@ -4349,7 +4351,7 @@ int main(int argc,char **argv)
     tau_ext[wvl_idx]=2.0*hgt_mdp*ext_cff_dst[wvl_idx]; // [frc] Extinction optical depth
     tau_abs[wvl_idx]=2.0*hgt_mdp*abs_cff_dst[wvl_idx]; // [frc] Absorption optical depth
     tau_sct[wvl_idx]=2.0*hgt_mdp*sca_cff_dst[wvl_idx]; // [frc] Scattering optical depth
-  } // end loop over wvl
+  } // !wvl_idx
 
   // Determine 
   if(mie_flg && tst_sng != "nsz"){

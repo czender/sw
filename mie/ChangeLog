@@ -1,5 +1,7 @@
 2024-09-11  Charlie Zender  <zender@uci.edu>
 
+	* Print wavelength bounds for debugging band, not entire wavelength array when reporting diagnostic flx_slr_frc
+
 	* After building libcsz_c++, libcsm_c++, and mie with -DPRC_DBL	everything builds and links on MacOS!
 
 	* mie unable to link to mie_sph_BoH83() which declares ngl as double *, but prc_cmp is float by default

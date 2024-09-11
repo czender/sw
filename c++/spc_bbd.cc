@@ -38,7 +38,7 @@ int // [enm] Return success code
 spc_bbd_cls::tpt_set(const prc_cmp &tpt_arg) // [K] Blackbody temperature
 {
   // Purpose: Set temperature
-  std::string sbr_nm("spc_bbd_cls::tpt_set"); // [sng] Subroutine name
+  std::string sbr_nm("spc_bbd_cls::tpt_set()"); // [sng] Subroutine name
   const prc_cmp tpt_max(1400.0); // [K] Maximum allowed blackbody temperature
 
   assert(tpt_arg >= 0.0);
@@ -177,7 +177,7 @@ spc_bbd_cls::flx_bbd_frc_get // [fnc] Fraction of blackbody emission in given sp
      function over wide spectral bands.
      fxm: Implement fast routine that optimizes quadrature of Planck function */
      
-  std::string sbr_nm("spc_bbd_cls::flx_bbd_frc_get"); // [sng] Subroutine name
+  std::string sbr_nm("spc_bbd_cls::flx_bbd_frc_get()"); // [sng] Subroutine name
   long bnd_idx; // [idx] Counting index for bnd
   long wvl_idx; // [idx] Counting index for wvl
   double ntn_ttl; // [W m-2 sr-1] Radiance in specified spectral region
@@ -223,7 +223,7 @@ spc_bbd_cls::flx_bbd_frc_get // [fnc] Fraction of blackbody emission in given sp
 
   prc_cmp flx_bbd_frc; // [frc] Fraction of blackbody flux in band
   long wvl_nbr(1L); // [nbr] Number of wavelength bands
-  std::string sbr_nm("spc_bbd_cls::flx_bbd_frc_get"); // [sng] Subroutine name
+  std::string sbr_nm("spc_bbd_cls::flx_bbd_frc_get()"); // [sng] Subroutine name
 
   rcd+=flx_bbd_frc_get // [fnc] Fraction of blackbody emission in given spectral region
     (&wvl_min, // I [m] Minimum wavelength
@@ -262,7 +262,7 @@ flx_bbd_frc_get_WiW76 // [fnc] Fraction of blackbody emission in given spectral 
   using phc::cst_Planck; // (6.62606876e-34) [J s] Planck's constant (CODATA, 2018 SI NIST) (exact)
   using phc::speed_of_light; // (2.99792458e+08) [m s-1] Speed of light in vacuo (CODATA, 2018 SI NIST)
 
-  std::string sbr_nm("flx_bbd_frc_get_WiW76"); // [sng] Subroutine name
+  std::string sbr_nm("flx_bbd_frc_get_WiW76()"); // [sng] Subroutine name
   std::string nrm_typ_sng("flx_frc_abs"); // [sng] Normalization type
   int rcd(0); // [enm] Return code
   
@@ -318,7 +318,7 @@ flx_bbd_frc_get_WiW76 // [fnc] Fraction of blackbody emission in given spectral 
 
   } // !wvn_idx
 
-  if(dbg_lvl_get() >= dbg_off){
+  if(dbg_lvl_get() > dbg_off){
     std::cout << "Diagnostics from " << sbr_nm << std::endl;
     std::cout << "Temperature = " << tpt << " K" << std::endl;
     std::cout << "Blackbody hemispheric irradiance = cst_stf_blt*T^4 = " << cst_Stefan_Boltzmann*std::pow(tpt,4.0) << " W m-2" << std::endl;
