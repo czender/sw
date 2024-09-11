@@ -1801,11 +1801,11 @@ int main(int argc,char **argv)
     const long mmr_blk_sz(100000000); // [B] Size of each block
     const float mmr_blk_ttl_max(100.0e9); // [B] Maximum amount to try to allocate
     char *mmr_blk_ptr[mmr_blk_nbr]; // [ptr] Pointer for each block
+    long mmr_blk_cnt(0L); // [nbr] Count of blocks allocated
 #ifdef HAVE_LONG_LONG
     // long long is ISO C99 standard but is neither ISO C++ nor ANSI C standard
     long long mmr_blk_ttl(0LL); // Cumulative allocated memory
 #else // !HAVE_LONG_LONG
-    long mmr_blk_cnt(0L); // [nbr] Count of blocks allocated
     long mmr_blk_ttl(0L); // [B] Cumulative allocated memory
 #endif // !HAVE_LONG_LONG
     for(idx=0;idx<mmr_blk_nbr;idx++){
