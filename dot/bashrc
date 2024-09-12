@@ -463,10 +463,6 @@ case "${PVM_ARCH}" in
 #	    hpc* ) export NETCDF_ROOT="${PKG_ROOT}/netcdf" ; export NETCDF4_LIB="${PKG_ROOT}/netcdf4" ; ;; # HPC
 ##		export LD_ASSUME_KERNEL='2.4.1' # Prevents IPCC PGI linker complaints
 #	esac # endcase ${HOST}
-#	if [ -n "${NETCDF_ROOT}" ]; then
-#	    export NETCDF_INC="${NETCDF_ROOT}/include"
-#	    export NETCDF_LIB="${NETCDF_ROOT}/lib"
-#	fi # !NETCDF_ROOT
 	# 20200906: Always export HDF5_PLUGIN_PATH (at least on MacOS) for CCR
 	# 20230903: Deprecate CCR, so netCDF looks for plugins in `nc-config --plugindir`
 #	case "${HOST}" in 
@@ -571,13 +567,16 @@ case "${PVM_ARCH}" in
     MACOS* ) # MACOS on PowerPC and (beginning 20140529), x86_64 machines
 	export DATA=/Users/${USER}/data
 	export INFOPATH=./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/share/info
-#	export NCARG_ROOT='/opt/local' # Port-installed
-#	export NETCDF_ROOT="${PKG_ROOT}" # Homebrew
+	case "${HOST}" in 
+	    spectral* ) export NETCDF_ROOT='/opt/netcdf' ; ;; # MacOS development netCDF environment
+	esac # endcase ${HOST}
+	if [ -n "${NETCDF_ROOT}" ]; then
+	    export NETCDF_INC="${NETCDF_ROOT}/include"
+	    export NETCDF_LIB="${NETCDF_ROOT}/lib"
+	fi # !NETCDF_ROOT
 	export NCARG_ROOT="${PKG_ROOT}/opt/ncl-6.6.2" # Homebrew-installed
 	# 20200906: Always export HDF5_PLUGIN_PATH (at least on MacOS) for CCR
 	export HDF5_PLUGIN_PATH='/usr/local/hdf5/lib/plugin'
-#	export NETCDF_INC=${HOME}/include
-#	export NETCDF_LIB=${HOME}/lib
 #	export UDUNITS_INC="${PKG_ROOT}/include" # Homebrew location
 
 # GCC_RCH_ARG and ICC_RCH_ARG set CPU architecture only
@@ -806,9 +805,9 @@ AR='ar'
 ##RANLIB_macports='gcc-ranlib-mp-10'
 #NM='nm'
 ##NM_macports='gcc-nm-mp-10'
-CC_clang='clang'
-CC_clang_homebrew='clang'
-CC_clang_macports='clang-mp-11'
+CC_clang='clang -std=c23'
+CC_clang_homebrew='clang -std=c23'
+CC_clang_macports='clang-mp-11 -std=c23'
 # 20150109: Introduce -D_DEFAULT_SOURCE in place of deprecated (as of gcc 4.9.2) -D_BSD_SOURCE -D_POSIX_SOURCE
 # 20201002: Drop -pedantic because that makes __USE_BSD and thus M_LN2 needed by CCR unfindable (reinstate because that did not work)
 # Conda compiler names explained at https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html
@@ -823,12 +822,13 @@ CC_icx='icx -std=gnu11 -D_DEFAULT_SOURCE'
 CC_pathcc='pathcc -std=gnu11 -D_DEFAULT_SOURCE'
 CC_pgcc='pgcc -c9x -D_DEFAULT_SOURCE'
 #20230408: Clangv16 defaults to clang++ -std=c++17 which deprecates std::binary_function used by ncap2, Antlr2
-CXX_clang='clang++ -std=c++17'
-CXX_clang_homebrew='clang++ -std=c++17'
-CXX_clang_macports='clang++-mp-12 -std=c++17'
-#CXX_clang='clang++ -std=c++14'
-#CXX_clang_homebrew='clang++ -std=c++14'
-#CXX_clang_macports='clang++-mp-12 -std=c++14'
+#CXX_clang='clang++ -std=c++17'
+#CXX_clang_homebrew='clang++ -std=c++17'
+#CXX_clang_macports='clang++-mp-12 -std=c++17'
+#20240911: Clangv18 supports -std=c++23
+CXX_clang='clang++ -std=c++23'
+CXX_clang_homebrew='clang++ -std=c++23'
+CXX_clang_macports='clang++-mp-12 -std=c++23'
 CXX_gxx='g++ -std=c++17'
 CXX_gxx_conda='x86_64-conda-linux-gnu-g++ -std=c++17'
 CXX_gxx_homebrew='g++-12 -std=c++17'
