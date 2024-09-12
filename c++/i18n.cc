@@ -58,13 +58,15 @@
 
 // Internationalization i18n
 // libintl.h header is required in every file with gettext() functions
-#include <libintl.h> // Internationalization i18n
+#if ( !defined ALPHA ) && ( !defined MACOS ) && ( !defined SGI6 ) && ( !defined SGI64 ) && ( !defined SGIMP64 )
+# include <libintl.h> // Internationalization i18n
+#endif // !OS has libintl.h
 // Linux and SGI libintl.h load locale.h themselves, but Solaris libintl.h does not so do it manually
 #include <locale.h> // Locale setlocale()
 #ifndef _LIBINTL_H
 // Define stub for gettext to allow compiling when libintl.h is not available
 # define gettext(foo) foo
-#endif // _LIBINTL_H
+#endif // !_LIBINTL_H
 
 // Standard C headers
 #include <cstdlib> // strtod, strtol, malloc, getopt, getenv

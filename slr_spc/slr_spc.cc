@@ -256,10 +256,10 @@ int main(const int argc,char **argv)
     default: // Print proper usage 
       //      (void)usg_prn(opt_sng);
       return EXIT_FAILURE;
-    } // end switch 
-  } // end while loop 
+    } // !switch OPT
+  } // !while(1)
   
-  // Process the positional arguments  
+  // Process positional arguments  
   if(optind < argc){
     int psn_arg_nbr=argc-optind;
     if(psn_arg_nbr > 2){
@@ -269,8 +269,8 @@ int main(const int argc,char **argv)
     }else if(psn_arg_nbr == 2){
       fl_in=argv[optind++];
       fl_out=argv[optind++];
-    } // end else
-  } // end if  
+    } // !psn_arg_nbr
+  } // !optind
 
   // Convert input data to SI units
   //  prc_cmp wvl_ctr=0.5*(wvl_min+wvl_max);
