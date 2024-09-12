@@ -2616,15 +2616,15 @@ void usg_prn(const char *opt_sng)
   std::cerr << "\twvl\tWavelength grid class" << std::endl;
   std::cerr << std::endl;
 
-  if(&opt_sng == &opt_sng){;} // CEWU Compiler Error Warning Usage
-} // end usg_prn() 
+  if(&opt_sng == &opt_sng+1){;} // CEWU Compiler Error Warning Usage
+} // !usg_prn() 
 
 void virtualViaReference(const SzDstFnc &fnc,const prc_cmp rds)
 {
   //  fnc(rds);
-  if(&fnc == &fnc){;} // CEWU Compiler Error Warning Usage
-  if(&rds == &rds){;} // CEWU Compiler Error Warning Usage
-} // end virtualViaReference
+  if(&fnc == &fnc+1){;} // CEWU Compiler Error Warning Usage
+  if(&rds == &rds+1){;} // CEWU Compiler Error Warning Usage
+} // !virtualViaReference
 
 char ** /* O [sng] Array of list elements */
 lst_prs /* [fnc] Create list of strings from given string and arbitrary delimiter */
