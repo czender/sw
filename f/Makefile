@@ -75,29 +75,29 @@ endif
 ifndef ${ABI}
 # 32- vs. 64-bit ABI: 32=32-bit mode, 64=64-bit mode (default) if available
  ABI := 64
-endif # endif ABI
+endif # !ABI
 ifndef ${DBG}
 # Debugging token N=No (default) Y=Yes
  DBG := N
-endif # endif DBG
+endif # !DBG
 ifndef DPN_SFX
  DPN_SFX := d
-endif # endif DPN_SFX
+endif # !DPN_SFX
 ifndef GCC_RCH_ARG
  GCC_RCH_ARG :=
-endif # endif GCC_RCH_ARG
+endif # !GCC_RCH_ARG
 ifndef ICC_RCH_ARG
  ICC_RCH_ARG :=
-endif # endif ICC_RCH_ARG
+endif # !ICC_RCH_ARG
 ifndef MDL_SFX
  MDL_SFX := mod
-endif # endif MDL_SFX
+endif # !MDL_SFX
 ifndef ${MPI} # MPI
  MPI := N
-endif # endif MPI
+endif # !MPI
 ifndef ${NETCDF4} # netCDF4 support
  NETCDF4 := Y
-endif # endif NETCDF4
+endif # !NETCDF4
 ifndef NETCDF_ROOT
  NETCDF_ROOT := /usr/local
 endif
@@ -112,17 +112,17 @@ ifndef NETCDF_LIB
 endif
 ifndef ${NETCDFF} # Link to libnetcdff.a
  NETCDFF := Y
-endif # endif NETCDFF
+endif # !NETCDFF
 ifndef ${OMP} # OpenMP
  OMP := Y
-endif # endif OMP
+endif # !OMP
 ifndef OPTS
  OPTS := O
 endif
 ifndef ${PRC}
 # Precision token D=Double S=Single N=Native
  PRC := D
-endif # endif PRC
+endif # !PRC
 ifndef PVM_ARCH
  PVM_ARCH := $(shell ${HOME}/sh/pvmgetarch)
 endif
@@ -139,12 +139,12 @@ ifndef UNAMES
 endif
 ifndef USR_TKN
  USR_TKN := 
-endif # endif USR_TKN
+endif # !USR_TKN
 
 ifeq (${NETCDF4},Y)
  CPPFLAGS += -DENABLE_NETCDF4
  USR_TKN += -DENABLE_NETCDF4
-endif # endif NETCDF4
+endif # !NETCDF4
 
 # Derived-tokens based on primary tokens
 # These tokens should not be altered by hand
@@ -205,12 +205,12 @@ endif # !SZ
 ifneq (${HDF5_INC},${NETCDF_INC})
  NETCDF_INC += -I${HDF5_INC}
 endif # end 
-endif # endif NETCDF4
+endif # !NETCDF4
 
 # Link to libnetcdff.a
 ifeq (${NETCDFF},Y)
  NC_LIBS := -lnetcdff ${NC_LIBS}
-endif # endif NETCDFF
+endif # !NETCDFF
 
 # Derived-tokens based on primary tokens
 # These tokens should not be altered by hand
@@ -225,7 +225,7 @@ ifndef LINUX_CXX
  #LINUX_CXX := insure
  #LINUX_CXX := pathCC
  #LINUX_CXX := pgCC
-endif # endif LINUX_CXX
+endif # !LINUX_CXX
 ifndef LINUX_CC
 # C compiler for Linux
  LINUX_CC := gcc -std=c99 -pedantic -D_BSD_SOURCE -D_POSIX_SOURCE
@@ -234,7 +234,7 @@ ifndef LINUX_CC
  #LINUX_CC := insure
  #LINUX_CC := pathcc -std=c99 -D_BSD_SOURCE -D_POSIX_SOURCE
  #LINUX_CC := pgcc
-endif # endif LINUX_CC
+endif # !LINUX_CC
 ifndef LINUX_FC
 # Fortran compiler for Linux
  #LINUX_FC := g95
@@ -244,8 +244,8 @@ ifndef LINUX_FC
  #LINUX_FC := ifort
  #LINUX_FC := pathf95
  #LINUX_FC := pgf95
-endif # endif LINUX_FC
-endif # endif LINUX
+endif # !LINUX_FC
+endif # !LINUX
 
 # NB: Do NOT add comment lines, e.g., # This is a comma, to character definitions
 null :=
@@ -350,7 +350,7 @@ else
  CC := xlc
  CPP_DFN += -U_OPENMP
  FC := xlf95
-endif # endif OMP
+endif # !OMP
 CXX := xlC
 CFLAGS := ${OMP_FLG} -qmaxmem=-1
 CPP := /lib/cpp -P
@@ -420,7 +420,7 @@ ifeq (${ABI},64)
  LDFLAGS += -q64 
 else
  CPPFLAGS += -D_LARGE_FILES
-endif # endif ABI
+endif # !ABI
 CXXFLAGS := ${CFLAGS}
 ${MY_OBJ_DIR}/%.o : %.F90
 	${FC} -c ${FREEFLAGS} ${FFLAGS} ${CPP_DFN_F} ${CPPINC} -o ${MY_OBJ_DIR}/$(notdir $@) $<
@@ -431,12 +431,12 @@ ${MY_OBJ_DIR}/%.o : %.F
 ${MY_OBJ_DIR}/%.o : %.f
 	${FC} -c ${FIXEDFLAGS} ${FFLAGS} ${CPP_DFN_F} ${CPPINC} -o ${MY_OBJ_DIR}/$(notdir $@) $<
 endif
-# endif AIX
+# !AIX
 
 ifeq (${PVM_ARCH},ALPHA)
 ifeq (${OMP},Y)
  OMP_FLG := -omp
-endif # endif OMP
+endif # !OMP
 CXX := cxx -std strict_ansi
 CC := cc
 CFLAGS := ${OMP_FLG}
@@ -473,7 +473,7 @@ ${MY_OBJ_DIR}/%.o : %.F90
 ${MY_OBJ_DIR}/%.o : %.F
 	${FC} -c ${FIXEDFLAGS} ${FFLAGS} ${CPPFLAGS} -o ${MY_OBJ_DIR}/$(notdir $@) $<
 endif
-# endif ALPHA
+# !ALPHA
 
 ifeq (${PVM_ARCH},CRAY)
 CXX := g++
@@ -511,7 +511,7 @@ ${MY_OBJ_DIR}/%.o : %.f
 	${FC} -c ${FFLAGS} $<
 	mv -f $(notdir $@) ${MY_OBJ_DIR}
 endif
-# endif CRAY
+# !CRAY
 
 # Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOS
 ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSDMACOS))
@@ -593,7 +593,7 @@ ifeq (${OMP},Y)
  OMP_FLG_C := -fopenmp
  OMP_FLG_F := -fopenmp
  LDFLAGS += -lgomp -lpthread
-endif # endif OMP
+endif # !OMP
 ifeq (${PRC},D)
 # FFLAGS += -fdefault-real-8
  FFLAGS += -fdefault-real-8 -fdefault-double-8
@@ -680,7 +680,7 @@ ifeq (${MPI},Y)
  CC := $(subst icc,mpicc,${CC})
  CXX := $(subst icpc,mpiCC,${CXX})
  FC := $(subst ifort,mpif90,${FC})
-endif # endif MPI
+endif # !MPI
 endif # end Intel (Kai) Fortran Compiler
 # Lahey-Fujitsu Fortran Compiler
 ifeq (${FC},lf95)
@@ -697,7 +697,7 @@ else
 endif
 ifeq ($(STC),Y)
  LDFLAGS := --staticlink ${LDFLAGS}
-endif # endif STC
+endif # !STC
 ifeq (${OPTS},O)
 # --tpp: Pentium Pro/Pentium II code generation
 # --[n]sav: [Do not] save local variables
@@ -761,7 +761,7 @@ ifeq (${OPTS},X)
  CFLAGS += -g -Mbounds
 endif
  CXXFLAGS := ${CFLAGS}
-endif # endif Portland Group C++ Compiler
+endif # !Portland Group C++ Compiler
 # Portland Group Fortran Compiler
 ifneq (${null},$(findstring pgf,${FC}))
 # -Kieee : Used by CCSM
@@ -777,7 +777,7 @@ else
 endif
 ifeq ($(STC),Y)
  LDFLAGS := -Wl,-Bstatic ${LDFLAGS}
-endif # endif STC
+endif # !STC
 ifeq (${OPTS},O)
 # -fast    Common optimizations: -O2 -Munroll=c:1 -Mnoframe -Mlre
 # -fastsse == -fast -Mvect=sse -Mscalarsse -Mcache_align -Mflushzendif
@@ -801,14 +801,14 @@ ifeq (${OMP},Y)
  CFLAGS += ${OMP_FLG_C}
  FFLAGS += ${OMP_FLG_F}
  LDFLAGS := ${OMP_FLG_F} ${LDFLAGS}
-endif # endif OMP
+endif # !OMP
 ifeq (${MPI},Y)
  CC := $(subst icc,mpicc,${CC})
  CXX := $(subst icpc,mpiCC,${CXX})
  FC := $(subst ifort,mpif90,${FC})
-endif # endif MPI
+endif # !MPI
 endif
-# endif LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOS
+# !LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOS
 
 ifeq (${UNAMES},IRIX64)
 CXX := CC
@@ -848,7 +848,7 @@ ifeq (${OPTS},X)
  FFLAGS += -g -check_bounds -ansi -uvar
 endif
 endif
-# endif IRIX64=SGI64,SGIMP64
+# !IRIX64=SGI64,SGIMP64
 
 ifeq (${UNAMES},SunOS) 
 CXX := g++
@@ -904,7 +904,7 @@ ifeq (${FC},f77)
 endif
 endif
 endif
-# endif SunOS=SUN4SOL2,SUNMP
+# !SunOS=SUN4SOL2,SUNMP
 
 ifeq (${PVM_ARCH},WIN32)
 CXX := ${LINUX_CXX}
@@ -947,7 +947,7 @@ ifeq (${OPTS},X)
 endif
 endif # end G95 Compiler
 endif
-# endif WIN32
+# !WIN32
 
 # Link to Electric Fence library, see man efence
 ifeq (${PVM_ARCH},LINUX)
@@ -955,7 +955,7 @@ ifneq (${null},$(findstring ${OPTS},DX))
 # LDFLAGS += -lefence
 endif
 endif
-# endif LINUX
+# !LINUX
 
 # Disable OpenMP on platforms that automatically support it
 ifeq (${OMP},N)
@@ -969,8 +969,8 @@ ifeq (${OMP},N)
  LDFLAGS := $(filter-out -mp,${LDFLAGS})
  ifneq (${UNAMES},SunOS)
   CPPFLAGS += -U_OPENMP
- endif # endif SunOS
-endif # endif OMP
+ endif # !SunOS
+endif # !OMP
 
 # Define any remaining variables
 libcsz_f90 := ${MY_LIB_DIR}/libcsz_f90

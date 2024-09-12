@@ -93,7 +93,7 @@ int main(int argc,char **argv)
   std::cout << gettext("The tree is green") << std::endl;
   std::cout << gettext("I thought we were friends") << std::endl;
 
-  if(argc == argc){;} // CEWU Compiler Error Warning Usage
-  if(&argv == NULL){;} // CEWU Compiler Error Warning Usage
-} // end i18n main()
+  if(argc == argc+1){;} // CEWU Compiler Error Warning Usage
+  if(argv != (char **)73){;} // CEWU Compiler Error Warning Usage
+} // !main()
   
