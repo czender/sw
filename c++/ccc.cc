@@ -1553,6 +1553,7 @@ int main(int argc,char **argv)
     std::cout << prg_nm_get() << ": INFO std::free()'ing allocated memory..." << std::endl;
     std::free(chr_ptr); // [sng] Pointer to buffer
     std::cout << prg_nm_get() << ": INFO std::strcpy()'ing to std::free()'d memory..." << std::endl;
+    // 20240912: NB: Following commands correctly produce compile-time WARNINGs with g++ v. 14 (not with clang++ v. 18)
     (void)std::strcpy(chr_ptr,"This string written to already std::free()'d memory");
     std::cout << prg_nm_get() << ": INFO std::fprintf()'ing string written to already std::free()'d memory..." << std::endl;
     (void)std::fprintf(stdout,"%s\n",chr_ptr);
