@@ -2,7 +2,7 @@
 
 /* Purpose: Fortran interface to C time routines */
 
-/* Copyright (C) 1994--2009 Charlie Zender
+/* Copyright (C) 1994--present Charlie Zender
    License: GNU General Public License (GPL) Version 3
    See http://www.gnu.org/copyleft/gpl.html for full license text */
 
@@ -19,6 +19,11 @@
    Compilation:
    gcc -Wall -c -O -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
    gcc -Wall -c -g -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
+   gcc -std=gnu17 -Wall -c -g -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o # works
+   gcc -std=gnu2x -Wall -c -g -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o # works
+   gcc -std=gnu23 -Wall -c -g -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o # works
+   gcc -std=c2x -Wall -c -g -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o # borken
+   gcc -std=c23 -Wall -c -g -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o # borken
    gcc -Wall -c -g -D${PVM_ARCH} -fPIE ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
    pgcc -c -g -D${PVM_ARCH} ${HOME}/sw/c/date_time.c -o ${MY_OBJ_DIR}/date_time.o
 
@@ -45,9 +50,9 @@
 
 #if defined(AIX)
 #define UNDERSCORE_ZERO
-#else /* not AIX */
+#else /* !AIX */
 #define UNDERSCORE_ONE
-#endif /* not AIX */
+#endif /* !AIX */
 
 #ifdef UNDERSCORE_ZERO
 #define FNC_C2F(x) x
@@ -85,7 +90,7 @@ FNC_C2F(date_time)
   if(bfr_lng < 26){
     (void)fprintf(stderr,"WARNING time buffer too small in date_time()\n");
     return;
-  } /* endif */ 
+  } /* !bfr_lng */ 
   
   time_time_t=time((time_t *)NULL); /* [s] Time stored as time_t */
   (void)strcpy(bfr,ctime(&time_time_t)); /* [sng] Date/time string */
@@ -96,7 +101,7 @@ FNC_C2F(date_time)
     *chr_ptr++=' '; /* [ptr] Pointer to current character */
 
   return;
-} /* end date_time() */ 
+} /* !date_time() */ 
 
 void 
 /* [fnc] Compute UNIX time (seconds since 1969) of given GMT date-time */
@@ -126,16 +131,16 @@ FNC_C2F(gmt2unix)
 
 #if defined(AIX) || defined(ALPHA)
   extern long timezone; /* [mnt] Offset of current TZ from GMT */
-#else /* not AIX */ 
+#else /* !AIX */ 
   extern time_t timezone; /* [mnt] Offset of current TZ from GMT */
-#endif /* not AIX */ 
+#endif /* !AIX */ 
 #if !defined(LINUX) && !defined(LINUXAMD64) && !defined(ALPHA)
   extern time_t altzone; /* [mnt] Offset of alternate TZ from GMT */
-#endif /* not LINUX or ALPHA */ 
+#endif /* !LINUX or ALPHA */ 
   extern int daylight; /* [flg] Daylight savings time */
   extern char *tzname[2]; /* [sng] UNIX code of main and alternate TZs */
 
-  int rcd=0; /* [rcd] Return code */
+  int rcd; /* [rcd] Return code */
 
   struct tm *gmt_tm; /* [tm] GMT time structure for desired input date */
 
@@ -153,12 +158,15 @@ FNC_C2F(gmt2unix)
     (void)sprintf(tz_set_cmd,"%s",tz_gmt_set_cmd);
     /* 20060913: CentOS 4.1 needs __USE_SVID in stdlib.h to prototype putenv()
        Implicit declaration is fine since function returns int
-       Better long-term workaround may be to switch to BSD setenv() */
-    rcd+=putenv(tz_set_cmd);
+       Better long-term workaround is to switch to BSD setenv()
+       20240926: gcc -std=c23 rejects putenv() without other CPP definitions...time to shift to BSD setenv() */
+    rcd=putenv(tz_set_cmd);
+    //rcd=setenv(tz_set_cmd);
+    if(rcd) abort();
     (void)tzset();
     /* Do not free tz_set_cmd as per caveats on Linux putenv() man page */
     /*    if(tz_set_cmd != NULL) (void)free(tz_set_cmd); tz_set_cmd=NULL;*/
-  } /* endif TZ exists */
+  } /* !TZ exists */
 
   /* Initialize time structure */ 
   time_unix_time_t=(time_t)0; /* [s] UNIX time stored as time_t */
@@ -180,9 +188,9 @@ FNC_C2F(gmt2unix)
     (void)fprintf(stderr,"UTC - MTZ = timezone = %li\n",(long)timezone);
 #if !defined(LINUX) && !defined(LINUXAMD64) && !defined(ALPHA)
     (void)fprintf(stderr,"UTC - ATZ = altzone = %li\n",(long)altzone);
-#endif /* not LINUX or ALPHA */ 
+#endif /* !LINUX or ALPHA */ 
     (void)fprintf(stderr,"daylight = %d\n",daylight);
-  } /* endif */   
+  } /* !0 */   
 
   /* Warning: Behavior of putenv under Linux is very subtle---read man page for latest on 
      re-entrancy, memory leaks, use of automatic variable and BSD compatibility of this routine 
@@ -193,17 +201,18 @@ FNC_C2F(gmt2unix)
     /* Allocate space for "TZ=" + tz_lcl + terminating NUL */
     tz_set_cmd=(char *)malloc((strlen(tz_lcl)+4)*sizeof(char)); /* [sng] Command for putenv() to set TZ */
     (void)sprintf(tz_set_cmd,"TZ=%s",tz_lcl); /* [sng] Command for putenv() to set TZ */
-    rcd+=putenv(tz_set_cmd);
+    rcd=putenv(tz_set_cmd);
+    if(rcd) abort();
     (void)tzset();
     /* Do not free tz_set_cmd as per caveats on Linux putenv() man page */
     /*    if(tz_set_cmd != NULL) (void)free(tz_set_cmd); tz_set_cmd=NULL;*/
-  } /* endif TZ exists */
+  } /* !TZ exists */
 
   if(tz_lcl != NULL) (void)free(tz_lcl);
   tz_lcl=NULL; /* [sng] Local copy of TZ environment variable */
 
   return;
-} /* end gmt2unix() */ 
+} /* !gmt2unix() */ 
 
 void 
 FNC_C2F(unix2gmt)
@@ -255,7 +264,7 @@ FNC_C2F(unix2gmt)
   *yr=gmt_tm_ptr->tm_year+1900; /* [yr] Christian Year */
 
   return;
-} /* end unix2gmt() */ 
+} /* !unix2gmt() */ 
 
 void 
 FNC_C2F(gmtime_tst)
@@ -277,10 +286,10 @@ FNC_C2F(gmtime_tst)
      may cause gmtime() to fail here, depending on putenv() implementation */
   gmt_tm_ptr=gmtime(&time_unix_time_t); /* [tm] UNIX time structure */
 
-  gmt_tm_ptr=gmt_tm_ptr; /* CEWI: Avoids set but not used message */
+  gmt_tm_ptr=gmt_tm_ptr; /* CEWI: Avoid set-but-not-used warning */
   
   return;
-} /* end gmtime_tst() */ 
+} /* !gmtime_tst() */ 
 
 void 
  /* [fnc] Create standard date-time string for given decimal time and time-zone */
@@ -309,19 +318,19 @@ FNC_C2F(unix2gmt_sng)
 
 #if (defined AIX) || (defined ALPHA)
   extern long timezone; /* [mnt] Offset of current TZ from GMT */
-#else /* not AIX */ 
+#else /* !AIX */ 
   extern time_t timezone; /* [mnt] Offset of current TZ from GMT */
-#endif /* not AIX */ 
+#endif /* !AIX */ 
 #if !defined(LINUX) && !defined(LINUXAMD64) && !defined(ALPHA)
   extern time_t altzone; /* [mnt] Offset of alternate TZ from GMT */
-#endif /* not LINUX or ALPHA */ 
+#endif /* !LINUX or ALPHA */ 
   extern int daylight; /* [flg] Daylight savings time */
   extern char *tzname[2]; /* [sng] UNIX code of main and alternate TZs */
 
   double time_unix_dbl; /* [s] UNIX time stored as double */
   double sec_frc; /* [s] Fractional seconds */
 
-  int rcd=0; /* [rcd] Return code */
+  int rcd; /* [rcd] Return code */
 
   long time_unix_long; /* [s] UNIX time stored as intrinsic long */
   long tz_lng_max=4; /* [nbr] Maximum length of TZ string (including trailing NUL) */
@@ -338,17 +347,17 @@ FNC_C2F(unix2gmt_sng)
   if(bfr_lng < 32){
     (void)fprintf(stderr,"WARNING time buffer too small in unix2gmt_sng()\n");
     return;
-  } /* endif */ 
+  } /* !bfr_lng */ 
 
   if(tz_lng > tz_lng_max){
     (void)fprintf(stderr,"WARNING tz_lng = %d in unix2gmt_sng()\n",tz_lng);
     return;
-  } /* endif */ 
+  } /* !tz_lng */ 
 
   if(tz_lng < tz_lng_max){
     (void)fprintf(stderr,"WARNING tz_lng = %d in unix2gmt_sng()\n",tz_lng);
     return;
-  } /* endif */ 
+  } /* !tz_lng */ 
 
   /* NUL-terminate time-zone string */ 
   tz_nm[3]='\0';
@@ -371,11 +380,12 @@ FNC_C2F(unix2gmt_sng)
     /* Allocate space for command and terminating NUL */
     tz_set_cmd=(char *)malloc((strlen(tz_gmt_set_cmd)+1)*sizeof(char)); /* [sng] Command for putenv() to set TZ */
     (void)sprintf(tz_set_cmd,"%s",tz_gmt_set_cmd); /* [sng] Command for putenv() to set TZ */
-    rcd+=putenv(tz_set_cmd);
+    rcd=putenv(tz_set_cmd);
+    if(rcd) abort();
     (void)tzset();
     /* Do not free tz_set_cmd as as per caveats for Linux putenv() */
     /*    if(tz_set_cmd != NULL) (void)free(tz_set_cmd); tz_set_cmd=NULL;*/
-  } /* endif TZ exists */
+  } /* !TZ exists */
 
   /* Calling putenv() in separate subroutine with automatic string argument 
      may cause gmtime() to fail here, depending on putenv() implementation */
@@ -386,11 +396,12 @@ FNC_C2F(unix2gmt_sng)
     /* Allocate space for "TZ=" + tz_lcl + terminating NUL */
     tz_set_cmd=(char *)malloc((strlen(tz_lcl)+4)*sizeof(char)); /* [sng] Command for putenv() to set TZ */
     (void)sprintf(tz_set_cmd,"TZ=%s",tz_lcl); /* [sng] Command for putenv() to set TZ */
-    rcd+=putenv(tz_set_cmd);
+    rcd=putenv(tz_set_cmd);
+    if(rcd) abort();
     (void)tzset();
     /* Do not free tz_set_cmd as as per caveats for Linux putenv() */
     /*    if(tz_set_cmd != NULL) (void)free(tz_set_cmd); tz_set_cmd=NULL;*/
-  } /* endif TZ exists */
+  } /* !TZ exists */
 
   if(tz_lcl != NULL) (void)free(tz_lcl);
   tz_lcl=NULL; /* [sng] Local copy of TZ environment variable */
@@ -431,9 +442,9 @@ FNC_C2F(unix2gmt_sng)
     (void)fprintf(stderr,"UTC - MTZ = timezone = %li\n",(long)timezone);
 #if !defined(LINUX) && !defined(LINUXAMD64) && !defined(ALPHA)
     (void)fprintf(stderr,"UTC - ATZ = altzone = %li\n",(long)altzone);
-#endif /* not LINUX or ALPHA */ 
+#endif /* !LINUX or ALPHA */ 
     (void)fprintf(stderr,"daylight = %d\n",daylight);
-  } /* endif */   
+  } /* !0 */   
 
   return;
-} /* end unix2gmt_sng() */ 
+} /* !unix2gmt_sng() */ 

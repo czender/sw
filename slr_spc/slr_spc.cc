@@ -15,6 +15,7 @@
    ThD71: TaL89, Ste78, Sli89
    NeL84: EbC92 
    Kur95: ZBP97
+   MFA17: CMIP6
    JHC21: JHC21
    FDE24: CMIP7 */
 
@@ -46,6 +47,7 @@
    Production:
    slr_spc --dbg=1 --flx_slr_src=FDE24 --wvl_nbr=3890 ${DATA}/aca/solar_CMIP_SOLARIS-HEPPA-4-3_gn_1850_2023.nc ${DATA}/aca/spc_FDE24.nc
    slr_spc --dbg=1 --flx_slr_src=JHC21 --wvl_nbr=2104 ${DATA}/aca/tsis_ssi_L3_c24h_20240807.nc ${DATA}/aca/spc_JHC21.nc
+   slr_spc --dbg=1 --flx_slr_src=MFA17 --wvl_nbr=3890 ${DATA}/aca/Solar_input4MIPS_1850_2299.nc ${DATA}/aca/spc_MFA17.nc
    slr_spc --dbg=1 --ncr_wvl --wvl_nbr=49934 ${DATA}/aca/spc_Kur95_01wvn.txt ${DATA}/aca/spc_Kur95_01wvn.nc
    slr_spc --dbg=1 --ncr_wvl --wvl_nbr=2497 ${DATA}/aca/spc_Kur95_20wvn.txt ${DATA}/aca/spc_Kur95_20wvn.nc
    slr_spc --dbg=1 --flx_slr_src=NeL84 ${DATA}/aca/spc_NeL84.txt ${DATA}/aca/spc_NeL84.nc
@@ -91,12 +93,13 @@ int main(const int argc,char **argv)
   void usg_prn(const char *opt_sng);
 
   // Enums
-  enum flx_slr_src{LaN68,ThD71,NeL84,Kur95,JHC21,FDE24};
-  const std::string flx_slr_sng[6]={
+  enum flx_slr_src{LaN68,ThD71,NeL84,Kur95,MFA17,JHC21,FDE24};
+  const std::string flx_slr_sng[7]={
     "Labs and Neckel (1968) (LaN68)",
     "Thekeakara and Drummond (1971) (ThD71)",
     "Neckel and Labs (via WDC) (1984) (NeL84)",
     "Kurucz (1995) (Kur95)",
+    "Matthes, Funke, Anderson, et al. (2017) (MFA17)",
     "Jing, Huang, Chen, et al. (2021) (JHC21)",
     "Funke, Dudok de Wit, Ermolli, et al. (2024) (FDE24)"
   };
@@ -218,6 +221,9 @@ int main(const int argc,char **argv)
 	else if((flx_slr_sng[Kur95].find(opt_sng) != std::string::npos) || 
 	   (opt_sng.find("Kur95") != std::string::npos)) 
 	  flx_slr_src=Kur95;
+	else if((flx_slr_sng[MFA17].find(opt_sng) != std::string::npos) || 
+	   (opt_sng.find("MFA17") != std::string::npos)) 
+	  flx_slr_src=MFA17;
 	else if((flx_slr_sng[JHC21].find(opt_sng) != std::string::npos) || 
 	   (opt_sng.find("JHC21") != std::string::npos)) 
 	  flx_slr_src=JHC21;
@@ -289,6 +295,8 @@ int main(const int argc,char **argv)
     wvl_nbr=921;
     flx_frc_fnc=FORTRAN_slffln; // Bogus, not used
   }else if(flx_slr_src == Kur95){
+    flx_frc_fnc=FORTRAN_slffln; // Bogus, not used
+  }else if(flx_slr_src == MFA17){
     flx_frc_fnc=FORTRAN_slffln; // Bogus, not used
   }else if(flx_slr_src == JHC21){
     flx_frc_fnc=FORTRAN_slffln; // Bogus, not used
@@ -594,6 +602,68 @@ int main(const int argc,char **argv)
     delete []flx_spc_wvn;
   } // !Kur95
   
+  if(flx_slr_src == MFA17){ // MFA17
+
+    // Check for file existance
+    struct stat stat_sct;
+    rcd=stat(fl_in.c_str(),&stat_sct);
+    if(rcd == -1) std::perror("ERROR std::stat()");
+
+    // Open input file
+    int nc_id=nco_open(fl_in,NC_NOWRITE); // [fnc] Open netCDF file
+    if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Opening "+fl_in);
+  
+    wvl_nbr=nco_inq_dimlen(nc_id,static_cast<std::string>("wavelength")); // [nbr] Number of wavelengths
+
+    prc_cmp *wvl_bnd_nm=new prc_cmp[2*wvl_nbr]; // [nm] Wavelength bounds
+    prc_cmp *wvl_ctr_nm=new prc_cmp[wvl_nbr]; // [nm] Wavelength at band center
+    prc_cmp *wvl_dlt_nm=new prc_cmp[wvl_nbr]; // [nm] Bandwidth
+    prc_cmp *flx_spc_bnd_1au_xnm=new prc_cmp[wvl_nbr]; // [W m-2 nm-1] TSIS-measured absolute spectral flux at 1 AU
+    prc_cmp *flx_spc_bnd=new prc_cmp[wvl_nbr]; // [W m-2 m-1] TSIS-measured absolute spectral flux at 1 AU
+
+    // User must free this memory when no longer needed
+    // For objects in spc_slr_cls, this is done in fl_slr_spc_set() which calls deallocate()
+    rcd=nco_get_var(nc_id,static_cast<std::string>("wlen_bnds"),wvl_bnd_nm); // [nm]
+    rcd=nco_get_var(nc_id,static_cast<std::string>("wavelength"),wvl_ctr_nm); // [nm]
+    rcd=nco_get_var(nc_id,static_cast<std::string>("band_width"),wvl_dlt_nm); // [nm]
+    rcd=nco_get_var(nc_id,static_cast<std::string>("ssi"),flx_spc_bnd_1au_xnm); // [mW m-2 nm-1] 
+
+    // MFA17 provides wavelength in nm (like TSIS)
+    for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
+      wvl_min[wvl_idx]=1.0e-9*wvl_bnd_nm[2*wvl_idx];
+      wvl_max[wvl_idx]=1.0e-9*wvl_bnd_nm[2*wvl_idx+1];
+    } // !wvl_idx
+    for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
+      wvl_ctr[wvl_idx]=1.0e-9*wvl_ctr_nm[wvl_idx];
+      wvl[wvl_idx]=wvl_ctr[wvl_idx]; // [m] Nominal wavelength
+      wvl_dlt[wvl_idx]=1.0e-9*wvl_dlt_nm[wvl_idx];
+      flx_spc_bnd[wvl_idx]=1.0e6*flx_spc_bnd_1au_xnm[wvl_idx]; // [mW m-2 nm-1] -> [W m-2 m-1]
+    } // !wvl_idx
+
+    // Close input file
+    rcd=nco_close(nc_id); // [fnc] Close netCDF file
+    if(dbg_lvl_get() >= dbg_sbr) dbg_prn(sbr_nm,"Closing "+fl_in);
+
+    std::cerr << "Ingested data from " << fl_in << std::endl;
+
+    if(dbg_lvl > dbg_off){
+      std::cerr << "idx\twvl_ctr\tflx_spc_wvl" << std::endl;
+      std::cerr << "#\tnm\tW m-2 nm-1" << std::endl;
+      for(idx=0;idx<wvl_nbr;idx++) std::cerr << idx << "\t" << wvl_ctr[idx] << "\t" << 1.0e-9*flx_spc_bnd[idx] << std::endl;
+    } // !dbg
+
+    // Create standard fields
+    for(wvl_idx=0;wvl_idx<wvl_nbr;wvl_idx++){
+      flx_bnd[wvl_idx]=wvl_dlt[wvl_idx]*flx_spc_bnd[wvl_idx]; // [W m-2] Solar flux in band
+    } // !wvl_idx
+
+    delete []wvl_bnd_nm;
+    delete []wvl_ctr_nm;
+    delete []wvl_dlt_nm;
+    delete []flx_spc_bnd_1au_xnm;
+    delete []flx_spc_bnd;
+  } // !MFA17
+  
   if(flx_slr_src == JHC21){ // JHC21
 
     // Check for file existance
@@ -689,7 +759,7 @@ int main(const int argc,char **argv)
       wvl_ctr[wvl_idx]=1.0e-9*wvl_ctr_nm[wvl_idx];
       wvl[wvl_idx]=wvl_ctr[wvl_idx]; // [m] Nominal wavelength
       wvl_dlt[wvl_idx]=1.0e-9*wvl_dlt_nm[wvl_idx];
-      flx_spc_bnd[wvl_idx]=1.0e9*flx_spc_bnd_1au_xnm[wvl_idx];
+      flx_spc_bnd[wvl_idx]=1.0e9*flx_spc_bnd_1au_xnm[wvl_idx]; // [W m-2 nm-1] -> [W m-2 m-1]
     } // !wvl_idx
 
     // Close input file
@@ -842,6 +912,7 @@ int main(const int argc,char **argv)
   prc_cmp *flx_frc_ThD71=new prc_cmp[wvl_nbr];
   prc_cmp *flx_frc_NeL84=new prc_cmp[wvl_nbr];
   prc_cmp *flx_frc_Kur95=new prc_cmp[wvl_nbr];
+  prc_cmp *flx_frc_MFA17=new prc_cmp[wvl_nbr];
   prc_cmp *flx_frc_JHC21=new prc_cmp[wvl_nbr];
   prc_cmp *flx_frc_FDE24=new prc_cmp[wvl_nbr];
   prc_cmp *flx_slr=new prc_cmp[wvl_nbr];
@@ -856,6 +927,7 @@ int main(const int argc,char **argv)
     flx_frc_ThD71[idx]=static_cast<prc_cmp>(FORTRAN_slfftd(&wvl_min_mcr,&wvl_max_mcr));
     flx_frc_NeL84[idx]=0.0;
     if(flx_slr_src == Kur95) flx_frc_Kur95[idx]=flx_frc[idx]; else flx_frc_Kur95[idx]=1.0/wvl_nbr;
+    if(flx_slr_src == MFA17) flx_frc_MFA17[idx]=flx_frc[idx]; else flx_frc_MFA17[idx]=1.0/wvl_nbr;
     if(flx_slr_src == JHC21) flx_frc_JHC21[idx]=flx_frc[idx]; else flx_frc_JHC21[idx]=1.0/wvl_nbr;
     if(flx_slr_src == FDE24) flx_frc_FDE24[idx]=flx_frc[idx]; else flx_frc_FDE24[idx]=1.0/wvl_nbr;
     flx_slr[idx]=slr_cst*flx_frc[idx];
@@ -944,6 +1016,7 @@ int main(const int argc,char **argv)
     {0,"flx_frc_JHC21",nco_xtyp,1,dmn_wvl,"long_name","Fraction of solar flux: Jing, Huang, Chen, et al. (2021)","units","fraction"},
     {0,"flx_frc_Kur95",nco_xtyp,1,dmn_wvl,"long_name","Fraction of solar flux: Kurucz (1995)","units","fraction"},
     {0,"flx_frc_LaN68",nco_xtyp,1,dmn_wvl,"long_name","Fraction of solar flux: Labs & Neckel (1968)","units","fraction"},
+    {0,"flx_frc_MFA17",nco_xtyp,1,dmn_wvl,"long_name","Fraction of solar flux: Matthes, Funke, Anderson, et al. (2017)","units","fraction"},
     {0,"flx_frc_NeL84",nco_xtyp,1,dmn_wvl,"long_name","Fraction of solar flux: Neckel & Labs (1984)","units","fraction"},
     {0,"flx_frc_ThD71",nco_xtyp,1,dmn_wvl,"long_name","Fraction of solar flux: Thekeakara & Drummond (1971)","units","fraction"},
     {0,"flx_frc_blr",nco_xtyp,1,dmn_wvl,"long_name","Fraction of solar flux at shorter wavelengths","units","fraction"},
@@ -976,6 +1049,7 @@ int main(const int argc,char **argv)
   rcd=nco_put_var(nc_out,static_cast<std::string>("flx_frc_JHC21"),flx_frc_JHC21); delete []flx_frc_JHC21;
   rcd=nco_put_var(nc_out,static_cast<std::string>("flx_frc_Kur95"),flx_frc_Kur95); delete []flx_frc_Kur95;
   rcd=nco_put_var(nc_out,static_cast<std::string>("flx_frc_LaN68"),flx_frc_LaN68); delete []flx_frc_LaN68;
+  rcd=nco_put_var(nc_out,static_cast<std::string>("flx_frc_MFA17"),flx_frc_MFA17); delete []flx_frc_MFA17;
   rcd=nco_put_var(nc_out,static_cast<std::string>("flx_frc_NeL84"),flx_frc_NeL84); delete []flx_frc_NeL84;
   rcd=nco_put_var(nc_out,static_cast<std::string>("flx_frc_ThD71"),flx_frc_ThD71); delete []flx_frc_ThD71;
   rcd=nco_put_var(nc_out,static_cast<std::string>("flx_frc_blr"),flx_frc_blr); delete []flx_frc_blr;

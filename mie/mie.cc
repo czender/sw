@@ -433,7 +433,7 @@ int main(int argc,char **argv)
   prc_cmp rgh_mmn_mbl(100.0e-6); // [m] Roughness length momentum for erodible surfaces MaB95 p. 16420, GMB98 p. 6205
   prc_cmp rgh_mmn_smt(10.0e-6); // [m] Smooth roughness length MaB95 p. 16426, MaB97 p. 4392, GMB98 p. 6207 fxm: aer uses 30.0e-6
   //prc_cmp slr_cst(phc::slr_cst_CCM); // [W m-2] Solar constant (default value until 20240911)
-  prc_cmp slr_cst(phc::slr_cst_FDE24); // [W m-2] Solar constant 20240911: Adopt FDE24 values by default
+  prc_cmp slr_cst(phc::slr_cst_FDE24_hst); // [W m-2] Solar constant 20240911: Adopt FDE24 values by default
   prc_cmp slr_zen_ngl_cos(1.0); // [frc] Cosine solar zenith angle
   prc_cmp snw_hgt_lqd(0.0); // [m] Equivalent liquid water snow depth
   prc_cmp spc_heat_prt(0.0); // [J kg-1 K-1] Specific heat capacity of particle
@@ -5272,7 +5272,7 @@ int main(int argc,char **argv)
       {0,"sfc_rsl_frc",NC_FLOAT,0,dmn_scl,"long_name","Resolved fraction of surface area concentration","units","fraction"},
       {0,"sfc_spc_anl",NC_FLOAT,0,dmn_scl,"long_name","Specific surface area analytic","units","meter2 kilogram-1"},
       {0,"sfc_spc_rsl",NC_FLOAT,0,dmn_scl,"long_name","Specific Surface area resolved","units","meter2 kilogram-1"},
-      {0,"slr_cst",NC_FLOAT,0,dmn_scl,"long_name","Solar constant","units","watt meter-2"},
+      {0,"slr_cst",NC_DOUBLE,0,dmn_scl,"long_name","Solar constant","units","watt meter-2"},
       {0,"spc_heat_prt",NC_FLOAT,0,dmn_scl,"long_name","Specific heat capacity of particle","units","joule kilogram-1 kelvin-1"},
       {0,"sz_ctr",nco_xtyp,1,dmn_sz,"long_name","Size at bin center","units","meter"},
       {0,"sz_dbg",nco_xtyp,0,dmn_scl,"long_name","Debugging size","units","meter"},
