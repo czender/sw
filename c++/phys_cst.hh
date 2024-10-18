@@ -122,6 +122,8 @@ namespace phc{ // [nms] Physical constant namespace
   const double slr_cst_FDE24_hst(1361.353); // (1361.353) [W m-2] Solar constant 1850-2023 daily mean
   const double slr_cst_FDE24_PI(1361.37); // (1361.37) [W m-2] Solar constant "pre-industrial" 18500101-18730128 daily mean
   const double slr_cst_FDE24_mnm(1360.8); // (1360.8) [W m-2] Solar constant "quiet" during solar minimum used in CMIP7 (FDE24 p. 1218)
+  const double slr_cst_MFA17_hst(1360.86); // (1360.86) [W m-2] Solar constant 1850-2014 monthly mean
+  const double slr_cst_MFA17_PI(1360.747); // (1360.747) [W m-2] Solar constant "pre-industrial" 1850-1873 monthly mean
   const double spc_heat_H2O_ice_vlm(2.094e06); // (2.094e06) [J m-3 K-1] Volumetric specific heat capacity of ice water CCM:lsm/phyconi.F
   const double spc_heat_H2O_ice(2108.0); // (2108.0) [J kg-1 K-1] Specific heat capacity of ice water (quora.com)
   const double spc_heat_H2O_lqd(4187.0); // (4187.0) [J kg-1 K-1] Specific heat capacity of liquid water RoY94 p. 15 (fxm: better to derive this from density and volumetric spec. heat?)
