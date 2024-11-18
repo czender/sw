@@ -45,7 +45,8 @@
    slr_spc --dbg=1 --wvl_lmt=5.0 --wvl_nbr=2497 ${DATA}/aca/spc_Kur95_20wvn.txt ${DATA}/aca/spc_Kur95_20wvn.nc
 
    Production:
-   slr_spc --dbg=1 --flx_slr_src=FDE24 --wvl_nbr=3890 ${DATA}/aca/solar_CMIP_SOLARIS-HEPPA-4-3_gn_1850_2023.nc ${DATA}/aca/spc_FDE24.nc
+   slr_spc --dbg=1 --flx_slr_src=FDE24 --wvl_nbr=3890 ${DATA}/aca/solar_CMIP_SOLARIS-HEPPA-4-3_gn_18500101_18730128.nc ${DATA}/aca/spc_FDE24_18500101_18730128.nc # PI Control
+   slr_spc --dbg=1 --flx_slr_src=FDE24 --wvl_nbr=3890 ${DATA}/aca/solar_CMIP_SOLARIS-HEPPA-4-3_gn_1850_2023.nc ${DATA}/aca/spc_FDE24.nc # PD average
    slr_spc --dbg=1 --flx_slr_src=JHC21 --wvl_nbr=2104 ${DATA}/aca/tsis_ssi_L3_c24h_20240807.nc ${DATA}/aca/spc_JHC21.nc
    slr_spc --dbg=1 --flx_slr_src=MFA17 --wvl_nbr=3890 ${DATA}/aca/Solar_input4MIPS_1850_2299.nc ${DATA}/aca/spc_MFA17.nc
    slr_spc --dbg=1 --ncr_wvl --wvl_nbr=49934 ${DATA}/aca/spc_Kur95_01wvn.txt ${DATA}/aca/spc_Kur95_01wvn.nc

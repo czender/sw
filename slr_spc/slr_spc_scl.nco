@@ -1,0 +1,36 @@
+/* Purpose: Scale mie-generated SSI spectra from initial to desired total TSI
+   Usage:
+
+   slr_cst_trg=1361.37; # [W m-2] Solar constant "pre-industrial" 18500101-18730128 daily mean FDE24 CMIP7 PI
+   slr_cst_trg=1360.747; # [W m-2] Solar constant "pre-industrial" 18500101-18730128 daily mean MFA17 CMIP6 PI
+
+   ncap2 -O -v --script="slr_cst_trg=1360.747" -S /Users/zender/sw/slr_spc/slr_spc_scl.nco /Users/zender/data/mie/mie.nc ~/foo.nc
+   ncap2 -O -v --script="slr_cst_trg=1360.747" -S /Users/zender/data/solar/slr_spc_scl.nco /Users/zender/mie_MFA17_rrtmg.nc ~/foo.nc */
+
+if(!exists(slr_cst_trg)) slr_cst_trg=1361.37; // [W m-2] Solar constant "pre-industrial" 18500101-18730128 daily mean FDE24 CMIP7
+
+wvl_nbr=14;
+defdim("wvl",wvl_nbr);
+wvl_min=wvl_min;
+wvl_max=wvl_max;
+wvl_ctr=wvl_ctr;
+wvl_dlt=wvl_dlt;
+wvn_min=wvn_min;
+wvn_max=wvn_max;
+wvn_dlt=wvn_dlt;
+flx_slr_frc_in=flx_slr_frc;
+
+slr_cst_trg=1361.37;
+slr_cst_nmn=slr_cst;
+slr_cst_in=flx_slr.ttl();
+flx_slr_in=flx_slr;
+scl_fct=slr_cst_trg/slr_cst_in;
+flx_slr_out=scl_fct*flx_slr_in;
+slr_cst_out=flx_slr_out.ttl();
+flx_slr_frc_out=flx_slr_out/flx_slr_out.ttl();
+print("Input solar constant (nominal) = ");print(slr_cst_nmn,"%19.15f\n");
+print("Sum of input spectral fluxes = ");print(flx_slr_in.ttl(),"%19.15f\n");
+print("Desired output solar constant = ");print(slr_cst_out,"%19.15f\n");
+print("Scale factor = ");print(scl_fct,"%19.15f\n");
+print("Sum of output spectral fluxes = ");print(flx_slr_out.ttl(),"%19.15f\n");
+print("Sum of output spectral flux fractions = ");print(flx_slr_frc_out.ttl(),"%19.15f\n");

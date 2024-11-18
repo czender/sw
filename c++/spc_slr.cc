@@ -49,7 +49,7 @@ int spc_slr_cls::nst_nbr=0; // [nbr] Number of instantiated class members
 // 20240911 Change default solar spectrum, constant from LaN68, 1367 W/m2 to FDE24, 1361.353 W/m2 from CMIP7
 //prc_cmp spc_slr_cls::slr_cst_dfl=1367.0; // [W m-2] Default solar constant (CCM3)
 //std::string spc_slr_cls::spc_slr_typ_dfl="LaN68"; // [sng] Default solar flux source abbreviation
-prc_cmp spc_slr_cls::slr_cst_dfl=1361.353; // [W m-2] Default solar constant (CCM3)
+prc_cmp spc_slr_cls::slr_cst_dfl=1361.353; // [W m-2] Default solar constant (FDE24 1850-2023 daily mean)
 std::string spc_slr_cls::spc_slr_typ_dfl="FDE24"; // [sng] Default solar flux source abbreviation
 
 // Static members end
@@ -99,6 +99,11 @@ spc_slr_cls::tst(long obj_nbr){ // [fnc] Self-test of spc_slr_cls class
   std::cout << "abb = " << tst_obj->abb << ", flx_frc = " << flx_frc << std::endl;
   delete tst_obj; // [sct] Test object
 
+  tst_obj=new spc_slr_cls("FDE24_PI"); // [sct] Test object
+  flx_frc=tst_obj->flx_frc_get(0.2e-6,1.0e-5); // [fnc] Fraction of solar spectrum in a single spectral region
+  std::cout << "abb = " << tst_obj->abb << ", flx_frc = " << flx_frc << std::endl;
+  delete tst_obj; // [sct] Test object
+
   // 20240911: Testing lsr source breaks because there is no openable file with its spectrum
   //tst_obj=new spc_slr_cls("lsr"); // [sct] Test object
   //flx_frc=tst_obj->flx_frc_get(0.2e-6,1.0e-5); // [fnc] Fraction of solar spectrum in a single spectral region
@@ -143,6 +148,10 @@ sng2sng_map spc_slr_cls::opt2abb_map_mk(){ // Create abbreviation map
   map_tmp.insert(sng2sng_map::value_type("FDE24","FDE24"));
   map_tmp.insert(sng2sng_map::value_type("Funke","FDE24"));
   map_tmp.insert(sng2sng_map::value_type("CMIP7","FDE24"));
+
+  map_tmp.insert(sng2sng_map::value_type("FDE24_PI","FDE24_PI"));
+  map_tmp.insert(sng2sng_map::value_type("Funke_PI","FDE24_PI"));
+  map_tmp.insert(sng2sng_map::value_type("CMIP7_PI","FDE24_PI"));
 
   map_tmp.insert(sng2sng_map::value_type("lsr","lsr"));
   map_tmp.insert(sng2sng_map::value_type("laser","lsr"));
@@ -195,6 +204,10 @@ sng2spc_slr_sct_map spc_slr_cls::spc_slr_map_mk(){ // [fnc] Create solar flux so
     {"FDE24", // [sng] Solar flux source abbreviation
      "Funke, Dudok de Wit, Ermolli, et al. (2024) CMIP7", // [sng] Solar flux source description
      fio::data_file_path_get("spc_FDE24.nc"), // [sng] File containing solar spectrum
+     (flx_slr_frc_fnc_ptr_typ)CEWI_NULL}, // [fnc] Function to compute solar spectrum
+    {"FDE24_PI", // [sng] Solar flux source abbreviation
+     "Funke, Dudok de Wit, Ermolli, et al. (2024) CMIP7 Pre-Industrial (PI) Control, 18500101--18730128", // [sng] Solar flux source description
+     fio::data_file_path_get("spc_FDE24_18500101_18730128.nc"), // [sng] File containing solar spectrum
      (flx_slr_frc_fnc_ptr_typ)CEWI_NULL}, // [fnc] Function to compute solar spectrum
     {"lsr", // [sng] Solar flux source abbreviation
      "Laser (delta function)", // [sng] Solar flux source description
