@@ -20,7 +20,6 @@ wvn_max=wvn_max;
 wvn_dlt=wvn_dlt;
 flx_slr_frc_in=flx_slr_frc;
 
-slr_cst_trg=1361.37;
 slr_cst_nmn=slr_cst;
 slr_cst_in=flx_slr.ttl();
 flx_slr_in=flx_slr;
