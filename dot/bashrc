@@ -166,7 +166,7 @@ if fl_is_exe ${HOME}/nco/autobld/config.guess ; then
 	firn* | sastrugi* ) export GNU_TRP=`${HOME}/nco/autobld/config.guess` ; ;;
 	* ) export GNU_TRP='x86_64-unknown-linux-gnu' ; ;;
 #	* ) export GNU_TRP='20190814_config_guess_workaround' ; ;;
-    esac # endcase ${HOST}
+    esac # !${HOST}
 fi # GNU_TRP
 
 # Use Tcsh-6.06 REMOTEHOST variable to set DISPLAY
@@ -182,7 +182,7 @@ else
 	export XSUNTRANSPORT=shmem
 	export XSUNSMESIZE=256
     ;; # SUN*
-    esac # endcase ${PVM_ARCH}
+    esac # !${PVM_ARCH}
 fi # local host
 
 # Clean up frequently set environment variables (many Makefiles depend on these)
@@ -252,7 +252,7 @@ PATH=${PATH}\:${MY_BIN_DIR}
 # Amazon Web Services AWS NCO development for OSTFL
 case "${HOST}" in 
     spectral* ) export AWS_DEFAULT_PROFILE='AWSAdministratorAccess-767397735549' ; ;; # MacOS Homebrew Mac silicon
-esac # endcase ${HOST}
+esac # !${HOST}
 
 # PKG_ROOT is where non-default sysadmin-installed packages reside
 # PKG_ROOT is usually argument to configure --prefix=${PKG_ROOT}
@@ -265,7 +265,7 @@ case "${HOST}" in
     cg-gpu* ) export PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # NCSA roger cluster
     gplogin* ) export PKG_ROOT='/sopt' ; ;; # UCI PS Rocks Cluster
     hpc* ) export PKG_ROOT='/software' ; ;; # Torque machines
-esac # endcase ${HOST}
+esac # !${HOST}
 
 case "${HOST}" in 
     firn* | katabatic* | rigb* | sastrugi* | spectral* ) export OMP_NUM_THREADS=4 ; ;; # endif
@@ -274,7 +274,7 @@ case "${HOST}" in
     derecho* ) export OMP_NUM_THREADS='16' ; ;; # dual-hexadecimal processor
     cg1* ) export OMP_NUM_THREADS=2 ; ;; # cg1*
     * ) export OMP_NUM_THREADS=1 ; ;; # *
-esac # endcase ${HOST}
+esac # !${HOST}
 
 # Set operating system dependent paths and packages...
 case "${PVM_ARCH}" in 
@@ -299,9 +299,9 @@ case "${PVM_ARCH}" in
 		    esqf0[8]* ) # UCI
 		    export OMP_NUM_THREADS=32 # OpenMP
 		    ;; # UCI
-		esac # endcase ${HOST}
+		esac # !${HOST}
 		;; # UCI
-	esac # endcase ${HOST}
+	esac # !${HOST}
 	
 	PATH=${PATH}\:/usr/local/bin
 	PATH=${PATH}\:/usr/bin
@@ -322,7 +322,7 @@ case "${PVM_ARCH}" in
 		PATH=${PATH}\:/usr/lpp/LoadL/full/bin
 		MANPATH=${MANPATH}\:/usr/lpp/LoadL/full/man
 		;; # UCI
-	esac # endcase ${HOST}
+	esac # !${HOST}
 	
 	MANPATH=${MANPATH}\:${HOME}/nco/man
 	MANPATH=${MANPATH}\:/local/man
@@ -446,12 +446,12 @@ case "${PVM_ARCH}" in
 	    hpc* ) export DATA="/data/users/${USER}" ; ;; # UCI HPC
 	    login-* ) export DATA="${HOME}/data" ; ;; # UCI RCIC HPC3
 	    * ) export DATA="${HOME}/data" ; ;; # default
-	esac # endcase ${HOST}
+	esac # !${HOST}
 	# ROCKS_ROLLS_ROOT is where Rocks clusters put rolls
 	# 20210420 HPCs that use modules should have no PKG_ROOT defined because there is no single location for all packages
 	case "${HOST}" in 
 	    gplogin* | hpc* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # UCI PS Rocks Cluster
-	esac # endcase ${HOST}
+	esac # !${HOST}
 	# 20231206 Stop assigning NETCDF_ROOT in bashrc, do so in configure.eg instead
 #	if [ -n "${NETCDF_ROOT}" ]; then
 #	    # Some modules, e.g., on compy, define NETCDF_ROOT, so use that
@@ -462,28 +462,28 @@ case "${PVM_ARCH}" in
 #	case "${HOST}" in 
 #	    hpc* ) export NETCDF_ROOT="${PKG_ROOT}/netcdf" ; export NETCDF4_LIB="${PKG_ROOT}/netcdf4" ; ;; # HPC
 ##		export LD_ASSUME_KERNEL='2.4.1' # Prevents IPCC PGI linker complaints
-#	esac # endcase ${HOST}
+#	esac # !${HOST}
 	# 20200906: Always export HDF5_PLUGIN_PATH (at least on MacOS) for CCR
 	# 20230903: Deprecate CCR, so netCDF looks for plugins in `nc-config --plugindir`
 #	case "${HOST}" in 
 #	    chrysalis* | imua* ) export HDF5_PLUGIN_PATH="${HOME}/anaconda/lib/hdf5/plugin" ; ;;
 #	    * ) export HDF5_PLUGIN_PATH='/usr/local/hdf5/lib/plugin' ; ;; # default
-#	esac # endcase ${HOST}
+#	esac # !${HOST}
 
 	# Set MPI
         # fxm: temporary NCO hack: Machines with MPI_ROOT set are assumed to have parallel filesystems for NCO builds
 	case "${HOST}" in 
 	    gplogin* ) export MPI_ROOT_OLD='/usr/mpi/intel/openmpi-1.5.1' ; ;; # UCI PS Rocks Cluster OpenMPI
-	esac # endcase ${HOST}
+	esac # !${HOST}
 	# Set NCARG
 	case "${HOST}" in 
 	    grele* ) NCARG_ROOT='/usr/local/ncl-6.3.0' ; ;; # UCI PS Rocks Cluster
 	    gplogin* ) NCARG_ROOT='/sopt/ncl' ; ;; # UCI PS Rocks Cluster
-	esac # endcase ${HOST}
+	esac # !${HOST}
 	# Set MPICH_ROOT
 	case "${HOST}" in 
 	    * ) MPICH_ROOT="${PKG_ROOT}/mpich" ; ;; # HPC and default
-	esac # endcase ${HOST}
+	esac # !${HOST}
 	if [ -n "${ROCKS_ROLLS_ROOT}" ]; then
 	    TORQUE_ROOT="${ROCKS_ROLLS_ROOT}/torque"
 	fi # ROCKS_ROLLS_ROOT
@@ -518,7 +518,7 @@ case "${PVM_ARCH}" in
 		PATH=${PATH}\:${ICC_ROOT}/bin/intel64 ; ;; # greenplanet
 #	    e3sm* ) 
 #		PATH=${PATH}\:/usr/local/cuda/bin ; ;; # CUDA
-	esac # endcase ${HOST}
+	esac # !${HOST}
 	
 	MANPATH=${MANPATH}\:${HOME}/anaconda/man
 	MANPATH=${MANPATH}\:${HOME}/nco/man
@@ -537,26 +537,27 @@ case "${PVM_ARCH}" in
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${ICC_ROOT}/lib/intel64
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/home/pvicente/install/udunits-2.1.24/lib
 		;; # greenplanet
-	esac # endcase ${HOST}
+	esac # !${HOST}
 	case "${HOST}" in 
 	    gplogin* ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PGI}/linux86-64/7.2-3/lib ; ;;
 	    hpc* ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PGI}/linux86-64/7.2-3/lib ; ;;
-	esac # endcase ${HOST}
+	esac # !${HOST}
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${HOME}/anaconda/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${NETCDF4_ROOT}/lib
 	case "${HOST}" in 
-	    chrysalis* | chrlogin* | chr-[0123456789][0123456789][0123456789][0123456789] | compy* | e3sm* | imua* ) # Fedora uses LIB64 directory
+#	    chrysalis* | chrlogin* | chr-[0123456789][0123456789][0123456789][0123456789] | compy* | e3sm* | imua* ) # Fedora uses LIB64 directory
+	    compy* | e3sm* | imua* ) # Fedora uses LIB64 directory
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib64
 		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/lib64
 		;; # LIB64
-	esac # endcase ${PVM_ARCH}
+	esac # !${PVM_ARCH}
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
 	case "${HOST}" in 
 	    # 20130916: Support NCAR modules on derecho by removing custom environment variables
 #	    acme1* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/p/user_pub/e3sm_unified/envs/base/envs/e3sm_unified_latest/lib ; ;; # LLNL
 	    derecho* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/u/apps/derecho/23.06/spack/opt/spack/udunits/2.2.28/gcc/12.2.0/vls2/lib\:/glade/u/apps/ch/opt/gsl/2.7/gnu/12.1.0/lib ; ;; # NCAR
-	esac # endcase ${HOST}
+	esac # !${HOST}
 
 # HTTP proxy at LGGE needed for googleearth
 # Removed 20080420: dangerous! interferes with aptitude and possibly other stuff
@@ -569,7 +570,7 @@ case "${PVM_ARCH}" in
 	export INFOPATH=./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/share/info
 	case "${HOST}" in 
 	    spectral* ) export NETCDF_ROOT='/opt/netcdf' ; ;; # MacOS development netCDF environment
-	esac # endcase ${HOST}
+	esac # !${HOST}
 	if [ -n "${NETCDF_ROOT}" ]; then
 	    export NETCDF_INC="${NETCDF_ROOT}/include"
 	    export NETCDF_LIB="${NETCDF_ROOT}/lib"
@@ -583,7 +584,7 @@ case "${PVM_ARCH}" in
 # Select ABI flags (i.e., 32 or 64 bit) at make time
 	case "${HOST}" in 
 	    cg1* ) export GCC_RCH_ARG='-mcpu=970' ; ;; # PowerPC 970
-	esac # endcase ${HOST}
+	esac # !${HOST}
 	export SYSTYPE='BSD' # Used by killproc
 #	export PYTHONPATH=/usr/lib/portage/pym
 	export TEXMFDIR=/usr/local/texlive/texmf-local # One level above bibtex, tex etc. for Homebrew
@@ -779,7 +780,7 @@ case "${PVM_ARCH}" in
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
 	;; # WIN32*
     
-esac # endcase ${PVM_ARCH}
+esac # !${PVM_ARCH}
 
 if [ -n "${MPI_ROOT}" ]; then
     LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MPI_ROOT}/lib # OpenMPI
@@ -861,12 +862,12 @@ case "${HOST}" in
     gplogin* ) export LINUX_CC=${CC_icx/icx/mpicc} ; export LINUX_CXX=${CXX_icx/icx/mpiCC} ; export LINUX_FC=${FC_ifort/ifort/mpif90} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icx/ifort OpenMPI	
 #    gplogin* ) export LINUX_CC=${CC_icx} ; export LINUX_CXX=${CXX_icx} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icx/ifort OpenMPI GreenPlanet is special because it has a parallel filesystem, lustre, and hence can take advantage of MPI I/O when compiler is MPI-aware. However, compiler switches in all of my custom Makefiles are triggered by vendor-compiler names, e.g., gfortran, ifort, and xlf90, rather than the generic mpicc/mpiCC/mpif90, which are ambiguous. Hence we use this method to designate the invocation command (e.g., "mpif90" or "pgf90") together with the underlying compiler (e.g., "gfortran" or "pgf90"): MPI=Y tells Makefile to invoke compiler with 'mpicc', 'mpif90', etc., but LINUX_CC/CXX/FC point to underlying compilers. Makefile sets compiler-specific switches and options using LINUX_CC/CXX/FC, then, afterwards, sets CC/CXX/FC to 'mpicc/mpiCC/mpif90'. Alternate method, shown in preceding line, sets LINUX_CC/CXX/FC directly to 'mpicc/mpiCC/mpif90' here in bashrc, but then compiler-specific switches in Makefile are missed.
     hpc* ) export LINUX_CC=${CC_pgcc} ; export LINUX_CXX=${CXX_pgCC} ; export LINUX_FC=${FC_pgf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # pgcc/pgCC/pgf95 MPICH2
-    chrlogin* | e3sm* ) export LINUX_CC=${CC_gcc_conda} ; export LINUX_CXX=${CXX_gxx_conda} ; export LINUX_FC=${FC_gfortran_conda} ; ;; # gcc/g++/gfortran Conda
+    e3sm* ) export LINUX_CC=${CC_gcc_conda} ; export LINUX_CXX=${CXX_gxx_conda} ; export LINUX_FC=${FC_gfortran_conda} ; ;; # gcc/g++/gfortran Conda
     imua* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # gcc/g++/gfortran RPMs
-    andes* | blogin* | blues* | compy* | derecho* | frontier* | login-* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # gcc/g++/gfortran OpenMPI
+    andes* | blogin* | blues* | chrylogin* | compy* | derecho* | frontier* | login-* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # gcc/g++/gfortran OpenMPI
 #    derecho* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # gcc/g++/g95 MPICH 
-esac # endcase ${HOST}
+esac # !${HOST}
 # LAMMPICC and LAMPICXX are OS-independent
 export LAMMPICC=${LINUX_CC}
 export LAMMPICXX=${LINUX_CXX} 
@@ -879,7 +880,7 @@ case "${HOST}" in
     esmf* ) export GCC_RCH_ARG='-mtune=power4' ; export ICC_RCH_ARG='' ; ;; # Power4
     e3sm* | grele* | imua* | snow* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-axP -mcpu=pentium4 -msse3' ; ;; # Core2 Extreme EMT64
     gplogin* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-ipo -no-prec-div -Wl,-z,muldefs' ; ;; # Core2 Extreme EMT64
-esac # endcase ${HOST}
+esac # !${HOST}
 # Set ICC_ROOT, IFC_ROOT
 case "${HOST}" in
     firn* | katabatic* | rigb* | sastrugi* ) export ICC_ROOT='' ; export IFC_ROOT='' ; ;; # IA32
@@ -887,13 +888,13 @@ case "${HOST}" in
     gplogin* ) export ICC_ROOT='/sopt/intel/Compiler/11.0/081' ; export IFC_ROOT='/sopt/intel/Compiler/11.0/081' ; ;; # UCI PS Rocks Cluster
     ipcc* ) export ICC_ROOT='/opt/intel/cce/9.1.038' ; export IFC_ROOT='/opt/intel/fce/9.1.032' ; ;; # IPCC
     hpc* ) export ICC_ROOT='/software/intel/cc' ; export IFC_ROOT='/software/intel/fc' ; ;; # HPC
-esac # endcase ${HOST}
+esac # !${HOST}
 
 # System-specific environments
 case "${HOST}" in
     andes* | frontier* ) export PROJID='cli115' ; ;; # OLCF
     perlmutter* | nid[0123456789][0123456789][0123456789][0123456789][0123456789][0123456789] ) export PROJID='e3sm' ; export PATH="${PATH}:/opt/cray/pe/netcdf/4.8.1.1/gnu/9.1/bin" ; export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/opt/cray/pe/netcdf/4.8.1.1/gnu/9.1/lib:/global/common/software/spackecp/perlmutter/e4s-21.11/software/cray-sles15-zen3/gcc-11.2.0/gsl-2.7-2p3pcjckzogek2dubph7q4yd5msjuhxt/lib" ; ;; # 20220518 needed for ncgen
-esac # endcase ${HOST}
+esac # !${HOST}
 # 20230831 Frontier and Perlmutter login nodes share this name :(
 if [ "${LMOD_SYSTEM_NAME}" = 'perlmutter' ]; then
     export PROJID='e3sm'
@@ -920,7 +921,7 @@ if [ -n "${JOB_NAME}" -a -n "${QUEUE}" ]; then
 	*_int_* )
 	    exit 0 # Bail out if this is a non-interactive shell
 	;; # *_int_*
-    esac # endcase ${QUEUE}
+    esac # !${QUEUE}
 fi # in job queue
 
 # PS1 is not defined for non-interactive logins (as of RedHat 7.x)
@@ -949,7 +950,7 @@ case ${PVM_ARCH} in
     * ) 
 	shopt -s extglob        # Extended regular expressions in filename globbing
     ;; # *
-esac # endcase PVM_ARCH
+esac # !PVM_ARCH
 
 case ${PVM_ARCH} in
 # 20010707: SGI bash does not allow ulimit setting
@@ -962,7 +963,7 @@ case ${PVM_ARCH} in
 	    ulimit -s unlimited # Set soft stacksize limit to unlimited (cf. /etc/initscript)
 	fi # !HOST
 	;; # CRAY | LINUX* | SUN* 
-esac # endcase ${PVM_ARCH}
+esac # !${PVM_ARCH}
 
 # Per-shell variables
 HISTCONTROL='ignoredups' # Ignore duplicate lines
@@ -1011,7 +1012,7 @@ case ${PVM_ARCH} in
 	#export PRINTER='hp4250' # LGGE office
 	case ${HOST} in
 	    e3sm* | firn* | grele* | imua* | sastrugi* ) export PRINTER='hpm600' ; ;; # UCI Croul mail room
-	esac # endcase ${HOST}
+	esac # !${HOST}
 	#export PRINTER='hp4350' # UCI Croul 3242 (common area)
 	#export PRINTER='hpm600' # UCI Croul mail room
 	#export PRINTER='hp5180' # SMU home
@@ -1028,7 +1029,7 @@ case ${PVM_ARCH} in
     * )
 	export PRINTER='lp'
     ;; # default
-esac # endcase ${PVM_ARCH}
+esac # !${PVM_ARCH}
 
 # Directory alias key: format is SDD where
 # S = System abbreviation
@@ -1214,7 +1215,7 @@ case ${PVM_ARCH} in
     alias man='man -F'
     ;; # SUN*
 
-esac # endcase ${PVM_ARCH}
+esac # !${PVM_ARCH}
 
 # Windows only
 case ${PVM_ARCH} in
@@ -1227,7 +1228,7 @@ case ${PVM_ARCH} in
     shopt -s cdspell # Ignore small typos when changing directory
     export CYGWIN='nodosfilewarning' # http://www.cygwin.com/cygwin-ug-net/using-cygwinenv.html
     ;; # WIN32*
-esac # endcase ${PVM_ARCH}
+esac # !${PVM_ARCH}
 
 # MSS
 case ${PVM_ARCH} in
@@ -1238,7 +1239,7 @@ case ${PVM_ARCH} in
 # Keys to stop running programs, back-up over characters typed and erase whole line
     stty intr '^c' erase '^?' kill '^u'
     ;; # SGI* | CRAY 
-esac # endcase ${PVM_ARCH}
+esac # !${PVM_ARCH}
 
 # SCRIP
 case ${PVM_ARCH} in
@@ -1248,14 +1249,14 @@ case ${PVM_ARCH} in
 	export SCRIPEXEDIR="${DATA}/scrip"
 	export SCRIPARCH='linuxgfortran_serial'
     ;; # LINUX* )
-esac # endcase ${PVM_ARCH}
+esac # !${PVM_ARCH}
 
 # WCSTOOLS skg star catalogs
 case ${PVM_ARCH} in
     LINUX* )
 	export WCS_BINDIR="${DATA}/astro"
     ;; # LINUX* )
-esac # endcase ${PVM_ARCH}
+esac # !${PVM_ARCH}
 
 # TeX installation
 case ${PVM_ARCH} in
@@ -1266,7 +1267,7 @@ case ${PVM_ARCH} in
 #    export TEXMFCNF=${TEXMFDIR}/web2c # One level above bibtex, tex,
 #    export THUMBPDF="--debug --verbose --device=mono" # Arguments to thumbpdf
     ;; # SUN* | LINUX* | AIX* | SGI* )
-esac # endcase ${PVM_ARCH}
+esac # !${PVM_ARCH}
 
 if [ "${PVM_ARCH}" = 'CRAY' ]; then
     alias ccm2nc='/fs/cgd/csm/bin/J90/ccm2nc'
@@ -1278,7 +1279,7 @@ case ${PVM_ARCH} in
     SUN* | AIX* )
 	alias tar='gtar'
     ;; # SUN* | AIX*
-esac # endcase ${PVM_ARCH}
+esac # !${PVM_ARCH}
 case ${PVM_ARCH} in
     AIX* )
 #	alias make='gmake --jobs=4'
@@ -1289,7 +1290,7 @@ case ${PVM_ARCH} in
 	alias time='gtime'
 	alias ldd='otool -L'
 	;; # MACOS*
-esac # endcase ${PVM_ARCH}
+esac # !${PVM_ARCH}
 
 # Licenses for IDL and PGI are handled by FlexLM
 # FlexLM is started in /etc/rc.d/rc.local by executing
@@ -1332,12 +1333,12 @@ case ${PVM_ARCH} in
 	export INTEL_LICENSE_FILE='/software/icc/licenses:/software/ifc/licenses'
         export LM_LICENSE_FILE="7496@hpc.oit.uci.edu"
     ;; # Opteron cluster
-    esac # endcase ${HOST}
+    esac # !${HOST}
 
     export PATHSCALE_SUBSCRIPTION_DAEMON='ipcc.calit2.uci.edu:7143'
 
 ;; # LINUX*
-esac # endcase ${PVM_ARCH}
+esac # !${PVM_ARCH}
 
 if [ "${PVM_ARCH}" != "CRAY" ]; then
     # Output from shjob, ecjob, etc. is saved here
