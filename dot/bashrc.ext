@@ -40,7 +40,7 @@ if [ "$NERSC_HOST" == "perlmutter" ]; then
    alias gtc='for rps in acd diwg nco pnp prv rsr sw; do cd ~/${rps};git commit -am "lazy commit";echo "Pushing ${rps}...";git push;done;cd -'
    alias gtp='for rps in acd diwg nco pnp prv rsr sw; do cd ~/${rps};echo "Pulling ${rps}...";git pull;done;cd -'
    alias h='history'
-   alias hdo='cd ${HOME}/dot' ; function hdocp { cp ${1} ${HOME}/dot ; }
+   alias hdo='cd ${HOME}/sw/dot' ; function hdocp { cp ${1} ${HOME}/dot ; }
    alias hnc='cd ${HOME}/nco' ; function hnccp { cp ${1} ${HOME}/nco ; }
    alias ls='ls --color=auto' # Use color if standard output is terminal
    alias mv='mv -i' # -i = inquire
