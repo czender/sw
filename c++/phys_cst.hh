@@ -120,8 +120,8 @@ namespace phc{ // [nms] Physical constant namespace
   const double sfc_tns_wtr_lqd_STP(7.610e-3); // [J m-2] Surface tension of liquid water at STP
   const double slr_cst_CCM(1367.0); // (1367.0) [W m-2] Solar constant used in CCM
   const double slr_cst_FDE24_hst(1361.353); // (1361.353) [W m-2] Solar constant 1850-2023 daily mean
-  const double slr_cst_FDE24_PI(1361.37); // (1361.37) [W m-2] Solar constant "pre-industrial" 18500101-18730128 daily mean HEPPA 4-3
-  const double slr_cst_FDE24_PI(1361.617); // (1361.617) [W m-2] Solar constant "pre-industrial" 18500101-18730128 daily mean HEPPA 4-5
+  const double slr_cst_FDE24_PI_old(1361.37); // (1361.37) [W m-2] Solar constant "pre-industrial" 18500101-18730128 daily mean HEPPA 4-3
+  const double slr_cst_FDE24_PI(1361.617); // (1361.617) [W m-2] Solar constant "pre-industrial" 18500101-18730128 daily mean HEPPA 4-5, 4-6
   const double slr_cst_FDE24_mnm(1360.8); // (1360.8) [W m-2] Solar constant "quiet" during solar minimum used in CMIP7 (FDE24 p. 1218)
   const double slr_cst_MFA17_hst(1360.86); // (1360.86) [W m-2] Solar constant 1850-2014 monthly mean
   const double slr_cst_MFA17_PI(1360.747); // (1360.747) [W m-2] Solar constant "pre-industrial" 18500101-18730128 daily mean used in CMIP6

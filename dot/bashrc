@@ -25,8 +25,6 @@
 # scp -p ${HOME}/sw/dot/bashrc derecho.hpc.ucar.edu:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc dust.ess.uci.edu:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc e3sm.ess.uci.edu:.bashrc
-# scp -p ${HOME}/sw/dot/bashrc andes.olcf.ornl.gov:.bashrc
-# scp -p ${HOME}/sw/dot/bashrc hpc3.rcic.uci.edu:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc imua.ess.uci.edu:.bashrc
 # scp -p dust.ess.uci.edu:.bashrc ${HOME}/.bashrc 
 
@@ -207,7 +205,8 @@ case "${HOST}" in
     chrysalis* | chrlogin* | chr-[0123456789][0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_chrysalis" ; MY_LIB_DIR="${HOME}/lib_chrysalis" ; MY_OBJ_DIR="${HOME}/obj_chrysalis" ; ;;
     frontier* ) export MY_BIN_DIR="${HOME}/bin_frontier" ; MY_LIB_DIR="${HOME}/lib_frontier" ; MY_OBJ_DIR="${HOME}/obj_frontier" ; ;;
     login[0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_${LMOD_SYSTEM_NAME}" ; MY_LIB_DIR="${HOME}/lib_${LMOD_SYSTEM_NAME}" ; MY_OBJ_DIR="${HOME}/obj_${LMOD_SYSTEM_NAME}" ; ;; # 20230831 Frontier and Perlmutter login nodes share this name :(
-    perlmutter* ) export MY_BIN_DIR="${HOME}/bin_perlmutter" ; MY_LIB_DIR="${HOME}/lib_perlmutter" ; MY_OBJ_DIR="${HOME}/obj_perlmutter" ; ;;
+#    perlmutter* ) export MY_BIN_DIR="${HOME}/bin_perlmutter" ; MY_LIB_DIR="${HOME}/lib_perlmutter" ; MY_OBJ_DIR="${HOME}/obj_perlmutter" ; ;;
+    perlmutter* ) export MY_BIN_DIR="/global/cfs/cdirs/e3sm/${USER}/bin_perlmutter" ; MY_LIB_DIR="/global/cfs/cdirs/e3sm/${USER}/lib_perlmutter" ; MY_OBJ_DIR="/global/cfs/cdirs/e3sm/${USER}/obj_perlmutter" ; ;;
 esac # !${HOST}
 
 # *PATH:
@@ -438,10 +437,10 @@ case "${PVM_ARCH}" in
 		if [ "${LMOD_SYSTEM_NAME}" = 'frontier' ]; then
 		    DATA="/lustre/orion/cli115/world-shared/${USER}"
 		elif [ "${LMOD_SYSTEM_NAME}" = 'perlmutter' ]; then
-		    DATA="${HOME}/data"
+		    DATA="/global/cfs/cdirs/e3sm/${USER}"
 		fi # !LMOD_SYSTEM_NAME
 		;; # !login	
-	    perlmutter* | nid* ) export DATA="${HOME}/data" ; ;; # NERSC
+	    perlmutter* | nid* ) export DATA="/global/cfs/cdirs/e3sm/${USER}" ; ;; # NERSC
 	    gplogin* ) export DATA="/data/${USER}" ; ;; # UCI PS Rocks Cluster
 	    hpc* ) export DATA="/data/users/${USER}" ; ;; # UCI HPC
 	    login-* ) export DATA="${HOME}/data" ; ;; # UCI RCIC HPC3
