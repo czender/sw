@@ -200,13 +200,13 @@ export MY_OBJ_DIR=${HOME}/obj
 export MY_INC_DIR=${HOME}/include
 # Some machines have machine-specific paths that override defaults above
 case "${HOST}" in
-    andes* ) export MY_BIN_DIR="${HOME}/bin_andes" ; MY_LIB_DIR="${HOME}/lib_andes" ; MY_OBJ_DIR="${HOME}/obj_andes" ; ;;
-    blues* | blogin* | b[0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_blues" ; MY_LIB_DIR="${HOME}/lib_blues" ; MY_OBJ_DIR="${HOME}/obj_blues" ; ;;
-    chrysalis* | chrlogin* | chr-[0123456789][0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_chrysalis" ; MY_LIB_DIR="${HOME}/lib_chrysalis" ; MY_OBJ_DIR="${HOME}/obj_chrysalis" ; ;;
-    frontier* ) export MY_BIN_DIR="${HOME}/bin_frontier" ; MY_LIB_DIR="${HOME}/lib_frontier" ; MY_OBJ_DIR="${HOME}/obj_frontier" ; ;;
-    login[0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_${LMOD_SYSTEM_NAME}" ; MY_LIB_DIR="${HOME}/lib_${LMOD_SYSTEM_NAME}" ; MY_OBJ_DIR="${HOME}/obj_${LMOD_SYSTEM_NAME}" ; ;; # 20230831 Frontier and Perlmutter login nodes share this name :(
-#    perlmutter* ) export MY_BIN_DIR="${HOME}/bin_perlmutter" ; MY_LIB_DIR="${HOME}/lib_perlmutter" ; MY_OBJ_DIR="${HOME}/obj_perlmutter" ; ;;
-    perlmutter* ) export MY_BIN_DIR="/global/cfs/cdirs/e3sm/${USER}/bin_perlmutter" ; MY_LIB_DIR="/global/cfs/cdirs/e3sm/${USER}/lib_perlmutter" ; MY_OBJ_DIR="/global/cfs/cdirs/e3sm/${USER}/obj_perlmutter" ; ;;
+    andes* ) export MY_BIN_DIR="${HOME}/bin_andes" ; export MY_LIB_DIR="${HOME}/lib_andes" ; export MY_OBJ_DIR="${HOME}/obj_andes" ; ;;
+    blues* | blogin* | b[0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_blues" ; export MY_LIB_DIR="${HOME}/lib_blues" ; export MY_OBJ_DIR="${HOME}/obj_blues" ; ;;
+    chrysalis* | chrlogin* | chr-[0123456789][0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_chrysalis" ; export MY_LIB_DIR="${HOME}/lib_chrysalis" ; export MY_OBJ_DIR="${HOME}/obj_chrysalis" ; ;;
+    frontier* ) export MY_BIN_DIR="${HOME}/bin_frontier" ; export MY_LIB_DIR="${HOME}/lib_frontier" ; export MY_OBJ_DIR="${HOME}/obj_frontier" ; ;;
+    login[0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_${LMOD_SYSTEM_NAME}" ; export MY_LIB_DIR="${HOME}/lib_${LMOD_SYSTEM_NAME}" ; export MY_OBJ_DIR="${HOME}/obj_${LMOD_SYSTEM_NAME}" ; ;; # 20230831 Frontier and Perlmutter login nodes share this name :(
+#    perlmutter* ) export MY_BIN_DIR="${HOME}/bin_perlmutter" ; export MY_LIB_DIR="${HOME}/lib_perlmutter" ; export MY_OBJ_DIR="${HOME}/obj_perlmutter" ; ;;
+    perlmutter* ) export MY_BIN_DIR="/global/cfs/cdirs/e3sm/${USER}/bin_perlmutter" ; export MY_LIB_DIR="/global/cfs/cdirs/e3sm/${USER}/lib_perlmutter" ; export MY_OBJ_DIR="/global/cfs/cdirs/e3sm/${USER}/obj_perlmutter" ; ;;
 esac # !${HOST}
 
 # *PATH:
