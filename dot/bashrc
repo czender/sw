@@ -193,13 +193,6 @@ fi # local host
 #unset F90FLAGS
 #unset LDFLAGS
 
-# Export primary custom environment variables (many Makefiles depend on these)
-# Machines that name match below will override these defaults
-export MY_BIN_DIR=${HOME}/bin
-export MY_LIB_DIR=${HOME}/lib
-export MY_OBJ_DIR=${HOME}/obj
-export MY_INC_DIR=${HOME}/include
-
 # Disambiguate to find effective host name = HOST_FFC
 # HOST_FFC is simply the common machine name instead of login or compute node name
 HOST_FFC="${HOST}"
@@ -219,6 +212,30 @@ case "${HOST_FFC}" in
     nid[0123456789][0123456789][0123456789][0123456789][0123456789][0123456789] ) HOST_FFC='perlmutter' ; ;; # NERSC
 esac # !${HOST_FFC}
 export HOST_FFC
+
+case "${HOST_FFC}" in 
+    acme1* ) export DATA="/home/${USER}/data" ; ;; # LLNL
+    andes* | frontier* ) export DATA="/lustre/orion/cli115/world-shared/${USER}" ; ;; # OLCF
+    blues* ) export DATA="/home/${USER}/data" ; ;; # ANL LCRC
+    chrysalis* ) export DATA="${HOME}/data" ; ;; # ANL LCRC
+    compy* ) export DATA="/qfs/people/${USER}/data" ; ;; # PNNL 
+    derecho* ) export DATA="/glade/work/${USER}" ; ;; # NCAR
+    e3sm* ) export DATA="${HOME}/data" ; ;; # UCI
+    frontier* ) export DATA="/lustre/orion/cli115/world-shared/${USER}" ; ;; # ORNL
+    greenplanet* ) export DATA="/data/${USER}" ; ;; # UCI PS Rocks Cluster
+    hpc* ) export DATA="/data/users/${USER}" ; ;; # UCI RCIC HPC3
+    imua* ) export DATA="${HOME}/data" ; ;; # UCI
+    perlmutter* ) export DATA="/global/cfs/cdirs/e3sm/${USER}" ; ;; # NERSC
+    roger* ) export DATA="/home/${USER}/data" ; ;; # NCSA roger
+    * ) export DATA="${HOME}/data" ; ;; # default
+esac # !${HOST_FFC}
+
+# Export primary custom environment variables (many Makefiles depend on these)
+# Machines that name match below will override these defaults
+export MY_BIN_DIR=${HOME}/bin
+export MY_LIB_DIR=${HOME}/lib
+export MY_OBJ_DIR=${HOME}/obj
+export MY_INC_DIR=${HOME}/include
 
 # Some machines have machine-specific paths that override defaults above
 case "${HOST_FFC}" in
@@ -308,8 +325,6 @@ case "${PVM_ARCH}" in
 	export X11='/usr/lib/X11'
 	case "${HOST}" in 
 	    esqf* ) # UCI
-#		export DATA=/ptmp/${USER}
-		export DATA=/data/${USER}
 		export NETCDF_INC=/usr/local/include
 		export NETCDF_LIB=/usr/local/lib # 64 bit ABI (default)
 		case "${HOST}" in 
@@ -384,7 +399,6 @@ case "${PVM_ARCH}" in
 	;; # ALPHA*
     
     CRAY )
-	export DATA=/fs/cgd/data0/${USER}
 	export NCARG_ROOT=/usr/local/lib/ncarg
 	export NETCDF_INC=/usr/local/include
 	export NETCDF_LIB=/usr/local/lib
@@ -444,22 +458,6 @@ case "${PVM_ARCH}" in
 	export TEXMFDIR='/usr/share/texmf-texlive' # One level above bibtex, tex,
 #	export X11='/usr/X11R6'
 # https://stackoverflow.com/questions/4554718/how-to-use-patterns-in-the-case-statement-in-bash-scripting
-	case "${HOST_FFC}" in 
-	    acme1* ) export DATA="/home/${USER}/data" ; ;; # LLNL
-	    andes* | frontier* ) export DATA="/lustre/orion/cli115/world-shared/${USER}" ; ;; # OLCF
-	    blues* ) export DATA="/home/${USER}/data" ; ;; # ANL LCRC
-	    cg-gpu* ) export DATA="/home/${USER}/data" ; ;; # NCSA roger
-	    chrysalis* ) export DATA="${HOME}/data" ; ;; # ANL LCRC
-	    compy* ) export DATA="/qfs/people/${USER}/data" ; ;; # PNNL 
-	    derecho* ) export DATA="/glade/work/${USER}" ; ;; # NCAR
-	    e3sm* ) export DATA="${HOME}/data" ; ;; # UCI
-	    frontier* ) export DATA="/lustre/orion/cli115/world-shared/${USER}" ; ;; # ORNL
-	    greenplanet* ) export DATA="/data/${USER}" ; ;; # UCI PS Rocks Cluster
-	    hpc* ) export DATA="/data/users/${USER}" ; ;; # UCI RCIC HPC3
-	    imua* ) export DATA="${HOME}/data" ; ;; # UCI
-	    perlmutter* ) export DATA="/global/cfs/cdirs/e3sm/${USER}" ; ;; # NERSC
-	    * ) export DATA="${HOME}/data" ; ;; # default
-	esac # !${HOST_FFC}
 	# ROCKS_ROLLS_ROOT is where Rocks clusters put rolls
 	# 20210420 HPCs that use modules should have no PKG_ROOT defined because there is no single location for all packages
 	case "${HOST_FFC}" in 
@@ -578,7 +576,6 @@ case "${PVM_ARCH}" in
 	;; # LINUX*
     
     MACOS* ) # MACOS on PowerPC and (beginning 20140529) x86_64 machines running MacOS
-	export DATA=/Users/${USER}/data
 	export INFOPATH=./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/share/info
 	case "${HOST_FFC}" in 
 	    spectral* ) export NETCDF_ROOT='/opt/netcdf' ; ;; # MacOS development netCDF environment
