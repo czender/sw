@@ -125,6 +125,14 @@ program fff
   integer,parameter::lev_nbr_max=19 ! [nbr] Maximum number of levels
   integer,parameter::lon_nbr_max=128 ! [nbr] Maximum number of longitudes
 
+  ! Default _FillValues
+  integer*1,parameter::fll_val_byt=nf90_fill_byte ! [nbr] Default _FillValue for type NC_BYTE (synonomous with nf90_fill_int1)
+  character(1),parameter::fll_val_chr=nf90_fill_char ! [nbr] Default _FillValue for type NC_CHAR
+  integer*2,parameter::fll_val_sht=nf90_fill_short ! [nbr] Default _FillValue for type NC_SHORT (synonomous with nf90_fill_int2)
+  integer,parameter::fll_val_int=nf90_fill_int ! [nbr] Default _FillValue for type NC_INT
+  real(r4),parameter::fll_val_flt=nf90_fill_float ! [nbr] Default _FillValue for type NC_FLOAT (synonomous with nf90_fill_real)
+  real(r8),parameter::fll_val_dbl=nf90_fill_double ! [nbr] Default _FillValue for type NC_DOUBLE
+  
   ! Set defaults for command-line options 
   character(80)::drc_in='/Users/zender/nco/data'//nlc ! [sng] Input directory
   character(80)::drc_out='' ! [sng] Output directory
@@ -411,6 +419,16 @@ program fff
      write (6,*) 'main() reports sng_foo = ',sng_foo
   endif ! endif .true.
 
+  ! Test default _FillValue
+  if (dbg_lvl==dbg_old .or. ftn_strcmp(tst_sng,'fll')==0) then
+     write (6,*) 'main() reports fll_val_byt = nf90_fill_byte = nf90_fill_int1 = ',fll_val_byt
+     write (6,*) 'main() reports fll_val_chr = nf90_fill_char = ',fll_val_chr
+     write (6,*) 'main() reports fll_val_sht = nf90_fill_short = nf90_fill_int2 = ',fll_val_sht
+     write (6,*) 'main() reports fll_val_int = nf90_fill_int = ',fll_val_int
+     write (6,*) 'main() reports fll_val_flt = nf90_fill_float = nf90_fill_real = ',fll_val_flt
+     write (6,*) 'main() reports fll_val_dbl = nf90_fill_double = ',fll_val_dbl
+  endif ! !tst_sng
+  
   ! Test date and time routines
   if (dbg_lvl==dbg_old .or. ftn_strcmp(tst_sng,'gmt')==0) call date_time_tst(lcl_date_time)
 
