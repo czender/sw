@@ -2,35 +2,31 @@
 # /bin/cp ~/sw/dot/bashrc.ext ~/.bashrc.ext
 
 # begin .bashrc.ext
-[ -e $HOME/.dbgdot ] && echo "entering .bashrc.ext"
+[ -e ${HOME}/.dbgdot ] && echo "entering .bashrc.ext"
  
 # User additions to .bashrc go in this file
 
 # Un-comment and modify the following template for system-specific
 # personal settings.
-if [ "$NERSC_HOST" == "perlmutter" ]; then
+if [ "${NERSC_HOST}" = 'perlmutter' ]; then
 
    export DATA="/global/cfs/cdirs/e3sm/${USER}"
 
    export PATH="${PATH}:${DATA}/bin_perlmutter"
+   export PATH="${PATH}:${HOME}/sh"
+
    export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${DATA}/lib_perlmutter"
 
    export MY_BIN_DIR="${DATA}/bin_perlmutter"
    export MY_LIB_DIR="${DATA}/lib_perlmutter"
    export MY_OBJ_DIR="${DATA}/obj_perlmutter"
-
-#   module load gsl/2.7
-
-fi # !perlmutter
-if [ "$NERSC_HOST" == "perlmutter" ]; then
-   eval `dircolors -b` # Set environment variable LS_COLORS for ls
-
-   export PAGER='less' # Default pager (usually 'less' or 'more')
-
-   export PATH="${PATH}:${HOME}/sh"
-
    export MY_INC_DIR="${HOME}/include"
    export MY_MAN_DIR="${HOME}/man"
+
+   export PAGER='less' # Default pager (usually 'less' or 'more')
+   function m { ${PAGER} ${*} ; }
+
+   eval `dircolors -b` # Set environment variable LS_COLORS for ls
 
    alias bsrc="source ${HOME}/.bashrc.ext"
    alias cln='rm *~ .[a-zA-Z]~ \#\*\# core core.* *.tmp *foo foo* *.o *.bak *.trace gmeta aaaa* thumb???.png thumbdta.tex *-t.tex* *.bbl *.blg *.log *.glo *.aux *.dlog *.cp *.cps *.fn *.fns *.ky *.pg *.toc *.tp *.vr *.lof *.lot *.dvi *.ttt *.fff *.stackdump PET0.*'
@@ -49,8 +45,7 @@ if [ "$NERSC_HOST" == "perlmutter" ]; then
    alias path="echo -e \${PATH//:/'\n'}" # NeR98 p. 102
    alias ld_library_path="echo -e \${LD_LIBRARY_PATH//:/'\n'}" # NeR98 p. 102
 
-   function m { ${PAGER} ${*} ; }
-fi
+fi # !NERSC_HOST
 
 [ -e $HOME/.dbgdot ] && echo "exiting .bashrc.ext"
 # !.bashrc.ext

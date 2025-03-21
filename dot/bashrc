@@ -194,20 +194,40 @@ fi # local host
 #unset LDFLAGS
 
 # Export primary custom environment variables (many Makefiles depend on these)
+# Machines that name match below will override these defaults
 export MY_BIN_DIR=${HOME}/bin
 export MY_LIB_DIR=${HOME}/lib
 export MY_OBJ_DIR=${HOME}/obj
 export MY_INC_DIR=${HOME}/include
+
+# Disambiguate to find effective host name = HOST_FFC
+# HOST_FFC is simply the common machine name instead of login or compute node name
+HOST_FFC="${HOST}"
+case "${HOST_FFC}" in
+    bebop* | blogin* | b[0123456789][0123456789][0123456789] ) HOST_FFC='blues' ; ;; # ALCF LCRC blues compute nodes named bNNN, 16|64 cores|GB/node 
+    chrlogin* | chr-[0123456789][0123456789][0123456789][0123456789] ) HOST_FFC='chrysalis' ; ;; # ANL LCRC
+    cg-gpu* ) HOST_FFC='roger' ; ;; # NCSA roger cluster
+    gplogin* ) HOST_FFC='greenplanet' ; ;; # UCI PS Rocks Cluster
+    login-* ) HOST_FFC='hpc' ; ;; # UCI RCIC HPC3
+    login[0123456789][0123456789] ) # 20230831 Frontier and Perlmutter login nodes share this name :(
+	if [ "${LMOD_SYSTEM_NAME}" = 'frontier' ]; then
+	    HOST_FFC='frontier'
+	elif [ "${LMOD_SYSTEM_NAME}" = 'perlmutter' ]; then
+	    HOST_FFC='perlmutter'
+	fi # !LMOD_SYSTEM_NAME
+	;; # !login	
+    nid[0123456789][0123456789][0123456789][0123456789][0123456789][0123456789] ) HOST_FFC='perlmutter' ; ;; # NERSC
+esac # !${HOST_FFC}
+export HOST_FFC
+
 # Some machines have machine-specific paths that override defaults above
-case "${HOST}" in
+case "${HOST_FFC}" in
     andes* ) export MY_BIN_DIR="${HOME}/bin_andes" ; export MY_LIB_DIR="${HOME}/lib_andes" ; export MY_OBJ_DIR="${HOME}/obj_andes" ; ;;
-    blues* | blogin* | b[0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_blues" ; export MY_LIB_DIR="${HOME}/lib_blues" ; export MY_OBJ_DIR="${HOME}/obj_blues" ; ;;
-    chrysalis* | chrlogin* | chr-[0123456789][0123456789][0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_chrysalis" ; export MY_LIB_DIR="${HOME}/lib_chrysalis" ; export MY_OBJ_DIR="${HOME}/obj_chrysalis" ; ;;
+    blues* ) export MY_BIN_DIR="${HOME}/bin_blues" ; export MY_LIB_DIR="${HOME}/lib_blues" ; export MY_OBJ_DIR="${HOME}/obj_blues" ; ;;
+    chrysalis* ) export MY_BIN_DIR="${HOME}/bin_chrysalis" ; export MY_LIB_DIR="${HOME}/lib_chrysalis" ; export MY_OBJ_DIR="${HOME}/obj_chrysalis" ; ;;
     frontier* ) export MY_BIN_DIR="${HOME}/bin_frontier" ; export MY_LIB_DIR="${HOME}/lib_frontier" ; export MY_OBJ_DIR="${HOME}/obj_frontier" ; ;;
-    login[0123456789][0123456789] ) export MY_BIN_DIR="${HOME}/bin_${LMOD_SYSTEM_NAME}" ; export MY_LIB_DIR="${HOME}/lib_${LMOD_SYSTEM_NAME}" ; export MY_OBJ_DIR="${HOME}/obj_${LMOD_SYSTEM_NAME}" ; ;; # 20230831 Frontier and Perlmutter login nodes share this name :(
-#    perlmutter* ) export MY_BIN_DIR="${HOME}/bin_perlmutter" ; export MY_LIB_DIR="${HOME}/lib_perlmutter" ; export MY_OBJ_DIR="${HOME}/obj_perlmutter" ; ;;
     perlmutter* ) export MY_BIN_DIR="/global/cfs/cdirs/e3sm/${USER}/bin_perlmutter" ; export MY_LIB_DIR="/global/cfs/cdirs/e3sm/${USER}/lib_perlmutter" ; export MY_OBJ_DIR="/global/cfs/cdirs/e3sm/${USER}/obj_perlmutter" ; ;;
-esac # !${HOST}
+esac # !${HOST_FFC}
 
 # *PATH:
 # Do NOT use ~ in setting paths. MANPATH, e.g., does not expand ~ when searching paths
@@ -233,8 +253,8 @@ esac # !${HOST}
 # Put /usr/local/man last
 
 # Initalize all paths to current directory (insecure, but frequently useful)
-case "${HOST}" in 
-    bebop* | blues* | blogin* | b590 ) # ALCF LCRC blues compute nodes named bNNN, 16|64 cores|GB/node 
+case "${HOST_FFC}" in 
+    bebop* ) # ALCF LCRC blues compute nodes named bNNN, 16|64 cores|GB/node 
 	# Append to paths if in soft environment
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:'./'
 	MANPATH=${MANPATH}\:'./'
@@ -243,7 +263,7 @@ case "${HOST}" in
 	LD_LIBRARY_PATH='./'
 	MANPATH='./'
 	PATH='./' ; ;;
-esac # !HOST
+esac # !HOST_FFC
 # My executables 
 PATH=${PATH}\:${HOME}/sh
 PATH=${PATH}\:${MY_BIN_DIR}
@@ -254,26 +274,27 @@ case "${HOST}" in
 esac # !${HOST}
 
 # PKG_ROOT is where non-default sysadmin-installed packages reside
-# PKG_ROOT is usually argument to configure --prefix=${PKG_ROOT}
-case "${HOST}" in 
+# PKG_ROOT is often argument to configure --prefix=${PKG_ROOT}
+case "${HOST_FFC}" in 
     chrysalis* | compy* | e3sm* ) export PKG_ROOT="${HOME}/anaconda" ; ;; # Anaconda
+    perlmutter* ) export PKG_ROOT="${DATA}/anaconda" ; ;; # Anaconda
     imua* ) export PKG_ROOT="/usr" ; ;; # Fedora
     katabatic* | rigb* ) export PKG_ROOT='/opt/local' ; ;; # MacOS MacPorts
     firn* | sastrugi* ) export PKG_ROOT='/usr/local' ; ;; # MacOS Homebrew Intel silicon
     spectral* ) export PKG_ROOT='/opt/homebrew' ; ;; # MacOS Homebrew Mac silicon
-    cg-gpu* ) export PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # NCSA roger cluster
-    gplogin* ) export PKG_ROOT='/sopt' ; ;; # UCI PS Rocks Cluster
+    roger* ) export PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # NCSA roger cluster
+    greenplanet* ) export PKG_ROOT='/sopt' ; ;; # UCI PS Rocks Cluster
     hpc* ) export PKG_ROOT='/software' ; ;; # Torque machines
-esac # !${HOST}
+esac # !${HOST_FFC}
 
-case "${HOST}" in 
+case "${HOST_FFC}" in 
     firn* | katabatic* | rigb* | sastrugi* | spectral* ) export OMP_NUM_THREADS=4 ; ;; # endif
-    gplogin* | grele* | snow* ) export OMP_NUM_THREADS='8' ; ;; # dual-quad processor
+    greenplanet* | grele* | snow* ) export OMP_NUM_THREADS='8' ; ;; # dual-quad processor
     acme1* | andes* | compy* | e3sm* | imua* ) export OMP_NUM_THREADS='16' ; ;; # dual-octet processor
     derecho* ) export OMP_NUM_THREADS='16' ; ;; # dual-hexadecimal processor
     cg1* ) export OMP_NUM_THREADS=2 ; ;; # cg1*
     * ) export OMP_NUM_THREADS=1 ; ;; # *
-esac # !${HOST}
+esac # !${HOST_FFC}
 
 # Set operating system dependent paths and packages...
 case "${PVM_ARCH}" in 
@@ -423,34 +444,27 @@ case "${PVM_ARCH}" in
 	export TEXMFDIR='/usr/share/texmf-texlive' # One level above bibtex, tex,
 #	export X11='/usr/X11R6'
 # https://stackoverflow.com/questions/4554718/how-to-use-patterns-in-the-case-statement-in-bash-scripting
-	case "${HOST}" in 
+	case "${HOST_FFC}" in 
 	    acme1* ) export DATA="/home/${USER}/data" ; ;; # LLNL
 	    andes* | frontier* ) export DATA="/lustre/orion/cli115/world-shared/${USER}" ; ;; # OLCF
-	    bebop* | blues* | blogin* | chrlogin* ) export DATA="/home/${USER}/data" ; ;; # ANL LCRC
+	    blues* ) export DATA="/home/${USER}/data" ; ;; # ANL LCRC
 	    cg-gpu* ) export DATA="/home/${USER}/data" ; ;; # NCSA roger
 	    chrysalis* ) export DATA="${HOME}/data" ; ;; # ANL LCRC
 	    compy* ) export DATA="/qfs/people/${USER}/data" ; ;; # PNNL 
 	    derecho* ) export DATA="/glade/work/${USER}" ; ;; # NCAR
 	    e3sm* ) export DATA="${HOME}/data" ; ;; # UCI
+	    frontier* ) export DATA="/lustre/orion/cli115/world-shared/${USER}" ; ;; # ORNL
+	    greenplanet* ) export DATA="/data/${USER}" ; ;; # UCI PS Rocks Cluster
+	    hpc* ) export DATA="/data/users/${USER}" ; ;; # UCI RCIC HPC3
 	    imua* ) export DATA="${HOME}/data" ; ;; # UCI
-	    login[0123456789][0123456789] ) # 20230831 Frontier and Perlmutter login nodes share this name :(
-		if [ "${LMOD_SYSTEM_NAME}" = 'frontier' ]; then
-		    DATA="/lustre/orion/cli115/world-shared/${USER}"
-		elif [ "${LMOD_SYSTEM_NAME}" = 'perlmutter' ]; then
-		    DATA="/global/cfs/cdirs/e3sm/${USER}"
-		fi # !LMOD_SYSTEM_NAME
-		;; # !login	
-	    perlmutter* | nid* ) export DATA="/global/cfs/cdirs/e3sm/${USER}" ; ;; # NERSC
-	    gplogin* ) export DATA="/data/${USER}" ; ;; # UCI PS Rocks Cluster
-	    hpc* ) export DATA="/data/users/${USER}" ; ;; # UCI HPC
-	    login-* ) export DATA="${HOME}/data" ; ;; # UCI RCIC HPC3
+	    perlmutter* ) export DATA="/global/cfs/cdirs/e3sm/${USER}" ; ;; # NERSC
 	    * ) export DATA="${HOME}/data" ; ;; # default
-	esac # !${HOST}
+	esac # !${HOST_FFC}
 	# ROCKS_ROLLS_ROOT is where Rocks clusters put rolls
 	# 20210420 HPCs that use modules should have no PKG_ROOT defined because there is no single location for all packages
-	case "${HOST}" in 
-	    gplogin* | hpc* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # UCI PS Rocks Cluster
-	esac # !${HOST}
+	case "${HOST_FFC}" in 
+	    greenplanet* | hpc* ) ROCKS_ROLLS_ROOT='/opt' ; ;; # UCI PS Rocks Cluster
+	esac # !${HOST_FFC}
 	# 20231206 Stop assigning NETCDF_ROOT in bashrc, do so in configure.eg instead
 #	if [ -n "${NETCDF_ROOT}" ]; then
 #	    # Some modules, e.g., on compy, define NETCDF_ROOT, so use that
@@ -458,39 +472,39 @@ case "${PVM_ARCH}" in
 #	elif [ -n "${PKG_ROOT}" ]; then
 #	    export NETCDF_ROOT="${PKG_ROOT}"
 #	fi # !NETCDF_ROOT
-#	case "${HOST}" in 
+#	case "${HOST_FFC}" in 
 #	    hpc* ) export NETCDF_ROOT="${PKG_ROOT}/netcdf" ; export NETCDF4_LIB="${PKG_ROOT}/netcdf4" ; ;; # HPC
 ##		export LD_ASSUME_KERNEL='2.4.1' # Prevents IPCC PGI linker complaints
-#	esac # !${HOST}
+#	esac # !${HOST_FFC}
 	# 20200906: Always export HDF5_PLUGIN_PATH (at least on MacOS) for CCR
 	# 20230903: Deprecate CCR, so netCDF looks for plugins in `nc-config --plugindir`
-#	case "${HOST}" in 
+#	case "${HOST_FFC}" in 
 #	    chrysalis* | imua* ) export HDF5_PLUGIN_PATH="${HOME}/anaconda/lib/hdf5/plugin" ; ;;
 #	    * ) export HDF5_PLUGIN_PATH='/usr/local/hdf5/lib/plugin' ; ;; # default
-#	esac # !${HOST}
+#	esac # !${HOST_FFC}
 
 	# Set MPI
         # fxm: temporary NCO hack: Machines with MPI_ROOT set are assumed to have parallel filesystems for NCO builds
-	case "${HOST}" in 
-	    gplogin* ) export MPI_ROOT_OLD='/usr/mpi/intel/openmpi-1.5.1' ; ;; # UCI PS Rocks Cluster OpenMPI
-	esac # !${HOST}
+	case "${HOST_FFC}" in 
+	    greenplanet* ) export MPI_ROOT_OLD='/usr/mpi/intel/openmpi-1.5.1' ; ;; # UCI PS Rocks Cluster OpenMPI
+	esac # !${HOST_FFC}
 	# Set NCARG
-	case "${HOST}" in 
+	case "${HOST_FFC}" in 
 	    grele* ) NCARG_ROOT='/usr/local/ncl-6.3.0' ; ;; # UCI PS Rocks Cluster
-	    gplogin* ) NCARG_ROOT='/sopt/ncl' ; ;; # UCI PS Rocks Cluster
-	esac # !${HOST}
+	    greenplanet* ) NCARG_ROOT='/sopt/ncl' ; ;; # UCI PS Rocks Cluster
+	esac # !${HOST_FFC}
 	# Set MPICH_ROOT
-	case "${HOST}" in 
+	case "${HOST_FFC}" in 
 	    * ) MPICH_ROOT="${PKG_ROOT}/mpich" ; ;; # HPC and default
-	esac # !${HOST}
+	esac # !${HOST_FFC}
 	if [ -n "${ROCKS_ROLLS_ROOT}" ]; then
 	    TORQUE_ROOT="${ROCKS_ROLLS_ROOT}/torque"
 	fi # ROCKS_ROLLS_ROOT
 	
-	case "${HOST}" in 
-	    perlmutter* | nid* ) PATH=${PATH}\:${DATA}/anaconda/bin ; ;; # NERSC
+	case "${HOST_FFC}" in 
+	    perlmutter* ) PATH=${PATH}\:${DATA}/anaconda/bin ; ;; # NERSC
 	    * ) PATH=${PATH}\:${HOME}/anaconda/bin ; ;; # default
-	esac # !${HOST}
+	esac # !${HOST_FFC}
 	PATH=${PATH}\:/usr/local/bin
 	PATH=${PATH}\:/usr/local/sbin # Debian
 	PATH=${PATH}\:/usr/bin
@@ -511,21 +525,21 @@ case "${PVM_ARCH}" in
 #		PATH=${PATH}\:${PKG_ROOT}/ganglia/bin
 	fi # ROCKS_ROLLS_ROOT
 
-	case "${HOST}" in 
+	case "${HOST_FFC}" in 
 #	    acme1* ) PATH=${PATH}\:/p/user_pub/e3sm_unified/envs/base/envs/e3sm_unified_latest/bin ; ;; # LLNL
 	    # Default compy PATH=/share/apps/modules/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/ganglia/bin:/opt/ganglia/sbin:/opt/pdsh/bin:/opt/rocks/bin:/opt/rocks/sbin:/qfs/people/zender/bin
 	    compy* ) PATH=${PATH}\:/share/apps/modules/bin\:/opt/rocks/bin ; ;; # PNNL compy
 	    derecho* ) PATH=${PATH}\:/opt/pbs/bin\:/glade/u/apps/derecho/23.06/spack/opt/spack/ncarcompilers/1.0.0/gcc/12.2.0/gj6c/bin ; ;; # NCAR derecho
-	    gplogin* ) # x86-64
+	    greenplanet* ) # x86-64
 		PATH=${PATH}\:${ICC_ROOT}/bin/intel64 ; ;; # greenplanet
 #	    e3sm* ) 
 #		PATH=${PATH}\:/usr/local/cuda/bin ; ;; # CUDA
-	esac # !${HOST}
+	esac # !${HOST_FFC}
 	
-	case "${HOST}" in 
-	    perlmutter* | nid* ) MANPATH=${MANPATH}\:${DATA}/anaconda/man ; ;; # NERSC
+	case "${HOST_FFC}" in 
+	    perlmutter* ) MANPATH=${MANPATH}\:${DATA}/anaconda/man ; ;; # NERSC
 	    * ) MANPATH=${MANPATH}\:${HOME}/anaconda/man ; ;; # default
-	esac # !${HOST}
+	esac # !${HOST_FFC}
 	MANPATH=${MANPATH}\:${HOME}/nco/man
 	MANPATH=${MANPATH}\:/usr/local/man
 	MANPATH=${MANPATH}\:/usr/share/man
@@ -537,20 +551,10 @@ case "${PVM_ARCH}" in
 	
 #	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${X11}/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MY_LIB_DIR}
-	case "${HOST}" in 
-	    gplogin* ) # x86-64
-		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${ICC_ROOT}/lib/intel64
-		LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/home/pvicente/install/udunits-2.1.24/lib
-		;; # greenplanet
-	esac # !${HOST}
-	case "${HOST}" in 
-	    gplogin* ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PGI}/linux86-64/7.2-3/lib ; ;;
-	    hpc* ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${PGI}/linux86-64/7.2-3/lib ; ;;
-	esac # !${HOST}
-	case "${HOST}" in 
-	    perlmutter* | nid* ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${DATA}/anaconda/lib ; ;; # NERSC
+	case "${HOST_FFC}" in 
+	    perlmutter* ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${DATA}/anaconda/lib ; ;; # NERSC
 	    * ) LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${HOME}/anaconda/lib ; ;; # default
-	esac # !${HOST}
+	esac # !${HOST_FFC}
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${NETCDF4_ROOT}/lib
 	case "${HOST}" in 
@@ -576,9 +580,9 @@ case "${PVM_ARCH}" in
     MACOS* ) # MACOS on PowerPC and (beginning 20140529) x86_64 machines running MacOS
 	export DATA=/Users/${USER}/data
 	export INFOPATH=./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/share/info
-	case "${HOST}" in 
+	case "${HOST_FFC}" in 
 	    spectral* ) export NETCDF_ROOT='/opt/netcdf' ; ;; # MacOS development netCDF environment
-	esac # !${HOST}
+	esac # !${HOST_FFC}
 	if [ -n "${NETCDF_ROOT}" ]; then
 	    export NETCDF_INC="${NETCDF_ROOT}/include"
 	    export NETCDF_LIB="${NETCDF_ROOT}/lib"
@@ -590,25 +594,25 @@ case "${PVM_ARCH}" in
 
 # GCC_RCH_ARG and ICC_RCH_ARG set CPU architecture only
 # Select ABI flags (i.e., 32 or 64 bit) at make time
-	case "${HOST}" in 
+	case "${HOST_FFC}" in 
 	    cg1* ) export GCC_RCH_ARG='-mcpu=970' ; ;; # PowerPC 970
-	esac # !${HOST}
+	esac # !${HOST_FFC}
 	export SYSTYPE='BSD' # Used by killproc
 #	export PYTHONPATH=/usr/lib/portage/pym
 	export TEXMFDIR=/usr/local/texlive/texmf-local # One level above bibtex, tex etc. for Homebrew
-	case "${HOST}" in 
+	case "${HOST_FFC}" in 
 	    firn* | sastrugi* | spectral* ) # MacOS Homebrew
 		# Required to build nco.pdf due to ancient Xcode CLT TeXInfo
 		PATH="${PKG_ROOT}/opt/llvm/bin"\:${PATH} ; # Required for OpenMP-enabled clang
 	        PATH="${PKG_ROOT}/opt/make/libexec/gnubin"\:${PATH} ; # Required for GNU make
 		PATH="${PKG_ROOT}/opt/texinfo/bin"\:${PATH} ; ;; # Required for nco.texi
-	esac # !HOST
+	esac # !HOST_FFC
 	PATH=${PATH}\:"${PKG_ROOT}/opt/coreutils/libexec/gnubin" # Up-to-date GNU commands from GNU Homebrew coreutils
 	#PATH=${PATH}\:/opt/local/libexec/gnubin # Up-to-date GNU commands from GNU MacPorts coreutils
-	case "${HOST}" in 
+	case "${HOST_FFC}" in 
 	    firn* ) # MacOS Intel Compilers
 		PATH='/opt/intel/oneapi/compiler/latest/mac/bin/intel64'\:${PATH} ; ;; # Required for Intel compilers
-	esac # !HOST
+	esac # !HOST_FFC
 	PATH=${PATH}\:/usr/local/bin # Custom-built 3rd party packages
 	PATH=${PATH}\:/opt/netcdf/bin # netCDF development branch location
 	PATH=${PATH}\:"${PKG_ROOT}/bin" # Homebrew packages
@@ -645,7 +649,7 @@ case "${PVM_ARCH}" in
 	export SYSTYPE=SVR3
 	export X11=/usr/lib/X11
 	
-	if [ "${HOST}" = 'tempest' ]; then
+	if [ "${HOST_FFC}" = 'tempest' ]; then
 	    export NETCDF_INC=/usr/local/include
 	    export NETCDF_LIB=/usr/local/lib64/r4i4 # 64 bit ABI (default)
 	fi # tempest
@@ -686,7 +690,7 @@ case "${PVM_ARCH}" in
 	if [ -f '/opt/modules/modules/init/bash' ]; then
 	    source /opt/modules/modules/init/bash
 	    module purge
-	    if [ "${HOST}" = 'tempest' ]; then
+	    if [ "${HOST_FFC}" = 'tempest' ]; then
 		module load MIPSpro mpt scsl nqe modules
 	    fi # tempest
 	fi # endif
@@ -860,22 +864,22 @@ FC_pgf95='pgf95'
 # Compiler names for generic MPI libraries held in MPI_CC and MPI_CXX
 # MPI_CC and MPI_CXX depend upon MPICH version (MPICH or MPICH2)
 # and, sometimes, compiler (icc finds mpi.h automatically, gcc needs help)
-case "${HOST}" in
+case "${HOST_FFC}" in
 #    firn* ) export LINUX_CC=${CC_clang_macports} ; export LINUX_CXX=${CXX_clang_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # clang/clang/macports
 #    firn* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # clang/clang/macports
     firn* ) export LINUX_CC=${CC_icx} ; export LINUX_CXX=${CXX_icx} ; export LINUX_FC=${FC_ifort} ; ;; # icx/icx
     sastrugi* | spectral* ) export LINUX_CC=${CC_clang_homebrew} ; export LINUX_CXX=${CXX_clang_homebrew} ; export LINUX_FC=${FC_gfortran_homebrew} ; ;; # clang/clang/homebrew
     dhcp* | katabatic* | rigb* ) export LINUX_CC=${CC_gcc_macports} ; export LINUX_CXX=${CXX_gxx_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # all MacPorts
     grele* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC="${LINUX_CC} -I/usr/include/mpich2" ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK -I/usr/include/mpich2" ;; # gcc/g++/gfortran MPICH2
-    gplogin* ) export LINUX_CC=${CC_icx/icx/mpicc} ; export LINUX_CXX=${CXX_icx/icx/mpiCC} ; export LINUX_FC=${FC_ifort/ifort/mpif90} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icx/ifort OpenMPI	
-#    gplogin* ) export LINUX_CC=${CC_icx} ; export LINUX_CXX=${CXX_icx} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icx/ifort OpenMPI GreenPlanet is special because it has a parallel filesystem, lustre, and hence can take advantage of MPI I/O when compiler is MPI-aware. However, compiler switches in all of my custom Makefiles are triggered by vendor-compiler names, e.g., gfortran, ifort, and xlf90, rather than the generic mpicc/mpiCC/mpif90, which are ambiguous. Hence we use this method to designate the invocation command (e.g., "mpif90" or "pgf90") together with the underlying compiler (e.g., "gfortran" or "pgf90"): MPI=Y tells Makefile to invoke compiler with 'mpicc', 'mpif90', etc., but LINUX_CC/CXX/FC point to underlying compilers. Makefile sets compiler-specific switches and options using LINUX_CC/CXX/FC, then, afterwards, sets CC/CXX/FC to 'mpicc/mpiCC/mpif90'. Alternate method, shown in preceding line, sets LINUX_CC/CXX/FC directly to 'mpicc/mpiCC/mpif90' here in bashrc, but then compiler-specific switches in Makefile are missed.
+    greenplanet* ) export LINUX_CC=${CC_icx/icx/mpicc} ; export LINUX_CXX=${CXX_icx/icx/mpiCC} ; export LINUX_FC=${FC_ifort/ifort/mpif90} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icx/ifort OpenMPI	
+#    greenplanet* ) export LINUX_CC=${CC_icx} ; export LINUX_CXX=${CXX_icx} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icx/ifort OpenMPI GreenPlanet is special because it has a parallel filesystem, lustre, and hence can take advantage of MPI I/O when compiler is MPI-aware. However, compiler switches in all of my custom Makefiles are triggered by vendor-compiler names, e.g., gfortran, ifort, and xlf90, rather than the generic mpicc/mpiCC/mpif90, which are ambiguous. Hence we use this method to designate the invocation command (e.g., "mpif90" or "pgf90") together with the underlying compiler (e.g., "gfortran" or "pgf90"): MPI=Y tells Makefile to invoke compiler with 'mpicc', 'mpif90', etc., but LINUX_CC/CXX/FC point to underlying compilers. Makefile sets compiler-specific switches and options using LINUX_CC/CXX/FC, then, afterwards, sets CC/CXX/FC to 'mpicc/mpiCC/mpif90'. Alternate method, shown in preceding line, sets LINUX_CC/CXX/FC directly to 'mpicc/mpiCC/mpif90' here in bashrc, but then compiler-specific switches in Makefile are missed.
     hpc* ) export LINUX_CC=${CC_pgcc} ; export LINUX_CXX=${CXX_pgCC} ; export LINUX_FC=${FC_pgf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # pgcc/pgCC/pgf95 MPICH2
     e3sm* ) export LINUX_CC=${CC_gcc_conda} ; export LINUX_CXX=${CXX_gxx_conda} ; export LINUX_FC=${FC_gfortran_conda} ; ;; # gcc/g++/gfortran Conda
     imua* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # gcc/g++/gfortran RPMs
-    andes* | blogin* | blues* | chrylogin* | compy* | derecho* | frontier* | login-* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # gcc/g++/gfortran OpenMPI
+    andes* | blogin* | blues* | chrylogin* | compy* | derecho* | frontier* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # gcc/g++/gfortran OpenMPI
 #    derecho* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # gcc/g++/g95 MPICH 
-esac # !${HOST}
+esac # !${HOST_FFC}
 # LAMMPICC and LAMPICXX are OS-independent
 export LAMMPICC=${LINUX_CC}
 export LAMMPICXX=${LINUX_CXX} 
@@ -883,32 +887,27 @@ export LAMMPICXX=${LINUX_CXX}
 # GCC_RCH_ARG, ICC_RCH_ARG, PGI_RCH_ARG, and PSC_RCH_ARG set CPU architecture only
 # Select ABI flags (i.e., 32 or 64 bit) at make time
 # NB: Pathscale documents extensive set of PSC_* flags on User's Guide p. 149--151
-case "${HOST}" in 
+case "${HOST_FFC}" in 
     firn* | katabatic* | rigb* | sastrugi* ) export GCC_RCH_ARG='' ; export ICC_RCH_ARG='' ; ;; # Intel Core i7
     esmf* ) export GCC_RCH_ARG='-mtune=power4' ; export ICC_RCH_ARG='' ; ;; # Power4
     e3sm* | grele* | imua* | snow* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-axP -mcpu=pentium4 -msse3' ; ;; # Core2 Extreme EMT64
-    gplogin* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-ipo -no-prec-div -Wl,-z,muldefs' ; ;; # Core2 Extreme EMT64
-esac # !${HOST}
+    greenplanet* ) export GCC_RCH_ARG='-march=native' ; export ICC_RCH_ARG='-ipo -no-prec-div -Wl,-z,muldefs' ; ;; # Core2 Extreme EMT64
+esac # !${HOST_FFC}
 # Set ICC_ROOT, IFC_ROOT
-case "${HOST}" in
+case "${HOST_FFC}" in
     firn* | katabatic* | rigb* | sastrugi* ) export ICC_ROOT='' ; export IFC_ROOT='' ; ;; # IA32
     e3sm* | grele* | imua* | snow* ) export ICC_ROOT='/opt/intel/cc/9.0' ; export IFC_ROOT='/opt/intel/fc/9.0' ; ;; # IA64
-    gplogin* ) export ICC_ROOT='/sopt/intel/Compiler/11.0/081' ; export IFC_ROOT='/sopt/intel/Compiler/11.0/081' ; ;; # UCI PS Rocks Cluster
+    greenplanet* ) export ICC_ROOT='/sopt/intel/Compiler/11.0/081' ; export IFC_ROOT='/sopt/intel/Compiler/11.0/081' ; ;; # UCI PS Rocks Cluster
     ipcc* ) export ICC_ROOT='/opt/intel/cce/9.1.038' ; export IFC_ROOT='/opt/intel/fce/9.1.032' ; ;; # IPCC
     hpc* ) export ICC_ROOT='/software/intel/cc' ; export IFC_ROOT='/software/intel/fc' ; ;; # HPC
-esac # !${HOST}
+esac # !${HOST_FFC}
 
 # System-specific environments
-case "${HOST}" in
+case "${HOST_FFC}" in
     andes* | frontier* ) export PROJID='cli115' ; ;; # OLCF
-    perlmutter* | nid[0123456789][0123456789][0123456789][0123456789][0123456789][0123456789] ) export PROJID='e3sm' ; export PATH="${PATH}:/opt/cray/pe/netcdf/4.8.1.1/gnu/9.1/bin" ; export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/opt/cray/pe/netcdf/4.8.1.1/gnu/9.1/lib:/global/common/software/spackecp/perlmutter/e4s-21.11/software/cray-sles15-zen3/gcc-11.2.0/gsl-2.7-2p3pcjckzogek2dubph7q4yd5msjuhxt/lib" ; ;; # 20220518 needed for ncgen
-esac # !${HOST}
-# 20230831 Frontier and Perlmutter login nodes share this name :(
-if [ "${LMOD_SYSTEM_NAME}" = 'perlmutter' ]; then
-    export PROJID='e3sm'
-    export PATH="${PATH}:/opt/cray/pe/netcdf/4.8.1.1/gnu/9.1/bin"
-    export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/opt/cray/pe/netcdf/4.8.1.1/gnu/9.1/lib:/global/common/software/spackecp/perlmutter/e4s-21.11/software/cray-sles15-zen3/gcc-11.2.0/gsl-2.7-2p3pcjckzogek2dubph7q4yd5msjuhxt/lib" # 20220518 needed for ncgen
-fi # !login
+    perlmutter* ) export PROJID='e3sm' ; ;; # NERSC
+#    perlmutter* ) export PROJID='e3sm' ; export PATH="${PATH}:/opt/cray/pe/netcdf/4.8.1.1/gnu/9.1/bin" ; export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/opt/cray/pe/netcdf/4.8.1.1/gnu/9.1/lib:/global/common/software/spackecp/perlmutter/e4s-21.11/software/cray-sles15-zen3/gcc-11.2.0/gsl-2.7-2p3pcjckzogek2dubph7q4yd5msjuhxt/lib" ; ;; # 20220518 needed for ncgen
+esac # !${HOST_FFC}
 
 # Export the big three
 export LD_LIBRARY_PATH
@@ -967,9 +966,9 @@ case ${PVM_ARCH} in
 	ulimit -c 0 # Maximum size of core files created
     ;; # CRAY | LINUX* | SUN* 
     CRAY | LINUX* | SUN* )
-	if [[ ! "${HOST}" =~ 'login-' ]]; then
+	if [[ ! "${HOST_FFC}" =~ 'hpc' ]]; then
 	    ulimit -s unlimited # Set soft stacksize limit to unlimited (cf. /etc/initscript)
-	fi # !HOST
+	fi # !HOST_FFC
 	;; # CRAY | LINUX* | SUN* 
 esac # !${PVM_ARCH}
 
@@ -1018,9 +1017,9 @@ case ${PVM_ARCH} in
     AIX* | LINUX* | WIN32* )
 	#export PRINTER='hp4050' # UCI croul
 	#export PRINTER='hp4250' # LGGE office
-	case ${HOST} in
+	case ${HOST_FFC} in
 	    e3sm* | firn* | grele* | imua* | sastrugi* ) export PRINTER='hpm600' ; ;; # UCI Croul mail room
-	esac # !${HOST}
+	esac # !${HOST_FFC}
 	#export PRINTER='hp4350' # UCI Croul 3242 (common area)
 	#export PRINTER='hpm600' # UCI Croul mail room
 	#export PRINTER='hp5180' # SMU home
@@ -1325,7 +1324,7 @@ case ${PVM_ARCH} in
 #    export FER_GO=". ${FER_DIR}/go ${FER_DIR}/examples ${FER_DIR}/contrib ${HOME}/ferret/go"PGI
 #    export FER_PALETTE=". ${FER_DIR}/ppl ${HOME}/ferret/ppl" # palettes
 
-    case ${HOST} in
+    case ${HOST_FFC} in
     aerosol* | e3sm* | firn* | grele* | imua* | jaws* | katabatic* | rigb* | sastrugi* )
 	export INTEL_LICENSE_FILE='/opt/intel/cc/9.0/licenses:/opt/intel/fc/9.0/licenses'
 	export LM_LICENSE_FILE='1700@ess1.ess.uci.edu'
@@ -1333,7 +1332,7 @@ case ${PVM_ARCH} in
     dhcp* )
 	export LM_LICENSE_FILE='1726@fileserver.ucar.edu'
     ;; # visiting NCAR
-    gplogin* ) 
+    greenplanet* ) 
         export INTEL_LICENSE_FILE='/opt/intel/licenses'
         export LM_LICENSE_FILE='7496@hpc.oit.uci.edu'
     ;; # UCI PS Rocks Cluster
@@ -1341,7 +1340,7 @@ case ${PVM_ARCH} in
 	export INTEL_LICENSE_FILE='/software/icc/licenses:/software/ifc/licenses'
         export LM_LICENSE_FILE="7496@hpc.oit.uci.edu"
     ;; # Opteron cluster
-    esac # !${HOST}
+    esac # !${HOST_FFC}
 
     export PATHSCALE_SUBSCRIPTION_DAEMON='ipcc.calit2.uci.edu:7143'
 
@@ -1376,7 +1375,7 @@ if bsh_mjr_vrs_ge_2; then
 # Pattern matching and replacement operator // was introduced in Bash 2.0
 # 20070423: Nevertheless bash 2.00.0 on tempest chokes on these statements
 # 20090822: Escaping dollar-sign causes shell to check values each time
-    if [ "${HOST}" != 'tempest' ]; then
+    if [ "${HOST_FFC}" != 'tempest' ]; then
 	alias classpath="echo -e \${CLASSPATH//:/'\n'}" # NeR98 p. 102
 	alias path="echo -e \${PATH//:/'\n'}" # NeR98 p. 102
 	alias manpath="echo -e \${MANPATH//:/'\n'}" # NeR98 p. 102
