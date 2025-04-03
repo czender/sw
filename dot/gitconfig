@@ -1,6 +1,8 @@
 [user]
 	name = Charlie Zender
 	email = zender@uci.edu
+[alias]
+	logg = log --oneline --decorate --graph
 [core]
 	editor = emacs
 	excludesfile = ~/.gitignore
