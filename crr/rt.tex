@@ -1326,9 +1326,9 @@ These relations are analogous to (\ref{eqn:flx_frq_wvl}).
 
 The Planck function (\ref{eqn:plk_dfn}) implicitly defines the
 \trmdfn{brightness temperature}.
-The brightness temperature $\tptbrt$ associated with an object with
-that emits a known radiance $\plkwvl$ or $\plkfrq$ is the temperature
-of the blackbody that would produce that radiance.
+The brightness temperature $\tptbrt$ associated with an object
+that emits a known radiance $\plkwvl$ or $\plkfrq$ is by definition the temperature
+of the blackbody that would produce the same radiance.
 Hence the brightness temperature is to radiance as the effective
 temperature is to flux.
 Both are characteristics are measured in terms of temperature, yet
@@ -1521,6 +1521,55 @@ interest.
 Assuming the wavelength of peak measured emission is $\wvlmshmax$\,\um.
 Then a first approximation is that the planetary temperature is close
 to $2897.8 / \wvlmshmax$.
+\clearpage
+\noindent%
+Helpful constants in Remote Sensing:
+\begin{enumerate*}
+\item Speed of light: $\cstspdlgt = 2.99792458 \times 10^{8}$\,\mxs
+\item Planck's constant: $\cstplk = 6.62606876 \times 10^{-34}$\,\js
+\item Stefan-Boltzmann constant: $\cststfblt = 5.67032  \times 10^{-8}$\,\wxmSkQ
+\item Boltzmann's constant: $\cstblt = 1.380649  \times 10^{-23}$\,\jxK
+\item Base of the natural logarithm: $\me = 2.71828$
+\item Pi: $\mpi = 3.14159$
+\end{enumerate*}
+Helpful equations:
+\begin{eqnarray}
+\cstspdlgt & = & \wvl \frq \qquad [\mbox{\mxs}] \qquad \mbox{Speed of Light} \nonumber \\ % eqn:wvl_dfn
+\nrg & = & \cstplk \frq = \cstplk \cstspdlgt / \wvl \qquad [\mbox{J}] \qquad \mbox{Photon energy} \nonumber \\ % eqn:nrg_dfn
+\wvn & \equiv & \frac{1}{\wvl} = \frac{\frq}{\cstspdlgt} \nonumber \qquad [\mbox{\xm}] \qquad \mbox{Wavenumber definition} \\ % eqn:wvn_dfn
+\flxupwplk & = & \cststfblt \tpt^{4} \qquad [\mbox{\wxmS}] \qquad \mbox{Stefan-Boltzmann Law (blackbodies)} \nonumber \\ % eqn:stf_blt_dfn
+\flxupwmsvavg & = & \msvavg \cststfblt \tpt^{4} \qquad [\mbox{\wxmS}] \qquad \mbox{Stefan-Boltzmann Law (greybodies)} \nonumber \\ % eqn:stf_blt_dfn
+\msvavg & \equiv & \flxupwmsvavg/\flxupwplk \nonumber \qquad \mbox{Emissivity definition} \\ % eqn:msv_not_dfn
+\frqmshmax & \approx & 5.88 \times 10^{10} \, \tpt \qquad [\mbox{\hz}] \qquad \mbox{Wien's Law (frequency)} \nonumber \\ % eqn:wvl_max_apx
+\wvlmshmax & \approx & 2897.8 / \tpt \qquad [\mbox{\um}] \qquad \mbox{Wien's Law (wavelength)} \nonumber \\ % eqn:wvl_max_apx
+\plkfrq(\tpt,\frq) & = & \frac{2 \cstplk \frq^{3}}
+       {\cstspdlgt^{2}( \me^{\cstplk \frq / \cstblt \tpt} - 1)}
+       \qquad [\mbox{\wxmSsrhz}] \qquad \mbox{Planck Function (frequency)} \nonumber \\ % eqn:plk_frq_dfn
+\plkwvl(\tpt,\wvl) & = & \frac{2 \cstplk \cstspdlgt^{2}}
+       {\wvl^{5} ( \me^{\cstplk \cstspdlgt / \wvl \cstblt \tpt} - 1)}
+       \qquad [\mbox{\wxmSsrm}] \qquad \mbox{Planck Function (wavelength)} \nonumber \\ % eqn:plk_wvl_dfn
+\tptbrt(\plkfrq,\frq) & = & \frac{\cstplk \frq}{\cstblt}
+\left[ \ln \left( 1 + \frac{ 2 \cstplk \frq^{3}}{\plkfrq \cstspdlgt^{2}} \right) \right]^{-1}
+\qquad [\mbox{K}]  \qquad \mbox {Brightness temperature} \nonumber \\ % eqn:tpt_brt_frq_dfn
+\tptbrt(\plkwvl,\wvl) & = & \frac{\cstplk \cstspdlgt}{\wvl \cstblt}
+\left[ \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2}}{\plkwvl \wvl^{5}} \right) \right]^{-1}
+\qquad [\mbox{K}]  \qquad \mbox {Brightness temperature} \nonumber % eqn:tpt_brt_wvl_dfn
+\label{eqn:xmp_eqn}
+\end{eqnarray}
+Here are quantitative examples of the Planck Function, the Stefan-Boltzmann Law, and Wien's Law for $\tpt = 300$\,K, e.g., tropical ocean surfaces:
+\begin{enumerate*}
+\item Where in the EM spectrum does this surface emit?\\
+Thermal Infrared
+\item What is the upwelling hemispheric irradiance?\\
+$\flxupwplk = \cststfblt (300^{4}) = 5.67 \times 10^{-8} \times 81 \times 108 = 459$\,\wxmS
+\item What are the wavelength and frequency of maximum emission?\\
+Wien's Law: $\wvlmshmax= 2898/300 = 9.66$\,\um\ (aka MODIS Band~30), $\frqmshmax = ?$
+\item What radiance would be measured by MODIS Band~32  (at 12\,\um)?\\
+Planck Function: $I = 8.96 \times 10^{6}$\,\wxmSsrm\ $ = 8.96$\,\wxmSsrum
+\item What is the 12\,\um\ radiance for water of realistic emissivity $\msv = 0.96$?\\
+$0.96 \times 8.96 = 8.60$\,\wxmSsrum
+\end{enumerate*}
+\clearpage
 
 \subsubsection[Hemispheric Quantities]{Hemispheric Quantities}\label{sxn:flx_hms}
 In climate studies we are most interested in the irradiance passing
