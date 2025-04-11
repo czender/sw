@@ -1441,8 +1441,12 @@ and we obtain
 \frac{2 \cstspdlgt \cstblt \tpt}{\wvn^{4}}
 \end{align}
 \end{subequations}
+The emitted radiance in all forms of (\ref{eqn:plk_ryl_jean_dfn}) is linearly proportional to the temperature for 
+wavelengths in Rayleigh-Jeans limit.
+This property allows us, for instance, to remotely sense the temperature of
+ocean and ice surfaces from low-energy photons such as with passive microwave radiometers. 
 
-The frequencies of extreme emission are obtained by taking
+The frequencies of maximum emission for any wavelength and temperature are obtained by taking
 the partial derivative of (\ref{eqn:plk_frq_dfn}) with respect to
 frequency with the temperature held constant
 \begin{eqnarray}
@@ -1506,9 +1510,8 @@ The result is
 \label{eqn:wvl_max_apx}
 \end{eqnarray}
 where the units of the numerical factor are \umk.
-Note that (\ref{eqn:frq_max_apx}) and (\ref{eqn:wvl_max_apx})
-do not yield the same answer because they measure different 
-quantities.
+Equations~(\ref{eqn:frq_max_apx}) and (\ref{eqn:wvl_max_apx}) are valid for all temperatures and wavelengths.
+Note that these relations do not yield the same numerical answer because they measure different quantities.
 The wavelength of maximum emission per unit wavelength, for example,
 is displaced by a factor of approximately 1.76 from the wavelength of
 maximum emission per unit frequency.
@@ -1539,7 +1542,8 @@ Helpful equations:
 \wvn & \equiv & \frac{1}{\wvl} = \frac{\frq}{\cstspdlgt} \nonumber \qquad [\mbox{\xm}] \qquad \mbox{Wavenumber definition} \\ % eqn:wvn_dfn
 \flxupwplk & = & \cststfblt \tpt^{4} \qquad [\mbox{\wxmS}] \qquad \mbox{Stefan-Boltzmann Law (blackbodies)} \nonumber \\ % eqn:stf_blt_dfn
 \flxupwmsvavg & = & \msvavg \cststfblt \tpt^{4} \qquad [\mbox{\wxmS}] \qquad \mbox{Stefan-Boltzmann Law (greybodies)} \nonumber \\ % eqn:stf_blt_dfn
-\msvavg & \equiv & \flxupwmsvavg/\flxupwplk \nonumber \qquad \mbox{Emissivity definition} \\ % eqn:msv_not_dfn
+\msv(\wvl) & \equiv & \flxupwwvl/\flxupwwvlplk \nonumber \qquad \mbox{Emissivity definition (spectral)} \\ % eqn:msv_not_dfn
+\msvavg & \equiv & \flxupwmsvavg/\flxupwplk \nonumber \qquad \mbox{Emissivity definition (broadband)} \\ % eqn:msv_not_dfn
 \frqmshmax & \approx & 5.88 \times 10^{10} \, \tpt \qquad [\mbox{\hz}] \qquad \mbox{Wien's Law (frequency)} \nonumber \\ % eqn:wvl_max_apx
 \wvlmshmax & \approx & 2897.8 / \tpt \qquad [\mbox{\um}] \qquad \mbox{Wien's Law (wavelength)} \nonumber \\ % eqn:wvl_max_apx
 \plkfrq(\tpt,\frq) & = & \frac{2 \cstplk \frq^{3}}
