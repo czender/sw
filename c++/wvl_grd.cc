@@ -579,7 +579,8 @@ wvl_grd_cls::recompute(){ // [fnc] Recompute properties of object
   }else if(grd_sng == "RRTMG_LW"){ // 
     /* RRTMG spectral grid from Zach Wolff 20211112
        Only difference from RRTM_LW grid is interface at 2380 (not 2390) cm-1
-       ~/mpas/src/core_seaice/column/constants/cice/ice_constants_colpkg.F90 */
+       ~/mpas/src/core_seaice/column/constants/cice/ice_constants_colpkg.F90
+       The full RRTMG_LW grid spans [10,3250] cm-1 = [3.077,1000] um */
 
     const prc_cmp wvn_min_RRTMG_LW[]={  10.0, 350.0, 500.0, 630.0, 700.0, 820.0, 980.0,1080.0,
 				      1180.0,1390.0,1480.0,1800.0,2080.0,2250.0,2380.0,2600.0}; // [cm-1]
@@ -599,7 +600,8 @@ wvl_grd_cls::recompute(){ // [fnc] Recompute properties of object
   }else if(grd_sng == "RRTMGP_LW"){ // 
     /* RRTMGP spectral grid from Zach Wolff 20211112
        Differences from RRTMG_LW grid are interfaces at 250 (not 350) cm-1, 2390 (not 2380) cm-1, and 2680 (not 2600) cm-1
-       ~/mpas/src/core_seaice/column/constants/cice/ice_constants_colpkg.F90 */
+       ~/mpas/src/core_seaice/column/constants/cice/ice_constants_colpkg.F90
+       The full RRTMGP_LW grid spans [10,3250] cm-1 = [3.077,1000] um */
 
     const prc_cmp wvn_min_RRTMGP_LW[]={  10.0, 250.0, 500.0, 630.0, 700.0, 820.0, 980.0,1080.0,
 				       1180.0,1390.0,1480.0,1800.0,2080.0,2250.0,2390.0,2680.0}; // [cm-1]

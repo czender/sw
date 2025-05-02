@@ -231,43 +231,11 @@ might contribute to or benefit from the project please contact
 %\onecolumn
 
 \clearpage
-\begin{center}
-\bigskip
-{\Large \textbf{Notes for Students of ESS~223,\\ Earth System Physics:}}\\
-\bigskip
-\end{center}
-This monograph on Radiative Transfer provides some core and some
-supplementary reading material for ESS~223.
-We will discuss much of the material in the first twenty pages,
-and the figures at the end.
-\csznote{
-% Equivalence to Hou02
-Much of the material in \cite{Hou02}, Chapters~2 and~4, is described
-at a more advanced level in the rest of this monograph.
-\citeauthor{Hou02}~\S\,2.2 is our \S\,\ref{sxn:plk_fnc}, \ref{sxn:ext},
-and \ref{sxn:str_atm};
-\citeauthor{Hou02}~\S\,2.3 is our \S\,\ref{sxn:rte_plk_sln};
-Part of \citeauthor{Hou02}~\S\,4.1 is our \S\,\ref{sxn:sct}; 
-Part of \citeauthor{Hou02}~\S\,4.2 is our \S\,\ref{sxn:two_srm}; 
-Part of \citeauthor{Hou02}~\S\,4.3 is our \S\,\ref{sxn:eqv_wdt} and \S\,\ref{sxn:lnshp}; 
-\citeauthor{Hou02}~\S\,4.4 is our \S\,\ref{sxn:HCG} and \S\,\ref{sxn:lsd}; 
-\citeauthor{Hou02}~\S\,4.5 is our \S\,\ref{sxn:rte_sln_frm}--\ref{sxn:rte_plk_sln}; 
-This FACT has no equivalent to \citeauthor{Hou02}~\S\,4.6--4.8.
-\citeauthor{Hou02}~\S\,4.9 is our \S\,\ref{sxn:nbm}; 
-and \citeauthor{Hou02}~\S\,4.10 is our \S\,\ref{sxn:rad_frc}. 
-% \stepcounter{idxpg} % [nbr] Page number of Index
-} % end csznote
-The Index beginning on page~\pageref{sxn:idx} is also helpful.
-\begin{center}
-\bigskip
-{\Large \textbf{Notes for Students of ESS~236,\\ Radiative Transfer and Remote Sensing:}}\\
-\bigskip
-\end{center}
-Yada yada yada.
-\clearpage
 \tableofcontents
 \listoffigures
 \listoftables
+\clearpage
+
 \pagenumbering{arabic}
 \setcounter{page}{1}
 %\markleft{Radiative Transfer}
@@ -1327,7 +1295,7 @@ These relations are analogous to (\ref{eqn:flx_frq_wvl}).
 The Planck function (\ref{eqn:plk_dfn}) implicitly defines the
 \trmdfn{brightness temperature}.
 The brightness temperature $\tptbrt$ associated with an object
-that emits a known radiance $\plkwvl$ or $\plkfrq$ is by definition the temperature
+that emits a known radiance $\ntnwvl$ or $\ntnfrq$ is by definition the temperature
 of the blackbody that would produce the same radiance.
 Hence the brightness temperature is to radiance as the effective
 temperature is to flux.
@@ -1342,41 +1310,44 @@ $\tptbrt$:
 \label{eqn:tpt_brt_dfn}
 \begin{align}
 \label{eqn:tpt_brt_frq_dfn}
-\plkfrq(\tptbrt,\frq) & = \frac{2 \cstplk \frq^{3}}{\cstspdlgt^{2} 
+\ntnfrq(\tptbrt,\frq) & = \frac{2 \cstplk \frq^{3}}{\cstspdlgt^{2} 
 ( \me^{\cstplk \frq / \cstblt \tptbrt} - 1)} \nonumber \\
 \me^{\cstplk \frq / \cstblt \tptbrt} - 1 & =
-\frac{2 \cstplk \frq^{3}}{\plkfrq \cstspdlgt^{2}} \nonumber \\
+\frac{2 \cstplk \frq^{3}}{\ntnfrq \cstspdlgt^{2}} \nonumber \\
 \frac{\cstplk \frq}{\cstblt \tptbrt} & =
-\ln \left( 1 + \frac{ 2 \cstplk \frq^{3}}{\plkfrq \cstspdlgt^{2}} \right) \nonumber \\
-\tptbrt(\plkfrq,\frq) & = \frac{\cstplk \frq}{\cstblt}
-\left[ \ln \left( 1 + \frac{ 2 \cstplk \frq^{3}}{\plkfrq \cstspdlgt^{2}} \right) \right]^{-1},
-\qquad \mbox{\frq\ in \Hz, \plkfrq\ in \Hz$^{-1}$ = s} \\
+\ln \left( 1 + \frac{ 2 \cstplk \frq^{3}}{\ntnfrq \cstspdlgt^{2}} \right) \nonumber \\
+\tptbrt(\ntnfrq,\frq) & = \frac{\cstplk \frq}{\cstblt}
+\left[ \ln \left( 1 + \frac{ 2 \cstplk \frq^{3}}{\ntnfrq \cstspdlgt^{2}} \right) \right]^{-1},
+\qquad \mbox{\frq\ in \Hz, \ntnfrq\ in \Hz$^{-1}$ = s} \\
 \label{eqn:tpt_brt_wvl_dfn}
-\plkwvl(\tptbrt,\wvl) & = \frac{2 \cstplk \cstspdlgt^{2}}{\wvl^{5} 
+\ntnwvl(\tptbrt,\wvl) & = \frac{2 \cstplk \cstspdlgt^{2}}{\wvl^{5} 
 ( \me^{\cstplk \cstspdlgt / \wvl \cstblt \tptbrt} - 1)} \nonumber \\
 \me^{\cstplk \cstspdlgt / \wvl \cstblt \tptbrt} - 1 & =
-\frac{2 \cstplk \cstspdlgt^{2}} {\plkwvl \wvl^{5}} \nonumber \\
+\frac{2 \cstplk \cstspdlgt^{2}} {\ntnwvl \wvl^{5}} \nonumber \\
 \frac{\cstplk \cstspdlgt}{\wvl \cstblt \tptbrt} & =
-\ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2}}{\plkwvl \wvl^{5}} \right) \nonumber \\
-\tptbrt(\plkwvl,\wvl) & = \frac{\cstplk \cstspdlgt}{\wvl \cstblt}
-\left[ \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2}}{\plkwvl \wvl^{5}} \right) \right]^{-1},
-\qquad \mbox{\wvl\ in m, \plkwvl\ in m$^{-1}$} \\ 
+\ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2}}{\ntnwvl \wvl^{5}} \right) \nonumber \\
+\tptbrt(\ntnwvl,\wvl) & = \frac{\cstplk \cstspdlgt}{\wvl \cstblt}
+\left[ \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2}}{\ntnwvl \wvl^{5}} \right) \right]^{-1},
+\qquad \mbox{\wvl\ in m, \ntnwvl\ in m$^{-1}$} \\ 
 \label{eqn:tpt_brt_wvn_dfn}
-\plkwvn(\tptbrt,\wvn) & = \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}
+\ntnwvn(\tptbrt,\wvn) & = \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}
 {\me^{\cstplk \cstspdlgt \wvn / \cstblt \tptbrt} - 1} \nonumber \\
 \me^{\cstplk \cstspdlgt \wvn / \cstblt \tptbrt} - 1 & =
-\frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}{\plkwvn} \nonumber \\
+\frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}{\ntnwvn} \nonumber \\
 \frac{\cstplk \cstspdlgt \wvn}{\cstblt \tptbrt} & =
-\ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}{\plkwvn} \right) \nonumber \\
-\tptbrt(\plkwvn,\wvn) & = \frac{\cstplk \cstspdlgt \wvn}{\cstblt}
-\left[ \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}{\plkwvn} \right) \right]^{-1},
-\qquad \mbox{\wvn\ in \xm, \plkwvn\ in (\xm)$^{-1}$} \\
+\ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}{\ntnwvn} \right) \nonumber \\
+\tptbrt(\ntnwvn,\wvn) & = \frac{\cstplk \cstspdlgt \wvn}{\cstblt}
+\left[ \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}{\ntnwvn} \right) \right]^{-1},
+\qquad \mbox{\wvn\ in \xm, \ntnwvn\ in (\xm)$^{-1}$} \\
 \label{eqn:tpt_brt_wvn_cgs_dfn}
-\tptbrt(\plkwvn,\wvn) & = \frac{100 \cstplk \cstspdlgt \wvn}{\cstblt}
-\left[ \ln \left( 1 + \frac{2 \times 10^{8} \cstplk \cstspdlgt^{2} \wvn^{3}}{\plkwvn} \right) \right]^{-1},
-\qquad \mbox{\wvn\ in \xcm, \plkwvn\ in (\xcm)$^{-1}$}
+\tptbrt(\ntnwvn,\wvn) & = \frac{100 \cstplk \cstspdlgt \wvn}{\cstblt}
+\left[ \ln \left( 1 + \frac{2 \times 10^{8} \cstplk \cstspdlgt^{2} \wvn^{3}}{\ntnwvn} \right) \right]^{-1},
+\qquad \mbox{\wvn\ in \xcm, \ntnwvn\ in (\xcm)$^{-1}$}
 \end{align}
 \end{subequations}
+We use $\ntnfrq$ and $\ntnwvl$ instead of $\plkfrq$ and $\plkwvl$ in (\ref{eqn:tpt_brt_dfn})
+to indicate that the brightness temperature definitions apply to any radiance, not 
+necessarily blackbody radiance.
 
 The Planck function (\ref{eqn:plk_dfn}) has interesting behavior in
 both the high and the low energy photon limits. 
@@ -1386,6 +1357,7 @@ the photon energy greatly exceeds the ambient thermal energy
 \cstplk \frq \gg \cstblt \tpt
 \label{eqn:wien_dfn}
 \end{eqnarray}
+such that $\exp(\cstplk \frq / \cstblt \tpt) -1 \rightarrow \exp(\cstplk \frq / \cstblt \tpt)$. 
 In Wien's limit, (\ref{eqn:plk_dfn}) becomes
 \begin{subequations}
 \label{eqn:plk_wien_dfn}
@@ -1408,14 +1380,17 @@ limit}, the photon energy is much less than the ambient thermal energy
 \end{eqnarray}
 Thus in the Rayleigh-Jeans limit the arguments to the exponential in
 (\ref{eqn:plk_dfn}) are less than~$1$ so the exponentials may be
-expanded in Taylor series
-$\me^{\xxx} = 1 + \xxx + \xxx^{2}/2! + \cdots$.
+expanded into a Taylor series
+$\me^{\xxx} = 1 + \xxx  + \xxx^{2}/2! + \xxx^{3}/3! + \cdots$.
 Due to (\ref{eqn:ryl_jean_dfn}), terms quadratic and higher become
 vanishingly small compared to the first two terms.
 Starting from (\ref{eqn:plk_frq_dfn}) 
 \begin{eqnarray}
 % cf ThS99 p. 94, KiK80 p. 94
-\plkfrq(\tpt,\frq) & \approx & 
+\plkfrq(\tpt,\frq) & = & \frac{2 \cstplk \frq^{3}}
+       {\cstspdlgt^{2}( \me^{\cstplk \frq / \cstblt \tpt} - 1)}
+       \nonumber \\
+& \approx & 
 \frac{2 \cstplk \frq^{3}}{\cstspdlgt^{2}}
 \left(1 + \frac{\cstplk \frq}{\cstblt \tpt} -1 \right)^{-1}
 \nonumber \\
@@ -1443,8 +1418,25 @@ and we obtain
 \end{subequations}
 The emitted radiance in all forms of (\ref{eqn:plk_ryl_jean_dfn}) is linearly proportional to the temperature for 
 wavelengths in Rayleigh-Jeans limit.
-This property allows us, for instance, to remotely sense the temperature of
-ocean and ice surfaces from low-energy photons such as with passive microwave radiometers. 
+
+We can invert the Rayleigh-Jeans limit (\ref{eqn:plk_ryl_jean_dfn}) to obtain
+the brightness temperature of low-energy photons detected with passive microwave radiometers.
+This is particularly useful over ocean and ice surfaces, due to their contrasting microwave emissivities.
+An observed microwave spectral radiance  $\ntn$ corresponds to a brightness temperature
+\begin{subequations}
+\label{eqn:tpt_brt_ryl_jean_dfn}
+\begin{align}
+\label{eqn:tpt_frq_ryl_jean_dfn}
+\tptbrt(\ntnfrq,\frq) & \approx  
+\frac{\cstspdlgt^{2} \ntnfrq}{2 \frq^{2} \cstblt} \\
+\label{eqn:tpt_wvl_ryl_jean_dfn}
+\tptbrt(\ntnwvl,\wvl) & \approx  
+\frac{\wvl^{4} \ntnwvl}{2 \cstspdlgt \cstblt} \\
+\label{eqn:tpt_wvn_ryl_jean_dfn}
+\tptbrt(\ntnwvn,\wvn) & \approx  
+\frac{\wvn^{4} \ntnwvn}{2 \cstspdlgt \cstblt}
+\end{align}
+\end{subequations}
 
 The frequencies of maximum emission for any wavelength and temperature are obtained by taking
 the partial derivative of (\ref{eqn:plk_frq_dfn}) with respect to
@@ -1491,7 +1483,7 @@ that $\xxx \approx 2.8215$ so that
 \begin{eqnarray}
 % KiK80 p. 98 (27)
 \frac{\cstplk \frqmshmax}{\cstblt \tpt} & \approx & 2.82 \nonumber \\
-\frqmshmax & \approx & 2.82 \cstblt \tpt / \cstplk \nonumber \\
+\frqmshmax & \approx & 2.82 \, \cstblt \tpt / \cstplk \nonumber \\
 & \approx & 5.88 \times 10^{10} \, \tpt \qquad\mbox{\hz}
 \label{eqn:frq_max_apx}
 \end{eqnarray}
@@ -1542,8 +1534,8 @@ Helpful equations:
 \wvn & \equiv & \frac{1}{\wvl} = \frac{\frq}{\cstspdlgt} \nonumber \qquad [\mbox{\xm}] \qquad \mbox{Wavenumber definition} \\ % eqn:wvn_dfn
 \flxupwplk & = & \cststfblt \tpt^{4} \qquad [\mbox{\wxmS}] \qquad \mbox{Stefan-Boltzmann Law (blackbodies)} \nonumber \\ % eqn:stf_blt_dfn
 \flxupwmsvavg & = & \msvavg \cststfblt \tpt^{4} \qquad [\mbox{\wxmS}] \qquad \mbox{Stefan-Boltzmann Law (greybodies)} \nonumber \\ % eqn:stf_blt_dfn
-\msv(\wvl) & \equiv & \flxupwwvl/\flxupwwvlplk \nonumber \qquad \mbox{Emissivity definition (spectral)} \\ % eqn:msv_not_dfn
-\msvavg & \equiv & \flxupwmsvavg/\flxupwplk \nonumber \qquad \mbox{Emissivity definition (broadband)} \\ % eqn:msv_not_dfn
+\msv(\wvl) & \equiv & \flxupwwvl/\flxupwwvlplk \nonumber \qquad \mbox{Spectral emissivity definition} \\ % eqn:msv_not_dfn
+\msvavg & \equiv & \flxupwmsvavg/\flxupwplk \nonumber \qquad \mbox{Broadband emissivity definition} \\ % eqn:msv_not_dfn
 \frqmshmax & \approx & 5.88 \times 10^{10} \, \tpt \qquad [\mbox{\hz}] \qquad \mbox{Wien's Law (frequency)} \nonumber \\ % eqn:wvl_max_apx
 \wvlmshmax & \approx & 2897.8 / \tpt \qquad [\mbox{\um}] \qquad \mbox{Wien's Law (wavelength)} \nonumber \\ % eqn:wvl_max_apx
 \plkfrq(\tpt,\frq) & = & \frac{2 \cstplk \frq^{3}}
@@ -1552,11 +1544,11 @@ Helpful equations:
 \plkwvl(\tpt,\wvl) & = & \frac{2 \cstplk \cstspdlgt^{2}}
        {\wvl^{5} ( \me^{\cstplk \cstspdlgt / \wvl \cstblt \tpt} - 1)}
        \qquad [\mbox{\wxmSsrm}] \qquad \mbox{Planck Function (wavelength)} \nonumber \\ % eqn:plk_wvl_dfn
-\tptbrt(\plkfrq,\frq) & = & \frac{\cstplk \frq}{\cstblt}
-\left[ \ln \left( 1 + \frac{ 2 \cstplk \frq^{3}}{\plkfrq \cstspdlgt^{2}} \right) \right]^{-1}
+\tptbrt(\ntnfrq,\frq) & = & \frac{\cstplk \frq}{\cstblt}
+\left[ \ln \left( 1 + \frac{ 2 \cstplk \frq^{3}}{\ntnfrq \cstspdlgt^{2}} \right) \right]^{-1}
 \qquad [\mbox{K}]  \qquad \mbox {Brightness temperature} \nonumber \\ % eqn:tpt_brt_frq_dfn
-\tptbrt(\plkwvl,\wvl) & = & \frac{\cstplk \cstspdlgt}{\wvl \cstblt}
-\left[ \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2}}{\plkwvl \wvl^{5}} \right) \right]^{-1}
+\tptbrt(\ntnwvl,\wvl) & = & \frac{\cstplk \cstspdlgt}{\wvl \cstblt}
+\left[ \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2}}{\ntnwvl \wvl^{5}} \right) \right]^{-1}
 \qquad [\mbox{K}]  \qquad \mbox {Brightness temperature} \nonumber % eqn:tpt_brt_wvl_dfn
 \label{eqn:xmp_eqn}
 \end{eqnarray}
@@ -1568,10 +1560,10 @@ Thermal Infrared
 $\flxupwplk = \cststfblt (300^{4}) = 5.67 \times 10^{-8} \times 81 \times 108 = 459$\,\wxmS
 \item What are the wavelength and frequency of maximum emission?\\
 Wien's Law: $\wvlmshmax= 2898/300 = 9.66$\,\um\ (aka MODIS Band~30), $\frqmshmax = ?$
-\item What radiance would be measured by MODIS Band~32  (at 12\,\um)?\\
-Planck Function: $I = 8.96 \times 10^{6}$\,\wxmSsrm\ $ = 8.96$\,\wxmSsrum
-\item What is the 12\,\um\ radiance for water of realistic emissivity $\msv = 0.96$?\\
-$0.96 \times 8.96 = 8.60$\,\wxmSsrum
+\item What blackbody radiance would be measured by MODIS Band~32  (at 12\,\um)?\\
+Planck Function: $\plkwvl = 8.96 \times 10^{6}$\,\wxmSsrm\ $ = 8.96$\,\wxmSsrum
+\item What is the 12\,\um\ radiance $\ntnwvl$ for water of realistic spectral emissivity $\msv = 0.96$?\\
+$\ntnwvl = \msvwvl \plkwvl = 0.96 \times 8.96 = 8.60$\,\wxmSsrum
 \end{enumerate*}
 \clearpage
 
@@ -1593,13 +1585,13 @@ Then the azimuthal contribution to (\ref{eqn:flx_udfn}) is $2\mpi$ and
 \int_{\plru=0}^{\plru=1} \ntnfrq \plru \,\dfr\plru \right)
 \label{eqn:hms_u}
 \end{eqnarray}
-We now introduce the change of variables $\plrmu = |\plru| = |\cos
+We now introduce the change of variables $\plrmu = |\plru| = |\!\cos
 \plr|$. 
 Referring to (\ref{eqn:plru_dfn}) we find
 \begin{subequations}
 \label{eqn:plrmu_dfn}
 \begin{align}
-\plrmu =  | \cos \plr | & = \left\{ 
+\plrmu =  |\!\cos \plr | & = \left\{ 
 \begin{array}{r@{\quad:\quad}ll}
 \cos \plr & 0 < \plr < \mpi/2 \\
 -\cos \plr & \mpi/2 < \plr <  \mpi

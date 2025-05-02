@@ -1078,7 +1078,7 @@ alias hte='cd ${HOME}/sw/tex' ; function htecp { cp ${1} ${HOME}/sw/tex ; }
 alias pze='cd /ptmp/${USER}' ; function pzecp { cp ${1} /ptmp/${USER} ; }
 
 alias stm='cd /fs/cgd/home0/${USER}/tmp' ; function stmcp { cp ${1} /fs/cgd/home0/${USER}/tmp ; }
-alias sze='cd /fs/cgd/home0/${USER}' ; function szecp { cp ${1} /fs/cgd/home0/${USER} ; }
+alias sze='cd ${SCRATCH}' # ; function szecp { cp ${1} ${SCRATCH} ; }
 
 alias uze='cd /usr/tmp/${USER}' ; function uzecp { cp ${1} /usr/tmp/${USER} ; }
 
