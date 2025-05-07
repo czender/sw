@@ -52,7 +52,9 @@ namespace phc{ // [nms] Physical constant namespace
   const double cff_hnr_HNO3_H2O_298K(2.1e5); // (2.1e5) [mol ltr-1 atm-1] Henry's Law coefficient of HNO3 in liquid water at 298K SeP97 p. 341 Table 6.2
   const double cst_Gravitation(6.672e-11); // (6.672e-11) [N m2 kg-2] Universal gravitational constant
   const double cst_Loschmidt(2.6871e+25); // (2.6871e+25) [mlc m-3] Loschmidt's number (molecules of air per cubic meter at STP) (NB: this is derivable in principle)
-  const double cst_Stefan_Boltzmann(5.67032e-8); // (5.67032e-8) [W m-2 K-4] Stefan-Boltzmann constant GoY89 p. 462
+  // const double cst_Stefan_Boltzmann_GoY89(5.67032e-8); // (5.67032e-8) [W m-2 K-4] Stefan-Boltzmann constant GoY89 p. 462 NB: Use this value until 20250505
+  const double cst_Stefan_Boltzmann(5.670374419e-8); // (5.670374419e-8) [W m-2 K-4] Stefan-Boltzmann constant CODATA exact https://physics.nist.gov/cgi-bin/cuu/Value?sigma
+
   const double cst_von_krm(0.4); // (0.4) [frc] Von Karman's constant
   const double dmt_cll_CO2(3.34e-10); // (3.34e-10) [m] Collision diameter of CO2 CRC95 p. 6-244
   const double dmt_cll_HNO3(3.5e-10); // (3.5e-10) [m] fxm: Pure guess
