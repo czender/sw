@@ -10,8 +10,13 @@
 # 20250507: Update all ANL/ALCF/LCRC to first ssh to logins.lcrc.anl.gov and then ssh to Chrysalis
 # These options should keep the ssh connection alive longer
 
-ServerAliveInterval 120
+ServerAliveInterval 300
 ServerAliveCountMax 5
+
+Host logins.lcrc.anl.gov
+    HostName logins.lcrc.anl.gov
+    User ac.zender
+    IdentityFile ~/.ssh/id_rsa
 
 Host bebop.lcrc.anl.gov bebop
     HostName bebop.lcrc.anl.gov

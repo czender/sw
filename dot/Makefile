@@ -83,11 +83,11 @@ ssh : ${MY_SSH_DIR}/authorized_keys
 	-scp -p $^ hpc3.rcic.uci.edu:.ssh
 	-scp -p $^ imua.ess.uci.edu:.ssh
 	-scp -p $^ sastrugi.ess.uci.edu:.ssh
+	-scp -p $^ home.ps.uci.edu:.ssh
+	-scp -p $^ blues.lcrc.anl.gov:.ssh
 	-scp -p $^ katabatic.ess.uci.edu:.ssh
 	-scp -p $^ grele.ess.uci.edu:.ssh
 	-scp -p $^ gplogin2.ps.uci.edu:.ssh
-	-scp -p $^ home.ps.uci.edu:.ssh
-	-scp -p $^ blues.lcrc.anl.gov:.ssh
 #	-scp -p $^ babyblue.ucar.edu:.ssh
 #	-scp -p $^ biogenic.ess.uci.edu:.ssh
 #	-scp -p $^ blackforest.ucar.edu:.ssh
