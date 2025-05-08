@@ -1311,38 +1311,41 @@ $\tptbrt$:
 \begin{align}
 \label{eqn:tpt_brt_frq_dfn}
 \ntnfrq(\tptbrt,\frq) & = \frac{2 \cstplk \frq^{3}}{\cstspdlgt^{2} 
-( \me^{\cstplk \frq / \cstblt \tptbrt} - 1)} \nonumber \\
+( \me^{\cstplk \frq / \cstblt \tptbrt} - 1)}, 
+\qquad \mbox{\frq\ in \Hz, \ntnfrq\ in \wxmSsrhz} \nonumber \\
 \me^{\cstplk \frq / \cstblt \tptbrt} - 1 & =
 \frac{2 \cstplk \frq^{3}}{\ntnfrq \cstspdlgt^{2}} \nonumber \\
 \frac{\cstplk \frq}{\cstblt \tptbrt} & =
 \ln \left( 1 + \frac{ 2 \cstplk \frq^{3}}{\ntnfrq \cstspdlgt^{2}} \right) \nonumber \\
 \tptbrt(\ntnfrq,\frq) & = \frac{\cstplk \frq}{\cstblt}
 \left[ \ln \left( 1 + \frac{ 2 \cstplk \frq^{3}}{\ntnfrq \cstspdlgt^{2}} \right) \right]^{-1},
-\qquad \mbox{\frq\ in \Hz, \ntnfrq\ in \Hz$^{-1}$ = s} \\
+\qquad \mbox{\frq\ in \Hz, \ntnfrq\ in \wxmSsrhz} \\
 \label{eqn:tpt_brt_wvl_dfn}
 \ntnwvl(\tptbrt,\wvl) & = \frac{2 \cstplk \cstspdlgt^{2}}{\wvl^{5} 
-( \me^{\cstplk \cstspdlgt / \wvl \cstblt \tptbrt} - 1)} \nonumber \\
+( \me^{\cstplk \cstspdlgt / \wvl \cstblt \tptbrt} - 1)}, 
+\qquad \mbox{\wvl\ in m, \ntnwvl\ in \wxmSsrm} \nonumber \\
 \me^{\cstplk \cstspdlgt / \wvl \cstblt \tptbrt} - 1 & =
 \frac{2 \cstplk \cstspdlgt^{2}} {\ntnwvl \wvl^{5}} \nonumber \\
 \frac{\cstplk \cstspdlgt}{\wvl \cstblt \tptbrt} & =
 \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2}}{\ntnwvl \wvl^{5}} \right) \nonumber \\
 \tptbrt(\ntnwvl,\wvl) & = \frac{\cstplk \cstspdlgt}{\wvl \cstblt}
 \left[ \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2}}{\ntnwvl \wvl^{5}} \right) \right]^{-1},
-\qquad \mbox{\wvl\ in m, \ntnwvl\ in m$^{-1}$} \\ 
+\qquad \mbox{\wvl\ in m, \ntnwvl\ in \wxmSsrm} \\ 
 \label{eqn:tpt_brt_wvn_dfn}
 \ntnwvn(\tptbrt,\wvn) & = \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}
-{\me^{\cstplk \cstspdlgt \wvn / \cstblt \tptbrt} - 1} \nonumber \\
+{\me^{\cstplk \cstspdlgt \wvn / \cstblt \tptbrt} - 1},  
+\qquad \mbox{\wvn\ in \xm, \ntnwvn\ in \wxmSsrxm} \nonumber \\
 \me^{\cstplk \cstspdlgt \wvn / \cstblt \tptbrt} - 1 & =
 \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}{\ntnwvn} \nonumber \\
 \frac{\cstplk \cstspdlgt \wvn}{\cstblt \tptbrt} & =
 \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}{\ntnwvn} \right) \nonumber \\
 \tptbrt(\ntnwvn,\wvn) & = \frac{\cstplk \cstspdlgt \wvn}{\cstblt}
 \left[ \ln \left( 1 + \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}{\ntnwvn} \right) \right]^{-1},
-\qquad \mbox{\wvn\ in \xm, \ntnwvn\ in (\xm)$^{-1}$} \\
+\qquad \mbox{\wvn\ in \xm, \ntnwvn\ in \wxmSsrxm} \\
 \label{eqn:tpt_brt_wvn_cgs_dfn}
 \tptbrt(\ntnwvn,\wvn) & = \frac{100 \cstplk \cstspdlgt \wvn}{\cstblt}
 \left[ \ln \left( 1 + \frac{2 \times 10^{8} \cstplk \cstspdlgt^{2} \wvn^{3}}{\ntnwvn} \right) \right]^{-1},
-\qquad \mbox{\wvn\ in \xcm, \ntnwvn\ in (\xcm)$^{-1}$}
+\qquad \mbox{\wvn\ in \xcm, \ntnwvn\ in \wxmSsrwvn}
 \end{align}
 \end{subequations}
 We use $\ntnfrq$ and $\ntnwvl$ instead of $\plkfrq$ and $\plkwvl$ in (\ref{eqn:tpt_brt_dfn})

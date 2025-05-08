@@ -1,3 +1,7 @@
+2025-05-08  Charlie Zender  <zender@uci.edu>
+
+	* Update all physical constants to 2022 CODATA (latest available)
+
 2024-09-11  Charlie Zender  <zender@uci.edu>
 
 	* Implement CEWIs to quiet Clang c++17 warnings on ccc.cc

@@ -36,24 +36,26 @@ namespace phc{ // [nms] Physical constant namespace
 
   // 2018 SI NIST definition refers to
   // doi:10.1088/1681-7575/aa950a (see also https://www.nist.gov/si-redefinition/meet-constants)
-  //  const double cst_Avagadro(6.02214199e+23); // (6.02214199e+23) [mlc mol-1] Avagadro's number (CODATA)
+  //  const double cst_Avagadro(6.02214199e+23); // (6.02214199e+23) [mlc mol-1] Avagadro's number
   //const double cst_Avagadro(6.022045e+23); // (6.022045e+23) [mlc mol-1] Avagadro's number (CCM?)
-  const double cst_Avagadro(6.02214076e+23); // (6.02214076e+23) [mlc mol-1] Avagadro's number 2018 SI NIST
+  const double cst_Avagadro(6.02214076e+23); // (6.02214076e+23) [mlc mol-1] Avagadro's number (2022 CODATA) 2018 SI NIST
   // const double cst_Boltzmann(1.3806503e-23); // (1.3806503e-23) [J K-1] Boltzmann's constant MoT00 p. BG11
   //const double cst_Boltzmann(1.38063e-23); // (1.38063e-23) [J K-1] Boltzmann's constant (CCM?)
-  const double cst_Boltzmann(1.380649e-23); // (1.380649e-23) [J K-1] Boltzmann's constant (2018 SI NIST)
+  const double cst_Boltzmann(1.380649e-23); // (1.380649e-23) [J K-1] Boltzmann's constant (2018 SI NIST, 2022 CODATA 2019, exact)
   // const double cst_Planck(6.62620e-34); // (6.62620e-34) [J s] Planck's constant (CCM?)
-  const double cst_Planck(6.62606876e-34); // (6.62606876e-34) [J s] Planck's constant (CODATA, 2018 SI NIST) (exact)
+  //  const double cst_Planck(6.62606876e-34); // (6.62606876e-34) [J s] Planck's constant (CODATA, 2018 SI NIST) (exact)
+  const double cst_Planck(6.62607015e-34); // (6.62607015e-34) [J s] Planck's constant (2022 CODATA) (exact)
   //  const double speed_of_light(2.99793e+08); // (2.99792458e+08) [m s-1] Speed of light in vacuo (???)
-  const double speed_of_light(2.99792458e+08); // (2.99792458e+08) [m s-1] Speed of light in vacuo (CODATA, 2018 SI NIST)
+  const double speed_of_light(2.99792458e+08); // (2.99792458e+08) [m s-1] Speed of light in vacuo (2022 CODATA, 2018 SI NIST)
 
   //  const double cst_Gravitation(6.673e-11); // (6.673e-11) [N m2 kg-2] Universal gravitational constant (CODATA)
+  const double cst_Gravitation(6.67430e-11); // (6.67430e-11) [N m2 kg-2] Universal gravitational constant (2022 CODATA)
   //  const double gas_cst_unv(8.314472); // (8.314472) [J mol-1 K-1] Universal gas constant (CODATA)
   const double cff_hnr_HNO3_H2O_298K(2.1e5); // (2.1e5) [mol ltr-1 atm-1] Henry's Law coefficient of HNO3 in liquid water at 298K SeP97 p. 341 Table 6.2
-  const double cst_Gravitation(6.672e-11); // (6.672e-11) [N m2 kg-2] Universal gravitational constant
   const double cst_Loschmidt(2.6871e+25); // (2.6871e+25) [mlc m-3] Loschmidt's number (molecules of air per cubic meter at STP) (NB: this is derivable in principle)
   // const double cst_Stefan_Boltzmann_GoY89(5.67032e-8); // (5.67032e-8) [W m-2 K-4] Stefan-Boltzmann constant GoY89 p. 462 NB: Use this value until 20250505
-  const double cst_Stefan_Boltzmann(5.670374419e-8); // (5.670374419e-8) [W m-2 K-4] Stefan-Boltzmann constant CODATA exact https://physics.nist.gov/cgi-bin/cuu/Value?sigma
+  // const double cst_Stefan_Boltzmann(5.670374419e-8); // (5.670374419e-8) [W m-2 K-4] Stefan-Boltzmann constant CODATA exact https://physics.nist.gov/cgi-bin/cuu/Value?sigma
+  const double cst_Stefan_Boltzmann(5.670374419184431e-8); // (5.670374419184431e-8) [W m-2 K-4] Stefan-Boltzmann constant CODATA exact double precision from ncap2 -O -s 'M_PI=3.14159265358979323846264338327950288;cst_Boltzmann=1.380649e-23;cst_Planck=6.62607015e-34;speed_of_light=2.99792458e+08;cst_Stefan_Boltzmann=2*M_PI^5*cst_Boltzmann^4/(15*speed_of_light^2*cst_Planck^3);print(cst_Stefan_Boltzmann);' ~/foo.nc
 
   const double cst_von_krm(0.4); // (0.4) [frc] Von Karman's constant
   const double dmt_cll_CO2(3.34e-10); // (3.34e-10) [m] Collision diameter of CO2 CRC95 p. 6-244
