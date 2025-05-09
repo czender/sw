@@ -1229,9 +1229,15 @@ fortunately, the properties of radiation in TE can be shown to apply
 to a less restrictive equilibrium known as \trmdfn{local thermodynamic  
 equilibrium}, or LTE\@.  
 
-\subsubsection[Planck Function]{Planck Function}\label{sxn:plk_fnc}
-The Planck function $\plkfrq$ describes the intensity of blackbody
-radiation as a function of temperature and wavelength
+\subsubsection[Planck's Law]{Planck's Law}\label{sxn:plk_fnc}\label{sxn:plk_law}
+A blackbody is an idealized physical body that absorbs all radiation incident upon it
+at wavelengths from any direction.
+Planck's Law describes the spectral density of radiation emitted by a blackbody in
+thermal equilibrium, when there is no net exchange of energy or mass between
+the body and its environment.
+The expression that governs the emitted radiance in these conditions is called
+the Planck Function $\plkfrq$.
+The Planck Function governs the intensity of emitted blackbody radiation as a function of temperature and wavelength:
 % 19991011: subequation/align environment is more cramped than equivalent eqnarray
 \begin{subequations}
 \label{eqn:plk_dfn}
@@ -1239,19 +1245,19 @@ radiation as a function of temperature and wavelength
 \label{eqn:plk_frq_dfn}
 \plkfrq(\tpt,\frq) & = \frac{2 \cstplk \frq^{3}}
        {\cstspdlgt^{2}( \me^{\cstplk \frq / \cstblt \tpt} - 1)},
-       \qquad \mbox{\frq\ in \Hz, \plkfrq\ in \Hz$^{-1}$} \\
+       \qquad \mbox{\frq\ in \Hz, \plkfrq\ in \wxmSsrhz} \\
 \label{eqn:plk_wvl_dfn}
 \plkwvl(\tpt,\wvl) & = \frac{2 \cstplk \cstspdlgt^{2}}
        {\wvl^{5} ( \me^{\cstplk \cstspdlgt / \wvl \cstblt \tpt} - 1)},
-       \qquad \mbox{\wvl\ in m, \plkwvl\ in m$^{-1}$} \\ 
+       \qquad \mbox{\wvl\ in m, \plkwvl\ in \wxmSsrm} \\ 
 \label{eqn:plk_wvn_dfn}
 \plkwvn(\tpt,\wvn) & = \frac{2 \cstplk \cstspdlgt^{2} \wvn^{3}}
        {\me^{\cstplk \cstspdlgt \wvn / \cstblt \tpt} - 1},
-       \qquad \mbox{\wvn\ in \xm, \plkwvn\ in (\xm)$^{-1}$} \\
+       \qquad \mbox{\wvn\ in \xm, \plkwvn\ in \wxmSsrxm} \\
 \label{eqn:plk_wvn_cgs_dfn}
 \plkwvn(\tpt,\wvn) & = \frac{2 \times 10^{8} \cstplk \cstspdlgt^{2} \wvn^{3}}
        {\me^{100 \cstplk \cstspdlgt \wvn / \cstblt \tpt} - 1},
-       \qquad \mbox{\wvn\ in \xcm, \plkwvn\ in (\xcm)$^{-1}$}
+       \qquad \mbox{\wvn\ in \xcm, \plkwvn\ in \wxmSsrwvn}
 \end{align}
 \end{subequations}
 Blackbodies emit isotropically.
@@ -1349,8 +1355,8 @@ $\tptbrt$:
 \end{align}
 \end{subequations}
 We use $\ntnfrq$ and $\ntnwvl$ instead of $\plkfrq$ and $\plkwvl$ in (\ref{eqn:tpt_brt_dfn})
-to indicate that the brightness temperature definitions apply to any radiance, not 
-necessarily blackbody radiance.
+to indicate that the brightness temperature definitions apply to any radiances, not 
+necessarily blackbody radiances.
 
 The Planck function (\ref{eqn:plk_dfn}) has interesting behavior in
 both the high and the low energy photon limits. 
@@ -1521,14 +1527,14 @@ Then a first approximation is that the planetary temperature is close
 to $2897.8 / \wvlmshmax$.
 \clearpage
 \noindent%
-Helpful constants in Remote Sensing:
+Helpful constants in Remote Sensing from the \href{https://www.physics.nist.gov/cuu/Constants}{2022 CODATA recommended} values:
 \begin{enumerate*}
 \item Speed of light: $\cstspdlgt = 2.99792458 \times 10^{8}$\,\mxs
-\item Planck's constant: $\cstplk = 6.62606876 \times 10^{-34}$\,\js
-\item Stefan-Boltzmann constant: $\cststfblt = 5.67032  \times 10^{-8}$\,\wxmSkQ
+\item Planck's constant: $\cstplk = 6.62607015 \times 10^{-34}$\,\js
+\item Stefan-Boltzmann constant: $\cststfblt = 5.670374419  \times 10^{-8}$\,\wxmSkQ
 \item Boltzmann's constant: $\cstblt = 1.380649  \times 10^{-23}$\,\jxK
-\item Base of the natural logarithm: $\me = 2.71828$
-\item Pi: $\mpi = 3.14159$
+\item Base of the natural logarithm: $\me = 2.718281828$
+\item Pi: $\mpi = 3.141592654$
 \end{enumerate*}
 Helpful equations:
 \begin{eqnarray}
