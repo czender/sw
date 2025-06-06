@@ -50,11 +50,10 @@ namespace phc{ // [nms] Physical constant namespace
 
   //  const double cst_Gravitation(6.673e-11); // (6.673e-11) [N m2 kg-2] Universal gravitational constant (CODATA)
   const double cst_Gravitation(6.67430e-11); // (6.67430e-11) [N m2 kg-2] Universal gravitational constant (2022 CODATA)
-  //  const double gas_cst_unv(8.314472); // (8.314472) [J mol-1 K-1] Universal gas constant (CODATA)
   const double cff_hnr_HNO3_H2O_298K(2.1e5); // (2.1e5) [mol ltr-1 atm-1] Henry's Law coefficient of HNO3 in liquid water at 298K SeP97 p. 341 Table 6.2
   const double cst_Loschmidt(2.6871e+25); // (2.6871e+25) [mlc m-3] Loschmidt's number (molecules of air per cubic meter at STP) (NB: this is derivable in principle)
   // const double cst_Stefan_Boltzmann_GoY89(5.67e-8); // (5.67e-8) [W m-2 K-4] Stefan-Boltzmann constant E3SM used this until at least 20250508
-  // const double cst_Stefan_Boltzmann_GoY89(5.67032e-8); // (5.67032e-8) [W m-2 K-4] Stefan-Boltzmann constant GoY89 p. 462 NB: Use this value until 20250505
+  // const double cst_Stefan_Boltzmann_GoY89(5.67032e-8); // (5.67032e-8) [W m-2 K-4] Stefan-Boltzmann constant GoY89 p. 462 NB: I used this value until 20250505
   // const double cst_Stefan_Boltzmann(5.670374419e-8); // (5.670374419e-8) [W m-2 K-4] Stefan-Boltzmann constant CODATA exact https://physics.nist.gov/cgi-bin/cuu/Value?sigma
   const double cst_Stefan_Boltzmann(5.670374419184431e-8); // (5.670374419184431e-8) [W m-2 K-4] Stefan-Boltzmann constant CODATA exact double precision from ncap2 -O -s 'M_PI=3.14159265358979323846264338327950288;cst_Boltzmann=1.380649e-23;cst_Planck=6.62607015e-34;speed_of_light=2.99792458e+08;cst_Stefan_Boltzmann=2*M_PI^5*cst_Boltzmann^4/(15*speed_of_light^2*cst_Planck^3);print(cst_Stefan_Boltzmann);' ~/foo.nc
 
@@ -64,7 +63,8 @@ namespace phc{ // [nms] Physical constant namespace
   const double dmt_cll_N2(3.15e-10); // (3.15e-10) [m] Collision diameter of N2 CRC95 p. 6-244 
   const double dmt_cll_O2(2.98e-10); // (2.98e-10) [m] Collision diameter of O2 CRC95 p. 6-244
   const double dmt_cll_air(3.46e-10); // (3.46e-10) [m] Mean collision diameter of air SeP97 p. 1292 Table A.7
-  const double gas_cst_unv(8.31441); // (8.31441) [J mol-1 K-1] Universal gas constant
+  const double gas_cst_unv(8.314472); // (8.314472) [J mol-1 K-1] Universal gas constant (CODATA)
+  //const double gas_cst_unv(8.31441); // (8.31441) [J mol-1 K-1] Universal gas constant (Used until 20250601)
   const double grv_sfc_mean(9.80665); // (9.80665) [m s-2] Mean gravitational acceleration at Earth's surface (RRTMGP)
   const double hc(1.986488377e-25); // (1.986488377e-25) [J m] Planck constant times speed of light = hc
   const double hc2(5.9553531e-17); // (5.9553531e-17) [J m2 s-1] Planck constant times speed of light squared = hc2

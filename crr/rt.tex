@@ -306,8 +306,11 @@ to warming the planet and we have
 \label{eqn:flx_abs_sw_dfn}
 \end{eqnarray}
 
+A blackbody is an idealized physical body that absorbs all radiation incident upon it
+at all wavelengths and from any direction.
+Planck's Law states that blackbodies radiate at a rate described by the Planck function (\ref{eqn:plk_frq_dfn}).
 Earth does not cool to space as a perfect blackbody
-(\ref{eqn:plk_frq_dfn}) of a single temperature and emissivity.
+of a single temperature and emissivity.
 Nevertheless the spectrum of thermal radiation $\flxolr$ which escapes
 to space and thus cools Earth does resemble blackbody emission with a
 characteristic temperature.
@@ -1231,7 +1234,7 @@ equilibrium}, or LTE\@.
 
 \subsubsection[Planck's Law]{Planck's Law}\label{sxn:plk_fnc}\label{sxn:plk_law}
 A blackbody is an idealized physical body that absorbs all radiation incident upon it
-at wavelengths from any direction.
+at wavelengths and from any direction.
 Planck's Law describes the spectral density of radiation emitted by a blackbody in
 thermal equilibrium, when there is no net exchange of energy or mass between
 the body and its environment.
@@ -2015,6 +2018,9 @@ $\frqone$ to infinity,
 & = & \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}} 
 \int_{\frqone}^{\infty} 
 \frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx
+= \frac{15 \cststfblt \tpt^ {4}}{\mpi^{4}}
+\int_{\frqone}^{\infty} 
+\frac{\xxx^{3}}{\me^{\xxx} - 1} \,\dfr\xxx
 \label{eqn:plk_ntg_frq}
 \end{eqnarray}
 where, as before, $\xxx \equiv \cstplk \frq/\cstblt \tpt$.
@@ -2052,17 +2058,17 @@ where
 \label{eqn:rdn_cst_dfn}
 \begin{align}
 \label{eqn:rdn_cst_one_frq_dfn}
-\rdncstone & = \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}}, \mkern8mu
+\rdncstone & = \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}} =  \frac{15 \cststfblt \tpt^ {4}}{\mpi^{4}}, \mkern8mu
 \rdncsttwo = \cstplk / \cstblt, \mkern8mu
       \xxx = \cstplk \frq / \cstblt \tpt,
                \mkern8mu \mbox{\frq\ in \Hz\ = \xs} \\
 \label{eqn:rdn_cst_one_wvn_dfn}
-\rdncstone & = \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}}, \mkern8mu
+\rdncstone & = \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}} =  \frac{15 \cststfblt \tpt^ {4}}{\mpi^{4}}, \mkern8mu
 \rdncsttwo = \cstplk \cstspdlgt / \cstblt, \mkern8mu
       \xxx = \cstplk \cstspdlgt \wvn / \cstblt \tpt,
                \mkern8mu \mbox{\wvn\ in \xm} \\
 \label{eqn:rdn_cst_one_wvn_cgs_dfn}
-\rdncstone & = \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}}, \mkern8mu
+\rdncstone & = \frac{2 \mpi \cstblt^{4} \tpt^{4} }{\cstspdlgt^{2} \cstplk^{3}} =  \frac{15 \cststfblt \tpt^ {4}}{\mpi^{4}}, \mkern8mu
 \rdncsttwo = 100 \cstplk \cstspdlgt / \cstblt, \mkern8mu
       \xxx = 100 \cstplk \cstspdlgt \wvn / \cstblt \tpt,
                \mkern8mu \mbox{\wvn\ in \xcm}
