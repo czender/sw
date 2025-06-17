@@ -575,10 +575,10 @@ case "${PVM_ARCH}" in
 #	export http_proxy='http://proxy.ujf-grenoble.fr/auto-proxy.pac'
 	;; # LINUX*
     
-    MACOS* ) # MACOS on PowerPC and (beginning 20140529) x86_64 machines running MacOS
+    MACOS* ) # MACOS on PowerPC and (beginning 20140529) x86_64 machines and (beginning ~2022) arm64 machines running MacOS
 	export INFOPATH=./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/share/info
 	case "${HOST_FFC}" in 
-	    spectral* ) export NETCDF_ROOT='/opt/netcdf' ; ;; # MacOS development netCDF environment
+	    sastrugi* | spectral* ) export NETCDF_ROOT='/opt/netcdf' ; ;; # MacOS development netCDF environment
 	esac # !${HOST_FFC}
 	if [ -n "${NETCDF_ROOT}" ]; then
 	    export NETCDF_INC="${NETCDF_ROOT}/include"
