@@ -26,6 +26,7 @@
 # scp -p ${HOME}/sw/dot/bashrc dust.ess.uci.edu:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc e3sm.ess.uci.edu:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc imua.ess.uci.edu:.bashrc
+# scp -p ${HOME}/sw/dot/bashrc perlmutter.nersc.gov:.bashrc
 # scp -p dust.ess.uci.edu:.bashrc ${HOME}/.bashrc 
 
 # RedHat Linux 7.x does not define PS1 in /etc/bashrc
@@ -217,7 +218,7 @@ case "${HOST_FFC}" in
     acme1* ) export DATA="/home/${USER}/data" ; ;; # LLNL
     andes* | frontier* ) export DATA="/lustre/orion/cli115/world-shared/${USER}" ; ;; # OLCF
     blues* ) export DATA="/home/${USER}/data" ; ;; # ANL LCRC
-    chrysalis* ) export DATA="${HOME}/data" ; ;; # ANL LCRC
+    chrysalis* ) export DATA="${HOME}/data" ; export SCRATCH="/lcrc/group/e3sm/ac.zender/scratch" ; ;; # ANL LCRC
     compy* ) export DATA="/qfs/people/${USER}/data" ; ;; # PNNL 
     derecho* ) export DATA="/glade/work/${USER}" ; ;; # NCAR
     e3sm* ) export DATA="${HOME}/data" ; ;; # UCI
