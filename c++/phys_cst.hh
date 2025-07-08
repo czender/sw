@@ -63,7 +63,7 @@ namespace phc{ // [nms] Physical constant namespace
   const double dmt_cll_N2(3.15e-10); // (3.15e-10) [m] Collision diameter of N2 CRC95 p. 6-244 
   const double dmt_cll_O2(2.98e-10); // (2.98e-10) [m] Collision diameter of O2 CRC95 p. 6-244
   const double dmt_cll_air(3.46e-10); // (3.46e-10) [m] Mean collision diameter of air SeP97 p. 1292 Table A.7
-  const double gas_cst_unv(8.314472); // (8.314472) [J mol-1 K-1] Universal gas constant (CODATA)
+  const double gas_cst_unv(8.314462618); // (8.314462618) [J mol-1 K-1] Universal gas constant (CODATA 2022)
   //const double gas_cst_unv(8.31441); // (8.31441) [J mol-1 K-1] Universal gas constant (Used until 20250601)
   const double grv_sfc_mean(9.80665); // (9.80665) [m s-2] Mean gravitational acceleration at Earth's surface (RRTMGP)
   const double hc(1.986488377e-25); // (1.986488377e-25) [J m] Planck constant times speed of light = hc

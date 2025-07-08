@@ -1155,8 +1155,8 @@ alias hpc='ssh -Y hpc.oit.uci.edu'
 alias hpc3='ssh -Y hpc3.rcic.uci.edu'
 alias mv='mv -i' # -i = inquire
 alias nvr='env | sort | more'
-#alias panoply='java -jar /data/zender/tmp/PanoplyJ/jars/Panoply.jar'
-alias toolsui='java -jar /data/zender/tmp/toolsUI-4.6.11.jar'
+alias panoply='java -jar ${DATA}/tmp/PanoplyJ/jars/Panoply.jar'
+alias toolsui='java -jar ${DATA}/tmp/toolsUI-4.6.11.jar'
 alias ps2pdf='ps2pdf -dMaxSubsetPct=100 -dCompatibilityLevel=1.2 -dSubsetFonts=true -dEmbedAllFonts=true -sAutoRotatePages=PageByPage -sColorConversionStrategy=LeaveColorUnchanged'
 alias pslz="ps -l -U ${USER}" # -f = Full listing -U username
 alias psz="ps -f -U ${USER}" # -f = Full listing -U username
