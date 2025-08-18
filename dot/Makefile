@@ -82,12 +82,13 @@ ssh : ${MY_SSH_DIR}/authorized_keys
 	-scp -p $^ e3sm.ess.uci.edu:.ssh
 	-scp -p $^ hpc3.rcic.uci.edu:.ssh
 	-scp -p $^ imua.ess.uci.edu:.ssh
+	-scp -p $^ maluhia.ess.uci.edu:.ssh
 	-scp -p $^ sastrugi.ess.uci.edu:.ssh
 	-scp -p $^ home.ps.uci.edu:.ssh
 	-scp -p $^ blues.lcrc.anl.gov:.ssh
-	-scp -p $^ katabatic.ess.uci.edu:.ssh
-	-scp -p $^ grele.ess.uci.edu:.ssh
-	-scp -p $^ gplogin2.ps.uci.edu:.ssh
+#	-scp -p $^ katabatic.ess.uci.edu:.ssh
+#	-scp -p $^ grele.ess.uci.edu:.ssh
+#	-scp -p $^ gplogin2.ps.uci.edu:.ssh
 #	-scp -p $^ babyblue.ucar.edu:.ssh
 #	-scp -p $^ biogenic.ess.uci.edu:.ssh
 #	-scp -p $^ blackforest.ucar.edu:.ssh
@@ -96,6 +97,7 @@ ssh : ${MY_SSH_DIR}/authorized_keys
 #	-scp -p $^ chinookfe.ucar.edu:.ssh
 #	-scp -p $^ edison.nersc.gov:.ssh
 #	-scp -p $^ elnino.ess.uci.edu:.ssh
+#	-scp -p $^ firn.ess.uci.edu:.ssh
 #	-scp -p $^ frazil.ess.uci.edu:.ssh
 #	-scp -p $^ givre.ess.uci.edu:.ssh
 #	-scp -p $^ glace.ess.uci.edu:.ssh

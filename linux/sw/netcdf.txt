@@ -10008,7 +10008,7 @@ autoreconf -i -f
 # NB: --enable-hdf4 documented at http://www.unidata.ucar.edu/software/netcdf/docs/build_hdf4.html
 # NB: --enable-hdf4 documented requires libhdf.a, libdf.a, libjpeg.a (and netCDF configure does not itself add -ljpeg)
 # NB: --enable-logging allows HDF error message to print
-# NB: --enable-nczarr builds Zarr (true by default)
+# NB: --enable-nczarr builds NCZarr (true by default)
 # NB: --enable-s3 (formerly --enable-nczarr-s3) enables NCZarr S3 support (false by default, also requires LDFLAGS="-L/opt/homebrew/lib -laws-cpp-sdk-s3") (added by PR#2686 in 4.9.3-dev)
 # NB: --enable-pnetcdf build with parallel I/O for classic files
 # NB: --enable-separate-fortran builds libnetcdff.a (default with shared libraries)

@@ -288,7 +288,7 @@ PATH=${PATH}\:${MY_BIN_DIR}
 
 # Amazon Web Services AWS NCO development for OSTFL
 case "${HOST}" in 
-    spectral* ) export AWS_DEFAULT_PROFILE='AWSAdministratorAccess-767397735549' ; ;; # MacOS Homebrew Mac silicon
+    maluhia* | spectral* ) export AWS_DEFAULT_PROFILE='AWSAdministratorAccess-767397735549' ; ;; # MacOS Homebrew Mac silicon
 esac # !${HOST}
 
 # PKG_ROOT is where non-default sysadmin-installed packages reside
@@ -299,14 +299,14 @@ case "${HOST_FFC}" in
     imua* ) export PKG_ROOT="/usr" ; ;; # Fedora
     katabatic* | rigb* ) export PKG_ROOT='/opt/local' ; ;; # MacOS MacPorts
     firn* | sastrugi* ) export PKG_ROOT='/usr/local' ; ;; # MacOS Homebrew Intel silicon
-    spectral* ) export PKG_ROOT='/opt/homebrew' ; ;; # MacOS Homebrew Mac silicon
+    maluhia* | spectral* ) export PKG_ROOT='/opt/homebrew' ; ;; # MacOS Homebrew Mac silicon
     roger* ) export PKG_ROOT='/sw/netcdf-4.4.0' ; ;; # NCSA roger cluster
     greenplanet* ) export PKG_ROOT='/sopt' ; ;; # UCI PS Rocks Cluster
     hpc* ) export PKG_ROOT='/software' ; ;; # Torque machines
 esac # !${HOST_FFC}
 
 case "${HOST_FFC}" in 
-    firn* | katabatic* | rigb* | sastrugi* | spectral* ) export OMP_NUM_THREADS=4 ; ;; # endif
+    firn* | katabatic* | rigb* | sastrugi* | maluhia* | spectral* ) export OMP_NUM_THREADS=4 ; ;; # endif
     greenplanet* | grele* | snow* ) export OMP_NUM_THREADS='8' ; ;; # dual-quad processor
     acme1* | andes* | compy* | e3sm* | imua* ) export OMP_NUM_THREADS='16' ; ;; # dual-octet processor
     derecho* ) export OMP_NUM_THREADS='16' ; ;; # dual-hexadecimal processor
@@ -579,7 +579,7 @@ case "${PVM_ARCH}" in
     MACOS* ) # MACOS on PowerPC and (beginning 20140529) x86_64 machines and (beginning ~2022) arm64 machines running MacOS
 	export INFOPATH=./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/share/info
 	case "${HOST_FFC}" in 
-	    sastrugi* | spectral* ) export NETCDF_ROOT='/opt/netcdf' ; ;; # MacOS development netCDF environment
+	    sastrugi* | maluhia* | spectral* ) export NETCDF_ROOT='/opt/netcdf' ; ;; # MacOS development netCDF environment
 	esac # !${HOST_FFC}
 	if [ -n "${NETCDF_ROOT}" ]; then
 	    export NETCDF_INC="${NETCDF_ROOT}/include"
@@ -599,7 +599,7 @@ case "${PVM_ARCH}" in
 #	export PYTHONPATH=/usr/lib/portage/pym
 	export TEXMFDIR=/usr/local/texlive/texmf-local # One level above bibtex, tex etc. for Homebrew
 	case "${HOST_FFC}" in 
-	    firn* | sastrugi* | spectral* ) # MacOS Homebrew
+	    firn* | sastrugi* | maluhia* | spectral* ) # MacOS Homebrew
 		# Required to build nco.pdf due to ancient Xcode CLT TeXInfo
 		PATH="${PKG_ROOT}/opt/llvm/bin"\:${PATH} ; # Required for OpenMP-enabled clang
 	        PATH="${PKG_ROOT}/opt/make/libexec/gnubin"\:${PATH} ; # Required for GNU make
@@ -866,7 +866,7 @@ case "${HOST_FFC}" in
 #    firn* ) export LINUX_CC=${CC_clang_macports} ; export LINUX_CXX=${CXX_clang_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # clang/clang/macports
 #    firn* ) export LINUX_CC=${CC_clang} ; export LINUX_CXX=${CXX_clang} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # clang/clang/macports
     firn* ) export LINUX_CC=${CC_icx} ; export LINUX_CXX=${CXX_icx} ; export LINUX_FC=${FC_ifort} ; ;; # icx/icx
-    sastrugi* | spectral* ) export LINUX_CC=${CC_clang_homebrew} ; export LINUX_CXX=${CXX_clang_homebrew} ; export LINUX_FC=${FC_gfortran_homebrew} ; ;; # clang/clang/homebrew
+    sastrugi* | maluhia* | spectral* ) export LINUX_CC=${CC_clang_homebrew} ; export LINUX_CXX=${CXX_clang_homebrew} ; export LINUX_FC=${FC_gfortran_homebrew} ; ;; # clang/clang/homebrew
     dhcp* | katabatic* | rigb* ) export LINUX_CC=${CC_gcc_macports} ; export LINUX_CXX=${CXX_gxx_macports} ; export LINUX_FC=${FC_gfortran_macports} ; ;; # all MacPorts
     grele* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC="${LINUX_CC} -I/usr/include/mpich2" ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK -I/usr/include/mpich2" ;; # gcc/g++/gfortran MPICH2
     greenplanet* ) export LINUX_CC=${CC_icx/icx/mpicc} ; export LINUX_CXX=${CXX_icx/icx/mpiCC} ; export LINUX_FC=${FC_ifort/ifort/mpif90} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icx/ifort OpenMPI	
