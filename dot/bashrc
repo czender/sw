@@ -36,7 +36,7 @@ if [ -f /etc/bashrc ]; then
 #    sleep 0
 # 20150917 reintroduce /etc/bashrc so to setup softenv in batch jobs on Cooley ALCF
     . /etc/bashrc
-fi # endif
+fi # !/etc/bashrc
 
 function fl_is_exe {
 # Purpose: Check if file exists and is executable
@@ -579,7 +579,8 @@ case "${PVM_ARCH}" in
     MACOS* ) # MACOS on PowerPC and (beginning 20140529) x86_64 machines and (beginning ~2022) arm64 machines running MacOS
 	export INFOPATH=./:${HOME}/nco/doc:/usr/local/info:/usr/info:/usr/share/info
 	case "${HOST_FFC}" in 
-	    sastrugi* | maluhia* | spectral* ) export NETCDF_ROOT='/opt/netcdf' ; ;; # MacOS development netCDF environment
+	    sastrugi* | spectral* ) export NETCDF_ROOT='/opt/netcdf' ; ;; # MacOS development netCDF environment
+	    maluhia* ) export NETCDF_ROOT='/opt/homebrew' ; ;; # MacOS development netCDF environment
 	esac # !${HOST_FFC}
 	if [ -n "${NETCDF_ROOT}" ]; then
 	    export NETCDF_INC="${NETCDF_ROOT}/include"
@@ -612,7 +613,7 @@ case "${PVM_ARCH}" in
 		PATH='/opt/intel/oneapi/compiler/latest/mac/bin/intel64'\:${PATH} ; ;; # Required for Intel compilers
 	esac # !HOST_FFC
 	PATH=${PATH}\:/usr/local/bin # Custom-built 3rd party packages
-	PATH=${PATH}\:/opt/netcdf/bin # netCDF development branch location
+	PATH=${PATH}\:${NETCDF_ROOT}/bin # netCDF development branch location
 	PATH=${PATH}\:"${PKG_ROOT}/bin" # Homebrew packages
 	PATH=${PATH}\:"${PKG_ROOT}/sbin" # Homebrew packages
 	PATH=${PATH}\:/usr/bin # MacOS defaults
@@ -629,7 +630,7 @@ case "${PVM_ARCH}" in
 	
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${MY_LIB_DIR}
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/local/lib
-	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/opt/netcdf/lib
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${NETCDF_ROOT}/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:"${PKG_ROOT}/lib"
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:${HOME}/anaconda/lib
@@ -1052,9 +1053,9 @@ esac # !${PVM_ARCH}
 
 # Directory aliases
 alias dac='cd ${DATA}/aca' # ; function daccp { cp ${1} ${DATA}/aca ; }
+alias dbm='cd ${DATA}/bm' # ; function dbmcp { cp ${1} ${DATA}/bm ; }
 alias dmi='cd ${DATA}/mie' # ; function dmicp { cp ${1} ${DATA}/mie ; }
 alias dmn='cd ${DATA}/mny' # ; function dmncp { cp ${1} ${DATA}/mny ; }
-alias dic='cd ${DATA}/icr' # ; function diccp { cp ${1} ${DATA}/icr ; }
 alias dpp='cd ${DATA}/ppr' # ; function dppcp { cp ${1} ${DATA}/ppr ; }
 alias dps='cd ${DATA}/ps' # ; function dpscp { cp ${1} ${DATA}/ps ; }
 alias dtm='cd ${DATA}/tmp' # ; function dtmcp { cp ${1} ${DATA}/tmp ; }

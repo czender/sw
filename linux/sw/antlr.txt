@@ -808,3 +808,758 @@ make install
 #***********************************************************************
 # 20240107: derecho.ucar.edu 
 #***********************************************************************
+
+-*-fundamental-*-
+
+#***********************************************************************
+# 20060525: virga.ess.uci.edu Debian Ubuntu Dapper Drake icc/ifort antlr-2.7.6
+#***********************************************************************
+cd ${DATA}/tmp
+wget http://www.antlr.org/download/antlr-2.7.6.tar.gz
+scp dust.ess.uci.edu:/data/zender/tmp/antlr-2.7.6.tar.gz .
+tar xvzf antlr-2.7.6.tar.gz
+cd ${DATA}/tmp/antlr-2.7.6
+make distclean
+bash # New shell level keeps environment variables sandboxed
+export GNU_TRP=`~/nco/autobld/config.guess`
+export CC='icc -std=c99'
+export CFLAGS='-O3 -g -mp -w1'
+export CPPFLAGS='-DNDEBUG'
+export CXX='icpc'
+export CXXFLAGS='-O3 -g -mp -w1'
+export FC='ifort'
+export F90='ifort'
+export FFLAGS='-O3 -g -axW -mp -vec_report1'
+export F90FLAGS='-O3 -g -axW -mp -vec_report1'
+./configure --prefix=/usr/local --with-bootclasspath="/usr/lib/jvm/java-1.4.2-gcj-4.1-1.4.2.0/jre/lib" > antlr.configure.foo 2>&1
+make
+make test
+sudo make install
+exit # Return to previous shell level
+make clean
+#***********************************************************************
+# 20060525: virga.ess.uci.edu Debian Ubuntu Dapper Drake icc/ifort antlr-2.7.6
+#***********************************************************************
+
+#***********************************************************************
+# 20070308: soot.ess.uci.edu Fedora Core 6 fc6 gcc/g++ antlr-2.7.6
+#***********************************************************************
+cd ${DATA}/tmp
+wget http://www.antlr.org/download/antlr-2.7.6.tar.gz
+scp dust.ess.uci.edu:/data/zender/tmp/antlr-2.7.6.tar.gz .
+tar xvzf antlr-2.7.6.tar.gz
+cd ${DATA}/tmp/antlr-2.7.6
+make distclean
+bash # New shell level keeps environment variables sandboxed
+export GNU_TRP=`~/nco/autobld/config.guess`
+export CC='gcc'
+export CXX='g++'
+export CPPFLAGS='-DNDEBUG'
+export CFLAGS='-O -g'
+export FC='gfortran'
+export F90='gfortran'
+export FFLAGS='-O -g -fno-second-underscore'
+export F90FLAGS='-O -g -fno-second-underscore'
+./configure --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+make test
+sudo make install
+exit # Return to previous shell level
+make clean
+#***********************************************************************
+# 20070308: soot.ess.uci.edu Fedora Core 6 fc6 gcc/g++ antlr-2.7.6
+#***********************************************************************
+
+#***********************************************************************
+# 20100503: givre.ess.uci.edu x86_64/EMT64 Windows Cygwin 1.7.5-1 gcc/gfortran netcdf-4-daily
+# 20100503 NB: Antlr source CharScanner.hpp must be patched!
+#include <cstring> // csz 20100503
+#***********************************************************************
+cd ${DATA}/tmp
+wget http://www.antlr.org/download/antlr-2.7.7.tar.gz
+scp dust.ess.uci.edu:/data/zender/tmp/antlr-2.7.7.tar.gz .
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+./configure --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+make test
+make install # NB: sudo does not exist in cygwin
+exit # Return to previous shell level
+make clean
+#***********************************************************************
+20100503: givre.ess.uci.edu x86_64/EMT64 Windows Cygwin 1.7.5-1 gcc/gfortran netcdf-4-daily
+#***********************************************************************
+
+#***********************************************************************
+# 20100929: givre.ess.uci.edu x86_64/EMT64 Windows Cygwin 1.7.7-1 gcc/gfortran netcdf-4-daily
+# 20100929 NB: Antlr source CharScanner.hpp must be patched!
+#include <cstring> // csz 20100503
+#***********************************************************************
+cd ${DATA}/tmp
+wget http://www.antlr2.org/download/antlr-2.7.7.tar.gz 
+scp dust.ess.uci.edu:/data/zender/tmp/antlr-2.7.7.tar.gz .
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+./configure --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+make test
+sudo make install
+exit # Return to previous shell level
+make clean
+#***********************************************************************
+20100929: givre.ess.uci.edu x86_64/EMT64 Windows Cygwin 1.7.7-1 gcc/gfortran netcdf-4-daily
+#***********************************************************************
+
+#***********************************************************************
+# 20150310: rhea.ccs.ornl.gov 
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+mkdir -p ${HOME}/data/tmp
+export DATA=${HOME}/data
+cd ${DATA}/tmp
+wget http://www.antlr2.org/download/antlr-2.7.7.tar.gz 
+scp dust.ess.uci.edu:/data/zender/tmp/antlr-2.7.7.tar.gz .
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/manl --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+make test
+make install
+make clean
+#***********************************************************************
+# 20150310: rhea.ccs.ornl.gov 
+#***********************************************************************
+
+#***********************************************************************
+# 20150716: pileus.ornl.gov 
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+mkdir -p ${HOME}/data/tmp
+export DATA=${HOME}/data
+cd ${DATA}/tmp
+wget http://glace.ess.uci.edu/libs/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+./configure  --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+make test
+make install
+make clean
+#***********************************************************************
+# 20150716: pileus.ornl.gov 
+#***********************************************************************
+
+#***********************************************************************
+# 20160224: grele.ess.uci.edu 
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+wget http://glace.ess.uci.edu/libs/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+./configure  --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+make test
+sudo make install
+#make clean
+#***********************************************************************
+# 20160224: grele.ess.uci.edu 
+#***********************************************************************
+
+#***********************************************************************
+# 20160421: roger-login.ncsa.illinois.edu 
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+./configure  --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+make test
+make install
+#make clean
+#***********************************************************************
+# 20160421: roger-login.ncsa.illinois.edu 
+#***********************************************************************
+
+#***********************************************************************
+# 20170807: edison.nersc.gov 
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20170807: edison.nersc.gov 
+#***********************************************************************
+
+#***********************************************************************
+# 20170920: frazil.ess.uci.edu with clang not GCC
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+export CC='clang'
+export CFLAGS='-Wall'
+export CXX='clang -std=c++11'
+./configure  --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+cd ${DATA}/tmp
+wget http://dust.ess.uci.edu/tmp/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+CC='clang' CFLAGS='-Wall' CXX='clang -std=c++11' ./configure  --prefix=/usr/local --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+make test
+sudo make install
+#make clean
+#***********************************************************************
+# 20170920: frazil.ess.uci.edu 
+#***********************************************************************
+
+#***********************************************************************
+# 20180427: cheyenne.ucar.edu 
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+CC='icc' CFLAGS='-Wall' CXX='icpc' ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20180427: cheyenne.ucar.edu 
+#***********************************************************************
+
+#***********************************************************************
+# 20180529: aerosol.ess.uci.edu 
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+CC=gcc CFLAGS='-Wall' CXX=g++ ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20180529: aerosol.ess.uci.edu 
+#***********************************************************************
+
+#***********************************************************************
+# 20180729: aerosol.ess.uci.edu 
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20180729: aerosol.ess.uci.edu 
+#***********************************************************************
+
+#***********************************************************************
+# 20180729: blues.lcrc.anl.gov 
+# antlr provided by soft add +antlr-2.7.7 does not have patched CharScanner.hpp!
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+make test
+make install
+# STATUS: Not Working, last error comes from gcj which cannot find ecj1:
+make[1]: Entering directory `/blues/gpfs/home/zender/data/tmp/antlr-2.7.7/antlr'
+*** compiling 216 Java file(s)
+gcj: error trying to exec 'ecj1': execvp: No such file or directory
+
+#make clean
+#***********************************************************************
+# 20180729: blues.lcrc.anl.gov 
+#***********************************************************************
+
+#***********************************************************************
+# 20180823: theta.lcrc.anl.gov 
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+mkdir ${DATA}/tmp
+cd ${DATA}/tmp
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+make test
+make install
+#***********************************************************************
+# 20180823: theta.lcrc.anl.gov 
+#***********************************************************************
+
+#***********************************************************************
+# 20181023: aerosol.ess.uci.edu with gcc/g++ 8.2 on MacOSX 10.14
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+/bin/rm -r -f ${DATA}/tmp/antlr-2.7.7 # Important! Otherwise permissions may get screwed up
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20181023: aerosol.ess.uci.edu 
+#***********************************************************************
+
+#***********************************************************************
+# 20190511: cori.nersc.gov 
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20190511: cori.nersc.gov 
+#***********************************************************************
+
+#***********************************************************************
+# 20190524: compy.pnl.gov 
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+export DATA=${HOME}/data
+cd ${DATA}/tmp
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+./configure --prefix=${HOME} --bindir=${HOME}/bin --datadir=${HOME}/data/antlr --libdir=${HOME}/lib --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20190524: compy.pnl.gov 
+#***********************************************************************
+
+#***********************************************************************
+# 20190709: sastrugi.ess.uci.edu with gcc/g++ 9.1 on MacOSX 10.14
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+/bin/rm -r -f ${DATA}/tmp/antlr-2.7.7 # Important! Otherwise permissions may get screwed up
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20190709: sastrugi.ess.uci.edu 
+#***********************************************************************
+
+#***********************************************************************
+# 20190813: cheyenne.ucar.edu 
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+module purge
+module load ncarenv gnu/9.1.0 ncarcompilers mpt netcdf/4.6.3
+CC='gcc' CFLAGS='-Wall' CXX='g++' ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20190813: cheyenne.ucar.edu 
+#***********************************************************************
+
+#***********************************************************************
+# 20190912: rigb.ess.uci.edu with gcc/g++ 9.2 on MacOSX 10.14
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+/bin/rm -r -f ${DATA}/tmp/antlr-2.7.7 # Important! Otherwise permissions may get screwed up
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20190912: rigb.ess.uci.edu 
+#***********************************************************************
+
+#***********************************************************************
+# 20190927: sastrugi.ess.uci.edu with clang-8.0 on MacOSX 10.14
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+/bin/rm -r -f ${DATA}/tmp/antlr-2.7.7 # Important! Otherwise permissions may get screwed up
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20190927: sastrugi.ess.uci.edu with clang-8.0 on MacOSX 10.14
+#***********************************************************************
+
+#***********************************************************************
+# 20191016: sastrugi.ess.uci.edu with clang-9.0 on MacOSX 10.15
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+/bin/rm -r -f ${DATA}/tmp/antlr-2.7.7 # Important! Otherwise permissions may get screwed up
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20191016: sastrugi.ess.uci.edu with clang-9.0 on MacOSX 10.15
+#***********************************************************************
+
+#***********************************************************************
+# 20200513: sastrugi.ess.uci.edu with clang-10 on MacOSX 10.15.4
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+/bin/rm -r -f ${DATA}/tmp/antlr-2.7.7 # Important! Otherwise permissions may get screwed up
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20200513: sastrugi.ess.uci.edu with clang-10 on MacOSX 10.15.4
+#***********************************************************************
+
+#***********************************************************************
+# 20201208: andes.olcf.ornl.gov 
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20201208
+#include <cstdio> // csz 20201208
+***********************************************************************
+cd ${DATA}/tmp
+wget http://www.antlr2.org/download/antlr-2.7.7.tar.gz 
+scp dust.ess.uci.edu:/data/zender/tmp/antlr-2.7.7.tar.gz .
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20201208: andes.olcf.ornl.gov 
+#***********************************************************************
+
+#***********************************************************************
+# 20210824: sastrugi.ess.uci.edu with clang-12.0 on MacOS 11.5.2
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+/bin/rm -r -f ${DATA}/tmp/antlr-2.7.7 # Important! Otherwise permissions may get screwed up
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+make # NB: requires JDK (which includes JRE), free from Oracle
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20210824: sastrugi.ess.uci.edu with clang-12.0 on MacOS 11.5.2
+#***********************************************************************
+
+#***********************************************************************
+# 20220104: compy.pnl.gov 
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20220104
+#include <cstdio> // csz 20220104
+***********************************************************************
+cd ${DATA}/tmp
+wget http://www.antlr2.org/download/antlr-2.7.7.tar.gz 
+scp dust.ess.uci.edu:/data/zender/tmp/antlr-2.7.7.tar.gz .
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+
+# GCC
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+# Intel
+CC=icc CFLAGS='-Wall' CXX=icpc ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+
+make
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20220104: compy.pnl.gov 
+#***********************************************************************
+
+#***********************************************************************
+# 20220224: spectral.ess.uci.edu with clang-13.0.1 on MacOS 12.2.1
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+/bin/rm -r -f ${DATA}/tmp/antlr-2.7.7 # Important! Otherwise permissions may get screwed up
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+# NB: requires JDK (which includes JRE), free from Oracle:
+# https://download.oracle.com/java/17/latest/jdk-17_macos-aarch64_bin.dmg
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20220224: spectral.ess.uci.edu with clang-13.0.1 on MacOS 12.2.1
+#***********************************************************************
+
+#***********************************************************************
+# 20220630: perlmutter.nersc.gov gcc 11.2.0
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+/bin/rm -r -f ${DATA}/tmp/antlr-2.7.7 # Important! Otherwise permissions may get screwed up
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+# Fails to configure
+#CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+# Fails due to inability to find javac and jar 
+# CC=gcc CFLAGS='-Wall' CXX=g++ ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-java --disable-python --disable-shared > antlr.configure.foo 2>&1
+# Success!
+JAVAC=/usr/bin/javac JAR=/usr/bin/jar CC=gcc CFLAGS='-Wall' CXX=g++ ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-java --disable-python --disable-shared > antlr.configure.foo 2>&1
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+
+openjdk-devel is installed on the system, does /usr/bin/java work for builting antlr?
+#***********************************************************************
+# 20220630: perlmutter.nersc.gov gcc 11.2.0
+#***********************************************************************
+
+#***********************************************************************
+# 20221004: chrysalis.lcrc.anl.gov gcc 9.3
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+***********************************************************************
+cd ${DATA}/tmp
+/bin/rm -r -f ${DATA}/tmp/antlr-2.7.7 # Important! Otherwise permissions may get screwed up
+wget http://dust.ess.uci.edu/nco/antlr-2.7.7.tar.gz
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+CC=gcc CFLAGS='-Wall' CXX=g++ ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-java --disable-python --disable-shared > antlr.configure.foo 2>&1
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20221004: chrysalis.lcrc.anl.gov gcc 9.3
+#***********************************************************************
+
+#***********************************************************************
+# 20230314: compy.pnl.gov 
+# NB: Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20230314
+#include <cstdio> // csz 20230314
+***********************************************************************
+cd ${DATA}/tmp
+wget http://www.antlr2.org/download/antlr-2.7.7.tar.gz 
+scp dust.ess.uci.edu:/data/zender/tmp/antlr-2.7.7.tar.gz .
+tar xvzf antlr-2.7.7.tar.gz
+cd ${DATA}/tmp/antlr-2.7.7
+make distclean
+
+# GCC
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+# Intel
+CC=icc CFLAGS='-Wall' CXX=icpc ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+
+make
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20230314: compy.pnl.gov 
+#***********************************************************************
+
+#***********************************************************************
+# 20230412: spectral.ess.uci.edu with Homebrew clang-16.0.1 on MacOS 13.3.1
+# NB: Original Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+# NB: Original Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+class ANTLR_API CharScannerLiteralsLess : public ANTLR_USE_NAMESPACE(std)binary_function<ANTLR_USE_NAMESPACE(std)string,ANTLR_USE_NAMESPACE(std)string,bool> { // csz 20230412
+***********************************************************************
+git clone git@github.com:nco/antlr2.git ${DATA}/antlr2
+cd ${DATA}/antlr2
+make distclean
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr2 --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+# NB: requires JDK (which includes JRE), free from Oracle:
+# https://download.oracle.com/java/17/latest/jdk-17_macos-aarch64_bin.dmg
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20230412: spectral.ess.uci.edu with Homebrew clang-16.0.1 on MacOS 13.3.1
+#***********************************************************************
+
+#***********************************************************************
+# 20250819: maluhia.ess.uci.edu with Homebrew clang-20.1.8 on MacOS 15.6
+# NB: Original Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+# NB: Original Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+class ANTLR_API CharScannerLiteralsLess : public ANTLR_USE_NAMESPACE(std)binary_function<ANTLR_USE_NAMESPACE(std)string,ANTLR_USE_NAMESPACE(std)string,bool> { // csz 20230412
+***********************************************************************
+git clone git@github.com:nco/antlr2.git ${DATA}/antlr2
+cd ${DATA}/antlr2
+make distclean
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr2 --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+# NB: requires entire JDK (which includes JRE), free from Oracle:
+# https://www.java.com/en/download/manual.jsp
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20250819: maluhia.ess.uci.edu with Homebrew clang-20.1.8 on MacOS 15.6
+#***********************************************************************
+
