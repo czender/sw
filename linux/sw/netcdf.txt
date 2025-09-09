@@ -10171,6 +10171,8 @@ autoreconf -i -f
 # Discussion is here: https://github.com/Homebrew/homebrew-core/issues/207161#issuecomment-2654422193
 # Place in /opt/netcdf so requires sudo make install 
 CC='clang -mllvm --aarch64-enable-global-isel-at-O=-1' CPPFLAGS="-I/opt/homebrew/include" LDFLAGS="-L/opt/homebrew/lib -laws-cpp-sdk-s3" ./configure --prefix=/opt/netcdf --enable-shared --enable-cdf5 --enable-dap --enable-logging --enable-netcdf4 --enable-nczarr --enable-s3 --enable-v2 --with-plugin-dir=${HDF5_PLUGIN_PATH} > netcdf.configure.foo 2>&1
+# 20250903 Temporary build to avoid S3 on maluhia
+CC='clang -mllvm --aarch64-enable-global-isel-at-O=-1' CPPFLAGS="-I/opt/homebrew/include" LDFLAGS="-L/opt/homebrew/lib" ./configure --prefix=/opt/netcdf --enable-shared --enable-cdf5 --enable-dap --enable-logging --enable-netcdf4 --enable-nczarr --enable-v2 --with-plugin-dir=${HDF5_PLUGIN_PATH} > netcdf.configure.foo 2>&1
 mv -f config.log netcdf.config.log.foo
 make > netcdf.make.foo 2>&1
 make check > netcdf.check.foo 2>&1

@@ -1543,7 +1543,6 @@ make install
 #***********************************************************************
 # 20250819: maluhia.ess.uci.edu with Homebrew clang-20.1.8 on MacOS 15.6
 # NB: Original Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
-# NB: Original Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
 #include <strings.h> // csz 20150310
 #include <cstdio> // csz 20150310
 class ANTLR_API CharScannerLiteralsLess : public ANTLR_USE_NAMESPACE(std)binary_function<ANTLR_USE_NAMESPACE(std)string,ANTLR_USE_NAMESPACE(std)string,bool> { // csz 20230412
