@@ -57,31 +57,31 @@ MY_INC_DIR := ${HOME}/include
 ifndef ${ABI}
 # 32- vs. 64-bit ABI: 32=32-bit mode, 64=64-bit mode (default) if available
  ABI := 64
-endif # endif ABI
+endif # !ABI
 ifndef ${DBG}
 # Debugging token N=No (default) Y=Yes
  DBG := N
-endif # endif DBG
+endif # !DBG
 ifndef I18N
  I18N := Y
  MY_SHR_DIR := ${HOME}/share
  MY_ES_DIR := ${MY_SHR_DIR}/locale/es/LC_MESSAGES
  MY_FR_DIR := ${MY_SHR_DIR}/locale/fr/LC_MESSAGES
-endif # endif I18N
+endif # !I18N
 ifdef GSL_INC
  GSL_INC := -I${GSL_INC}
 else
  GSL_INC := $(shell gsl-config --cflags)
-endif # endif GSL_INC
+endif # !GSL_INC
 ifdef GSL_LIB
  GSL_LIB := -L${GSL_LIB}
 else
  GSL_LIB := $(shell gsl-config --libs)
-endif # endif GSL_LIB
+endif # !GSL_LIB
 ifndef MK_DPN
  MK_DPN = ${CPP} -M # NB: Recursive expansion required
  MK_DPN_CXX = ${CXX} -M # NB: Recursive expansion required
-endif # endif MK_DPN
+endif # !MK_DPN
 ifndef NETCDF_ROOT
  NETCDF_ROOT := /usr/local
 endif
@@ -93,25 +93,25 @@ ifdef INC_NCAR
  NETCDF_INC := ${INC_NCAR} # NCAR module path
 else # endelse INC_NCAR
  NETCDF_INC := ${NETCDF_ROOT}/include # Directory containing netcdf.h
-endif # endif INC_NCAR
-endif # endif NETCDF_INC
+endif # !INC_NCAR
+endif # !NETCDF_INC
 ifndef NETCDF_LIB
 ifdef LIB_NCAR
  NETCDF_LIB := ${LIB_NCAR} # NCAR module path
 else # endelse LIB_NCAR
  NETCDF_LIB := ${NETCDF_ROOT}/lib # Directory containing libnetcdf.a
-endif # endif LIB_NCAR
-endif # endif NETCDF_LIB
+endif # !LIB_NCAR
+endif # !NETCDF_LIB
 ifndef ${OMP} # OpenMP
  OMP := Y
-endif # endif OMP
+endif # !OMP
 ifndef OPTS
  OPTS := O
-endif # endif OPTS
+endif # !OPTS
 ifndef ${PRC}
 # Precision token S=Single D=Double (default) L=Long Double
  PRC := D
-endif # endif PRC
+endif # !PRC
 ifndef PVM_ARCH
  PVM_ARCH := $(shell ${HOME}/sh/pvmgetarch)
 endif
@@ -124,10 +124,10 @@ ifndef UNAMES
 endif
 ifndef USR_TKN
  USR_TKN := -DABORT_ON_ERROR
-endif # endif USR_TKN
+endif # !USR_TKN
 ifndef VRS_SNG
  VRS_SNG := $(shell date +%Y%m%d)
-endif # endif VRS_SNG
+endif # !VRS_SNG
 
 # Derived-tokens based on primary tokens
 # These tokens should not be altered by hand
@@ -141,7 +141,7 @@ ifndef LINUX_CXX
  #LINUX_CXX := insure
  #LINUX_CXX := pathCC
  #LINUX_CXX := pgCC
-endif # endif LINUX_CXX
+endif # !LINUX_CXX
 ifndef LINUX_CC
 # C compiler for Linux
  LINUX_CC := gcc -std=c99 -pedantic -D_BSD_SOURCE
@@ -150,7 +150,7 @@ ifndef LINUX_CC
  #LINUX_CC := insure
  #LINUX_CC := pathcc -std=c99 -D_BSD_SOURCE -D_POSIX_SOURCE
  #LINUX_CC := pgcc -c9x -D_BSD_SOURCE -D_POSIX_SOURCE
-endif # endif LINUX_CC
+endif # !LINUX_CC
 ifndef LINUX_FC
 # Fortran compiler for Linux
  LINUX_FC := g95
@@ -159,23 +159,23 @@ ifndef LINUX_FC
  #LINUX_FC := lf95
  #LINUX_FC := pathf95
  #LINUX_FC := pgf90
-endif # endif LINUX_CC
+endif # !LINUX_CC
 ifeq (${PVM_ARCH},LINUXAMD64)
 ifndef LINUX_CXX
 # GCC 3.3 fails in atomicity.h with -O, -O0, and -O2 so use 3.4 instead 
  LINUX_CXX := g++
-endif # endif LINUX_CXX
+endif # !LINUX_CXX
 ifndef LINUX_CC
  LINUX_CC := gcc -std=c99 -pedantic -D_BSD_SOURCE
-endif # endif LINUX_CC
+endif # !LINUX_CC
 ifndef LINUX_FC
  LINUX_FC := g95
-endif # endif LINUX_FC
-endif # endif LINUXAMD64
+endif # !LINUX_FC
+endif # !LINUXAMD64
 ifeq (${PVM_ARCH},LINUXALPHA)
  LINUX_FC := g77
-endif # endif LINUXALPHA
-endif # endif LINUX
+endif # !LINUXALPHA
+endif # !LINUX
 ifeq (${PRC},D)
  USR_TKN := -DPRC_DBL ${USR_TKN}
 else
@@ -183,8 +183,8 @@ ifeq (${PRC},L)
  USR_TKN := -DPRC_LDB ${USR_TKN}
 else
  USR_TKN := -DPRC_FLT ${USR_TKN}
-endif # endif PRC
-endif # endif PRC
+endif # !PRC
+endif # !PRC
 
 # NB: CPP_TKN is recursively expanded variable, define only when components are ready
 CPP_TKN = ${USR_TKN} -D${PVM_ARCH} -DNO_NETCDF_2 -DVERSION='${VRS_SNG}' -DHOSTNAME='${HOST}' -DUSER='${USER}'
@@ -345,7 +345,7 @@ ifeq (${OMP},Y)
 else
  CPP_DFN += -U_OPENMP
  FC := xlf95
-endif # endif OMP
+endif # !OMP
 ifeq (${OPTS},O)
 # -O : -O3 is safe, -O5 is dangerous
 # -qstrict: Ensure that -O3 optimizations do not alter program semantics
@@ -373,7 +373,7 @@ ifeq (${ABI},64)
  CFLAGS += -q64
  FFLAGS += -q64
  LDFLAGS += -q64 
-endif # endif ABI
+endif # !ABI
 # Additional flags for AIX:
 # -M Generate information to be included in a "make" description file; output goes to .u file
 # -c Do not send object files to the linkage editor
@@ -386,7 +386,7 @@ ${MY_DPN_DIR}/%.d : %.c
 ${MY_DPN_DIR}/%.d : %.cc
 	${MK_DPN} ${CPPFLAGS} $< ;perl -p -e 's/$*\.o/${MY_OBJ_DIR_RX}\/$*.o ${MY_DPN_DIR_RX}\/$(notdir $@)/g;s/${slash_rx}/\${slash}/g' $*.u > $@ ; \
 	rm -f $*.i $*.o $*.u;
-endif # endif AIX VA Compiler Collection
+endif # !AIX VA Compiler Collection
 # GNU Compiler Collection
 ifneq (${null},$(findstring gcc,${CC}))
  CFLAGS := -Wall -Wunused
@@ -406,9 +406,9 @@ endif
 ifeq (${ABI},64)
  CC += -maix64 
  CXX += -maix64 
-endif # endif ABI
+endif # !ABI
  CXXFLAGS := ${CFLAGS}
-endif # endif GNU Compiler Collection
+endif # !GNU Compiler Collection
 # -q64: Select 64-bit compiler mode (required for accessing large files)
 # -qwarn64: Warn on possible long-to-integer or pointer-to-integer truncation
 CXXFLAGS := ${CFLAGS}
@@ -418,14 +418,14 @@ ifeq (${OMP},Y)
  FFLAGS += ${OMP_FLG_F}
 # LD behavior assumes C source code
  LDFLAGS := ${OMP_FLG_C} ${LDFLAGS}
-endif # endif OMP
+endif # !OMP
 endif
-# endif AIX
+# !AIX
 
 ifeq (${PVM_ARCH},ALPHA)
 ifeq (${OMP},Y)
  OMP_FLG := -omp
-endif # endif OMP
+endif # !OMP
 CXX := cxx -std strict_ansi
 #CXX := cxx -std ansi -D__NO_USE_STD_IOSTREAM
 CC := cc
@@ -462,7 +462,7 @@ ${MY_OBJ_DIR}/%.o : %.F90
 ${MY_OBJ_DIR}/%.o : %.F
 	${FC} -c ${FIXEDFLAGS} ${FFLAGS} ${CPPFLAGS} -o ${MY_OBJ_DIR}/$(notdir $@) $<
 endif
-# endif ALPHA
+# !ALPHA
 
 ifeq (${PVM_ARCH},CRAY)
 CXX := g++
@@ -498,7 +498,7 @@ ${MY_OBJ_DIR}/%.o : %.f
 	${FC} -c ${FFLAGS} $<
 	mv -f $(notdir $@) ${MY_OBJ_DIR}
 endif
-# endif CRAY
+# !CRAY
 
 # Works on LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, and FREEBSD and MACOS
 ifneq (${null},$(findstring ${PVM_ARCH},LINUXALPHALINUXAMD64LINUXARMFREEBSDMACOS))
@@ -512,7 +512,7 @@ LD := ld
 LDFLAGS += -L${MY_LIB_DIR} -lcsm_c++ -lcsz_c++ -lnco_c++ -L${NETCDF_LIB} -lnetcdf
 ifeq (${PVM_ARCH},MACOS)
  LDFLAGS += -lresolv
-endif # endif MACOS
+endif # !MACOS
 LEX := flex
 LINT := lint
 YACC := bison
@@ -537,7 +537,7 @@ ifeq (${OPTS},X)
  CFLAGS += -g
 endif
  CXXFLAGS := ${CFLAGS}
-endif # endif Comeau C Compiler
+endif # !Comeau C Compiler
 # GNU Compiler Collection or LLVM
 # 20140204: gcc and clang should receive identical options
 ifeq (gcc,$(firstword ${CC}))
@@ -590,8 +590,8 @@ ifneq (clang,$(firstword ${CC}))
  OMP_FLG_C := -fopenmp
  OMP_FLG_F := -fopenmp
  LDFLAGS += -lgomp -lpthread
-endif # endif clang
-endif # endif OMP
+endif # !clang
+endif # !OMP
 ifeq (${OPTS},O)
  CFLAGS += -O -g
 endif
@@ -610,10 +610,10 @@ ifeq (${ABI},64)
  CFLAGS += -m64
  FFLAGS += -m64
  LDFLAGS += -m64
-endif # endif ABI
-endif # endif LINUXAMD64
+endif # !ABI
+endif # !LINUXAMD64
  CXXFLAGS := ${CFLAGS}
-endif # endif GNU Compiler Collection or LLVM
+endif # !GNU Compiler Collection or LLVM
 # Intel (Kai) C++ Compiler
 ifeq (icc,$(firstword ${CC}))
 # -cxxlib-gcc: link using C++ run-time libraries provided with GCC (default) (generated code is binary compatible with g++)
@@ -659,7 +659,7 @@ ifeq (${OPTS},X)
  CFLAGS += -g -Wall
 endif
  CXXFLAGS := ${CFLAGS}
-endif # endif Intel (Kai) C++ Compiler
+endif # !Intel (Kai) C++ Compiler
 # Intel (Kai) Fortran Compiler
 ifeq (${FC},ifc)
 # -e95 issues warnings for non-standard fortran
@@ -669,7 +669,7 @@ ifeq (${FC},ifc)
 # LDFLAGS += -lVaxlib
 ifeq (${OMP},Y)
  OMP_FLG_F := -openmp -openmp_report0
-endif # endif OMP
+endif # !OMP
 ifeq (${PRC},D)
  FFLAGS += -i4 -r8 -doubletemps
 else
@@ -687,7 +687,7 @@ endif
 ifeq (${OPTS},X)
  FFLAGS += -g -C -e95
 endif
-endif # endif Intel (Kai) Fortran Compiler
+endif # !Intel (Kai) Fortran Compiler
 # Pathscale (QLogic) C++ Compiler
 ifeq (pathcc,$(firstword ${CC}))
 # pathcc -show-defaults
@@ -746,7 +746,7 @@ ifeq (${OPTS},X)
  CFLAGS += -g -Mbounds
 endif
  CXXFLAGS := ${CFLAGS}
-endif # endif Portland Group C++ Compiler
+endif # !Portland Group C++ Compiler
 # Portland Group Fortran Compiler
 ifeq (${FC},pgf90)
  FFLAGS := -Mextend -Mnosecond_underscore -byteswapio -Mrecursive -Mdalign -Ktrap=fp -Mlfs
@@ -766,7 +766,7 @@ endif
 ifeq (${OPTS},X)
  FFLAGS += -g -Mbounds
 endif
-endif # endif Portland Group Fortran Compiler
+endif # !Portland Group Fortran Compiler
 # G77 Fortran compiler
 ifeq (${FC},g77)
  FFLAGS := -ffixed-line-length-132 -fno-second-underscore
@@ -782,21 +782,21 @@ endif
 ifeq (${OPTS},X)
  FFLAGS := -g -O -fdebug-kludge -fbounds-check
 endif
-endif # endif G77 Fortran compiler
+endif # !G77 Fortran compiler
 ifeq (${OMP},Y)
  CFLAGS += ${OMP_FLG_C}
  CXXFLAGS += ${OMP_FLG_C}
  FFLAGS += ${OMP_FLG_C}
 # LD behavior assumes C source code
  LDFLAGS := ${OMP_FLG_C} ${LDFLAGS}
-endif # endif OMP
+endif # !OMP
 endif
-# endif LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, FREEBSD, MACOS
+# !LINUX, LINUXALPHA, LINUXAMD64, LINUXARM, FREEBSD, MACOS
 
 ifeq (${PVM_ARCH},NECSX)
 ifeq (${OMP},Y)
  OMP_FLG := -Popenmp
-endif # endif OMP
+endif # !OMP
 CXX := c++
 #CC := c++ -Xa
 CC := cc
@@ -830,13 +830,13 @@ MK_DPN = /usr/local/bin/mkdep.perl /usr/lib/cpp # NECSX try this
 ${MY_DPN_DIR}/%.d : %.c
 	${MK_DPN} ${CPPFLAGS} $< | perl -p -e 's/$*\.o/${MY_OBJ_DIR_RX}\/$*.o ${MY_DPN_DIR_RX}\/$(notdir $@)/g;s/${slash_rx}/\${slash}/g' > $@
 endif
-# endif NECSX
+# !NECSX
 
 # SGI6, SGI64, SGIMP64
 ifneq (${null},$(findstring SGI,${PVM_ARCH}))
 ifeq (${OMP},Y)
  OMP_FLG := -mp -mpio
-endif # endif OMP
+endif # !OMP
 #CXX := CC -LANG:std
 #CC := cc
 # 20000302: -w suppresses warnings which will swamp linker
@@ -854,13 +854,13 @@ ifeq (${PVM_ARCH},SGI6)
 GCC_ABI_FLG := -mabi=32
 GCC_LDFLAGS_SZ_SPC := ${GCC_ABI_FLG} -mips3 
 SGI_ABI_FLG := -n32 -mips3 ${OMP_FLG}
-# endif SGI6
+# !SGI6
 else
 # SGI64, SGIMP64
 GCC_ABI_FLG := -mabi=64
 GCC_LDFLAGS_SZ_SPC := ${GCC_ABI_FLG} -mips4 -L/usr/local/lib/mabi=64
 SGI_ABI_FLG := -64 -mips4 ${OMP_FLG}
-# endif SGI64, SGIMP64
+# !SGI64, SGIMP64
 endif
 ifeq (${CC},gcc)
  LDFLAGS := $(GCC_LDFLAGS_SZ_SPC) ${LDFLAGS}
@@ -879,7 +879,7 @@ ifeq (${OPTS},X)
 endif
  CXXFLAGS := ${CFLAGS}
 endif
-# endif CC=gcc
+# !CC=gcc
 ifeq (${CC},cc)
 # SGI Native C++ headers are in /usr/include/CC
  LDFLAGS := ${SGI_ABI_FLG} ${LDFLAGS}
@@ -897,7 +897,7 @@ ifeq (${OPTS},X)
  CFLAGS += -g -trapuv
 endif
 endif
-# endif CC=cc
+# !CC=cc
 # Fortran flags
 FFLAGS := ${SGI_ABI_FLG} -extend_source
 ifeq (${OPTS},O)
@@ -914,7 +914,7 @@ ifeq (${OPTS},X)
 endif
 # end fortran flags
 endif
-# endif SGI6, SGI64, SGIMP64
+# !SGI6, SGI64, SGIMP64
 
 ifeq (${UNAMES},SunOS) 
 CXX := g++
@@ -949,7 +949,7 @@ endif
 endif
  CXXFLAGS := ${CFLAGS}
 endif
-# endif SunOS=SUN4SOL2,SUNMP
+# !SunOS=SUN4SOL2,SUNMP
 
 ifeq (${PVM_ARCH},WIN32)
 C_ONLY := Y
@@ -972,7 +972,7 @@ ifeq (${OPTS},D)
  CFLAGS += -g
 endif
 endif
-# endif WIN32
+# !WIN32
 
 # Link to Electric Fence library, see man efence
 ifneq (${null},$(findstring LINUX,${PVM_ARCH}))
@@ -983,21 +983,21 @@ ifneq (${null},$(findstring ${OPTS},DX))
 # LDFLAGS += -lefence
 endif
 endif
-# endif LINUX
+# !LINUX
 
 ifeq ($(STC),Y)
 # Created statically linked executable
  LDFLAGS := -static ${LDFLAGS}
-endif # endif STC
+endif # !STC
 
 # Disable OpenMP on platforms that automatically support it
 ifeq (${OMP},N)
 ifneq (${null},$(findstring SGI,${PVM_ARCH}))
  CFLAGS := $(filter-out -mp -mpio,${CFLAGS})
  LDFLAGS := $(filter-out -mp -mpio,${LDFLAGS})
-endif # endif SGI
+endif # !SGI
  CPPFLAGS += -U_OPENMP
-endif # endif OMP
+endif # !OMP
 
 # Define any remaining variables
 libcsz_c := ${MY_LIB_DIR}/libcsz_c
