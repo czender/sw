@@ -215,14 +215,12 @@ esac # !${HOST_FFC}
 export HOST_FFC
 
 case "${HOST_FFC}" in 
-    acme1* ) export DATA="/home/${USER}/data" ; ;; # LLNL
     andes* | frontier* ) export DATA="/lustre/orion/cli115/world-shared/${USER}" ; ;; # OLCF
     blues* ) export DATA="/home/${USER}/data" ; ;; # ANL LCRC
     chrysalis* ) export DATA="${HOME}/data" ; export SCRATCH="/lcrc/group/e3sm/ac.zender/scratch" ; ;; # ANL LCRC
     compy* ) export DATA="/qfs/people/${USER}/data" ; ;; # PNNL 
     derecho* ) export DATA="/glade/work/${USER}" ; ;; # NCAR
     e3sm* ) export DATA="${HOME}/data" ; ;; # UCI
-    frontier* ) export DATA="/lustre/orion/cli115/world-shared/${USER}" ; ;; # ORNL
     greenplanet* ) export DATA="/data/${USER}" ; ;; # UCI PS Rocks Cluster
     hpc* ) export DATA="/data/users/${USER}" ; ;; # UCI RCIC HPC3
     imua* ) export DATA="${HOME}/data" ; ;; # UCI
@@ -306,9 +304,9 @@ case "${HOST_FFC}" in
 esac # !${HOST_FFC}
 
 case "${HOST_FFC}" in 
-    firn* | katabatic* | rigb* | sastrugi* | maluhia* | spectral* ) export OMP_NUM_THREADS=4 ; ;; # endif
+    firn* | katabatic* | rigb* | sastrugi* | maluhia* | spectral* ) export OMP_NUM_THREADS=4 ; ;; # 
     greenplanet* | grele* | snow* ) export OMP_NUM_THREADS='8' ; ;; # dual-quad processor
-    acme1* | andes* | compy* | e3sm* | imua* ) export OMP_NUM_THREADS='16' ; ;; # dual-octet processor
+    andes* | chrysalis* | compy* | e3sm* | frontier* | imua* | perlmutter* ) export OMP_NUM_THREADS='16' ; ;; # dual-octet processor
     derecho* ) export OMP_NUM_THREADS='16' ; ;; # dual-hexadecimal processor
     cg1* ) export OMP_NUM_THREADS=2 ; ;; # cg1*
     * ) export OMP_NUM_THREADS=1 ; ;; # *
@@ -525,7 +523,6 @@ case "${PVM_ARCH}" in
 	fi # ROCKS_ROLLS_ROOT
 
 	case "${HOST_FFC}" in 
-#	    acme1* ) PATH=${PATH}\:/p/user_pub/e3sm_unified/envs/base/envs/e3sm_unified_latest/bin ; ;; # LLNL
 	    # Default compy PATH=/share/apps/modules/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/ganglia/bin:/opt/ganglia/sbin:/opt/pdsh/bin:/opt/rocks/bin:/opt/rocks/sbin:/qfs/people/zender/bin
 	    compy* ) PATH=${PATH}\:/share/apps/modules/bin\:/opt/rocks/bin ; ;; # PNNL compy
 	    derecho* ) PATH=${PATH}\:/opt/pbs/bin\:/glade/u/apps/derecho/23.06/spack/opt/spack/ncarcompilers/1.0.0/gcc/12.2.0/gj6c/bin ; ;; # NCAR derecho
@@ -566,7 +563,6 @@ case "${PVM_ARCH}" in
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/usr/lib
 	case "${HOST}" in 
 	    # 20130916: Support NCAR modules on derecho by removing custom environment variables
-#	    acme1* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/p/user_pub/e3sm_unified/envs/base/envs/e3sm_unified_latest/lib ; ;; # LLNL
 	    derecho* ) export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:/glade/u/apps/derecho/23.06/spack/opt/spack/udunits/2.2.28/gcc/12.2.0/vls2/lib\:/glade/u/apps/ch/opt/gsl/2.7/gnu/12.1.0/lib ; ;; # NCAR
 	esac # !${HOST}
 
@@ -1100,7 +1096,6 @@ fi # endif
 #alias ncbrowse='java ncBrowse.Browser' # netCDF file browser
 alias bc='bc -l' # -l = defines standard math library and sets scale to 20
 alias beepoff='xset b off' # Turn beep sound off for quiet work envionments
-alias acme1='ssh -Y zender1@acme1.llnl.gov' # pw_hgh source /usr/local/uvcdat/latest/bin/setup_runtime.sh
 alias andes='ssh -Y andes.olcf.ornl.gov' # pyn_mdm + 6-digit fob code
 alias bebop='ssh -Y bebop.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 # 20240607: for ALCF, go to logins, then SSH to blues
