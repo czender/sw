@@ -304,9 +304,8 @@ case "${HOST_FFC}" in
 esac # !${HOST_FFC}
 
 case "${HOST_FFC}" in 
-    firn* | katabatic* | rigb* | sastrugi* | maluhia* | spectral* ) export OMP_NUM_THREADS=4 ; ;; # 
-    greenplanet* | grele* | snow* ) export OMP_NUM_THREADS='8' ; ;; # dual-quad processor
-    andes* | chrysalis* | compy* | e3sm* | frontier* | imua* | perlmutter* ) export OMP_NUM_THREADS='16' ; ;; # dual-octet processor
+    firn* | rigb* | sastrugi* | maluhia* | spectral* ) export OMP_NUM_THREADS=4 ; ;; # 
+    andes* | chrysalis* | compy* | e3sm* | frontier* | imua* | perlmutter* ) export OMP_NUM_THREADS='8' ; ;; # dual-octet processor
     derecho* ) export OMP_NUM_THREADS='16' ; ;; # dual-hexadecimal processor
     cg1* ) export OMP_NUM_THREADS=2 ; ;; # cg1*
     * ) export OMP_NUM_THREADS=1 ; ;; # *
