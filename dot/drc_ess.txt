@@ -17,9 +17,12 @@ Irvine, CA 92697-3100
 Latitude :   33.643662 N
 Longitude: -117.844613 E
 
-Campus maps and freeway directions are at http://www.uci.edu/campusmap
-ESS offices are in Croul Hall (CH), building 417 in quadrant F6.
-Parking permits may be obtained/picked-up at these five locations:
+Campus maps and freeway directions are at http://map.uci.edu
+ESS offices are in Croul Hall (CH) which is building 417.
+The closest parking is in Lot 12A.
+Parking permits may be obtained/picked-up as described at
+
+https://parking.uci.edu/permits/visitor
 
 https://www.parking.uci.edu/reservations
 
