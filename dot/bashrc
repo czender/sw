@@ -168,22 +168,6 @@ if fl_is_exe ${HOME}/nco/autobld/config.guess ; then
     esac # !${HOST}
 fi # GNU_TRP
 
-# Use Tcsh-6.06 REMOTEHOST variable to set DISPLAY
-if [ -n "${REMOTEHOST}" ]; then
-    export DISPLAY="${REMOTEHOST}:0"
-else 
-    case "${PVM_ARCH}" in 
-    SUN* ) 
-# Setting DISPLAY to unix:0 automatically fouls up cvs ccm checkins
-#	export DISPLAY="unix:0"
-	unset DISPLAY
-	# Enables Sun's shared memory transport
-	export XSUNTRANSPORT=shmem
-	export XSUNSMESIZE=256
-    ;; # SUN*
-    esac # !${PVM_ARCH}
-fi # local host
-
 # Clean up frequently set environment variables (many Makefiles depend on these)
 #unset CC
 #unset CXX
