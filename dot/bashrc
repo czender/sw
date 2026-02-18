@@ -183,7 +183,7 @@ fi # GNU_TRP
 HOST_FFC="${HOST}"
 case "${HOST_FFC}" in
     bebop* | blogin* | b[0123456789][0123456789][0123456789] ) HOST_FFC='blues' ; ;; # ALCF LCRC blues compute nodes named bNNN, 16|64 cores|GB/node 
-    chrlogin* | chr-[0123456789][0123456789][0123456789][0123456789] | ilogin* ) HOST_FFC='chrysalis' ; ;; # ANL LCRC
+    chrlogin* | chr-[0123456789][0123456789][0123456789][0123456789] | ilogin* | i[0123456789][0123456789][0123456789] ) HOST_FFC='chrysalis' ; ;; # ANL LCRC
     cg-gpu* ) HOST_FFC='roger' ; ;; # NCSA roger cluster
     gplogin* ) HOST_FFC='greenplanet' ; ;; # UCI PS Rocks Cluster
     login-* ) HOST_FFC='hpc' ; ;; # UCI RCIC HPC3
@@ -492,6 +492,11 @@ case "${PVM_ARCH}" in
 	PATH=${PATH}\:/bin
 	PATH=${PATH}\:/sbin
 #	PATH=${PATH}\:${X11}/bin
+	# LCRC Improv needs PBS
+	case "${HOST}" in 
+	    ilogin* | i[0123456789][0123456789][0123456789] ) PATH=${PATH}\:/opt/pbs/bin/qsub ; ;; # ANL LCRC Improv
+	esac # !${HOST}
+
 	if [ -n "${MPI_ROOT}" ]; then
 		PATH=${PATH}\:${MPI_ROOT}/bin # OpenMPI
 	fi # MPI_ROOT
