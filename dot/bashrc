@@ -183,7 +183,7 @@ fi # GNU_TRP
 HOST_FFC="${HOST}"
 case "${HOST_FFC}" in
     bebop* | blogin* | b[0123456789][0123456789][0123456789] ) HOST_FFC='blues' ; ;; # ALCF LCRC blues compute nodes named bNNN, 16|64 cores|GB/node 
-    chrlogin* | chr-[0123456789][0123456789][0123456789][0123456789] ) HOST_FFC='chrysalis' ; ;; # ANL LCRC
+    chrlogin* | chr-[0123456789][0123456789][0123456789][0123456789] | ilogin* ) HOST_FFC='chrysalis' ; ;; # ANL LCRC
     cg-gpu* ) HOST_FFC='roger' ; ;; # NCSA roger cluster
     gplogin* ) HOST_FFC='greenplanet' ; ;; # UCI PS Rocks Cluster
     login-* ) HOST_FFC='hpc' ; ;; # UCI RCIC HPC3
@@ -1089,6 +1089,7 @@ alias chrysalis='ssh -Y ac.zender@chrysalis.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias compy='ssh -Y compy.pnl.gov' # pyn_hgh + 6-digit fob code
 alias derecho='ssh -Y derecho.hpc.ucar.edu' # Token-response of NCAR CIT pw_psw sends Duo request
 alias frontier='ssh -Y frontier.olcf.ornl.gov' # pyn_mdm + 6-digit fob code
+alias improv='ssh -Y ac.zender@improv.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias perlmutter='ssh -Y perlmutter-p1.nersc.gov' # pw_psw (EMN=PeRLmutter)
 alias bsrc="source ${HOME}/.bashrc"
 alias chm='chmod 644 *.*' # Make readable

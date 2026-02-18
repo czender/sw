@@ -8,6 +8,7 @@
 # 20191205: Update keep alive value as per https://bjornjohansen.no/ssh-timeout
 # 20240607: Cause SSH to blues to first ssh to logins.lcrc.anl.gov and then ssh to blues
 # 20250507: Update all ANL/ALCF/LCRC to first ssh to logins.lcrc.anl.gov and then ssh to Chrysalis
+# 20260218: Add Improv option to LCRC access
 # These options should keep the ssh connection alive longer
 
 ServerAliveInterval 300
@@ -30,3 +31,8 @@ Host chrysalis.lcrc.anl.gov chrysalis
     User ac.zender
     IdentityFile ~/.ssh/id_rsa
     
+Host improv.lcrc.anl.gov improv
+    HostName improv.lcrc.anl.gov
+    ProxyJump logins.lcrc.anl.gov
+    User ac.zender
+    IdentityFile ~/.ssh/id_rsa
