@@ -19,7 +19,7 @@
 # Usage: 
 # /bin/cp -f ${HOME}/.bashrc /fs/cgd/home0/${USER}
 # scp -p ${HOME}/sw/dot/bashrc andes.olcf.ornl.gov:.bashrc
-# scp -p ${HOME}/sw/dot/bashrc blues.lcrc.anl.gov:.bashrc
+# scp -p ${HOME}/sw/dot/bashrc bebop.lcrc.anl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc chrysalis.lcrc.anl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc compy.pnl.gov:.bashrc
 # scp -p ${HOME}/sw/dot/bashrc derecho.hpc.ucar.edu:.bashrc
@@ -182,7 +182,7 @@ fi # GNU_TRP
 # HOST_FFC is simply the common machine name instead of login or compute node name
 HOST_FFC="${HOST}"
 case "${HOST_FFC}" in
-    bebop* | blogin* | b[0123456789][0123456789][0123456789] ) HOST_FFC='blues' ; ;; # ALCF LCRC blues compute nodes named bNNN, 16|64 cores|GB/node 
+    bebop* | blogin* | b[0123456789][0123456789][0123456789] ) HOST_FFC='bebop' ; ;; # ALCF LCRC bebop compute nodes named bNNN, 16|64 cores|GB/node 
     chrlogin* | chr-[0123456789][0123456789][0123456789][0123456789] | ilogin* | i[0123456789][0123456789][0123456789] ) HOST_FFC='chrysalis' ; ;; # ANL LCRC
     cg-gpu* ) HOST_FFC='roger' ; ;; # NCSA roger cluster
     gplogin* ) HOST_FFC='greenplanet' ; ;; # UCI PS Rocks Cluster
@@ -200,7 +200,7 @@ export HOST_FFC
 
 case "${HOST_FFC}" in 
     andes* | frontier* ) export DATA="/lustre/orion/cli115/world-shared/${USER}" ; ;; # OLCF
-    blues* ) export DATA="/home/${USER}/data" ; ;; # ANL LCRC
+    bebop* ) export DATA="/home/${USER}/data" ; ;; # ANL LCRC
     chrysalis* ) export DATA="${HOME}/data" ; export SCRATCH="/lcrc/group/e3sm/ac.zender/scratch" ; ;; # ANL LCRC
     compy* ) export DATA="/qfs/people/${USER}/data" ; ;; # PNNL 
     derecho* ) export DATA="/glade/work/${USER}" ; ;; # NCAR
@@ -223,7 +223,7 @@ export MY_INC_DIR=${HOME}/include
 # Some machines have machine-specific paths that override defaults above
 case "${HOST_FFC}" in
     andes* ) export MY_BIN_DIR="${HOME}/bin_andes" ; export MY_LIB_DIR="${HOME}/lib_andes" ; export MY_OBJ_DIR="${HOME}/obj_andes" ; ;;
-    blues* ) export MY_BIN_DIR="${HOME}/bin_blues" ; export MY_LIB_DIR="${HOME}/lib_blues" ; export MY_OBJ_DIR="${HOME}/obj_blues" ; ;;
+#    bebop* ) export MY_BIN_DIR="${HOME}/bin_bebop" ; export MY_LIB_DIR="${HOME}/lib_bebop" ; export MY_OBJ_DIR="${HOME}/obj_bebop" ; ;;
     chrysalis* ) export MY_BIN_DIR="${HOME}/bin_chrysalis" ; export MY_LIB_DIR="${HOME}/lib_chrysalis" ; export MY_OBJ_DIR="${HOME}/obj_chrysalis" ; ;;
     frontier* ) export MY_BIN_DIR="${HOME}/bin_frontier" ; export MY_LIB_DIR="${HOME}/lib_frontier" ; export MY_OBJ_DIR="${HOME}/obj_frontier" ; ;;
     perlmutter* ) export MY_BIN_DIR="/global/cfs/cdirs/e3sm/${USER}/bin_perlmutter" ; export MY_LIB_DIR="/global/cfs/cdirs/e3sm/${USER}/lib_perlmutter" ; export MY_OBJ_DIR="/global/cfs/cdirs/e3sm/${USER}/obj_perlmutter" ; ;;
@@ -254,11 +254,6 @@ esac # !${HOST_FFC}
 
 # Initalize all paths to current directory (insecure, but frequently useful)
 case "${HOST_FFC}" in 
-    bebop* ) # ALCF LCRC blues compute nodes named bNNN, 16|64 cores|GB/node 
-	# Append to paths if in soft environment
-	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}\:'./'
-	MANPATH=${MANPATH}\:'./'
-	PATH=${PATH}\:'./' ; ;;
     * ) # Reset paths if not in soft environment
 	LD_LIBRARY_PATH='./'
 	MANPATH='./'
@@ -492,8 +487,9 @@ case "${PVM_ARCH}" in
 	PATH=${PATH}\:/bin
 	PATH=${PATH}\:/sbin
 #	PATH=${PATH}\:${X11}/bin
-	# LCRC Improv needs PBS
+	# LCRC Improv and Bebop need PBS
 	case "${HOST}" in 
+	    bebop* | b[0123456789][0123456789][0123456789] ) PATH=${PATH}\:/opt/pbs/bin/qsub ; ;; # ANL LCRC Bebop
 	    ilogin* | i[0123456789][0123456789][0123456789] ) PATH=${PATH}\:/opt/pbs/bin/qsub ; ;; # ANL LCRC Improv
 	esac # !${HOST}
 
@@ -865,7 +861,7 @@ case "${HOST_FFC}" in
     hpc* ) export LINUX_CC=${CC_pgcc} ; export LINUX_CXX=${CXX_pgCC} ; export LINUX_FC=${FC_pgf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # pgcc/pgCC/pgf95 MPICH2
     e3sm* ) export LINUX_CC=${CC_gcc_conda} ; export LINUX_CXX=${CXX_gxx_conda} ; export LINUX_FC=${FC_gfortran_conda} ; ;; # gcc/g++/gfortran Conda
     imua* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # gcc/g++/gfortran RPMs
-    andes* | blogin* | blues* | chrylogin* | compy* | derecho* | frontier* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # gcc/g++/gfortran OpenMPI
+    andes* | blogin* | bebop* | chrylogin* | compy* | derecho* | frontier* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # gcc/g++/gfortran OpenMPI
 #    derecho* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # gcc/g++/g95 MPICH 
 esac # !${HOST_FFC}
@@ -1085,10 +1081,8 @@ fi # endif
 alias bc='bc -l' # -l = defines standard math library and sets scale to 20
 alias beepoff='xset b off' # Turn beep sound off for quiet work envionments
 alias andes='ssh -Y andes.olcf.ornl.gov' # pyn_mdm + 6-digit fob code
-alias bebop='ssh -Y bebop.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
-# 20240607: for ALCF, go to logins, then SSH to blues
-#alias blues='ssh -Y ac.zender@blues.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
-alias blues='ssh -Y -J ac.zender@logins.lcrc.anl.gov ac.zender@blues.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
+# 20240607: for ALCF, go to logins, then SSH to destination machine
+alias bebop='ssh -J ac.zender@logins.lcrc.anl.gov bebop.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias bm='cd ~/nco/bm;nco_bm.pl --regress ncks;cd -'
 alias chrysalis='ssh -Y ac.zender@chrysalis.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias compy='ssh -Y compy.pnl.gov' # pyn_hgh + 6-digit fob code
