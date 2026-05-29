@@ -865,7 +865,7 @@ case "${HOST_FFC}" in
     hpc* ) export LINUX_CC=${CC_pgcc} ; export LINUX_CXX=${CXX_pgCC} ; export LINUX_FC=${FC_pgf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # pgcc/pgCC/pgf95 MPICH2
     e3sm* ) export LINUX_CC=${CC_gcc_conda} ; export LINUX_CXX=${CXX_gxx_conda} ; export LINUX_FC=${FC_gfortran_conda} ; ;; # gcc/g++/gfortran Conda
     imua* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # gcc/g++/gfortran RPMs
-    andes* | blogin* | bebop* | chrlogin* | compy* | derecho* | frontier* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # gcc/g++/gfortran OpenMPI
+    andes* | blogin* | bebop* | chrysalis* | compy* | derecho* | frontier* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # gcc/g++/gfortran OpenMPI
 #    derecho* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # gcc/g++/g95 MPICH 
 esac # !${HOST_FFC}
