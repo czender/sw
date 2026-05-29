@@ -10318,11 +10318,13 @@ autoreconf -i -f
 # NB: --with-udunits builds libudunits2.a (apparently deprecated ~201307)
 # With HDF4 on FC26 in /usr/local:
 # 20220220: Remove Anaconda paths and HDF4 to build netcdf-c
+# 20260504: Tried unsuccessfully to get working with HDF4 (which Homebrew unhelpfully does not install). Give up on custom builds with HDF4 (see ~/sw/linux/sw/hdf.txt for more reasons). Use Anaconda netCDF to get HDF4.
 # 20250212: Suggested workaround to llvm/clangv19 breakage: -mllvm --aarch64-enable-global-isel-at-O=-1
 # Discussion is here: https://github.com/Homebrew/homebrew-core/issues/207161#issuecomment-2654422193
 # 20260301: -mllvm not necessary and not found, omit it
 # 20260301: --aarch64-enable-global-isel-at-O=-1 not necessary and not found, omit it
 # 20260301: Option --enable_filter-zstd becomes --enable-plugins in v4.10.0
+# 20260520: Option --enable-hdf4 requires separate (non-Conda) HDF4 installation, an untenable rabbit-hole
 # Place in /opt/netcdf so requires sudo make install 
 CC=clang CPPFLAGS="-I/opt/homebrew/include" LDFLAGS="-L/opt/homebrew/lib -laws-cpp-sdk-s3" ./configure --prefix=/opt/netcdf --enable-shared --enable-cdf5 --enable-dap --enable-logging --enable-hdf5 --enable-nczarr --enable-plugins --enable-s3 --enable-v2 --with-plugin-dir=${HDF5_PLUGIN_PATH} > netcdf.configure.foo 2>&1
 # 20260301: Temporary workaround to avoid AWS Paginator.h file not found error

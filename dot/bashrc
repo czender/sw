@@ -569,7 +569,7 @@ case "${PVM_ARCH}" in
 	    export NETCDF_INC="${NETCDF_ROOT}/include"
 	    export NETCDF_LIB="${NETCDF_ROOT}/lib"
 	fi # !NETCDF_ROOT
-	export NCARG_ROOT="${PKG_ROOT}/opt/ncl-6.6.2" # Homebrew-installed
+	# export NCARG_ROOT="${PKG_ROOT}/opt/ncl-6.6.2" # Homebrew-installed
 	# 20200906: Always export HDF5_PLUGIN_PATH (at least on MacOS) for CCR
 	export HDF5_PLUGIN_PATH='/usr/local/hdf5/lib/plugin'
 #	export UDUNITS_INC="${PKG_ROOT}/include" # Homebrew location
@@ -804,6 +804,7 @@ CC_clang='clang -std=c23'
 #CC_clang_homebrew='clang -std=c23'
 # 20250913 Add -fopenmp to compile NCO with OpenMP
 CC_clang_homebrew='clang -std=c23 -fopenmp'
+#20260511: Address sanitizer slows programs by ~2x
 #CC_clang_homebrew='clang -std=c23 -fsanitize=address'
 CC_clang_macports='clang-mp-11 -std=c23'
 # 20150109: Introduce -D_DEFAULT_SOURCE in place of deprecated (as of gcc 4.9.2) -D_BSD_SOURCE -D_POSIX_SOURCE
@@ -820,14 +821,14 @@ CC_icx='icx -std=gnu11 -D_DEFAULT_SOURCE'
 CC_pathcc='pathcc -std=gnu11 -D_DEFAULT_SOURCE'
 CC_pgcc='pgcc -c9x -D_DEFAULT_SOURCE'
 #20230408: Clangv16 defaults to clang++ -std=c++17 which deprecates std::binary_function used by ncap2, Antlr2
-#CXX_clang='clang++ -std=c++17'
-#CXX_clang_homebrew='clang++ -std=c++17'
-#CXX_clang_macports='clang++-mp-12 -std=c++17'
 #20240911: Clangv18 supports -std=c++23
 CXX_clang='clang++ -std=c++23'
 # 20250913 Add -fopenmp to compile NCO with OpenMP
 #CXX_clang_homebrew='clang++ -std=c++23'
+#20260417: Clangv22.1 -std=c++23 stops compiling ncap2 Invoke.cc and other files
+#20260511: New ncap2 patch allows Clangv22.1 -std=c++23 to work again
 CXX_clang_homebrew='clang++ -std=c++23 -fopenmp'
+#20260511: Address sanitizer slows programs by ~2x
 #CXX_clang_homebrew='clang++ -std=c++23 -fsanitize=address'
 CXX_clang_macports='clang++-mp-12 -std=c++23'
 CXX_gxx='g++ -std=c++17'
@@ -864,7 +865,7 @@ case "${HOST_FFC}" in
     hpc* ) export LINUX_CC=${CC_pgcc} ; export LINUX_CXX=${CXX_pgCC} ; export LINUX_FC=${FC_pgf95} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX} -DMPICH_IGNORE_CXX_SEEK" ;; # pgcc/pgCC/pgf95 MPICH2
     e3sm* ) export LINUX_CC=${CC_gcc_conda} ; export LINUX_CXX=${CXX_gxx_conda} ; export LINUX_FC=${FC_gfortran_conda} ; ;; # gcc/g++/gfortran Conda
     imua* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; ;; # gcc/g++/gfortran RPMs
-    andes* | blogin* | bebop* | chrylogin* | compy* | derecho* | frontier* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # gcc/g++/gfortran OpenMPI
+    andes* | blogin* | bebop* | chrlogin* | compy* | derecho* | frontier* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_gfortran} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # gcc/g++/gfortran OpenMPI
 #    derecho* ) export LINUX_CC=${CC_icc} ; export LINUX_CXX=${CXX_icpc} ; export LINUX_FC=${FC_ifort} ; export MPI_CC=${LINUX_CC} ; export MPI_CXX="${LINUX_CXX}" ;; # icc/icpc/ifort
     nothing* ) export LINUX_CC=${CC_gcc} ; export LINUX_CXX=${CXX_gxx} ; export LINUX_FC=${FC_g95} ; export MPI_CC="${LINUX_CC} -I/usr/lib/mpich/include" ; export MPI_CXX="${LINUX_CXX} -I/usr/lib/mpich/include" ;; # gcc/g++/g95 MPICH 
 esac # !${HOST_FFC}
@@ -1091,7 +1092,8 @@ alias chrysalis='ssh -Y ac.zender@chrysalis.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias compy='ssh -Y compy.pnl.gov' # pyn_hgh + 6-digit fob code
 alias derecho='ssh -Y derecho.hpc.ucar.edu' # Token-response of NCAR CIT pw_psw sends Duo request
 alias frontier='ssh -Y frontier.olcf.ornl.gov' # pyn_mdm + 6-digit fob code
-alias improv='ssh -Y ac.zender@improv.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
+alias improv='ssh -J zender@logins.lcrc.anl.gov improv.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
+#alias improv='ssh -Y ac.zender@improv.lcrc.anl.gov' # pw_hgh (EMN=ALCF)
 alias perlmutter='ssh -Y perlmutter-p1.nersc.gov' # pw_psw (EMN=PeRLmutter)
 alias bsrc="source ${HOME}/.bashrc"
 alias chm='chmod 644 *.*' # Make readable

@@ -1562,3 +1562,27 @@ make install
 # 20250819: maluhia.ess.uci.edu with Homebrew clang-20.1.8 on MacOS 15.6
 #***********************************************************************
 
+#***********************************************************************
+# 20260412: maluhia.ess.uci.edu with Homebrew clang-22.1.3 on MacOS 26.3
+# NB: Original Antlr source antlr-2.7.7/lib/cpp/antlr/CharScanner.hpp must be patched!
+#include <strings.h> // csz 20150310
+#include <cstdio> // csz 20150310
+class ANTLR_API CharScannerLiteralsLess : public ANTLR_USE_NAMESPACE(std)binary_function<ANTLR_USE_NAMESPACE(std)string,ANTLR_USE_NAMESPACE(std)string,bool> { // csz 20230412
+***********************************************************************
+git clone git@github.com:nco/antlr2.git ${DATA}/antlr2
+cd ${DATA}/antlr2
+git pull
+make distclean
+CC=${LINUX_CC} CFLAGS='-Wall' CXX=${LINUX_CXX} ./configure --prefix=${HOME} --bindir=${MY_BIN_DIR} --datadir=${DATA}/antlr2 --libdir=${MY_LIB_DIR} --mandir=${HOME}/nco/man --disable-csharp --disable-shared > antlr.configure.foo 2>&1
+# NB: requires entire JDK (which includes JRE), free from Oracle:
+# https://www.java.com/en/download/manual.jsp
+make
+
+make test # breaks on atof() issue
+make install
+#make clean
+#***********************************************************************
+# 20260412: maluhia.ess.uci.edu with Homebrew clang-22.1.3 on MacOS 26.3
+#***********************************************************************
+
+

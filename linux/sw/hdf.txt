@@ -108,5 +108,23 @@ Augmentation tool:
 
 
 #***********************************************************************
-# 20110520: neige.ess.uci.edu x86_64/EMT64 Debian Ubuntu Natty Narwhal gcc/gfortran hdf5eos
+# 20260504: HDF4 4.2.5
 #***********************************************************************
+mv /Users/zender/Downloads/hdf-4.2.5.tar.gz ${DATA}/tmp
+cd ${DATA}/tmp
+tar xvzf hdf-4.2.5.tar.gz
+cd hdf-4.2.5
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=${DATA}/tmp/hdf4 -DHDF4_ENABLE_NETCDF=OFF -DHDF4_ENABLE_FORTRAN=ON
+make
+make install
+
+cd hdf-4.2.5
+./configure --prefix=${DATA}/tmp/hdf4 --with-zlib=/opt/homebrew --with-jpeg=/opt/homebrew --disable-netcdf --disable-fortran --enable-shared
+Fails with ...
+checking for supported version of jpeg library... configure: error: 
+  jpeg library version 7 and higher is not currently supported.
+  Please use version 6b, obtainable at:
+    http://www.hdfgroup.org/ftp/lib-external/jpeg/src/jpegsrc.v6b.tar.gz
+  For further questions, please contact help@hdfgroup.org.
