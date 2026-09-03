@@ -148,7 +148,7 @@ alias gvr "Governor Arnold Schwarzenegger <governor@governor.ca.gov>"
 alias prz "President Barack Obama <president@whitehouse.gov>" # http://www.whitehouse.gov/contact
 alias rpr_2 "Honorable John Campbell <john.campbell@mail.house.gov>" # Congressional District 48, (949) 756-2244
 alias asm_1 "Assemblyman Chuck DeVore, Assembly District 70 <assemblymember.chuck.devore@assembly.ca.gov>"
-alias snt_3 "Senator John Ackerman, Senate District 33 <senator.ackerman@sen.ca.gov>
+alias snt_3 "Senator John Ackerman, Senate District 33 <senator.ackerman@sen.ca.gov>"
 alias snt_1 "Senator Barbara Boxer <senator@boxer.senate.gov>"
 alias snt_2 "Senator Dianne Feinstein <senator@feinstein.senate.gov>"
 alias vp "Vice President Dick Cheney <vice.president@whitehouse.gov>"
@@ -348,7 +348,7 @@ alias barcilon "Albert Barcilon <barcilon@met.fsu.edu>"
 alias bardeen "Chuck Bardeen <Charles.Bardeen@lasp.colorado.edu>"
 alias barletta "Barbara Barletta <bbarlett@uci.edu>"
 alias barlow "Janet Barlow <j.f.barlow@rdg.ac.uk>"
-alias barrientos "Rich Barrientos <>" # drums Phone: (949) 276-5812 (H), 933-8967 (C)
+alias barrientos "Rich Barrientos <foo@bar.com>" # drums Phone: (949) 276-5812 (H), 933-8967 (C)
 alias barth "Mary Barth <barthm@ncar.ucar.edu>"
 alias bassett "Britt Bassett <britt@windom.netrack.net>"
 alias bates "Timothy Bates <Bates@pmel.noaa.gov>"
@@ -424,7 +424,7 @@ alias bryant "Rob Bryant <r.g.bryant@sheffield.ac.uk>"
 alias buccolo "Gina Buccolo <gbuccolo@uci.edu>"
 alias buchanan "Terri Buchanan <buchanat@uci.edu>" # 4-3102
 alias bucholtz "Anthony Bucholtz <anthony@arlo.ucsd.edu>"
-alias buck "Clifton Buck <>" # Fe solubility, works with landing
+alias buck "Clifton Buck <foo@bar.com>" # Fe solubility, works with landing
 alias buja "Lawrence Buja <southern@ncar.ucar.edu>"
 alias bullard "Joanna Bullard <J.E.Bullard@lboro.ac.uk>" # dust girl, poet
 alias bullock "Mark Bullock <bullock@boulder.swri.edu>"
@@ -787,7 +787,7 @@ alias gowda "Ashwin Gowda <gowda@uci.edu>"
 alias grabowski "Wojciech Grabowski <grabow@ncar.ucar.edu>"
 alias graciano "Martha Graciano <graciano@uci.edu>"
 alias graff "Irene Graff <imgraff@uci.edu>"
-alias rubado "Annette Rubado-Mejia <>" # Jair's mom
+alias rubado "Annette Rubado-Mejia <foo@bar.com>" # Jair's mom
 alias grant_g "Glenn Grant <glenn@60south.com>"
 alias hearn "Julia Hearn <swtinjn@gmail.com>" # Dominic's mom
 alias ludwig_l "Lisa Grant Ludwig <lgrant@uci.edu>" # Lisa Grant Ludwig
@@ -1499,7 +1499,7 @@ alias sibley "Morgan Sibley <msibley@uci.edu>" # ESS assistant
 alias siedenburg_j "Jules Siedenburg <j.siedenburg@uea.ac.uk>" # Martin lives in Hove, near Brighton
 alias siedenburg_k "Kai Siedenburg <hikailani@gmail.com>"
 alias siegel "Dave Siegel <davey@icess.ucsb.edu>"
-alias silver "Vicki Silver <>" # 854-1877 (H)
+alias silver "Vicki Silver <foo@bar.com>" # 854-1877 (H)
 alias simbulan "Christine Simbulan <csimbula@uci.edu>"
 alias simmons "Gloria Brown Simmons <gbs@uci.edu>"
 alias simmons_e "Elizabeth Simmons <esimmons@msu.edu>"
@@ -1525,7 +1525,7 @@ alias sokolov "Mike Sokolov <sokolov@crl.dec.com>"
 alias sokolov_c "Carol Sokolov <csokolov@uci.edu>"
 alias soller "Lana Soller <lana@ncar.ucar.edu>"
 alias solomon "Susan Solomon <solomon@al.noaa.gov>"
-alias song_a "Angela Miri Song < A.M.Song@lse.ac.uk>"
+alias song_a "Angela Miri Song <A.M.Song@lse.ac.uk>"
 alias songer "Nancy Songer <songer@spot.colorado.edu>"
 alias sorooshian "Soroosh Sorooshian <soroosh@uci.edu>"
 alias southon "John Southon <jsouthon@uci.edu>"
@@ -1769,7 +1769,7 @@ alias goodman "Jeff Goodman <goodmanjm@appstate.edu>"
 alias opel "Andy Opel <aopel@fsu.edu>"
 alias kochman "Debbie Kochman Dean <debbiedeane@earthlink.net>"
 alias gadol "Peter Gadol <pgadol@aol.com>"
-alias agui "Maria Agui Carter <>"
+alias agui "Maria Agui Carter <foo@bar.com>"
 alias boynton "Ryan Boynton <rsboynton@gmail.com>"
 
 set retrieveinterval='30'
