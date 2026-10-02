@@ -185,10 +185,12 @@ fi # GNU_TRP
 # HOST_FFC is simply the common machine name instead of login or compute node name
 HOST_FFC="${HOST}"
 case "${HOST_FFC}" in
+    andes* ) HOST_FFC='andes' ; ;; # OLCF andes compute nodes named andesNNN, 256 GB/node
     bebop* | blogin* | b[0123456789][0123456789][0123456789] ) HOST_FFC='bebop' ; ;; # ALCF LCRC bebop compute nodes named bNNN, 16|64 cores|GB/node 
     chrlogin* | chr-[0123456789][0123456789][0123456789][0123456789] | ilogin* | i[0123456789][0123456789][0123456789] ) HOST_FFC='chrysalis' ; ;; # ANL LCRC
-    cg-gpu* ) HOST_FFC='roger' ; ;; # NCSA roger cluster
-    gplogin* ) HOST_FFC='greenplanet' ; ;; # UCI PS Rocks Cluster
+    compy* | n[0123456789][0123456789][0123456789][0123456789] ) HOST_FFC='compy' ; ;; # PNNL compy compute nodes all named nNNNN, 40|192 cores|GB/node (compy login nodes also 192 GB)
+    derecho* ) HOST_FFC='derecho' ; ;; # NCAR derecho compute nodes named, e.g., r8i0n8, r5i3n16, r12i5n29 ... 18|(64/256) cores|GB/node (derecho login nodes 512 GB)
+    frontier* ) HOST_FFC='frontier' ; ;; # OLCF frontier compute nodes named frontier01276 64|512 cores|GB/node
     login-* ) HOST_FFC='hpc' ; ;; # UCI RCIC HPC3
     login[0123456789][0123456789] ) # 20230831 Frontier and Perlmutter login nodes share this name :(
 	if [ "${LMOD_SYSTEM_NAME}" = 'frontier' ]; then
@@ -197,7 +199,7 @@ case "${HOST_FFC}" in
 	    HOST_FFC='perlmutter'
 	fi # !LMOD_SYSTEM_NAME
 	;; # !login	
-    nid[0123456789][0123456789][0123456789][0123456789][0123456789][0123456789] ) HOST_FFC='perlmutter' ; ;; # NERSC
+    perlmutter* | nid[0123456789][0123456789][0123456789][0123456789][0123456789][0123456789] ) HOST_FFC='perlmutter' ; ;; # NERSC
 esac # !${HOST_FFC}
 export HOST_FFC
 
